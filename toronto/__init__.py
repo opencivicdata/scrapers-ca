@@ -26,7 +26,7 @@ class Toronto(Jurisdiction):
 
     }
   def get_scraper(self, term, session, scraper_type):
-    if scraper_type == 'person':
+    if scraper_type == 'people':
         return TorontoPersonScraper
 
   def scrape_session_list(self):
@@ -46,7 +46,7 @@ class TorontoPersonScraper(Scraper):
 
 
   def get_people(self):
-    yield self.toronto_scrape_people
+    yield self.toronto_scrape_people()
 
   def toronto_scrape_people(self):
     page = self.lxmlize(COUNCIL_PAGE)
