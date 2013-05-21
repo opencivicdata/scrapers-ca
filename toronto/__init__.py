@@ -9,7 +9,7 @@ import re
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
 
 class Toronto(Jurisdiction):
-  jurisdiction_id = 'ca-on-to'
+  jurisdiction_id = 'ca-on-toronto'
 
   def get_metadata(self):
     return {
@@ -38,12 +38,8 @@ class Toronto(Jurisdiction):
         return TorontoPersonScraper
 
   def scrape_session_list(self):
-    page = self.lxmlize('http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare')
-    return page.xpath("//select[@id='termId']//option[position()>1]/text()")
-
-  def lxmlize(self, url, encoding = 'utf-8'):
-    entry = urlopen(url).encode(encoding)
-    return lxml.html.fromstring(entry)
+    entry = urlopen('http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare').encode('utf-8')
+    return lxml.html.fromstring(entry).xpath("//select[@id='termId']//option[position()>1]/text()")
 
 class TorontoPersonScraper(Scraper):
   def lxmlize(self, url, encoding = 'utf-8'):
@@ -51,7 +47,6 @@ class TorontoPersonScraper(Scraper):
     page = lxml.html.fromstring(entry)
     page.make_links_absolute(url)
     return page
-
 
   def get_people(self):
     yield self.toronto_scrape_people()
