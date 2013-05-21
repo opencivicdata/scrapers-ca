@@ -105,6 +105,7 @@ class TorontoPersonScraper(Scraper):
         p.add_contact('phone', phone, note)
         fax = contact[2].strip()
         p.add_contact('fax', fax, note)
+    return p
 
   def scrape_mayor(self):
     url = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=e53332d0b6d1e310VgnVCM10000071d60f89RCRD&vgnextfmt=default'
@@ -125,3 +126,4 @@ class TorontoPersonScraper(Scraper):
 
     p.add_contact('address', address, 'Mailing')
     p.add_contact('phone', phone, '')
+    return p
