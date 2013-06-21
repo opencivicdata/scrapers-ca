@@ -42,7 +42,7 @@ class TorontoPersonScraper(Scraper):
       p.add_link(info.xpath('//a[contains(@href,"twitter.com")]')[0].attrib['href'], 'twitter')
 
     # add contact info
-    p.add_contact('email', info.xpath('.//a')[0].text_content(),'')
+    p.add_contact('email', info.xpath('.//a')[0].text_content(),None)
    #//*[@id="content"]/div/div[1]/div[2]/p[1]
     contacts = info.xpath('//div/p[text()[contains(.,"Phone:")]]')
     for contact in contacts:
@@ -82,5 +82,5 @@ class TorontoPersonScraper(Scraper):
     phone = info.xpath('.//p[3]/text()')[0]
 
     p.add_contact('address', address, 'Mailing')
-    p.add_contact('phone', phone, '')
+    p.add_contact('phone', phone, None)
     return p
