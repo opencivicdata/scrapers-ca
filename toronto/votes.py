@@ -34,7 +34,7 @@ class TorontoVoteScraper(Scraper):
 
           session = self.session
           date = row[1].split()[0]
-          v_type = row[4]
+          v_type = map_type(row[4])
           passed = 'Carried' in row[6]
 
           if not 'tie' in row[6]:  
@@ -42,7 +42,13 @@ class TorontoVoteScraper(Scraper):
           else:
             yes_count, no_count = 1, 1
           vote = Vote(session, date, v_type, passed, int(yes_count), int(no_count))
-          vote.vote(member.text.strip(), row[5])
+          vote.vote(member.text.strip(), row[5].lower())
 #          vote.add_bill(row[3],chamber=None)
           vote.add_source("http://app.toronto.ca/tmmis/getAdminReport.do")
           yield vote
+
+def map_type(type_string):
+  if "Amend" in type_string:
+    return "amendment"
+  if "Adopt" in type_string:
+    return "passage"
