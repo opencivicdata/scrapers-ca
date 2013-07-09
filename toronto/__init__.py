@@ -40,4 +40,7 @@ class Toronto(Jurisdiction):
 
   def scrape_session_list(self):
     page = lxmlize('http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare')
-    return page.xpath("//select[@id='termId']//option[position()>1]/text()")
+    terms = page.xpath("//select[@id='termId']//option[position()>1]/text()")
+    terms.pop(0)
+    return terms
+    
