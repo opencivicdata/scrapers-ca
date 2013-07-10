@@ -22,6 +22,8 @@ class TorontoPersonScraper(Scraper):
     page = lxmlize(url)
     info = page.xpath("//div[@class='main']")[0]
     name = info.xpath("//h3")[1].text_content().replace('Councillor', '').strip()
+    if "Ana Bail" in name:
+      name = "Ana Bailao"
     district = info.xpath("//p")[0].text_content()
 
     p = Legislator(name=name, district=district)

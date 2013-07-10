@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pupa.scrape import Scraper
 from larvae.vote import Vote
 
@@ -12,17 +13,16 @@ class TorontoVoteScraper(Scraper):
 
 
   def get_votes(self):
-    vote_no = 0
-
 
     tmpdir = tempfile.mkdtemp()
     download_files(tmpdir)
     
-
     #read through each csv file
     files = [f for f in os.listdir(tmpdir)]
     for f in files:
+      
       name = f.replace('.csv','')
+
       with open(tmpdir+'/'+f,'rb') as csvfile:
         csvfile = csv.reader(csvfile, delimiter = ',')
         next(csvfile)
@@ -40,9 +40,7 @@ class TorontoVoteScraper(Scraper):
           vote.vote(name, VOTES[row[5]])
           scan_files(tmpdir, f, vote, row)
           vote.add_source("http://app.toronto.ca/tmmis/getAdminReport.do")
-          vote_no = vote_no+1
           yield vote
-
       os.remove(tmpdir+'/'+f)
     shutil.rmtree(tmpdir)
 
@@ -55,9 +53,6 @@ def download_files(dest_directory):
   ## download csv files
   members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
   for member in members:
-    if member not in members[1:3]:
-      continue
-
 
     post = {
     'function' : 'getMemberVoteReport',
@@ -73,9 +68,16 @@ def download_files(dest_directory):
     if r.headers['content-type'] != 'application/vnd.ms-excel':
       continue
 
-    print 'downloading '+member.text
+    
+    name = member.text  
+    if name == "Norman Kelly":
+      name = "Norm Kelly"
+    if "Ana Bail" in name:
+      name = "Ana Bailao"
 
-    vote_file = open(dest_directory+'/'+member.text+'.csv','w')
+    print 'downloading '+name
+
+    vote_file = open(dest_directory+'/'+name+'.csv','w')
     vote_file.write(r.text.encode('utf-8').strip())
     vote_file.close()
 
@@ -88,60 +90,32 @@ def download_files(dest_directory):
 ## delete matching rows in other files 
 
 def scan_files(directory, current_file, vote, vote_row):
-  members = []
   files = [f for f in os.listdir(directory)]
   for f in files:
     if f == current_file:
       continue
     name = f.replace('.csv','')
-
-    tempfile = csv.writer(open(directory+'/temp.csv','wb'))
+    tempfile_target = open(directory+'/temp.csv','wb')
+    tempfile = csv.writer(tempfile_target)
     with open(directory+'/'+f, 'r+') as csvfile:
       csvfile = csv.reader(csvfile, delimiter = ',')
-      next(csvfile)
       for row in csvfile:
-        if row[0] != vote_row[0]:
-          tempfile.writerow(row)
-          continue
-        if same_vote(row, vote_row):
+        row_description = row[2:5]+row[6:8]
+        vote_description = vote_row[2:5]+vote_row[6:8]
+        if (row_description == vote_description):
           vote.vote(name,VOTES[row[5]])
         else:
           tempfile.writerow(row)
+      tempfile_target.close()
+
     os.remove(directory+'/'+f)
     os.rename(directory+'/temp.csv',directory+'/'+f)
 
 
-def same_vote(row1, row2):
-  for i in range(1,8):
-    if i == 5:
-      continue
-    if row1[i] != row2[i]:
-      return False
-  return True    
 
 
 
-#     for row in re.split("[^r]\\n",r.text)[1:]: 
 
-#       row = row.split('\",\"')
-#       if not row or len(row) < 8:
-#         continue
 
-#       name = member.text.strip()
-#       if name == "Norman Kelly":
-#         name = "Norm Kelly"  
-#       session = self.session
-#       date = row[1].split()[0]
-#       v_type = 'other' #map_type(row[4])
-#       passed = 'Carried' in row[6]
-
-#       if not 'tie' in row[6]:  
-#         yes_count, no_count = row[6].split()[1].split('-')  
-#       else:
-#         yes_count, no_count = 1, 1
-#       vote = Vote(session, date, row[3], v_type, passed, int(yes_count), int(no_count))
-#       vote.vote(name, votes[row[5]])
-# #          vote.add_bill(row[3],chamber=None)
-#       vote.add_source("http://app.toronto.ca/tmmis/getAdminReport.do")
-#       yield vote
+ 
 
