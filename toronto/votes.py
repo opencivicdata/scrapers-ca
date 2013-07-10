@@ -13,45 +13,20 @@ class TorontoVoteScraper(Scraper):
 
   def get_votes(self):
     vote_no = 0
-    "http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport"
-    page = lxmlize("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
+
 
     tmpdir = tempfile.mkdtemp()
+    download_files(tmpdir)
+    
 
-
-    members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
-    for member in members:
-      if member not in members[1:3]:
-        continue
-
-
-      post = {
-      'function' : 'getMemberVoteReport',
-      'download': 'csv',
-      'exportPublishReportId' : 2,
-      'termId' : 4,
-      'memberId' : member.attrib['value'],
-      'decisionBodyId' : 0,
-      
-      }
-
-      r = requests.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
-      if r.headers['content-type'] != 'application/vnd.ms-excel':
-        continue
-
-      print 'downloading '+member.text
-
-      vote_file = open(tmpdir+'/'+member.text+'.csv','w')
-      vote_file.write(r.text.encode('utf-8').strip())
-      vote_file.close()
-
-
+    #read through each csv file
     files = [f for f in os.listdir(tmpdir)]
     for f in files:
       name = f.replace('.csv','')
       with open(tmpdir+'/'+f,'rb') as csvfile:
         csvfile = csv.reader(csvfile, delimiter = ',')
         next(csvfile)
+
         for row in csvfile:
           session = self.session
           date = row[1].split()[0]
@@ -63,14 +38,56 @@ class TorontoVoteScraper(Scraper):
             yes_count, no_count = 1, 1
           vote = Vote(session, date, row[3], v_type, passed, int(yes_count), int(no_count))
           vote.vote(name, VOTES[row[5]])
-          find_voters(tmpdir, f, vote, row)
+          scan_files(tmpdir, f, vote, row)
           vote.add_source("http://app.toronto.ca/tmmis/getAdminReport.do")
           vote_no = vote_no+1
           yield vote
+
       os.remove(tmpdir+'/'+f)
     shutil.rmtree(tmpdir)
 
-def find_voters(directory, current_file, vote, vote_row):
+
+def download_files(dest_directory):
+
+  "http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport"
+  page = lxmlize("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
+
+  ## download csv files
+  members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
+  for member in members:
+    if member not in members[1:3]:
+      continue
+
+
+    post = {
+    'function' : 'getMemberVoteReport',
+    'download': 'csv',
+    'exportPublishReportId' : 2,
+    'termId' : 4,
+    'memberId' : member.attrib['value'],
+    'decisionBodyId' : 0,
+    
+    }
+
+    r = requests.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
+    if r.headers['content-type'] != 'application/vnd.ms-excel':
+      continue
+
+    print 'downloading '+member.text
+
+    vote_file = open(dest_directory+'/'+member.text+'.csv','w')
+    vote_file.write(r.text.encode('utf-8').strip())
+    vote_file.close()
+
+
+
+
+
+## scan csv files of other representatives for matching votes
+## adding representatives to Vote object
+## delete matching rows in other files 
+
+def scan_files(directory, current_file, vote, vote_row):
   members = []
   files = [f for f in os.listdir(directory)]
   for f in files:
@@ -95,7 +112,7 @@ def find_voters(directory, current_file, vote, vote_row):
 
 
 def same_vote(row1, row2):
-  for i in range(1,7):
+  for i in range(1,8):
     if i == 5:
       continue
     if row1[i] != row2[i]:
