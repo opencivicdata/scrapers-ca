@@ -1,20 +1,20 @@
 from pupa.scrape import Jurisdiction
 
 # from .events import TorontoEventScraper
-from .people import PeterboroughPersonScraper
+from .people import AjaxPersonScraper
 # from .votes import TorontoVoteScraper
 from .utils import lxmlize
 
 import re
 
-class Peterborough(Jurisdiction):
-  jurisdiction_id = 'ca-on-peterborough'
+class Ajax(Jurisdiction):
+  jurisdiction_id = 'ca-on-ajax'
 
   def get_metadata(self):
     return {
-      'name': 'Peterborough',
-      'legislature_name': 'Peterborough City Council',
-      'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
+      'name': 'Ajax',
+      'legislature_name': 'Ajax City Council',
+      'legislature_url': 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],
@@ -36,7 +36,7 @@ class Peterborough(Jurisdiction):
     # if scraper_type == 'events':
     #     return TorontoEventScraper
     if scraper_type == 'people':
-        return PeterboroughPersonScraper
+        return AjaxPersonScraper
     # if scraper_type == 'votes':
     #     return TorontoVoteScraper
 
