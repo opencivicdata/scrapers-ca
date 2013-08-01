@@ -35,7 +35,6 @@ class GatineauPersonScraper(Scraper):
         site = content.xpath('.//a')[1].attrib['href']
         p.add_link(site, 'personal site')
 
-
       yield p
   
   def scrape_mayor(self, url):

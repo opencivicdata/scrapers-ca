@@ -64,16 +64,25 @@ class OakvillePersonScraper(Scraper):
     
     ## extract contact information
     address = re.findall(r'([0-9].*([A-Z][0-9][A-Z] [0-9][A-Z][0-9]))', info, flags=re.DOTALL)
+    if address:
+      address = re.sub(r'\W{2,}',' ' , str(address[0])).decode()
+      address = address.replace("u'",'').replace(' n ',', ').replace("(",'')
+
     phone = re.findall(r'tel: (\S*)|phone: (\S*)', info)
     if not phone:
-      phone = re.findall(r'([0-9]{3}-[0-9]{3}-[0-9]{4})',info)
+      phone = re.findall(r'([0-9]{3}[- ][0-9]{3}[- ][0-9]{4})',info)
+    if 'tuple' in str(type(phone[0])):
+      print phone
+      phone = next(x for x in phone[0] if x != '')
+      print phone
+    else:
+      phone = phone[0]
     fax = re.findall(r'fax: (\S*) ',info)
     emails = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "mailto:")]')
-
     ## save contact info to councillor object
     if address:
-      councillor.add_contact('address', str(address[0]), None)
-    councillor.add_contact('phone', str(phone[0]), None)
+      councillor.add_contact('address', address, None)
+    councillor.add_contact('phone', str(phone), None)
     if fax:
       councillor.add_contact('fax', str(fax[0]), None)
     councillor.add_contact('email', emails[0].text_content(), councillor.name)
