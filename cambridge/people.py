@@ -24,10 +24,12 @@ class CambridgePersonScraper(Scraper):
       url = councillor.xpath('.//a')[0].attrib['href']
       page = lxmlize(url)
 
-      address = page.xpath('//*[contains(text(),"Address")]/ancestor::td')[-1].text_content().split(':')[-1]
-      phone = page.xpath('//*[contains(text(),"Tel")]/ancestor::td')[-1].text_content().split(':')[-1]
+      address = page.xpath('//*[contains(text(),"Address")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t",'')
+      phone = page.xpath('//*[contains(text(),"Tel")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t",'')
+      phone = phone.replace('(','').replace(') ','-')
       if page.xpath('//*[contains(text(),"Fax")]'):
-        fax = page.xpath('//*[contains(text(),"Fax")]/ancestor::td')[-1].text_content().split(':')[-1]
+        fax = page.xpath('//*[contains(text(),"Fax")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t",'')
+        fax = fax.replace('(','').replace(') ','-')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].text_content()
       
       p = Legislator(name=name, district=district)
