@@ -15,7 +15,7 @@ class BurlingtonPersonScraper(Scraper):
 
     councillors = page.xpath('//div[@id="subnav"]//a')
     for councillor in councillors:
-      name = councillor.xpath('./span/text()')[0]
+      name = councillor.xpath('./span/text()')[0].strip()
       district = councillor.xpath('.//strong')[0].text_content()
 
       url = councillor.attrib['href']
@@ -28,7 +28,7 @@ class BurlingtonPersonScraper(Scraper):
 
       address = page.xpath('//div[@id="content"]//p[contains(text(),"City of Burlington,")]')
       contact = page.xpath('//div[@id="subnav"]//p[contains(text(),"Phone")]')[0]
-      phone = re.findall(r'Phone: (.*)', contact.text_content())[0]
+      phone = re.findall(r'Phone: (.*)', contact.text_content())[0].replace('Ext. ', 'x').replace('#','x')
       fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
       email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
       
@@ -43,22 +43,21 @@ class BurlingtonPersonScraper(Scraper):
 
       link_div = contact.xpath('following-sibling::p')[0]
       self.get_links(p, link_div)
-
       yield p
   def scrape_mayor(self, name, url):
     page = lxmlize(url)
 
     contact = page.xpath('//div[@id="grey-220"]//li')[0]
     
-    phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact.text_content())[0]
+    phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact.text_content())[0].replace('Ext. ', 'x')
     fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
     email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
+    link_div = page.xpath('//div[@id="leftnav-grey"]')[0]
 
     mayor_page = lxmlize('http://www.burlingtonmayor.com')
     contact_url = mayor_page.xpath('//div[@class="menu"]//a[contains(text(),"Contact")]')[0].attrib['href']
     mayor_page = lxmlize(contact_url)
-
     address = mayor_page.xpath('//div[@class="entry-content"]//p[contains(text(),"City Hall")]')[0].text_content()
 
     p = Legislator(name=name, district="Burlington")
@@ -70,7 +69,7 @@ class BurlingtonPersonScraper(Scraper):
     p.add_contact('email', email, None)
     p.add_contact('address', address, None)
 
-    link_div = mayor_page.xpath('//div[@id="ssba"]')[0]
+
 
     self.get_links(p, link_div)
 
