@@ -52,7 +52,6 @@ class GuelphPersonScraper(Scraper):
       twitter = page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')
       if twitter:
         p.add_link(twitter[0].attrib['href'], 'twitter')
-      print p._contact_details
       yield p
 
 

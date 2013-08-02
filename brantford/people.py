@@ -28,14 +28,14 @@ class BrantfordPersonScraper(Scraper):
 
       page = lxmlize(url)
       
-      address = page.xpath('//div[@id="centre_content"]//p')[0].text_content()
+      address = page.xpath('//div[@id="centre_content"]//p')[0].text_content().replace("\r\n",', ')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].attrib['href'].replace('mailto:','')
       p.add_contact('address', address, None)
       p.add_contact('email', email, None)
 
       numbers = page.xpath('//div[@id="centre_content"]//p[contains(text(),"-")]')[0].text_content()
       if 'tel' in numbers:
-        phone = re.findall(r'(.*)tel', numbers)[0].strip().replace(' ','-')
+        phone = re.findall(r'(.*)tel', numbers)[0].strip().replace(' ','-').replace("\xc2",'').replace("\xa0",'-')
         p.add_contact('phone', phone, None)
       if 'cell' in numbers:
         cell = re.findall(r'(.*)cell', numbers)[0].strip().replace(' ','-')
