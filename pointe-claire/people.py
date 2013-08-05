@@ -1,0 +1,47 @@
+from pupa.scrape import Scraper, Legislator
+from larvae.person import Person
+from larvae.organization import Organization
+
+from .utils import lxmlize
+
+import re
+
+COUNCIL_PAGE = 'http://www.ville.pointe-claire.qc.ca/en/city-hall-administration/your-council/municipal-council.html'
+
+class Pointe_ClairePersonScraper(Scraper):
+
+  def get_people(self):
+    page = lxmlize(COUNCIL_PAGE)
+
+    mayor = page.xpath('.//div[@class="item-page clearfix"]//table[1]//p')[1]
+    name = mayor.xpath('.//strong/text()')[0]
+    
+    p = Legislator(name=name, district='pointe-claire')
+    p.add_source(COUNCIL_PAGE)
+
+    phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ','-')
+    email = mayor.xpath('.//a/@href')[0]
+    p.add_contact('phone', phone, None)
+    p.add_contact('email', email, 'email form to be filled out in web browser')
+    yield p
+
+
+    rows = page.xpath('//tr')
+    for i, row in enumerate(rows):
+      if i % 2 == 0 :
+        continue
+      councillors = row.xpath('./td')
+      for j, councillor in enumerate(councillors):
+        name = councillor.text_content()
+        district = rows[i+1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] +', '+ rows[i+1].xpath('.//td/p[1]/text()')[j]
+
+        p = Legislator(name=name, district=district)
+        p.add_source(COUNCIL_PAGE)
+
+        phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i+1].xpath('.//td')[j].text_content())[0].replace(' ','-')              
+        email = rows[i+1].xpath('.//td')[j].xpath('.//a/@href')[1].replace('mailto:','')
+        
+        p.add_contact('phone', phone, None)
+        p.add_contact('email', email, 'email form to be filled out in web browser')
+
+        yield p
