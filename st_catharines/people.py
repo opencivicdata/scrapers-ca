@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re
 
@@ -20,7 +20,6 @@ class St_CatharinesPersonScraper(Scraper):
       name = councillor.text_content().split(',')[0]
       district = page.xpath('//p[contains(text(), "Ward")]/text()')[0]
       if 'Mayor' in district:
-        print '================================='
         district = 'St. Catharines'
 
       p = Legislator(name=name, district=district)

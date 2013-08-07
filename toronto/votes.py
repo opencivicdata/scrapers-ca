@@ -2,7 +2,7 @@
 from pupa.scrape import Scraper
 from larvae.vote import Vote
 
-from .utils import lxmlize
+from utils import lxmlize
 import requests, re
 import csv, tempfile, shutil, os
 

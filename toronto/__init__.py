@@ -3,7 +3,7 @@ from pupa.scrape import Jurisdiction
 from .events import TorontoEventScraper
 from .people import TorontoPersonScraper
 from .votes import TorontoVoteScraper
-from .utils import lxmlize
+from utils import lxmlize
 
 class Toronto(Jurisdiction):
   jurisdiction_id = 'ca-on-toronto'

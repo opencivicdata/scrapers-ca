@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re, os, requests, tempfile, shutil
 

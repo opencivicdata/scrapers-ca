@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re
 
@@ -37,6 +37,6 @@ class Grand_Prarie_No_1PersonScraper(Scraper):
           p.add_contact('fax', number, None)
         else:
           p.add_contact('phone', number, contact_type)
-      
+      yield p
 
- 
+      

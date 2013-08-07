@@ -1,7 +1,7 @@
 from pupa.scrape import Scraper
 from larvae.event import Event
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import requests, re
 import datetime as dt

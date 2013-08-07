@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re
 
@@ -37,6 +37,4 @@ class AjaxPersonScraper(Scraper):
           p.add_contact(contact_type, contact, None)
         else:
           p.add_link(contact, contact_type)
-      print p._contact_details
-      print p.links
       yield p

@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re
 
@@ -20,7 +20,6 @@ class OakvillePersonScraper(Scraper):
          p = Legislator(name=name, district="Oakville")
          url = councillor.xpath('.//a')[0].attrib['href']
          self.scrape_mayor(url,p)
-         print p._contact_details
          yield p
       else:
         name = councillor.xpath('.//h2')[2].text_content()
@@ -29,7 +28,6 @@ class OakvillePersonScraper(Scraper):
         p = Legislator(name=name, district=district)
         url = councillor.xpath('.//a')[0].attrib['href']
         self.scrape_councillor(url, p)
-        print p._contact_details
         yield p
     
   def scrape_mayor(self, url, mayor):
@@ -72,9 +70,7 @@ class OakvillePersonScraper(Scraper):
     if not phone:
       phone = re.findall(r'([0-9]{3}[- ][0-9]{3}[- ][0-9]{4})',info)
     if 'tuple' in str(type(phone[0])):
-      print phone
       phone = next(x for x in phone[0] if x != '')
-      print phone
     else:
       phone = phone[0]
     fax = re.findall(r'fax: (\S*) ',info)

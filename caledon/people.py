@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re
 
@@ -14,7 +14,6 @@ class CaledonPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="printAreaContent"]//table//td')[2:]
-    print councillors
     for councillor in councillors:
       district, name = councillor.text_content().split('-')
       url = councillor.xpath('.//a')[0].attrib['href']
@@ -39,3 +38,4 @@ class CaledonPersonScraper(Scraper):
       p.add_contact('phone', phone, None)
       p.add_contact('fax', fax, None)
 
+      yield p

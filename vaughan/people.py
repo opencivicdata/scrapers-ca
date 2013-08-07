@@ -2,7 +2,7 @@ from pupa.scrape import Scraper, Legislator
 from larvae.person import Person
 from larvae.organization import Organization
 
-from .utils import lxmlize
+from utils import lxmlize
 
 import re
 
@@ -24,7 +24,7 @@ class  VaughanPersonScraper(Scraper):
       else:
         name = re.split(r'Mayor', title)[-1]
         district = 'Vaughan'
-
+      name = name.strip()
       if councillor == councillors[0]:
         contact_info = page.xpath('//div[@id="WebPartWPQ2"]')[0]
       else:
