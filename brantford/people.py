@@ -22,7 +22,7 @@ class BrantfordPersonScraper(Scraper):
       name = councillor.xpath('./td')[1].text_content()
       url = councillor.xpath('./td/a')[0].attrib['href']
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 

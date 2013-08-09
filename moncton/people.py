@@ -23,7 +23,7 @@ class MonctonPersonScraper(Scraper):
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('Email', email, None)

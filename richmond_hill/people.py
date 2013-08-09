@@ -38,7 +38,7 @@ class Richmond_HillPersonScraper(Scraper):
       fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)',info)[0].replace(' ','').replace('(','').replace(')','-')
       email = page.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('address', address, None)

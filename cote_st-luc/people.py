@@ -24,7 +24,7 @@ class Cote_St_LucPersonScraper(Scraper):
       district = councillor.xpath('.//h3/text()')[0]
       name = councillor.xpath('.//p[contains(text(), "Councillor")]/strong/text()')[0]
       
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillors_url)
 
@@ -51,7 +51,7 @@ class Cote_St_LucPersonScraper(Scraper):
     email = info.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
     phone = info.xpath('.//p[contains(text(), "phone")]/text()')[0].replace('Telephone: ','')
 
-    p = Legislator(name=name, district='cote st-luc')
+    p = Legislator(name=name, post_id='cote st-luc')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_contact('email', email, None)

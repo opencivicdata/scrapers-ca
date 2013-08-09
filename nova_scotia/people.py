@@ -30,7 +30,7 @@ class Nova_ScotiaPersonScraper(Scraper):
       if not re.findall(r'[0-9]', lines[0]):
         district = district + ' ' + lines.pop(0).strip()
       
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       address = lines.pop(0).strip() +', '+lines.pop(0).strip()

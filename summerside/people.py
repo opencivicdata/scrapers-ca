@@ -24,7 +24,7 @@ class SummersidePersonScraper(Scraper):
       name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Councillor', '').replace('Deputy Mayor', '')
       district = page.xpath('//div[@class="articlebody-inside"]/p')[0].text_content()
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -43,7 +43,7 @@ class SummersidePersonScraper(Scraper):
 
     name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Mayor','')
 
-    p = Legislator(name=name, district='summerside')
+    p = Legislator(name=name, post_id='summerside')
     p.add_source(MAYOR_PAGE)
 
     info = page.xpath('//div[@class="articlebody-inside"]/p')

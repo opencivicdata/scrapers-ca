@@ -33,7 +33,7 @@ class SudburyPersonScraper(Scraper):
       fax = re.findall(r'([0-9].*)', fax)[0].replace(') ','-')
       email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
       p.add_contact('address', address, 'City Council general mailing address')
@@ -60,7 +60,7 @@ class SudburyPersonScraper(Scraper):
     fax = fax.split(' ')[-1]
     email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p = Legislator(name=name, district='Sudbury')
+    p = Legislator(name=name, post_id='Sudbury')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
     p.add_contact('address', address, None)

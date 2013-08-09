@@ -23,7 +23,7 @@ class BellevillePersonScraper(Scraper):
       if not 'ward' in district:
         district = 'belleville'
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       info = councillor.xpath('./text()')

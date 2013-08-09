@@ -23,7 +23,7 @@ class LaSallePersonScraper(Scraper):
         name = councillor.xpath('./b/font/text()')
       name = name[0]
 
-      p = Legislator(name=name, district="LaSalle")
+      p = Legislator(name=name, post_id="LaSalle")
       p.add_source(COUNCIL_PAGE)
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]

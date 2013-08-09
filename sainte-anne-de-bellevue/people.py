@@ -23,7 +23,7 @@ class Sainte_Anne_de_BellevuePersonScraper(Scraper):
         name = re.findall(r'(?<=[0-9]).*', councillor.text_content(), flags=re.DOTALL)[0].strip()
         district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller','')
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       email = councillor.xpath('.//a')

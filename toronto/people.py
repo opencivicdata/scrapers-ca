@@ -26,7 +26,7 @@ class TorontoPersonScraper(Scraper):
       name = "Ana Bailao"
     district = info.xpath("//p")[0].text_content()
 
-    p = Legislator(name=name, district=district)
+    p = Legislator(name=name, post_id=district)
 
     info = info.xpath("//div[@class='last']")[0]
 

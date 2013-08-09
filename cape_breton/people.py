@@ -22,7 +22,7 @@ class Cape_BretonPersonScraper(Scraper):
        phone = councillor.xpath('.//td[5]/p/text()')[0].split(':')[1].replace("(",'').replace(") ",'-')
        fax = councillor.xpath('.//td[5]/p/text()')[1].split(':')[1].replace("(",'').replace(") ",'-')
 
-       p = Legislator(name=name, district=district)
+       p = Legislator(name=name, post_id=district)
        p.add_source(COUNCIL_PAGE)
        p.add_contact('address', address, None)
        p.add_contact('phone', phone, None)

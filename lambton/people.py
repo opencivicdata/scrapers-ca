@@ -21,7 +21,7 @@ class LambtonPersonScraper(Scraper):
         name = name.split(',')[0].strip()
       district = councillor.xpath('.//td[1]//p[contains(text(),",")]/text()')[0].split(',')[1].strip()
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       info = councillor.xpath('.//td[2]')[0].text_content()

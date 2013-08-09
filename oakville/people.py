@@ -17,7 +17,7 @@ class OakvillePersonScraper(Scraper):
     for councillor in councillors:
       if len(councillor.xpath('.//h2')) < 3:
          name = councillor.xpath('.//h2')[1].text_content()
-         p = Legislator(name=name, district="Oakville")
+         p = Legislator(name=name, post_id="Oakville")
          url = councillor.xpath('.//a')[0].attrib['href']
          self.scrape_mayor(url,p)
          yield p
@@ -25,7 +25,7 @@ class OakvillePersonScraper(Scraper):
         name = councillor.xpath('.//h2')[2].text_content()
         district = councillor.xpath('.//h2')[0].text_content()
 
-        p = Legislator(name=name, district=district)
+        p = Legislator(name=name, post_id=district)
         url = councillor.xpath('.//a')[0].attrib['href']
         self.scrape_councillor(url, p)
         yield p
@@ -82,7 +82,7 @@ class OakvillePersonScraper(Scraper):
     if fax:
       councillor.add_contact('fax', str(fax[0]), None)
     councillor.add_contact('email', emails[0].text_content(), councillor.name)
-    councillor.add_contact('email', emails[1].text_content(), councillor.district)
+    councillor.add_contact('email', emails[1].text_content(), 'district')
 
     ## extra links
     if "Twitter" in info:

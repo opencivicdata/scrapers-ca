@@ -27,7 +27,7 @@ class MercierPersonScraper(Scraper):
         district.strip()
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
       
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       yield p

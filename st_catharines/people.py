@@ -22,7 +22,7 @@ class St_CatharinesPersonScraper(Scraper):
       if 'Mayor' in district:
         district = 'St. Catharines'
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
 

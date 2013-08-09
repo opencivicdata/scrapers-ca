@@ -20,7 +20,7 @@ class SennevillePersonScraper(Scraper):
         district = 'senneville'
       name = councillor.xpath('./td[2]//strong/text()')[0].lower()
       email = councillor.xpath('.//a/text()')[0]
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       yield p

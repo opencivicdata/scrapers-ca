@@ -21,7 +21,7 @@ class DorvalPersonScraper(Scraper):
         district = 'dorval'
       else:
         district = info[2]
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]

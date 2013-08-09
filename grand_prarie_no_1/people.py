@@ -18,7 +18,7 @@ class Grand_Prarie_No_1PersonScraper(Scraper):
       name = councillor.xpath('./h2')[0].text_content().split('Division')[0]
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
       
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       address = councillor.xpath('./p[1]')[0].text_content()

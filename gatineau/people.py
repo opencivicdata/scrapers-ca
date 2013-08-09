@@ -25,7 +25,7 @@ class GatineauPersonScraper(Scraper):
       phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ','-')
       email = content.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('phone', phone, None)
@@ -47,7 +47,7 @@ class GatineauPersonScraper(Scraper):
     phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ','-')
     email = content.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
     
-    p = Legislator(name=name, district='Gatineau')
+    p = Legislator(name=name, post_id='Gatineau')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_source(contact_url)

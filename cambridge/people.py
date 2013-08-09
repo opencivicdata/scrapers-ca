@@ -32,7 +32,7 @@ class CambridgePersonScraper(Scraper):
         fax = fax.replace('(','').replace(') ','-')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].text_content()
       
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('address', address, None)

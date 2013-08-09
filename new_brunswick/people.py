@@ -33,7 +33,7 @@ class New_BrunswickPersonScraper(Scraper):
           site = site[0].text_content()
         councillors = page.xpath('//div[@class="right_contents"]//p/text()')
         for councillor in councillors:
-          p = Legislator(name=councillor, district=district)
+          p = Legislator(name=councillor, post_id=district)
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)

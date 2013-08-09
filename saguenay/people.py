@@ -19,7 +19,7 @@ class SaguenayPersonScraper(Scraper):
     m_name = mayor[1].strip().split('.')[1].strip()
     m_phone = mayor[2].strip().split(':')[1].strip()
 
-    m = Legislator(name=m_name, district='Saguenay')
+    m = Legislator(name=m_name, post_id='Saguenay')
     m.add_source(COUNCIL_PAGE)
     m.add_contact('phone', m_phone, None)
 
@@ -35,7 +35,7 @@ class SaguenayPersonScraper(Scraper):
 
       url = councillor.xpath('./p/a')[0].attrib['href']
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 

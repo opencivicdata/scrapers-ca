@@ -71,7 +71,7 @@ class SaskatchewanPersonScraper(Scraper):
             councillors.append(councillor)
       
       for councillor in councillors:
-        p = Legislator(district=district_name, name=councillor)
+        p = Legislator(post_id=district_name, name=councillor)
         p.add_source(COUNCIL_PAGE)
         for key, value in contacts.iteritems():
           p.add_contact(key, value, None)

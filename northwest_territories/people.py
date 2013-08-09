@@ -20,7 +20,7 @@ class Northwest_TerritoriesPersonScraper(Scraper):
       district = councillor.xpath('./ancestor::p/preceding-sibling::h2')[-1].text_content().split('–'.decode('utf-8'))[0]
       name = ' '.join(councillor.text_content().split()[-2:]).replace('-Â'.decode('utf-8'),'')
 
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
       if 'SAO' in name:

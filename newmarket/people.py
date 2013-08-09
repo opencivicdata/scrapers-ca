@@ -23,7 +23,7 @@ class NewmarketPersonScraper(Scraper):
       district = district if not 'Regional' in district else 'newmarket'
       url = councillor.xpath('.//a/@href')[0]
       
-      p = Legislator(name=name, district=district)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -66,7 +66,7 @@ class NewmarketPersonScraper(Scraper):
 
   def scrape_mayor(self, div):
     name = div.xpath('.//strong/text()')[0].replace(',', '')
-    p = Legislator(name=name, district='newmarket')
+    p = Legislator(name=name, post_id='newmarket')
     p.add_source(COUNCIL_PAGE)
 
     numbers = div.xpath('.//p/text()')

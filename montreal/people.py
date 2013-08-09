@@ -25,7 +25,7 @@ class MontrealPersonScraper(Scraper):
     name = line['PRENOM']+ ' ' + line['NOM']
     district = line['ARRONDISSEMENT']
 
-    p = Legislator(name=name, district=district)
+    p = Legislator(name=name, post_id=district)
     p.add_source(COUNCIL_PAGE)
 
     if line['ADRESSE_ARRONDISSEMENT']:
