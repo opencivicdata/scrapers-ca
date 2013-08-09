@@ -1,4 +1,5 @@
-MONGO_HOST = ENV['MONGOHQ_URL']
+import os
+MONGO_HOST = os.environ['MONGOHQ_URL']
 MONGO_PORT = 27017
 MONGO_DATABASE = 'pupa'
 
