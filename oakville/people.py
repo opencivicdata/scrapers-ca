@@ -17,7 +17,7 @@ class OakvillePersonScraper(Scraper):
     for councillor in councillors:
       if len(councillor.xpath('.//h2')) < 3:
          name = councillor.xpath('.//h2')[1].text_content()
-         p = Legislator(self, name=name, district="Oakville")
+         p = Legislator(name=name, district="Oakville")
          url = councillor.xpath('.//a')[0].attrib['href']
          self.scrape_mayor(url,p)
          yield p
