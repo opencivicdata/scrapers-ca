@@ -7,5 +7,6 @@ for jurisdiction in jurisdictions:
     os.system("python -m pupa.cli update --people "+jurisdiction)
   except:
     errors[jurisdiction] = sys.exc_info()[0]
+    print '----------------------------------'
 for key, value in errors.iteritems():
   print key, ' failed with ', value
