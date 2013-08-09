@@ -1,20 +1,20 @@
 from pupa.scrape import Jurisdiction
 
 # from .events import TorontoEventScraper
-from .people import New_BrunswickPersonScraper
+from .people import Wood_BuffaloPersonScraper
 # from .votes import TorontoVoteScraper
 from utils import lxmlize
 
 import re
 
-class New_Brunswick(Jurisdiction):
-  jurisdiction_id = 'ca-nb'
+class Wood_Buffalo(Jurisdiction):
+  jurisdiction_id = 'ca-on-burlington'
 
   def get_metadata(self):
     return {
-      'name': 'New Brunswick',
-      'legislature_name': 'New Brunswick City Council',
-      'legislature_url': 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html',
+      'name': 'Wood Buffalo',
+      'legislature_name': 'Wood Buffalo City Council',
+      'legislature_url': 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],
@@ -36,7 +36,7 @@ class New_Brunswick(Jurisdiction):
     # if scraper_type == 'events':
     #     return TorontoEventScraper
     if scraper_type == 'people':
-        return New_BrunswickPersonScraper
+        return Wood_BuffaloPersonScraper
     # if scraper_type == 'votes':
     #     return TorontoVoteScraper
 

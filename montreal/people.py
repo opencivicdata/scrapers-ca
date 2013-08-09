@@ -16,7 +16,6 @@ class MontrealPersonScraper(Scraper):
     data = urllib2.urlopen(COUNCIL_PAGE)
     data = json.load(data, 'latin-1')
     for line in data:
-      print remove_accents(line['ARRONDISSEMENT'])
       if district == 'Montreal':
         if "Maire" in line['TITRE_MAIRIE'] or "Ville" in line['TITRE_CONSEIL'] or 'désigné'.decode('utf-8') in line['TITRE_CONSEIL']:
           yield self.add_councillor(line)
