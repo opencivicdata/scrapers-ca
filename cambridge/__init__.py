@@ -9,7 +9,7 @@ import re
 
 class Cambridge(Jurisdiction):
   jurisdiction_id = 'ca-on-cambridge'
-  geo_code = 3530010
+  geographic_code = 3530010
   def get_metadata(self):
     return {
       'name': 'Cambridge',

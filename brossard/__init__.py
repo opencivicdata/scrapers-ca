@@ -9,7 +9,7 @@ import re
 
 class Brossard(Jurisdiction):
   jurisdiction_id = 'ca-qc-brossard'
-  geo_code = 2458007
+  geographic_code = 2458007
   def get_metadata(self):
     return {
       'name': 'Brossard',

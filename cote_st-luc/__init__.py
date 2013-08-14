@@ -9,7 +9,7 @@ import re
 
 class Cote_St_Luc(Jurisdiction):
   jurisdiction_id = 'ca-qc-cote_st-luc'
-  geo_code = 2466058
+  geographic_code = 2466058
   def get_metadata(self):
     return {
       'name': 'Cote_St-Luc',

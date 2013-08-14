@@ -9,7 +9,7 @@ import re
 
 class Belleville(Jurisdiction):
   jurisdiction_id = 'ca-on-belleville'
-  geo_code = 3512005
+  geographic_code = 3512005
   def get_metadata(self):
     return {
       'name': 'Belleville',

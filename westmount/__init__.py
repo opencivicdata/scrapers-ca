@@ -9,7 +9,7 @@ import re
 
 class Westmount(Jurisdiction):
   jurisdiction_id = 'ca-qc-westmount'
-  geo_code = 2466032
+  geographic_code = 2466032
   def get_metadata(self):
     return {
       'name': 'Westmount',

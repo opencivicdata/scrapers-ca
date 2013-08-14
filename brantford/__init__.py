@@ -9,7 +9,7 @@ import re
 
 class Brantford(Jurisdiction):
   jurisdiction_id = 'ca-on-brantford'
-  geo_code = 3529006
+  geographic_code = 3529006
 
   def get_metadata(self):
     return {

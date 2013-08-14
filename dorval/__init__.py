@@ -9,7 +9,7 @@ import re
 
 class Dorval(Jurisdiction):
   jurisdiction_id = 'ca-qc-dorval'
-  geo_code = 2466087
+  geographic_code = 2466087
   def get_metadata(self):
     return {
       'name': 'Dorval',

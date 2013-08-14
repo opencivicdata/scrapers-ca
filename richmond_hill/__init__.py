@@ -9,7 +9,7 @@ import re
 
 class Richmond_Hill(Jurisdiction):
   jurisdiction_id = 'ca-on-richmond_hill'
-  geo_code = 3519038
+  geographic_code = 3519038
   def get_metadata(self):
     return {
       'name': 'Richmond_Hill',

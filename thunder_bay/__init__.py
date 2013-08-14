@@ -9,7 +9,7 @@ import re
 
 class Thunder_Bay(Jurisdiction):
   jurisdiction_id = 'ca-on-thunder_bay'
-  geo_code = 3558004
+  geographic_code = 3558004
   def get_metadata(self):
     return {
       'name': 'Thunder Bay',

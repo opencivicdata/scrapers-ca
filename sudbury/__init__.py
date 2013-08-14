@@ -9,7 +9,7 @@ import re
 
 class Gatineau(Jurisdiction):
   jurisdiction_id = 'ca-qc-sudbury'
-  geo_code = 3553005
+  geographic_code = 3553005
   def get_metadata(self):
     return {
       'name': 'Sudbury',

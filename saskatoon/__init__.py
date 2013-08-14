@@ -9,7 +9,7 @@ import re
 
 class Saskatoon(Jurisdiction):
   jurisdiction_id = 'ca-sa-saskatoon'
-  geo_code = 4711066
+  geographic_code = 4711066
   def get_metadata(self):
     return {
       'name': 'Saskatoon',

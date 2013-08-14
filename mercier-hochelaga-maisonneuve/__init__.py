@@ -9,7 +9,7 @@ import re
 
 class Mercier_Hochelaga_Maisonneuve(Jurisdiction):
   jurisdiction_id = 'ca-qc-mercier-hochelaga-maisonneuve'
-  geo_code = 2466023
+  geographic_code = 2466023
   def get_metadata(self):
     return {
       'name': 'Mercier-Hochelaga-Maisonneuve',

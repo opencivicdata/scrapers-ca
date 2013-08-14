@@ -9,7 +9,7 @@ import re
 
 class Guelph(Jurisdiction):
   jurisdiction_id = 'ca-on-guelph'
-  geo_code = 3523008
+  geographic_code = 3523008
   def get_metadata(self):
     return {
       'name': 'Guelph',

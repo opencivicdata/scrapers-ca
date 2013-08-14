@@ -9,7 +9,7 @@ import re
 
 class Lambton(Jurisdiction):
   jurisdiction_id = 'ca-on-lambton'
-  geo_code = 3538040
+  geographic_code = 3538040
   def get_metadata(self):
     return {
       'name': 'Lambton',

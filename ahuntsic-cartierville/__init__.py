@@ -9,7 +9,7 @@ import re
 
 class Ahuntsic_Cartierville(Jurisdiction):
   jurisdiction_id = 'ca-qc-ahuntsic-cartierville'
-  geo_code = 2466023
+  geographic_code = 2466023
   def get_metadata(self):
     return {
       'name': 'Ahuntsic-Cartierville',

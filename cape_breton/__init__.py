@@ -9,7 +9,7 @@ import re
 
 class Cape_Breton(Jurisdiction):
   jurisdiction_id = 'ca-ns-cape_breton'
-  geo_code = 1217030
+  geographic_code = 1217030
   def get_metadata(self):
     return {
       'name': 'Cape Breton',

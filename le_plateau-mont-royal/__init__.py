@@ -9,7 +9,7 @@ import re
 
 class Le_Plateau_Mont_Royal(Jurisdiction):
   jurisdiction_id = 'ca-qc-le_plateau-mont-royal'
-  geo_code = 2466023
+  geographic_code = 2466023
   def get_metadata(self):
     return {
       'name': 'Le Plateau-Mont-Royal',

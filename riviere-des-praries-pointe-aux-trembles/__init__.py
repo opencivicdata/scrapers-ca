@@ -9,7 +9,7 @@ import re
 
 class Riviere_des_Prairies_Pointe_aux_Trembles(Jurisdiction):
   jurisdiction_id = 'ca-qc-riviere-des-prairies-pointe-aux-trembles'
-  geo_code = 2466023
+  geographic_code = 2466023
   def get_metadata(self):
     return {
       'name': 'Riviere-des-Prairies-Pointe-aux-Trembles',
