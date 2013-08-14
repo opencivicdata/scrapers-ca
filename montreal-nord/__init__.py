@@ -7,7 +7,7 @@ from utils import lxmlize
 
 import re
 
-class Montreal(Jurisdiction):
+class Montreal_Nord(Jurisdiction):
   jurisdiction_id = 'ca-qc-montreal-nord'
   geo_code = 2466023
   def get_metadata(self):

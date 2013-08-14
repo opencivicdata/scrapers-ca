@@ -7,7 +7,7 @@ from utils import lxmlize
 
 import re
 
-class Montreal(Jurisdiction):
+class Riviere_des_Prairies_Pointe_aux_Trembles(Jurisdiction):
   jurisdiction_id = 'ca-qc-riviere-des-prairies-pointe-aux-trembles'
   geo_code = 2466023
   def get_metadata(self):

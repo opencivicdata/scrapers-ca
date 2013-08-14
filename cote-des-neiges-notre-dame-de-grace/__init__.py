@@ -7,7 +7,7 @@ from utils import lxmlize
 
 import re
 
-class Montreal(Jurisdiction):
+class Cote_des_Neiges_Notre_Dame_de_Grace(Jurisdiction):
   jurisdiction_id = 'ca-qc-cote-des-neiges-notre-dame-de-grace'
   geo_code = 2466023
   def get_metadata(self):

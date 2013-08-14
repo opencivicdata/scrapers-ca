@@ -7,7 +7,7 @@ from utils import lxmlize
 
 import re
 
-class Montreal(Jurisdiction):
+class Villeray_Saint_Michel_Parc_Extension(Jurisdiction):
   jurisdiction_id = 'ca-qc-villeray-saint-michel-parc-extension'
   geo_code = 2466023
   def get_metadata(self):
