@@ -9,7 +9,7 @@ import re
 
 class Sainte_Jerome(Jurisdiction):
   jurisdiction_id = 'ca-on-burlington'
-
+  geo_code = 2475017
   def get_metadata(self):
     return {
       'name': 'Sainte-Jerome',

@@ -9,7 +9,7 @@ import re
 
 class Montreal(Jurisdiction):
   jurisdiction_id = "ca-qc-l'ile-bizard-sainte-genevieve"
-
+  geo_code = 2466023
   def get_metadata(self):
     return {
       'name': "L'Ile-Bizard-Sainte-Genevieve",

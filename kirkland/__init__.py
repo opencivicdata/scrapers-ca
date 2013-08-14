@@ -9,7 +9,7 @@ import re
 
 class Kirkland(Jurisdiction):
   jurisdiction_id = 'ca-qc-kirkland'
-
+  geo_code = 2466102
   def get_metadata(self):
     return {
       'name': 'Kirkland',

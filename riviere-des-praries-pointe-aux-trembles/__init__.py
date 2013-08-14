@@ -9,7 +9,7 @@ import re
 
 class Montreal(Jurisdiction):
   jurisdiction_id = 'ca-qc-riviere-des-prairies-pointe-aux-trembles'
-
+  geo_code = 2466023
   def get_metadata(self):
     return {
       'name': 'Riviere-des-Prairies-Pointe-aux-Trembles',

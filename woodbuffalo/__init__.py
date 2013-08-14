@@ -9,7 +9,7 @@ import re
 
 class Wood_Buffalo(Jurisdiction):
   jurisdiction_id = 'ca-on-burlington'
-
+  geo_code = 4816037
   def get_metadata(self):
     return {
       'name': 'Wood Buffalo',

@@ -9,7 +9,7 @@ import re
 
 class Clarington(Jurisdiction):
   jurisdiction_id = 'ca-on-clarington'
-
+  geo_code = 3518017
   def get_metadata(self):
     return {
       'name': 'Clarington',

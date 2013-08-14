@@ -9,7 +9,7 @@ import re
 
 class Haldimand(Jurisdiction):
   jurisdiction_id = 'ca-on-haldimand'
-
+  geo_code = 3528018
   def get_metadata(self):
     return {
       'name': 'Haldimand',

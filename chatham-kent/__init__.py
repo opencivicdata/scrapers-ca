@@ -9,7 +9,7 @@ import re
 
 class Chatham_Kent(Jurisdiction):
   jurisdiction_id = 'ca-on-chatham-kent'
-
+  geo_code = 3536020
   def get_metadata(self):
     return {
       'name': 'Chatham-Kent',

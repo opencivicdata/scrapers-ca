@@ -9,7 +9,7 @@ import re
 
 class Saguenay(Jurisdiction):
   jurisdiction_id = 'ca-qc-saguenay'
-
+  geo_code = 2494068
   def get_metadata(self):
     return {
       'name': 'Saguenay',

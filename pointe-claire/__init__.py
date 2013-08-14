@@ -9,7 +9,7 @@ import re
 
 class Pointe_Claire(Jurisdiction):
   jurisdiction_id = 'ca-qc-pointe-claire'
-
+  geo_code = 2466097
   def get_metadata(self):
     return {
       'name': 'Pointe-Claire',

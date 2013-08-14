@@ -9,7 +9,7 @@ import re
 
 class Fredericton(Jurisdiction):
   jurisdiction_id = 'ca-nb-fredericton'
-
+  geo_code = 1310032
   def get_metadata(self):
     return {
       'name': 'Fredericton',

@@ -9,7 +9,7 @@ import re
 
 class Burlington(Jurisdiction):
   jurisdiction_id = 'ca-on-burlington'
-
+  geo_code = 3524002
   def get_metadata(self):
     return {
       'name': 'Burlington',

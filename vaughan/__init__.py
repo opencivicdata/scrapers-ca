@@ -9,7 +9,7 @@ import re
 
 class Gatineau(Jurisdiction):
   jurisdiction_id = 'ca-on-vaughan'
-
+  geo_code = 3519028
   def get_metadata(self):
     return {
       'name': 'Vaughan',

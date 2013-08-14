@@ -9,7 +9,7 @@ import re
 
 class Newmarket(Jurisdiction):
   jurisdiction_id = 'ca-on-newmarket'
-
+  geo_code = 3519048
   def get_metadata(self):
     return {
       'name': 'Newmarket',

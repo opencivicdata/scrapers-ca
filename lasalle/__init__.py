@@ -9,7 +9,7 @@ import re
 
 class LaSalle(Jurisdiction):
   jurisdiction_id = 'ca-qc-lasalle'
-
+  geo_code = 3537034
   def get_metadata(self):
     return {
       'name': 'LaSalle',

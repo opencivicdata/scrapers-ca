@@ -9,7 +9,7 @@ import re
 
 class Mercier(Jurisdiction):
   jurisdiction_id = 'ca-qc-mercier'
-
+  geo_code = 2466072
   def get_metadata(self):
     return {
       'name': 'Mercier',

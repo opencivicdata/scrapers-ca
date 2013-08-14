@@ -9,7 +9,7 @@ import re
 
 class Ajax(Jurisdiction):
   jurisdiction_id = 'ca-on-ajax'
-
+  geo_code = 3518005
   def get_metadata(self):
     return {
       'name': 'Ajax',

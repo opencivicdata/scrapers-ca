@@ -9,7 +9,7 @@ import re
 
 class Stratford(Jurisdiction):
   jurisdiction_id = 'ca-pe-stratford'
-
+  geo_code = 3531011
   def get_metadata(self):
     return {
       'name': 'Stratford',

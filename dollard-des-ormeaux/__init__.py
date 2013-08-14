@@ -9,7 +9,7 @@ import re
 
 class Dollard_Des_Ormeaux(Jurisdiction):
   jurisdiction_id = 'ca-qc-dollard-des-ormeaux'
-
+  geo_code = 2466142
   def get_metadata(self):
     return {
       'name': 'Dollard-Des-Ormeaux',

@@ -9,7 +9,7 @@ import re
 
 class Summerside(Jurisdiction):
   jurisdiction_id = 'ca-pe-summerside'
-
+  geo_code = 1103025
   def get_metadata(self):
     return {
       'name': 'Summerside',

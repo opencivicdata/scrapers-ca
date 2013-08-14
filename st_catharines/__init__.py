@@ -9,7 +9,7 @@ import re
 
 class St_Catharines(Jurisdiction):
   jurisdiction_id = 'ca-on-st_catharines'
-
+  geo_code = 3526053
   def get_metadata(self):
     return {
       'name': 'St. Catharines',

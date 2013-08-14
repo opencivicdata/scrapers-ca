@@ -9,7 +9,7 @@ import re
 
 class Oakville(Jurisdiction):
   jurisdiction_id = 'ca-on-oakville'
-
+  geo_code = 3524001
   def get_metadata(self):
     return {
       'name': 'Oakville',
