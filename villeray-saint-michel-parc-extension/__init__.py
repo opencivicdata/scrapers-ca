@@ -9,7 +9,7 @@ import re
 
 class Villeray_Saint_Michel_Parc_Extension(Jurisdiction):
   jurisdiction_id = 'ca-qc-villeray-saint-michel-parc-extension'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Villeray-Saint-Michel-Parc-Extension',
