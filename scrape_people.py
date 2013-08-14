@@ -1,4 +1,3 @@
-
 import sys, os
 import importlib
 import argparse
@@ -45,4 +44,5 @@ def scrape_people():
       report = {'name' : jurisdiction, 'status' : 'working' , 'error' : sys.exc_info()}
       reports.append(report)
   return reports
+
 
