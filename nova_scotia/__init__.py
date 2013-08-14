@@ -9,7 +9,7 @@ import re
 
 class Nova_Scotia(Jurisdiction):
   jurisdiction_id = 'ca-ns'
-
+  geographic_code = 'ns'
   def get_metadata(self):
     return {
       'name': 'Nova Scotia',

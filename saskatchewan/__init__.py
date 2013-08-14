@@ -9,7 +9,7 @@ import re
 
 class Saskatchewan(Jurisdiction):
   jurisdiction_id = 'ca-sk'
-
+  geographic_code = 'sk'
   def get_metadata(self):
     return {
       'name': 'Saskatchewan',

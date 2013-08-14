@@ -9,7 +9,7 @@ import re
 
 class Senneville(Jurisdiction):
   jurisdiction_id = 'ca-qc-senneville'
-
+  geographic_code = 2466127
   def get_metadata(self):
     return {
       'name': 'Senneville',

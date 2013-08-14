@@ -9,7 +9,7 @@ import re
 
 class Sainte_Anne_de_Bellevue(Jurisdiction):
   jurisdiction_id = 'ca-qc-sainte-anne-de-bellevue'
-
+  geographic_code = 2466117
   def get_metadata(self):
     return {
       'name': 'Sainte-Anne-de-Bellevue',
