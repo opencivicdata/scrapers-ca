@@ -9,7 +9,6 @@ import re
 
 class Anjou(Jurisdiction):
   jurisdiction_id = 'ca-qc-anjou'
-  geographic_code = 2466023
   def get_metadata(self):
     return {
       'name': 'Anjou',

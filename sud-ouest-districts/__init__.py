@@ -9,7 +9,7 @@ import re
 
 class Sud_Ouest(Jurisdiction):
   jurisdiction_id = 'ca-qc-sud-ouest'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Le Sud-Ouest',

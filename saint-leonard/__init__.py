@@ -9,7 +9,7 @@ import re
 
 class St_Leonard(Jurisdiction):
   jurisdiction_id = 'ca-qc-st-leonard'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Saint-Leonard',

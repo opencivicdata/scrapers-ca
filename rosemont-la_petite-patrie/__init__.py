@@ -9,7 +9,7 @@ import re
 
 class Rosemont_La_Petite_Patrie(Jurisdiction):
   jurisdiction_id = 'ca-qc-rosemont-la_petitepatrie'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Rosemont-La PetitePatri',

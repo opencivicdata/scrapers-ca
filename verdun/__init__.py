@@ -9,7 +9,7 @@ import re
 
 class Verdun(Jurisdiction):
   jurisdiction_id = 'ca-qc-verdun'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Verdun',

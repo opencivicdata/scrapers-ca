@@ -9,7 +9,7 @@ import re
 
 class Ville_Marie(Jurisdiction):
   jurisdiction_id = 'ca-qc-ville-marie'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Ville-Marie',

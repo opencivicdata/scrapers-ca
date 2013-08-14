@@ -9,7 +9,7 @@ import re
 
 class Outremont(Jurisdiction):
   jurisdiction_id = 'ca-qc-outremont'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Outremont',

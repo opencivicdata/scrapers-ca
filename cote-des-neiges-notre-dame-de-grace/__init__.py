@@ -9,7 +9,7 @@ import re
 
 class Cote_des_Neiges_Notre_Dame_de_Grace(Jurisdiction):
   jurisdiction_id = 'ca-qc-cote-des-neiges-notre-dame-de-grace'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Cote-des-Neiges-Notre-Dame-de-Grace',

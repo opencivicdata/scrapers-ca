@@ -9,7 +9,7 @@ import re
 
 class Montreal_Nord(Jurisdiction):
   jurisdiction_id = 'ca-qc-montreal-nord'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Montreal-Nord',

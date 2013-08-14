@@ -9,7 +9,7 @@ import re
 
 class Pierrefonds_Roxboro(Jurisdiction):
   jurisdiction_id = 'ca-qc-pierrefonds-roxboro'
-  geographic_code = 2466023
+
   def get_metadata(self):
     return {
       'name': 'Pierrefonds-Roxboro',
