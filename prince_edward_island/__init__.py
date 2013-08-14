@@ -9,7 +9,7 @@ import re
 
 class Prince_Edward_Island(Jurisdiction):
   jurisdiction_id = 'ca-pe'
-  geographic_code = 'pe'
+  geographic_code = 11
   def get_metadata(self):
     return {
       'name': 'Prince Edward Island',

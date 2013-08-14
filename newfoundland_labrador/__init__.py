@@ -9,7 +9,7 @@ import re
 
 class Newfoundland_Labrador(Jurisdiction):
   jurisdiction_id = 'ca-nl'
-  geographic_code = 'nl'
+  geographic_code = 10
   def get_metadata(self):
     return {
       'name': 'Newfoundland Labrador',

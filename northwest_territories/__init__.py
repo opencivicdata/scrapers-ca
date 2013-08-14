@@ -9,7 +9,7 @@ import re
 
 class Northwest_Territories(Jurisdiction):
   jurisdiction_id = 'ca-nt'
-  geographic_code = 'nt'
+  geographic_code = 61
   def get_metadata(self):
     return {
       'name': 'Northwest Territories',
