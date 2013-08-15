@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Chatham_KentPersonScraper
+from .people import ChathamKentPersonScraper
 from utils import lxmlize
 
-class Chatham_Kent(Jurisdiction):
+class ChathamKent(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3536020/council'
   geographic_code = 3536020
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Chatham_Kent(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Chatham_KentPersonScraper
+        return ChathamKentPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

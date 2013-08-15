@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import New_BrunswickPersonScraper
+from .people import NewBrunswickPersonScraper
 from utils import lxmlize
 
-class New_Brunswick(Jurisdiction):
+class NewBrunswick(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nb/legislature'
   geographic_code = 13
   def get_metadata(self):
@@ -25,7 +25,7 @@ class New_Brunswick(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return New_BrunswickPersonScraper
+        return NewBrunswickPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

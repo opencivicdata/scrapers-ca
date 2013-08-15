@@ -8,7 +8,7 @@ import re, urllib2, os
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
-class Newfoundland_LabradorPersonScraper(Scraper):
+class NewfoundlandAndLabradorPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

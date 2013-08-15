@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Wood_BuffaloPersonScraper
+from .people import WoodBuffaloPersonScraper
 from utils import lxmlize
 
-class Wood_Buffalo(Jurisdiction):
+class WoodBuffalo(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:4816037/council'
   geographic_code = 4816037
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Wood_Buffalo(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Wood_BuffaloPersonScraper
+        return WoodBuffaloPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

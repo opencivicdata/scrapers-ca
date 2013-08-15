@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Thunder_BayPersonScraper
+from .people import ThunderBayPersonScraper
 from utils import lxmlize
 
-class Thunder_Bay(Jurisdiction):
+class ThunderBay(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3558004/council'
   geographic_code = 3558004
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Thunder_Bay(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Thunder_BayPersonScraper
+        return ThunderBayPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

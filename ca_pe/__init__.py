@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Prince_Edward_IslandPersonScraper
+from .people import PrinceEdwardIslandPersonScraper
 from utils import lxmlize
 
-class Prince_Edward_Island(Jurisdiction):
+class PrinceEdwardIsland(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:pe/legislature'
   geographic_code = 11
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Prince_Edward_Island(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Prince_Edward_IslandPersonScraper
+        return PrinceEdwardIslandPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Dollard_Des_OrmeauxPersonScraper
+from .people import DollardDesOrmeauxPersonScraper
 from utils import lxmlize
 
-class Dollard_Des_Ormeaux(Jurisdiction):
+class DollardDesOrmeaux(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466142/council'
   geographic_code = 2466142
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Dollard_Des_Ormeaux(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Dollard_Des_OrmeauxPersonScraper
+        return DollardDesOrmeauxPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

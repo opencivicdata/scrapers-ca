@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17'
 
-class Dollard_Des_OrmeauxPersonScraper(Scraper):
+class DollardDesOrmeauxPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

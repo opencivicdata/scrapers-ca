@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.pointe-claire.qc.ca/en/city-hall-administration/your-council/municipal-council.html'
 
-class Pointe_ClairePersonScraper(Scraper):
+class PointeClairePersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

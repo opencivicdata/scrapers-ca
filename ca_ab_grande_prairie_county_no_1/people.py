@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'
 
-class Grand_Prarie_No_1PersonScraper(Scraper):
+class GrandePrairieCountyNo1PersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

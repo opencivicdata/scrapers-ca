@@ -8,7 +8,7 @@ import re, urllib2, os
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
-class Nova_ScotiaPersonScraper(Scraper):
+class NovaScotiaPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()

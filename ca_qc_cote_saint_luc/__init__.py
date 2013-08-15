@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Cote_St_LucPersonScraper
+from .people import CoteSaintLucPersonScraper
 from utils import lxmlize
 
-class Cote_St_Luc(Jurisdiction):
+class CoteSaintLuc(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466058/council'
   geographic_code = 2466058
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Cote_St_Luc(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Cote_St_LucPersonScraper
+        return CoteSaintLucPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

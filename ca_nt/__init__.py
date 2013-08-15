@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Northwest_TerritoriesPersonScraper
+from .people import NorthwestTerritoriesPersonScraper
 from utils import lxmlize
 
-class Northwest_Territories(Jurisdiction):
+class NorthwestTerritories(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/territory:nt/legislature'
   geographic_code = 61
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Northwest_Territories(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Northwest_TerritoriesPersonScraper
+        return NorthwestTerritoriesPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

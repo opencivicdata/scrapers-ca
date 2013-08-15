@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/city-council/'
 
-class SudburyPersonScraper(Scraper):
+class GreaterSudburyPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

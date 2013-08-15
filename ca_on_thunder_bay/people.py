@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.thunderbay.ca/City_Government/Your_Council.htm'
 
-class Thunder_BayPersonScraper(Scraper):
+class ThunderBayPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Newfoundland_LabradorPersonScraper
+from .people import NewfoundlandAndLabradorPersonScraper
 from utils import lxmlize
 
-class Newfoundland_Labrador(Jurisdiction):
+class NewfoundlandAndLabrador(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nl/legislature'
   geographic_code = 10
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Newfoundland_Labrador(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Newfoundland_LabradorPersonScraper
+        return NewfoundlandAndLabradorPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

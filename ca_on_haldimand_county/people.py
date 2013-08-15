@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.haldimandcounty.on.ca/OurCounty.aspx?id=338'
 
-class HaldimandPersonScraper(Scraper):
+class HaldimandCountyPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

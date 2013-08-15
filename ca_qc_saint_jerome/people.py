@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx'
 
-class Sainte_JeromePersonScraper(Scraper):
+class SaintJeromePersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

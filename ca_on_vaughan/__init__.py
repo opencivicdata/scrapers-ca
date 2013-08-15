@@ -5,7 +5,7 @@ from utils import lxmlize
 
 import re
 
-class Gatineau(Jurisdiction):
+class Vaughan(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3519028/council'
   geographic_code = 3519028
   def get_metadata(self):

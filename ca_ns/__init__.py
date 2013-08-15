@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import Nova_ScotiaPersonScraper
+from .people import NovaScotiaPersonScraper
 from utils import lxmlize
 
-class Nova_Scotia(Jurisdiction):
+class NovaScotia(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:ns/legislature'
   geographic_code = 12
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Nova_Scotia(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return Nova_ScotiaPersonScraper
+        return NovaScotiaPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

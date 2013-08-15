@@ -1,9 +1,9 @@
 from pupa.scrape import Jurisdiction
 
-from .people import SudburyPersonScraper
+from .people import GreaterSudburyPersonScraper
 from utils import lxmlize
 
-class Gatineau(Jurisdiction):
+class GreaterSudbury(Jurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3553005/council'
   geographic_code = 3553005
   def get_metadata(self):
@@ -25,7 +25,7 @@ class Gatineau(Jurisdiction):
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
-        return SudburyPersonScraper
+        return GreaterSudburyPersonScraper
 
   def scrape_session_list(self):
     return ['N/A']

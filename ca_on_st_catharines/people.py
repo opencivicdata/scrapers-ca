@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/BrianMcMullanMayor.asp'
 
-class St_CatharinesPersonScraper(Scraper):
+class StCatharinesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
