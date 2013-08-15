@@ -4,7 +4,7 @@ from .people import Sainte_JeromePersonScraper
 from utils import lxmlize
 
 class Sainte_Jerome(Jurisdiction):
-  jurisdiction_id = 'ca-on-burlington'
+  jurisdiction_id = 'ca-qc-sainte-jerome'
   geographic_code = 2475017
   def get_metadata(self):
     return {
