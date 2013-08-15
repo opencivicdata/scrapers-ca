@@ -1,8 +1,6 @@
 from pupa.scrape import Jurisdiction
 
-# from .events import TorontoEventScraper
 from .people import WestmountPersonScraper
-# from .votes import TorontoVoteScraper
 from utils import lxmlize
 
 import re
@@ -29,16 +27,11 @@ class Westmount(Jurisdiction):
         }
       },
       'feature_flags': [],
-      # '_ignored_scraped_sessions': ['2006-2010'],
     }
 
   def get_scraper(self, term, session, scraper_type):
-    # if scraper_type == 'events':
-    #     return TorontoEventScraper
     if scraper_type == 'people':
         return WestmountPersonScraper
-    # if scraper_type == 'votes':
-    #     return TorontoVoteScraper
 
   def scrape_session_list(self):
     return ['2010-2014']
