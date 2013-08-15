@@ -1,32 +1,12 @@
-from pupa.scrape import Jurisdiction
+from utils import CanadianJurisdiction
 
-from .people import WestmountPersonScraper
-from utils import lxmlize
-
-class Westmount(Jurisdiction):
+class Westmount(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466032/council'
   geographic_code = 2466032
-  def get_metadata(self):
+  def _get_metadata(self):
     return {
       'name': 'Westmount',
       'legislature_name': 'Westmount City Council',
       'legislature_url': 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61',
-      'terms': [{
-        'name': 'N/A',
-        'sessions': ['N/A'],
-      }],
       'provides': ['people'],
-      'session_details': {
-        'N/A': {
-          '_scraped_name': 'N/A',
-        }
-      },
     }
-
-  def get_scraper(self, term, session, scraper_type):
-    if scraper_type == 'people':
-        return WestmountPersonScraper
-
-  def scrape_session_list(self):
-    return ['N/A']
-    

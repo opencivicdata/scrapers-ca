@@ -1,5 +1,43 @@
+from pupa.scrape import Jurisdiction
+
 from scrapelib import urlopen
 import lxml.html
+
+class CanadianJurisdiction(Jurisdiction):
+  def get_metadata(self):
+    metadata = {
+      'feature_flags': [],
+      'parties': [],
+      'session_details': {
+        'N/A': {
+          '_scraped_name': 'N/A',
+        }
+      },
+      'terms': [
+        {
+          'name': 'N/A',
+          'sessions': ['N/A'],
+          'start_year': 1900,
+          'end_year': 2030,
+        }
+      ],
+    }
+    metadata.update(self._get_metadata())
+    return metadata
+
+  def get_scraper(self, term, session, scraper_type):
+    if scraper_type in self.metadata['provides']:
+      if scraper_type == 'events':
+        singular = 'Event'
+      elif scraper_type == 'people':
+        singular = 'Person'
+      elif scraper_type == 'votes':
+        singular = 'Vote'
+      class_name = self.__class__.__name__ + singular + 'Scraper'
+      return getattr(__import__(self.__module__ + '.' + scraper_type, fromlist=[class_name]), class_name)
+
+  def scrape_session_list(self):
+    return ['N/A']
 
 def lxmlize(url, encoding = 'utf-8'):
   entry = urlopen(url).encode(encoding)

@@ -1,32 +1,12 @@
-from pupa.scrape import Jurisdiction
+from utils import CanadianJurisdiction
 
-from .people import WoodBuffaloPersonScraper
-from utils import lxmlize
-
-class WoodBuffalo(Jurisdiction):
+class WoodBuffalo(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:4816037/council'
   geographic_code = 4816037
-  def get_metadata(self):
+  def _get_metadata(self):
     return {
       'name': 'Wood Buffalo',
       'legislature_name': 'Wood Buffalo City Council',
       'legislature_url': 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm',
-      'terms': [{
-        'name': 'N/A',
-        'sessions': ['N/A'],
-      }],
       'provides': ['people'],
-      'session_details': {
-        'N/A': {
-          '_scraped_name': 'N/A',
-        }
-      },
     }
-
-  def get_scraper(self, term, session, scraper_type):
-    if scraper_type == 'people':
-        return WoodBuffaloPersonScraper
-
-  def scrape_session_list(self):
-    return ['N/A']
-    
