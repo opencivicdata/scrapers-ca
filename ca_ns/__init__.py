@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 class NovaScotia(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:ns/legislature'
-  geographic_code = 12
+
   def _get_metadata(self):
     return {
       'name': 'Nova Scotia',

@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 class PrinceEdwardIsland(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:pe/legislature'
-  geographic_code = 11
+
   def _get_metadata(self):
     return {
       'name': 'Prince Edward Island',
