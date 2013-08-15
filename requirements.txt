@@ -1,4 +1,6 @@
+GitPython
 lxml
+unidecode
 -e git+http://github.com/opencivicdata/pupa.git#egg=pupa
 -e git+http://github.com/opencivicdata/larvae.git#egg=larvae
 -e git+http://github.com/sunlightlabs/scrapelib.git#egg=scrapelib

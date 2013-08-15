@@ -7,7 +7,7 @@ from utils import lxmlize
 
 class Toronto(Jurisdiction):
   jurisdiction_id = 'ca-on-toronto'
-  geographic_code = 4819006
+  geographic_code = 3520005
   def get_metadata(self):
     return {
       'name': 'Toronto',

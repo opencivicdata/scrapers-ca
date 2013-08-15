@@ -5,7 +5,7 @@ from utils import lxmlize
 
 class Montreal_Est(Jurisdiction):
   jurisdiction_id = 'ca-qc-montreal-est'
-  geographic_code = 3524002
+  geographic_code = 2466007
   def get_metadata(self):
     return {
       'name': 'Montreal-Est',

@@ -5,7 +5,7 @@ from utils import lxmlize
 
 class Lambton(Jurisdiction):
   jurisdiction_id = 'ca-on-lambton'
-  geographic_code = 3538040
+
   def get_metadata(self):
     return {
       'name': 'Lambton',
