@@ -56,11 +56,19 @@ class TorontoEventScraper(Scraper):
     with open('meetings.csv','rb') as csvfile:
       csvfile = csv.reader(csvfile,delimiter = ',')
       next(csvfile)
+
+      committee = ''
+      agenda_items = []
+
       for row in csvfile:
         name = row[0]
         when = row[2]
         when = dt.datetime.strptime(when, "%Y-%m-%d")
-        location = row[5] 
+        location = row[5]
+
+        if name != committee:
+          committee = name
+          agenda_items = find_items(committee) 
 
         e = Event(name=name,
                   session=self.session,
@@ -95,5 +103,20 @@ def find_attendees(directory , event):
           if (row[0] == event[0]) and (row[1] == event[1]) and (row[5] == "Y"):
             attendees.append(name)
   return set(attendees)
+
+def find_items(committee):
+  page = lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
+  link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href'%committee)[0]
+  page = lxmlize(link)
+  meetings = page.xpath('//a[contains(@name, "header")]')
+  for meeting in meetings:
+    meeting_id = meeting.attrib['name'].replace('header','').strip()
+    # get = { 'function' : 'doPrepare', 'meetingId' : meeting_id }
+    request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&meetingId=%s'%meeting_id
+    # r = requests.get('http://app.toronto.ca/tmmis/decisionBodyProfile.do?', data=get)
+    page = lxmlize(request_string)
+    items = page.xpath('//tr[@class = "urgent" or @class="nonUrgent"]')
+    for item in items:
+      print item.text_content()
 
 
