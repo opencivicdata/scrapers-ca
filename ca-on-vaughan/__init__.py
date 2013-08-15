@@ -20,13 +20,11 @@ class Gatineau(Jurisdiction):
         'end_year': 2014,
       }],
       'provides': ['people'],
-      'parties': [],
       'session_details': {
         '2010-2014': {
           '_scraped_name': '2010-2014',
         }
       },
-      'feature_flags': [],
     }
 
   def get_scraper(self, term, session, scraper_type):

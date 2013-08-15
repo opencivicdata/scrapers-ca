@@ -3,8 +3,6 @@ from pupa.scrape import Jurisdiction
 from .people import GatineauPersonScraper
 from utils import lxmlize
 
-import re
-
 class Gatineau(Jurisdiction):
   jurisdiction_id = 'ca-qc-gatineau'
   geographic_code = 2481017
@@ -20,13 +18,11 @@ class Gatineau(Jurisdiction):
         'end_year': 2013,
       }],
       'provides': ['people'],
-      'parties': [],
       'session_details': {
         '2009-2013': {
           '_scraped_name': '2009-2013',
         }
       },
-      'feature_flags': [],
     }
 
   def get_scraper(self, term, session, scraper_type):

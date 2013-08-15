@@ -20,13 +20,11 @@ class Toronto(Jurisdiction):
         'end_year': 2014,
       }],
       'provides': ['events', 'people', 'votes'],
-      'parties': [],
       'session_details': {
         '2010-2014': {
           '_scraped_name': '2010-2014',
         }
       },
-      'feature_flags': [],
       '_ignored_scraped_sessions': ['2006-2010'],
     }
 

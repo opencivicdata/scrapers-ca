@@ -3,8 +3,6 @@ from pupa.scrape import Jurisdiction
 from .people import AjaxPersonScraper
 from utils import lxmlize
 
-import re
-
 class Ajax(Jurisdiction):
   jurisdiction_id = 'ca-on-ajax'
   geographic_code = 3518005
@@ -14,19 +12,15 @@ class Ajax(Jurisdiction):
       'legislature_name': 'Ajax City Council',
       'legislature_url': 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp',
       'terms': [{
-        'name': '2010-2014',
-        'sessions': ['2010-2014'],
-        'start_year': 2010,
-        'end_year': 2014,
+        'name': 'N/A',
+        'sessions': ['N/A'],
       }],
       'provides': ['people'],
-      'parties': [],
       'session_details': {
-        '2010-2014': {
-          '_scraped_name': '2010-2014',
+        'N/A': {
+          '_scraped_name': 'N/A',
         }
       },
-      'feature_flags': [],
     }
 
   def get_scraper(self, term, session, scraper_type):
@@ -34,5 +28,5 @@ class Ajax(Jurisdiction):
         return AjaxPersonScraper
 
   def scrape_session_list(self):
-    return ['2010-2014']
+    return ['N/A']
     

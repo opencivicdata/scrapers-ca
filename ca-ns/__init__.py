@@ -3,8 +3,6 @@ from pupa.scrape import Jurisdiction
 from .people import Nova_ScotiaPersonScraper
 from utils import lxmlize
 
-import re
-
 class Nova_Scotia(Jurisdiction):
   jurisdiction_id = 'ca-ns'
   geographic_code = 12
@@ -14,19 +12,15 @@ class Nova_Scotia(Jurisdiction):
       'legislature_name': 'Nova Scotia City Council',
       'legislature_url': 'http://www.unsm.ca/doc_download/880-mayor-list-2013',
       'terms': [{
-        'name': '2010-2014',
-        'sessions': ['2010-2014'],
-        'start_year': 2010,
-        'end_year': 2014,
+        'name': 'N/A',
+        'sessions': ['N/A'],
       }],
       'provides': ['people'],
-      'parties': [],
       'session_details': {
-        '2010-2014': {
-          '_scraped_name': '2010-2014',
+        'N/A': {
+          '_scraped_name': 'N/A',
         }
       },
-      'feature_flags': [],
     }
 
   def get_scraper(self, term, session, scraper_type):
@@ -34,5 +28,5 @@ class Nova_Scotia(Jurisdiction):
         return Nova_ScotiaPersonScraper
 
   def scrape_session_list(self):
-    return ['2010-2014']
+    return ['N/A']
     

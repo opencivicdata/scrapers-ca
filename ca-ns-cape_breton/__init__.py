@@ -3,8 +3,6 @@ from pupa.scrape import Jurisdiction
 from .people import Cape_BretonPersonScraper
 from utils import lxmlize
 
-import re
-
 class Cape_Breton(Jurisdiction):
   jurisdiction_id = 'ca-ns-cape_breton'
   geographic_code = 1217030
@@ -14,19 +12,15 @@ class Cape_Breton(Jurisdiction):
       'legislature_name': 'Cape Breton City Council',
       'legislature_url': 'http://www.cbrm.ns.ca/councillors.html',
       'terms': [{
-        'name': '2010-2014',
-        'sessions': ['2010-2014'],
-        'start_year': 2010,
-        'end_year': 2014,
+        'name': 'N/A',
+        'sessions': ['N/A'],
       }],
       'provides': ['people'],
-      'parties': [],
       'session_details': {
-        '2010-2014': {
-          '_scraped_name': '2010-2014',
+        'N/A': {
+          '_scraped_name': 'N/A',
         }
       },
-      'feature_flags': [],
     }
 
   def get_scraper(self, term, session, scraper_type):
@@ -34,5 +28,5 @@ class Cape_Breton(Jurisdiction):
         return Cape_BretonPersonScraper
 
   def scrape_session_list(self):
-    return ['2010-2014']
+    return ['N/A']
     
