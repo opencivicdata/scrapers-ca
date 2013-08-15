@@ -4,7 +4,7 @@ from .people import Sainte_Anne_de_BellevuePersonScraper
 from utils import lxmlize
 
 class Sainte_Anne_de_Bellevue(Jurisdiction):
-  jurisdiction_id = 'ca-qc-sainte-anne-de-bellevue'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466117/council'
   geographic_code = 2466117
   def get_metadata(self):
     return {

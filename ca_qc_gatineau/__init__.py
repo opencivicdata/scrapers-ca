@@ -4,7 +4,7 @@ from .people import GatineauPersonScraper
 from utils import lxmlize
 
 class Gatineau(Jurisdiction):
-  jurisdiction_id = 'ca-qc-gatineau'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2481017/council'
   geographic_code = 2481017
   def get_metadata(self):
     return {

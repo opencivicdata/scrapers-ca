@@ -4,7 +4,7 @@ from .people import SaguenayPersonScraper
 from utils import lxmlize
 
 class Saguenay(Jurisdiction):
-  jurisdiction_id = 'ca-qc-saguenay'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2494068/council'
   geographic_code = 2494068
   def get_metadata(self):
     return {

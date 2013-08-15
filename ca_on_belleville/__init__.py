@@ -4,7 +4,7 @@ from .people import BellevillePersonScraper
 from utils import lxmlize
 
 class Belleville(Jurisdiction):
-  jurisdiction_id = 'ca-on-belleville'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3512005/council'
   geographic_code = 3512005
   def get_metadata(self):
     return {

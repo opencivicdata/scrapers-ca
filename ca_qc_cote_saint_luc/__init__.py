@@ -4,7 +4,7 @@ from .people import Cote_St_LucPersonScraper
 from utils import lxmlize
 
 class Cote_St_Luc(Jurisdiction):
-  jurisdiction_id = 'ca-qc-cote_st-luc'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466058/council'
   geographic_code = 2466058
   def get_metadata(self):
     return {

@@ -4,7 +4,7 @@ from .people import Newfoundland_LabradorPersonScraper
 from utils import lxmlize
 
 class Newfoundland_Labrador(Jurisdiction):
-  jurisdiction_id = 'ca-nl'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nl/legislature'
   geographic_code = 10
   def get_metadata(self):
     return {

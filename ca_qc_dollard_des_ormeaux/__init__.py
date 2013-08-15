@@ -4,7 +4,7 @@ from .people import Dollard_Des_OrmeauxPersonScraper
 from utils import lxmlize
 
 class Dollard_Des_Ormeaux(Jurisdiction):
-  jurisdiction_id = 'ca-qc-dollard-des-ormeaux'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466142/council'
   geographic_code = 2466142
   def get_metadata(self):
     return {

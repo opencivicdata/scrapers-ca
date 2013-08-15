@@ -4,7 +4,7 @@ from .people import MercierPersonScraper
 from utils import lxmlize
 
 class Mercier(Jurisdiction):
-  jurisdiction_id = 'ca-qc-mercier'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2467045/council'
   geographic_code = 2467045
   def get_metadata(self):
     return {

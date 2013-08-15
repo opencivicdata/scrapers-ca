@@ -4,7 +4,7 @@ from .people import HaldimandPersonScraper
 from utils import lxmlize
 
 class Haldimand(Jurisdiction):
-  jurisdiction_id = 'ca-on-haldimand'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3528018/council'
   geographic_code = 3528018
   def get_metadata(self):
     return {

@@ -4,7 +4,7 @@ from .people import WestmountPersonScraper
 from utils import lxmlize
 
 class Westmount(Jurisdiction):
-  jurisdiction_id = 'ca-qc-westmount'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466032/council'
   geographic_code = 2466032
   def get_metadata(self):
     return {

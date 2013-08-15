@@ -4,7 +4,7 @@ from .people import Northwest_TerritoriesPersonScraper
 from utils import lxmlize
 
 class Northwest_Territories(Jurisdiction):
-  jurisdiction_id = 'ca-nt'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/territory:nt/legislature'
   geographic_code = 61
   def get_metadata(self):
     return {

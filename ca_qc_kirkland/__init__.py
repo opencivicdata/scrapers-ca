@@ -4,7 +4,7 @@ from .people import KirklandPersonScraper
 from utils import lxmlize
 
 class Kirkland(Jurisdiction):
-  jurisdiction_id = 'ca-qc-kirkland'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466102/council'
   geographic_code = 2466102
   def get_metadata(self):
     return {

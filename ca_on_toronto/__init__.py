@@ -6,7 +6,7 @@ from .votes import TorontoVoteScraper
 from utils import lxmlize
 
 class Toronto(Jurisdiction):
-  jurisdiction_id = 'ca-on-toronto'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3520005/council'
   geographic_code = 3520005
   def get_metadata(self):
     return {

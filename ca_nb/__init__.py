@@ -4,7 +4,7 @@ from .people import New_BrunswickPersonScraper
 from utils import lxmlize
 
 class New_Brunswick(Jurisdiction):
-  jurisdiction_id = 'ca-nb'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nb/legislature'
   geographic_code = 13
   def get_metadata(self):
     return {

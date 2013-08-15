@@ -4,7 +4,7 @@ from .people import AjaxPersonScraper
 from utils import lxmlize
 
 class Ajax(Jurisdiction):
-  jurisdiction_id = 'ca-on-ajax'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3518005/council'
   geographic_code = 3518005
   def get_metadata(self):
     return {

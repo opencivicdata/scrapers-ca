@@ -4,7 +4,7 @@ from .people import Nova_ScotiaPersonScraper
 from utils import lxmlize
 
 class Nova_Scotia(Jurisdiction):
-  jurisdiction_id = 'ca-ns'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:ns/legislature'
   geographic_code = 12
   def get_metadata(self):
     return {

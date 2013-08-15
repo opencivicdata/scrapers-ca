@@ -4,7 +4,7 @@ from .people import Grand_Prarie_No_1PersonScraper
 from utils import lxmlize
 
 class Grand_Prarie_No_1(Jurisdiction):
-  jurisdiction_id = 'ca-ab-grand_prarie_no_1'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:4819006/council'
   geographic_code = 4819006
   def get_metadata(self):
     return {

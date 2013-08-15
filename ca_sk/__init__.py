@@ -4,7 +4,7 @@ from .people import SaskatchewanPersonScraper
 from utils import lxmlize
 
 class Saskatchewan(Jurisdiction):
-  jurisdiction_id = 'ca-sk'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:sk/legislature'
   geographic_code = 47
   def get_metadata(self):
     return {

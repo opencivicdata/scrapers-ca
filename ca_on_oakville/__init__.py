@@ -6,7 +6,7 @@ from utils import lxmlize
 import re
 
 class Oakville(Jurisdiction):
-  jurisdiction_id = 'ca-on-oakville'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3524001/council'
   geographic_code = 3524001
   def get_metadata(self):
     return {

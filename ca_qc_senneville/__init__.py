@@ -4,7 +4,7 @@ from .people import SennevillePersonScraper
 from utils import lxmlize
 
 class Senneville(Jurisdiction):
-  jurisdiction_id = 'ca-qc-senneville'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466127/council'
   geographic_code = 2466127
   def get_metadata(self):
     return {

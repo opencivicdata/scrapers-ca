@@ -4,7 +4,7 @@ from .people import NewmarketPersonScraper
 from utils import lxmlize
 
 class Newmarket(Jurisdiction):
-  jurisdiction_id = 'ca-on-newmarket'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3519048/council'
   geographic_code = 3519048
   def get_metadata(self):
     return {

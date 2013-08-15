@@ -4,7 +4,7 @@ from .people import GuelphPersonScraper
 from utils import lxmlize
 
 class Guelph(Jurisdiction):
-  jurisdiction_id = 'ca-on-guelph'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3523008/council'
   geographic_code = 3523008
   def get_metadata(self):
     return {

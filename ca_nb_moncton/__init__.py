@@ -4,7 +4,7 @@ from .people import MonctonPersonScraper
 from utils import lxmlize
 
 class Moncton(Jurisdiction):
-  jurisdiction_id = 'ca-on-moncton'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:1307022/council'
   geographic_code = 1307022
   def get_metadata(self):
     return {

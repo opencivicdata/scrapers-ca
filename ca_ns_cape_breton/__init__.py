@@ -4,7 +4,7 @@ from .people import Cape_BretonPersonScraper
 from utils import lxmlize
 
 class Cape_Breton(Jurisdiction):
-  jurisdiction_id = 'ca-ns-cape_breton'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:1217030/council'
   geographic_code = 1217030
   def get_metadata(self):
     return {

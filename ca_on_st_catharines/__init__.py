@@ -4,7 +4,7 @@ from .people import St_CatharinesPersonScraper
 from utils import lxmlize
 
 class St_Catharines(Jurisdiction):
-  jurisdiction_id = 'ca-on-st_catharines'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3526053/council'
   geographic_code = 3526053
   def get_metadata(self):
     return {

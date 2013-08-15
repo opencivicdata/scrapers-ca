@@ -4,7 +4,7 @@ from .people import Thunder_BayPersonScraper
 from utils import lxmlize
 
 class Thunder_Bay(Jurisdiction):
-  jurisdiction_id = 'ca-on-thunder_bay'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3558004/council'
   geographic_code = 3558004
   def get_metadata(self):
     return {

@@ -4,7 +4,7 @@ from .people import Chatham_KentPersonScraper
 from utils import lxmlize
 
 class Chatham_Kent(Jurisdiction):
-  jurisdiction_id = 'ca-on-chatham-kent'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3536020/council'
   geographic_code = 3536020
   def get_metadata(self):
     return {

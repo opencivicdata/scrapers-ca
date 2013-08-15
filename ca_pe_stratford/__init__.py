@@ -4,7 +4,7 @@ from .people import StratfordPersonScraper
 from utils import lxmlize
 
 class Stratford(Jurisdiction):
-  jurisdiction_id = 'ca-pe-stratford'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:1102080/council'
   geographic_code = 1102080
   def get_metadata(self):
     return {

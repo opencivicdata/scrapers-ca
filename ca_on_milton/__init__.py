@@ -4,7 +4,7 @@ from .people import MiltonPersonScraper
 from utils import lxmlize
 
 class Milton(Jurisdiction):
-  jurisdiction_id = 'ca-on-milton'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3524009/council'
   geographic_code = 3524009
   def get_metadata(self):
     return {

@@ -4,7 +4,7 @@ from .people import Prince_Edward_IslandPersonScraper
 from utils import lxmlize
 
 class Prince_Edward_Island(Jurisdiction):
-  jurisdiction_id = 'ca-pe'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:pe/legislature'
   geographic_code = 11
   def get_metadata(self):
     return {

@@ -4,7 +4,7 @@ from .people import Richmond_HillPersonScraper
 from utils import lxmlize
 
 class Richmond_Hill(Jurisdiction):
-  jurisdiction_id = 'ca-on-richmond_hill'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3519038/council'
   geographic_code = 3519038
   def get_metadata(self):
     return {

@@ -4,7 +4,7 @@ from .people import MontrealPersonScraper
 from utils import lxmlize
 
 class Montreal(Jurisdiction):
-  jurisdiction_id = 'ca-qc-montreal'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/council'
   geographic_code = 2466023
   def get_metadata(self):
     return {

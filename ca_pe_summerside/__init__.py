@@ -4,7 +4,7 @@ from .people import SummersidePersonScraper
 from utils import lxmlize
 
 class Summerside(Jurisdiction):
-  jurisdiction_id = 'ca-pe-summerside'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:1103025/council'
   geographic_code = 1103025
   def get_metadata(self):
     return {
