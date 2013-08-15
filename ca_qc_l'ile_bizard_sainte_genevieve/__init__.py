@@ -15,5 +15,3 @@ class Lile_Bizard_Sainte_Genevieve(CanadianJurisdiction):
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
         return MontrealPersonScraper
-
-    

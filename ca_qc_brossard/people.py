@@ -23,7 +23,7 @@ class BrossardPersonScraper(Scraper):
       if 'Mayor' in district:
         district = 'brossard'
       phone = info.pop(0).replace('ext. ', 'x').strip()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)

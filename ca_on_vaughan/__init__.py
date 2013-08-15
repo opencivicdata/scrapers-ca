@@ -28,4 +28,3 @@ class Vaughan(CanadianJurisdiction):
     session = page.xpath('//*[@id="WebPartTitleWPQ2"]/h3/span[1]')[0].text_content()
     session = re.findall(r'[0-9]{4}-[0-9]{4}', session)[0]
     return [str(session)]
-    

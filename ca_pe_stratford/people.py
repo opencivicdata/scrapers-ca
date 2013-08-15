@@ -17,7 +17,7 @@ class StratfordPersonScraper(Scraper):
 
     councillors = page.xpath('//strong[contains(text(), "Councillor")]/parent::p')
     for councillor in councillors:
-      
+
       name = councillor.xpath('./strong/text()')[0].replace('Councillor', '')
       district = re.findall('Ward .*', councillor.text_content())[0]
 
@@ -49,4 +49,3 @@ class StratfordPersonScraper(Scraper):
     p.add_contact('email', email, None)
     p.add_contact('phone', phone, None)
     return p
-

@@ -25,7 +25,7 @@ class KirklandPersonScraper(Scraper):
 
       phone = councillor.xpath('.//div[contains(text(), "#")]/text()')[0].replace('T ','').replace(' ','-').replace(',-#-',' x')
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('phone', phone, None)

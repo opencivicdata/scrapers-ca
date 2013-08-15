@@ -19,7 +19,7 @@ class WoodBuffaloPersonScraper(Scraper):
       if not name:
         continue
       district = councillor.xpath('./ancestor::table/preceding-sibling::h2/text()')[-1].split('-')[1]
-      
+
       url = councillor.attrib['href']
       page = lxmlize(url)
 

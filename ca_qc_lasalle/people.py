@@ -16,8 +16,8 @@ class LaSallePersonScraper(Scraper):
     for councillor in councillors:
       if not councillor.text_content().strip():
         continue
-      name = councillor.xpath('./font/b/text()') 
-      if not name: 
+      name = councillor.xpath('./font/b/text()')
+      if not name:
         name = councillor.xpath('./font/text()')
       if 'e-mail' in name[0]:
         name = councillor.xpath('./b/font/text()')
@@ -36,4 +36,3 @@ class LaSallePersonScraper(Scraper):
       home_phone = re.findall(r'(?<=home phone:)(.*)', councillor.text_content(), flags=re.DOTALL)[0]
       p.add_contact('Phone', home_phone.strip(), 'home')
       yield p
-      

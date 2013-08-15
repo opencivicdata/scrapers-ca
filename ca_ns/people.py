@@ -29,7 +29,7 @@ class NovaScotiaPersonScraper(Scraper):
       district = lines.pop(0).strip()
       if not re.findall(r'[0-9]', lines[0]):
         district = district + ' ' + lines.pop(0).strip()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
@@ -55,7 +55,7 @@ class NovaScotiaPersonScraper(Scraper):
         if matches:
           p.add_contact('email', emails.pop(i), None)
       yield p
-          
+
 
     txt.close()
     os.system('rm ns.pdf')

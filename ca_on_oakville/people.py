@@ -29,7 +29,7 @@ class OakvillePersonScraper(Scraper):
         url = councillor.xpath('.//a')[0].attrib['href']
         self.scrape_councillor(url, p)
         yield p
-    
+
   def scrape_mayor(self, url, mayor):
     page = lxmlize(url)
     mayor.add_source(COUNCIL_PAGE)
@@ -59,7 +59,7 @@ class OakvillePersonScraper(Scraper):
     councillor.add_source(url)
 
     info = page.xpath('//div[@class = "fourcol multicollast"]//p')[1].text_content()
-    
+
     ## extract contact information
     address = re.findall(r'([0-9].*([A-Z][0-9][A-Z] [0-9][A-Z][0-9]))', info, flags=re.DOTALL)
     if address:
@@ -94,4 +94,3 @@ class OakvillePersonScraper(Scraper):
     if "LinkedIn" in info:
       link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "linkedin")]')[0].attrib['href']
       councillor.add_link(link,'linkedin')
-

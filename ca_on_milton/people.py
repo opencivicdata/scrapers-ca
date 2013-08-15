@@ -20,7 +20,7 @@ class MiltonPersonScraper(Scraper):
         district = 'milton'
       else:
         district = councillor.xpath('./td[2]/p/text()')[2]
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 

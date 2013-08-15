@@ -16,7 +16,7 @@ class SaintJeromePersonScraper(Scraper):
     councillors = page.xpath('//table[1]/tbody//tr')[6:]
     for councillor in councillors:
       councillor = councillor.text_content().strip()
-      
+
       name = councillor.split(',')[0]
 
       if 'district' in name:
@@ -25,7 +25,7 @@ class SaintJeromePersonScraper(Scraper):
       if not district:
         district = re.findall(ur'no ([0-9]{1,2})', councillor)
 
-      # if theres still no district, it must be the mayor      
+      # if theres still no district, it must be the mayor
       if not district:
         district = 'sainte-jerome'
       else:

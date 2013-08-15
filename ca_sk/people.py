@@ -69,7 +69,7 @@ class SaskatchewanPersonScraper(Scraper):
           councillor = line.split(':')[1].replace('Mr.','').replace('Mrs.','').replace('Ms.','').replace('His Worship','').replace('Her Worship','').strip()
           if councillor:
             councillors.append(councillor)
-      
+
       for councillor in councillors:
         p = Legislator(post_id=district_name, name=councillor)
         p.add_source(COUNCIL_PAGE)

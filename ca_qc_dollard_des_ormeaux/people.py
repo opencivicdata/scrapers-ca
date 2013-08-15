@@ -33,7 +33,7 @@ class DollardDesOrmeauxPersonScraper(Scraper):
 
       email = councillor.xpath('./parent::p/following-sibling::p//a[contains(@href, "mailto:")]')
       if email:
-        p.add_contact('email', email[0].text_content(), 'personal email') 
+        p.add_contact('email', email[0].text_content(), 'personal email')
 
       p.add_contact('phone', general_phone, 'phone for all city councillors')
       p.add_contact('fax', general_fax, 'fax for all city councillors')

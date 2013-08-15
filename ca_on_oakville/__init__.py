@@ -28,4 +28,3 @@ class Oakville(CanadianJurisdiction):
     terms = page.xpath("//div[@class='colsevenfive multicol']//ul//li//a[contains(text(),'Orientation Manual')]")[0]
     terms = re.match(r'([0-9]{4})-([0-9]{4})', terms.text_content()).group()
     return [terms]
-    

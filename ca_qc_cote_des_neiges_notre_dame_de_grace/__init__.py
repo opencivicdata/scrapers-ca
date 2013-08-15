@@ -15,5 +15,3 @@ class Cote_des_Neiges_Notre_Dame_de_Grace(CanadianJurisdiction):
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
         return MontrealPersonScraper
-
-    

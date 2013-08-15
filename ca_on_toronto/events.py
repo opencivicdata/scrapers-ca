@@ -60,14 +60,14 @@ class TorontoEventScraper(Scraper):
         name = row[0]
         when = row[2]
         when = dt.datetime.strptime(when, "%Y-%m-%d")
-        location = row[5] 
+        location = row[5]
 
         e = Event(name=name,
                   session=self.session,
                   when=when,
                   location=location
           )
-        
+
         attendees = find_attendees(tmpdir, row)
         if len(attendees) == 0:
           empty.append(row)
@@ -82,7 +82,7 @@ class TorontoEventScraper(Scraper):
 def find_attendees(directory , event):
   # TODO
   # go through all csv files and find members that attended the event
-  attendees = [] 
+  attendees = []
   files = [f for f in os.listdir(directory)]
   for f in files:
     name = f.replace('.csv','')
@@ -95,5 +95,3 @@ def find_attendees(directory , event):
           if (row[0] == event[0]) and (row[1] == event[1]) and (row[5] == "Y"):
             attendees.append(name)
   return set(attendees)
-
-

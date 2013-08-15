@@ -23,7 +23,7 @@ class CoteSaintLucPersonScraper(Scraper):
     for councillor in councillors:
       district = councillor.xpath('.//h3/text()')[0]
       name = councillor.xpath('.//p[contains(text(), "Councillor")]/strong/text()')[0]
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillors_url)
@@ -42,7 +42,7 @@ class CoteSaintLucPersonScraper(Scraper):
         p.add_link(website, 'personal site')
 
       yield p
-  
+
   def scrape_mayor(self, url):
     page = lxmlize(url)
     info = page.xpath('//div[@class="pane-content"]')[1]

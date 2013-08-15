@@ -51,5 +51,3 @@ class LambtonPersonScraper(Scraper):
         councillor.add_contact('email', contact, note)
       else:
         councillor.add_contact('Phone', contact, note + ' ' + contact_type)
-
-

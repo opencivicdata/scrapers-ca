@@ -40,5 +40,5 @@ class SaguenayPersonScraper(Scraper):
       p.add_source(url)
 
       p.add_contact('phone', phone, None)
-      p.add_contact('email', email, None)      
+      p.add_contact('email', email, None)
       yield p

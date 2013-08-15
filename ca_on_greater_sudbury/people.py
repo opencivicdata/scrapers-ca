@@ -29,7 +29,7 @@ class GreaterSudburyPersonScraper(Scraper):
       address = page.xpath('//div[@class="column last"]//p')[0].text_content()
       phone = page.xpath('//article[@id="primary"]//*[contains(text(),"Tel")]')[0].text_content()
       phone = re.findall(r'([0-9].*)', phone)[0].replace(') ','-')
-      fax = page.xpath('//article[@id="primary"]//*[contains(text(),"Fax")]')[0].text_content()  
+      fax = page.xpath('//article[@id="primary"]//*[contains(text(),"Fax")]')[0].text_content()
       fax = re.findall(r'([0-9].*)', fax)[0].replace(') ','-')
       email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
@@ -48,9 +48,9 @@ class GreaterSudburyPersonScraper(Scraper):
 
     name = div.text_content().replace('Mayor ','')
     contact_url = page.xpath('//ul[@class="navSecondary"]//a[contains(text(),"Contact")]')[0].attrib['href']
-    page = lxmlize(contact_url)    
-    
-    contact_div = page.xpath('//div[@class="col"][2]')[0]  
+    page = lxmlize(contact_url)
+
+    contact_div = page.xpath('//div[@class="col"][2]')[0]
 
     address = contact_div.xpath('.//p[1]')[0].text_content()
     address = re.findall(r'(City of Greater .*)', address, flags=re.DOTALL)[0]

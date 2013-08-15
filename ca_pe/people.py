@@ -49,5 +49,3 @@ class PrinceEdwardIslandPersonScraper(Scraper):
         if site:
           p.add_link(site, 'website')
         yield p
-
-

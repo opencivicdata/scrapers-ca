@@ -15,5 +15,3 @@ class Le_Plateau_Mont_Royal(CanadianJurisdiction):
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
         return MontrealPersonScraper
-
-    

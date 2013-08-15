@@ -15,5 +15,3 @@ class Riviere_des_Prairies_Pointe_aux_Trembles(CanadianJurisdiction):
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':
         return MontrealPersonScraper
-
-    

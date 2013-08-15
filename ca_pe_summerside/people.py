@@ -50,7 +50,7 @@ class SummersidePersonScraper(Scraper):
     phone = re.findall(r'to (.*)', info[1].text_content())[0]
     address = info[3].text_content().replace('by mail: ', '') +' '+ info[4].text_content()
     email = info[5].xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-    
+
     p.add_contact('phone', phone, None)
     p.add_contact('address', address, None)
     p.add_contact('email', email, None)

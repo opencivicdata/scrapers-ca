@@ -30,7 +30,7 @@ class BellevillePersonScraper(Scraper):
       if len(info) < 3:
         info = info+councillors[i+1].xpath('./text()')
       info = info[2:]
-      
+
       for contact in info:
         if 'Email' in contact:
           break

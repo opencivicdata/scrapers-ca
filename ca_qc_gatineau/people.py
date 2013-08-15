@@ -36,7 +36,7 @@ class GatineauPersonScraper(Scraper):
         p.add_link(site, 'personal site')
 
       yield p
-  
+
   def scrape_mayor(self, url):
     page = lxmlize(url)
     contact_url = page.xpath('//a[contains(text(), "Communiquez")]')[0].attrib['href']
@@ -46,7 +46,7 @@ class GatineauPersonScraper(Scraper):
     name = content.xpath('.//h2')[0].text_content()
     phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ','-')
     email = content.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-    
+
     p = Legislator(name=name, post_id='Gatineau')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)

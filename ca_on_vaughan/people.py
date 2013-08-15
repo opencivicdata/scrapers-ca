@@ -29,11 +29,11 @@ class  VaughanPersonScraper(Scraper):
         contact_info = page.xpath('//div[@id="WebPartWPQ2"]')[0]
       else:
         contact_info = page.xpath('//div[@id="WebPartWPQ3"]')[0]
-      
+
       phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4} ext. [0-9]{4}', contact_info.text_content())[0].replace('ext. ','x')
       fax = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact_info.text_content())[1]
       email = contact_info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
@@ -53,4 +53,3 @@ class  VaughanPersonScraper(Scraper):
         youtube = page.xpath('.//a[contains(@href, "youtube")]')[0].attrib['href']
         p.add_link(youtube,'youtube')
       yield p
-

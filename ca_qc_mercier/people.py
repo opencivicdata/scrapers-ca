@@ -17,7 +17,7 @@ class MercierPersonScraper(Scraper):
     for councillor in councillors:
       if not councillor.text_content().strip():
         continue
-      
+
       if councillor == councillors[6]:
         name = councillor.xpath('.//span')[0].text_content().replace('Maire','').strip()
         district = 'mercier'
@@ -26,7 +26,7 @@ class MercierPersonScraper(Scraper):
         name = name.replace('Monsieur', '').replace('Madame', '').strip()
         district.strip()
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)

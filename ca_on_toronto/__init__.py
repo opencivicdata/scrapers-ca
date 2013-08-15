@@ -28,4 +28,3 @@ class Toronto(CanadianJurisdiction):
     terms = page.xpath("//select[@id='termId']//option[position()>1]/text()")
     terms.pop(0)
     return terms
-    
