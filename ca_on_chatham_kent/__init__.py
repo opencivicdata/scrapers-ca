@@ -8,5 +8,4 @@ class ChathamKent(CanadianJurisdiction):
       'name': 'Chatham-Kent',
       'legislature_name': 'Chatham-Kent City Council',
       'legislature_url': 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx',
-      'provides': ['people'],
     }

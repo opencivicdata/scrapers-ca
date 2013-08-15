@@ -8,5 +8,4 @@ class Mercier(CanadianJurisdiction):
       'name': 'Mercier',
       'legislature_name': 'Mercier City Council',
       'legislature_url': 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp',
-      'provides': ['people'],
     }

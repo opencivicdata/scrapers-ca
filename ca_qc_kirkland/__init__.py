@@ -8,5 +8,4 @@ class Kirkland(CanadianJurisdiction):
       'name': 'Kirkland',
       'legislature_name': 'Kirkland City Council',
       'legislature_url': 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-municipal/elus-municipaux',
-      'provides': ['people'],
     }

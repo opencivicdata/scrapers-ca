@@ -8,5 +8,4 @@ class Guelph(CanadianJurisdiction):
       'name': 'Guelph',
       'legislature_name': 'Guelph City Council',
       'legislature_url': 'http://guelph.ca/city-hall/mayor-and-council/city-council/',
-      'provides': ['people'],
     }

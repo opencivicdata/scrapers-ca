@@ -8,5 +8,4 @@ class Fredericton(CanadianJurisdiction):
       'name': 'Fredericton',
       'legislature_name': 'Fredericton City Council',
       'legislature_url': 'http://www.fredericton.ca/en/citygovernment/CityCouncil.asp',
-      'provides': ['people'],
     }

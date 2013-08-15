@@ -8,5 +8,4 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
       'name': 'Grande Prairie County No. 1',
       'legislature_name': 'Grande Prairie County No. 1 City Council',
       'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
-      'provides': ['people'],
     }

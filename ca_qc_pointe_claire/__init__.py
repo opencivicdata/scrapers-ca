@@ -10,5 +10,4 @@ class PointeClaire(CanadianJurisdiction):
       'name': 'Pointe-Claire',
       'legislature_name': 'Pointe-Claire City Council',
       'legislature_url': 'http://www.ville.pointe-claire.qc.ca/en/city-hall-administration/your-council/municipal-council.html',
-      'provides': ['people'],
     }

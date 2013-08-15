@@ -8,5 +8,4 @@ class Gatineau(CanadianJurisdiction):
       'name': 'Gatineau',
       'legislature_name': 'Gatineau Municipal Council',
       'legislature_url': 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal',
-      'provides': ['people'],
     }

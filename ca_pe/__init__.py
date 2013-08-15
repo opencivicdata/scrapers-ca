@@ -8,5 +8,4 @@ class PrinceEdwardIsland(CanadianJurisdiction):
       'name': 'Prince Edward Island',
       'legislature_name': 'Prince Edward Island City Council',
       'legislature_url': 'http://www.gov.pe.ca/mapp/municipalitites.php',
-      'provides': ['people'],
     }

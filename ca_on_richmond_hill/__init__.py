@@ -8,5 +8,4 @@ class RichmondHill(CanadianJurisdiction):
       'name': 'Richmond Hill',
       'legislature_name': 'Richmond Hill City Council',
       'legislature_url': 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_of_the_council',
-      'provides': ['people'],
     }

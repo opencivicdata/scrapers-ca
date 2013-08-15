@@ -8,5 +8,4 @@ class HaldimandCounty(CanadianJurisdiction):
       'name': 'Haldimand County',
       'legislature_name': 'Haldimand County Council',
       'legislature_url': 'http://www.haldimandcounty.on.ca/OurCounty.aspx?id=338',
-      'provides': ['people'],
     }

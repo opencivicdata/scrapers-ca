@@ -8,5 +8,4 @@ class Senneville(CanadianJurisdiction):
       'name': 'Senneville',
       'legislature_name': 'Senneville City Council',
       'legislature_url': 'http://www.villagesenneville.qc.ca/fr/membres-du-conseil-municipal',
-      'provides': ['people'],
     }

@@ -8,5 +8,4 @@ class Newmarket(CanadianJurisdiction):
       'name': 'Newmarket',
       'legislature_name': 'Newmarket City Council',
       'legislature_url': 'http://www.newmarket.ca/en/townhall/contactinformationmayorandtowncouncil.asp',
-      'provides': ['people'],
     }

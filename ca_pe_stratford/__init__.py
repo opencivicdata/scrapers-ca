@@ -8,5 +8,4 @@ class Stratford(CanadianJurisdiction):
       'name': 'Stratford',
       'legislature_name': 'Stratford City Council',
       'legislature_url': 'http://www.townofstratford.ca/town-hall/government/town-council/',
-      'provides': ['people'],
     }

@@ -8,5 +8,4 @@ class NorthwestTerritories(CanadianJurisdiction):
       'name': 'Northwest Territories',
       'legislature_name': 'Northwest Territories City Council',
       'legislature_url': 'http://www.nwtac.com/about/communities/',
-      'provides': ['people'],
     }

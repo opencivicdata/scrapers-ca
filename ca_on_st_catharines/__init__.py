@@ -8,5 +8,4 @@ class StCatharines(CanadianJurisdiction):
       'name': 'St. Catharines',
       'legislature_name': 'St. Catharines City Council',
       'legislature_url': 'http://www.stcatharines.ca/en/governin/BrianMcMullanMayor.asp',
-      'provides': ['people'],
     }

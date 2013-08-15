@@ -8,5 +8,4 @@ class Summerside(CanadianJurisdiction):
       'name': 'Summerside',
       'legislature_name': 'Summerside City Council',
       'legislature_url': 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/councillors/',
-      'provides': ['people'],
     }

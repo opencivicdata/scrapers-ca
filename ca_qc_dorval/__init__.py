@@ -8,5 +8,4 @@ class Dorval(CanadianJurisdiction):
       'name': 'Dorval',
       'legislature_name': 'Dorval Municipal Council',
       'legislature_url': 'http://www.ville.dorval.qc.ca/en/default.asp?contentID=516',
-      'provides': ['people'],
     }

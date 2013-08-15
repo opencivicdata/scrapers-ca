@@ -8,5 +8,4 @@ class Westmount(CanadianJurisdiction):
       'name': 'Westmount',
       'legislature_name': 'Westmount City Council',
       'legislature_url': 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61',
-      'provides': ['people'],
     }

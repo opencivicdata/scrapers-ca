@@ -8,5 +8,4 @@ class DollardDesOrmeaux(CanadianJurisdiction):
       'name': 'Dollard-Des-Ormeaux',
       'legislature_name': 'Dollard-Des-Ormeaux City Council',
       'legislature_url': 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17',
-      'provides': ['people'],
     }

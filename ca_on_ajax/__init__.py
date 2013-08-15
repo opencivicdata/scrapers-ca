@@ -8,5 +8,4 @@ class Ajax(CanadianJurisdiction):
       'name': 'Ajax',
       'legislature_name': 'Ajax City Council',
       'legislature_url': 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp',
-      'provides': ['people'],
     }

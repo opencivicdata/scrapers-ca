@@ -8,5 +8,4 @@ class Cambridge(CanadianJurisdiction):
       'name': 'Cambridge',
       'legislature_name': 'Cambridge City Council',
       'legislature_url': 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&sid=57',
-      'provides': ['people'],
     }

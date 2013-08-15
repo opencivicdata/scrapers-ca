@@ -8,5 +8,4 @@ class Belleville(CanadianJurisdiction):
       'name': 'Belleville',
       'legislature_name': 'Belleville City Council',
       'legislature_url': 'http://www.city.belleville.on.ca/CITYHALL/MAYORANDCOUNCIL/Pages/CityCouncil.aspx',
-      'provides': ['people'],
     }

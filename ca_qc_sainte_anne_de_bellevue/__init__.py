@@ -8,5 +8,4 @@ class SainteAnneDeBellevue(CanadianJurisdiction):
       'name': 'Sainte-Anne-de-Bellevue',
       'legislature_name': 'Sainte-Anne-de-Bellevue City Council',
       'legislature_url': 'http://www.ville.sainte-anne-de-bellevue.qc.ca/Democratie.aspx',
-      'provides': ['people'],
     }

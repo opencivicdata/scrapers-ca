@@ -8,5 +8,4 @@ class CapeBreton(CanadianJurisdiction):
       'name': 'Cape Breton',
       'legislature_name': 'Cape Breton City Council',
       'legislature_url': 'http://www.cbrm.ns.ca/councillors.html',
-      'provides': ['people'],
     }

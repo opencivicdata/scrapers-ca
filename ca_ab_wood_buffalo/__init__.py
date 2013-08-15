@@ -8,5 +8,4 @@ class WoodBuffalo(CanadianJurisdiction):
       'name': 'Wood Buffalo',
       'legislature_name': 'Wood Buffalo City Council',
       'legislature_url': 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm',
-      'provides': ['people'],
     }

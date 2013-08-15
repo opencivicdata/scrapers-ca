@@ -8,5 +8,4 @@ class SaintJerome(CanadianJurisdiction):
       'name': 'Sainte-Jerome',
       'legislature_name': 'Sainte-Jerome City Council',
       'legislature_url': 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx',
-      'provides': ['people'],
     }

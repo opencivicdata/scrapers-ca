@@ -8,5 +8,4 @@ class Brossard(CanadianJurisdiction):
       'name': 'Brossard',
       'legislature_name': 'Brossard City Council',
       'legislature_url': 'http://www.ville.brossard.qc.ca/Ma-ville/conseil-municipal.aspx?lang=en-CA',
-      'provides': ['people'],
     }

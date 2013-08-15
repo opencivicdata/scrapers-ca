@@ -16,7 +16,6 @@ class Vaughan(CanadianJurisdiction):
         'start_year': 2010,
         'end_year': 2014,
       }],
-      'provides': ['people'],
       'session_details': {
         '2010-2014': {
           '_scraped_name': '2010-2014',

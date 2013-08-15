@@ -8,5 +8,4 @@ class MontrealEst(CanadianJurisdiction):
       'name': 'Montreal-Est',
       'legislature_name': 'Montreal-Est City Council',
       'legislature_url': 'http://ville.montreal-est.qc.ca/site2/index.php?option=com_content&view=article&id=12&Itemid=59',
-      'provides': ['people'],
     }

@@ -8,5 +8,4 @@ class NewBrunswick(CanadianJurisdiction):
       'name': 'New Brunswick',
       'legislature_name': 'New Brunswick City Council',
       'legislature_url': 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html',
-      'provides': ['people'],
     }

@@ -8,5 +8,4 @@ class Milton(CanadianJurisdiction):
       'name': 'Milton',
       'legislature_name': 'Milton City Council',
       'legislature_url': 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972',
-      'provides': ['people'],
     }

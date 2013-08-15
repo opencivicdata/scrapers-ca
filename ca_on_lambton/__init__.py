@@ -8,5 +8,4 @@ class Lambton(CanadianJurisdiction):
       'name': 'Lambton',
       'legislature_name': 'Lambton County Council',
       'legislature_url': 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx',
-      'provides': ['people'],
     }

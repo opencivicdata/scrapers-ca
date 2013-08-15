@@ -8,5 +8,4 @@ class CoteSaintLuc(CanadianJurisdiction):
       'name': 'Cote_St-Luc',
       'legislature_name': 'Cote St-Luc City Council',
       'legislature_url': 'http://www.cotesaintluc.org/Administration',
-      'provides': ['people'],
     }

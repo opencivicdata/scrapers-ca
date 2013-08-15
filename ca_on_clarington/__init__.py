@@ -8,5 +8,4 @@ class Clarington(CanadianJurisdiction):
       'name': 'Clarington',
       'legislature_name': 'Clarington City Council',
       'legislature_url': 'http://www.clarington.net/htdocs/council_bios.html',
-      'provides': ['people'],
     }

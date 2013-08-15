@@ -8,5 +8,4 @@ class Saskatchewan(CanadianJurisdiction):
       'name': 'Saskatchewan',
       'legislature_name': 'Saskatchewan City Council',
       'legislature_url': 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf',
-      'provides': ['people'],
     }

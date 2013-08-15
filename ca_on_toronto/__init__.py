@@ -14,7 +14,6 @@ class Toronto(CanadianJurisdiction):
         'start_year': 2010,
         'end_year': 2014,
       }],
-      'provides': ['events', 'people', 'votes'],
       'session_details': {
         '2010-2014': {
           '_scraped_name': '2010-2014',

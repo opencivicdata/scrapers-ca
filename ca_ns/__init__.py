@@ -8,5 +8,4 @@ class NovaScotia(CanadianJurisdiction):
       'name': 'Nova Scotia',
       'legislature_name': 'Nova Scotia City Council',
       'legislature_url': 'http://www.unsm.ca/doc_download/880-mayor-list-2013',
-      'provides': ['people'],
     }

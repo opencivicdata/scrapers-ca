@@ -8,5 +8,4 @@ class Caledon(CanadianJurisdiction):
       'name': 'Caledon',
       'legislature_name': 'Caledon City Council',
       'legislature_url': 'http://www.town.caledon.on.ca/en/townhall/council.asp',
-      'provides': ['people'],
     }
