@@ -8,12 +8,12 @@ import re, urllib2, os
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
-class Newfoundland_LabradorPersonScraper(Scraper):
+class NewfoundlandAndLabradorPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
     url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]
-    
+
     response = urllib2.urlopen(url).read()
     pdf = open('nl.pdf', 'w')
     pdf.write(response)

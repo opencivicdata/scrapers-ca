@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_of_the_council'
 
-class Richmond_HillPersonScraper(Scraper):
+class RichmondHillPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

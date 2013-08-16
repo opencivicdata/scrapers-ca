@@ -19,7 +19,7 @@ class BurlingtonPersonScraper(Scraper):
       district = councillor.xpath('.//strong')[0].text_content()
 
       url = councillor.attrib['href']
-      
+
       if councillor == councillors[0]:
         yield self.scrape_mayor(name, url)
         continue
@@ -31,7 +31,7 @@ class BurlingtonPersonScraper(Scraper):
       phone = re.findall(r'Phone: (.*)', contact.text_content())[0].replace('Ext. ', 'x').replace('#','x')
       fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
       email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
@@ -48,7 +48,7 @@ class BurlingtonPersonScraper(Scraper):
     page = lxmlize(url)
 
     contact = page.xpath('//div[@id="grey-220"]//li')[0]
-    
+
     phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact.text_content())[0].replace('Ext. ', 'x')
     fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
     email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
@@ -90,5 +90,5 @@ class BurlingtonPersonScraper(Scraper):
         councillor.add_link(link, 'linkedin')
       if 'google' in link:
         councillor.add_link(link, 'google plus')
-      else: 
+      else:
         councillor.add_link(link, 'personal site')

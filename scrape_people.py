@@ -29,14 +29,14 @@ def scrape_people():
       subparsers = parser.add_subparsers(dest='subcommand')
 
       subcommands = {}
-      for mod in COMMAND_MODULES:   
+      for mod in COMMAND_MODULES:
         cmd = importlib.import_module(mod).Command(subparsers)
         subcommands[cmd.name] = cmd
 
       # process args
       args = parser.parse_args(['update', '--people', jurisdiction])
       subcommands[args.subcommand].handle(args)
-    
+
       report = {'name' : jurisdiction, 'status' : 'working', 'error' : 'none' }
       reports.append(report)
 
@@ -44,5 +44,3 @@ def scrape_people():
       report = {'name' : jurisdiction, 'status' : 'working' , 'error' : sys.exc_info()}
       reports.append(report)
   return reports
-
-

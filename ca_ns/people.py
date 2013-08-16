@@ -8,7 +8,7 @@ import re, urllib2, os
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
-class Nova_ScotiaPersonScraper(Scraper):
+class NovaScotiaPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()
@@ -29,7 +29,7 @@ class Nova_ScotiaPersonScraper(Scraper):
       district = lines.pop(0).strip()
       if not re.findall(r'[0-9]', lines[0]):
         district = district + ' ' + lines.pop(0).strip()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
@@ -55,7 +55,7 @@ class Nova_ScotiaPersonScraper(Scraper):
         if matches:
           p.add_contact('email', emails.pop(i), None)
       yield p
-          
+
 
     txt.close()
     os.system('rm ns.pdf')

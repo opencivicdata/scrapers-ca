@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.cbrm.ns.ca/councillors.html'
 
-class Cape_BretonPersonScraper(Scraper):
+class CapeBretonPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

@@ -19,7 +19,7 @@ class MonctonPersonScraper(Scraper):
       district = councillor.xpath('.//span/text()')[1]
 
       email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:','')
-      
+
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
 
@@ -31,5 +31,5 @@ class MonctonPersonScraper(Scraper):
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
       for phone in phone_nos:
-        p.add_contact('Phone', phone[0], None)  
-      yield p   
+        p.add_contact('Phone', phone[0], None)
+      yield p

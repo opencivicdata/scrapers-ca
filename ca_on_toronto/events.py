@@ -76,12 +76,29 @@ class TorontoEventScraper(Scraper):
                   location=location
           )
         
+
+
         attendees = find_attendees(tmpdir, row)
         if len(attendees) == 0:
           empty.append(row)
         for attendee in find_attendees(tmpdir, row):
           e.add_person(attendee)
         e.add_source("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMeetingScheduleReport")
+        
+        for item in agenda_items:
+          if item['date'].date() == when.date():
+            i = e.add_agenda_item(item['description'])
+            i.add_committee(committee)
+            i['order'] = item['order']
+
+            for link in item['links']:
+              i.add_media_link(link['name'], link['url'])
+
+            if item['subject']:
+              i.add_subject(item['subject'])
+            if item['notes']:
+              i['notes'] = [item['notes']]
+
         yield e
 
     shutil.rmtree(tmpdir)
@@ -105,18 +122,74 @@ def find_attendees(directory , event):
   return set(attendees)
 
 def find_items(committee):
+
+  agenda_items = []
+
   page = lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
   link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href'%committee)[0]
   page = lxmlize(link)
   meetings = page.xpath('//a[contains(@name, "header")]')
   for meeting in meetings:
+    date = meeting.xpath('./parent::h3')[0].text_content().strip().split('-')
+    date = dt.datetime.strptime('-'.join(date[0:2]).strip(), "%B %d, %Y - %I:%M %p")
     meeting_id = meeting.attrib['name'].replace('header','').strip()
     # get = { 'function' : 'doPrepare', 'meetingId' : meeting_id }
-    request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&meetingId=%s'%meeting_id
-    # r = requests.get('http://app.toronto.ca/tmmis/decisionBodyProfile.do?', data=get)
+    if committee == 'City Council':
+      request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&meetingId=%s'%meeting_id
+    else:
+      request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&meetingId=%s'%meeting_id
     page = lxmlize(request_string)
-    items = page.xpath('//tr[@class = "urgent" or @class="nonUrgent"]')
+    items = page.xpath('//tr[@class="nonUrgent" or @class="urgent"]')
     for item in items:
-      print item.text_content()
+      page = lxmlize(item.xpath('.//a/@href')[0])
+      item_content_script = page.xpath('//script[contains(text(), "loadContent")]/text()')[0]
+      item_id = re.findall(r'(?<=agendaItemId:")(.*)(?=")', item_content_script)[0]
+      if committee == 'City Council':
+        item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getCouncilMinutesItemPreview&r=1376598367685&agendaItemId=%s'%item_id
+      else:
+        item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getMinutesItemPreview&r=1376593612354&agendaItemId=%s'%item_id
+      page = lxmlize(item_info_url)
 
+      root_description = page.xpath('//font[@size="4"]')[0].text_content()
+      root_order = page.xpath('//table[@class="border"]//td[1]//text()')[0]
+      
+      item_links = []
+      links = page.xpath('//a')
+      for link in links:
+        description = link.xpath('.//parent::font/preceding-sibling::font/text()')
+        if description:
+          description = description[-1]
+        else:
+          description = link.text_content()
+        item_link = {'name' : description, 'url' : link.attrib['href']}
+        item_links.append(item_link)
 
+      agenda_items.append({
+        'committee' : committee,
+        'description' : root_description,
+        'order' : root_order,
+        'date' : date,
+        'links' : item_links
+      })
+
+      decisions = page.xpath('//b[contains(text(), "Decision")]/ancestor::tr/following-sibling::tr//p')
+      agenda_item = {'notes' : []}
+      for decision in decisions:
+        if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
+          print '=========================================================='
+          agenda_item['notes'].append(decision.text_content()) 
+        if not decision.text_content().strip() or not re.findall(r'[0-9]\.\W{2,}', decision.text_content()):
+          continue
+        number, description = re.split(r'(?<=[0-9])\.\W{2,}', decision.text_content())
+        order = root_order+'-'+number
+        agenda_item['committee'] = committee
+        agenda_item['description'] = description
+        agenda_item['order'] = order
+        agenda_item['date'] = date
+        agenda_item['links'] = item_links
+        agenda_items.append(agenda_item)
+        print agenda_item['notes']
+        agenda_item = {'notes' : []}
+                
+
+  return agenda_items

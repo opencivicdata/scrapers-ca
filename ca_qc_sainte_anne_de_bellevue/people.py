@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.sainte-anne-de-bellevue.qc.ca/Democratie.aspx'
 
-class Sainte_Anne_de_BellevuePersonScraper(Scraper):
+class SainteAnneDeBellevuePersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

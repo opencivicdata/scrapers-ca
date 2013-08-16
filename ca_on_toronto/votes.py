@@ -16,11 +16,11 @@ class TorontoVoteScraper(Scraper):
 
     tmpdir = tempfile.mkdtemp()
     download_files(tmpdir)
-    
+
     #read through each csv file
     files = [f for f in os.listdir(tmpdir)]
     for f in files:
-      
+
       name = f.replace('.csv','')
 
       with open(tmpdir+'/'+f,'rb') as csvfile:
@@ -31,9 +31,9 @@ class TorontoVoteScraper(Scraper):
           session = self.session
           date = row[1].split()[0]
           v_type = 'other'
-          passed = 'Carried' in row[6] 
-          if not 'tie' in row[6]:  
-            yes_count, no_count = row[6].split()[1].split('-')  
+          passed = 'Carried' in row[6]
+          if not 'tie' in row[6]:
+            yes_count, no_count = row[6].split()[1].split('-')
           else:
             yes_count, no_count = 1, 1
           vote = Vote(session, date, row[3], v_type, passed, int(yes_count), int(no_count))
@@ -61,15 +61,15 @@ def download_files(dest_directory):
     'termId' : 4,
     'memberId' : member.attrib['value'],
     'decisionBodyId' : 0,
-    
+
     }
 
     r = requests.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
     if r.headers['content-type'] != 'application/vnd.ms-excel':
       continue
 
-    
-    name = member.text  
+
+    name = member.text
     if name == "Norman Kelly":
       name = "Norm Kelly"
     if "Ana Bail" in name:
@@ -87,7 +87,7 @@ def download_files(dest_directory):
 
 ## scan csv files of other representatives for matching votes
 ## adding representatives to Vote object
-## delete matching rows in other files 
+## delete matching rows in other files
 
 def scan_files(directory, current_file, vote, vote_row):
   files = [f for f in os.listdir(directory)]
@@ -110,12 +110,3 @@ def scan_files(directory, current_file, vote, vote_row):
 
     os.remove(directory+'/'+f)
     os.rename(directory+'/temp.csv',directory+'/'+f)
-
-
-
-
-
-
-
- 
-

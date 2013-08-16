@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
-class Wood_BuffaloPersonScraper(Scraper):
+class WoodBuffaloPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
@@ -19,7 +19,7 @@ class Wood_BuffaloPersonScraper(Scraper):
       if not name:
         continue
       district = councillor.xpath('./ancestor::table/preceding-sibling::h2/text()')[-1].split('-')[1]
-      
+
       url = councillor.attrib['href']
       page = lxmlize(url)
 

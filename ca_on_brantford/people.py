@@ -27,7 +27,7 @@ class BrantfordPersonScraper(Scraper):
       p.add_source(url)
 
       page = lxmlize(url)
-      
+
       address = page.xpath('//div[@id="centre_content"]//p')[0].text_content().replace("\r\n",', ')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].attrib['href'].replace('mailto:','')
       p.add_contact('address', address, None)

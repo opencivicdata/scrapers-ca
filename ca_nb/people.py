@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 
-class New_BrunswickPersonScraper(Scraper):
+class NewBrunswickPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

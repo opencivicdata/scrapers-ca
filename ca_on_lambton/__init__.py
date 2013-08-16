@@ -1,32 +1,11 @@
-from pupa.scrape import Jurisdiction
+from utils import CanadianJurisdiction
 
-from .people import LambtonPersonScraper
-from utils import lxmlize
-
-class Lambton(Jurisdiction):
+class Lambton(CanadianJurisdiction):
   jurisdiction_id = 'ca-on-lambton'
-  geographic_code = 3538040
-  def get_metadata(self):
+
+  def _get_metadata(self):
     return {
       'name': 'Lambton',
       'legislature_name': 'Lambton County Council',
       'legislature_url': 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx',
-      'terms': [{
-        'name': 'N/A',
-        'sessions': ['N/A'],
-      }],
-      'provides': ['people'],
-      'session_details': {
-        'N/A': {
-          '_scraped_name': 'N/A',
-        }
-      },
     }
-
-  def get_scraper(self, term, session, scraper_type):
-    if scraper_type == 'people':
-        return LambtonPersonScraper
-
-  def scrape_session_list(self):
-    return ['N/A']
-    

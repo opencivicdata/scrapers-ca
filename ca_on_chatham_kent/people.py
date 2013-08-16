@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx'
 
-class Chatham_KentPersonScraper(Scraper):
+class ChathamKentPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
@@ -20,7 +20,7 @@ class Chatham_KentPersonScraper(Scraper):
         district = 'chatham-kent'
       else:
         district = re.findall(r'(?<=Council )(.*)(?=\()', district)[0]
-      
+
       councillors = ward.xpath('.//a')
       for councillor in councillors:
         name = councillor.text_content()
@@ -32,7 +32,7 @@ class Chatham_KentPersonScraper(Scraper):
         p.add_source(url)
 
         address = page.xpath('//div[@class="div_contact_us_content_address"]')[0].text_content()
-        p.add_contact('address', address, None) 
+        p.add_contact('address', address, None)
 
         contacts = page.xpath('//div[@class="div_contact_us_content_kv"]/div')
         for contact in contacts:

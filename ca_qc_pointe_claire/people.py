@@ -8,14 +8,14 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.pointe-claire.qc.ca/en/city-hall-administration/your-council/municipal-council.html'
 
-class Pointe_ClairePersonScraper(Scraper):
+class PointeClairePersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor = page.xpath('.//div[@class="item-page clearfix"]//table[1]//p')[1]
     name = mayor.xpath('.//strong/text()')[0]
-    
+
     p = Legislator(name=name, post_id='pointe-claire')
     p.add_source(COUNCIL_PAGE)
 
@@ -38,9 +38,9 @@ class Pointe_ClairePersonScraper(Scraper):
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
 
-        phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i+1].xpath('.//td')[j].text_content())[0].replace(' ','-')              
+        phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i+1].xpath('.//td')[j].text_content())[0].replace(' ','-')
         email = rows[i+1].xpath('.//td')[j].xpath('.//a/@href')[1].replace('mailto:','')
-        
+
         p.add_contact('phone', phone, None)
         p.add_contact('email', email, 'email form to be filled out in web browser')
 

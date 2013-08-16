@@ -8,7 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.thunderbay.ca/City_Government/Your_Council.htm'
 
-class Thunder_BayPersonScraper(Scraper):
+class ThunderBayPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
@@ -32,14 +32,14 @@ class Thunder_BayPersonScraper(Scraper):
         else:
           name = info.xpath('./p/strong/em/text()')[0]
       name = name.replace('Councillor', '').replace('Mayor', '').strip()
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
 
       address = ', '.join(info.xpath('./p/text()')[0:2]).strip()
       address = re.sub(r'\s{2,}', ' ', address)
-      
+
       p.add_contact('address', address, None)
 
       contacts = info.xpath('./p[2]/text()')
@@ -52,11 +52,11 @@ class Thunder_BayPersonScraper(Scraper):
           break
         else:
           p.add_contact('Phone', contact, contact_type.strip())
-      
+
       email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
       p.add_contact('email', email, None)
 
       yield p
 
-        
+
       # print name, district

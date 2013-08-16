@@ -31,13 +31,13 @@ class GuelphPersonScraper(Scraper):
       if email:
         email = email[0].text_content()
         p.add_contact('email', email, None)
-      
+
       site = councillor.xpath('.//a[contains(text(),"Website")]')
       if site:
         p.add_link('personal site', site[0].attrib['href'])
 
       page = lxmlize(url)
-      
+
       address = re.findall(r'Address: (.*)Phone', page.xpath('//div[@class="entry-content"]')[0].text_content())
       if address:
         p.add_contact('address', address[0], None)
@@ -46,7 +46,7 @@ class GuelphPersonScraper(Scraper):
       if blog:
         p.add_link(blog[0].attrib['href'], 'blog')
 
-      facebook = page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')  
+      facebook = page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')
       if facebook:
         p.add_link(facebook[0].attrib['href'], 'facebook')
       twitter = page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')
@@ -66,7 +66,7 @@ class GuelphPersonScraper(Scraper):
     phone = div.xpath('.//text()[3]')[0]
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
     blog = div.xpath('.//a[2]')[0].attrib['href']
-    
+
     page = lxmlize(url)
 
     address = re.findall(r'Address: (.*)Phone', page.xpath('//div[@class="entry-content"]')[0].text_content())[0]
