@@ -1,5 +1,5 @@
 from pupa.scrape import Scraper
-from larvae.event import Event
+from pupa.models import Event
 
 from utils import lxmlize
 
@@ -94,8 +94,6 @@ class TorontoEventScraper(Scraper):
             for link in item['links']:
               i.add_media_link(link['name'], link['url'])
 
-            if item['subject']:
-              i.add_subject(item['subject'])
             if item['notes']:
               i['notes'] = [item['notes']]
 
@@ -169,18 +167,20 @@ def find_items(committee):
         'description' : root_description,
         'order' : root_order,
         'date' : date,
-        'links' : item_links
+        'links' : item_links,
+        'notes' : []
       })
 
       decisions = page.xpath('//b[contains(text(), "Decision")]/ancestor::tr/following-sibling::tr//p')
       agenda_item = {'notes' : []}
       for decision in decisions:
         if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
-          print '=========================================================='
           agenda_item['notes'].append(decision.text_content()) 
         if not decision.text_content().strip() or not re.findall(r'[0-9]\.\W{2,}', decision.text_content()):
           continue
-        number, description = re.split(r'(?<=[0-9])\.\W{2,}', decision.text_content())
+        number = re.findall(r'([0-9]{1,2})\.', decision.text_content())[0]
+        description = re.sub(r'^[0-9]{1,2}\.', '', decision.text_content()).strip()
+        # number, description = re.split(r'(?<=^[0-9]{2,})\.\W{2,}', decision.text_content())
         order = root_order+'-'+number
         agenda_item['committee'] = committee
         agenda_item['description'] = description
@@ -188,7 +188,6 @@ def find_items(committee):
         agenda_item['date'] = date
         agenda_item['links'] = item_links
         agenda_items.append(agenda_item)
-        print agenda_item['notes']
         agenda_item = {'notes' : []}
                 
 

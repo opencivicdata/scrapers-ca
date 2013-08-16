@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pupa.scrape import Scraper
-from larvae.vote import Vote
+from pupa.models import Vote
 
 from utils import lxmlize
 import requests, re

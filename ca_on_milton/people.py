@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
-from larvae.person import Person
-from larvae.organization import Organization
+from pupa.models import Person
+from pupa.models import Organization
 
 from utils import lxmlize
 
