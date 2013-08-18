@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: latin-1 -*-
 from pupa.scrape import Scraper, Legislator
-from pupa.models import Person
-from pupa.models import Organization
 
 from utils import lxmlize
 
