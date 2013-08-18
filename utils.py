@@ -28,22 +28,22 @@ class CanadianJurisdiction(Jurisdiction):
     for scraper_type in ('bills', 'events', 'people', 'speeches', 'votes'):
       try:
         __import__(self.__module__ + '.' + scraper_type)
-        metadata['provides'].append(scraper_type)
       except ImportError:
         pass
+      else:
+        metadata['provides'].append(scraper_type)
     metadata.update(self._get_metadata())
     return metadata
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type in self.metadata['provides']:
-      singular = {
+      class_name = self.__class__.__name__ + {
         'bills': 'Bill',
         'events': 'Event',
         'people': 'Person',
         'speeches': 'Speech',
         'votes': 'Vote',
-      }[scraper_type]
-      class_name = self.__class__.__name__ + singular + 'Scraper'
+      }[scraper_type] + 'Scraper'
       return getattr(__import__(self.__module__ + '.' + scraper_type, fromlist=[class_name]), class_name)
 
   def scrape_session_list(self):
