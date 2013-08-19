@@ -1,7 +1,7 @@
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
-class St_Laurent(CanadianJurisdiction):
+class LaSalle(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-lasalle'
 
   def _get_metadata(self):

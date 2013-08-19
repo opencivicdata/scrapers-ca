@@ -174,7 +174,7 @@ def find_items(committee):
       })
 
       decisions = page.xpath('//b[contains(text(), "Decision")]/ancestor::tr/following-sibling::tr//p')
-      agenda_item = {'notes' : []}
+      agenda_item = {'notes' : PyListObject()}
       for decision in decisions:
         if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
           note = decision.text_content().strip()
