@@ -5,7 +5,7 @@ class GreaterSudbury(CanadianJurisdiction):
   geographic_code = 3553005
   def _get_metadata(self):
     return {
-      'name': 'Sudbury',
+      'name': 'Greater Sudbury',
       'legislature_name': 'Greater Sudbury City Council',
       'legislature_url': 'http://www.greatersudbury.ca/inside-city-hall/city-council/',
     }

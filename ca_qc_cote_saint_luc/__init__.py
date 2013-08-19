@@ -6,7 +6,7 @@ class CoteSaintLuc(CanadianJurisdiction):
   geographic_code = 2466058
   def _get_metadata(self):
     return {
-      'name': u'Cote_St-Luc',
+      'name': u'Côte-Saint-Luc',
       'legislature_name': u'Conseil municipal de Côte-Saint-Luc',
       'legislature_url': 'http://www.cotesaintluc.org/Administration',
     }

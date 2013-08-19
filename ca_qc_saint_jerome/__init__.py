@@ -6,7 +6,7 @@ class SaintJerome(CanadianJurisdiction):
   geographic_code = 2475017
   def _get_metadata(self):
     return {
-      'name': u'Sainte-Jerome',
+      'name': u'Saint-Jérôme',
       'legislature_name': u'Conseil municipal de Saint-Jérôme',
       'legislature_url': 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx',
     }
