@@ -175,7 +175,8 @@ def find_items(committee):
       agenda_item = {'notes' : []}
       for decision in decisions:
         if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
-          agenda_item['notes'].append(decision.text_content()) 
+          note = re.sub(r'\s{2,}', ' ', decision.text_content()).strip()
+          agenda_item['notes'].append(note) 
         if not decision.text_content().strip() or not re.findall(r'[0-9]\.\W{2,}', decision.text_content()):
           continue
         number = re.findall(r'([0-9]{1,2})\.', decision.text_content())[0]
