@@ -1,6 +1,6 @@
 from utils import CanadianJurisdiction
 
-class PrinceEdwardIsland(CanadianJurisdiction):
+class BritishColumbia(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:pe/legislature'
 
   def _get_metadata(self):
