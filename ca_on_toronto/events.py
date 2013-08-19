@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: latin-1 -*-
 from pupa.scrape import Scraper
 from pupa.models import Event
 
@@ -175,7 +177,7 @@ def find_items(committee):
       agenda_item = {'notes' : []}
       for decision in decisions:
         if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
-          note = re.sub(r'\s{2,}', ' ', decision.text_content()).strip()
+          note = decision.text_content().replace('\xa0'.decode('utf-8'),'').replace('\xc2'.decode('utf-8'),'')
           agenda_item['notes'].append(note) 
         if not decision.text_content().strip() or not re.findall(r'[0-9]\.\W{2,}', decision.text_content()):
           continue
