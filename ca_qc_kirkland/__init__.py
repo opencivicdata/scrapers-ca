@@ -6,6 +6,6 @@ class Kirkland(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Kirkland',
-      'legislature_name': 'Kirkland City Council',
+      'legislature_name': 'Conseil municipal de Kirkland',
       'legislature_url': 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-municipal/elus-municipaux',
     }

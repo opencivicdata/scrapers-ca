@@ -1,3 +1,4 @@
+#coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
@@ -6,8 +7,8 @@ class Riviere_des_Prairies_Pointe_aux_Trembles(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Riviere-des-Prairies-Pointe-aux-Trembles',
-      'legislature_name': 'Riviere-des-Prairies-Pointe-aux-Trembles Borough Council',
+      'name': u'Rivière-des-Prairies—Pointe-aux-Trembles',
+      'legislature_name': u'Rivière-des-Prairies—Pointe-aux-Trembles Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

@@ -6,6 +6,6 @@ class Mercier(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Mercier',
-      'legislature_name': 'Mercier City Council',
+      'legislature_name': 'Conseil municipal de Mercier',
       'legislature_url': 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp',
     }

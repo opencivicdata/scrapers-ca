@@ -6,6 +6,6 @@ class Brossard(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Brossard',
-      'legislature_name': 'Brossard City Council',
+      'legislature_name': 'Conseil municipal de Brossard',
       'legislature_url': 'http://www.ville.brossard.qc.ca/Ma-ville/conseil-municipal.aspx?lang=en-CA',
     }

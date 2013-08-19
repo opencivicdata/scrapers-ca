@@ -6,6 +6,6 @@ class Senneville(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Senneville',
-      'legislature_name': 'Senneville City Council',
+      'legislature_name': 'Conseil municipal de Senneville',
       'legislature_url': 'http://www.villagesenneville.qc.ca/fr/membres-du-conseil-municipal',
     }

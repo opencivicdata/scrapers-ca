@@ -1,3 +1,4 @@
+#coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
@@ -6,8 +7,8 @@ class St_Leonard(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Saint-Leonard',
-      'legislature_name': 'Saint-Leonard Borough Council',
+      'name': u'Saint-Léonard',
+      'legislature_name': u'Saint-Léonard Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

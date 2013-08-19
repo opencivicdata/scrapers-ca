@@ -6,6 +6,6 @@ class Westmount(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Westmount',
-      'legislature_name': 'Westmount City Council',
+      'legislature_name': 'Conseil municipal de Westmount',
       'legislature_url': 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61',
     }

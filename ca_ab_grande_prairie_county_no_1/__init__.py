@@ -6,6 +6,6 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Grande Prairie County No. 1',
-      'legislature_name': 'Grande Prairie County No. 1 City Council',
+      'legislature_name': 'County of Grande Prairie No. 1 Council',
       'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
     }

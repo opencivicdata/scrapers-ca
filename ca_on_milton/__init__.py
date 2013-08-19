@@ -6,6 +6,6 @@ class Milton(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Milton',
-      'legislature_name': 'Milton City Council',
+      'legislature_name': 'Milton Town Council',
       'legislature_url': 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972',
     }

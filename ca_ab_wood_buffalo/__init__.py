@@ -6,6 +6,6 @@ class WoodBuffalo(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Wood Buffalo',
-      'legislature_name': 'Wood Buffalo City Council',
+      'legislature_name': 'Wood Buffalo Municipal Council',
       'legislature_url': 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm',
     }

@@ -1,3 +1,4 @@
+#coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
@@ -6,8 +7,8 @@ class Lile_Bizard_Sainte_Genevieve(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': "L'Ile-Bizard-Sainte-Genevieve",
-      'legislature_name': "L'Ile-Bizard-Sainte-Genevieve Borough Council",
+      'name': u"L'Île-Bizard—Sainte-Genevieve",
+      'legislature_name': u"L'Île-Bizard—Sainte-Genevieve Borough Council",
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

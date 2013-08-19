@@ -6,6 +6,6 @@ class RichmondHill(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Richmond Hill',
-      'legislature_name': 'Richmond Hill City Council',
+      'legislature_name': 'Richmond Hill Town Council',
       'legislature_url': 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_of_the_council',
     }

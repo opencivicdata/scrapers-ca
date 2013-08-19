@@ -5,6 +5,7 @@ from utils import lxmlize
 import re, urllib2, os
 
 COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
+# See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx
 
 class SaskatchewanPersonScraper(Scraper):
 

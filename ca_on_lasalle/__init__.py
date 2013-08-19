@@ -6,6 +6,6 @@ class LaSalle(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'LaSalle',
-      'legislature_name': 'LaSalle City Council',
+      'legislature_name': 'LaSalle Town Council',
       'legislature_url': 'http://www.town.lasalle.on.ca/Council/council-council.htm',
     }

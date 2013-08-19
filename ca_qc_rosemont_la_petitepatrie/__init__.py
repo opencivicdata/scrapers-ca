@@ -1,3 +1,4 @@
+#coding: utf-8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
@@ -6,8 +7,8 @@ class Rosemont_La_Petite_Patrie(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Rosemont-La PetitePatri',
-      'legislature_name': 'Rosemont-La PetitePatrie Borough Council',
+      'name': u'Rosemont—La Petite-Patrie',
+      'legislature_name': u'Rosemont—La Petite-Patrie Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

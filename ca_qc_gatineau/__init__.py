@@ -6,6 +6,6 @@ class Gatineau(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Gatineau',
-      'legislature_name': 'Gatineau Municipal Council',
+      'legislature_name': 'Conseil municipal de Gatineau',
       'legislature_url': 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal',
     }

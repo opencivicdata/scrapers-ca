@@ -6,6 +6,6 @@ class Dorval(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Dorval',
-      'legislature_name': 'Dorval Municipal Council',
+      'legislature_name': 'Conseil municipal de Dorval',
       'legislature_url': 'http://www.ville.dorval.qc.ca/en/default.asp?contentID=516',
     }

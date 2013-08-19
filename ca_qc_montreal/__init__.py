@@ -1,3 +1,4 @@
+#coding: utf8
 from .people import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
@@ -6,8 +7,8 @@ class Montreal(CanadianJurisdiction):
   geographic_code = 2466023
   def _get_metadata(self):
     return {
-      'name': 'Montreal',
-      'legislature_name': 'Montreal City Council',
+      'name': u'Montréal',
+      'legislature_name': u'Conseil municipal de Montréal',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

@@ -6,6 +6,6 @@ class DollardDesOrmeaux(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Dollard-Des-Ormeaux',
-      'legislature_name': 'Dollard-Des-Ormeaux City Council',
+      'legislature_name': 'Conseil municipal de Dollard-Des-Ormeaux',
       'legislature_url': 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17',
     }

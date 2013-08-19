@@ -6,6 +6,6 @@ class Saguenay(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Saguenay',
-      'legislature_name': 'Saguenay City Council',
+      'legislature_name': 'Conseil municipal de Saguenay',
       'legislature_url': 'http://ville.saguenay.ca/fr/administration-municipale/conseils-municipaux-et-darrondissement/membres-des-conseils',
     }

@@ -6,6 +6,6 @@ class Ajax(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Ajax',
-      'legislature_name': 'Ajax City Council',
+      'legislature_name': 'Ajax Town Council',
       'legislature_url': 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp',
     }

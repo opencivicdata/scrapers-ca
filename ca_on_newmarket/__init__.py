@@ -6,6 +6,6 @@ class Newmarket(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Newmarket',
-      'legislature_name': 'Newmarket City Council',
+      'legislature_name': 'Newmarket Town Council',
       'legislature_url': 'http://www.newmarket.ca/en/townhall/contactinformationmayorandtowncouncil.asp',
     }

@@ -1,3 +1,4 @@
+#coding: utf8
 from utils import CanadianJurisdiction
 
 class CoteSaintLuc(CanadianJurisdiction):
@@ -5,7 +6,7 @@ class CoteSaintLuc(CanadianJurisdiction):
   geographic_code = 2466058
   def _get_metadata(self):
     return {
-      'name': 'Cote_St-Luc',
-      'legislature_name': 'Cote St-Luc City Council',
+      'name': u'Cote_St-Luc',
+      'legislature_name': u'Conseil municipal de Côte-Saint-Luc',
       'legislature_url': 'http://www.cotesaintluc.org/Administration',
     }

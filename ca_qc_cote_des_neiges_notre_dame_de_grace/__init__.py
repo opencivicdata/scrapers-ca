@@ -1,3 +1,4 @@
+#coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
@@ -6,8 +7,8 @@ class Cote_des_Neiges_Notre_Dame_de_Grace(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Cote-des-Neiges-Notre-Dame-de-Grace',
-      'legislature_name': 'Cote-des-Neiges-Notre-Dame-de-Grace Borough Council',
+      'name': u'Côte-des-Neiges—Notre-Dame-de-Grâce',
+      'legislature_name': u'Côte-des-Neiges—Notre-Dame-de-Grâce Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }
