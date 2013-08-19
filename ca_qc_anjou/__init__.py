@@ -3,6 +3,7 @@ from utils import CanadianJurisdiction
 
 class Anjou(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-anjou'
+
   def _get_metadata(self):
     return {
       'name': 'Anjou',

@@ -6,7 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
 
-class BurlingtonPersonScraper(Scraper):
+class EdmontonPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
