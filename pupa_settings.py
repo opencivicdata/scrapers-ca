@@ -1,7 +1,11 @@
 import os
-MONGO_HOST = os.environ['MONGOHQ_URL']
+if os.environ.get('MONGOHQ_URL'):
+    MONGO_HOST = os.environ['MONGOHQ_URL']
+    MONGO_DATABASE = 'app17409961'
+else:
+    MONGO_HOST = 'localhost'
+    MONGO_DATABASE = 'pupa'
 MONGO_PORT = 27017
-MONGO_DATABASE = 'app17409961'
 
 SCRAPELIB_RPM = 60
 SCRAPELIB_TIMEOUT = 60
