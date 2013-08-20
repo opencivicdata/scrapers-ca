@@ -3,8 +3,8 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Riviere_des_Prairies_Pointe_aux_Trembles(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-riviere-des-prairies-pointe-aux-trembles'
+class RiviereDesPrairiesPointeAuxTrembles(CanadianJurisdiction):
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles/council'
   ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles'
 
   def _get_metadata(self):

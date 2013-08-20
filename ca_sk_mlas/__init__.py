@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class Saskatchewan(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:sk/legislature'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/province:sk/legislature'
 
   def _get_metadata(self):
     return {

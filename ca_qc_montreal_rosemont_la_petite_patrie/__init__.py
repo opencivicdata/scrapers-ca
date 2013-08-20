@@ -3,8 +3,8 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Rosemont_La_Petite_Patrie(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-rosemont-la_petitepatrie'
+class RosemontLaPetitePatrie(CanadianJurisdiction):
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:rosemont-la_petite-patrie/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:rosemont-la_petite-patrie'
 
   def _get_metadata(self):

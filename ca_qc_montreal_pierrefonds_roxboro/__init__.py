@@ -3,7 +3,7 @@ from utils import CanadianJurisdiction
 
 
 class PierrefondsRoxboro(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro'
 
   def _get_metadata(self):

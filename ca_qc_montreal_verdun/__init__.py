@@ -3,13 +3,13 @@ from utils import CanadianJurisdiction
 
 
 class Verdun(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:verdun/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:verdun/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:verdun'
 
   def _get_metadata(self):
     return {
       'name': 'Verdun',
-      'legislature_name': 'Verdun City Council',
+      'legislature_name': u"Conseil d'arrondissement de Verdun",
       'legislature_url': 'http://ville.montreal.qc.ca/verdun',
       'provides': ['people'],
     }

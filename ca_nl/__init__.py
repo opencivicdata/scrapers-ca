@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class NewfoundlandAndLabrador(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nl/legislature'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/province:nl/legislature'
 
   def _get_metadata(self):
     return {

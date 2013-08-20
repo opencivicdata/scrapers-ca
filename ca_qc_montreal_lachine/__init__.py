@@ -3,7 +3,7 @@ from utils import CanadianJurisdiction
 
 
 class Lachine(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:lachine/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:lachine/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:lachine'
 
   def _get_metadata(self):

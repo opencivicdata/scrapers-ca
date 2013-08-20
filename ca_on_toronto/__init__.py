@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction, lxmlize
 
 
 class Toronto(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3520005/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3520005/council'
   geographic_code = 3520005
 
   def _get_metadata(self):

@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class Dorval(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466087/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466087/council'
   geographic_code = 2466087
 
   def _get_metadata(self):

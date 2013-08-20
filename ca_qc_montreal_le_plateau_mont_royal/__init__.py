@@ -3,7 +3,7 @@ from utils import CanadianJurisdiction
 
 
 class LePlateauMontRoyal(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal'
 
   def _get_metadata(self):

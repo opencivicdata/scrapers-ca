@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class Westmount(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466032/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466032/council'
   geographic_code = 2466032
 
   def _get_metadata(self):

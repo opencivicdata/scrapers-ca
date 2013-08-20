@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 
 class MercierHochelagaMaisonneuve(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:mercier-hochelaga-maisonneuve/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:mercier-hochelaga-maisonneuve/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:mercier-hochelaga-maisonneuve'
 
   def _get_metadata(self):

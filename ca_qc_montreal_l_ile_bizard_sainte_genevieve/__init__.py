@@ -3,8 +3,9 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Lile_Bizard_Sainte_Genevieve(CanadianJurisdiction):
-  jurisdiction_id = "ca-qc-l'ile-bizard-sainte-genevieve"
+class LIleBizardSainteGenevieve(CanadianJurisdiction):
+  jurisdiction_id = u"ocd-jurisdiction/country:ca/csd:2466023/arrondissement:l~île-bizard-sainte-geneviève/council"
+  ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:l~île-bizard-sainte-geneviève'
 
   def _get_metadata(self):
     return {

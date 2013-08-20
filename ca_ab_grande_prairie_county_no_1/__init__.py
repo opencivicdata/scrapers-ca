@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class GrandePrairieCountyNo1(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:4819006/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:4819006/council'
   geographic_code = 4819006
 
   def _get_metadata(self):

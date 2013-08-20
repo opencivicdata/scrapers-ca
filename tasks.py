@@ -28,7 +28,10 @@ for row in reader:
 urls = {}
 reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/ca_census_subdivisions.csv') # @todo switch repository and branch
 for row in reader:
-  urls[row[0]] = row[1]
+  urls[row[0].decode('utf8')] = row[1]
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv') # @todo switch repository and branch
+for row in reader:
+  urls[row[0].decode('utf8')] = row[1]
 
 # Map census subdivision type codes to names.
 census_subdivision_type_names = {}
@@ -61,7 +64,9 @@ def slug(ocd_division):
   return unidecode(unicode(names[ocd_division]).lower().translate({
     ord(u' '): u'_',
     ord(u"'"): u'_',
-    ord(u'-'): u'_',
+    ord(u'-'): u'_', # dash
+    ord(u'—'): u'_', # m-dash
+    ord(u'–'): u'_', # n-dash
     ord(u'.'): None,
   }))
 
@@ -141,7 +146,8 @@ for module_name in os.listdir('.'):
             jurisdiction_id_suffix = 'council'
           else:
             raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
-          expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in re.split('[ -]', names[ocd_division].replace("'", '').replace('.', '').replace(u'—', '-')))))
+          class_name_parts = re.split('[ -]', re.sub(u"[—–]", '-', re.sub("['.]", '', names[ocd_division])))
+          expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
           expected_jurisdiction_id = ocd_division.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
 
           # Warn if there is no expected legislative URL.

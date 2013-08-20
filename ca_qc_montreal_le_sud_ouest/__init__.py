@@ -3,7 +3,7 @@ from utils import CanadianJurisdiction
 
 
 class LeSudOuest(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_sud-ouest/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_sud-ouest/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:le_sud-ouest'
 
   def _get_metadata(self):

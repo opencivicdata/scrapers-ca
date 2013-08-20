@@ -3,7 +3,7 @@ from utils import CanadianJurisdiction
 
 
 class VilleMarie(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:ville-marie/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:ville-marie/council'
   ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:ville-marie'
 
   def _get_metadata(self):
