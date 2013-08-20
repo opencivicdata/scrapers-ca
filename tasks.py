@@ -196,7 +196,5 @@ for module_name in os.listdir('.'):
           print 'No OCD division for %s' % module_name
 
 # @todo
-# legislature_url: compare to source_url in scraped data
-# assign appropriate jurisdiction_id and geographic_code to those lacking a geographic_code
+# legislature_url: compare to sources in scraped data
 # fix all the jurisdictions without geographic_code, especially the pseudo-jurisdictions
-# add scraper for borough URLs
