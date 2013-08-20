@@ -1,6 +1,7 @@
-#coding: utf8
+# coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
+
 
 class Montreal_Nord(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-montreal-nord'

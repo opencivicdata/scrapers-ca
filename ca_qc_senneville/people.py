@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.villagesenneville.qc.ca/fr/membres-du-conseil-municipal'
 
+
 class SennevillePersonScraper(Scraper):
 
   def get_people(self):

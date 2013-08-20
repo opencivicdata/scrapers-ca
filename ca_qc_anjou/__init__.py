@@ -1,6 +1,7 @@
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
+
 class Anjou(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-anjou'
 

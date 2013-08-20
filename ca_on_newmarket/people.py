@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.newmarket.ca/en/townhall/contactinformationmayorandtowncouncil.asp'
 
+
 class NewmarketPersonScraper(Scraper):
 
   def get_people(self):
@@ -40,7 +41,7 @@ class NewmarketPersonScraper(Scraper):
       if email:
         p.add_contact('email', email[0], None)
       for i, contact in enumerate(numbers):
-        if i==0:
+        if i == 0:
           continue
         if '@' in contact:
           email = re.findall(r'[a-z]+@.*\.ca', contact)[0]
@@ -50,7 +51,7 @@ class NewmarketPersonScraper(Scraper):
           ext = re.findall(r'(Ext\. [0-9]{3,4})', contact)
           if ext:
             number = number + ext[0].replace('Ext. ', ' x')
-          contact_type = re.findall(r'[A-Za-z]+$', numbers[i-1])[0]
+          contact_type = re.findall(r'[A-Za-z]+$', numbers[i - 1])[0]
         if 'Fax' in contact_type:
           p.add_contact('Fax', number, None)
         elif 'Phone' in contact_type:

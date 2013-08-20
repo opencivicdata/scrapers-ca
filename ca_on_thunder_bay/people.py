@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.thunderbay.ca/City_Government/Your_Council.htm'
 
+
 class ThunderBayPersonScraper(Scraper):
 
   def get_people(self):
@@ -43,7 +44,7 @@ class ThunderBayPersonScraper(Scraper):
       contacts = info.xpath('./p[2]/text()')
       for contact in contacts:
         contact_type, contact = contact.split(':')
-        contact = contact.replace('(','').replace(') ','-').strip()
+        contact = contact.replace('(', '').replace(') ', '-').strip()
         if 'Fax' in contact_type:
           p.add_contact('Fax', contact, None)
         elif 'Email' in contact_type:

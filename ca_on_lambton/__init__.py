@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class Lambton(CanadianJurisdiction):
   jurisdiction_id = 'ca-on-lambton'
 

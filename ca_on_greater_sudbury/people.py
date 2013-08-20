@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/city-council/'
 
+
 class GreaterSudburyPersonScraper(Scraper):
 
   def get_people(self):
@@ -26,9 +27,9 @@ class GreaterSudburyPersonScraper(Scraper):
 
       address = page.xpath('//div[@class="column last"]//p')[0].text_content()
       phone = page.xpath('//article[@id="primary"]//*[contains(text(),"Tel")]')[0].text_content()
-      phone = re.findall(r'([0-9].*)', phone)[0].replace(') ','-')
+      phone = re.findall(r'([0-9].*)', phone)[0].replace(') ', '-')
       fax = page.xpath('//article[@id="primary"]//*[contains(text(),"Fax")]')[0].text_content()
-      fax = re.findall(r'([0-9].*)', fax)[0].replace(') ','-')
+      fax = re.findall(r'([0-9].*)', fax)[0].replace(') ', '-')
       email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
       p = Legislator(name=name, post_id=district)
@@ -44,7 +45,7 @@ class GreaterSudburyPersonScraper(Scraper):
     url = div.attrib['href']
     page = lxmlize(url)
 
-    name = div.text_content().replace('Mayor ','')
+    name = div.text_content().replace('Mayor ', '')
     contact_url = page.xpath('//ul[@class="navSecondary"]//a[contains(text(),"Contact")]')[0].attrib['href']
     page = lxmlize(contact_url)
 
@@ -53,7 +54,7 @@ class GreaterSudburyPersonScraper(Scraper):
     address = contact_div.xpath('.//p[1]')[0].text_content()
     address = re.findall(r'(City of Greater .*)', address, flags=re.DOTALL)[0]
     phone = contact_div.xpath('.//p[2]')[0].text_content()
-    phone = phone.replace('Phone: ','')
+    phone = phone.replace('Phone: ', '')
     fax = contact_div.xpath('.//p[3]')[0].text_content()
     fax = fax.split(' ')[-1]
     email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()

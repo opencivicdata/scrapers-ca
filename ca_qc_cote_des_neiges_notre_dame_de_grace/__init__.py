@@ -1,6 +1,7 @@
-#coding: utf8
+# coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
+
 
 class Cote_des_Neiges_Notre_Dame_de_Grace(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-cote-des-neiges-notre-dame-de-grace'

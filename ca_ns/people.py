@@ -2,9 +2,12 @@ from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
 
-import re, urllib2, os
+import re
+import urllib2
+import os
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
+
 
 class NovaScotiaPersonScraper(Scraper):
 
@@ -31,13 +34,12 @@ class NovaScotiaPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
 
-      address = lines.pop(0).strip() +', '+lines.pop(0).strip()
+      address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:
-        address = address+', '+lines.pop(0).strip()
+        address = address + ', ' + lines.pop(0).strip()
 
       if not 'Phone' in lines[0]:
-        address = address+', '+lines.pop(0).strip()
-
+        address = address + ', ' + lines.pop(0).strip()
 
       phone = lines.pop(0).split(':')[1].strip()
       if 'Fax' in lines.pop(0):
@@ -47,13 +49,12 @@ class NovaScotiaPersonScraper(Scraper):
       p.add_contact('phone', phone, None)
       p.add_contact('fax', fax, None)
       for i, email in enumerate(emails):
-        regex = name.split()[-1].lower()+'|'+'|'.join(district.split()[-2:]).replace('of', '').lower()
-        regex = regex.replace('||','|')
-        matches = re.findall(r'%s' %regex, email )
+        regex = name.split()[-1].lower() + '|' + '|'.join(district.split()[-2:]).replace('of', '').lower()
+        regex = regex.replace('||', '|')
+        matches = re.findall(r'%s' % regex, email)
         if matches:
           p.add_contact('email', emails.pop(i), None)
       yield p
-
 
     txt.close()
     os.system('rm ns.pdf')

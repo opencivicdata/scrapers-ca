@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 
+
 class NewBrunswickPersonScraper(Scraper):
 
   def get_people(self):
@@ -20,8 +21,8 @@ class NewBrunswickPersonScraper(Scraper):
 
         address = ', '.join(page.xpath('//div[@class="left_contents"]/p[1]/text()'))
         contacts = page.xpath('//div[@class="left_contents"]/p[3]/text()')
-        phone = contacts[0].split(':')[1].strip().replace(' ','-')
-        fax = contacts[1].split(':')[1].strip().replace(' ','-')
+        phone = contacts[0].split(':')[1].strip().replace(' ', '-')
+        fax = contacts[1].split(':')[1].strip().replace(' ', '-')
         email = page.xpath('//div[@class="left_contents"]//a[contains(@href, "mailto:")]')
         if email:
           email = email[0].text_content()

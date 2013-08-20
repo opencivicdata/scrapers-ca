@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.sainte-anne-de-bellevue.qc.ca/Democratie.aspx'
 
+
 class SainteAnneDeBellevuePersonScraper(Scraper):
 
   def get_people(self):
@@ -19,7 +20,7 @@ class SainteAnneDeBellevuePersonScraper(Scraper):
         district = 'Sainte-Anne-de-Bellevue'
       else:
         name = re.findall(r'(?<=[0-9]).*', councillor.text_content(), flags=re.DOTALL)[0].strip()
-        district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller','')
+        district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller', '')
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)

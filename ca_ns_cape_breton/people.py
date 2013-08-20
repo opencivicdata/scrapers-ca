@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.cbrm.ns.ca/councillors.html'
 
+
 class CapeBretonPersonScraper(Scraper):
 
   def get_people(self):
@@ -16,9 +17,9 @@ class CapeBretonPersonScraper(Scraper):
        name = councillor.xpath('.//a')[0].text_content()
        district = councillor.xpath('.//strong')[0].text_content()
 
-       address = councillor.xpath('.//td')[3].text_content().replace("\r\n",', ')
-       phone = councillor.xpath('.//td[5]/p/text()')[0].split(':')[1].replace("(",'').replace(") ",'-')
-       fax = councillor.xpath('.//td[5]/p/text()')[1].split(':')[1].replace("(",'').replace(") ",'-')
+       address = councillor.xpath('.//td')[3].text_content().replace("\r\n", ', ')
+       phone = councillor.xpath('.//td[5]/p/text()')[0].split(':')[1].replace("(", '').replace(") ", '-')
+       fax = councillor.xpath('.//td[5]/p/text()')[1].split(':')[1].replace("(", '').replace(") ", '-')
 
        p = Legislator(name=name, post_id=district)
        p.add_source(COUNCIL_PAGE)

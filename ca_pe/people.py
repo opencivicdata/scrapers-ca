@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.gov.pe.ca/mapp/municipalitites.php'
 
+
 class PrinceEdwardIslandPersonScraper(Scraper):
 
   def get_people(self):
@@ -16,11 +17,10 @@ class PrinceEdwardIslandPersonScraper(Scraper):
       url = district.attrib['href']
       page = lxmlize(url)
 
-
       info = page.xpath('//div[@style="WIDTH:750"]/dl')
       for contact in info:
         contact_type = contact.xpath('./dt')[0].text_content()
-        contact = contact.xpath('./dd')[0].text_content().replace('(','').replace(') ','-')
+        contact = contact.xpath('./dd')[0].text_content().replace('(', '').replace(') ', '-')
         if 'Officials' in contact_type:
           break
         if 'Tel' in contact_type:
@@ -36,7 +36,7 @@ class PrinceEdwardIslandPersonScraper(Scraper):
 
       councillors = page.xpath('//div[@style="WIDTH:750"]/dl/dt[contains(text(), "Elected Officials")]/parent::dl/dd/pre/text()')[0].splitlines(True)
       for councillor in councillors:
-        name = councillor.replace('(Mayor)','').replace('(Deputy Mayor)','').replace('(Chairperson)','').strip()
+        name = councillor.replace('(Mayor)', '').replace('(Deputy Mayor)', '').replace('(Chairperson)', '').strip()
         p = Legislator(name=name, post_id=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)

@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17'
 
+
 class DollardDesOrmeauxPersonScraper(Scraper):
 
   def get_people(self):
@@ -20,10 +21,10 @@ class DollardDesOrmeauxPersonScraper(Scraper):
     for councillor in councillors:
 
       if 'Mayor' in councillor.text_content():
-        name = councillor.text_content().replace('Mayor','')
+        name = councillor.text_content().replace('Mayor', '')
         district = 'dollard-des-ormeaux'
       else:
-        name = re.split(r'[0-9]',councillor.text_content())[1]
+        name = re.split(r'[0-9]', councillor.text_content())[1]
         district = 'District ' + re.findall(r'[0-9]', councillor.text_content())[0]
 
       p = Legislator(name=name, post_id=district)

@@ -2,10 +2,13 @@ from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
 
-import re, urllib2, os
+import re
+import urllib2
+import os
 
 COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
 # See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx
+
 
 class SaskatchewanPersonScraper(Scraper):
 
@@ -33,11 +36,11 @@ class SaskatchewanPersonScraper(Scraper):
     for page in pages:
       index = re.search(r'(\s{6,})', page[0])
       if index:
-        index = index.end()-1
+        index = index.end() - 1
       else:
         index = -1
-      dist1=[]
-      dist2=[]
+      dist1 = []
+      dist2 = []
       for line in page:
         dist1.append(line[:index].strip())
         dist2.append(line[index:].strip())
@@ -50,11 +53,11 @@ class SaskatchewanPersonScraper(Scraper):
       contacts = {}
       for i, line in enumerate(district):
         if 'Phone' in line:
-          phone = line.split(':')[1].replace('(','').replace(') ', '-').strip()
+          phone = line.split(':')[1].replace('(', '').replace(') ', '-').strip()
           if phone:
             contacts['phone'] = phone
         if 'Fax' in line:
-          fax = line.split(':')[1].replace('(','').replace(') ', '-').strip()
+          fax = line.split(':')[1].replace('(', '').replace(') ', '-').strip()
           if fax:
             contacts['fax'] = fax
         if 'E-Mail' in line:
@@ -62,10 +65,10 @@ class SaskatchewanPersonScraper(Scraper):
           if email:
             contacts['email'] = email
         if 'Address' in line and line.split(':')[1].strip():
-          address = line.split(':')[1].strip() + ', ' + ', '.join(district[i+1:]).replace(' ,','')
+          address = line.split(':')[1].strip() + ', ' + ', '.join(district[i + 1:]).replace(' ,', '')
           contacts['address'] = address
         if 'Mayor' in line or 'Councillor' in line or 'Alderman' in line:
-          councillor = line.split(':')[1].replace('Mr.','').replace('Mrs.','').replace('Ms.','').replace('His Worship','').replace('Her Worship','').strip()
+          councillor = line.split(':')[1].replace('Mr.', '').replace('Mrs.', '').replace('Ms.', '').replace('His Worship', '').replace('Her Worship', '').strip()
           if councillor:
             councillors.append(councillor)
 

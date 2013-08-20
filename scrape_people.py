@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 import importlib
 import argparse
 from mycityhall_scrapers import *
@@ -11,14 +12,12 @@ from pupa.cli.commands import update, base
 def scrape_people():
   jurisdictions = os.listdir('./mycityhall_scrapers')
   # scraper_path = os.path.abspath(os.path.join(os.path.abspath(__file__), os.pardir))+'/mycityhall_scrapers/'
-  scraper_path = os.path.abspath(os.path.join(os.path.abspath(__file__), os.pardir))+'/'
+  scraper_path = os.path.abspath(os.path.join(os.path.abspath(__file__), os.pardir)) + '/'
   print scraper_path
-  sys.path.insert(0,scraper_path)
-  jurisdictions = [x for x in jurisdictions if os.path.exists(scraper_path+x+'/__init__.py')]
-
+  sys.path.insert(0, scraper_path)
+  jurisdictions = [x for x in jurisdictions if os.path.exists(scraper_path + x + '/__init__.py')]
 
   reports = []
-
 
   for jurisdiction in jurisdictions:
     try:
@@ -37,10 +36,10 @@ def scrape_people():
       args = parser.parse_args(['update', '--people', jurisdiction])
       subcommands[args.subcommand].handle(args)
 
-      report = {'name' : jurisdiction, 'status' : 'working', 'error' : 'none' }
+      report = {'name': jurisdiction, 'status': 'working', 'error': 'none'}
       reports.append(report)
 
     except:
-      report = {'name' : jurisdiction, 'status' : 'working' , 'error' : sys.exc_info()}
+      report = {'name': jurisdiction, 'status': 'working', 'error': sys.exc_info()}
       reports.append(report)
   return reports

@@ -8,6 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/MayorAndCouncil/RegionalAndWardCouncillors/!ut/p/a1/04_Sj9CPykssy0xPLMnMz0vMAfGjzOJN_N2dnX3CLAKNgkwMDDw9XcJM_VwCDUMDDfULsh0VAfz7Fis!/'
 
+
 class MarkhamPersonScraper(Scraper):
 
   def get_people(self):
@@ -22,12 +23,12 @@ class MarkhamPersonScraper(Scraper):
       name = councillor.xpath('.//strong')[1].text_content().strip()
       district = councillor.xpath('.//a//text()')[0].strip()
       if 'Ward' in district:
-        district = district.replace('Councillor','')
+        district = district.replace('Councillor', '')
       else:
         district = 'Markham'
 
       url = councillor.xpath('.//a/@href')[0]
-      
+
       if 'Ward 4' in district:
         yield scrape_4(name, url)
         continue
@@ -39,7 +40,7 @@ class MarkhamPersonScraper(Scraper):
       p.add_source(url)
 
       contact = page.xpath('//div[@class="microSiteLinksWrapper"]')[1]
-      address = re.sub(r'\s{2,}' ,' ' , ' '.join(contact.xpath('.//p/text()')[:2])).strip()
+      address = re.sub(r'\s{2,}', ' ', ' '.join(contact.xpath('.//p/text()')[:2])).strip()
       phone = contact.xpath('.//p/text()')[2].split(':')[1].strip()
       email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
       website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
@@ -52,7 +53,6 @@ class MarkhamPersonScraper(Scraper):
       get_links(p, contact)
       yield p
 
-        
 
 def scrape_4(name, url):
   page = lxmlize(url)
@@ -61,13 +61,14 @@ def scrape_4(name, url):
   p.add_source(url)
   p.add_source(COUNCIL_PAGE)
 
-  address = re.sub(r'\s{2,}' ,' ' , ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
+  address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
   phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
   email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
   p.add_contact('address', address, None)
   p.add_contact('phone', phone, None)
   p.add_contact('email', email, None)
   return p
+
 
 def get_links(councillor, div):
   links = div.xpath('.//a')

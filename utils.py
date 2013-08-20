@@ -5,7 +5,9 @@ import os.path
 from scrapelib import urlopen
 import lxml.html
 
+
 class CanadianJurisdiction(Jurisdiction):
+
   def get_metadata(self):
     metadata = {
       'feature_flags': [],
@@ -49,7 +51,8 @@ class CanadianJurisdiction(Jurisdiction):
   def scrape_session_list(self):
     return ['N/A']
 
-def lxmlize(url, encoding = 'utf-8'):
+
+def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
   page = lxml.html.fromstring(entry)
 

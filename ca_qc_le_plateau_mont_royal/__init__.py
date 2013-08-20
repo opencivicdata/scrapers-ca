@@ -1,6 +1,7 @@
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
+
 class Le_Plateau_Mont_Royal(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-le_plateau-mont-royal'
 

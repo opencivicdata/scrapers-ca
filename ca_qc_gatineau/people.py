@@ -6,7 +6,9 @@ import re
 
 COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
 
+
 class GatineauPersonScraper(Scraper):
+
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
@@ -20,7 +22,7 @@ class GatineauPersonScraper(Scraper):
       page = lxmlize(url)
       content = page.xpath('//div[@id="pagecontent"]')[0]
       district = content.xpath('.//h2')[0].text_content()
-      phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ','-')
+      phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ', '-')
       email = content.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
       p = Legislator(name=name, post_id=district)
@@ -42,7 +44,7 @@ class GatineauPersonScraper(Scraper):
 
     content = page.xpath('//div[@id="pagecontent"]')[0]
     name = content.xpath('.//h2')[0].text_content()
-    phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ','-')
+    phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ', '-')
     email = content.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
     p = Legislator(name=name, post_id='Gatineau')

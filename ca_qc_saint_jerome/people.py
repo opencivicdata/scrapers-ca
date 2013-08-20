@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx'
 
+
 class SaintJeromePersonScraper(Scraper):
 
   def get_people(self):
@@ -29,7 +30,7 @@ class SaintJeromePersonScraper(Scraper):
       else:
         district = district[0]
 
-      phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', councillor)[0].replace(' ','-')
+      phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', councillor)[0].replace(' ', '-')
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)

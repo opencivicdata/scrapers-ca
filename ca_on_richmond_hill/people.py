@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_of_the_council'
 
+
 class RichmondHillPersonScraper(Scraper):
 
   def get_people(self):
@@ -32,8 +33,8 @@ class RichmondHillPersonScraper(Scraper):
 
       address = re.findall(r'(?<=Town of Richmond Hill).*(?=Telephone)', info)[0]
       address = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
-      phone = re.findall(r'(?<=Telephone:) (.*)(?=Fax)', info)[0].replace('(','').replace(') ','-').replace(', ext. ', ' x')
-      fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)',info)[0].replace(' ','').replace('(','').replace(')','-')
+      phone = re.findall(r'(?<=Telephone:) (.*)(?=Fax)', info)[0].replace('(', '').replace(') ', '-').replace(', ext. ', ' x')
+      fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)', info)[0].replace(' ', '').replace('(', '').replace(')', '-')
       email = page.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
 
       p = Legislator(name=name, post_id=district)
@@ -45,7 +46,7 @@ class RichmondHillPersonScraper(Scraper):
       p.add_contact('email', email, None)
 
       if 'Website' in info:
-        site = re.findall(r'www\..*\.com',info)[0]
+        site = re.findall(r'www\..*\.com', info)[0]
         p.add_link(site, 'personal site')
       yield p
 

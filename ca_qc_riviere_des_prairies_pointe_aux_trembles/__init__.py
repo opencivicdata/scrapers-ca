@@ -1,6 +1,7 @@
-#coding: utf8
+# coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
+
 
 class Riviere_des_Prairies_Pointe_aux_Trembles(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-riviere-des-prairies-pointe-aux-trembles'

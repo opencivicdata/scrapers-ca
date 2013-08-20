@@ -2,9 +2,12 @@ from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
 
-import re, urllib2, os
+import re
+import urllib2
+import os
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
+
 
 class NewfoundlandAndLabradorPersonScraper(Scraper):
 
@@ -26,27 +29,27 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
       for line in page:
         if 'Official Name' in line:
           column_index['dist_end'] = re.search('Region', line).start()
-          column_index['name_start'] = re.search('Mayor', line).start()+1
-          column_index['name_end'] = re.search('Clerk', line).start()-1
+          column_index['name_start'] = re.search('Mayor', line).start() + 1
+          column_index['name_end'] = re.search('Clerk', line).start() - 1
           column_index['phone_start'] = re.search('Line 1', line).start()
-          column_index['phone_end'] = re.search('Line 2', line).start()-1
+          column_index['phone_end'] = re.search('Line 2', line).start() - 1
           column_index['fax_start'] = re.search('Fax', line).start()
-          column_index['fax_end'] = re.search('E-mail', line).start()-2
-          column_index['email_start'] = column_index['fax_end']+1
-          column_index['email_end'] = re.search('Address', line).start()-1
-          column_index['address_start'] = column_index['email_end']+1
-          column_index['address_end'] = re.search('Days', line).start()-1
+          column_index['fax_end'] = re.search('E-mail', line).start() - 2
+          column_index['email_start'] = column_index['fax_end'] + 1
+          column_index['email_end'] = re.search('Address', line).start() - 1
+          column_index['address_start'] = column_index['email_end'] + 1
+          column_index['address_end'] = re.search('Days', line).start() - 1
           break
       for line in page:
         if 'Official Name' in line or not line.strip():
           continue
         district = line[:column_index['dist_end']]
         name = line[column_index['name_start']:column_index['name_end']].strip()
-        phone = line[column_index['phone_start']:column_index['phone_end']].strip().replace('(','').replace(') ','-')
-        fax = line[column_index['fax_start']:column_index['fax_end']].strip().replace('(','').replace(') ','-')
+        phone = line[column_index['phone_start']:column_index['phone_end']].strip().replace('(', '').replace(') ', '-')
+        fax = line[column_index['fax_start']:column_index['fax_end']].strip().replace('(', '').replace(') ', '-')
         email = line[column_index['email_start']:column_index['email_end']].strip()
         address = line[column_index['address_start']:column_index['address_end']].strip()
-        address = re.sub(r'\s{2,}',', ', address)
+        address = re.sub(r'\s{2,}', ', ', address)
         if not name or not district:
           continue
         p = Legislator(name=name, post_id=district)

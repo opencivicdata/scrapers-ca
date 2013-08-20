@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 
+
 class SaskatchewanPersonScraper(Scraper):
 
   def get_people(self):
@@ -23,12 +24,12 @@ class SaskatchewanPersonScraper(Scraper):
 
       contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
       office_address = contact.xpath('./td[1]/div[2]')[0].text_content()
-      office_phone = contact.xpath('./td[1]/div[3]')[0].text_content().split(':')[1].strip().replace('(','').replace(')','-')
-      office_fax = contact.xpath('./td[1]/div[4]')[0].text_content().split(':')[1].strip().replace('(','').replace(')','-')
+      office_phone = contact.xpath('./td[1]/div[3]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-')
+      office_fax = contact.xpath('./td[1]/div[4]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-')
 
       constituency_address = ''.join(contact.xpath('./td[2]/div//text()')[1:7])
-      constituency_phone = contact.xpath('./td[2]/div[4]//span/text()')[0].replace('(','').replace(')','-')
-      constituency_fax = contact.xpath('./td[2]/div[5]//span/text()')[0].replace('(','').replace(')','-')
+      constituency_phone = contact.xpath('./td[2]/div[4]//span/text()')[0].replace('(', '').replace(')', '-')
+      constituency_fax = contact.xpath('./td[2]/div[5]//span/text()')[0].replace('(', '').replace(')', '-')
 
       email = contact.xpath('./td[3]//a[contains(@href, "mailto:")]/text()')[0]
       website = contact.xpath('./td[3]//div[3]//a')

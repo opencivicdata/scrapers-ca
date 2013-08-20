@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class NorthwestTerritories(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/territory:nt/legislature'
 

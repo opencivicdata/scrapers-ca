@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class BritishColumbia(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:pe/legislature'
 

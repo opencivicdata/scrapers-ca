@@ -2,9 +2,14 @@ from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
 
-import re, os, requests, tempfile, shutil
+import re
+import os
+import requests
+import tempfile
+import shutil
 
 COUNCIL_PAGE = 'http://ville.saguenay.ca/fr/administration-municipale/conseils-municipaux-et-darrondissement/membres-des-conseils'
+
 
 class SaguenayPersonScraper(Scraper):
 
@@ -26,9 +31,9 @@ class SaguenayPersonScraper(Scraper):
     councillors = page.xpath('//div[@class="box"]//div')
     for councillor in councillors:
       district = councillor.xpath('./h3')[0].text_content()
-      name = councillor.xpath('.//p/text()')[1].replace('M. ','').replace('Mme ','').strip()
+      name = councillor.xpath('.//p/text()')[1].replace('M. ', '').replace('Mme ', '').strip()
 
-      phone = councillor.xpath('.//p/text()')[2].split(':')[1].strip().replace(' ','-')
+      phone = councillor.xpath('.//p/text()')[2].split(':')[1].strip().replace(' ', '-')
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
       url = councillor.xpath('./p/a')[0].attrib['href']

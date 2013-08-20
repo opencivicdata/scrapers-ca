@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class NewBrunswick(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nb/legislature'
 

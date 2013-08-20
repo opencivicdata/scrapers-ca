@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class NovaScotia(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:ns/legislature'
 

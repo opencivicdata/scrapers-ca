@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class Saskatchewan(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/province:sk/legislature'
 

@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://guelph.ca/city-hall/mayor-and-council/city-council/'
 
+
 class GuelphPersonScraper(Scraper):
 
   def get_people(self):
@@ -16,7 +17,7 @@ class GuelphPersonScraper(Scraper):
         yield self.scrape_mayor(councillor)
         continue
 
-      name = councillor.xpath('.//a')[0].text_content().replace('Councillor','').replace('Mayor','')
+      name = councillor.xpath('.//a')[0].text_content().replace('Councillor', '').replace('Mayor', '')
       district = councillor.xpath('.//text()[3]')[0]
       url = councillor.xpath('.//a')[0].attrib['href']
 
@@ -24,7 +25,7 @@ class GuelphPersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-      p.add_contact('phone', councillor.xpath('.//text()[4]')[0].replace('x','ext.'), None)
+      p.add_contact('phone', councillor.xpath('.//text()[4]')[0].replace('x', 'ext.'), None)
       email = councillor.xpath('.//a[contains(@href,"mailto:")]')
       if email:
         email = email[0].text_content()
@@ -51,7 +52,6 @@ class GuelphPersonScraper(Scraper):
       if twitter:
         p.add_link(twitter[0].attrib['href'], 'twitter')
       yield p
-
 
   def scrape_mayor(self, div):
     name = div.xpath('.//a')[0].text_content().replace('Mayor', '')

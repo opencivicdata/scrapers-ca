@@ -2,9 +2,11 @@ from utils import CanadianJurisdiction, lxmlize
 
 import re
 
+
 class Vaughan(CanadianJurisdiction):
   jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3519028/council'
   geographic_code = 3519028
+
   def _get_metadata(self):
     return {
       'name': 'Vaughan',
@@ -22,6 +24,7 @@ class Vaughan(CanadianJurisdiction):
         }
       },
     }
+
   def scrape_session_list(self):
     page = lxmlize('http://www.vaughan.ca/council/Pages/default.aspx')
     session = page.xpath('//*[@id="WebPartTitleWPQ2"]/h3/span[1]')[0].text_content()

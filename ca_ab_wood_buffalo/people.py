@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
+
 class WoodBuffaloPersonScraper(Scraper):
 
   def get_people(self):

@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.haldimandcounty.on.ca/OurCounty.aspx?id=338'
 
+
 class HaldimandCountyPersonScraper(Scraper):
 
   def get_people(self):
@@ -16,7 +17,7 @@ class HaldimandCountyPersonScraper(Scraper):
       if not councillor.text_content().strip():
         continue
       if 'Mayor' in councillor.text_content():
-        name = councillor.text_content().replace('Mayor ','')
+        name = councillor.text_content().replace('Mayor ', '')
         district = 'haldimand'
       else:
         district, name = councillor.text_content().split(' - ')
@@ -33,14 +34,14 @@ class HaldimandCountyPersonScraper(Scraper):
       info = page.xpath('//a[contains(@href, "mailto:")]/parent::*/text()')
       for i, field, in enumerate(info):
         if re.match(r'[0-9]+ [A-Z]', field):
-          address = field +', '+info[i+1] +', '+ info[i+2]
+          address = field + ', ' + info[i + 1] + ', ' + info[i + 2]
           p.add_contact('address', address, None)
         if re.findall(r'[0-9]{3} [0-9]{3} [0-9]{4}', field):
           if 'Fax' in field:
-            num = field.replace('Fax: ', '').strip().replace(' ','-')
+            num = field.replace('Fax: ', '').strip().replace(' ', '-')
             p.add_contact('fax', num, None)
           else:
-            num = field.replace('Telephone: ', '').strip().replace(' ','-')
+            num = field.replace('Telephone: ', '').strip().replace(' ', '-')
             p.add_contact('phone', num, None)
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)

@@ -1,5 +1,7 @@
+autopep8
 GitPython
 lxml
+pep8
 unidecode
 -e git+http://github.com/opencivicdata/pupa.git#egg=pupa
 -e git+http://github.com/sunlightlabs/scrapelib.git#egg=scrapelib

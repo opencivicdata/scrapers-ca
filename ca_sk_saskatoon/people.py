@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = "http://www.saskatoon.ca/CITY%20COUNCIL/YOUR%20WARD%20COUNCILLORS/Pages/default.aspx"
 
+
 class SaskatoonPersonScraper(Scraper):
 
   def get_people(self):
@@ -32,7 +33,7 @@ class SaskatoonPersonScraper(Scraper):
         if contact == contacts[-1]:
           break
         contact_type = contact.replace(':', '').strip()
-        value = contacts[i+1].replace('(','').replace(') ', '-').strip()
+        value = contacts[i + 1].replace('(', '').replace(') ', '-').strip()
         if 'Fax' in contact_type:
           p.add_contact('Fax', value, None)
         if 'Phone' in contact_type:

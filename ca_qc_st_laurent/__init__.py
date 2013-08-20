@@ -1,6 +1,7 @@
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
+
 class St_Laurent(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-st-laurent'
 

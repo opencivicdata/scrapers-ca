@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx'
 
+
 class ChathamKentPersonScraper(Scraper):
 
   def get_people(self):

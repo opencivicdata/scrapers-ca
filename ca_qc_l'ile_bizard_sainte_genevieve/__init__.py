@@ -1,6 +1,7 @@
-#coding: utf8
+# coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
+
 
 class Lile_Bizard_Sainte_Genevieve(CanadianJurisdiction):
   jurisdiction_id = "ca-qc-l'ile-bizard-sainte-genevieve"

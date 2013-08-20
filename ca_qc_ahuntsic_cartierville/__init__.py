@@ -1,6 +1,7 @@
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
+
 class Ahuntsic_Cartierville(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-ahuntsic-cartierville'
 

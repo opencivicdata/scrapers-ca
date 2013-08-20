@@ -8,6 +8,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.nwtac.com/about/communities/'
 
+
 class NorthwestTerritoriesPersonScraper(Scraper):
 
   def get_people(self):
@@ -16,7 +17,7 @@ class NorthwestTerritoriesPersonScraper(Scraper):
     councillors = page.xpath('//div[@class="entry-content"]//p/strong')
     for councillor in councillors:
       district = councillor.xpath('./ancestor::p/preceding-sibling::h2')[-1].text_content().split('–'.decode('utf-8'))[0]
-      name = ' '.join(councillor.text_content().split()[-2:]).replace('-Â'.decode('utf-8'),'')
+      name = ' '.join(councillor.text_content().split()[-2:]).replace('-Â'.decode('utf-8'), '')
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
@@ -28,10 +29,10 @@ class NorthwestTerritoriesPersonScraper(Scraper):
         if 'NT' in contact:
           p.add_contact('address', contact.strip(), None)
         if 'Tel' in contact:
-          contact = contact.replace('Tel. ','').replace('(','').replace(') ','-').strip()
+          contact = contact.replace('Tel. ', '').replace('(', '').replace(') ', '-').strip()
           p.add_contact('phone', contact, None)
         if 'Fax' in contact:
-          contact = contact.replace('Fax ','').replace('(','').replace(') ','-').strip()
+          contact = contact.replace('Fax ', '').replace('(', '').replace(') ', '-').strip()
           p.add_contact('fax', contact, None)
       email = councillor.xpath('./parent::p//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)

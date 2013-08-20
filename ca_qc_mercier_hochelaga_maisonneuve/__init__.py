@@ -1,6 +1,7 @@
-#coding: utf8
+# coding: utf8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
+
 
 class Mercier_Hochelaga_Maisonneuve(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-mercier-hochelaga-maisonneuve'

@@ -1,6 +1,7 @@
-#coding: utf-8
+# coding: utf-8
 from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
+
 
 class Rosemont_La_Petite_Patrie(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-rosemont-la_petitepatrie'
