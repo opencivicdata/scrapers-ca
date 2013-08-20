@@ -10,8 +10,8 @@ class Montreal_Nord(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': u'Montréal-Nord',
-      'legislature_name': u'Montréal-Nord Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement de Montréal-Nord",
+      'legislature_url': 'http://ville.montreal.qc.ca/mtlnord',
       'provides': ['people'],
     }
 

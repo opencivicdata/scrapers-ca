@@ -10,8 +10,8 @@ class St_Leonard(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': u'Saint-Léonard',
-      'legislature_name': u'Saint-Léonard Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement de Saint-Léonard",
+      'legislature_url': 'http://ville.montreal.qc.ca/st-leonard',
       'provides': ['people'],
     }
 

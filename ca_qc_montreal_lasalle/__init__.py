@@ -9,8 +9,8 @@ class LaSalle(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'LaSalle',
-      'legislature_name': 'LaSalle Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement de legislature_name': 'LaSalle",
+      'legislature_url': 'http://ville.montreal.qc.ca/lasalle',
       'provides': ['people'],
     }
 

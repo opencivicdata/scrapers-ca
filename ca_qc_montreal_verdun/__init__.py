@@ -10,7 +10,7 @@ class Verdun(CanadianJurisdiction):
     return {
       'name': 'Verdun',
       'legislature_name': 'Verdun City Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_url': 'http://ville.montreal.qc.ca/verdun',
       'provides': ['people'],
     }
 

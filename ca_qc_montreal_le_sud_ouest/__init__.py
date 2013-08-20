@@ -9,8 +9,8 @@ class LeSudOuest(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Le Sud-Ouest',
-      'legislature_name': 'Sud-Ouest Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement du Sud-Ouest",
+      'legislature_url': 'http://ville.montreal.qc.ca/sud-ouest',
       'provides': ['people'],
     }
 

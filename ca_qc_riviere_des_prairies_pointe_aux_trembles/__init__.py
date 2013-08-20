@@ -10,8 +10,8 @@ class Riviere_des_Prairies_Pointe_aux_Trembles(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': u'Rivière-des-Prairies—Pointe-aux-Trembles',
-      'legislature_name': u'Rivière-des-Prairies—Pointe-aux-Trembles Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement de Rivière-des-Prairies—Pointe-aux-Trembles",
+      'legislature_url': 'http://ville.montreal.qc.ca/rdp-pat',
       'provides': ['people'],
     }
 

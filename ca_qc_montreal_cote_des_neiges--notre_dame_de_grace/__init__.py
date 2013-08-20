@@ -10,8 +10,8 @@ class CoteDesNeigesNotreDameDeGrace(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': u'Côte-des-Neiges—Notre-Dame-de-Grâce',
-      'legislature_name': u'Côte-des-Neiges—Notre-Dame-de-Grâce Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement de Côte-des-Neiges—Notre-Dame-de-Grâce",
+      'legislature_url': 'http://ville.montreal.qc.ca/cdn-ndg',
       'provides': ['people'],
     }
 

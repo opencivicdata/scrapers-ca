@@ -9,8 +9,8 @@ class AhuntsicCartierville(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Ahuntsic-Cartierville',
-      'legislature_name': 'Ahuntsic-Cartierville Borough Council',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_name': u"Conseil d'arrondissement de legislature_name': 'Ahuntsic-Cartierville",
+      'legislature_url': 'http://ville.montreal.qc.ca/ahuntsic-cartierville',
       'provides': ['people'],
     }
 

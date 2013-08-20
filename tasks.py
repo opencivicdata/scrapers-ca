@@ -187,3 +187,4 @@ for module_name in os.listdir('.'):
 # legislature_url: compare to source_url in scraped data
 # assign appropriate jurisdiction_id and geographic_code to those lacking a geographic_code
 # fix all the jurisdictions without geographic_code, especially the pseudo-jurisdictions
+# add scraper for borough URLs
