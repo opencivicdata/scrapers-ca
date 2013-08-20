@@ -194,7 +194,3 @@ for module_name in os.listdir('.'):
             index.move([module_name, expected_module_name])
         else:
           print 'No OCD division for %s' % module_name
-
-# @todo
-# legislature_url: compare to sources in scraped data
-# fix all the jurisdictions without geographic_code, especially the pseudo-jurisdictions
