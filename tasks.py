@@ -1,6 +1,7 @@
 # coding: utf8
 
 import importlib
+import codecs
 import os
 import os.path
 import re
@@ -108,34 +109,39 @@ for module_name in os.listdir('.'):
 
           # Determine the expected module name, class name and jurisdiction_id.
           if ocd_type in ('province', 'territory'):
-            expected_module_name = u'ca_%s' % ocd_type_id
+            expected_module_name = 'ca_%s' % ocd_type_id
             if ocd_type_id in ('nl', 'ns'):
-              expected_legislature_name = u'%s House of Assembly' % names[ocd_division]
+              expected_legislature_name = '%s House of Assembly' % names[ocd_division]
             else:
-              expected_legislature_name = u'Legislative Assembly of %s' % names[ocd_division]
-            jurisdiction_id_suffix = u'legislature'
+              expected_legislature_name = 'Legislative Assembly of %s' % names[ocd_division]
+            jurisdiction_id_suffix = 'legislature'
           elif ocd_type == 'csd':
             province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
-            expected_module_name = u'ca_%s_%s' % (province_or_territory_type_id, slug(ocd_division))
+            expected_module_name = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocd_division))
             if ocd_type_id[:2] == '24':
-              expected_legislature_name = u'Conseil municipal de %s' % names[ocd_division]
+              expected_legislature_name = 'Conseil municipal de %s' % names[ocd_division]
             else:
               legislature_name_infix = census_subdivision_types[ocd_division]
               if legislature_name_infix in ('Municipality', 'Specialized municipality'):
                 legislature_name_infix = 'Municipal'
               elif legislature_name_infix == 'Regional municipality':
                 legislature_name_infix = 'Regional'
-              expected_legislature_name = u'%s %s Council' % (names[ocd_division], legislature_name_infix)
-            jurisdiction_id_suffix = u'council'
+              expected_legislature_name = '%s %s Council' % (names[ocd_division], legislature_name_infix)
+            jurisdiction_id_suffix = 'council'
           elif ocd_type == 'arrondissement':
             census_subdivision_type_id = sections[-2].split(':')[-1]
             province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
-            expected_module_name = u'ca_%s_%s_%s' % (province_or_territory_type_id, slug('/'.join(sections[:-1])), slug(ocd_division))
-            expected_legislature_name = u"Conseil d'arrondissement de %s" % names[ocd_division]
-            jurisdiction_id_suffix = u'council'
+            expected_module_name = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug('/'.join(sections[:-1])), slug(ocd_division))
+            if names[ocd_division][0] in ('A', 'E', 'I', 'O', 'U'):
+              expected_legislature_name = "Conseil d'arrondissement d'%s" % names[ocd_division]
+            elif names[ocd_division][:3] == 'Le ':
+              expected_legislature_name = "Conseil d'arrondissement du %s" % names[ocd_division][3:]
+            else:
+              expected_legislature_name = "Conseil d'arrondissement de %s" % names[ocd_division]
+            jurisdiction_id_suffix = 'council'
           else:
             raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
-          expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in re.split('[ -]', names[ocd_division].replace('.', '').replace(u'—', '-')))))
+          expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in re.split('[ -]', names[ocd_division].replace("'", '').replace('.', '').replace(u'—', '-')))))
           expected_jurisdiction_id = ocd_division.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
 
           # Warn if there is no expected legislative URL.
@@ -144,21 +150,21 @@ for module_name in os.listdir('.'):
           if urls.get(ocd_division):
             expected_legislature_url = urls[ocd_division]
           else:
-            print '%-50s %s' % (module_name, legislature_url)
+            print '%-60s %s' % (module_name, legislature_url)
 
           # Warn if the legislature_name may be incorrect.
           legislature_name = instance.metadata['legislature_name']
           if legislature_name != expected_legislature_name:
-            print u'%-50s %s' % (legislature_name, expected_legislature_name)
+            print '%-60s %s' % (legislature_name, expected_legislature_name)
 
           # Name the classes correctly.
           class_name = obj.__name__
           if class_name != expected_class_name:
             for basename in os.listdir(module_name):
               if basename.endswith('.py'):
-                with open(os.path.join(module_name, basename)) as f:
+                with codecs.open(os.path.join(module_name, basename), 'r', 'utf8') as f:
                   content = f.read()
-                with open(os.path.join(module_name, basename), 'w') as f:
+                with codecs.open(os.path.join(module_name, basename), 'w', 'utf8') as f:
                   content = content.replace(class_name, expected_class_name)
                   f.write(content)
 
@@ -166,9 +172,9 @@ for module_name in os.listdir('.'):
           name = instance.metadata['name']
           expected_name = names[ocd_division]
           if name != expected_name or jurisdiction_id != expected_jurisdiction_id or (expected_legislature_url and legislature_url != expected_legislature_url):
-           with open(os.path.join(module_name, '__init__.py')) as f:
+           with codecs.open(os.path.join(module_name, '__init__.py'), 'r', 'utf8') as f:
               content = f.read()
-           with open(os.path.join(module_name, '__init__.py'), 'w') as f:
+           with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
               if name != expected_name:
                 content = content.replace(name, expected_name)
               if jurisdiction_id != expected_jurisdiction_id:

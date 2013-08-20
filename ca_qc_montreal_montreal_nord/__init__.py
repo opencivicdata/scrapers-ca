@@ -3,8 +3,8 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Montreal_Nord(CanadianJurisdiction):
-  jurisdiction_id = u'ca-qc-montreal-nord'
+class MontrealNord(CanadianJurisdiction):
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:montréal-nord/council'
   ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:montréal-nord'
 
   def _get_metadata(self):

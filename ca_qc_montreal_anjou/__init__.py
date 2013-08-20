@@ -9,7 +9,7 @@ class Anjou(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Anjou',
-      'legislature_name': u"Conseil d'arrondissement de legislature_name': 'Anjou",
+      'legislature_name': u"Conseil d'arrondissement d'Anjou",
       'legislature_url': 'http://ville.montreal.qc.ca/anjou',
       'provides': ['people'],
     }
