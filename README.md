@@ -4,7 +4,7 @@
 
 ## Geographic codes
 
-Every jurisdiction has a `geographic_code` that corresponds to its [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) geographic code.
+Most jurisdictions have a `geographic_code` that corresponds to its [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) geographic code.
 
 ## Bugs? Questions?
 
