@@ -9,5 +9,5 @@ class StCatharines(CanadianJurisdiction):
     return {
       'name': 'St. Catharines',
       'legislature_name': 'St. Catharines City Council',
-      'legislature_url': 'http://www.stcatharines.ca/en/governin/BrianMcMullanMayor.asp',
+      'legislature_url': 'http://www.stcatharines.ca',
     }

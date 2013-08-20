@@ -9,5 +9,5 @@ class ThunderBay(CanadianJurisdiction):
     return {
       'name': 'Thunder Bay',
       'legislature_name': 'Thunder Bay City Council',
-      'legislature_url': 'http://www.thunderbay.ca/City_Government/Your_Council.htm',
+      'legislature_url': 'http://www.thunderbay.ca',
     }

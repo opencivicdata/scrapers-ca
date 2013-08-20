@@ -9,5 +9,5 @@ class Milton(CanadianJurisdiction):
     return {
       'name': 'Milton',
       'legislature_name': 'Milton Town Council',
-      'legislature_url': 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972',
+      'legislature_url': 'http://www.milton.ca',
     }

@@ -9,5 +9,5 @@ class Gatineau(CanadianJurisdiction):
     return {
       'name': 'Gatineau',
       'legislature_name': 'Conseil municipal de Gatineau',
-      'legislature_url': 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal',
+      'legislature_url': 'http://www.gatineau.ca',
     }

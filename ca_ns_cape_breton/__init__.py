@@ -9,5 +9,5 @@ class CapeBreton(CanadianJurisdiction):
     return {
       'name': 'Cape Breton',
       'legislature_name': 'Cape Breton Regional Council',
-      'legislature_url': 'http://www.cbrm.ns.ca/councillors.html',
+      'legislature_url': 'http://www.cbrm.ns.ca',
     }

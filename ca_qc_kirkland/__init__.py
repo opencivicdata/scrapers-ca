@@ -9,5 +9,5 @@ class Kirkland(CanadianJurisdiction):
     return {
       'name': 'Kirkland',
       'legislature_name': 'Conseil municipal de Kirkland',
-      'legislature_url': 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-municipal/elus-municipaux',
+      'legislature_url': 'http://www.ville.kirkland.qc.ca',
     }

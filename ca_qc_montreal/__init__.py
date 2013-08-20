@@ -11,7 +11,7 @@ class Montreal(CanadianJurisdiction):
     return {
       'name': u'Montréal',
       'legislature_name': u'Conseil municipal de Montréal',
-      'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
+      'legislature_url': 'http://www.ville.montreal.qc.ca',
       'provides': ['people'],
     }
 

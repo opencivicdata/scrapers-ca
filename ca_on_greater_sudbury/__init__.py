@@ -9,5 +9,5 @@ class GreaterSudbury(CanadianJurisdiction):
     return {
       'name': 'Greater Sudbury',
       'legislature_name': 'Greater Sudbury City Council',
-      'legislature_url': 'http://www.greatersudbury.ca/inside-city-hall/city-council/',
+      'legislature_url': 'http://www.greatersudbury.ca',
     }

@@ -9,5 +9,5 @@ class Saskatoon(CanadianJurisdiction):
     return {
       'name': 'Saskatoon',
       'legislature_name': 'Saskatoon City Council',
-      'legislature_url': "http://www.saskatoon.ca/CITY%20COUNCIL/YOUR%20WARD%20COUNCILLORS/Pages/default.aspx",
+      'legislature_url': "http://www.saskatoon.ca",
     }

@@ -10,5 +10,5 @@ class SaintJerome(CanadianJurisdiction):
     return {
       'name': u'Saint-Jérôme',
       'legislature_name': u'Conseil municipal de Saint-Jérôme',
-      'legislature_url': 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx',
+      'legislature_url': 'http://www.ville.saint-jerome.qc.ca',
     }

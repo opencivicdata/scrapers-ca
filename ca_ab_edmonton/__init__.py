@@ -9,5 +9,5 @@ class Edmonton(CanadianJurisdiction):
     return {
       'name': 'Edmonton',
       'legislature_name': 'Edmonton City Council',
-      'legislature_url': 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx',
+      'legislature_url': 'http://www.edmonton.ca',
     }

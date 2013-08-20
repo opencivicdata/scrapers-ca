@@ -9,5 +9,5 @@ class Ajax(CanadianJurisdiction):
     return {
       'name': 'Ajax',
       'legislature_name': 'Ajax Town Council',
-      'legislature_url': 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp',
+      'legislature_url': 'http://www.ajax.ca',
     }

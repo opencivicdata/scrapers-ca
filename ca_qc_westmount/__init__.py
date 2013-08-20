@@ -9,5 +9,5 @@ class Westmount(CanadianJurisdiction):
     return {
       'name': 'Westmount',
       'legislature_name': 'Conseil municipal de Westmount',
-      'legislature_url': 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61',
+      'legislature_url': 'http://www.westmount.org',
     }

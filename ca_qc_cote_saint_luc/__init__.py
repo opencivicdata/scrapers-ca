@@ -10,5 +10,5 @@ class CoteSaintLuc(CanadianJurisdiction):
     return {
       'name': u'Côte-Saint-Luc',
       'legislature_name': u'Conseil municipal de Côte-Saint-Luc',
-      'legislature_url': 'http://www.cotesaintluc.org/Administration',
+      'legislature_url': 'http://www.cotesaintluc.org',
     }

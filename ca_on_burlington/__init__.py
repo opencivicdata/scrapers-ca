@@ -9,5 +9,5 @@ class Burlington(CanadianJurisdiction):
     return {
       'name': 'Burlington',
       'legislature_name': 'Burlington City Council',
-      'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
+      'legislature_url': 'http://cms.burlington.ca',
     }

@@ -9,5 +9,5 @@ class Markham(CanadianJurisdiction):
     return {
       'name': 'Markham',
       'legislature_name': 'Markham City Council',
-      'legislature_url': 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/MayorAndCouncil/RegionalAndWardCouncillors/!ut/p/a1/04_Sj9CPykssy0xPLMnMz0vMAfGjzOJN_N2dnX3CLAKNgkwMDDw9XcJM_VwCDUMDDfULsh0VAfz7Fis!/',
+      'legislature_url': 'http://www.markham.ca',
     }

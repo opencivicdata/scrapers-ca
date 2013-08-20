@@ -9,5 +9,5 @@ class DollardDesOrmeaux(CanadianJurisdiction):
     return {
       'name': 'Dollard-Des Ormeaux',
       'legislature_name': 'Conseil municipal de Dollard-Des-Ormeaux',
-      'legislature_url': 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17',
+      'legislature_url': 'http://www.ville.ddo.qc.ca',
     }

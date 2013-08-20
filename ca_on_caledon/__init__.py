@@ -9,5 +9,5 @@ class Caledon(CanadianJurisdiction):
     return {
       'name': 'Caledon',
       'legislature_name': 'Caledon Town Council',
-      'legislature_url': 'http://www.town.caledon.on.ca/en/townhall/council.asp',
+      'legislature_url': 'http://www.town.caledon.on.ca',
     }

@@ -9,5 +9,5 @@ class PointeClaire(CanadianJurisdiction):
     return {
       'name': 'Pointe-Claire',
       'legislature_name': 'Conseil municipal de Pointe-Claire',
-      'legislature_url': 'http://www.ville.pointe-claire.qc.ca/en/city-hall-administration/your-council/municipal-council.html',
+      'legislature_url': 'http://www.ville.pointe-claire.qc.ca',
     }

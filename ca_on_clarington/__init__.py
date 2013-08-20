@@ -9,5 +9,5 @@ class Clarington(CanadianJurisdiction):
     return {
       'name': 'Clarington',
       'legislature_name': 'Clarington Municipal Council',
-      'legislature_url': 'http://www.clarington.net/htdocs/council_bios.html',
+      'legislature_url': 'http://www.clarington.net',
     }

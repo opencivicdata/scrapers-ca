@@ -9,5 +9,5 @@ class Newmarket(CanadianJurisdiction):
     return {
       'name': 'Newmarket',
       'legislature_name': 'Newmarket Town Council',
-      'legislature_url': 'http://www.newmarket.ca/en/townhall/contactinformationmayorandtowncouncil.asp',
+      'legislature_url': 'http://www.town.newmarket.on.ca',
     }

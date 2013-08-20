@@ -9,7 +9,7 @@ class Toronto(CanadianJurisdiction):
     return {
       'name': 'Toronto',
       'legislature_name': 'Toronto City Council',
-      'legislature_url': 'http://www.toronto.ca/city_hall/index.htm',
+      'legislature_url': 'http://www.toronto.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],

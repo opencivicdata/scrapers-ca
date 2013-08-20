@@ -9,5 +9,5 @@ class LaSalle(CanadianJurisdiction):
     return {
       'name': 'LaSalle',
       'legislature_name': 'LaSalle Town Council',
-      'legislature_url': 'http://www.town.lasalle.on.ca/Council/council-council.htm',
+      'legislature_url': 'http://www.town.lasalle.on.ca',
     }

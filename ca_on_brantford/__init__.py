@@ -9,5 +9,5 @@ class Brantford(CanadianJurisdiction):
     return {
       'name': 'Brantford',
       'legislature_name': 'Brantford City Council',
-      'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
+      'legislature_url': 'http://www.city.brantford.on.ca',
     }

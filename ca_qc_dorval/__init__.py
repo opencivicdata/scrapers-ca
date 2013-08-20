@@ -9,5 +9,5 @@ class Dorval(CanadianJurisdiction):
     return {
       'name': 'Dorval',
       'legislature_name': 'Conseil municipal de Dorval',
-      'legislature_url': 'http://www.ville.dorval.qc.ca/en/default.asp?contentID=516',
+      'legislature_url': 'http://www.ville.dorval.qc.ca',
     }

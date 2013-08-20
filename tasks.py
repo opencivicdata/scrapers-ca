@@ -17,35 +17,35 @@ def csv_reader(url):
   from StringIO import StringIO
   return csv.reader(StringIO(requests.get(url).content))
 
-# Map Standard Geographical Classification codes for provinces and territories.
+# Map Standard Geographical Classification codes to the OCD identifiers of provinces and territories.
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-sgc/ca_provinces_and_territories.csv')
 province_and_territory_abbreviations = {}
 for row in reader:
-  province_and_territory_abbreviations[int(row[1])] = row[0].split(':')[-1]
+  province_and_territory_abbreviations[row[1]] = row[0]
 
-# Province and territory names.
+# Map OCD identifiers to the names of provinces and territories.
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
 province_and_territory_names = {}
 for row in reader:
-  province_and_territory_names[row[0].split(':')[-1]] = row[1]
+  province_and_territory_names[row[0]] = row[1]
 
-# Census subdivision URLs.
-# reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/ca_census_subdivisions.rb') # @todo switch to .csv extension
-# census_subdivision_urls = {}
-# for row in reader:
-#   census_subdivision_urls[int(row[0].split(':')[-1])] = row[1]
+# Map OCD identifiers to URLs.
+reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/ca_census_subdivisions.csv')
+urls = {}
+for row in reader:
+  urls[row[0]] = row[1]
 
-# Census subdivision type names.
+# Map census subdivision type codes to names.
 census_subdivision_type_names = {}
 document = lxml.html.fromstring(requests.get('http://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-5-eng.cfm').content)
 for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
   census_subdivision_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
 
-# Census subdivision types.
+# Map OCD identifiers to census subdivision types.
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-types/ca_census_subdivisions.csv')
 census_subdivision_types = {}
 for row in reader:
-  census_subdivision_types[int(row[0].split(':')[-1])] = census_subdivision_type_names[row[1].decode('utf-8')]
+  census_subdivision_types[row[0]] = census_subdivision_type_names[row[1].decode('utf-8')]
 
 # Map Standard Geographical Classification codes for census subdivisions.
 geographic_name_re = re.compile('\A([^/(]+)')
@@ -58,7 +58,7 @@ for row in reader:
   if row:
     result = geographic_name_re.search(row[1].decode('iso-8859-1'))
     if result:
-      census_subdivision_names[int(row[0])] = result.group(1).strip()
+      census_subdivision_names[row[0]] = result.group(1).strip()
     else:
       raise Exception('Unrecognized geographic name "%s"' % row[1])
   else:
@@ -91,6 +91,7 @@ for module_name in os.listdir('.'):
 
         geographic_code = getattr(obj, 'geographic_code', None)
         if geographic_code:
+          geographic_code = str(geographic_code)
           instance = obj()
 
           # Ensure geographic_code is unique.
@@ -100,33 +101,37 @@ for module_name in os.listdir('.'):
             geographic_codes.add(geographic_code)
 
           # Determine the expected module name, class name and jurisdiction_id.
-          length = len(str(geographic_code))
+          length = len(geographic_code)
           if length == 2:
-            expected_class_name = province_and_territory_names[province_and_territory_abbreviations[geographic_code]]
+            ocd_identifier = province_and_territory_abbreviations[geographic_code]
+            abbreviation = ocd_identifier.split(':')[-1]
+            expected_class_name = province_and_territory_names[ocd_identifier]
+            expected_module_name = u'ca_%s' % abbreviation
             if geographic_code < 60:
-              expected_jurisdiction_id = 'ocd-jurisdiction/country:ca/province:%s/legislature' % province_and_territory_abbreviations[geographic_code]
+              expected_jurisdiction_id = 'ocd-jurisdiction/country:ca/province:%s/legislature' % ocd_identifier
             else:
-              expected_jurisdiction_id = 'ocd-jurisdiction/country:ca/territory:%s/legislature' % province_and_territory_abbreviations[geographic_code]
-            expected_module_name = u'ca_%s' % province_and_territory_abbreviations[geographic_code]
+              expected_jurisdiction_id = 'ocd-jurisdiction/country:ca/territory:%s/legislature' % ocd_identifier
           elif length == 7:
+            ocd_identifier = 'ocd-division/country:ca/csd:%s' % geographic_code
+            abbreviation = province_and_territory_abbreviations[geographic_code[:2]].split(':')[-1]
             expected_class_name = census_subdivision_names[geographic_code]
+            expected_module_name = u'ca_%s_%s' % (abbreviation, unidecode(census_subdivision_names[geographic_code].lower().translate(translation)))
             expected_jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:%s/council' % geographic_code
-            expected_module_name = u'ca_%s_%s' % (province_and_territory_abbreviations[int(str(geographic_code)[:2])], unidecode(census_subdivision_names[geographic_code].lower().translate(translation)))
           expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in re.split('[ -]', expected_class_name.replace('.', '')))))
 
-          # legislature_url = instance.metadata['legislature_url']
-          # if census_subdivision_urls.get(geographic_code):
-          #   expected_legislature_url = census_subdivision_urls[geographic_code]
-          # else:
-          #   expected_legislature_url = None
-          #   print '%s %s' % (module_name, legislature_url)
+          legislature_url = instance.metadata['legislature_url']
+          expected_legislature_url = None
+          if urls.get(ocd_identifier):
+            expected_legislature_url = urls[ocd_identifier]
+          else:
+            print '%-50s %s' % (module_name, legislature_url)
 
           # Warn if the legislature_name may be incorrect.
           legislature_name = instance.metadata['legislature_name']
-          if str(geographic_code)[:2] == '24':
+          if geographic_code[:2] == '24':
             expected_legislature_name = 'Conseil municipal de %s' % census_subdivision_names[geographic_code]
           else:
-            word = census_subdivision_types[geographic_code]
+            word = census_subdivision_types[ocd_identifier]
             if word in ('Municipality', 'Specialized municipality'):
               word = 'Municipal'
             elif word == 'Regional municipality':
@@ -165,11 +170,10 @@ for module_name in os.listdir('.'):
           # Name the module correctly.
           if module_name != expected_module_name:
             index.move([module_name, expected_module_name])
-        # else:
-        #   print 'No geographic_code for %s' % module_name
+        else:
+          print 'No geographic_code for %s' % module_name
 
 # @todo
 # legislature_url: compare to source_url in scraped data
 # assign appropriate jurisdiction_id and geographic_code to those lacking a geographic_code
 # fix all the jurisdictions without geographic_code, especially the pseudo-jurisdictions
-# run PEP8

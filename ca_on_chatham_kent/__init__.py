@@ -9,5 +9,5 @@ class ChathamKent(CanadianJurisdiction):
     return {
       'name': 'Chatham-Kent',
       'legislature_name': 'Chatham-Kent Municipal Council',
-      'legislature_url': 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx',
+      'legislature_url': 'http://www.chatham-kent.ca',
     }

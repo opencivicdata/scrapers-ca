@@ -9,5 +9,5 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
     return {
       'name': 'Grande Prairie County No. 1',
       'legislature_name': 'County of Grande Prairie No. 1 Council',
-      'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
+      'legislature_url': 'http://www.countygp.ab.ca',
     }

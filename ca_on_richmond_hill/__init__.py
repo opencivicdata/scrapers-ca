@@ -9,5 +9,5 @@ class RichmondHill(CanadianJurisdiction):
     return {
       'name': 'Richmond Hill',
       'legislature_name': 'Richmond Hill Town Council',
-      'legislature_url': 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_of_the_council',
+      'legislature_url': 'http://www.town.richmond-hill.on.ca',
     }

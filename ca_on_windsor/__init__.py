@@ -9,5 +9,5 @@ class Windsor(CanadianJurisdiction):
     return {
       'name': 'Windsor',
       'legislature_name': 'Windsor City Council',
-      'legislature_url': 'http://www.citywindsor.ca/mayorandcouncil/City-Councillors/Pages/City-Councillors.aspx',
+      'legislature_url': 'http://www.citywindsor.ca',
     }

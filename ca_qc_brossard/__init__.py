@@ -9,5 +9,5 @@ class Brossard(CanadianJurisdiction):
     return {
       'name': 'Brossard',
       'legislature_name': 'Conseil municipal de Brossard',
-      'legislature_url': 'http://www.ville.brossard.qc.ca/Ma-ville/conseil-municipal.aspx?lang=en-CA',
+      'legislature_url': 'http://www.ville.brossard.qc.ca',
     }

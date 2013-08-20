@@ -9,5 +9,5 @@ class Saguenay(CanadianJurisdiction):
     return {
       'name': 'Saguenay',
       'legislature_name': 'Conseil municipal de Saguenay',
-      'legislature_url': 'http://ville.saguenay.ca/fr/administration-municipale/conseils-municipaux-et-darrondissement/membres-des-conseils',
+      'legislature_url': 'http://ville.saguenay.ca',
     }

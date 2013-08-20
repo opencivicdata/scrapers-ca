@@ -9,5 +9,5 @@ class Stratford(CanadianJurisdiction):
     return {
       'name': 'Stratford',
       'legislature_name': 'Stratford Town Council',
-      'legislature_url': 'http://www.townofstratford.ca/town-hall/government/town-council/',
+      'legislature_url': 'http://www.townofstratford.ca',
     }

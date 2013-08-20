@@ -9,5 +9,5 @@ class WoodBuffalo(CanadianJurisdiction):
     return {
       'name': 'Wood Buffalo',
       'legislature_name': 'Wood Buffalo Municipal Council',
-      'legislature_url': 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm',
+      'legislature_url': 'http://www.woodbuffalo.ab.ca',
     }

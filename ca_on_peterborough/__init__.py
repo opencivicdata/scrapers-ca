@@ -9,5 +9,5 @@ class Peterborough(CanadianJurisdiction):
     return {
       'name': 'Peterborough',
       'legislature_name': 'Peterborough City Council',
-      'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
+      'legislature_url': 'http://www.city.peterborough.on.ca',
     }

@@ -11,7 +11,7 @@ class Vaughan(CanadianJurisdiction):
     return {
       'name': 'Vaughan',
       'legislature_name': 'Vaughan City Council',
-      'legislature_url': 'http://www.vaughan.ca/council/Pages/default.aspx',
+      'legislature_url': 'https://www.vaughan.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],

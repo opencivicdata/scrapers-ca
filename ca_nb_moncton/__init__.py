@@ -9,5 +9,5 @@ class Moncton(CanadianJurisdiction):
     return {
       'name': 'Moncton',
       'legislature_name': 'Moncton City Council',
-      'legislature_url': 'http://cms.burlington.ca/Page110.aspx',
+      'legislature_url': 'http://www.moncton.ca',
     }

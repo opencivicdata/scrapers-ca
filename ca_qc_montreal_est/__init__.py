@@ -10,5 +10,5 @@ class MontrealEst(CanadianJurisdiction):
     return {
       'name': u'Montréal-Est',
       'legislature_name': u'Conseil municipal de Montréal-Est',
-      'legislature_url': 'http://ville.montreal-est.qc.ca/site2/index.php?option=com_content&view=article&id=12&Itemid=59',
+      'legislature_url': 'http://ville.montreal-est.qc.ca',
     }

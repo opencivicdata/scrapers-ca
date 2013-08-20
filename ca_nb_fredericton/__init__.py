@@ -9,5 +9,5 @@ class Fredericton(CanadianJurisdiction):
     return {
       'name': 'Fredericton',
       'legislature_name': 'Fredericton City Council',
-      'legislature_url': 'http://www.fredericton.ca/en/citygovernment/CityCouncil.asp',
+      'legislature_url': 'http://www.fredericton.ca',
     }

@@ -9,5 +9,5 @@ class Mercier(CanadianJurisdiction):
     return {
       'name': 'Mercier',
       'legislature_name': 'Conseil municipal de Mercier',
-      'legislature_url': 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp',
+      'legislature_url': 'http://www.ville.mercier.qc.ca',
     }
