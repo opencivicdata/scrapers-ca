@@ -5,6 +5,7 @@ from utils import CanadianJurisdiction
 
 class Villeray_Saint_Michel_Parc_Extension(CanadianJurisdiction):
   jurisdiction_id = 'ca-qc-villeray-saint-michel-parc-extension'
+  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:villeray-saint-michel-parc-extension'
 
   def _get_metadata(self):
     return {

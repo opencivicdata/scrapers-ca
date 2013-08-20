@@ -2,13 +2,14 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Sud_Ouest(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-sud-ouest'
+class SaintLaurent(CanadianJurisdiction):
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:saint-laurent/council'
+  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:saint-laurent'
 
   def _get_metadata(self):
     return {
-      'name': 'Le Sud-Ouest',
-      'legislature_name': 'Sud-Ouest Borough Council',
+      'name': 'Saint-Laurent',
+      'legislature_name': 'Saint-Laurent Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

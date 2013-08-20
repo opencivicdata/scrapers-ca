@@ -4,7 +4,8 @@ from utils import CanadianJurisdiction
 
 
 class St_Leonard(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-st-leonard'
+  jurisdiction_id = u'ca-qc-st-leonard'
+  ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:saint-léonard'
 
   def _get_metadata(self):
     return {

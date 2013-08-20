@@ -2,8 +2,9 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Pierrefonds_Roxboro(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-pierrefonds-roxboro'
+class PierrefondsRoxboro(CanadianJurisdiction):
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro/council'
+  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro'
 
   def _get_metadata(self):
     return {

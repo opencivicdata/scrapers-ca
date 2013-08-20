@@ -3,8 +3,9 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Cote_des_Neiges_Notre_Dame_de_Grace(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-cote-des-neiges-notre-dame-de-grace'
+class CoteDesNeigesNotreDameDeGrace(CanadianJurisdiction):
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:côte-des-neiges-notre-dame-de-grâce/council'
+  ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:côte-des-neiges-notre-dame-de-grâce'
 
   def _get_metadata(self):
     return {

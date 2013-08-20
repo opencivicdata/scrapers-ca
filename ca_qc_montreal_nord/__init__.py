@@ -4,12 +4,13 @@ from utils import CanadianJurisdiction
 
 
 class Montreal_Nord(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-montreal-nord'
+  jurisdiction_id = u'ca-qc-montreal-nord'
+  ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:montréal-nord'
 
   def _get_metadata(self):
     return {
-      'name': 'Montréal-Nord',
-      'legislature_name': 'Montréal-Nord Borough Council',
+      'name': u'Montréal-Nord',
+      'legislature_name': u'Montréal-Nord Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }

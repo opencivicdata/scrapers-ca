@@ -2,8 +2,9 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class Le_Plateau_Mont_Royal(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-le_plateau-mont-royal'
+class LePlateauMontRoyal(CanadianJurisdiction):
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal/council'
+  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal'
 
   def _get_metadata(self):
     return {

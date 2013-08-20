@@ -2,13 +2,14 @@ from ca_qc_montreal import MontrealPersonScraper
 from utils import CanadianJurisdiction
 
 
-class St_Laurent(CanadianJurisdiction):
-  jurisdiction_id = 'ca-qc-st-laurent'
+class Anjou(CanadianJurisdiction):
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:anjou/council'
+  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:anjou'
 
   def _get_metadata(self):
     return {
-      'name': 'Saint-Laurent',
-      'legislature_name': 'Saint-Laurent Borough Council',
+      'name': 'Anjou',
+      'legislature_name': 'Anjou Borough Council',
       'legislature_url': 'http://depot.ville.montreal.qc.ca/bd-elus/data.json',
       'provides': ['people'],
     }
