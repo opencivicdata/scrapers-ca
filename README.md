@@ -10,7 +10,9 @@ Other jurisdictions have an `ocd_division` that corresponds to its [Open Civic D
 
 ## Maintenance
 
-A `tasks.py` file will correct module names, class names, `jurisdiction_id`, `name`, `legislature_name` and `legislature_url`. Run as `python tasks.py`. It will report any module without an OCD division or with a `legislature_name` or `legislature_url` that requires manual verification.
+The `tasks.py` script will correct module names, class names, and `jurisdiction_id`, `name`, `legislature_name` and `legislature_url` in `__init.py__` files. It will report any module without an OCD division or with a `legislature_name` or `legislature_url` that requires manual verification.
+
+    python tasks.py
 
 To test [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance, run:
 
