@@ -89,6 +89,7 @@ for module_name in os.listdir('.'):
         else:
           jurisdiction_ids.add(jurisdiction_id)
 
+        # Determine the ocd_division.
         ocd_division = getattr(obj, 'ocd_division', None)
         geographic_code = getattr(obj, 'geographic_code', None)
         if ocd_division:
@@ -112,11 +113,11 @@ for module_name in os.listdir('.'):
           else:
             ocd_divisions.add(ocd_division)
 
-            instance = obj()
+          instance = obj()
           sections = ocd_division.split('/')
           ocd_type, ocd_type_id = sections[-1].split(':')
 
-          # Determine the expected module name, class name and jurisdiction_id.
+          # Determine the expected module name and jurisdiction_id.
           if ocd_type in ('province', 'territory'):
             expected_module_name = 'ca_%s' % ocd_type_id
             if ocd_type_id in ('nl', 'ns'):
@@ -150,9 +151,11 @@ for module_name in os.listdir('.'):
             jurisdiction_id_suffix = 'council'
           else:
             raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
+          expected_jurisdiction_id = ocd_division.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
+
+          # Determine the expected class name.
           class_name_parts = re.split('[ -]', re.sub(u"[—–]", '-', re.sub("['.]", '', names[ocd_division])))
           expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
-          expected_jurisdiction_id = ocd_division.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
 
           # Warn if there is no expected legislative URL.
           legislature_url = instance.metadata['legislature_url']
