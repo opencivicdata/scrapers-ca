@@ -95,9 +95,9 @@ class TorontoEventScraper(Scraper):
             i['order'] = item['order']
 
             for link in item['links']:
-              i.add_media_link(link['name'], link['url'])
+              i.add_media_link(link['name'], link['url'], on_duplicate='ignore')
 
-            if item['notes']:
+            if 'notes' in item:
               i['notes'] = [item['notes']]
 
         yield e
@@ -129,10 +129,17 @@ def find_items(committee):
   agenda_items = []
 
   page = lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
-  link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href' % committee)[0]
+  link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href'%committee)
+  if link:
+    link = link[0]
+  else:
+    return None
+
   page = lxmlize(link)
   meetings = page.xpath('//a[contains(@name, "header")]')
   for meeting in meetings:
+    if not 'Complete' in meeting.xpath('./parent::h3')[0].text_content():
+      continue
     date = meeting.xpath('./parent::h3')[0].text_content().strip().split('-')
     date = dt.datetime.strptime('-'.join(date[0:2]).strip(), "%B %d, %Y - %I:%M %p")
     meeting_id = meeting.attrib['name'].replace('header', '').strip()
@@ -142,6 +149,7 @@ def find_items(committee):
     else:
       request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&meetingId=%s' % meeting_id
     page = lxmlize(request_string)
+    
     items = page.xpath('//tr[@class="nonUrgent" or @class="urgent"]')
     for item in items:
       page = lxmlize(item.xpath('.//a/@href')[0])
@@ -155,10 +163,13 @@ def find_items(committee):
 
       root_description = page.xpath('//font[@size="4"]')[0].text_content()
       root_order = page.xpath('//table[@class="border"]//td[1]//text()')[0]
-
+      
+      ## Get background documents 
       item_links = []
-      links = page.xpath('//a')
+      links = page.xpath('//a[not(contains(@href, "mailto:"))]')
       for link in links:
+        if not 'href' in link.attrib.keys():
+          continue
         description = link.xpath('.//parent::font/preceding-sibling::font/text()')
         if description:
           description = description[-1]
@@ -168,32 +179,37 @@ def find_items(committee):
         item_links.append(item_link)
 
       agenda_items.append({
-        'committee': committee,
-        'description': root_description,
-        'order': root_order,
-        'date': date,
-        'links': item_links,
-        'notes': []
+        'committee' : committee,
+        'description' : root_description,
+        'order' : root_order,
+        'date' : date,
+        'links' : item_links,
       })
 
+      ## Read through the decisions section and create agenda items from the list
       decisions = page.xpath('//b[contains(text(), "Decision")]/ancestor::tr/following-sibling::tr//p')
-      agenda_item = {'notes': PyListObject()}
+      agenda_item = {}
+      notes = ''
       for decision in decisions:
         if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
           note = decision.text_content().strip()
-          agenda_item['notes'].append(note)
+          notes = notes + ' ' + note
         if not decision.text_content().strip() or not re.findall(r'[0-9]\.\W{2,}', decision.text_content()):
           continue
         number = re.findall(r'([0-9]{1,2})\.', decision.text_content())[0]
         description = re.sub(r'^[0-9]{1,2}\.', '', decision.text_content()).strip()
-        # number, description = re.split(r'(?<=^[0-9]{2,})\.\W{2,}', decision.text_content())
-        order = root_order + '-' + number
+        order = root_order+'-'+number
+
         agenda_item['committee'] = committee
         agenda_item['description'] = description
+        if len(notes) > 0:
+          agenda_item['notes'] = {'description' : notes}
         agenda_item['order'] = order
         agenda_item['date'] = date
         agenda_item['links'] = item_links
         agenda_items.append(agenda_item)
-        agenda_item = {'notes': []}
+        agenda_item = {}
+        notes = ''
+                
 
   return agenda_items
