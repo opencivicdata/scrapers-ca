@@ -12,6 +12,9 @@ import lxml.html
 import requests
 from unidecode import unidecode
 
+# Tidies all scraper code.
+
+
 # Reads a remote CSV file.
 def csv_reader(url):
   import csv
@@ -26,10 +29,10 @@ for row in reader:
 
 # Map OCD identifiers to URLs.
 urls = {}
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/ca_census_subdivisions.csv') # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/ca_census_subdivisions.csv')  # @todo switch repository and branch
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv') # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv')  # @todo switch repository and branch
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
 
@@ -47,7 +50,7 @@ for row in reader:
 
 # Map OCD identifiers and Standard Geographical Classification codes to names.
 names = {}
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv') # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv')  # @todo switch repository and branch
 for row in reader:
   names[row[0].decode('utf8')] = row[1].decode('utf8')
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
@@ -60,13 +63,14 @@ for row in reader:
 repo = Repo('.')
 index = repo.index
 
+
 def slug(ocd_division):
   return unidecode(unicode(names[ocd_division]).lower().translate({
     ord(u' '): u'_',
     ord(u"'"): u'_',
-    ord(u'-'): u'_', # dash
-    ord(u'—'): u'_', # m-dash
-    ord(u'–'): u'_', # n-dash
+    ord(u'-'): u'_',  # dash
+    ord(u'—'): u'_',  # m-dash
+    ord(u'–'): u'_',  # n-dash
     ord(u'.'): None,
   }))
 

@@ -177,11 +177,11 @@ def find_items(committee):
       })
 
       decisions = page.xpath('//b[contains(text(), "Decision")]/ancestor::tr/following-sibling::tr//p')
-      agenda_item = {'notes' : PyListObject()}
+      agenda_item = {'notes': PyListObject()}
       for decision in decisions:
         if 'style' in decision.attrib.keys() and 'MARGIN-LEFT: 1in' in decision.attrib['style']:
           note = decision.text_content().strip()
-          agenda_item['notes'].append(note) 
+          agenda_item['notes'].append(note)
         if not decision.text_content().strip() or not re.findall(r'[0-9]\.\W{2,}', decision.text_content()):
           continue
         number = re.findall(r'([0-9]{1,2})\.', decision.text_content())[0]
