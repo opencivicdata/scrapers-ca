@@ -1,6 +1,8 @@
 from utils import CanadianJurisdiction
 
 
+# The municipal association lists only top-level officials.
+# @see http://afmnb.org/municipalite_membre.cfm?id=12
 class NewBrunswick(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/province:nb/legislature'
 

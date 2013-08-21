@@ -12,6 +12,9 @@ import lxml.html
 import requests
 from unidecode import unidecode
 
+# Tidies all scraper code.
+
+
 # Reads a remote CSV file.
 def csv_reader(url):
   import csv
@@ -26,10 +29,10 @@ for row in reader:
 
 # Map OCD identifiers to URLs.
 urls = {}
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/ca_census_subdivisions.csv') # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/ca_census_subdivisions.csv')  # @todo switch repository and branch
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv') # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv')  # @todo switch repository and branch
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
 
@@ -47,7 +50,7 @@ for row in reader:
 
 # Map OCD identifiers and Standard Geographical Classification codes to names.
 names = {}
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv') # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv')  # @todo switch repository and branch
 for row in reader:
   names[row[0].decode('utf8')] = row[1].decode('utf8')
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
@@ -60,13 +63,14 @@ for row in reader:
 repo = Repo('.')
 index = repo.index
 
+
 def slug(ocd_division):
   return unidecode(unicode(names[ocd_division]).lower().translate({
     ord(u' '): u'_',
     ord(u"'"): u'_',
-    ord(u'-'): u'_', # dash
-    ord(u'—'): u'_', # m-dash
-    ord(u'–'): u'_', # n-dash
+    ord(u'-'): u'_',  # dash
+    ord(u'—'): u'_',  # m-dash
+    ord(u'–'): u'_',  # n-dash
     ord(u'.'): None,
   }))
 
@@ -85,6 +89,7 @@ for module_name in os.listdir('.'):
         else:
           jurisdiction_ids.add(jurisdiction_id)
 
+        # Determine the ocd_division.
         ocd_division = getattr(obj, 'ocd_division', None)
         geographic_code = getattr(obj, 'geographic_code', None)
         if ocd_division:
@@ -108,11 +113,11 @@ for module_name in os.listdir('.'):
           else:
             ocd_divisions.add(ocd_division)
 
-            instance = obj()
+          instance = obj()
           sections = ocd_division.split('/')
           ocd_type, ocd_type_id = sections[-1].split(':')
 
-          # Determine the expected module name, class name and jurisdiction_id.
+          # Determine the expected module name and jurisdiction_id.
           if ocd_type in ('province', 'territory'):
             expected_module_name = 'ca_%s' % ocd_type_id
             if ocd_type_id in ('nl', 'ns'):
@@ -146,9 +151,11 @@ for module_name in os.listdir('.'):
             jurisdiction_id_suffix = 'council'
           else:
             raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
+          expected_jurisdiction_id = ocd_division.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
+
+          # Determine the expected class name.
           class_name_parts = re.split('[ -]', re.sub(u"[—–]", '-', re.sub("['.]", '', names[ocd_division])))
           expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
-          expected_jurisdiction_id = ocd_division.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
 
           # Warn if there is no expected legislative URL.
           legislature_url = instance.metadata['legislature_url']
