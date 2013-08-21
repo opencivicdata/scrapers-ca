@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp'
 
+
 class MercierPersonScraper(Scraper):
 
   def get_people(self):
@@ -17,7 +18,7 @@ class MercierPersonScraper(Scraper):
         continue
 
       if councillor == councillors[6]:
-        name = councillor.xpath('.//span')[0].text_content().replace('Maire','').strip()
+        name = councillor.xpath('.//span')[0].text_content().replace('Maire', '').strip()
         district = 'mercier'
       else:
         name, district = councillor.xpath('.//span')[0].text_content().split('Conseiller')

@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/BrianMcMullanMayor.asp'
 
+
 class StCatharinesPersonScraper(Scraper):
 
   def get_people(self):
@@ -34,8 +35,8 @@ class StCatharinesPersonScraper(Scraper):
         fax = contacts.xpath('.//p')[5].text_content()
 
       address = re.sub(r'([a-z\.])([A-Z])', r'\1, \2', address)
-      phone = phone.replace('Tel: ','').replace('.','-')
-      fax = fax.replace('Fax: ','').replace('.','-')
+      phone = phone.replace('Tel: ', '').replace('.', '-')
+      fax = fax.replace('Fax: ', '').replace('.', '-')
       email = contacts.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
 
       p.add_contact('address', address, None)

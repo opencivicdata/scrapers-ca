@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.town.caledon.on.ca/en/townhall/council.asp'
 
+
 class CaledonPersonScraper(Scraper):
 
   def get_people(self):

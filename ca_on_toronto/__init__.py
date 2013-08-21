@@ -1,13 +1,15 @@
 from utils import CanadianJurisdiction, lxmlize
 
+
 class Toronto(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3520005/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3520005/council'
   geographic_code = 3520005
+
   def _get_metadata(self):
     return {
       'name': 'Toronto',
       'legislature_name': 'Toronto City Council',
-      'legislature_url': 'http://www.toronto.ca/city_hall/index.htm',
+      'legislature_url': 'http://www.toronto.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],

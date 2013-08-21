@@ -6,7 +6,9 @@ import re
 
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
 
+
 class TorontoPersonScraper(Scraper):
+
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
@@ -42,21 +44,22 @@ class TorontoPersonScraper(Scraper):
       p.add_link(info.xpath('//a[contains(@href,"twitter.com")]')[0].attrib['href'], 'twitter')
 
     # add contact info
-    p.add_contact('email', info.xpath('.//a')[0].text_content(),None)
+    p.add_contact('email', info.xpath('.//a')[0].text_content(), None)
    #//*[@id="content"]/div/div[1]/div[2]/p[1]
     contacts = info.xpath('//div/p[text()[contains(.,"Phone:")]]')
     for contact in contacts:
       note = contact.xpath('.//strong')[0].text_content()
       contact = contact.xpath('br/following-sibling::node()')
-      if len(contact) > 8 : continue
+      if len(contact) > 8:
+        continue
       if len(contact) >= 4:
-        address = (contact[0]+", "+contact[2]).strip()
+        address = (contact[0] + ", " + contact[2]).strip()
         p.add_contact('address', address, note)
         if "Phone: " in contact[4]:
-          phone = contact[4].replace("Phone: ",'').strip()
+          phone = contact[4].replace("Phone: ", '').strip()
           p.add_contact('phone', phone, note)
         if len(contact) > 5 and "Fax:" in contact[6]:
-          fax = contact[6].replace("Fax: ",'').strip()
+          fax = contact[6].replace("Fax: ", '').strip()
           p.add_contact('fax', fax, note)
       else:
         phone = contact[0].strip()

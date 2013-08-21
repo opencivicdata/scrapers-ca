@@ -2,14 +2,16 @@ from utils import CanadianJurisdiction, lxmlize
 
 import re
 
+
 class Oakville(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3524001/council'
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3524001/council'
   geographic_code = 3524001
+
   def _get_metadata(self):
     return {
       'name': 'Oakville',
       'legislature_name': 'Oakville Town Council',
-      'legislature_url': 'http://www.oakville.ca/townhall/council.html',
+      'legislature_url': 'http://www.oakville.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],
@@ -22,6 +24,7 @@ class Oakville(CanadianJurisdiction):
         }
       },
     }
+
   def scrape_session_list(self):
     page = lxmlize('http://www.oakville.ca/townhall/council.html')
     terms = page.xpath("//div[@class='colsevenfive multicol']//ul//li//a[contains(text(),'Orientation Manual')]")[0]

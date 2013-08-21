@@ -2,77 +2,47 @@ from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
 
-import re, urllib2, os
+import re
 
-COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
+COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
+
 
 class SaskatchewanPersonScraper(Scraper):
 
   def get_people(self):
-    response = urllib2.urlopen(COUNCIL_PAGE).read()
-    pdf = open('sk.pdf', 'w')
-    pdf.write(response)
-    pdf.close()
+    page = lxmlize(COUNCIL_PAGE)
+    councillors = page.xpath('//table[@id="MLAs"]//tr')[1:]
+    for councillor in councillors:
+      name = councillor.xpath('./td')[0].text_content().split('. ')[1]
+      district = councillor.xpath('./td')[2].text_content()
+      url = councillor.xpath('./td[1]/a/@href')[0]
+      page = lxmlize(url)
 
-    os.system('pdftotext sk.pdf -layout')
-    txt = open('sk.txt', 'r')
-    data = txt.read()
+      p = Legislator(name=name, post_id=district)
+      p.add_source(COUNCIL_PAGE)
+      p.add_source(url)
 
-    data = data.splitlines(True)
-    pages = []
-    page = []
-    for line in data:
-      if line.strip() and not 'Page' in line and not 'CITIES' in line and not 'NORTHERN TOWNS, VILLAGES' in line:
-        page.append(line)
-      elif page:
-        pages.append(page)
-        page = []
+      contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
+      office_address = contact.xpath('./td[1]/div[2]')[0].text_content()
+      office_phone = contact.xpath('./td[1]/div[3]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-')
+      office_fax = contact.xpath('./td[1]/div[4]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-')
 
-    districts = []
-    for page in pages:
-      index = re.search(r'(\s{6,})', page[0])
-      if index:
-        index = index.end()-1
-      else:
-        index = -1
-      dist1=[]
-      dist2=[]
-      for line in page:
-        dist1.append(line[:index].strip())
-        dist2.append(line[index:].strip())
-      districts.append(dist1)
-      districts.append(dist2)
+      constituency_address = ''.join(contact.xpath('./td[2]/div//text()')[1:7])
+      constituency_phone = contact.xpath('./td[2]/div[4]//span/text()')[0].replace('(', '').replace(')', '-')
+      constituency_fax = contact.xpath('./td[2]/div[5]//span/text()')[0].replace('(', '').replace(')', '-')
 
-    for district in districts:
-      district_name = district.pop(0).split(',')[0].lower()
-      councillors = []
-      contacts = {}
-      for i, line in enumerate(district):
-        if 'Phone' in line:
-          phone = line.split(':')[1].replace('(','').replace(') ', '-').strip()
-          if phone:
-            contacts['phone'] = phone
-        if 'Fax' in line:
-          fax = line.split(':')[1].replace('(','').replace(') ', '-').strip()
-          if fax:
-            contacts['fax'] = fax
-        if 'E-Mail' in line:
-          email = line.split(':')[1].strip()
-          if email:
-            contacts['email'] = email
-        if 'Address' in line and line.split(':')[1].strip():
-          address = line.split(':')[1].strip() + ', ' + ', '.join(district[i+1:]).replace(' ,','')
-          contacts['address'] = address
-        if 'Mayor' in line or 'Councillor' in line or 'Alderman' in line:
-          councillor = line.split(':')[1].replace('Mr.','').replace('Mrs.','').replace('Ms.','').replace('His Worship','').replace('Her Worship','').strip()
-          if councillor:
-            councillors.append(councillor)
+      email = contact.xpath('./td[3]//a[contains(@href, "mailto:")]/text()')[0]
+      website = contact.xpath('./td[3]//div[3]//a')
+      if website:
+        website = website[0].text_content()
+        p.add_link(website, 'website')
 
-      for councillor in councillors:
-        p = Legislator(post_id=district_name, name=councillor)
-        p.add_source(COUNCIL_PAGE)
-        for key, value in contacts.iteritems():
-          p.add_contact(key, value, None)
-        yield p
-    os.system('rm sk.pdf')
-    os.system('rm sk.txt')
+      p.add_contact('address', office_address, 'Legislative Building')
+      p.add_contact('address', constituency_address, 'constituency')
+      p.add_contact('phone', office_phone, 'Legislative Building')
+      p.add_contact('phone', constituency_phone, 'constituency')
+      p.add_contact('fax', office_fax, 'Legislative Building')
+      p.add_contact('fax', constituency_fax, 'constituency')
+      p.add_contact('email', email, None)
+
+      yield p

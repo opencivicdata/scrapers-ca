@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
 
+
 class EdmontonPersonScraper(Scraper):
 
   def get_people(self):
@@ -34,4 +35,3 @@ class EdmontonPersonScraper(Scraper):
         p.add_contact(contact_type, contact, None)
       print p._contact_details
       yield p
-    

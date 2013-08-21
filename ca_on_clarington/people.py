@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.clarington.net/htdocs/council_bios.html'
 
+
 class ClaringtonPersonScraper(Scraper):
 
   def get_people(self):

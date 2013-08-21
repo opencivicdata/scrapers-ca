@@ -6,7 +6,9 @@ import re
 
 COUNCIL_PAGE = 'http://www.oakville.ca/townhall/council.html'
 
+
 class OakvillePersonScraper(Scraper):
+
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
@@ -17,7 +19,7 @@ class OakvillePersonScraper(Scraper):
          name = councillor.xpath('.//h2')[1].text_content()
          p = Legislator(name=name, post_id="Oakville")
          url = councillor.xpath('.//a')[0].attrib['href']
-         self.scrape_mayor(url,p)
+         self.scrape_mayor(url, p)
          yield p
       else:
         name = councillor.xpath('.//h2')[2].text_content()
@@ -33,23 +35,22 @@ class OakvillePersonScraper(Scraper):
     mayor.add_source(COUNCIL_PAGE)
     mayor.add_source(url)
 
-    ## gather contact details
+    # gather contact details
     info = page.xpath('//div[@class="fourcol multicol"]//p')[0]
     phone = re.findall(r'tel: (\S*)', info.text_content())[0]
     fax = re.findall(r'fax: (\S*)', info.text_content())[0]
     email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-    ## save contact details to object
+    # save contact details to object
     mayor.add_contact('phone', phone, None)
     mayor.add_contact('fax', fax, None)
     mayor.add_contact('email', email, None)
 
-    ## extra sites
+    # extra sites
     twitter = info.xpath('.//a[contains(@href, "twitter")]')[0].attrib['href']
     facebook = info.xpath('.//a[contains(@href, "facebook")]')[0].attrib['href']
     mayor.add_link(twitter, 'twitter')
     mayor.add_link(facebook, 'facebook')
-
 
   def scrape_councillor(self, url, councillor):
     page = lxmlize(url)
@@ -58,22 +59,22 @@ class OakvillePersonScraper(Scraper):
 
     info = page.xpath('//div[@class = "fourcol multicollast"]//p')[1].text_content()
 
-    ## extract contact information
+    # extract contact information
     address = re.findall(r'([0-9].*([A-Z][0-9][A-Z] [0-9][A-Z][0-9]))', info, flags=re.DOTALL)
     if address:
-      address = re.sub(r'\W{2,}',' ' , str(address[0])).decode()
-      address = address.replace("u'",'').replace(' n ',', ').replace("(",'')
+      address = re.sub(r'\W{2,}', ' ', str(address[0])).decode()
+      address = address.replace("u'", '').replace(' n ', ', ').replace("(", '')
 
     phone = re.findall(r'tel: (\S*)|phone: (\S*)', info)
     if not phone:
-      phone = re.findall(r'([0-9]{3}[- ][0-9]{3}[- ][0-9]{4})',info)
+      phone = re.findall(r'([0-9]{3}[- ][0-9]{3}[- ][0-9]{4})', info)
     if 'tuple' in str(type(phone[0])):
       phone = next(x for x in phone[0] if x != '')
     else:
       phone = phone[0]
-    fax = re.findall(r'fax: (\S*) ',info)
+    fax = re.findall(r'fax: (\S*) ', info)
     emails = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "mailto:")]')
-    ## save contact info to councillor object
+    # save contact info to councillor object
     if address:
       councillor.add_contact('address', address, None)
     councillor.add_contact('phone', str(phone), None)
@@ -82,13 +83,13 @@ class OakvillePersonScraper(Scraper):
     councillor.add_contact('email', emails[0].text_content(), councillor.name)
     councillor.add_contact('email', emails[1].text_content(), 'district')
 
-    ## extra links
+    # extra links
     if "Twitter" in info:
       link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "twitter")]')[0].attrib['href']
-      councillor.add_link(link,'twitter')
+      councillor.add_link(link, 'twitter')
     if "Facebook" in info:
       link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "facebook")]')[0].attrib['href']
-      councillor.add_link(link,'facebook')
+      councillor.add_link(link, 'facebook')
     if "LinkedIn" in info:
       link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "linkedin")]')[0].attrib['href']
-      councillor.add_link(link,'linkedin')
+      councillor.add_link(link, 'linkedin')

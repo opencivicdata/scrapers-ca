@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972'
 
+
 class MiltonPersonScraper(Scraper):
 
   def get_people(self):
@@ -14,7 +15,7 @@ class MiltonPersonScraper(Scraper):
     councillors = page.xpath('//table[@id="Table1table"]/tbody/tr')[1:]
     for councillor in councillors:
       name = councillor.xpath('./td[2]/p/text()')[1]
-      if len(councillor.xpath('./td[2]/p/text()'))<3:
+      if len(councillor.xpath('./td[2]/p/text()')) < 3:
         district = 'milton'
       else:
         district = councillor.xpath('./td[2]/p/text()')[2]
@@ -23,7 +24,7 @@ class MiltonPersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
 
       if councillor == councillors[0]:
-        address = ', '.join(councillor.xpath('./td[3]/p[1]/text()')).replace('Email:','').strip()
+        address = ', '.join(councillor.xpath('./td[3]/p[1]/text()')).replace('Email:', '').strip()
         p.add_contact('address', address, None)
 
       numbers = councillor.xpath('./td[3]/p[2]/text()')

@@ -12,4 +12,4 @@ setup(name='mycityhall-scrapers',
       description='MyCityHall.ca Scrapers',
       long_description=long_description,
       platforms=['any'],
-)
+      )

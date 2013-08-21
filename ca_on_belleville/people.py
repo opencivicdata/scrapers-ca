@@ -5,6 +5,8 @@ from utils import lxmlize
 import re
 
 COUNCIL_PAGE = 'http://www.city.belleville.on.ca/CITYHALL/MAYORANDCOUNCIL/Pages/CityCouncil.aspx'
+
+
 class BellevillePersonScraper(Scraper):
 
   def get_people(self):
@@ -17,7 +19,7 @@ class BellevillePersonScraper(Scraper):
         continue
       name = name[0]
 
-      district = councillor.xpath('./ancestor::tr/preceding-sibling::tr//font[@color="#000080"]')[0].text_content().lower().replace('councillors','')
+      district = councillor.xpath('./ancestor::tr/preceding-sibling::tr//font[@color="#000080"]')[0].text_content().lower().replace('councillors', '')
       if not 'ward' in district:
         district = 'belleville'
 
@@ -26,7 +28,7 @@ class BellevillePersonScraper(Scraper):
 
       info = councillor.xpath('./text()')
       if len(info) < 3:
-        info = info+councillors[i+1].xpath('./text()')
+        info = info + councillors[i + 1].xpath('./text()')
       info = info[2:]
 
       for contact in info:

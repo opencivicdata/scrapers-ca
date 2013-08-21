@@ -1,7 +1,8 @@
 from utils import CanadianJurisdiction
 
+
 class Lambton(CanadianJurisdiction):
-  jurisdiction_id = 'ca-on-lambton'
+  jurisdiction_id = u'ca-on-lambton'
 
   def _get_metadata(self):
     return {

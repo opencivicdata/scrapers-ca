@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.dorval.qc.ca/en/default.asp?contentID=516'
 
+
 class DorvalPersonScraper(Scraper):
 
   def get_people(self):

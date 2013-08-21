@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.townofstratford.ca/town-hall/government/town-council/'
 
+
 class StratfordPersonScraper(Scraper):
 
   def get_people(self):
@@ -40,7 +41,7 @@ class StratfordPersonScraper(Scraper):
     info = page.xpath('//div[@class="entry-content"]/p')[:4]
     name = info[0].text_content().replace('Mayor', '')
     email = info[2].xpath('./a')[0].text_content()
-    phone = info[3].text_content().replace('Phone ','')
+    phone = info[3].text_content().replace('Phone ', '')
 
     p = Legislator(name=name, post_id='stratford')
     p.add_source(COUNCIL_PAGE)

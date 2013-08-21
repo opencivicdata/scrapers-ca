@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-municipal/elus-municipaux'
 
+
 class KirklandPersonScraper(Scraper):
 
   def get_people(self):
@@ -21,7 +22,7 @@ class KirklandPersonScraper(Scraper):
         district = councillor.xpath('.//h2')[0].text_content()
       name = councillor.xpath('.//strong/text()')[0]
 
-      phone = councillor.xpath('.//div[contains(text(), "#")]/text()')[0].replace('T ','').replace(' ','-').replace(',-#-',' x')
+      phone = councillor.xpath('.//div[contains(text(), "#")]/text()')[0].replace('T ', '').replace(' ', '-').replace(',-#-', ' x')
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
       p = Legislator(name=name, post_id=district)

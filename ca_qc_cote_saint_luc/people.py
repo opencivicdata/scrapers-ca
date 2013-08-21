@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
 
+
 class CoteSaintLucPersonScraper(Scraper):
 
   def get_people(self):
@@ -45,9 +46,9 @@ class CoteSaintLucPersonScraper(Scraper):
     page = lxmlize(url)
     info = page.xpath('//div[@class="pane-content"]')[1]
 
-    name = info.xpath('.//h3/text()')[0].replace('Mayor ','')
+    name = info.xpath('.//h3/text()')[0].replace('Mayor ', '')
     email = info.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
-    phone = info.xpath('.//p[contains(text(), "phone")]/text()')[0].replace('Telephone: ','')
+    phone = info.xpath('.//p[contains(text(), "phone")]/text()')[0].replace('Telephone: ', '')
 
     p = Legislator(name=name, post_id='cote st-luc')
     p.add_source(COUNCIL_PAGE)

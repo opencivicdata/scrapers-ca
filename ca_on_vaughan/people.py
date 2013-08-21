@@ -6,7 +6,9 @@ import re
 
 COUNCIL_PAGE = 'http://www.vaughan.ca/council/Pages/default.aspx'
 
-class  VaughanPersonScraper(Scraper):
+
+class VaughanPersonScraper(Scraper):
+
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
     councillors = page.xpath('//div[@class="PL_Column1"]//ul[@class="dfwp-list"][1]/li/div/div/a')
@@ -28,7 +30,7 @@ class  VaughanPersonScraper(Scraper):
       else:
         contact_info = page.xpath('//div[@id="WebPartWPQ3"]')[0]
 
-      phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4} ext. [0-9]{4}', contact_info.text_content())[0].replace('ext. ','x')
+      phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4} ext. [0-9]{4}', contact_info.text_content())[0].replace('ext. ', 'x')
       fax = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact_info.text_content())[1]
       email = contact_info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
@@ -49,5 +51,5 @@ class  VaughanPersonScraper(Scraper):
         p.add_link(twitter, 'facebook')
       if page.xpath('.//a[contains(@href,"youtube")]'):
         youtube = page.xpath('.//a[contains(@href, "youtube")]')[0].attrib['href']
-        p.add_link(youtube,'youtube')
+        p.add_link(youtube, 'youtube')
       yield p

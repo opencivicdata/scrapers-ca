@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 
+
 class MonctonPersonScraper(Scraper):
 
   def get_people(self):
@@ -16,7 +17,7 @@ class MonctonPersonScraper(Scraper):
       name = councillor.xpath('.//a')[0].text_content()
       district = councillor.xpath('.//span/text()')[1]
 
-      email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:','')
+      email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:', '')
 
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
