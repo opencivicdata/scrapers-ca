@@ -7,7 +7,7 @@ import re
 COUNCIL_PAGE = 'http://www.ville.quebec.qc.ca/apropos/vie_democratique/elus/conseil_municipal/membres.aspx'
 
 
-class Quebec_CityPersonScraper(Scraper):
+class QuebecPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

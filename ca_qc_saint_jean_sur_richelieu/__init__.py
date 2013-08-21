@@ -8,6 +8,6 @@ class SaintJeanSurRichelieu(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Saint-Jean-sur-Richelieu',
-      'legislature_name': 'Saint-Jean-sur-Richelieu City Council',
+      'legislature_name': 'Conseil municipal de Saint-Jean-sur-Richelieu',
       'legislature_url': 'http://www.ville.saint-jean-sur-richelieu.qc.ca',
     }

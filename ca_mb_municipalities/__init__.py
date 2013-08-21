@@ -2,8 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class Manitoba(CanadianJurisdiction):
-  jurisdiction_id = u'ocd-jurisdiction/country:ca/provinces:mb/legislature'
-  geographic_code = 46
+  jurisdiction_id = u'ocd-jurisdiction/country:ca/province:mb/legislature'
 
   def _get_metadata(self):
     return {
