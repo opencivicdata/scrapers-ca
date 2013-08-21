@@ -126,10 +126,16 @@ def find_items(committee):
   agenda_items = []
 
   page = lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
-  link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href'%committee)[0]
+  link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href'%committee)
+  if link:
+    link = link[0]
+  else:
+    return None
   page = lxmlize(link)
   meetings = page.xpath('//a[contains(@name, "header")]')
   for meeting in meetings:
+    if not 'Complete' in meeting.xpath('./parent::h3')[0].text_content():
+      continue
     date = meeting.xpath('./parent::h3')[0].text_content().strip().split('-')
     date = dt.datetime.strptime('-'.join(date[0:2]).strip(), "%B %d, %Y - %I:%M %p")
     meeting_id = meeting.attrib['name'].replace('header','').strip()
