@@ -1,6 +1,8 @@
 from utils import CanadianJurisdiction
 
 
+# The official government source only lists top-level officials.
+# @see http://www.gov.ns.ca/snsmr/municipal/government/contact.asp
 class NovaScotia(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/province:ns/legislature'
 

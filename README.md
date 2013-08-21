@@ -6,6 +6,8 @@
 
 Most jurisdictions have a `geographic_code` that corresponds to its [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) geographic code.
 
+Other jurisdictions have an `ocd_division` that corresponds to its [Open Civic Data Division Identifier](https://github.com/opencivicdata/ocd-division-ids).
+
 ## Bugs? Questions?
 
 This repository is on GitHub: [http://github.com/opennorth/mycityhall-scrapers](http://github.com/opennorth/mycityhall-scrapers), where your contributions, forks, bug reports, feature requests, and feedback are greatly welcomed.
