@@ -35,6 +35,6 @@ class LevisPersonScraper(Scraper):
 def get_email(script):
   var = re.findall(r'\'(.*)\'', script)
   h = HTMLParser.HTMLParser()
-  email = h.unescape(''.join(var))
+  email = h.handle_charref(''.join(var))
   # print email
   return email
