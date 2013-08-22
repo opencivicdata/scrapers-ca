@@ -1,0 +1,40 @@
+from pupa.scrape import Scraper, Legislator
+
+from utils import lxmlize
+
+import re 
+import HTMLParser
+
+COUNCIL_PAGE = 'http://www.ville.levis.qc.ca/Fr/Conseil/'
+
+
+class LevisPersonScraper(Scraper):
+
+  def get_people(self):
+    page = lxmlize(COUNCIL_PAGE)
+
+    councillors = page.xpath('//table[@id="Tableau_01"]//a/@href')
+    for councillor in councillors:
+      page = lxmlize(councillor)
+      name = page.xpath('//table[@id="table1"]//td[2]//b')[0].text_content()
+      district = page.xpath('//table[@id="table1"]//td[2]//i')[0].text_content()
+      if 'Maire' in district:
+        district = 'levis'
+      else:
+        district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]
+      
+      p = Legislator(name=name, post_id=district)
+      p.add_source(COUNCIL_PAGE)
+      p.add_source(councillor)
+
+      script = page.xpath('//table[@id="table1"]//td[2]//script')[0].text_content()
+      email = get_email(script)
+      # p.add_contact('email', email, None)
+      yield p
+
+def get_email(script):
+  var = re.findall(r'\'(.*)\'', script)
+  h = HTMLParser.HTMLParser()
+  email = h.unescape(''.join(var))
+  # print email
+  return email
