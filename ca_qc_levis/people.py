@@ -2,7 +2,8 @@ from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
 
-import re 
+import re
+import urllib 
 import HTMLParser
 
 COUNCIL_PAGE = 'http://www.ville.levis.qc.ca/Fr/Conseil/'
@@ -29,12 +30,10 @@ class LevisPersonScraper(Scraper):
 
       script = page.xpath('//table[@id="table1"]//td[2]//script')[0].text_content()
       email = get_email(script)
-      # p.add_contact('email', email, None)
+      p.add_contact('email', email, None)
       yield p
 
 def get_email(script):
-  var = re.findall(r'\'(.*)\'', script)
   h = HTMLParser.HTMLParser()
-  email = h.handle_charref(''.join(var))
-  # print email
-  return email
+  email =  h.unescape(re.search('(?<=")[^"]+', urllib.unquote(''.join(re.findall("(?<=\(\')[^']+", script)))).group(0))
+  return email + '@ville.levis.qc.ca'
