@@ -1,7 +1,7 @@
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
-
+import HTMLParser
 import re
 
 COUNCIL_PAGE = 'http://www.beaconsfield.ca/en/your-council.html'
@@ -24,6 +24,8 @@ class BeaconsfieldPersonScraper(Scraper):
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
         phone = phone.split(':')[1].strip().replace(' ','-')
         p.add_contact('phone', phone, None)
+        script = councillor.xpath('.//parent::div/following-sibling::div/script')[0].text_content()
+        p.add_contact('email', get_email(script), None)
         yield p
         continue
 
@@ -35,4 +37,14 @@ class BeaconsfieldPersonScraper(Scraper):
         phone = phone[0]
         phone = phone.split(':')[1].strip().replace(' ','-')
         p.add_contact('phone', phone, None)
+      script = councillor.xpath('.//parent::div/following-sibling::p/script')[0].text_content()
+      p.add_contact('email', get_email(script), None)
+      print p._contact_details
       yield p
+
+def get_email(script):
+  var = re.findall(r'var addy\d{4,5} = \'(.*)\'', script)[0].replace('\' + \'','').replace('\'','')
+  ext = re.findall(r'addy\d{4,5} = addy\d{4,5} \+ \'(.*);', script)[0].replace('\' + \'','').replace('\'','')
+  h = HTMLParser.HTMLParser()
+  email = h.unescape(var+ext)
+  return email
