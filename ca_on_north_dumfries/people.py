@@ -7,7 +7,7 @@ import re
 COUNCIL_PAGE = 'http://www.northdumfries.ca/en/ourtownship/MeetYourCouncil.asp'
 
 
-class North_DumfriesPersonScraper(Scraper):
+class NorthDumfriesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

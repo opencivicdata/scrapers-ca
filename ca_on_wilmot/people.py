@@ -7,7 +7,7 @@ import re
 COUNCIL_PAGE = 'http://www.wilmot.ca/current-council.php'
 
 
-class WilmontPersonScraper(Scraper):
+class WilmotPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
