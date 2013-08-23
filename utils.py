@@ -1,5 +1,5 @@
-from pupa.scrape import Jurisdiction
-
+from pupa.scrape import Jurisdiction, Scraper
+from pupa.models import Organization
 import os.path
 
 from scrapelib import urlopen
@@ -63,3 +63,10 @@ def lxmlize(url, encoding='utf-8'):
   else:
     page.make_links_absolute(url)
     return page
+
+class CanadianScraper(Scraper):
+  def get_organization(self):
+    name = self.jurisdiction.get_metadata()['name']
+    jurisdiction_id = self.jurisdiction.jurisdiction_id
+    org = Organization(name=name, classification='jurisdiction', jurisdiction_id=jurisdiction_id)
+    return org

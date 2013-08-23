@@ -19,11 +19,15 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
+      p.add_extra('role', 'councillor')
+
+      image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
+      p.image = image
 
       address = councillor.xpath('./p[1]')[0].text_content()
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p.add_contact('address', address, None)
+      p.add_contact('address', address, 'office')
       p.add_contact('email', email, None)
 
       numbers = councillor.xpath('./p[2]')[0].text_content().replace('Email: ', '').replace(email, '').split(':')
@@ -33,7 +37,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
         contact_type = re.findall(r'[A-Za-z]+', numbers[index - 1])[0]
         number = re.findall(r'[0-9]{3}.[0-9]{3}.[0-9]{4}', number)[0].replace('.', '-')
         if contact_type == 'Fax':
-          p.add_contact('fax', number, None)
+          p.add_contact('fax', number, 'office')
         else:
           p.add_contact('phone', number, contact_type)
       yield p
