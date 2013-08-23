@@ -14,7 +14,7 @@ class EdmontonPersonScraper(CanadianScraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
     organization =  self.get_organization()
-    print organization
+    yield organization
 
     yield scrape_mayor()
     councillors = page.xpath('//div[@id="contentArea"]//h3//a/@href')
