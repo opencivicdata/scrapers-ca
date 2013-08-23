@@ -26,7 +26,7 @@ class EdmontonPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
 
-
+      print organization
       p.add_membership(organization, role='councillor')
 
 
