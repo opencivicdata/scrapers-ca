@@ -29,10 +29,10 @@ for row in reader:
 
 # Map OCD identifiers to URLs.
 urls = {}
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/ca_census_subdivisions.csv')  # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/ca_census_subdivisions.csv')
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv')  # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv')
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
 
@@ -50,7 +50,7 @@ for row in reader:
 
 # Map OCD identifiers and Standard Geographical Classification codes to names.
 names = {}
-reader = csv_reader('https://raw.github.com/jpmckinney/ocd-division-ids/ca/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv')  # @todo switch repository and branch
+reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv')
 for row in reader:
   names[row[0].decode('utf8')] = row[1].decode('utf8')
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
