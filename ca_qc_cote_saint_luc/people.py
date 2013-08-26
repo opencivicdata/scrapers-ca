@@ -1,19 +1,21 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
 
 
-class CoteSaintLucPersonScraper(Scraper):
+class CoteSaintLucPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     mayor_url = page.xpath('//a[contains(text(), "Mayor")]/@href')[0]
-    yield self.scrape_mayor(mayor_url)
+    yield self.scrape_mayor(mayor_url, organization)
 
     councillors_url = page.xpath('//a[contains(text(), "Councillors")]/@href')[0]
     page = lxmlize(councillors_url)
@@ -26,9 +28,12 @@ class CoteSaintLucPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillors_url)
+      p.add_membership(organization, role='councillor')
+
+      p.image = councillor.xpath('.//img/@src')[0]
 
       phone = councillor.xpath('.//p[contains(text(), "Telephone")]/text()')[0].split(':')[1]
-      p.add_contact('phone', phone, None)
+      p.add_contact('phone', phone, 'office')
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')
       if email:
@@ -42,7 +47,7 @@ class CoteSaintLucPersonScraper(Scraper):
 
       yield p
 
-  def scrape_mayor(self, url):
+  def scrape_mayor(self, url, organization):
     page = lxmlize(url)
     info = page.xpath('//div[@class="pane-content"]')[1]
 
@@ -52,7 +57,9 @@ class CoteSaintLucPersonScraper(Scraper):
 
     p = Legislator(name=name, post_id='cote st-luc')
     p.add_source(COUNCIL_PAGE)
+    p.add_membership(organization, role='mayor')
+    p.image = info.xpath('.//img/@src')[0]
     p.add_source(url)
     p.add_contact('email', email, None)
-    p.add_contact('phone', phone, None)
+    p.add_contact('phone', phone, 'office')
     return p

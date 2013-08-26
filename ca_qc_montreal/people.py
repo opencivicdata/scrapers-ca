@@ -1,8 +1,8 @@
 #!/usr/bin/python
-# -*- coding: latin-1 -*-
+# -*- coding: latin-1== -*-
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 import urllib2
@@ -12,26 +12,37 @@ import requests
 COUNCIL_PAGE = 'http://depot.ville.montreal.qc.ca/bd-elus/data.json'
 
 
-class MontrealPersonScraper(Scraper):
+class MontrealPersonScraper(CanadianScraper):
 
   def get_people(self):
+    organization = self.get_organization()
+    yield organization
+
     district = self.jurisdiction.get_metadata()["name"]
     data = urllib2.urlopen(COUNCIL_PAGE)
     data = json.load(data, 'latin-1')
     for line in data:
-      if district == 'Montreal':
+      print isinstance(district, unicode)
+      if district == u'Montréal'.encode('utf-8'):
+        print '-----------------------'
         if "Maire" in line['TITRE_MAIRIE'] or "Ville" in line['TITRE_CONSEIL'] or 'désigné'.decode('utf-8') in line['TITRE_CONSEIL']:
           yield self.add_councillor(line)
       elif district in remove_accents(line['ARRONDISSEMENT']):
-        yield self.add_councillor(line)
+        yield self.add_councillor(line, organization)
 
-  def add_councillor(self, line):
+  def add_councillor(self, line, organization):
     name = line['PRENOM'] + ' ' + line['NOM']
     district = line['ARRONDISSEMENT']
 
     p = Legislator(name=name, post_id=district)
     p.add_source(COUNCIL_PAGE)
 
+    if line['TITRE_MAIRIE']:
+      p.add_membership(organization, role='mayor')
+      print 'mayor'
+    else:
+      p.add_membership(organization, role='councillor')
+      print councillor
     if line['ADRESSE_ARRONDISSEMENT']:
       p.add_contact('address', line['ADRESSE_ARRONDISSEMENT'], 'district')
     if line['ADRESSE_HOTEL_DE_VILLE']:

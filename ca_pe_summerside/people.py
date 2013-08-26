@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
@@ -8,12 +8,14 @@ COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/coun
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'
 
 
-class SummersidePersonScraper(Scraper):
+class SummersidePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
-    yield self.scrape_mayor()
+    yield self.scrape_mayor(organization)
 
     councillors = page.xpath('//div[@class="articlebody-inside"]//p[contains(text(),"-")]')
     for councillor in councillors:
@@ -26,6 +28,9 @@ class SummersidePersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+      p.add_membership(organization, role='councillor')
+
+      p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
 
       contacts = page.xpath('//div[@class="articlebody-inside"]/p')[1].text_content().replace('Biography', '').replace('Committees', '').split(':')
       for i, contact in enumerate(contacts):
@@ -34,24 +39,26 @@ class SummersidePersonScraper(Scraper):
         contact_type = re.findall(r'([A-Z][a-z]+)', contacts[i - 1])[0]
         if contact_type != 'Address':
           contact = re.split(r'[A-Z]', contact)[0]
-        p.add_contact(contact_type.lower(), contact, None)
+        p.add_contact(contact_type.lower(), contact, 'office')
       yield p
 
-  def scrape_mayor(self):
+  def scrape_mayor(self, organization):
     page = lxmlize(MAYOR_PAGE)
 
     name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Mayor', '')
 
     p = Legislator(name=name, post_id='summerside')
     p.add_source(MAYOR_PAGE)
+    p.add_membership(organization, role='mayor')
+    p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
 
     info = page.xpath('//div[@class="articlebody-inside"]/p')
     phone = re.findall(r'to (.*)', info[1].text_content())[0]
     address = info[3].text_content().replace('by mail: ', '') + ' ' + info[4].text_content()
     email = info[5].xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p.add_contact('phone', phone, None)
-    p.add_contact('address', address, None)
+    p.add_contact('phone', phone, 'office')
+    p.add_contact('address', address, 'office')
     p.add_contact('email', email, None)
 
     return p

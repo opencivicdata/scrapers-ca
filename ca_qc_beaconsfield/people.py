@@ -1,16 +1,18 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 import HTMLParser
 import re
 
 COUNCIL_PAGE = 'http://www.beaconsfield.ca/en/your-council.html'
 
 
-class BeaconsfieldPersonScraper(Scraper):
+class BeaconsfieldPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//h1[@class="title"]')
     for councillor in councillors:
@@ -21,9 +23,11 @@ class BeaconsfieldPersonScraper(Scraper):
       if 'Mayor' in district:
         p = Legislator(name=name, post_id='beaconsfield')
         p.add_source(COUNCIL_PAGE)
+        p.add_membership(organization, role='mayor')
+        p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
         phone = phone.split(':')[1].strip().replace(' ','-')
-        p.add_contact('phone', phone, None)
+        p.add_contact('phone', phone, 'office')
         script = councillor.xpath('.//parent::div/following-sibling::div/script')[0].text_content()
         p.add_contact('email', get_email(script), None)
         yield p
@@ -32,14 +36,17 @@ class BeaconsfieldPersonScraper(Scraper):
       district = district.split('-')[1].strip()
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
+      p.add_membership(organization, role='councillor')
+
+      p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
+
       phone = councillor.xpath('.//parent::div/following-sibling::p[contains(text(), "514")]/text()')
       if phone:
         phone = phone[0]
         phone = phone.split(':')[1].strip().replace(' ','-')
-        p.add_contact('phone', phone, None)
+        p.add_contact('phone', phone, 'office')
       script = councillor.xpath('.//parent::div/following-sibling::p/script')[0].text_content()
       p.add_contact('email', get_email(script), None)
-      print p._contact_details
       yield p
 
 def get_email(script):
