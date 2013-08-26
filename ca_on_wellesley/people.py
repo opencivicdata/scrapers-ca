@@ -1,16 +1,18 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.township.wellesley.on.ca/index.php?file=council/council.html'
 
 
-class WellesleyPersonScraper(Scraper):
+class WellesleyPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//table[@class="tbl w100"][2]//tr/td')[1::2]
     councillors = councillors + page.xpath('//table[@class="tbl w100"][1]//td[2]')
@@ -18,8 +20,13 @@ class WellesleyPersonScraper(Scraper):
       district = councillor.xpath('./preceding-sibling::td/text()')
       if district:
         district = district[-1]
+        role = 'councillor'
       else:
         district = 'wellesley'
+        role = 'mayor'
+
+      image = councillor.xpath('./preceding-sibling::td/img/@src')[-1]
+        
       name = councillor.xpath('./span/text()')[0] 
       address = councillor.xpath('./text()')
       address = re.sub(r'\s{2,}', ' ', ' '.join(address[:4]))
@@ -28,7 +35,9 @@ class WellesleyPersonScraper(Scraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_contact('address', address, None)
-      p.add_contact('phone', phone, None)
+      p.add_membership(organization, role=role)
+      p.add_contact('address', address, 'office')
+      p.add_contact('phone', phone, 'office')
       p.add_contact('email', email, None)
+      p.image = image
       yield p

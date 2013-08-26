@@ -14,9 +14,10 @@ class EdmontonPersonScraper(CanadianScraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
     organization =  self.get_organization()
+    yield organization
 
 
-    yield scrape_mayor()
+    yield scrape_mayor(organization)
     councillors = page.xpath('//div[@id="contentArea"]//h3//a/@href')
     for councillor in councillors:
       page = lxmlize(councillor)
@@ -25,11 +26,7 @@ class EdmontonPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-
-      print organization
       p.add_membership(organization, role='councillor')
-
-
 
       image = page.xpath('//div[@id="contentArea"]//img/@src')
       if image:
@@ -38,7 +35,7 @@ class EdmontonPersonScraper(CanadianScraper):
       address = page.xpath('//address//p')
       if address:
         address = address[0].text_content()
-        p.add_contact('address', address, None)
+        p.add_contact('address', address, 'office')
 
       contacts = page.xpath('//table[@class="contactListing"]//tr')
       for contact in contacts:
@@ -50,13 +47,13 @@ class EdmontonPersonScraper(CanadianScraper):
       yield p
 
       
-def scrape_mayor():
+def scrape_mayor(organization):
   page = lxmlize(MAYOR_PAGE)
   name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[1].replace('Mayor', '').strip()
 
   p = Legislator(name=name, post_id='edmonton')
-  p.add_extra('role', 'mayor')
   p.add_source(MAYOR_PAGE)
+  p.add_membership(organization, role='mayor')
 
   image = page.xpath('//div[@id="contentArea"]//img/@src')[0]
   p.image = image

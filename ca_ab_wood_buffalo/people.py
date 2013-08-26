@@ -1,19 +1,21 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
 
-class WoodBuffaloPersonScraper(Scraper):
+class WoodBuffaloPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
-    mayor_url = page.xpath('//li[@id="pageid1075"]/div/a')[0]
-    yield scrape_mayor(mayor_url)
+    mayor_url = page.xpath('//li[@id="pageid1075"]/div/a/@href')[0]
+    yield scrape_mayor(mayor_url, organization)
 
     councillors = page.xpath('//table//a')
     for councillor in councillors:
@@ -29,7 +31,7 @@ class WoodBuffaloPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_extra('role', 'councillor')
+      p.add_membership(organization, 'councillor')
       p.image = image
 
       contacts = page.xpath('//div[@id="content"]//div[@class="block"]/p/text()')
@@ -42,18 +44,35 @@ class WoodBuffaloPersonScraper(Scraper):
           contact_type, contact = contact.split('(')
         contact = contact.replace(') ', '-').strip()
         if 'T' in contact_type:
-          p.add_contact('phone', contact, None)
+          p.add_contact('phone', contact, 'office')
         if 'H' in contact_type:
           p.add_contact('phone', contact, 'Home')
         if 'C' in contact_type:
           p.add_contact('phone', contact, 'Cell')
         if 'F' in contact_type:
-          p.add_contact('fax', contact, None)
+          p.add_contact('fax', contact, 'office')
       email = page.xpath('//div[@id="content"]//div[@class="block"]//a[contains(@href, "mailto:")]')[0].text_content()
       p.add_contact('email', email, None)
       yield p
 
-def scrape_mayor(url):
+def scrape_mayor(url, organization):
   page = lxmlize(url)
   name = page.xpath('//h1[@id="pagetitle"]/text()')[0].replace('Mayor', '').strip()
-  print name
+  image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
+  contact_url = page.xpath('//li[@id="pageid1954"]/a/@href')[0]
+  page = lxmlize(contact_url)
+
+  info = page.xpath('//div[@id="content"]/div[@class="block"][2]/p/text()')
+  address = ' '.join(info[1:4])
+  phone = info[4]
+  fax = info[5]
+
+  p = Legislator(name=name, post_id='wood buffalo')
+  p.add_source(url)
+  p.add_source(contact_url)
+  p.add_membership(organization, role='mayor')
+  p.add_contact('address', address, 'office')
+  p.add_contact('phone', phone, 'office')
+  p.add_contact('fax', fax, 'office')
+  p.image = image
+  return p

@@ -1,28 +1,33 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&sid=57'
 
 
-class CambridgePersonScraper(Scraper):
+class CambridgePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//div[@id="news"]//p')
     for councillor in councillors:
       district = councillor.xpath('./b')[0].text_content()
       district = re.findall(u'W|R.*', district)[0]
+      role = 'councillor'
       if 'Regional' in district:
         district = 'cambridge'
+        role = 'regional councillor'
       name = councillor.xpath('.//a')[0].text_content()
 
       url = councillor.xpath('.//a')[0].attrib['href']
       page = lxmlize(url)
 
+      image = page.xpath('//img[contains(@src, "councilImages")]/@src')[0]
       address = page.xpath('//*[contains(text(),"Address")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t", '')
       phone = page.xpath('//*[contains(text(),"Tel")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t", '')
       phone = phone.replace('(', '').replace(') ', '-')
@@ -34,8 +39,10 @@ class CambridgePersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_contact('address', address, None)
-      p.add_contact('phone', phone, None)
-      p.add_contact('fax', fax, None)
+      p.add_membership(organization, role=role)
+      p.add_contact('address', address, 'office')
+      p.add_contact('phone', phone, 'office')
+      p.add_contact('fax', fax, 'office')
       p.add_contact('email', email, None)
+      p.image = image
       yield p

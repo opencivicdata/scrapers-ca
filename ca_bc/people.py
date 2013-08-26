@@ -1,16 +1,18 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.leg.bc.ca/mla/3-2.htm'
 
 
-class BritishColumbiaPersonScraper(Scraper):
+class BritishColumbiaPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//table[3]//table[2]//table//td//a/@href')
     for councillor in councillors:
@@ -21,6 +23,9 @@ class BritishColumbiaPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
+      p.add_membership(organization, role='MLA')
+
+      p.image = page.xpath('//a[contains(@href, "images/members")]/@href')[0]
 
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)
@@ -36,7 +41,7 @@ class BritishColumbiaPersonScraper(Scraper):
 
       phones = page.xpath('//strong[contains(text(), "Phone:")]/ancestor::tr[1]')[0]
       office_phone = phones.xpath('./td[2]//text()')[0].strip().replace(' ', '-')
-      p.add_contact('phone', office_phone, 'office phone')
+      p.add_contact('phone', office_phone, 'office')
       constituency_phone = phones.xpath('./td[4]//text()')[0].strip().replace(' ', '-')
       if not 'TBD' in constituency_phone:
         p.add_contact('phone', constituency_phone, 'constituency')

@@ -4,9 +4,12 @@ import pupa_settings
 def main():
   connection = pymongo.Connection(pupa_settings.MONGO_HOST, pupa_settings.MONGO_PORT)
   db = connection[pupa_settings.MONGO_DATABASE]
-  for member in db['memberships'].find():
+  for person in db['people'].find():
     person = db['people'].find_one({'_id' : member['person_id']})
     organization = db['organizations'].find_one({'_id' : member['organization_id']})
+    
+
+
     data = {
       'name' : member['name'],
       'district_name' : organization['name'] + ' ' + member['post_id'],
@@ -17,7 +20,7 @@ def main():
       'offices' : get_offices(member['contact_details']),
       'party_name' : None,
       'email' : get_email(member['contact_details']),
-      
+
 
     }
     

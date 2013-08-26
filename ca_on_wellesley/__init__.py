@@ -8,6 +8,6 @@ class Wellesley(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Wellesley',
-      'legislature_name': 'Wellesley City Council',
-      'legislature_url': 'http://www.township.wellesley.on.ca/index.php?file=council/council.html',
+      'legislature_name': 'Wellesley Township Council',
+      'legislature_url': 'http://www.township.wellesley.on.ca',
     }

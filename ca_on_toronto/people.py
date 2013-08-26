@@ -1,24 +1,28 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
 
 
-class TorontoPersonScraper(Scraper):
+class TorontoPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     a = page.xpath('//a[contains(@href,"mayor")]')[0]
-    yield self.scrape_mayor(a.attrib['href'])
+    yield self.scrape_mayor(a.attrib['href'], organization)
 
     for a in page.xpath('//a[contains(@href,"councillors/")]'):
-      yield self.scrape_councilor(a.attrib['href'])
+      if 'vacant' in a.attrib['href']:
+        continue
+      yield self.scrape_councilor(a.attrib['href'], organization)
 
-  def scrape_councilor(self, url):
+  def scrape_councilor(self, url, organization):
     page = lxmlize(url)
     info = page.xpath("//div[@class='main']")[0]
     name = info.xpath("//h3")[1].text_content().replace('Councillor', '').strip()
@@ -33,6 +37,9 @@ class TorontoPersonScraper(Scraper):
     # add links
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
+    p.add_membership(organization, role='councillor')
+
+    p.image = page.xpath('//div[@class="two_column"]/div/img/@src')[0]
 
     if "website:" in info.text_content():
       p.add_link(info.xpath('.//a')[1].attrib['href'], 'homepage')
@@ -68,13 +75,16 @@ class TorontoPersonScraper(Scraper):
         p.add_contact('fax', fax, note)
     return p
 
-  def scrape_mayor(self, url):
+  def scrape_mayor(self, url, organization):
     page = lxmlize(url)
     name = page.xpath("//div[@class='detail']//h1/text()")[0].replace("Toronto Mayor", "").strip()
+    
     p = Legislator(name, "Toronto")
-
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
+    p.add_membership(organization, role='mayor')
+
+    p.image = page.xpath('//div[@class="image"]/img/@src')[0]
 
     url = page.xpath('//a[contains(text(), "Contact the Mayor")]')[0].attrib['href']
     p.add_source(url)
@@ -84,6 +94,6 @@ class TorontoPersonScraper(Scraper):
     address = (', ').join(info.xpath('.//p/text()')[0:6]).replace(",,", ",")
     phone = info.xpath('.//p[3]/text()')[0]
 
-    p.add_contact('address', address, 'Mailing')
-    p.add_contact('phone', phone, None)
+    p.add_contact('address', address, 'office')
+    p.add_contact('phone', phone, 'office')
     return p

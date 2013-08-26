@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
@@ -8,10 +8,12 @@ COUNCIL_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/City-Councillors/Pages
 MAYOR_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/Pages/Biography-of-the-Mayor.aspx'
 
 
-class WindsorPersonScraper(Scraper):
+class WindsorPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//div[@class="sectioning"]//p')[:-2]
     for councillor in councillors:
@@ -22,9 +24,11 @@ class WindsorPersonScraper(Scraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_contact('address', address, None)
-      p.add_contact('phone', phone, None)
+      p.add_membership(organization, role='councillor')
+      p.add_contact('address', address, 'city hall')
+      p.add_contact('phone', phone, 'city hall')
       p.add_contact('email', email, None)
+      p.image = councillor.xpath('./img/@src')[0]
 
       yield p
 
@@ -38,8 +42,10 @@ class WindsorPersonScraper(Scraper):
 
     p = Legislator(name=name, post_id='Windsor')
     p.add_source(MAYOR_PAGE)
-    p.add_contact('address', address, None)
-    p.add_contact('phone', phone, None)
-    p.add_contact('fax', fax, None)
+    p.add_membership(organization, role='mayor')
+    p.add_contact('address', address, 'city hall')
+    p.add_contact('phone', phone, 'city hall')
+    p.add_contact('fax', fax, 'city hall')
     p.add_contact('email', email, None)
+    p.image = page.xpath('//div[@class="sectioning"]//img[contains(@title, "Mayor")]/@src')[0]
     yield p

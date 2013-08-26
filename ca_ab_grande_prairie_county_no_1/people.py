@@ -1,16 +1,17 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
-
+from utils import lxmlize, CanadianScraper
 import re
 
 COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'
 
 
-class GrandePrairieCountyNo1PersonScraper(Scraper):
+class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//table[@class="table-plain"]/tbody/tr/td[2]')
     for councillor in councillors:
@@ -19,8 +20,8 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_extra('role', 'councillor')
-
+      p.add_membership(organization, 'councillor')
+      
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
       p.image = image
 

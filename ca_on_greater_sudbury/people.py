@@ -1,21 +1,23 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/city-council/'
 
 
-class GreaterSudburyPersonScraper(Scraper):
+class GreaterSudburyPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//div[@id="navMultilevel"]//a')
     for councillor in councillors:
       if councillor == councillors[0]:
-        yield self.scrape_mayor(councillor)
+        yield self.scrape_mayor(councillor, organization)
         continue
 
       if not '-' in councillor.text_content():
@@ -35,13 +37,15 @@ class GreaterSudburyPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
+      p.add_membership(organization, role='councillor')
       p.add_contact('address', address, 'City Council general mailing address')
-      p.add_contact('phone', phone, None)
-      p.add_contact('fax', fax, None)
-      p.add_contact('email', email, None)
+      p.add_contact('phone', phone, 'office')
+      p.add_contact('fax', fax, 'office')
+      p.add_contact('email', email, 'office')
+      p.image = page.xpath('//article[@id="primary"]//img/@src')[1]
       yield p
 
-  def scrape_mayor(self, div):
+  def scrape_mayor(self, div, organization):
     url = div.attrib['href']
     page = lxmlize(url)
 
@@ -62,8 +66,9 @@ class GreaterSudburyPersonScraper(Scraper):
     p = Legislator(name=name, post_id='Sudbury')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
-    p.add_contact('address', address, None)
-    p.add_contact('phone', phone, None)
-    p.add_contact('fax', fax, None)
+    p.add_membership(organization, role='mayor')
+    p.add_contact('address', address, 'office')
+    p.add_contact('phone', phone, 'office')
+    p.add_contact('fax', fax, 'office')
     p.add_contact('email', email, None)
     return p

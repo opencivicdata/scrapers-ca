@@ -1,19 +1,21 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.peterborough.ca/City_Hall/City_Council_2833/City_Council_Contact_Information.htm'
 
 
-class PeterboroughPersonScraper(Scraper):
+class PeterboroughPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     mayor_info = page.xpath('//h2[contains(text(), "MAYOR")]//following-sibling::p')[0]
-    yield self.scrape_mayor(mayor_info)
+    yield self.scrape_mayor(mayor_info, organization)
 
     wards = page.xpath('//h3')
     for ward in wards:
@@ -24,10 +26,11 @@ class PeterboroughPersonScraper(Scraper):
 
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
+        p.add_membership(organization, role='councillor')
 
         info = councillor.xpath('./text()')
         address = info.pop(0)
-        p.add_contact('address', address, None)
+        p.add_contact('address', address, 'office')
 
         # get phone numbers
         for line in info:
@@ -42,7 +45,7 @@ class PeterboroughPersonScraper(Scraper):
         if councillor == councillors[1]:
           break
 
-  def scrape_mayor(self, info):
+  def scrape_mayor(self, info, organization):
     name = info.xpath('./strong')[0].text_content()
     email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
@@ -53,11 +56,12 @@ class PeterboroughPersonScraper(Scraper):
 
     p = Legislator(name=name, post_id="peterborough")
     p.add_source(COUNCIL_PAGE)
+    p.add_membership(organization, role='mayor')
 
     p.add_contact('email', email, None)
-    p.add_contact('address', address, None)
-    p.add_contact('phone', phone, None)
-    p.add_contact('fax', fax, None)
+    p.add_contact('address', address, 'office')
+    p.add_contact('phone', phone, 'office')
+    p.add_contact('fax', fax, 'office')
     return p
 
   def get_tel_numbers(self, line, councillor):

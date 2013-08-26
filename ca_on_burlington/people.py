@@ -1,16 +1,18 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://cms.burlington.ca/Page110.aspx'
 
 
-class BurlingtonPersonScraper(Scraper):
+class BurlingtonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     councillors = page.xpath('//div[@id="subnav"]//a')
     for councillor in councillors:
@@ -20,7 +22,7 @@ class BurlingtonPersonScraper(Scraper):
       url = councillor.attrib['href']
 
       if councillor == councillors[0]:
-        yield self.scrape_mayor(name, url)
+        yield self.scrape_mayor(name, url, organization)
         continue
 
       page = lxmlize(url)
@@ -34,17 +36,21 @@ class BurlingtonPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+      p.add_membership(organization, role='councillor')
+
+      p.image = page.xpath('//div[@id="subnav"]//img/@src')[0]
+
       if address:
-        p.add_contact('address', address[0].text_content(), None)
-      p.add_contact('phone', phone, None)
-      p.add_contact('fax', fax, None)
+        p.add_contact('address', address[0].text_content(), 'office')
+      p.add_contact('phone', phone, 'office')
+      p.add_contact('fax', fax, 'office')
       p.add_contact('email', email, None)
 
       link_div = contact.xpath('following-sibling::p')[0]
       self.get_links(p, link_div)
       yield p
 
-  def scrape_mayor(self, name, url):
+  def scrape_mayor(self, name, url, organization):
     page = lxmlize(url)
 
     contact = page.xpath('//div[@id="grey-220"]//li')[0]
@@ -64,10 +70,13 @@ class BurlingtonPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_source('http://www.burlingtonmayor.com')
-    p.add_contact('phone', phone, None)
-    p.add_contact('fax', fax, None)
+    p.add_membership(organization, role='mayor')
+
+    p.image = page.xpath('//div[@id="grey-220"]/p/img/@src')[0]
+    p.add_contact('phone', phone, 'office')
+    p.add_contact('fax', fax, 'office')
     p.add_contact('email', email, None)
-    p.add_contact('address', address, None)
+    p.add_contact('address', address, 'office')
 
     self.get_links(p, link_div)
 
