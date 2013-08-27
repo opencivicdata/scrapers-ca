@@ -1,5 +1,5 @@
 from pupa.scrape import Scraper, Legislator
-
+from pupa.models import Organization
 from utils import lxmlize
 
 import re
@@ -16,6 +16,10 @@ class PrinceEdwardIslandPersonScraper(Scraper):
     for district in districts:
       url = district.attrib['href']
       page = lxmlize(url)
+
+      org = Organization(name=district.text_content()+ ' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org.add_source(url)
+      yield org 
 
       info = page.xpath('//div[@style="WIDTH:750"]/dl')
       for contact in info:
@@ -37,9 +41,13 @@ class PrinceEdwardIslandPersonScraper(Scraper):
       councillors = page.xpath('//div[@style="WIDTH:750"]/dl/dt[contains(text(), "Elected Officials")]/parent::dl/dd/pre/text()')[0].splitlines(True)
       for councillor in councillors:
         name = councillor.replace('(Mayor)', '').replace('(Deputy Mayor)', '').replace('(Chairperson)', '').strip()
+        role = councillor.replace(name, '').strip()
+        if not role:
+          role = 'councillor'
         p = Legislator(name=name, post_id=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
+        p.add_membership(org, role=role)
         p.add_contact('Phone', phone, None)
         p.add_contact('Fax', fax, None)
         p.add_contact('address', address, None)

@@ -1,5 +1,5 @@
 from pupa.scrape import Scraper, Legislator
-
+from pupa.models import Organization
 from utils import lxmlize
 
 import re
@@ -52,9 +52,16 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
         address = re.sub(r'\s{2,}', ', ', address)
         if not name or not district:
           continue
+
+        org = Organization(name=district + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+        org.add_source(COUNCIL_PAGE)
+        org.add_source(url)
+        yield org
+
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
+        p.add_membership(org, role='mayor')
         if phone:
           p.add_contact('phone', phone, None)
         # Im excluding fax because that column isn't properly aligned
@@ -63,7 +70,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
         if email:
           p.add_contact('email', email, None)
         if address:
-          p.add_contact('address', address, None)
+          p.add_contact('address', address, 'office')
         yield p
     os.system('rm nl.pdf')
     os.system('rm nl.txt')

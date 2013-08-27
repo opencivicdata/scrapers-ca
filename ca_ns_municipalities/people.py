@@ -1,5 +1,5 @@
 from pupa.scrape import Scraper, Legislator
-
+from pupa.models import Organization
 from utils import lxmlize, CanadianScraper
 
 import re
@@ -31,8 +31,13 @@ class NovaScotiaPersonScraper(CanadianScraper):
       if not re.findall(r'[0-9]', lines[0]):
         district = district + ' ' + lines.pop(0).strip()
 
+      org = Organization(name=district + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org.add_source(COUNCIL_PAGE)
+      yield org
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
+      p.add_membership(org, role='mayor')
 
       address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:

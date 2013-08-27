@@ -1,16 +1,19 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 
 
-class SaskatchewanPersonScraper(Scraper):
+class SaskatchewanPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
+
     councillors = page.xpath('//table[@id="MLAs"]//tr')[1:]
     for councillor in councillors:
       name = councillor.xpath('./td')[0].text_content().split('. ')[1]
@@ -21,6 +24,7 @@ class SaskatchewanPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+      p.add_membership(organization, role='councillor')
 
       contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
       office_address = contact.xpath('./td[1]/div[2]')[0].text_content()
