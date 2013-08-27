@@ -1,16 +1,18 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61'
 
 
-class WestmountPersonScraper(Scraper):
+class WestmountPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization
 
     mayor = page.xpath('//td[@class="LeftLinksSectionMenu"]/a')[0]
     name = mayor.text_content().replace('Mayor', '').strip()
@@ -19,12 +21,13 @@ class WestmountPersonScraper(Scraper):
     p = Legislator(name=name, post_id='Westmount')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
+    p.add_membership(organization, role='mayor')
     mayor_info = mayor_page.xpath('//div[@style="padding-right:10px;"]/table')[0]
     phone = mayor_info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
     fax = mayor_info.xpath('.//tr[3]/td[2]')[0].text_content().replace(' ', '-')
     email = mayor_info.xpath('.//tr[4]/td[2]')[0].text_content().strip()
-    p.add_contact('phone', phone, None)
-    p.add_contact('fax', fax, None)
+    p.add_contact('phone', phone, 'office')
+    p.add_contact('fax', fax, 'office')
     p.add_contact('email', email, None)
     yield p
 
@@ -40,6 +43,8 @@ class WestmountPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_contact('phone', phone, None)
+      p.add_membership(organization, role='councillor')
+      p.image = info.xpath('./ancestor::td//div[not(@id="insert")]/img/@src')[0]
+      p.add_contact('phone', phone, 'office')
       p.add_contact('email', email, None)
       yield p

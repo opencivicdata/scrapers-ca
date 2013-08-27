@@ -9,7 +9,7 @@ class LIleBizardSainteGenevieve(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u"L'Île-Bizard—Sainte-Geneviève",
+      'name': u"L'Île-Bizard-Sainte-Geneviève",
       'legislature_name': u"Conseil d'arrondissement de L'Île-Bizard—Sainte-Geneviève",
       'legislature_url': 'http://ville.montreal.qc.ca/ibsg',
       'provides': ['people'],

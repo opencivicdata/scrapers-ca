@@ -33,7 +33,6 @@ class StCatharinesPersonScraper(CanadianScraper):
       image = page.xpath('//div[@class="right"]/p/img/@src')
       if image:
         p.image = image[0]
-        print p.image, name
 
       contacts = page.xpath('//div[@class="contactDetails"]')[0]
       address = contacts.xpath('.//p')[2].text_content()
