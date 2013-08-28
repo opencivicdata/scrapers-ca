@@ -55,6 +55,7 @@ class BrantfordPersonScraper(CanadianScraper):
         p.add_link(site, 'personal site')
       yield p
 
+
 def scrape_mayor(organization):
   mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
   page = lxmlize(mayor_url)
@@ -70,7 +71,7 @@ def scrape_mayor(organization):
   address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
   address = re.sub(r'\s{2,}', ' ', address).strip()
   email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
-  phone = page.xpath('//ul[@id="legal_info"]/li[6]/text()')[0].strip().replace('.','-')
+  phone = page.xpath('//ul[@id="legal_info"]/li[6]/text()')[0].strip().replace('.', '-')
 
   p.add_contact('address', address, 'office')
   p.add_contact('email', email, None)
@@ -79,6 +80,7 @@ def scrape_mayor(organization):
   get_links(p, page.xpath('//ul[@id="social_media"]')[0])
 
   return p
+
 
 def get_links(councillor, div):
   links = div.xpath('.//a')

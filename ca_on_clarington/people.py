@@ -33,8 +33,6 @@ class ClaringtonPersonScraper(CanadianScraper):
       else:
         image = councillor.xpath('.//parent::*/following-sibling::*//@src')[0]
 
-
-
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)

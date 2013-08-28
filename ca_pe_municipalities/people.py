@@ -17,9 +17,9 @@ class PrinceEdwardIslandPersonScraper(Scraper):
       url = district.attrib['href']
       page = lxmlize(url)
 
-      org = Organization(name=district.text_content()+ ' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district.text_content() + ' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(url)
-      yield org 
+      yield org
 
       info = page.xpath('//div[@style="WIDTH:750"]/dl')
       for contact in info:

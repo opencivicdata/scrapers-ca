@@ -44,7 +44,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(div,organization):
+def scrape_mayor(div, organization):
   name = div.xpath('.//a')[0].text_content()
   url = div.xpath('.//a/@href')[0]
   page = lxmlize(url)

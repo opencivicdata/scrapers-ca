@@ -21,7 +21,7 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, 'councillor')
-      
+
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
       p.image = image
 

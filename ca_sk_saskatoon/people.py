@@ -59,8 +59,8 @@ def scrape_mayor(url, organization):
   page = lxmlize(contact_url)
 
   address = ' '.join(page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[4]/text()')[1:])
-  phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(','').replace(') ','-')
-  fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(','').replace(') ','-')
+  phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(', '').replace(') ', '-')
+  fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
 
   p = Legislator(name=name, post_id='saskatoon')
   p.add_source(COUNCIL_PAGE)

@@ -35,6 +35,6 @@ class WoolwichPersonScraper(CanadianScraper):
 
       for contact in info:
         note, num = contact.split(':')
-        num = num.strip().replace('(','').replace(') ', '-').replace('extension ', 'x')
+        num = num.strip().replace('(', '').replace(') ', '-').replace('extension ', 'x')
         p.add_contact('phone', num, note)
       yield p

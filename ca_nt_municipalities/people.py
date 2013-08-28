@@ -18,11 +18,11 @@ class NorthwestTerritoriesPersonScraper(Scraper):
     for councillor in councillors:
       district = councillor.xpath('./ancestor::p/preceding-sibling::h2')[-1].text_content().split('–'.decode('utf-8'))[0]
       name = ' '.join(councillor.text_content().split()[-2:]).replace('-Â'.decode('utf-8'), '')
-      role = councillor.text_content().replace(name,'').split('-')[0]
+      role = councillor.text_content().replace(name, '').split('-')[0]
       if 'SAO' in role or not role:
         continue
 
-      org = Organization(name=district+ ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
       yield org
 

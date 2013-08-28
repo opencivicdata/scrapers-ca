@@ -17,7 +17,7 @@ class KawarthaLakesPersonScraper(CanadianScraper):
 
     councillors = page.xpath('//p[@class="WSIndent"]/a')
     for councillor in councillors:
-      district = re.findall(r'(Ward [0-9]{1,2})', councillor.text_content() )
+      district = re.findall(r'(Ward [0-9]{1,2})', councillor.text_content())
       if district:
         district = district[0]
         name = councillor.text_content().replace(district, '').strip()
@@ -39,4 +39,3 @@ class KawarthaLakesPersonScraper(CanadianScraper):
       p.add_contact('email', email, None)
       p.image = image
       yield p
-

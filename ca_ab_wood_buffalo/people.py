@@ -55,6 +55,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
       p.add_contact('email', email, None)
       yield p
 
+
 def scrape_mayor(url, organization):
   page = lxmlize(url)
   name = page.xpath('//h1[@id="pagetitle"]/text()')[0].replace('Mayor', '').strip()

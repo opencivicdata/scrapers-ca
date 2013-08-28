@@ -3,7 +3,7 @@ from pupa.scrape import Scraper, Legislator
 from utils import lxmlize, CanadianScraper
 
 import re
-import urllib 
+import urllib
 import HTMLParser
 
 COUNCIL_PAGE = 'http://www.ville.levis.qc.ca/Fr/Conseil/'
@@ -27,7 +27,7 @@ class LevisPersonScraper(CanadianScraper):
       else:
         district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]
         role = 'councillor'
-      
+
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
@@ -39,7 +39,8 @@ class LevisPersonScraper(CanadianScraper):
       p.add_contact('email', email, None)
       yield p
 
+
 def get_email(script):
   h = HTMLParser.HTMLParser()
-  email =  h.unescape(re.search('(?<=")[^"]+', urllib.unquote(''.join(re.findall("(?<=\(\')[^']+", script)))).group(0))
+  email = h.unescape(re.search('(?<=")[^"]+', urllib.unquote(''.join(re.findall("(?<=\(\')[^']+", script)))).group(0))
   return email + '@ville.levis.qc.ca'

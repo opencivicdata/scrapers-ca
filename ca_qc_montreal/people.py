@@ -56,4 +56,4 @@ class MontrealPersonScraper(CanadianScraper):
 
 
 def format(string):
-  return unicode(re.sub(r'&#0?151;', u'—', unicode(string).replace(u'–', u'-'))) # replace n-dash with dash, unencode m-dash
+  return unicode(re.sub(r'&#0?151;', u'—', unicode(string).replace(u'–', u'-')))  # replace n-dash with dash, unencode m-dash

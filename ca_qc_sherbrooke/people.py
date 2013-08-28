@@ -20,7 +20,7 @@ class SherbrookePersonScraper(CanadianScraper):
       url = councillor.attrib['href']
       page = lxmlize(url)
       district = page.xpath('//h2/text()')[0]
-      role = 'councillor'  
+      role = 'councillor'
       if 'Maire' in district:
         district = 'Sherbrooke'
         role = 'mayor'
@@ -29,7 +29,7 @@ class SherbrookePersonScraper(CanadianScraper):
       p.add_source(url)
       p.add_membership(organization, role=role)
       p.image = page.xpath('//div[@id="conseiller-photo"]//img/@src')[0]
-      phone = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')[1].strip().replace(' ','-')
+      phone = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')[1].strip().replace(' ', '-')
       p.add_contact('phone', phone, None)
       email = page.xpath('//a[contains(@href, "mailto:")]/@href')
       if email:

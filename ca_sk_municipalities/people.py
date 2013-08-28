@@ -51,9 +51,9 @@ class SaskatchewanPersonScraper(Scraper):
 
       district_name = district.pop(0).split(',')[0].lower()
 
-      org = Organization(name=district_name+' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district_name + ' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
-      
+
       councillors = []
       contacts = {}
       for i, line in enumerate(district):

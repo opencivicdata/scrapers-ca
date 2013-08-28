@@ -21,7 +21,7 @@ class NorthDumfriesPersonScraper(CanadianScraper):
       name = info.pop(0).replace('Councillor', '')
       if 'Mayor' in name:
         district = 'North Dumfries'
-        name = name.replace('Mayor','').strip()
+        name = name.replace('Mayor', '').strip()
         role = 'mayor'
       else:
         district = info.pop(0)

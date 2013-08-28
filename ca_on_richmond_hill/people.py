@@ -48,7 +48,7 @@ class RichmondHillPersonScraper(CanadianScraper):
       p.add_contact('phone', phone, 'office')
       p.add_contact('fax', fax, 'office')
       p.add_contact('email', email, None)
-      p.image = page.xpath('//img[contains(@alt, "%s")]/@src'%name)[0]
+      p.image = page.xpath('//img[contains(@alt, "%s")]/@src' % name)[0]
       if 'Website' in info:
         site = re.findall(r'www\..*\.com', info)[0]
         p.add_link(site, 'personal site')
