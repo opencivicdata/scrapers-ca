@@ -9,12 +9,20 @@ def main():
   db = connection[pupa_settings.MONGO_DATABASE]
   i = 0
 
+  for member in db['memberships'].find({'role' : 'member'}).sort([('jurisdiction_id', 1), ('person_id' , 1)]):
+    contacts = db['memberships'].find_one({'person_id' : member['person_id']})
+    person = db['people'].find_one({'_id' : member['person_id']})
+    print db['organizations'].find_one({'jurisdiction_id' : member['jurisdiction_id']})['name'].__module__
+     # , person['name'], member['role']
+
+
 
   for person in db['people'].find():
     member = db['memberships'].find_one({'person_id' : person['_id'], 'role' : {'$ne' : 'member'}})
     if not member:
       continue
       i = i+1
+    # print member['jurisdiction_id']
     contacts = db['memberships'].find_one({'person_id' : person['_id'], 'role' : 'member'})
     organization = db['organizations'].find_one({'_id' : member['organization_id']})
     if person['post_id']:
@@ -39,8 +47,8 @@ def main():
       'extra' : get_extra(person)
 
     }
-    print json.dumps(data)
-    yield json.dump(data)
+    # print json.dumps(data)
+    # yield json.dump(data)
   print i
 def get_extra(person):
   extra = {}
