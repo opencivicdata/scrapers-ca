@@ -7,7 +7,7 @@ import re
 COUNCIL_PAGE = 'http://www.city.kawarthalakes.on.ca/city-hall/mayor-council/members-of-council'
 
 
-class Kawartha_LakesPersonScraper(CanadianScraper):
+class KawarthaLakesPersonScraper(CanadianScraper):
 
   def get_people(self):
 
