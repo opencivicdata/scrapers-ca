@@ -1,35 +1,72 @@
+# coding: utf8
 import pymongo
 import pupa_settings
+import re
+import json
 
 def main():
   connection = pymongo.Connection(pupa_settings.MONGO_HOST, pupa_settings.MONGO_PORT)
   db = connection[pupa_settings.MONGO_DATABASE]
+  i = 0
+
+
   for person in db['people'].find():
-    person = db['people'].find_one({'_id' : member['person_id']})
+    member = db['memberships'].find_one({'person_id' : person['_id'], 'role' : {'$ne' : 'member'}})
+    if not member:
+      continue
+      i = i+1
+    contacts = db['memberships'].find_one({'person_id' : person['_id'], 'role' : 'member'})
     organization = db['organizations'].find_one({'_id' : member['organization_id']})
-    
+    if person['post_id']:
+      name = organization['name'] + ' ' + person['post_id']
+    else:
+      name = organization['name']
+    name = re.sub(r'\s{2,}', ' ', name).strip()
+
 
 
     data = {
-      'name' : member['name'],
-      'district_name' : organization['name'] + ' ' + member['post_id'],
+      'name' : person['name'],
+      'district_name' : name,
       'elected_office' : member['role'],
       'source_url' : person['sources'][0]['url'],
-      'first_name' : member['name'].split()[0],
-      'last_name' : ' '.join(member['name'].split()[1:]),
-      'offices' : get_offices(member['contact_details']),
-      'party_name' : None,
-      'email' : get_email(member['contact_details']),
-
+      'offices' : get_offices(contacts['contact_details']),
+      'email' : get_email(contacts['contact_details']),
+      'url' : get_url(person),
+      'photo_url' : person['image'],
+      'personal_url' : get_personal_url(person),
+      'district_id' : person['post_id'],
+      'extra' : get_extra(person)
 
     }
-    
+    print json.dumps(data)
+    yield json.dump(data)
+  print i
+def get_extra(person):
+  extra = {}
+  for link in person['links']:
+    if not 'personal' in link['note']:
+      extra[link['note']] = link['url']
+  return extra
+
+def get_personal_url(person):
+  for link in person['links']:
+    if 'personal' in link['note'] or 'site' in link['note'] or 'Website' in link['note']:
+      return link['url']
+  return None
+
+def get_url(person):
+  if len(person['sources']) == 1:
+    return person['sources'][0]['url']
+  else:
+    return person['sources'][1]['url']
 
 def get_email(contacts):
   for contact in contacts:
-    if 'email' in contact['type']:
+    if 'email' in contact['type'] or 'Email' in contact['type']:
       return contact['value']
-      break 
+      break
+  return None 
 
 
 
@@ -37,6 +74,7 @@ def get_offices(contacts):
   mapping = {
   'phone' : 'tel',
   'Phone' : 'tel',
+  'Telephone' : 'tel',
   'Address' : 'postal',
   'address' : 'postal',
   'Fax' : 'fax',
@@ -60,7 +98,7 @@ def get_offices(contacts):
     for i, office_type in enumerate(office_types):
       if contact['note'] == office_type:
         offices[i][mapping[contact['type']]] = contact['value']
-  print offices
+  return offices
 
 
 

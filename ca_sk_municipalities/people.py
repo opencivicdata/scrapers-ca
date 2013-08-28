@@ -78,7 +78,9 @@ class SaskatchewanPersonScraper(Scraper):
           if councillor:
             councillors.append([councillor, role])
 
-      if councillors: yield org
+      if not councillors:
+        continue
+      yield org
       for councillor in councillors:
         p = Legislator(post_id=district_name, name=councillor[0])
         p.add_source(COUNCIL_PAGE)

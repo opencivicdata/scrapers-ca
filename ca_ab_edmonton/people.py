@@ -40,10 +40,15 @@ class EdmontonPersonScraper(CanadianScraper):
       contacts = page.xpath('//table[@class="contactListing"]//tr')
       for contact in contacts:
         contact_type = contact.xpath('./th/text()')[0]
-        contact = contact.xpath('./td//text()')[0]
+        value = contact.xpath('./td//text()')[0]
         if 'Title' in contact_type:
           continue
-        p.add_contact(contact_type, contact, 'office')
+        if 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
+          value = contact.xpath('./td/a/text()')[0]
+          p.add_link(value, contact_type)
+          continue
+        p.add_contact(contact_type, value, 'office')
+      print p._contact_details
       yield p
 
       
