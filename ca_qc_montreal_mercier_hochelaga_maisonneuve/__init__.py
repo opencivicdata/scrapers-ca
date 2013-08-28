@@ -9,7 +9,7 @@ class MercierHochelagaMaisonneuve(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Mercier-Hochelaga-Maisonneuve',
+      'name': u'Mercier—Hochelaga-Maisonneuve',
       'legislature_name': u"Conseil d'arrondissement de Mercier—Hochelaga-Maisonneuve",
       'legislature_url': 'http://ville.montreal.qc.ca/mhm',
       'provides': ['people'],
