@@ -14,15 +14,13 @@ class WhitbyPersonScraper(CanadianScraper):
     organization = self.get_organization()
     yield organization
 
-
-
     councillors = page.xpath('//table[@class=" "]/tbody//tr')[1:]
     for councillor in councillors:
       info = councillor.xpath('./td[2]/p/strong/em/text()')
       if not info:
         continue
       name, role = info[0].split(',')
-      if len(info) > 1 : 
+      if len(info) > 1:
         role = info[1]
       role = role.strip()
       name = name.strip()
