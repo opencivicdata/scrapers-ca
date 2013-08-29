@@ -3,53 +3,71 @@ import pymongo
 import pupa_settings
 import re
 import json
+import os
+import importlib
+from pupa.core import db
+
 
 def main():
-  connection = pymongo.Connection(pupa_settings.MONGO_HOST, pupa_settings.MONGO_PORT)
-  db = connection[pupa_settings.MONGO_DATABASE]
-  i = 0
+  for module_name in os.listdir('.'):
+    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
+      module = importlib.import_module(module_name)
+      for obj in module.__dict__.values():
+        jurisdiction_id = getattr(obj, 'jurisdiction_id', None)
+        if jurisdiction_id and module_name == 'ca_ab_edmonton':  # We've found the module.
+          print jurisdiction_id
+          print module_name
+          for member in db.memberships.find({'jurisdiction_id' : jurisdiction_id, 'role' : 'member'}):
+            person = db.people.find_one({'_id' : member['person_id']})
+            role = db.memberships.find_one({'person_id': member['person_id'], 'role' : {'$ne' : 'member'}})['role']
+            print member['contact_details']
 
-  for member in db['memberships'].find({'role' : 'member'}).sort([('jurisdiction_id', 1), ('person_id' , 1)]):
-    contacts = db['memberships'].find_one({'person_id' : member['person_id']})
-    person = db['people'].find_one({'_id' : member['person_id']})
-    print db['organizations'].find_one({'jurisdiction_id' : member['jurisdiction_id']})['name'].__module__
-     # , person['name'], member['role']
+# def main():
+#   connection = pymongo.Connection(pupa_settings.MONGO_HOST, pupa_settings.MONGO_PORT)
+#   db = connection[pupa_settings.MONGO_DATABASE]
+#   i = 0
 
-
-
-  for person in db['people'].find():
-    member = db['memberships'].find_one({'person_id' : person['_id'], 'role' : {'$ne' : 'member'}})
-    if not member:
-      continue
-      i = i+1
-    # print member['jurisdiction_id']
-    contacts = db['memberships'].find_one({'person_id' : person['_id'], 'role' : 'member'})
-    organization = db['organizations'].find_one({'_id' : member['organization_id']})
-    if person['post_id']:
-      name = organization['name'] + ' ' + person['post_id']
-    else:
-      name = organization['name']
-    name = re.sub(r'\s{2,}', ' ', name).strip()
+#   for member in db['memberships'].find({'role' : 'member'}).sort([('jurisdiction_id', 1), ('person_id' , 1)]):
+#     contacts = db['memberships'].find_one({'person_id' : member['person_id']})
+#     person = db['people'].find_one({'_id' : member['person_id']})
+#     print db['organizations'].find_one({'jurisdiction_id' : member['jurisdiction_id']})['name'].__module__
+#      # , person['name'], member['role']
 
 
 
-    data = {
-      'name' : person['name'],
-      'district_name' : name,
-      'elected_office' : member['role'],
-      'source_url' : person['sources'][0]['url'],
-      'offices' : get_offices(contacts['contact_details']),
-      'email' : get_email(contacts['contact_details']),
-      'url' : get_url(person),
-      'photo_url' : person['image'],
-      'personal_url' : get_personal_url(person),
-      'district_id' : person['post_id'],
-      'extra' : get_extra(person)
+#   for person in db['people'].find():
+#     member = db['memberships'].find_one({'person_id' : person['_id'], 'role' : {'$ne' : 'member'}})
+#     if not member:
+#       continue
+#       i = i+1
+#     # print member['jurisdiction_id']
+#     contacts = db['memberships'].find_one({'person_id' : person['_id'], 'role' : 'member'})
+#     organization = db['organizations'].find_one({'_id' : member['organization_id']})
+#     if person['post_id']:
+#       name = organization['name'] + ' ' + person['post_id']
+#     else:
+#       name = organization['name']
+#     name = re.sub(r'\s{2,}', ' ', name).strip()
 
-    }
-    # print json.dumps(data)
-    # yield json.dump(data)
-  print i
+
+
+#     data = {
+#       'name' : person['name'],
+#       'district_name' : name,
+#       'elected_office' : member['role'],
+#       'source_url' : person['sources'][0]['url'],
+#       'offices' : get_offices(contacts['contact_details']),
+#       'email' : get_email(contacts['contact_details']),
+#       'url' : get_url(person),
+#       'photo_url' : person['image'],
+#       'personal_url' : get_personal_url(person),
+#       'district_id' : person['post_id'],
+#       'extra' : get_extra(person)
+
+#     }
+#     # print json.dumps(data)
+#     # yield json.dump(data)
+#   print i
 def get_extra(person):
   extra = {}
   for link in person['links']:

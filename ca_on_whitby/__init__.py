@@ -8,6 +8,6 @@ class Whitby(CanadianJurisdiction):
   def _get_metadata(self):
     return {
       'name': 'Whitby',
-      'legislature_name': 'Whitby City Council',
-      'legislature_url': 'http://www.whitby.ca/en/townhall/meetyourcouncil.asp',
+      'legislature_name': 'Whitby Town Council',
+      'legislature_url': 'http://www.whitby.ca',
     }
