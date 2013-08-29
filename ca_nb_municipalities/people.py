@@ -22,7 +22,6 @@ class NewBrunswickPersonScraper(Scraper):
         district = page.xpath('//div[@class="pageHeader"]/h1/text()')[0].split('-')[1].strip()
 
         org_name = district + org_types[org_type]
-        print org_name
         org = Organization(name=org_name, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
         org.add_source(district_url)
         yield org

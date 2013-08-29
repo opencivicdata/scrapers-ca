@@ -1,16 +1,18 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 
 import re
 
 COUNCIL_PAGE = 'http://ville.montreal-est.qc.ca/site2/index.php?option=com_content&view=article&id=12&Itemid=59'
 
 
-class MontrealEstPersonScraper(Scraper):
+class MontrealEstPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
+    organization = self.get_organization()
+    yield organization 
 
     councillors = page.xpath('//table[@width="455"]//tr/td[1]//strong')
     for councillor in councillors:
