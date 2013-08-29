@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin-1 -*-
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 from pupa.models import Organization
 from utils import lxmlize

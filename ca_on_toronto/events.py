@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin-1 -*-
+# coding: utf8
 from pupa.scrape import Scraper
 from pupa.models import Event
 
