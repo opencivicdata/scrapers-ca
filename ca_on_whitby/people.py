@@ -37,4 +37,5 @@ class WhitbyPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)
       p.add_contact('email', email, None)
+      p.image = councillor.xpath('.//img/@src')[0]
       yield p
