@@ -47,11 +47,12 @@ class CaledonPersonScraper(CanadianScraper):
 
       yield p
 
+
 def scrape_mayor(url, organization):
   page = lxmlize(url)
 
   name = page.xpath('//div[@id="printAreaContent"]/h1/strong/text()')[0].replace('Mayor', '').strip()
-  address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':','').strip()
+  address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':', '').strip()
   phone = page.xpath('//strong[contains(text(), "phone")]/parent::p/text()')[1].split()[1]
 
   p = Legislator(name=name, post_id='caledon')

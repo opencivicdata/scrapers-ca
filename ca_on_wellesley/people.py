@@ -26,11 +26,11 @@ class WellesleyPersonScraper(CanadianScraper):
         role = 'mayor'
 
       image = councillor.xpath('./preceding-sibling::td/img/@src')[-1]
-        
-      name = councillor.xpath('./span/text()')[0] 
+
+      name = councillor.xpath('./span/text()')[0]
       address = councillor.xpath('./text()')
       address = re.sub(r'\s{2,}', ' ', ' '.join(address[:4]))
-      phone = councillor.xpath('./text()')[4].strip().replace('.','-')
+      phone = councillor.xpath('./text()')[4].strip().replace('.', '-')
       email = councillor.xpath('./a/text()')[0]
 
       p = Legislator(name=name, post_id=district)

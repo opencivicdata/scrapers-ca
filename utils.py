@@ -64,7 +64,9 @@ def lxmlize(url, encoding='utf-8'):
     page.make_links_absolute(url)
     return page
 
+
 class CanadianScraper(Scraper):
+
   def get_organization(self):
     name = self.jurisdiction.get_metadata()['name']
     jurisdiction_id = self.jurisdiction.jurisdiction_id

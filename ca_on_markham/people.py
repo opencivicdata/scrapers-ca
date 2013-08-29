@@ -82,6 +82,7 @@ def scrape_4(name, url, organization, image):
   p.image = image
   return p
 
+
 def scrape_mayor(url, organization):
   page = lxmlize(url)
   name = page.xpath('//div[@class="interiorContentWrapper"]/p/strong/text()')[0]

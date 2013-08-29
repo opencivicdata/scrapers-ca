@@ -21,7 +21,7 @@ class ManitobaPersonScraper(Scraper):
       else:
         title = ''.join(title[:2])
 
-      organization = Organization(name=title.lower()+' municipal council', classification= 'legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      organization = Organization(name=title.lower() + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       organization.add_source(COUNCIL_PAGE)
       yield organization
 

@@ -30,9 +30,8 @@ class BrossardPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)
 
-      image = page.xpath('//div[@class="slide_wrap"]//a[contains(@style, "background-image:url") and contains(@style, "%s")]/@style'%name.split()[0])[0]
+      image = page.xpath('//div[@class="slide_wrap"]//a[contains(@style, "background-image:url") and contains(@style, "%s")]/@style' % name.split()[0])[0]
       p.image = re.findall(r'\((.*)\)', image)[0]
-    
 
       p.add_contact('email', email, None)
       p.add_contact('phone', phone, 'office')

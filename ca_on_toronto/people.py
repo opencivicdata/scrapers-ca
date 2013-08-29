@@ -78,7 +78,7 @@ class TorontoPersonScraper(CanadianScraper):
   def scrape_mayor(self, url, organization):
     page = lxmlize(url)
     name = page.xpath("//div[@class='detail']//h1/text()")[0].replace("Toronto Mayor", "").strip()
-    
+
     p = Legislator(name, "Toronto")
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)

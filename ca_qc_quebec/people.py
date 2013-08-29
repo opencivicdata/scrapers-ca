@@ -38,8 +38,8 @@ class QuebecPersonScraper(CanadianScraper):
 
       phone = re.findall(r'T.l\. : ([0-9]{3} [0-9]{3}-[0-9]{4})(,.*([0-9]{4}))?', councillor.text_content())[0]
       if phone[-1]:
-        phone = phone[0].replace(' ','-') + ' x' + phone[-1]
+        phone = phone[0].replace(' ', '-') + ' x' + phone[-1]
       else:
-        phone = phone[0].replace(' ','-')
+        phone = phone[0].replace(' ', '-')
       p.add_contact('phone', phone, 'office')
       yield p

@@ -40,6 +40,7 @@ class MonctonPersonScraper(CanadianScraper):
         p.add_contact('Phone', phone[0], None)
       yield p
 
+
 def scrape_mayor(url, organization):
   page = lxmlize(url)
   name = ' '.join(page.xpath('//div[@id="content"]/p[2]/text()')[0].split()[1:3])

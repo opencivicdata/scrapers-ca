@@ -45,12 +45,13 @@ class WilmotPersonScraper(CanadianScraper):
         if re.match(r'[0-9]', contact):
           continue
         if 'fax' in contact:
-          p.add_contact('fax', base_info[i+1], 'office')
+          p.add_contact('fax', base_info[i + 1], 'office')
         else:
-          p.add_contact('phone', base_info[i+1], contact.strip())
+          p.add_contact('phone', base_info[i + 1], contact.strip())
       email = councillor.xpath('./parent::p/following-sibling::p/a[contains(@href, "mailto")]/text()')[0]
       p.add_contact('email', email, None)
       yield p
+
 
 def scrape_mayor(div, name, organization):
 

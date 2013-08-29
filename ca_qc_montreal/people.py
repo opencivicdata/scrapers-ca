@@ -1,4 +1,4 @@
-# -*- coding: utf-8== -*-
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize, CanadianScraper
@@ -19,7 +19,7 @@ class MontrealPersonScraper(CanadianScraper):
 
     district = self.jurisdiction.get_metadata()["name"]
     data = urllib2.urlopen(COUNCIL_PAGE)
-    data = json.load(data, 'latin-1')
+    data = json.load(data, 'windows-1252')
     for line in data:
       if district == u'Montréal':
         if "Maire" in line['TITRE_MAIRIE'] or "Ville" in line['TITRE_CONSEIL'] or 'désigné'.decode('utf-8') in line['TITRE_CONSEIL']:
@@ -56,4 +56,4 @@ class MontrealPersonScraper(CanadianScraper):
 
 
 def format(string):
-  return unicode(re.sub(r'&#0?151;', u'-', unicode(string)))
+  return unicode(re.sub(r'&#0?151;', u'—', unicode(string).replace(u'–', u'-')))  # replace n-dash with dash, unencode m-dash

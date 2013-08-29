@@ -6,7 +6,8 @@ from utils import lxmlize
 import re
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
-org_types = [' city council', ' town council', ' village council', ' community council' ]
+org_types = [' city council', ' town council', ' village council', ' community council']
+
 
 class NewBrunswickPersonScraper(Scraper):
 
@@ -47,7 +48,7 @@ class NewBrunswickPersonScraper(Scraper):
           p.add_source(link)
           p.add_source(district_url)
 
-          if i==0:
+          if i == 0:
             p.add_membership(org, role='mayor')
           else:
             p.add_membership(org, role='councillor')

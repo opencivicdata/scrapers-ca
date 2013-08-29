@@ -26,7 +26,7 @@ class BeaconsfieldPersonScraper(CanadianScraper):
         p.add_membership(organization, role='mayor')
         p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
-        phone = phone.split(':')[1].strip().replace(' ','-')
+        phone = phone.split(':')[1].strip().replace(' ', '-')
         p.add_contact('phone', phone, 'office')
         script = councillor.xpath('.//parent::div/following-sibling::div/script')[0].text_content()
         p.add_contact('email', get_email(script), None)
@@ -43,15 +43,16 @@ class BeaconsfieldPersonScraper(CanadianScraper):
       phone = councillor.xpath('.//parent::div/following-sibling::p[contains(text(), "514")]/text()')
       if phone:
         phone = phone[0]
-        phone = phone.split(':')[1].strip().replace(' ','-')
+        phone = phone.split(':')[1].strip().replace(' ', '-')
         p.add_contact('phone', phone, 'office')
       script = councillor.xpath('.//parent::div/following-sibling::p/script')[0].text_content()
       p.add_contact('email', get_email(script), None)
       yield p
 
+
 def get_email(script):
-  var = re.findall(r'var addy\d{4,5} = \'(.*)\'', script)[0].replace('\' + \'','').replace('\'','')
-  ext = re.findall(r'addy\d{4,5} = addy\d{4,5} \+ \'(.*);', script)[0].replace('\' + \'','').replace('\'','')
+  var = re.findall(r'var addy\d{4,5} = \'(.*)\'', script)[0].replace('\' + \'', '').replace('\'', '')
+  ext = re.findall(r'addy\d{4,5} = addy\d{4,5} \+ \'(.*);', script)[0].replace('\' + \'', '').replace('\'', '')
   h = HTMLParser.HTMLParser()
-  email = h.unescape(var+ext)
+  email = h.unescape(var + ext)
   return email

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf8
 from pupa.scrape import Scraper
 from pupa.models import Vote
 
