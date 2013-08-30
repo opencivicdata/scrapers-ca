@@ -2,7 +2,7 @@
 from pupa.scrape import Scraper
 from pupa.models import Vote
 
-from utils import lxmlize
+from utils import lxmlize, CanadianScraper
 import requests
 import re
 import csv
@@ -13,9 +13,11 @@ import os
 VOTES = {'Yes': 'yes', 'No': 'no', 'Absent': 'not-voting'}
 
 
-class TorontoVoteScraper(Scraper):
+class TorontoVoteScraper(CanadianScraper):
+
 
   def get_votes(self):
+    # org.add_source("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
 
     tmpdir = tempfile.mkdtemp()
     download_files(tmpdir)
@@ -39,7 +41,8 @@ class TorontoVoteScraper(Scraper):
             yes_count, no_count = row[6].split()[1].split('-')
           else:
             yes_count, no_count = 1, 1
-          vote = Vote(session, date, row[3], v_type, passed, int(yes_count), int(no_count))
+          motion = row[3].replace('\xc4', '').replace('\xc2','')
+          vote = Vote(self.jurisdiction.get_metadata()['name'], session, date, motion, v_type, passed, int(yes_count), int(no_count))
           vote.vote(name, VOTES[row[5]])
           scan_files(tmpdir, f, vote, row)
           vote.add_source("http://app.toronto.ca/tmmis/getAdminReport.do")
@@ -54,7 +57,7 @@ def download_files(dest_directory):
 
   # download csv files
   members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
-  for member in members:
+  for member in members[1:3]:
 
     post = {
         'function': 'getMemberVoteReport',
