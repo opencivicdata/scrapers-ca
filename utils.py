@@ -61,8 +61,6 @@ def lxmlize(url, encoding='utf-8'):
 class CanadianScraper(Scraper):
 
   def get_organization(self):
-    name = self.jurisdiction.division_name
-    jurisdiction_id = self.jurisdiction.jurisdiction_id
-    org = Organization(name=name, classification='legislature', jurisdiction_id=jurisdiction_id)
-    org.add_source(self.jurisdiction.url)
-    return org
+    organization = Organization(name=self.jurisdiction.name, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+    organization.add_source(self.jurisdiction.url)
+    return organization

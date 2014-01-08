@@ -1,5 +1,5 @@
 import os
-if os.environ.get('MONGOHQ_URL'):
+if os.environ.get('MONGOHQ_URL'): # @todo
     MONGO_HOST = os.environ['MONGOHQ_URL']
     MONGO_DATABASE = 'app17409961'
 else:
