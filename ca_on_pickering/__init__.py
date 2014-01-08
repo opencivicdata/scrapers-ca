@@ -9,5 +9,5 @@ class Pickering(CanadianJurisdiction):
     return {
       'name': 'Pickering',
       'legislature_name': 'Pickering City Council',
-      'legislature_url': 'http://www.pickering.ca/en/cityhall/citycouncil.asp',
+      'legislature_url': 'http://www.pickering.ca',
     }
