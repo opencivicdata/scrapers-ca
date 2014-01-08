@@ -7,7 +7,7 @@ class Cambridge(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Cambridge',
-      'legislature_name': 'Cambridge City Council',
-      'legislature_url': 'http://www.cambridge.ca',
+      'division_name': 'Cambridge',
+      'name': 'Cambridge City Council',
+      'url': 'http://www.cambridge.ca',
     }

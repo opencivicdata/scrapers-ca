@@ -8,7 +8,7 @@ class SaintJerome(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Saint-Jérôme',
-      'legislature_name': u'Conseil municipal de Saint-Jérôme',
-      'legislature_url': 'http://www.ville.saint-jerome.qc.ca',
+      'division_name': u'Saint-Jérôme',
+      'name': u'Conseil municipal de Saint-Jérôme',
+      'url': 'http://www.ville.saint-jerome.qc.ca',
     }

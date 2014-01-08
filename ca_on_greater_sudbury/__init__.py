@@ -7,7 +7,7 @@ class GreaterSudbury(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Greater Sudbury',
-      'legislature_name': 'Greater Sudbury City Council',
-      'legislature_url': 'http://www.greatersudbury.ca',
+      'division_name': 'Greater Sudbury',
+      'name': 'Greater Sudbury City Council',
+      'url': 'http://www.greatersudbury.ca',
     }

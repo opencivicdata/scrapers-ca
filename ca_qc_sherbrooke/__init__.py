@@ -7,7 +7,7 @@ class Sherbrooke(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Sherbrooke',
-      'legislature_name': 'Conseil municipal de Sherbrooke',
-      'legislature_url': 'http://www.ville.sherbrooke.qc.ca',
+      'division_name': 'Sherbrooke',
+      'name': 'Conseil municipal de Sherbrooke',
+      'url': 'http://www.ville.sherbrooke.qc.ca',
     }

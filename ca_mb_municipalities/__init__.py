@@ -6,7 +6,7 @@ class Manitoba(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Manitoba',
-      'legislature_name': 'Manitoba City Council',
-      'legislature_url': 'http://web5.gov.mb.ca/Public/municipalities.aspx',
+      'division_name': 'Manitoba',
+      'name': 'Manitoba City Council',
+      'url': 'http://web5.gov.mb.ca/Public/municipalities.aspx',
     }

@@ -7,7 +7,7 @@ class BritishColumbia(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'British Columbia',
-      'legislature_name': 'Legislative Assembly of British Columbia',
-      'legislature_url': 'http://www.leg.bc.ca',
+      'division_name': 'British Columbia',
+      'name': 'Legislative Assembly of British Columbia',
+      'url': 'http://www.leg.bc.ca',
     }

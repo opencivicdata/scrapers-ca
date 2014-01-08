@@ -7,7 +7,7 @@ class Burlington(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Burlington',
-      'legislature_name': 'Burlington City Council',
-      'legislature_url': 'http://cms.burlington.ca',
+      'division_name': 'Burlington',
+      'name': 'Burlington City Council',
+      'url': 'http://cms.burlington.ca',
     }

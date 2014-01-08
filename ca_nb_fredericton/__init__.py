@@ -7,7 +7,7 @@ class Fredericton(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Fredericton',
-      'legislature_name': 'Fredericton City Council',
-      'legislature_url': 'http://www.fredericton.ca',
+      'division_name': 'Fredericton',
+      'name': 'Fredericton City Council',
+      'url': 'http://www.fredericton.ca',
     }

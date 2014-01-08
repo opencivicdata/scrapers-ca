@@ -8,7 +8,7 @@ class Yukon(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Yukon',
-      'legislature_name': 'Yukon Municipal Legislation',
-      'legislature_url': 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf',
+      'division_name': 'Yukon',
+      'name': 'Yukon Municipal Legislation',
+      'url': 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf',
     }

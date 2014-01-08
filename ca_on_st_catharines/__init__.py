@@ -7,7 +7,7 @@ class StCatharines(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'St. Catharines',
-      'legislature_name': 'St. Catharines City Council',
-      'legislature_url': 'http://www.stcatharines.ca',
+      'division_name': 'St. Catharines',
+      'name': 'St. Catharines City Council',
+      'url': 'http://www.stcatharines.ca',
     }

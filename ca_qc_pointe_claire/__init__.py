@@ -7,7 +7,7 @@ class PointeClaire(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Pointe-Claire',
-      'legislature_name': 'Conseil municipal de Pointe-Claire',
-      'legislature_url': 'http://www.ville.pointe-claire.qc.ca',
+      'division_name': 'Pointe-Claire',
+      'name': 'Conseil municipal de Pointe-Claire',
+      'url': 'http://www.ville.pointe-claire.qc.ca',
     }

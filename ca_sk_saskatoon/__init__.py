@@ -7,7 +7,7 @@ class Saskatoon(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Saskatoon',
-      'legislature_name': 'Saskatoon City Council',
-      'legislature_url': "http://www.saskatoon.ca",
+      'division_name': 'Saskatoon',
+      'name': 'Saskatoon City Council',
+      'url': "http://www.saskatoon.ca",
     }

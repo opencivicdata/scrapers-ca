@@ -7,7 +7,7 @@ class KawarthaLakes(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Kawartha Lakes',
-      'legislature_name': 'Kawartha Lakes City Council',
-      'legislature_url': 'http://www.city.kawarthalakes.on.ca',
+      'division_name': 'Kawartha Lakes',
+      'name': 'Kawartha Lakes City Council',
+      'url': 'http://www.city.kawarthalakes.on.ca',
     }

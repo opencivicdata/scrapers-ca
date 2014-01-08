@@ -7,7 +7,7 @@ class Milton(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Milton',
-      'legislature_name': 'Milton Town Council',
-      'legislature_url': 'http://www.milton.ca',
+      'division_name': 'Milton',
+      'name': 'Milton Town Council',
+      'url': 'http://www.milton.ca',
     }

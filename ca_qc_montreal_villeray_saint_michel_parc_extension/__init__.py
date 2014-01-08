@@ -9,9 +9,9 @@ class VilleraySaintMichelParcExtension(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Villeray—Saint-Michel—Parc-Extension',
-      'legislature_name': u"Conseil d'arrondissement de Villeray—Saint-Michel—Parc-Extension",
-      'legislature_url': 'http://ville.montreal.qc.ca/vsp',
+      'division_name': u'Villeray—Saint-Michel—Parc-Extension',
+      'name': u"Conseil d'arrondissement de Villeray—Saint-Michel—Parc-Extension",
+      'url': 'http://ville.montreal.qc.ca/vsp',
       'provides': ['people'],
     }
 

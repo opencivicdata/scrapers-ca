@@ -7,7 +7,7 @@ class Guelph(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Guelph',
-      'legislature_name': 'Guelph City Council',
-      'legislature_url': 'http://guelph.ca',
+      'division_name': 'Guelph',
+      'name': 'Guelph City Council',
+      'url': 'http://guelph.ca',
     }

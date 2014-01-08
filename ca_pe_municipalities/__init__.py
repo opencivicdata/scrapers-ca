@@ -9,7 +9,7 @@ class PrinceEdwardIsland(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Prince Edward Island',
-      'legislature_name': 'Prince Edward Island City Council',
-      'legislature_url': 'http://www.gov.pe.ca/mapp/municipalitites.php',
+      'division_name': 'Prince Edward Island',
+      'name': 'Prince Edward Island City Council',
+      'url': 'http://www.gov.pe.ca/mapp/municipalitites.php',
     }

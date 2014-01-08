@@ -9,9 +9,9 @@ class Oakville(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Oakville',
-      'legislature_name': 'Oakville Town Council',
-      'legislature_url': 'http://www.oakville.ca',
+      'division_name': 'Oakville',
+      'name': 'Oakville Town Council',
+      'url': 'http://www.oakville.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],

@@ -8,9 +8,9 @@ class Lachine(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Lachine',
-      'legislature_name': u"Conseil d'arrondissement de Lachine",
-      'legislature_url': 'http://ville.montreal.qc.ca/lachine',
+      'division_name': 'Lachine',
+      'name': u"Conseil d'arrondissement de Lachine",
+      'url': 'http://ville.montreal.qc.ca/lachine',
       'provides': ['people'],
     }
 

@@ -8,7 +8,7 @@ class NorthwestTerritories(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Northwest Territories',
-      'legislature_name': 'Northwest Territories City Council',
-      'legislature_url': 'http://www.nwtac.com/about/communities/',
+      'division_name': 'Northwest Territories',
+      'name': 'Northwest Territories City Council',
+      'url': 'http://www.nwtac.com/about/communities/',
     }

@@ -7,7 +7,7 @@ class Beaconsfield(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Beaconsfield',
-      'legislature_name': 'Conseil municipal de Beaconsfield',
-      'legislature_url': 'http://www.beaconsfield.ca',
+      'division_name': 'Beaconsfield',
+      'name': 'Conseil municipal de Beaconsfield',
+      'url': 'http://www.beaconsfield.ca',
     }

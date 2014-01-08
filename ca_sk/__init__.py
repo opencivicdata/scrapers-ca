@@ -7,7 +7,7 @@ class Saskatchewan(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Saskatchewan',
-      'legislature_name': 'Legislative Assembly of Saskatchewan',
-      'legislature_url': 'http://www.legassembly.sk.ca',
+      'division_name': 'Saskatchewan',
+      'name': 'Legislative Assembly of Saskatchewan',
+      'url': 'http://www.legassembly.sk.ca',
     }

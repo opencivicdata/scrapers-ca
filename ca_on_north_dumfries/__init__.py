@@ -7,7 +7,7 @@ class NorthDumfries(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'North Dumfries',
-      'legislature_name': 'North Dumfries Township Council',
-      'legislature_url': 'http://www.township.northdumfries.on.ca',
+      'division_name': 'North Dumfries',
+      'name': 'North Dumfries Township Council',
+      'url': 'http://www.township.northdumfries.on.ca',
     }

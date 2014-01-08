@@ -7,7 +7,7 @@ class Belleville(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Belleville',
-      'legislature_name': 'Belleville City Council',
-      'legislature_url': 'http://www.city.belleville.on.ca',
+      'division_name': 'Belleville',
+      'name': 'Belleville City Council',
+      'url': 'http://www.city.belleville.on.ca',
     }

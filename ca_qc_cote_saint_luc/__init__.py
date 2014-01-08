@@ -8,7 +8,7 @@ class CoteSaintLuc(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Côte-Saint-Luc',
-      'legislature_name': u'Conseil municipal de Côte-Saint-Luc',
-      'legislature_url': 'http://www.cotesaintluc.org',
+      'division_name': u'Côte-Saint-Luc',
+      'name': u'Conseil municipal de Côte-Saint-Luc',
+      'url': 'http://www.cotesaintluc.org',
     }

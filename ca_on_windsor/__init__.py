@@ -7,7 +7,7 @@ class Windsor(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Windsor',
-      'legislature_name': 'Windsor City Council',
-      'legislature_url': 'http://www.citywindsor.ca',
+      'division_name': 'Windsor',
+      'name': 'Windsor City Council',
+      'url': 'http://www.citywindsor.ca',
     }

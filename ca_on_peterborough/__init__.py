@@ -7,7 +7,7 @@ class Peterborough(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Peterborough',
-      'legislature_name': 'Peterborough City Council',
-      'legislature_url': 'http://www.city.peterborough.on.ca',
+      'division_name': 'Peterborough',
+      'name': 'Peterborough City Council',
+      'url': 'http://www.city.peterborough.on.ca',
     }

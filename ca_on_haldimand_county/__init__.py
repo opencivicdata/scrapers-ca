@@ -7,7 +7,7 @@ class HaldimandCounty(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Haldimand County',
-      'legislature_name': 'Haldimand County Council',
-      'legislature_url': 'http://www.haldimandcounty.on.ca',
+      'division_name': 'Haldimand County',
+      'name': 'Haldimand County Council',
+      'url': 'http://www.haldimandcounty.on.ca',
     }

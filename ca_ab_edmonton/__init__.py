@@ -7,7 +7,7 @@ class Edmonton(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Edmonton',
-      'legislature_name': 'Edmonton City Council',
-      'legislature_url': 'http://www.edmonton.ca',
+      'division_name': 'Edmonton',
+      'name': 'Edmonton City Council',
+      'url': 'http://www.edmonton.ca',
     }

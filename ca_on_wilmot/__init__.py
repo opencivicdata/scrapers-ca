@@ -7,7 +7,7 @@ class Wilmot(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Wilmot',
-      'legislature_name': 'Wilmot Township Council',
-      'legislature_url': 'http://www.wilmot.ca',
+      'division_name': 'Wilmot',
+      'name': 'Wilmot Township Council',
+      'url': 'http://www.wilmot.ca',
     }

@@ -9,9 +9,9 @@ class Vaughan(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Vaughan',
-      'legislature_name': 'Vaughan City Council',
-      'legislature_url': 'https://www.vaughan.ca',
+      'division_name': 'Vaughan',
+      'name': 'Vaughan City Council',
+      'url': 'https://www.vaughan.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],

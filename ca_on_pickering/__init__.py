@@ -7,7 +7,7 @@ class Pickering(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Pickering',
-      'legislature_name': 'Pickering City Council',
-      'legislature_url': 'http://www.pickering.ca',
+      'division_name': 'Pickering',
+      'name': 'Pickering City Council',
+      'url': 'http://www.pickering.ca',
     }

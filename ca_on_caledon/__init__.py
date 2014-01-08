@@ -7,7 +7,7 @@ class Caledon(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Caledon',
-      'legislature_name': 'Caledon Town Council',
-      'legislature_url': 'http://www.town.caledon.on.ca',
+      'division_name': 'Caledon',
+      'name': 'Caledon Town Council',
+      'url': 'http://www.town.caledon.on.ca',
     }

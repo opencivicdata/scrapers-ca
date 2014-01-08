@@ -8,7 +8,7 @@ class MontrealEst(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Montréal-Est',
-      'legislature_name': u'Conseil municipal de Montréal-Est',
-      'legislature_url': 'http://ville.montreal-est.qc.ca',
+      'division_name': u'Montréal-Est',
+      'name': u'Conseil municipal de Montréal-Est',
+      'url': 'http://ville.montreal-est.qc.ca',
     }

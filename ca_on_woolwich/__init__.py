@@ -7,7 +7,7 @@ class Woolwich(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Woolwich',
-      'legislature_name': 'Woolwich Township Council',
-      'legislature_url': 'http://www.woolwich.ca',
+      'division_name': 'Woolwich',
+      'name': 'Woolwich Township Council',
+      'url': 'http://www.woolwich.ca',
     }

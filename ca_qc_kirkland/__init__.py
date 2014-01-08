@@ -7,7 +7,7 @@ class Kirkland(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Kirkland',
-      'legislature_name': 'Conseil municipal de Kirkland',
-      'legislature_url': 'http://www.ville.kirkland.qc.ca',
+      'division_name': 'Kirkland',
+      'name': 'Conseil municipal de Kirkland',
+      'url': 'http://www.ville.kirkland.qc.ca',
     }

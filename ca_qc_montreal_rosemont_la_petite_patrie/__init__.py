@@ -9,9 +9,9 @@ class RosemontLaPetitePatrie(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Rosemont—La Petite-Patrie',
-      'legislature_name': u"Conseil d'arrondissement de Rosemont—La Petite-Patrie",
-      'legislature_url': 'http://ville.montreal.qc.ca/rpp',
+      'division_name': u'Rosemont—La Petite-Patrie',
+      'name': u"Conseil d'arrondissement de Rosemont—La Petite-Patrie",
+      'url': 'http://ville.montreal.qc.ca/rpp',
       'provides': ['people'],
     }
 

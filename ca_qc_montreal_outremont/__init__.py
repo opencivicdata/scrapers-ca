@@ -8,9 +8,9 @@ class Outremont(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Outremont',
-      'legislature_name': u"Conseil d'arrondissement d'Outremont",
-      'legislature_url': 'http://ville.montreal.qc.ca/outremont',
+      'division_name': 'Outremont',
+      'name': u"Conseil d'arrondissement d'Outremont",
+      'url': 'http://ville.montreal.qc.ca/outremont',
       'provides': ['people'],
     }
 

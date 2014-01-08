@@ -7,7 +7,7 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Grande Prairie County No. 1',
-      'legislature_name': 'County of Grande Prairie No. 1 Council',
-      'legislature_url': 'http://www.countygp.ab.ca',
+      'division_name': 'Grande Prairie County No. 1',
+      'name': 'County of Grande Prairie No. 1 Council',
+      'url': 'http://www.countygp.ab.ca',
     }

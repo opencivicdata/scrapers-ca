@@ -7,7 +7,7 @@ class Moncton(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Moncton',
-      'legislature_name': 'Moncton City Council',
-      'legislature_url': 'http://www.moncton.ca',
+      'division_name': 'Moncton',
+      'name': 'Moncton City Council',
+      'url': 'http://www.moncton.ca',
     }

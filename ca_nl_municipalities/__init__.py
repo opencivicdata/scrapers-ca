@@ -8,7 +8,7 @@ class NewfoundlandAndLabrador(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Newfoundland Labrador',
-      'legislature_name': 'Newfoundland Labrador Municipal Council',
-      'legislature_url': 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html',
+      'division_name': 'Newfoundland Labrador',
+      'name': 'Newfoundland Labrador Municipal Council',
+      'url': 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html',
     }

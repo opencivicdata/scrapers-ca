@@ -6,7 +6,7 @@ class Lambton(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Lambton',
-      'legislature_name': 'Lambton County Council',
-      'legislature_url': 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx',
+      'division_name': 'Lambton',
+      'name': 'Lambton County Council',
+      'url': 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx',
     }

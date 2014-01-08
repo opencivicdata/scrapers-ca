@@ -7,7 +7,7 @@ class Summerside(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Summerside',
-      'legislature_name': 'Summerside City Council',
-      'legislature_url': 'http://www.city.summerside.pe.ca',
+      'division_name': 'Summerside',
+      'name': 'Summerside City Council',
+      'url': 'http://www.city.summerside.pe.ca',
     }

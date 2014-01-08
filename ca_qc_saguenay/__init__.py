@@ -7,7 +7,7 @@ class Saguenay(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Saguenay',
-      'legislature_name': 'Conseil municipal de Saguenay',
-      'legislature_url': 'http://ville.saguenay.ca',
+      'division_name': 'Saguenay',
+      'name': 'Conseil municipal de Saguenay',
+      'url': 'http://ville.saguenay.ca',
     }

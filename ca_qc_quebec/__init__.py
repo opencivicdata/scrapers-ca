@@ -8,7 +8,7 @@ class Quebec(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Québec',
-      'legislature_name': u'Conseil municipal de Québec',
-      'legislature_url': 'http://www.ville.quebec.qc.ca',
+      'division_name': u'Québec',
+      'name': u'Conseil municipal de Québec',
+      'url': 'http://www.ville.quebec.qc.ca',
     }

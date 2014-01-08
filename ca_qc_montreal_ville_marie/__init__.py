@@ -8,9 +8,9 @@ class VilleMarie(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Ville-Marie',
-      'legislature_name': u"Conseil d'arrondissement de Ville-Marie",
-      'legislature_url': 'http://ville.montreal.qc.ca/villemarie',
+      'division_name': 'Ville-Marie',
+      'name': u"Conseil d'arrondissement de Ville-Marie",
+      'url': 'http://ville.montreal.qc.ca/villemarie',
       'provides': ['people'],
     }
 

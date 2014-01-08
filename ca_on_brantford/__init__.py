@@ -7,7 +7,7 @@ class Brantford(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Brantford',
-      'legislature_name': 'Brantford City Council',
-      'legislature_url': 'http://www.city.brantford.on.ca',
+      'division_name': 'Brantford',
+      'name': 'Brantford City Council',
+      'url': 'http://www.city.brantford.on.ca',
     }

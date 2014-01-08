@@ -8,7 +8,7 @@ class NovaScotia(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Nova Scotia',
-      'legislature_name': 'Nova Scotia City Council',
-      'legislature_url': 'http://www.unsm.ca/doc_download/880-mayor-list-2013',
+      'division_name': 'Nova Scotia',
+      'name': 'Nova Scotia City Council',
+      'url': 'http://www.unsm.ca/doc_download/880-mayor-list-2013',
     }

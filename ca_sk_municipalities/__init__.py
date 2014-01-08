@@ -6,7 +6,7 @@ class Saskatchewan(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Saskatchewan',
-      'legislature_name': 'Saskatchewan City Council',
-      'legislature_url': 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf',
+      'division_name': 'Saskatchewan',
+      'name': 'Saskatchewan City Council',
+      'url': 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf',
     }

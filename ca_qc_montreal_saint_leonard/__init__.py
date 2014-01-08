@@ -9,9 +9,9 @@ class SaintLeonard(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Saint-Léonard',
-      'legislature_name': u"Conseil d'arrondissement de Saint-Léonard",
-      'legislature_url': 'http://ville.montreal.qc.ca/st-leonard',
+      'division_name': u'Saint-Léonard',
+      'name': u"Conseil d'arrondissement de Saint-Léonard",
+      'url': 'http://ville.montreal.qc.ca/st-leonard',
       'provides': ['people'],
     }
 

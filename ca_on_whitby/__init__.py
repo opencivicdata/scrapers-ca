@@ -7,7 +7,7 @@ class Whitby(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Whitby',
-      'legislature_name': 'Whitby Town Council',
-      'legislature_url': 'http://www.whitby.ca',
+      'division_name': 'Whitby',
+      'name': 'Whitby Town Council',
+      'url': 'http://www.whitby.ca',
     }

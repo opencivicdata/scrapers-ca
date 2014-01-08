@@ -7,7 +7,7 @@ class Clarington(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Clarington',
-      'legislature_name': 'Clarington Municipal Council',
-      'legislature_url': 'http://www.clarington.net',
+      'division_name': 'Clarington',
+      'name': 'Clarington Municipal Council',
+      'url': 'http://www.clarington.net',
     }

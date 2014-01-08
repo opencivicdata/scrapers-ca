@@ -7,9 +7,9 @@ class Toronto(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Toronto',
-      'legislature_name': 'Toronto City Council',
-      'legislature_url': 'http://www.toronto.ca',
+      'division_name': 'Toronto',
+      'name': 'Toronto City Council',
+      'url': 'http://www.toronto.ca',
       'terms': [{
         'name': '2010-2014',
         'sessions': ['2010-2014'],

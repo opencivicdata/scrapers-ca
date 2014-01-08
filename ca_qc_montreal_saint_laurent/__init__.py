@@ -8,9 +8,9 @@ class SaintLaurent(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Saint-Laurent',
-      'legislature_name': u"Conseil d'arrondissement de Saint-Laurent",
-      'legislature_url': 'http://ville.montreal.qc.ca/saint-laurent',
+      'division_name': 'Saint-Laurent',
+      'name': u"Conseil d'arrondissement de Saint-Laurent",
+      'url': 'http://ville.montreal.qc.ca/saint-laurent',
       'provides': ['people'],
     }
 

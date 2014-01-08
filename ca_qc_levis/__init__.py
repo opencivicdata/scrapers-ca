@@ -8,7 +8,7 @@ class Levis(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': u'Lévis',
-      'legislature_name': u'Conseil municipal de Lévis',
-      'legislature_url': 'http://www.ville.levis.qc.ca',
+      'division_name': u'Lévis',
+      'name': u'Conseil municipal de Lévis',
+      'url': 'http://www.ville.levis.qc.ca',
     }

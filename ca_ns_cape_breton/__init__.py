@@ -7,7 +7,7 @@ class CapeBreton(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Cape Breton',
-      'legislature_name': 'Cape Breton Regional Council',
-      'legislature_url': 'http://www.cbrm.ns.ca',
+      'division_name': 'Cape Breton',
+      'name': 'Cape Breton Regional Council',
+      'url': 'http://www.cbrm.ns.ca',
     }

@@ -7,7 +7,7 @@ class Markham(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Markham',
-      'legislature_name': 'Markham City Council',
-      'legislature_url': 'http://www.markham.ca',
+      'division_name': 'Markham',
+      'name': 'Markham City Council',
+      'url': 'http://www.markham.ca',
     }

@@ -7,7 +7,7 @@ class Stratford(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Stratford',
-      'legislature_name': 'Stratford Town Council',
-      'legislature_url': 'http://www.townofstratford.ca',
+      'division_name': 'Stratford',
+      'name': 'Stratford Town Council',
+      'url': 'http://www.townofstratford.ca',
     }

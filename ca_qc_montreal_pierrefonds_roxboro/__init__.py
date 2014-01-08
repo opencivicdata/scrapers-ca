@@ -8,9 +8,9 @@ class PierrefondsRoxboro(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Pierrefonds-Roxboro',
-      'legislature_name': u"Conseil d'arrondissement de Pierrefonds-Roxboro",
-      'legislature_url': 'http://ville.montreal.qc.ca/pierrefonds-roxboro',
+      'division_name': 'Pierrefonds-Roxboro',
+      'name': u"Conseil d'arrondissement de Pierrefonds-Roxboro",
+      'url': 'http://ville.montreal.qc.ca/pierrefonds-roxboro',
       'provides': ['people'],
     }
 

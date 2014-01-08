@@ -7,7 +7,7 @@ class SainteAnneDeBellevue(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Sainte-Anne-de-Bellevue',
-      'legislature_name': 'Conseil municipal de Sainte-Anne-de-Bellevue',
-      'legislature_url': 'http://www.ville.sainte-anne-de-bellevue.qc.ca',
+      'division_name': 'Sainte-Anne-de-Bellevue',
+      'name': 'Conseil municipal de Sainte-Anne-de-Bellevue',
+      'url': 'http://www.ville.sainte-anne-de-bellevue.qc.ca',
     }

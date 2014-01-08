@@ -8,9 +8,9 @@ class LePlateauMontRoyal(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Le Plateau-Mont-Royal',
-      'legislature_name': u"Conseil d'arrondissement du Plateau-Mont-Royal",
-      'legislature_url': 'http://ville.montreal.qc.ca/plateau',
+      'division_name': 'Le Plateau-Mont-Royal',
+      'name': u"Conseil d'arrondissement du Plateau-Mont-Royal",
+      'url': 'http://ville.montreal.qc.ca/plateau',
       'provides': ['people'],
     }
 

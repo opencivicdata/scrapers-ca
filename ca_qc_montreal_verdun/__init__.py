@@ -8,9 +8,9 @@ class Verdun(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Verdun',
-      'legislature_name': u"Conseil d'arrondissement de Verdun",
-      'legislature_url': 'http://ville.montreal.qc.ca/verdun',
+      'division_name': 'Verdun',
+      'name': u"Conseil d'arrondissement de Verdun",
+      'url': 'http://ville.montreal.qc.ca/verdun',
       'provides': ['people'],
     }
 

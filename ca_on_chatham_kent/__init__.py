@@ -7,7 +7,7 @@ class ChathamKent(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Chatham-Kent',
-      'legislature_name': 'Chatham-Kent Municipal Council',
-      'legislature_url': 'http://www.chatham-kent.ca',
+      'division_name': 'Chatham-Kent',
+      'name': 'Chatham-Kent Municipal Council',
+      'url': 'http://www.chatham-kent.ca',
     }

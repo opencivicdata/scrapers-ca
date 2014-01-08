@@ -7,7 +7,7 @@ class ThunderBay(CanadianJurisdiction):
 
   def _get_metadata(self):
     return {
-      'name': 'Thunder Bay',
-      'legislature_name': 'Thunder Bay City Council',
-      'legislature_url': 'http://www.thunderbay.ca',
+      'division_name': 'Thunder Bay',
+      'name': 'Thunder Bay City Council',
+      'url': 'http://www.thunderbay.ca',
     }
