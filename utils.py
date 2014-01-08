@@ -7,38 +7,31 @@ import lxml.html
 
 
 class CanadianJurisdiction(Jurisdiction):
-
-  def get_metadata(self):
-    metadata = {
-      'feature_flags': [],
-      'parties': [],
-      'provides': [],
-      'session_details': {
-        'N/A': {
-          '_scraped_name': 'N/A',
-        }
-      },
-      'terms': [
-        {
-          'name': 'N/A',
-          'sessions': ['N/A'],
-          'start_year': 1900,
-          'end_year': 2030,
-        }
-      ],
+  session_details = {
+    'N/A': {
+      '_scraped_name': 'N/A',
     }
+  }
+  terms = [
+    {
+      'name': 'N/A',
+      'sessions': ['N/A'],
+      'start_year': 1900,
+      'end_year': 2030,
+    }
+  ]
+
+  def __init__(self):
     for scraper_type in ('bills', 'events', 'people', 'speeches', 'votes'):
       try:
         __import__(self.__module__ + '.' + scraper_type)
       except ImportError:
         pass
       else:
-        metadata['provides'].append(scraper_type)
-    metadata.update(self._get_metadata())
-    return metadata
+        self.provides.append(scraper_type)
 
   def get_scraper(self, term, session, scraper_type):
-    if scraper_type in self.metadata['provides']:
+    if scraper_type in self.provides:
       class_name = self.__class__.__name__ + {
         'bills': 'Bill',
         'events': 'Event',
@@ -68,8 +61,8 @@ def lxmlize(url, encoding='utf-8'):
 class CanadianScraper(Scraper):
 
   def get_organization(self):
-    name = self.jurisdiction.get_metadata()['division_name']
+    name = self.jurisdiction.division_name
     jurisdiction_id = self.jurisdiction.jurisdiction_id
     org = Organization(name=name, classification='legislature', jurisdiction_id=jurisdiction_id)
-    org.add_source(self.jurisdiction.get_metadata()['url'])
+    org.add_source(self.jurisdiction.url)
     return org

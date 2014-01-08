@@ -17,7 +17,7 @@ class MontrealPersonScraper(CanadianScraper):
     organization = self.get_organization()
     yield organization
 
-    district = self.jurisdiction.get_metadata()["name"]
+    district = self.jurisdiction.name
     data = urllib2.urlopen(COUNCIL_PAGE)
     data = json.load(data, 'windows-1252')
     for line in data:

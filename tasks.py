@@ -113,7 +113,6 @@ for module_name in os.listdir('.'):
           else:
             ocd_divisions.add(ocd_division)
 
-          instance = obj()
           sections = ocd_division.split('/')
           ocd_type, ocd_type_id = sections[-1].split(':')
 
@@ -158,7 +157,7 @@ for module_name in os.listdir('.'):
           expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
 
           # Warn if there is no expected legislative URL.
-          url = instance.metadata['url']
+          url = getattr(obj, 'url', None)
           expected_url = None
           if urls.get(ocd_division):
             expected_url = urls[ocd_division]
@@ -166,7 +165,7 @@ for module_name in os.listdir('.'):
             print '%-60s %s' % (module_name, url)
 
           # Warn if the name may be incorrect.
-          name = instance.metadata['name']
+          name = getattr(obj, 'name', None)
           if name != expected_name:
             print '%-60s %s' % (name, expected_name)
 
@@ -182,7 +181,7 @@ for module_name in os.listdir('.'):
                   f.write(content)
 
           # Set the division_name, jurisdiction_id and url appropriately.
-          division_name = instance.metadata['division_name']
+          division_name = getattr(obj, 'division_name', None)
           expected_division_name = names[ocd_division]
           if division_name != expected_division_name or jurisdiction_id != expected_jurisdiction_id or (expected_url and url != expected_url):
            with codecs.open(os.path.join(module_name, '__init__.py'), 'r', 'utf8') as f:

@@ -6,14 +6,10 @@ from utils import CanadianJurisdiction
 class RiviereDesPrairiesPointeAuxTrembles(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles/council'
   ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles'
-
-  def _get_metadata(self):
-    return {
-      'division_name': u'Rivière-des-Prairies—Pointe-aux-Trembles',
-      'name': u"Conseil d'arrondissement de Rivière-des-Prairies—Pointe-aux-Trembles",
-      'url': 'http://ville.montreal.qc.ca/rdp-pat',
-      'provides': ['people'],
-    }
+  division_name = u'Rivière-des-Prairies—Pointe-aux-Trembles'
+  name = u"Conseil d'arrondissement de Rivière-des-Prairies—Pointe-aux-Trembles"
+  url = 'http://ville.montreal.qc.ca/rdp-pat'
+  provides = ['people']
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':

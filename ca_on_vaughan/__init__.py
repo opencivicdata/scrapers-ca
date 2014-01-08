@@ -6,24 +6,20 @@ import re
 class Vaughan(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3519028/council'
   geographic_code = 3519028
-
-  def _get_metadata(self):
-    return {
-      'division_name': 'Vaughan',
-      'name': 'Vaughan City Council',
-      'url': 'https://www.vaughan.ca',
-      'terms': [{
-        'name': '2010-2014',
-        'sessions': ['2010-2014'],
-        'start_year': 2010,
-        'end_year': 2014,
-      }],
-      'session_details': {
-        '2010-2014': {
-          '_scraped_name': '2010-2014',
-        }
-      },
+  division_name = 'Vaughan'
+  name = 'Vaughan City Council'
+  url = 'https://www.vaughan.ca'
+  terms = [{
+    'name': '2010-2014',
+    'sessions': ['2010-2014'],
+    'start_year': 2010,
+    'end_year': 2014,
+  }]
+  session_details = {
+    '2010-2014': {
+      '_scraped_name': '2010-2014',
     }
+  }
 
   def scrape_session_list(self):
     page = lxmlize('http://www.vaughan.ca/council/Pages/default.aspx')

@@ -4,10 +4,6 @@ from utils import CanadianJurisdiction
 class Newmarket(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3519048/council'
   geographic_code = 3519048
-
-  def _get_metadata(self):
-    return {
-      'division_name': 'Newmarket',
-      'name': 'Newmarket Town Council',
-      'url': 'http://www.town.newmarket.on.ca',
-    }
+  division_name = 'Newmarket'
+  name = 'Newmarket Town Council'
+  url = 'http://www.town.newmarket.on.ca'

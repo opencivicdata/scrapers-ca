@@ -6,14 +6,10 @@ from utils import CanadianJurisdiction
 class SaintLeonard(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:saint-léonard/council'
   ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:saint-léonard'
-
-  def _get_metadata(self):
-    return {
-      'division_name': u'Saint-Léonard',
-      'name': u"Conseil d'arrondissement de Saint-Léonard",
-      'url': 'http://ville.montreal.qc.ca/st-leonard',
-      'provides': ['people'],
-    }
+  division_name = u'Saint-Léonard'
+  name = u"Conseil d'arrondissement de Saint-Léonard"
+  url = 'http://ville.montreal.qc.ca/st-leonard'
+  provides = ['people']
 
   def get_scraper(self, term, session, scraper_type):
     if scraper_type == 'people':

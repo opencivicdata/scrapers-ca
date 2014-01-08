@@ -4,10 +4,6 @@ from utils import CanadianJurisdiction
 class StCatharines(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3526053/council'
   geographic_code = 3526053
-
-  def _get_metadata(self):
-    return {
-      'division_name': 'St. Catharines',
-      'name': 'St. Catharines City Council',
-      'url': 'http://www.stcatharines.ca',
-    }
+  division_name = 'St. Catharines'
+  name = 'St. Catharines City Council'
+  url = 'http://www.stcatharines.ca'

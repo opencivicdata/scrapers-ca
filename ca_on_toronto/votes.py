@@ -41,7 +41,7 @@ class TorontoVoteScraper(CanadianScraper):
           else:
             yes_count, no_count = 1, 1
           motion = row[3].replace('\xc4', '').replace('\xc2', '')
-          vote = Vote(self.jurisdiction.get_metadata()['division_name'], session, date, motion, v_type, passed, int(yes_count), int(no_count))
+          vote = Vote(self.jurisdiction.division_name, session, date, motion, v_type, passed, int(yes_count), int(no_count))
           vote.vote(name, VOTES[row[5]])
           scan_files(tmpdir, f, vote, row)
           vote.add_source("http://app.toronto.ca/tmmis/getAdminReport.do")
