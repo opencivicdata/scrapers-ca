@@ -12,7 +12,7 @@ class MontrealEstPersonScraper(CanadianScraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
     organization = self.get_organization()
-    yield organization 
+    yield organization
 
     councillors = page.xpath('//table[@width="455"]//tr/td[1]//strong')
     for councillor in councillors:

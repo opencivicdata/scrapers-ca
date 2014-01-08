@@ -48,9 +48,9 @@ class PickeringPersonScraper(CanadianScraper):
         else:
           p.add_link(link.attrib['href'], 'personal site')
 
-      if role == 'mayor': 
+      if role == 'mayor':
         add_contacts(p, mayor_contacts)
-      else: 
+      else:
         add_contacts(p, council_contacts)
       yield p
 
@@ -60,6 +60,3 @@ def add_contacts(p, contacts):
   fax = re.findall(r'[0-9]{3}\.[0-9]{3}\.[0-9]{4}', contacts[1])[0]
   p.add_contact('phone', phone, 'office')
   p.add_contact('fax', fax, 'office')
-
-
-      

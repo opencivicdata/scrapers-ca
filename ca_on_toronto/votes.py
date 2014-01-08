@@ -15,7 +15,6 @@ VOTES = {'Yes': 'yes', 'No': 'no', 'Absent': 'not-voting'}
 
 class TorontoVoteScraper(CanadianScraper):
 
-
   def get_votes(self):
     # org.add_source("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
 
@@ -41,7 +40,7 @@ class TorontoVoteScraper(CanadianScraper):
             yes_count, no_count = row[6].split()[1].split('-')
           else:
             yes_count, no_count = 1, 1
-          motion = row[3].replace('\xc4', '').replace('\xc2','')
+          motion = row[3].replace('\xc4', '').replace('\xc2', '')
           vote = Vote(self.jurisdiction.get_metadata()['name'], session, date, motion, v_type, passed, int(yes_count), int(no_count))
           vote.vote(name, VOTES[row[5]])
           scan_files(tmpdir, f, vote, row)
