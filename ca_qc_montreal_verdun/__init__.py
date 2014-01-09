@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class Verdun(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:verdun/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:verdun'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:verdun'
   division_name = 'Verdun'
   name = u"Conseil d'arrondissement de Verdun"
   url = 'http://ville.montreal.qc.ca/verdun'

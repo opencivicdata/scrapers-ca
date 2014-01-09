@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class Outremont(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:outremont/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:outremont'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:outremont'
   division_name = 'Outremont'
   name = u"Conseil d'arrondissement d'Outremont"
   url = 'http://ville.montreal.qc.ca/outremont'

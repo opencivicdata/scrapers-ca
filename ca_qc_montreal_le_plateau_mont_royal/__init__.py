@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class LePlateauMontRoyal(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:le_plateau-mont-royal'
   division_name = 'Le Plateau-Mont-Royal'
   name = u"Conseil d'arrondissement du Plateau-Mont-Royal"
   url = 'http://ville.montreal.qc.ca/plateau'

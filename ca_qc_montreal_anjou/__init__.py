@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class Anjou(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:anjou/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:anjou'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:anjou'
   division_name = 'Anjou'
   name = u"Conseil d'arrondissement d'Anjou"
   url = 'http://ville.montreal.qc.ca/anjou'

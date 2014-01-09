@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class AhuntsicCartierville(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:ahuntsic-cartierville/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:ahuntsic-cartierville'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:ahuntsic-cartierville'
   division_name = 'Ahuntsic-Cartierville'
   name = u"Conseil d'arrondissement d'Ahuntsic-Cartierville"
   url = 'http://ville.montreal.qc.ca/ahuntsic-cartierville'

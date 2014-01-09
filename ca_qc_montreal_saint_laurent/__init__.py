@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class SaintLaurent(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:saint-laurent/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:saint-laurent'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:saint-laurent'
   division_name = 'Saint-Laurent'
   name = u"Conseil d'arrondissement de Saint-Laurent"
   url = 'http://ville.montreal.qc.ca/saint-laurent'

@@ -5,7 +5,7 @@ from utils import CanadianJurisdiction
 
 class MontrealNord(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:montréal-nord/council'
-  ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:montréal-nord'
+  division_id = u'ocd-division/country:ca/csd:2466023/arrondissement:montréal-nord'
   division_name = u'Montréal-Nord'
   name = u"Conseil d'arrondissement de Montréal-Nord"
   url = 'http://ville.montreal.qc.ca/mtlnord'

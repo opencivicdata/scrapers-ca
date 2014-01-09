@@ -5,7 +5,7 @@ from utils import CanadianJurisdiction
 
 class MercierHochelagaMaisonneuve(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:mercier-hochelaga-maisonneuve/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:mercier-hochelaga-maisonneuve'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:mercier-hochelaga-maisonneuve'
   division_name = u'Mercier—Hochelaga-Maisonneuve'
   name = u"Conseil d'arrondissement de Mercier—Hochelaga-Maisonneuve"
   url = 'http://ville.montreal.qc.ca/mhm'

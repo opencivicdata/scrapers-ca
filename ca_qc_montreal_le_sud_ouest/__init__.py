@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class LeSudOuest(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:le_sud-ouest/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:le_sud-ouest'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:le_sud-ouest'
   division_name = 'Le Sud-Ouest'
   name = u"Conseil d'arrondissement du Sud-Ouest"
   url = 'http://ville.montreal.qc.ca/sud-ouest'

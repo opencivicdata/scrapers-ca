@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class PierrefondsRoxboro(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:pierrefonds-roxboro'
   division_name = 'Pierrefonds-Roxboro'
   name = u"Conseil d'arrondissement de Pierrefonds-Roxboro"
   url = 'http://ville.montreal.qc.ca/pierrefonds-roxboro'

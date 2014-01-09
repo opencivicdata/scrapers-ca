@@ -4,9 +4,7 @@ See [blank-pupa](https://github.com/opennorth/blank-pupa) to install dependencie
 
 ## Geographic codes
 
-Most jurisdictions have a `geographic_code` that corresponds to its [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) geographic code.
-
-Other jurisdictions have an `ocd_division` that corresponds to its [Open Civic Data Division Identifier](https://github.com/opencivicdata/ocd-division-ids).
+Most jurisdictions have a `geographic_code` that corresponds to its [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) geographic code. Other jurisdictions have an `division_id` that corresponds to its [Open Civic Data Division Identifier](https://github.com/opencivicdata/ocd-division-ids).
 
 ## Maintenance
 

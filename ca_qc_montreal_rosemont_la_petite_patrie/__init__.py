@@ -5,7 +5,7 @@ from utils import CanadianJurisdiction
 
 class RosemontLaPetitePatrie(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:rosemont-la_petite-patrie/council'
-  ocd_division = 'ocd-division/country:ca/csd:2466023/arrondissement:rosemont-la_petite-patrie'
+  division_id = 'ocd-division/country:ca/csd:2466023/arrondissement:rosemont-la_petite-patrie'
   division_name = u'Rosemont—La Petite-Patrie'
   name = u"Conseil d'arrondissement de Rosemont—La Petite-Patrie"
   url = 'http://ville.montreal.qc.ca/rpp'

@@ -5,7 +5,7 @@ from utils import CanadianJurisdiction
 
 class RiviereDesPrairiesPointeAuxTrembles(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles/council'
-  ocd_division = u'ocd-division/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles'
+  division_id = u'ocd-division/country:ca/csd:2466023/arrondissement:rivière-des-prairies-pointe-aux-trembles'
   division_name = u'Rivière-des-Prairies—Pointe-aux-Trembles'
   name = u"Conseil d'arrondissement de Rivière-des-Prairies—Pointe-aux-Trembles"
   url = 'http://ville.montreal.qc.ca/rdp-pat'
