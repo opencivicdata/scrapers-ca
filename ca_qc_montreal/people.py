@@ -39,15 +39,17 @@ class MontrealPersonScraper(CanadianScraper):
     else:
       p.add_membership(organization, role='councillor')
     if line['ADRESSE_ARRONDISSEMENT']:
-      p.add_contact('address', line['ADRESSE_ARRONDISSEMENT'], 'district')
+      p.add_contact('address', line['ADRESSE_ARRONDISSEMENT'], 'office')
     if line['ADRESSE_HOTEL_DE_VILLE']:
-      p.add_contact('address', line['ADRESSE_HOTEL_DE_VILLE'], 'city')
+      p.add_contact('address', line['ADRESSE_HOTEL_DE_VILLE'], 'legislature')
     if line['TELEPHONE_ARRONDISSEMENT']:
-      p.add_contact('voice', line['TELEPHONE_ARRONDISSEMENT'], 'district')
+      p.add_contact('voice', line['TELEPHONE_ARRONDISSEMENT'], 'office')
     if line['TELEPHONE_HOTEL_DE_VILLE']:
-      p.add_contact('voice', line['TELEPHONE_HOTEL_DE_VILLE'], 'city')
+      p.add_contact('voice', line['TELEPHONE_HOTEL_DE_VILLE'], 'legislature')
     if line['TELECOPIE_ARRONDISSEMENT']:
-      p.add_contact('fax', line['TELECOPIE_ARRONDISSEMENT'], 'district')
+      p.add_contact('fax', line['TELECOPIE_ARRONDISSEMENT'], 'office')
+    if line['TELECOPIE_HOTEL_DE_VILLE']:
+      p.add_contact('fax', line['TELECOPIE_HOTEL_DE_VILLE'], 'legislature')
     if line['COURRIEL']:
       p.add_contact('email', line['COURRIEL'], None)
     if line['FICHIER_IMAGE']:

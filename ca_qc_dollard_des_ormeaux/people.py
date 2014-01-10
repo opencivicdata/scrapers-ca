@@ -38,10 +38,10 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
 
       email = councillor.xpath('./parent::p/following-sibling::p//a[contains(@href, "mailto:")]')
       if email:
-        p.add_contact('email', email[0].text_content(), 'personal email')
+        p.add_contact('email', email[0].text_content(), None)
 
-      p.add_contact('voice', general_phone, 'front office')
-      p.add_contact('fax', general_fax, 'front office')
-      p.add_contact('email', general_email, 'front office')
+      p.add_contact('voice', general_phone, 'legislature')
+      p.add_contact('fax', general_fax, 'legislature')
+      p.add_contact('email', general_email, 'legislature')
 
       yield p

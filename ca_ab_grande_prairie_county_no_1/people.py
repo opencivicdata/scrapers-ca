@@ -28,7 +28,7 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
       address = councillor.xpath('./p[1]')[0].text_content()
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p.add_contact('address', address, 'office')
+      p.add_contact('address', address, 'legislature')
       p.add_contact('email', email, None)
 
       numbers = councillor.xpath('./p[2]')[0].text_content().replace('Email: ', '').replace(email, '').split(':')
@@ -38,7 +38,11 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
         contact_type = re.findall(r'[A-Za-z]+', numbers[index - 1])[0]
         number = re.findall(r'[0-9]{3}.[0-9]{3}.[0-9]{4}', number)[0].replace('.', '-')
         if contact_type == 'Fax':
-          p.add_contact('fax', number, 'office')
+          p.add_contact('fax', number, 'legislature')
+        else if contact_type == 'Cell':
+          p.add_contact('cell', number, 'legislature')
+        else if contact_type == 'Hm':
+          p.add_contact('voice', number, 'residence')
         else:
-          p.add_contact('voice', number, contact_type)
+          raise Exception('Unrecognized contact type %s' % contact_type)
       yield p

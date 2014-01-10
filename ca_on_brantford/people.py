@@ -34,7 +34,7 @@ class BrantfordPersonScraper(CanadianScraper):
 
       address = page.xpath('//div[@id="centre_content"]//p')[0].text_content().replace("\r\n", ', ')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].attrib['href'].replace('mailto:', '')
-      p.add_contact('address', address, None)
+      p.add_contact('address', address, 'legislature')
       p.add_contact('email', email, None)
 
       p.image = page.xpath('//div[@id="centre_content"]/h2/img/@src')[0]
@@ -42,13 +42,13 @@ class BrantfordPersonScraper(CanadianScraper):
       numbers = page.xpath('//div[@id="centre_content"]//p[contains(text(),"-")]')[0].text_content()
       if 'tel' in numbers:
         phone = re.findall(r'(.*)tel', numbers)[0].strip().replace(' ', '-').replace("\\xc2", '').replace("\\xa0", '-')
-        p.add_contact('voice', phone, None)
+        p.add_contact('voice', phone, 'legislature')
       if 'cell' in numbers:
         cell = re.findall(r'(.*)cell', numbers)[0].strip().replace(' ', '-')
-        p.add_contact('voice', cell, 'cell')
+        p.add_contact('cell', cell, 'legislature')
       if 'fax' in numbers:
         fax = re.findall(r'(.*)fax', numbers)[0].strip().replace(' ', '-')
-        p.add_contact('fax', fax, None)
+        p.add_contact('fax', fax, 'legislature')
 
       if len(page.xpath('//div[@id="centre_content"]//a')) > 2:
         p.add_link(page.xpath('//div[@id="centre_content"]//a')[-1].attrib['href'], None)
@@ -72,9 +72,9 @@ def scrape_mayor(organization):
   email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
   phone = page.xpath('//ul[@id="legal_info"]/li[6]/text()')[0].strip().replace('.', '-')
 
-  p.add_contact('address', address, 'office')
+  p.add_contact('address', address, 'legislature')
   p.add_contact('email', email, None)
-  p.add_contact('voice', phone, 'office')
+  p.add_contact('voice', phone, 'legislature')
 
   get_links(p, page.xpath('//ul[@id="social_media"]')[0])
 

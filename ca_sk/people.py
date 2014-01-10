@@ -27,25 +27,16 @@ class SaskatchewanPersonScraper(CanadianScraper):
       p.add_membership(organization, role='councillor')
 
       contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
-      office_address = contact.xpath('./td[1]/div[2]')[0].text_content()
-      office_phone = contact.xpath('./td[1]/div[3]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-')
-      office_fax = contact.xpath('./td[1]/div[4]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-')
-
-      constituency_address = ''.join(contact.xpath('./td[2]/div//text()')[1:7])
-      constituency_phone = contact.xpath('./td[2]/div[4]//span/text()')[0].replace('(', '').replace(')', '-')
-      constituency_fax = contact.xpath('./td[2]/div[5]//span/text()')[0].replace('(', '').replace(')', '-')
-
-      email = contact.xpath('./td[3]//a[contains(@href, "mailto:")]/text()')[0]
       website = contact.xpath('./td[3]//div[3]//a')
       if website:
         p.add_link(website[0].text_content(), None)
 
-      p.add_contact('address', office_address, 'Legislative Building')
-      p.add_contact('address', constituency_address, 'constituency')
-      p.add_contact('voice', office_phone, 'Legislative Building')
-      p.add_contact('voice', constituency_phone, 'constituency')
-      p.add_contact('fax', office_fax, 'Legislative Building')
-      p.add_contact('fax', constituency_fax, 'constituency')
-      p.add_contact('email', email, None)
+      p.add_contact('address', contact.xpath('./td[1]/div[2]')[0].text_content(), 'legislature')
+      p.add_contact('address', ''.join(contact.xpath('./td[2]/div//text()')[1:7]), 'constituency')
+      p.add_contact('voice', contact.xpath('./td[1]/div[3]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-'), 'legislature')
+      p.add_contact('voice', contact.xpath('./td[2]/div[4]//span/text()')[0].replace('(', '').replace(')', '-'), 'constituency')
+      p.add_contact('fax', contact.xpath('./td[1]/div[4]')[0].text_content().split(':')[1].strip().replace('(', '').replace(')', '-'), 'legislature')
+      p.add_contact('fax', contact.xpath('./td[2]/div[5]//span/text()')[0].replace('(', '').replace(')', '-'), 'constituency')
+      p.add_contact('email', contact.xpath('./td[3]//a[contains(@href, "mailto:")]/text()')[0], None)
 
       yield p

@@ -25,8 +25,8 @@ class WindsorPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role='councillor')
-      p.add_contact('address', address, 'city hall')
-      p.add_contact('voice', phone, 'city hall')
+      p.add_contact('address', address, 'legislature')
+      p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       p.image = councillor.xpath('./img/@src')[0]
 
@@ -43,9 +43,9 @@ class WindsorPersonScraper(CanadianScraper):
     p = Legislator(name=name, post_id='Windsor')
     p.add_source(MAYOR_PAGE)
     p.add_membership(organization, role='mayor')
-    p.add_contact('address', address, 'city hall')
-    p.add_contact('voice', phone, 'city hall')
-    p.add_contact('fax', fax, 'city hall')
+    p.add_contact('address', address, 'legislature')
+    p.add_contact('voice', phone, 'legislature')
+    p.add_contact('fax', fax, 'legislature')
     p.add_contact('email', email, None)
     p.image = page.xpath('//div[@class="sectioning"]//img[contains(@title, "Mayor")]/@src')[0]
     yield p
