@@ -56,7 +56,7 @@ class MarkhamPersonScraper(CanadianScraper):
       email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
       website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
       if website:
-        p.add_link(website[0], 'personal site')
+        p.add_link(website[0], None)
       p.add_contact('address', address, 'office')
       p.add_contact('voice', phone, 'office')
       p.add_contact('email', email, None)
@@ -107,11 +107,5 @@ def get_links(councillor, div):
 
     if 'mailto:' in link:
       continue
-    if 'facebook' in link:
-      councillor.add_link(link, 'facebook')
-    if 'twitter' in link:
-      councillor.add_link(link, 'twitter')
-    if 'linkedin' in link:
-      councillor.add_link(link, 'linkedin')
-    if 'google' in link:
-      councillor.add_link(link, 'google plus')
+    else:
+      councillor.add_link(link, None)

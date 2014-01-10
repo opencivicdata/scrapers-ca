@@ -53,5 +53,5 @@ class PrinceEdwardIslandPersonScraper(Scraper):
         p.add_contact('address', address, None)
         p.add_contact('email', email, None)
         if site:
-          p.add_link(site, 'website')
+          p.add_link(site, None)
         yield p

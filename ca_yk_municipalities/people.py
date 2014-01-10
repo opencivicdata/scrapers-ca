@@ -76,7 +76,7 @@ class YukonPersonScraper(Scraper):
           if fax:
             p.add_contact('fax', fax, None)
           if website:
-            p.add_link(website, 'municipal website')
+            p.add_link(website, None)
           yield p
 
     txt.close()

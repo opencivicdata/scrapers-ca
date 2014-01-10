@@ -42,13 +42,13 @@ class TorontoPersonScraper(CanadianScraper):
     p.image = page.xpath('//div[@class="two_column"]/div/img/@src')[0]
 
     if "website:" in info.text_content():
-      p.add_link(info.xpath('.//a')[1].attrib['href'], 'homepage')
+      p.add_link(info.xpath('.//a')[1].attrib['href'], None)
 
     if "Facebook" in info.text_content():
-      p.add_link(info.xpath('//a[contains(@href, "facebook.com")]')[0].attrib['href'], 'facebook')
+      p.add_link(info.xpath('//a[contains(@href, "facebook.com")]')[0].attrib['href'], None)
 
     if "Twitter" in info.text_content():
-      p.add_link(info.xpath('//a[contains(@href,"twitter.com")]')[0].attrib['href'], 'twitter')
+      p.add_link(info.xpath('//a[contains(@href,"twitter.com")]')[0].attrib['href'], None)
 
     # add contact info
     p.add_contact('email', info.xpath('.//a')[0].text_content(), None)

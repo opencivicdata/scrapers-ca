@@ -66,7 +66,7 @@ class NewmarketPersonScraper(CanadianScraper):
           p.add_contact('voice', number, contact_type.lower())
       site = page.xpath('.//a[contains(text(), "http://")]')
       if site:
-        p.add_link(site[0].text_content(), 'personal site')
+        p.add_link(site[0].text_content(), None)
       yield p
 
   def scrape_mayor(self, div, organization):

@@ -89,13 +89,5 @@ class BurlingtonPersonScraper(CanadianScraper):
 
       if 'mailto:' in link:
         continue
-      if 'facebook' in link:
-        councillor.add_link(link, 'facebook')
-      if 'twitter' in link:
-        councillor.add_link(link, 'twitter')
-      if 'linkedin' in link:
-        councillor.add_link(link, 'linkedin')
-      if 'google' in link:
-        councillor.add_link(link, 'google plus')
       else:
-        councillor.add_link(link, 'personal site')
+        councillor.add_link(link, None)

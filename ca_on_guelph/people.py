@@ -49,14 +49,14 @@ class GuelphPersonScraper(CanadianScraper):
 
       blog = page.xpath('//a[contains(text(),"Blog")]')
       if blog:
-        p.add_link(blog[0].attrib['href'], 'blog')
+        p.add_link(blog[0].attrib['href'], None)
 
       facebook = page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')
       if facebook:
-        p.add_link(facebook[0].attrib['href'], 'facebook')
+        p.add_link(facebook[0].attrib['href'], None)
       twitter = page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')
       if twitter:
-        p.add_link(twitter[0].attrib['href'], 'twitter')
+        p.add_link(twitter[0].attrib['href'], None)
       yield p
 
   def scrape_mayor(self, div, organization):
@@ -70,22 +70,19 @@ class GuelphPersonScraper(CanadianScraper):
 
     phone = div.xpath('.//text()[3]')[0]
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
-    blog = div.xpath('.//a[2]')[0].attrib['href']
 
     page = lxmlize(url)
 
     address = re.findall(r'Address: (.*)Phone', page.xpath('//div[@class="entry-content"]')[0].text_content())[0]
     fax = re.findall(r'Fax:(.*)Email', page.xpath('//div[@class="entry-content"]')[0].text_content())[0]
-    facebook = page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href']
-    twitter = page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href']
 
     p.add_contact('voice', phone, 'office')
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'office')
     p.add_contact('fax', fax, 'office')
-    p.add_link(blog, 'blog')
-    p.add_link(facebook, 'facebook')
-    p.add_link(twitter, 'twitter')
+    p.add_link(div.xpath('.//a[2]')[0].attrib['href'], None)
+    p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href'], None)
+    p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href'], None)
     p.image = page.xpath('//div[@class="entry-content"]/div/img/@src')[0]
 
     return p

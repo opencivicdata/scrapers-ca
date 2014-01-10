@@ -42,8 +42,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
 
       website = councillor.xpath('.//p[contains(text(), "Website")]/a')
       if website:
-        website = website[0].attrib['href']
-        p.add_link(website, 'personal site')
+        p.add_link(website[0].attrib['href'], None)
 
       yield p
 

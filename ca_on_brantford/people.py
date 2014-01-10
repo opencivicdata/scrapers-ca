@@ -51,8 +51,7 @@ class BrantfordPersonScraper(CanadianScraper):
         p.add_contact('fax', fax, None)
 
       if len(page.xpath('//div[@id="centre_content"]//a')) > 2:
-        site = page.xpath('//div[@id="centre_content"]//a')[-1].attrib['href']
-        p.add_link(site, 'personal site')
+        p.add_link(page.xpath('//div[@id="centre_content"]//a')[-1].attrib['href'], None)
       yield p
 
 
@@ -89,13 +88,5 @@ def get_links(councillor, div):
 
     if 'mailto:' in link:
       continue
-    if 'facebook' in link:
-      councillor.add_link(link, 'facebook')
-    if 'twitter' in link:
-      councillor.add_link(link, 'twitter')
-    if 'linkedin' in link:
-      councillor.add_link(link, 'linkedin')
-    if 'google' in link:
-      councillor.add_link(link, 'google plus')
     else:
-      councillor.add_link(link, 'personal site')
+      councillor.add_link(link, None)

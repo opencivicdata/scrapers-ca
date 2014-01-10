@@ -46,7 +46,7 @@ class PickeringPersonScraper(CanadianScraper):
         if 'Profile' in link.text_content():
           p.add_source(link.attrib['href'])
         else:
-          p.add_link(link.attrib['href'], 'personal site')
+          p.add_link(link.attrib['href'], None)
 
       if role == 'mayor':
         add_contacts(p, mayor_contacts)

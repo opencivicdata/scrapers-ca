@@ -60,5 +60,5 @@ class NewBrunswickPersonScraper(Scraper):
           if email:
             p.add_contact('email', email, None)
           if site:
-            p.add_link(site, 'district site')
+            p.add_link(site, None)
           yield p

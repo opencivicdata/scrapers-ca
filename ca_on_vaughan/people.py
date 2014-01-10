@@ -55,12 +55,9 @@ class VaughanPersonScraper(CanadianScraper):
       sites = page.xpath('//div[@id="WebPartWPQ5"]')[0]
 
       if page.xpath('.//a[contains(@href,"facebook")]'):
-        facebook = page.xpath('.//a[contains(@href,"facebook")]')[0].attrib['href']
-        p.add_link(facebook, 'facebook')
+        p.add_link(page.xpath('.//a[contains(@href,"facebook")]')[0].attrib['href'], None)
       if page.xpath('.//a[contains(@href,"twitter")]'):
-        twitter = page.xpath('.//a[contains(@href,"twitter")]')[0].attrib['href']
-        p.add_link(twitter, 'facebook')
+        p.add_link(page.xpath('.//a[contains(@href,"twitter")]')[0].attrib['href'], None)
       if page.xpath('.//a[contains(@href,"youtube")]'):
-        youtube = page.xpath('.//a[contains(@href, "youtube")]')[0].attrib['href']
-        p.add_link(youtube, 'youtube')
+        p.add_link(page.xpath('.//a[contains(@href, "youtube")]')[0].attrib['href'], None)
       yield p

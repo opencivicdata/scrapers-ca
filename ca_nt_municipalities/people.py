@@ -44,6 +44,5 @@ class NorthwestTerritoriesPersonScraper(Scraper):
       p.add_contact('email', email, None)
 
       if 'Website' in councillor.xpath('./parent::p')[0].text_content():
-        site = councillor.xpath('./parent::p//a')[1].attrib['href']
-        p.add_link(site, 'web page')
+        p.add_link(councillor.xpath('./parent::p//a')[1].attrib['href'], None)
       yield p

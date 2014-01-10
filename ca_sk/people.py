@@ -38,8 +38,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
       email = contact.xpath('./td[3]//a[contains(@href, "mailto:")]/text()')[0]
       website = contact.xpath('./td[3]//div[3]//a')
       if website:
-        website = website[0].text_content()
-        p.add_link(website, 'website')
+        p.add_link(website[0].text_content(), None)
 
       p.add_contact('address', office_address, 'Legislative Building')
       p.add_contact('address', constituency_address, 'constituency')

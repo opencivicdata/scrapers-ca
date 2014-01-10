@@ -40,8 +40,7 @@ class GatineauPersonScraper(CanadianScraper):
       p.image = content.xpath('//table//td/img/@src')[0]
 
       if "site" in content.text_content():
-        site = content.xpath('.//a')[1].attrib['href']
-        p.add_link(site, 'personal site')
+        p.add_link(content.xpath('.//a')[1].attrib['href'], None)
 
       yield p
 

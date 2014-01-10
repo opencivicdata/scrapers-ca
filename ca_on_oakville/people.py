@@ -52,10 +52,8 @@ class OakvillePersonScraper(CanadianScraper):
     mayor.add_contact('email', email, None)
 
     # extra sites
-    twitter = info.xpath('.//a[contains(@href, "twitter")]')[0].attrib['href']
-    facebook = info.xpath('.//a[contains(@href, "facebook")]')[0].attrib['href']
-    mayor.add_link(twitter, 'twitter')
-    mayor.add_link(facebook, 'facebook')
+    mayor.add_link(info.xpath('.//a[contains(@href, "twitter")]')[0].attrib['href'], None)
+    mayor.add_link(info.xpath('.//a[contains(@href, "facebook")]')[0].attrib['href'], None)
 
   def scrape_councillor(self, url, councillor, organization):
     page = lxmlize(url)
@@ -92,11 +90,8 @@ class OakvillePersonScraper(CanadianScraper):
 
     # extra links
     if "Twitter" in info:
-      link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "twitter")]')[0].attrib['href']
-      councillor.add_link(link, 'twitter')
+      councillor.add_link(page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "twitter")]')[0].attrib['href'], None)
     if "Facebook" in info:
-      link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "facebook")]')[0].attrib['href']
-      councillor.add_link(link, 'facebook')
+      councillor.add_link(page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "facebook")]')[0].attrib['href'], None)
     if "LinkedIn" in info:
-      link = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "linkedin")]')[0].attrib['href']
-      councillor.add_link(link, 'linkedin')
+      councillor.add_link(page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "linkedin")]')[0].attrib['href'], None)
