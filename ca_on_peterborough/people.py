@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
@@ -72,4 +72,4 @@ class PeterboroughPersonScraper(CanadianScraper):
           number = line[i + 1] if not re.match(r'x[0-9]', line[i + 2]) else line[i + 1] + ' ' + line[i + 2]
         else:
           number = line[i + 1]
-        councillor.add_contact(contact_type, number, line[i - 1].strip())
+        councillor.add_contact(contact_type, number, CONTACT_DETAIL_NOTE_MAP[line[i - 1].strip()])

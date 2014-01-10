@@ -55,6 +55,6 @@ class LambtonPersonScraper(CanadianScraper):
       elif 'Tel' in contact_type:
         councillor.add_contact('voice', contact, note)
       elif 'email' in contact_type:
-        councillor.add_contact('email', contact, note)
+        councillor.add_contact('email', contact, None)
       else:
-        councillor.add_contact('voice', contact, note + ' ' + contact_type)
+        councillor.add_contact('voice', contact, note)

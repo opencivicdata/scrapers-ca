@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
@@ -36,5 +36,5 @@ class WoolwichPersonScraper(CanadianScraper):
       for contact in info:
         note, num = contact.split(':')
         num = num.strip().replace('(', '').replace(') ', '-').replace('extension ', 'x')
-        p.add_contact('voice', num, note)
+        p.add_contact(CONTACT_DETAIL_TYPE_MAP[note], num, CONTACT_DETAIL_NOTE_MAP[note])
       yield p

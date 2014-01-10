@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
@@ -63,7 +63,7 @@ class NewmarketPersonScraper(CanadianScraper):
         elif 'Phone' in contact_type:
           p.add_contact('voice', number, 'legislature')
         else:
-          p.add_contact('voice', number, contact_type.lower())
+          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], number, CONTACT_DETAIL_NOTE_MAP[contact_type])
       site = page.xpath('.//a[contains(text(), "http://")]')
       if site:
         p.add_link(site[0].text_content(), None)
@@ -81,7 +81,7 @@ class NewmarketPersonScraper(CanadianScraper):
       if 'Fax' in num_type:
         p.add_contact('fax', number, 'legislature')
       else:
-        p.add_contact('voice', number, num_type)
+        p.add_contact('voice', number, CONTACT_DETAIL_NOTE_MAP[num_type])
     email = div.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
     p.add_contact('email', email, None)
     return p

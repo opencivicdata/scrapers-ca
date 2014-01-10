@@ -42,6 +42,6 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
 
       p.add_contact('voice', general_phone, 'legislature')
       p.add_contact('fax', general_fax, 'legislature')
-      p.add_contact('email', general_email, 'legislature')
+      p.add_contact('email', general_email, None)
 
       yield p

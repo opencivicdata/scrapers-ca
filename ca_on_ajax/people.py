@@ -1,15 +1,10 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
 COUNCIL_PAGE = 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp'
-CONTACT_DETAIL_TYPE_MAP = {
-  'Email': 'email',
-  'Fax': 'fax',
-  'Phone': 'voice',
-}
 
 
 class AjaxPersonScraper(CanadianScraper):
@@ -46,7 +41,8 @@ class AjaxPersonScraper(CanadianScraper):
         contact_type = line.xpath('./td')[0].text_content().strip()
         contact = line.xpath('./td')[1].text_content().strip()
         if re.match(r'(Phone)|(Fax)|(Email)', contact_type):
-          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], contact, 'legislature')
+          contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type]
+          p.add_contact(contact_type, contact, None if contact_type == 'email' else 'legislature')
         else:
-          p.add_link(contact, contact_type)
+          p.add_link(contact, None)
       yield p

@@ -1,17 +1,11 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
 COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/councillors/'
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'
-CONTACT_DETAIL_TYPE_MAP = {
-  'Address': 'address',
-  'Email': 'email',
-  'Fax': 'fax',
-  'Phone': 'voice',
-}
 
 
 class SummersidePersonScraper(CanadianScraper):
@@ -45,7 +39,8 @@ class SummersidePersonScraper(CanadianScraper):
         contact_type = re.findall(r'([A-Z][a-z]+)', contacts[i - 1])[0]
         if contact_type != 'Address':
           contact = re.split(r'[A-Z]', contact)[0]
-        p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], contact, 'legislature')
+        contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type]
+        p.add_contact(contact_type, contact, None if contact_type == 'email' else 'legislature')
       yield p
 
   def scrape_mayor(self, organization):

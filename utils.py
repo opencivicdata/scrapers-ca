@@ -1,9 +1,57 @@
+# coding: utf-8
 from pupa.scrape import Jurisdiction, Scraper
 from pupa.models import Organization
 import os.path
 
 from scrapelib import urlopen
 import lxml.html
+
+CONTACT_DETAIL_TYPE_MAP = {
+  'Address': 'address',
+  'bb': 'cell',
+  'bus': 'voice',
+  'Bus': 'voice',
+  'Bus.': 'voice',
+  'Business': 'voice',
+  'Cell': 'cell',
+  'Cell Phone': 'cell',
+  'Email': 'email',
+  'Fax': 'fax',
+  'Home': 'voice',
+  'Home Phone': 'voice',
+  'Home Phone*': 'voice',
+  'Office': 'voice',
+  'ph': 'voice',
+  u'ph\xc2': 'voice',
+  'Phone': 'voice',
+  'Res': 'voice',
+  'Res/Bus': 'voice',
+  'Residence': 'voice',
+  'Voice Mail': 'voice',
+}
+CONTACT_DETAIL_NOTE_MAP = {
+  'Address': 'legislature',
+  'bb': 'legislature',
+  'bus': 'legislature',
+  'Bus': 'legislature',
+  'Bus.': 'legislature',
+  'Business': 'legislature',
+  'Cell': 'legislature',
+  'Cell Phone': 'legislature',
+  'Email': None,
+  'Fax': 'legislature',
+  'Home': 'residence',
+  'Home Phone': 'residence',
+  'Home Phone*': 'residence',
+  'ph': 'legislature',
+  u'ph\xc2': 'legislature',
+  'Phone': 'legislature',
+  'Office': 'legislature',
+  'Res': 'residence',
+  'Res/Bus': 'residence',
+  'Residence': 'residence',
+  'Voice Mail': 'legislature',
+}
 
 
 class CanadianJurisdiction(Jurisdiction):

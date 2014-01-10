@@ -37,7 +37,7 @@ class GuelphPersonScraper(CanadianScraper):
 
       site = councillor.xpath('.//a[contains(text(),"Website")]')
       if site:
-        p.add_link('personal site', site[0].attrib['href'])
+        p.add_link(site[0].attrib['href'], None)
 
       page = lxmlize(url)
 

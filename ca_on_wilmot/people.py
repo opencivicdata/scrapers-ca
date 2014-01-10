@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
@@ -47,7 +47,7 @@ class WilmotPersonScraper(CanadianScraper):
         if 'fax' in contact:
           p.add_contact('fax', base_info[i + 1], 'legislature')
         else:
-          p.add_contact('voice', base_info[i + 1], contact.strip())
+          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact.strip()], base_info[i + 1], CONTACT_DETAIL_NOTE_MAP[contact.strip()])
       email = councillor.xpath('./parent::p/following-sibling::p/a[contains(@href, "mailto")]/text()')[0]
       p.add_contact('email', email, None)
       yield p

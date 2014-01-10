@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
@@ -57,7 +57,7 @@ class ThunderBayPersonScraper(CanadianScraper):
         elif 'Email' in contact_type:
           break
         else:
-          p.add_contact('voice', contact, contact_type.strip())
+          p.add_contact('voice', contact, CONTACT_DETAIL_NOTE_MAP[contact_type.strip()])
 
       email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
       p.add_contact('email', email, None)

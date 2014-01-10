@@ -78,7 +78,7 @@ def scrape_4(name, url, organization, image):
   email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
-  p.add_contact('email', email, 'legislature')
+  p.add_contact('email', email, None)
   p.image = image
   return p
 

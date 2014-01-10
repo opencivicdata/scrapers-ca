@@ -44,9 +44,9 @@ class EdmontonPersonScraper(CanadianScraper):
           continue
         if 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
           value = contact.xpath('./td/a/text()')[0]
-          p.add_link(value, contact_type)
-          continue
-        p.add_contact(contact_type, value, 'legislature')
+          p.add_link(value, None)
+        else:
+          p.add_contact(contact_type, value, 'legislature')
       print p._contact_details
       yield p
 

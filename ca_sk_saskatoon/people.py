@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
@@ -43,7 +43,7 @@ class SaskatoonPersonScraper(CanadianScraper):
         if 'Fax' in contact_type:
           p.add_contact('fax', value, 'legislature')
         if 'Phone' in contact_type:
-          p.add_contact('voice', value, contact_type.replace('Phone:', ''))
+          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], value, CONTACT_DETAIL_NOTE_MAP[contact_type.replace('Phone:', '')])
         if 'Email' in contact_type:
           p.add_contact('email', value, None)
       yield p
