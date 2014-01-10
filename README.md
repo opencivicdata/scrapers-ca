@@ -1,4 +1,4 @@
-## Canadian Legislative Scrapers
+# Canadian Legislative Scrapers
 
 See [blank-pupa](https://github.com/opennorth/blank-pupa) to install dependencies and get started.
 
