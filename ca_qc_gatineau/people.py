@@ -35,7 +35,7 @@ class GatineauPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_membership(organization, role='councillor')
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('email', email, None)
       p.image = content.xpath('//table//td/img/@src')[0]
 
@@ -59,7 +59,7 @@ class GatineauPersonScraper(CanadianScraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
     p.add_membership(organization, role='mayor')
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     p.add_contact('email', email, None)
 
     return p

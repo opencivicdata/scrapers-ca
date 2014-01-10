@@ -42,7 +42,7 @@ class BurlingtonPersonScraper(CanadianScraper):
 
       if address:
         p.add_contact('address', address[0].text_content(), 'office')
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('fax', fax, 'office')
       p.add_contact('email', email, None)
 
@@ -73,7 +73,7 @@ class BurlingtonPersonScraper(CanadianScraper):
     p.add_membership(organization, role='mayor')
 
     p.image = page.xpath('//div[@id="grey-220"]/p/img/@src')[0]
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     p.add_contact('fax', fax, 'office')
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'office')

@@ -64,13 +64,13 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_contact('address', address, note)
         if "Phone: " in contact[4]:
           phone = contact[4].replace("Phone: ", '').strip()
-          p.add_contact('phone', phone, note)
+          p.add_contact('voice', phone, note)
         if len(contact) > 5 and "Fax:" in contact[6]:
           fax = contact[6].replace("Fax: ", '').strip()
           p.add_contact('fax', fax, note)
       else:
         phone = contact[0].strip()
-        p.add_contact('phone', phone, note)
+        p.add_contact('voice', phone, note)
         fax = contact[2].strip()
         p.add_contact('fax', fax, note)
     return p
@@ -95,5 +95,5 @@ class TorontoPersonScraper(CanadianScraper):
     phone = info.xpath('.//p[3]/text()')[0]
 
     p.add_contact('address', address, 'office')
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     return p

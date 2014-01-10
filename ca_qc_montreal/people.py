@@ -43,9 +43,9 @@ class MontrealPersonScraper(CanadianScraper):
     if line['ADRESSE_HOTEL_DE_VILLE']:
       p.add_contact('address', line['ADRESSE_HOTEL_DE_VILLE'], 'city')
     if line['TELEPHONE_ARRONDISSEMENT']:
-      p.add_contact('phone', line['TELEPHONE_ARRONDISSEMENT'], 'district')
+      p.add_contact('voice', line['TELEPHONE_ARRONDISSEMENT'], 'district')
     if line['TELEPHONE_HOTEL_DE_VILLE']:
-      p.add_contact('phone', line['TELEPHONE_HOTEL_DE_VILLE'], 'city')
+      p.add_contact('voice', line['TELEPHONE_HOTEL_DE_VILLE'], 'city')
     if line['TELECOPIE_ARRONDISSEMENT']:
       p.add_contact('fax', line['TELECOPIE_ARRONDISSEMENT'], 'district')
     if line['COURRIEL']:

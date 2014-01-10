@@ -67,7 +67,7 @@ def scrape_mayor(organization):
   fax = page.xpath('.//address/following-sibling::table/tbody/tr/td/text()')[1]
 
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('fax', fax, 'office')
 
   return p

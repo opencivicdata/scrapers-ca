@@ -37,7 +37,7 @@ class WellesleyPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)
       p.add_contact('address', address, 'office')
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('email', email, None)
       p.image = image
       yield p

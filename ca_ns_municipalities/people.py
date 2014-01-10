@@ -51,7 +51,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
         fax = lines.pop(0)
 
       p.add_contact('address', address, None)
-      p.add_contact('phone', phone, None)
+      p.add_contact('voice', phone, None)
       p.add_contact('fax', fax, None)
       for i, email in enumerate(emails):
         regex = name.split()[-1].lower() + '|' + '|'.join(district.split()[-2:]).replace('of', '').lower()

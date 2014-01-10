@@ -41,7 +41,7 @@ class CambridgePersonScraper(CanadianScraper):
       p.add_source(url)
       p.add_membership(organization, role=role)
       p.add_contact('address', address, 'office')
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('fax', fax, 'office')
       p.add_contact('email', email, None)
       p.image = image

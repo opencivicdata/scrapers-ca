@@ -51,10 +51,10 @@ class LambtonPersonScraper(CanadianScraper):
         contact = re.findall(r'[0-9]{3}[- ][0-9]{3}-[0-9]{4}', contact)[0].replace(' ', '-')
 
       if 'Fax' in contact_type:
-        councillor.add_contact('Fax', contact, note)
+        councillor.add_contact('fax', contact, note)
       elif 'Tel' in contact_type:
-        councillor.add_contact('Phone', contact, note)
+        councillor.add_contact('voice', contact, note)
       elif 'email' in contact_type:
         councillor.add_contact('email', contact, note)
       else:
-        councillor.add_contact('Phone', contact, note + ' ' + contact_type)
+        councillor.add_contact('voice', contact, note + ' ' + contact_type)

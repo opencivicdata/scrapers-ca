@@ -30,7 +30,7 @@ class SherbrookePersonScraper(CanadianScraper):
       p.add_membership(organization, role=role)
       p.image = page.xpath('//div[@id="conseiller-photo"]//img/@src')[0]
       phone = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')[1].strip().replace(' ', '-')
-      p.add_contact('phone', phone, None)
+      p.add_contact('voice', phone, None)
       email = page.xpath('//a[contains(@href, "mailto:")]/@href')
       if email:
         email = email[0].split(':')[1]

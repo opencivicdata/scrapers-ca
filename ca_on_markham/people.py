@@ -58,7 +58,7 @@ class MarkhamPersonScraper(CanadianScraper):
       if website:
         p.add_link(website[0], 'personal site')
       p.add_contact('address', address, 'office')
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('email', email, None)
 
       get_links(p, contact)
@@ -77,7 +77,7 @@ def scrape_4(name, url, organization, image):
   phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
   email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('email', email, 'office')
   p.image = image
   return p
@@ -95,7 +95,7 @@ def scrape_mayor(url, organization):
   p.add_source(url)
   p.add_membership(organization, 'mayor')
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('email', email, None)
   yield p
 

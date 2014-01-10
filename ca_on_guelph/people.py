@@ -29,7 +29,7 @@ class GuelphPersonScraper(CanadianScraper):
       p.add_source(url)
       p.add_membership(organization, role='councillor')
 
-      p.add_contact('phone', councillor.xpath('.//text()[4]')[0].replace('x', 'ext.'), 'office')
+      p.add_contact('voice', councillor.xpath('.//text()[4]')[0].replace('x', 'ext.'), 'office')
       email = councillor.xpath('.//a[contains(@href,"mailto:")]')
       if email:
         email = email[0].text_content()
@@ -79,7 +79,7 @@ class GuelphPersonScraper(CanadianScraper):
     facebook = page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href']
     twitter = page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href']
 
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'office')
     p.add_contact('fax', fax, 'office')

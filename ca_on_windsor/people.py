@@ -26,7 +26,7 @@ class WindsorPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role='councillor')
       p.add_contact('address', address, 'city hall')
-      p.add_contact('phone', phone, 'city hall')
+      p.add_contact('voice', phone, 'city hall')
       p.add_contact('email', email, None)
       p.image = councillor.xpath('./img/@src')[0]
 
@@ -44,7 +44,7 @@ class WindsorPersonScraper(CanadianScraper):
     p.add_source(MAYOR_PAGE)
     p.add_membership(organization, role='mayor')
     p.add_contact('address', address, 'city hall')
-    p.add_contact('phone', phone, 'city hall')
+    p.add_contact('voice', phone, 'city hall')
     p.add_contact('fax', fax, 'city hall')
     p.add_contact('email', email, None)
     p.image = page.xpath('//div[@class="sectioning"]//img[contains(@title, "Mayor")]/@src')[0]

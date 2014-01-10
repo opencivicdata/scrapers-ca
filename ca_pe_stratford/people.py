@@ -38,7 +38,7 @@ class StratfordPersonScraper(CanadianScraper):
         email = councillor.xpath('./following-sibling::p//a[contains(@href, "mailto")]')
       email = email[0].text_content()
 
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('email', email, None)
 
       yield p
@@ -54,5 +54,5 @@ class StratfordPersonScraper(CanadianScraper):
     p.add_membership(organization, role='mayor')
     p.image = page.xpath('//div[@class="entry-content"]/p/a/img/@src')[0]
     p.add_contact('email', email, None)
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     return p

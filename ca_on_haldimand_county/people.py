@@ -49,7 +49,7 @@ class HaldimandCountyPersonScraper(CanadianScraper):
             p.add_contact('fax', num, 'office')
           else:
             num = field.replace('Telephone: ', '').strip().replace(' ', '-')
-            p.add_contact('phone', num, 'office')
+            p.add_contact('voice', num, 'office')
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)
       yield p

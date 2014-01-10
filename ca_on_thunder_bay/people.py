@@ -53,11 +53,11 @@ class ThunderBayPersonScraper(CanadianScraper):
         contact_type, contact = contact.split(':')
         contact = contact.replace('(', '').replace(') ', '-').strip()
         if 'Fax' in contact_type:
-          p.add_contact('Fax', contact, 'office')
+          p.add_contact('fax', contact, 'office')
         elif 'Email' in contact_type:
           break
         else:
-          p.add_contact('Phone', contact, contact_type.strip())
+          p.add_contact('voice', contact, contact_type.strip())
 
       email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
       p.add_contact('email', email, None)

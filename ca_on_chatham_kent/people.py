@@ -43,5 +43,5 @@ class ChathamKentPersonScraper(CanadianScraper):
         contacts = page.xpath('//div[@class="div_contact_us_content_kv"]/div')
         for contact in contacts:
           contact_type, contact = contact.text_content().split(':')
-          p.add_contact(contact_type.lower().strip(), contact.strip(), 'office')
+          p.add_contact(contact_type.lower().strip(), contact.strip(), 'office') # @todo fix contact_type
         yield p

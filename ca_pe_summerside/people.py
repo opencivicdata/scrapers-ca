@@ -39,7 +39,7 @@ class SummersidePersonScraper(CanadianScraper):
         contact_type = re.findall(r'([A-Z][a-z]+)', contacts[i - 1])[0]
         if contact_type != 'Address':
           contact = re.split(r'[A-Z]', contact)[0]
-        p.add_contact(contact_type.lower(), contact, 'office')
+        p.add_contact(contact_type.lower(), contact, 'office') # @todo fix contact_type
       yield p
 
   def scrape_mayor(self, organization):
@@ -57,7 +57,7 @@ class SummersidePersonScraper(CanadianScraper):
     address = info[3].text_content().replace('by mail: ', '') + ' ' + info[4].text_content()
     email = info[5].xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     p.add_contact('address', address, 'office')
     p.add_contact('email', email, None)
 

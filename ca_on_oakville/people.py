@@ -47,7 +47,7 @@ class OakvillePersonScraper(CanadianScraper):
     email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
     # save contact details to object
-    mayor.add_contact('phone', phone, 'office')
+    mayor.add_contact('voice', phone, 'office')
     mayor.add_contact('fax', fax, 'office')
     mayor.add_contact('email', email, None)
 
@@ -84,7 +84,7 @@ class OakvillePersonScraper(CanadianScraper):
     # save contact info to councillor object
     if address:
       councillor.add_contact('address', address, 'office')
-    councillor.add_contact('phone', str(phone), 'office')
+    councillor.add_contact('voice', str(phone), 'office')
     if fax:
       councillor.add_contact('fax', str(fax[0]), 'office')
     councillor.add_contact('email', emails[0].text_content(), councillor.name)

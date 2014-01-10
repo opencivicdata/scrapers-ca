@@ -47,6 +47,6 @@ class ManitobaPersonScraper(Scraper):
 
         p.add_contact('address', address, 'office')
         p.add_contact('fax', fax, 'office')
-        p.add_contact('phone', phone, 'office')
+        p.add_contact('voice', phone, 'office')
         p.add_contact('email', email, None)
         yield p

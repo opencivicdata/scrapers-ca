@@ -39,7 +39,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
       for contact in contacts:
         if re.findall(r'[0-9]', contact):
           phone = contact.strip().replace(' ', '-')
-          p.add_contact('phone', phone, 'office')
+          p.add_contact('voice', phone, 'office')
       get_links(p, page.xpath('.//td[@class="ms-rteTableOddCol-0"]')[0])
       yield p
 

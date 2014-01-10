@@ -45,7 +45,7 @@ class BellevillePersonScraper(CanadianScraper):
         if contact_type == 'Fax':
           p.add_contact('fax', number, 'office')
         elif 'phone' in contact_type:
-          p.add_contact('phone', number, 'office')
+          p.add_contact('voice', number, 'office')
         else:
-          p.add_contact('phone', number, contact_type)
+          p.add_contact('voice', number, contact_type)
       yield p

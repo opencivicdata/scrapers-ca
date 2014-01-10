@@ -36,7 +36,7 @@ class NorthwestTerritoriesPersonScraper(Scraper):
           p.add_contact('address', contact.strip(), 'office')
         if 'Tel' in contact:
           contact = contact.replace('Tel. ', '').replace('(', '').replace(') ', '-').strip()
-          p.add_contact('phone', contact, 'office')
+          p.add_contact('voice', contact, 'office')
         if 'Fax' in contact:
           contact = contact.replace('Fax ', '').replace('(', '').replace(') ', '-').strip()
           p.add_contact('fax', contact, 'office')

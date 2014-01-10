@@ -54,7 +54,7 @@ class NewBrunswickPersonScraper(Scraper):
 
           p.add_contact('address', address, 'office')
           if phone:
-            p.add_contact('phone', phone, 'office')
+            p.add_contact('voice', phone, 'office')
           if fax:
             p.add_contact('fax', fax, 'office')
           if email:

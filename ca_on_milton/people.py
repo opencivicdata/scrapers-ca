@@ -40,5 +40,5 @@ class MiltonPersonScraper(CanadianScraper):
         if 'Fax' in num_type:
           p.add_contact('fax', number, 'office')
         else:
-          p.add_contact('phone', number, num_type)
+          p.add_contact('voice', number, num_type)
       yield p

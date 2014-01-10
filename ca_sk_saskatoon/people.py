@@ -43,7 +43,7 @@ class SaskatoonPersonScraper(CanadianScraper):
         if 'Fax' in contact_type:
           p.add_contact('Fax', value, 'office')
         if 'Phone' in contact_type:
-          p.add_contact('Phone', value, contact_type.replace('Phone:', ''))
+          p.add_contact('voice', value, contact_type.replace('Phone:', ''))
         if 'Email' in contact_type:
           p.add_contact('email', value, None)
       yield p
@@ -68,6 +68,6 @@ def scrape_mayor(url, organization):
   p.add_membership(organization, role='mayor')
   p.image = image
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('fax', fax, 'office')
   return p

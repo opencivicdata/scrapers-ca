@@ -60,7 +60,7 @@ class SaskatchewanPersonScraper(Scraper):
         if 'Phone' in line:
           phone = line.split(':')[1].replace('(', '').replace(') ', '-').strip()
           if phone:
-            contacts['phone'] = phone
+            contacts['voice'] = phone
         if 'Fax' in line:
           fax = line.split(':')[1].replace('(', '').replace(') ', '-').strip()
           if fax:

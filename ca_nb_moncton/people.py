@@ -31,13 +31,13 @@ class MonctonPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_membership(organization, role='councillor')
-      p.add_contact('Email', email, None)
+      p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]
 
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
       for phone in phone_nos:
-        p.add_contact('Phone', phone[0], None)
+        p.add_contact('voice', phone[0], None)
       yield p
 
 
@@ -59,7 +59,7 @@ def scrape_mayor(url, organization):
   email = info.xpath('.//a/@href')[0].split(':')[1].strip()
 
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('fax', fax, 'office')
   p.add_contact('email', email, None)
 

@@ -39,7 +39,7 @@ class GreaterSudburyPersonScraper(CanadianScraper):
       p.add_source(councillor.attrib['href'])
       p.add_membership(organization, role='councillor')
       p.add_contact('address', address, 'City Council general mailing address')
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('fax', fax, 'office')
       p.add_contact('email', email, 'office')
       p.image = page.xpath('//article[@id="primary"]//img/@src')[1]
@@ -68,7 +68,7 @@ class GreaterSudburyPersonScraper(CanadianScraper):
     p.add_source(contact_url)
     p.add_membership(organization, role='mayor')
     p.add_contact('address', address, 'office')
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     p.add_contact('fax', fax, 'office')
     p.add_contact('email', email, None)
     return p

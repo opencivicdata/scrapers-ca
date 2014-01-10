@@ -42,7 +42,7 @@ class CaledonPersonScraper(CanadianScraper):
 
       p.add_contact('address', address, 'office')
       p.add_contact('email', email, None)
-      p.add_contact('phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       p.add_contact('fax', fax, 'office')
 
       yield p
@@ -61,5 +61,5 @@ def scrape_mayor(url, organization):
   p.add_membership(organization, role='mayor')
   p.image = page.xpath('//h2[contains(text(), "About me")]/img/@src')[0]
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   return p

@@ -40,8 +40,8 @@ class LaSallePersonScraper(CanadianScraper):
 
       phone = re.findall(r'(?<=phone:)(.*)(?=home)', councillor.text_content(), flags=re.DOTALL)
       if phone:
-        p.add_contact('Phone', phone[0].strip(), None)
+        p.add_contact('voice', phone[0].strip(), None)
 
       home_phone = re.findall(r'(?<=home phone:)(.*)', councillor.text_content(), flags=re.DOTALL)[0]
-      p.add_contact('Phone', home_phone.strip(), 'home')
+      p.add_contact('voice', home_phone.strip(), 'home')
       yield p

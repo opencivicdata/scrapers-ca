@@ -44,11 +44,11 @@ class WoodBuffaloPersonScraper(CanadianScraper):
           contact_type, contact = contact.split('(')
         contact = contact.replace(') ', '-').strip()
         if 'T' in contact_type:
-          p.add_contact('phone', contact, 'office')
+          p.add_contact('voice', contact, 'office')
         if 'H' in contact_type:
-          p.add_contact('phone', contact, 'Home')
+          p.add_contact('voice', contact, 'Home')
         if 'C' in contact_type:
-          p.add_contact('phone', contact, 'Cell')
+          p.add_contact('voice', contact, 'Cell')
         if 'F' in contact_type:
           p.add_contact('fax', contact, 'office')
       email = page.xpath('//div[@id="content"]//div[@class="block"]//a[contains(@href, "mailto:")]')[0].text_content()
@@ -73,7 +73,7 @@ def scrape_mayor(url, organization):
   p.add_source(contact_url)
   p.add_membership(organization, role='mayor')
   p.add_contact('address', address, 'office')
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('fax', fax, 'office')
   p.image = image
   return p

@@ -42,10 +42,10 @@ class BrantfordPersonScraper(CanadianScraper):
       numbers = page.xpath('//div[@id="centre_content"]//p[contains(text(),"-")]')[0].text_content()
       if 'tel' in numbers:
         phone = re.findall(r'(.*)tel', numbers)[0].strip().replace(' ', '-').replace("\\xc2", '').replace("\\xa0", '-')
-        p.add_contact('phone', phone, None)
+        p.add_contact('voice', phone, None)
       if 'cell' in numbers:
         cell = re.findall(r'(.*)cell', numbers)[0].strip().replace(' ', '-')
-        p.add_contact('phone', cell, 'cell')
+        p.add_contact('voice', cell, 'cell')
       if 'fax' in numbers:
         fax = re.findall(r'(.*)fax', numbers)[0].strip().replace(' ', '-')
         p.add_contact('fax', fax, None)
@@ -75,7 +75,7 @@ def scrape_mayor(organization):
 
   p.add_contact('address', address, 'office')
   p.add_contact('email', email, None)
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
 
   get_links(p, page.xpath('//ul[@id="social_media"]')[0])
 

@@ -71,7 +71,7 @@ class YukonPersonScraper(Scraper):
           p.add_source(COUNCIL_PAGE)
           p.add_membership(organization, role=role)
           p.add_contact('address', address, None)
-          p.add_contact('phone', phone, None)
+          p.add_contact('voice', phone, None)
           p.add_contact('email', email, None)
           if fax:
             p.add_contact('fax', fax, None)

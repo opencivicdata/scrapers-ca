@@ -58,5 +58,5 @@ class PickeringPersonScraper(CanadianScraper):
 def add_contacts(p, contacts):
   phone = re.findall(r'[0-9]{3}\.[0-9]{3}\.[0-9]{4}', contacts[0])[0]
   fax = re.findall(r'[0-9]{3}\.[0-9]{3}\.[0-9]{4}', contacts[1])[0]
-  p.add_contact('phone', phone, 'office')
+  p.add_contact('voice', phone, 'office')
   p.add_contact('fax', fax, 'office')

@@ -60,14 +60,14 @@ class PeterboroughPersonScraper(CanadianScraper):
 
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'office')
-    p.add_contact('phone', phone, 'office')
+    p.add_contact('voice', phone, 'office')
     p.add_contact('fax', fax, 'office')
     return p
 
   def get_tel_numbers(self, line, councillor):
     for i, x in enumerate(line):
       if u'\xbb' in x and not 'E-Mail' in line[i - 1]:
-        contact_type = "Phone" if not "Fax" in line[i - 1] else "Fax"
+        contact_type = "voice" if not "Fax" in line[i - 1] else "fax"
         if 'Voice Mail' in line[i - 1]:
           number = line[i + 1] if not re.match(r'x[0-9]', line[i + 2]) else line[i + 1] + ' ' + line[i + 2]
         else:

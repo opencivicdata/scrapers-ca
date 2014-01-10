@@ -43,8 +43,8 @@ class SaskatchewanPersonScraper(CanadianScraper):
 
       p.add_contact('address', office_address, 'Legislative Building')
       p.add_contact('address', constituency_address, 'constituency')
-      p.add_contact('phone', office_phone, 'Legislative Building')
-      p.add_contact('phone', constituency_phone, 'constituency')
+      p.add_contact('voice', office_phone, 'Legislative Building')
+      p.add_contact('voice', constituency_phone, 'constituency')
       p.add_contact('fax', office_fax, 'Legislative Building')
       p.add_contact('fax', constituency_fax, 'constituency')
       p.add_contact('email', email, None)

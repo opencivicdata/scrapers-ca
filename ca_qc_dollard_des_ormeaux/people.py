@@ -40,7 +40,7 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
       if email:
         p.add_contact('email', email[0].text_content(), 'personal email')
 
-      p.add_contact('phone', general_phone, 'front office')
+      p.add_contact('voice', general_phone, 'front office')
       p.add_contact('fax', general_fax, 'front office')
       p.add_contact('email', general_email, 'front office')
 

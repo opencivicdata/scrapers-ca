@@ -41,5 +41,5 @@ class SaintJeromePersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)
       p.image = image[0]
-      p.add_contact('Phone', phone, 'office')
+      p.add_contact('voice', phone, 'office')
       yield p

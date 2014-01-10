@@ -35,12 +35,12 @@ class FrederictonPersonScraper(CanadianScraper):
 
       phone = re.findall(r'(?<=Home: \().*(?=Fax:)', councillor.text_content())[0]
       phone = re.sub(r'(?<=[0-9])(\)\D{1,2})(?=[0-9])', '-', phone).split()[0]
-      p.add_contact('phone', phone, 'Home')
+      p.add_contact('voice', phone, 'Home')
 
       phone = re.findall(r'(?<=Office: \().*(?=Fax:)', councillor.text_content())
       if phone:
         phone = phone[0].replace(') ', '-')
-        p.add_contact('phone', phone, 'office')
+        p.add_contact('voice', phone, 'office')
 
       fax = re.findall(r'(?<=Fax: \().*(?=E-mail)', councillor.text_content())[0].replace(') ', '-')
       p.add_contact('fax', fax, 'office')
