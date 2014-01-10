@@ -1,9 +1,9 @@
-lxml
--e git+http://github.com/opencivicdata/pupa.git#egg=pupa
--e git+http://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
+lxml==3.3.0beta3
+git+http://github.com/opencivicdata/pupa.git
+git+http://github.com/sunlightlabs/scrapelib.git
 
 # Maintenance
-autopep8
-GitPython
-pep8
-unidecode
+autopep8==0.9.7
+GitPython==0.3.2.RC1
+pep8==1.4.6
+Unidecode==0.04.14
