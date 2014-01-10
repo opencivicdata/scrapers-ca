@@ -29,6 +29,6 @@ class NorthDumfriesPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)
-      p.add_contact('voice', info[0], 'office')
+      p.add_contact('voice', info[0], 'legislature')
       p.add_contact('email', info[1], None)
       yield p

@@ -34,5 +34,5 @@ class BrossardPersonScraper(CanadianScraper):
       p.image = re.findall(r'\((.*)\)', image)[0]
 
       p.add_contact('email', email, None)
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('voice', phone, 'legislature')
       yield p

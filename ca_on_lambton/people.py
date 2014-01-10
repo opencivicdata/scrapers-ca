@@ -33,9 +33,9 @@ class LambtonPersonScraper(CanadianScraper):
 
       info = councillor.xpath('.//td[2]')[0].text_content()
       residential_info = re.findall(r'(?<=Residence:)(.*)(?=Municipal Office:)', info, flags=re.DOTALL)[0]
-      self.get_contacts(residential_info, 'Residence', p)
+      self.get_contacts(residential_info, 'residence', p)
       municipal_info = re.findall(r'(?<=Municipal Office:)(.*)', info, flags=re.DOTALL)[0]
-      self.get_contacts(municipal_info, 'Municipal Office', p)
+      self.get_contacts(municipal_info, 'legislature', p)
       yield p
 
   def get_contacts(self, text, note, councillor):

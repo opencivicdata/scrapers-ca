@@ -26,9 +26,9 @@ class CapeBretonPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role='councillor')
-      p.add_contact('address', address, 'office')
-      p.add_contact('voice', phone, 'office')
-      p.add_contact('fax', fax, 'office')
+      p.add_contact('address', address, 'legislature')
+      p.add_contact('voice', phone, 'legislature')
+      p.add_contact('fax', fax, 'legislature')
 
       councillor_url = councillor.xpath('.//a/@href')[0]
       p.add_source(councillor_url)

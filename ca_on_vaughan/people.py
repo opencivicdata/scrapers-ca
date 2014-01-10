@@ -44,8 +44,8 @@ class VaughanPersonScraper(CanadianScraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_membership(organization, role=role)
-      p.add_contact('voice', phone, 'office')
-      p.add_contact('fax', fax, 'office')
+      p.add_contact('voice', phone, 'legislature')
+      p.add_contact('fax', fax, 'legislature')
       p.add_contact('email', email, None)
 
       image = page.xpath('//img[contains(@alt, "Councillor")]/@src')

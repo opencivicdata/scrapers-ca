@@ -39,15 +39,15 @@ class MontrealPersonScraper(CanadianScraper):
     else:
       p.add_membership(organization, role='councillor')
     if line['ADRESSE_ARRONDISSEMENT']:
-      p.add_contact('address', line['ADRESSE_ARRONDISSEMENT'], 'office')
+      p.add_contact('address', line['ADRESSE_ARRONDISSEMENT'], 'legislature')
     if line['ADRESSE_HOTEL_DE_VILLE']:
       p.add_contact('address', line['ADRESSE_HOTEL_DE_VILLE'], 'legislature')
     if line['TELEPHONE_ARRONDISSEMENT']:
-      p.add_contact('voice', line['TELEPHONE_ARRONDISSEMENT'], 'office')
+      p.add_contact('voice', line['TELEPHONE_ARRONDISSEMENT'], 'legislature')
     if line['TELEPHONE_HOTEL_DE_VILLE']:
       p.add_contact('voice', line['TELEPHONE_HOTEL_DE_VILLE'], 'legislature')
     if line['TELECOPIE_ARRONDISSEMENT']:
-      p.add_contact('fax', line['TELECOPIE_ARRONDISSEMENT'], 'office')
+      p.add_contact('fax', line['TELECOPIE_ARRONDISSEMENT'], 'legislature')
     if line['TELECOPIE_HOTEL_DE_VILLE']:
       p.add_contact('fax', line['TELECOPIE_HOTEL_DE_VILLE'], 'legislature')
     if line['COURRIEL']:

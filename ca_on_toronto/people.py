@@ -94,6 +94,6 @@ class TorontoPersonScraper(CanadianScraper):
     address = (', ').join(info.xpath('.//p/text()')[0:6]).replace(",,", ",")
     phone = info.xpath('.//p[3]/text()')[0]
 
-    p.add_contact('address', address, 'office')
-    p.add_contact('voice', phone, 'office')
+    p.add_contact('address', address, 'legislature')
+    p.add_contact('voice', phone, 'legislature')
     return p

@@ -41,9 +41,9 @@ class BurlingtonPersonScraper(CanadianScraper):
       p.image = page.xpath('//div[@id="subnav"]//img/@src')[0]
 
       if address:
-        p.add_contact('address', address[0].text_content(), 'office')
-      p.add_contact('voice', phone, 'office')
-      p.add_contact('fax', fax, 'office')
+        p.add_contact('address', address[0].text_content(), 'legislature')
+      p.add_contact('voice', phone, 'legislature')
+      p.add_contact('fax', fax, 'legislature')
       p.add_contact('email', email, None)
 
       link_div = contact.xpath('following-sibling::p')[0]
@@ -73,10 +73,10 @@ class BurlingtonPersonScraper(CanadianScraper):
     p.add_membership(organization, role='mayor')
 
     p.image = page.xpath('//div[@id="grey-220"]/p/img/@src')[0]
-    p.add_contact('voice', phone, 'office')
-    p.add_contact('fax', fax, 'office')
+    p.add_contact('voice', phone, 'legislature')
+    p.add_contact('fax', fax, 'legislature')
     p.add_contact('email', email, None)
-    p.add_contact('address', address, 'office')
+    p.add_contact('address', address, 'legislature')
 
     self.get_links(p, link_div)
 

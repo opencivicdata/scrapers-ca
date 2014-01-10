@@ -43,10 +43,10 @@ class ChathamKentPersonScraper(CanadianScraper):
         p.image = page.xpath('//div[@class="pageContent"]//img/@src')[0]
 
         address = page.xpath('//div[@class="div_contact_us_content_address"]')[0].text_content()
-        p.add_contact('address', address, 'office')
+        p.add_contact('address', address, 'legislature')
 
         contacts = page.xpath('//div[@class="div_contact_us_content_kv"]/div')
         for contact in contacts:
           contact_type, contact = contact.text_content().split(':')
-          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type.strip()], contact.strip(), 'office')
+          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type.strip()], contact.strip(), 'legislature')
         yield p

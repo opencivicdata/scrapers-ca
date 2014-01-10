@@ -27,7 +27,7 @@ class SaguenayPersonScraper(CanadianScraper):
     m = Legislator(name=m_name, post_id='Saguenay')
     m.add_source(COUNCIL_PAGE)
     m.add_membership(organization, role='mayor')
-    m.add_contact('voice', m_phone, 'office')
+    m.add_contact('voice', m_phone, 'legislature')
     m.image = page.xpath('//div[@class="box"]/p/img/@src')[0]
 
     yield m
@@ -49,6 +49,6 @@ class SaguenayPersonScraper(CanadianScraper):
 
       p.image = councillor.xpath('./p/img/@src')[0]
 
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p

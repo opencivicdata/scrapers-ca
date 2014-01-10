@@ -45,8 +45,8 @@ class ManitobaPersonScraper(Scraper):
         else:
           p.add_membership(organization, role=positions[i])
 
-        p.add_contact('address', address, 'office')
-        p.add_contact('fax', fax, 'office')
-        p.add_contact('voice', phone, 'office')
+        p.add_contact('address', address, 'legislature')
+        p.add_contact('fax', fax, 'legislature')
+        p.add_contact('voice', phone, 'legislature')
         p.add_contact('email', email, None)
         yield p

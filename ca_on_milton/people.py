@@ -31,14 +31,14 @@ class MiltonPersonScraper(CanadianScraper):
 
       if councillor == councillors[0]:
         address = ', '.join(councillor.xpath('./td[3]/p[1]/text()')).replace('Email:', '').strip()
-        p.add_contact('address', address, 'office')
+        p.add_contact('address', address, 'legislature')
 
       numbers = councillor.xpath('./td[3]/p[2]/text()')
       for number in numbers:
         num_type, number = number.split(':')
         number = number.replace(', ext ', ' x').strip()
         if 'Fax' in num_type:
-          p.add_contact('fax', number, 'office')
+          p.add_contact('fax', number, 'legislature')
         else:
           p.add_contact('voice', number, num_type)
       yield p

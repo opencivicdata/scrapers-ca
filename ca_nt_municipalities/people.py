@@ -33,13 +33,13 @@ class NorthwestTerritoriesPersonScraper(Scraper):
       info = councillor.xpath('./ancestor::p/text()')
       for contact in info:
         if 'NT' in contact:
-          p.add_contact('address', contact.strip(), 'office')
+          p.add_contact('address', contact.strip(), 'legislature')
         if 'Tel' in contact:
           contact = contact.replace('Tel. ', '').replace('(', '').replace(') ', '-').strip()
-          p.add_contact('voice', contact, 'office')
+          p.add_contact('voice', contact, 'legislature')
         if 'Fax' in contact:
           contact = contact.replace('Fax ', '').replace('(', '').replace(') ', '-').strip()
-          p.add_contact('fax', contact, 'office')
+          p.add_contact('fax', contact, 'legislature')
       email = councillor.xpath('./parent::p//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)
 

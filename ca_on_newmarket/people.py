@@ -59,9 +59,9 @@ class NewmarketPersonScraper(CanadianScraper):
             number = number + ext[0].replace('Ext. ', ' x')
           contact_type = re.findall(r'[A-Za-z]+$', numbers[i - 1])[0]
         if 'Fax' in contact_type:
-          p.add_contact('fax', number, 'office')
+          p.add_contact('fax', number, 'legislature')
         elif 'Phone' in contact_type:
-          p.add_contact('voice', number, 'office')
+          p.add_contact('voice', number, 'legislature')
         else:
           p.add_contact('voice', number, contact_type.lower())
       site = page.xpath('.//a[contains(text(), "http://")]')
@@ -79,7 +79,7 @@ class NewmarketPersonScraper(CanadianScraper):
     for number in numbers:
       num_type, number = number.split(':')
       if 'Fax' in num_type:
-        p.add_contact('fax', number, 'office')
+        p.add_contact('fax', number, 'legislature')
       else:
         p.add_contact('voice', number, num_type)
     email = div.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()

@@ -30,7 +30,7 @@ class PeterboroughPersonScraper(CanadianScraper):
 
         info = councillor.xpath('./text()')
         address = info.pop(0)
-        p.add_contact('address', address, 'office')
+        p.add_contact('address', address, 'legislature')
 
         # get phone numbers
         for line in info:
@@ -59,9 +59,9 @@ class PeterboroughPersonScraper(CanadianScraper):
     p.add_membership(organization, role='mayor')
 
     p.add_contact('email', email, None)
-    p.add_contact('address', address, 'office')
-    p.add_contact('voice', phone, 'office')
-    p.add_contact('fax', fax, 'office')
+    p.add_contact('address', address, 'legislature')
+    p.add_contact('voice', phone, 'legislature')
+    p.add_contact('fax', fax, 'legislature')
     return p
 
   def get_tel_numbers(self, line, councillor):

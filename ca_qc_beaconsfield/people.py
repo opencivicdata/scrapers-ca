@@ -27,7 +27,7 @@ class BeaconsfieldPersonScraper(CanadianScraper):
         p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
         phone = phone.split(':')[1].strip().replace(' ', '-')
-        p.add_contact('voice', phone, 'office')
+        p.add_contact('voice', phone, 'legislature')
         script = councillor.xpath('.//parent::div/following-sibling::div/script')[0].text_content()
         p.add_contact('email', get_email(script), None)
         yield p
@@ -44,7 +44,7 @@ class BeaconsfieldPersonScraper(CanadianScraper):
       if phone:
         phone = phone[0]
         phone = phone.split(':')[1].strip().replace(' ', '-')
-        p.add_contact('voice', phone, 'office')
+        p.add_contact('voice', phone, 'legislature')
       script = councillor.xpath('.//parent::div/following-sibling::p/script')[0].text_content()
       p.add_contact('email', get_email(script), None)
       yield p

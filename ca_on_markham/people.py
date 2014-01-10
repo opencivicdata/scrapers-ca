@@ -57,8 +57,8 @@ class MarkhamPersonScraper(CanadianScraper):
       website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
       if website:
         p.add_link(website[0], None)
-      p.add_contact('address', address, 'office')
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('address', address, 'legislature')
+      p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
 
       get_links(p, contact)
@@ -76,9 +76,9 @@ def scrape_4(name, url, organization, image):
   address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
   phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
   email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
-  p.add_contact('address', address, 'office')
-  p.add_contact('voice', phone, 'office')
-  p.add_contact('email', email, 'office')
+  p.add_contact('address', address, 'legislature')
+  p.add_contact('voice', phone, 'legislature')
+  p.add_contact('email', email, 'legislature')
   p.image = image
   return p
 
@@ -94,8 +94,8 @@ def scrape_mayor(url, organization):
   p = Legislator(name=name, post_id='markham')
   p.add_source(url)
   p.add_membership(organization, 'mayor')
-  p.add_contact('address', address, 'office')
-  p.add_contact('voice', phone, 'office')
+  p.add_contact('address', address, 'legislature')
+  p.add_contact('voice', phone, 'legislature')
   p.add_contact('email', email, None)
   yield p
 

@@ -36,8 +36,8 @@ class WellesleyPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_membership(organization, role=role)
-      p.add_contact('address', address, 'office')
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('address', address, 'legislature')
+      p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       p.image = image
       yield p

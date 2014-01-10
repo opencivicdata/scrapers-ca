@@ -41,5 +41,5 @@ class QuebecPersonScraper(CanadianScraper):
         phone = phone[0].replace(' ', '-') + ' x' + phone[-1]
       else:
         phone = phone[0].replace(' ', '-')
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('voice', phone, 'legislature')
       yield p

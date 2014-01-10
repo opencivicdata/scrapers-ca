@@ -33,7 +33,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
       p.image = councillor.xpath('.//img/@src')[0]
 
       phone = councillor.xpath('.//p[contains(text(), "Telephone")]/text()')[0].split(':')[1]
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('voice', phone, 'legislature')
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')
       if email:
@@ -60,5 +60,5 @@ class CoteSaintLucPersonScraper(CanadianScraper):
     p.image = info.xpath('.//img/@src')[0]
     p.add_source(url)
     p.add_contact('email', email, None)
-    p.add_contact('voice', phone, 'office')
+    p.add_contact('voice', phone, 'legislature')
     return p

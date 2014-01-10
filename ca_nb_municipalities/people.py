@@ -52,11 +52,11 @@ class NewBrunswickPersonScraper(Scraper):
           else:
             p.add_membership(org, role='councillor')
 
-          p.add_contact('address', address, 'office')
+          p.add_contact('address', address, 'legislature')
           if phone:
-            p.add_contact('voice', phone, 'office')
+            p.add_contact('voice', phone, 'legislature')
           if fax:
-            p.add_contact('fax', fax, 'office')
+            p.add_contact('fax', fax, 'legislature')
           if email:
             p.add_contact('email', email, None)
           if site:

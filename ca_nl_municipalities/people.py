@@ -70,7 +70,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
         if email:
           p.add_contact('email', email, None)
         if address:
-          p.add_contact('address', address, 'office')
+          p.add_contact('address', address, 'legislature')
         yield p
     os.system('rm nl.pdf')
     os.system('rm nl.txt')

@@ -42,14 +42,14 @@ class HaldimandCountyPersonScraper(CanadianScraper):
       for i, field, in enumerate(info):
         if re.match(r'[0-9]+ [A-Z]', field):
           address = field + ', ' + info[i + 1] + ', ' + info[i + 2]
-          p.add_contact('address', address, 'office')
+          p.add_contact('address', address, 'legislature')
         if re.findall(r'[0-9]{3} [0-9]{3} [0-9]{4}', field):
           if 'Fax' in field:
             num = field.replace('Fax: ', '').strip().replace(' ', '-')
-            p.add_contact('fax', num, 'office')
+            p.add_contact('fax', num, 'legislature')
           else:
             num = field.replace('Telephone: ', '').strip().replace(' ', '-')
-            p.add_contact('voice', num, 'office')
+            p.add_contact('voice', num, 'legislature')
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)
       yield p

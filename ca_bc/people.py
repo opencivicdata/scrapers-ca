@@ -32,7 +32,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
 
       office = ', '.join(page.xpath('//i/b[contains(text(), "Office:")]/ancestor::p/text()'))
       office = re.sub(r'\s{2,}', ' ', office)
-      p.add_contact('address', office, 'office')
+      p.add_contact('address', office, 'legislature')
 
       constituency = page.xpath('//i/b[contains(text(), "Constituency:")]/ancestor::p/text()')
       if not 'TBD' in constituency[0]:
@@ -41,14 +41,14 @@ class BritishColumbiaPersonScraper(CanadianScraper):
 
       phones = page.xpath('//strong[contains(text(), "Phone:")]/ancestor::tr[1]')[0]
       office_phone = phones.xpath('./td[2]//text()')[0].strip().replace(' ', '-')
-      p.add_contact('voice', office_phone, 'office')
+      p.add_contact('voice', office_phone, 'legislature')
       constituency_phone = phones.xpath('./td[4]//text()')[0].strip().replace(' ', '-')
       if not 'TBD' in constituency_phone:
         p.add_contact('voice', constituency_phone, 'constituency')
 
       faxes = page.xpath('//strong[contains(text(), "Fax:")]/ancestor::tr[1]')[0]
       office_fax = faxes.xpath('./td[2]//text()')[0].strip().replace(' ', '-')
-      p.add_contact('fax', office_fax, 'office')
+      p.add_contact('fax', office_fax, 'legislature')
       constituency_fax = faxes.xpath('./td[4]//text()')[0].strip().replace(' ', '-')
       if not 'TBD' in constituency_fax:
         p.add_contact('fax', constituency_fax, 'constituency')

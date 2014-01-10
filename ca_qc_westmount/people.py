@@ -26,8 +26,8 @@ class WestmountPersonScraper(CanadianScraper):
     phone = mayor_info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
     fax = mayor_info.xpath('.//tr[3]/td[2]')[0].text_content().replace(' ', '-')
     email = mayor_info.xpath('.//tr[4]/td[2]')[0].text_content().strip()
-    p.add_contact('voice', phone, 'office')
-    p.add_contact('fax', fax, 'office')
+    p.add_contact('voice', phone, 'legislature')
+    p.add_contact('fax', fax, 'legislature')
     p.add_contact('email', email, None)
     yield p
 
@@ -45,6 +45,6 @@ class WestmountPersonScraper(CanadianScraper):
       p.add_source(url)
       p.add_membership(organization, role='councillor')
       p.image = info.xpath('./ancestor::td//div[not(@id="insert")]/img/@src')[0]
-      p.add_contact('voice', phone, 'office')
+      p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p

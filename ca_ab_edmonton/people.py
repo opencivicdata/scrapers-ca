@@ -34,7 +34,7 @@ class EdmontonPersonScraper(CanadianScraper):
       address = page.xpath('//address//p')
       if address:
         address = address[0].text_content()
-        p.add_contact('address', address, 'office')
+        p.add_contact('address', address, 'legislature')
 
       contacts = page.xpath('//table[@class="contactListing"]//tr')
       for contact in contacts:
@@ -46,7 +46,7 @@ class EdmontonPersonScraper(CanadianScraper):
           value = contact.xpath('./td/a/text()')[0]
           p.add_link(value, contact_type)
           continue
-        p.add_contact(contact_type, value, 'office')
+        p.add_contact(contact_type, value, 'legislature')
       print p._contact_details
       yield p
 
@@ -66,8 +66,8 @@ def scrape_mayor(organization):
   phone = page.xpath('.//address/following-sibling::table/tbody/tr/td/text()')[0]
   fax = page.xpath('.//address/following-sibling::table/tbody/tr/td/text()')[1]
 
-  p.add_contact('address', address, 'office')
-  p.add_contact('voice', phone, 'office')
-  p.add_contact('fax', fax, 'office')
+  p.add_contact('address', address, 'legislature')
+  p.add_contact('voice', phone, 'legislature')
+  p.add_contact('fax', fax, 'legislature')
 
   return p
