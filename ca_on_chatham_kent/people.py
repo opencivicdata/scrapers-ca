@@ -5,6 +5,11 @@ from utils import lxmlize, CanadianScraper
 import re
 
 COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx'
+CONTACT_DETAIL_TYPE_MAP = {
+  'Email': 'email',
+  'Fax': 'fax',
+  'Phone': 'voice',
+}
 
 
 class ChathamKentPersonScraper(CanadianScraper):
@@ -43,5 +48,5 @@ class ChathamKentPersonScraper(CanadianScraper):
         contacts = page.xpath('//div[@class="div_contact_us_content_kv"]/div')
         for contact in contacts:
           contact_type, contact = contact.text_content().split(':')
-          p.add_contact(contact_type.lower().strip(), contact.strip(), 'office') # @todo fix contact_type
+          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type.strip()], contact.strip(), 'office')
         yield p

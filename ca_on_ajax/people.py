@@ -5,12 +5,12 @@ from utils import lxmlize, CanadianScraper
 import re
 
 COUNCIL_PAGE = 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp'
-
 CONTACT_DETAIL_TYPE_MAP = {
   'Email': 'email',
   'Fax': 'fax',
   'Phone': 'voice',
 }
+
 
 class AjaxPersonScraper(CanadianScraper):
 
