@@ -41,7 +41,7 @@ class SaskatoonPersonScraper(CanadianScraper):
         contact_type = contact.replace(':', '').strip()
         value = contacts[i + 1].replace('(', '').replace(') ', '-').strip()
         if 'Fax' in contact_type:
-          p.add_contact('Fax', value, 'office')
+          p.add_contact('fax', value, 'office')
         if 'Phone' in contact_type:
           p.add_contact('voice', value, contact_type.replace('Phone:', ''))
         if 'Email' in contact_type:
