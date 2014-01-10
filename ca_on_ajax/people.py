@@ -6,6 +6,11 @@ import re
 
 COUNCIL_PAGE = 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp'
 
+CONTACT_DETAIL_TYPE_MAP = {
+  'Email': 'email',
+  'Fax': 'fax',
+  'Phone': 'voice',
+}
 
 class AjaxPersonScraper(CanadianScraper):
 
@@ -41,7 +46,7 @@ class AjaxPersonScraper(CanadianScraper):
         contact_type = line.xpath('./td')[0].text_content().strip()
         contact = line.xpath('./td')[1].text_content().strip()
         if re.match(r'(Phone)|(Fax)|(Email)', contact_type):
-          p.add_contact(contact_type, contact, 'office') # @todo fix contact_type
+          p.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], contact, 'office')
         else:
           p.add_link(contact, contact_type)
       yield p
