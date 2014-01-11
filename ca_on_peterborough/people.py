@@ -67,7 +67,13 @@ class PeterboroughPersonScraper(CanadianScraper):
   def get_tel_numbers(self, line, councillor):
     for i, x in enumerate(line):
       if u'\xbb' in x and not 'E-Mail' in line[i - 1]:
-        contact_type = "voice" if not "Fax" in line[i - 1] else "fax"
+        if "Fax" in line[i - 1]:
+          contact_type = 'fax'
+        elif 'Cell Phone' in line[i - 1]:
+          contact_type = 'cell'
+        else:
+          print line[i - 1]
+          contact_type = 'voice'
         if 'Voice Mail' in line[i - 1]:
           number = line[i + 1] if not re.match(r'x[0-9]', line[i + 2]) else line[i + 1] + ' ' + line[i + 2]
         else:

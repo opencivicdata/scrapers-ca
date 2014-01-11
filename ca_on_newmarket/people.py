@@ -50,8 +50,7 @@ class NewmarketPersonScraper(CanadianScraper):
         if i == 0:
           continue
         if '@' in contact:
-          email = re.findall(r'[a-z]+@.*\.ca', contact)[0]
-          p.add_contact('email', email, None)
+          continue # executive assistant email
         else:
           number = re.findall(r'([0-9]{3}-[0-9]{3}-[0-9]{4})', contact)[0]
           ext = re.findall(r'(Ext\. [0-9]{3,4})', contact)
@@ -81,7 +80,7 @@ class NewmarketPersonScraper(CanadianScraper):
       if 'Fax' in num_type:
         p.add_contact('fax', number, 'legislature')
       else:
-        p.add_contact('voice', number, CONTACT_DETAIL_NOTE_MAP[num_type])
+        p.add_contact(CONTACT_DETAIL_TYPE_MAP[num_type], number, CONTACT_DETAIL_NOTE_MAP[num_type])
     email = div.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
     p.add_contact('email', email, None)
     return p

@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
@@ -44,11 +44,11 @@ class LambtonPersonScraper(CanadianScraper):
     for i, contact in enumerate(text):
       if i == 0:
         continue
-      contact_type = re.findall(r'[A-Za-z]+', text[i - 1])[0]
+      contact_type = next(x.strip() for x in re.findall(r'[A-Za-z ]+', text[i - 1]) if x.strip() and x.strip() != 'ext')
       if '@' in contact:
         contact = contact.strip()
       else:
-        contact = re.findall(r'[0-9]{3}[- ][0-9]{3}-[0-9]{4}', contact)[0].replace(' ', '-')
+        contact = re.findall(r'[0-9]{3}[- ][0-9]{3}-[0-9]{4}(?: ext\. [0-9]+)?', contact)[0].replace(' ', '-')
 
       if 'Fax' in contact_type:
         councillor.add_contact('fax', contact, note)
@@ -57,4 +57,4 @@ class LambtonPersonScraper(CanadianScraper):
       elif 'email' in contact_type:
         councillor.add_contact('email', contact, None)
       else:
-        councillor.add_contact('voice', contact, note)
+        councillor.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], contact, note)

@@ -39,9 +39,9 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
         number = re.findall(r'[0-9]{3}.[0-9]{3}.[0-9]{4}', number)[0].replace('.', '-')
         if contact_type == 'Fax':
           p.add_contact('fax', number, 'legislature')
-        else if contact_type == 'Cell':
+        elif contact_type == 'Cell':
           p.add_contact('cell', number, 'legislature')
-        else if contact_type == 'Hm':
+        elif contact_type == 'Hm':
           p.add_contact('voice', number, 'residence')
         else:
           raise Exception('Unrecognized contact type %s' % contact_type)
