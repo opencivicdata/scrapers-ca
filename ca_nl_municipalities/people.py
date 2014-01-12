@@ -5,6 +5,7 @@ from utils import lxmlize
 import re
 import urllib2
 import os
+import subprocess
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
@@ -20,9 +21,8 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
     pdf.write(response)
     pdf.close()
 
-    os.system('pdftotext nl.pdf -layout')
-    txt = open('nl.txt', 'r')
-    pages = txt.read().split('Municipal Directory')[1:]
+    data = subprocess.check_output(['pdftotext', '-layout', 'nl.pdf', '-'])
+    pages = data.split('Municipal Directory')[1:]
     for page in pages:
       page = page.splitlines(True)
       column_index = {}
@@ -53,7 +53,8 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         if not name or not district:
           continue
 
-        org = Organization(name=district + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+        chamber = district + ' Municipal Council'
+        org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
         org.add_source(COUNCIL_PAGE)
         org.add_source(url)
         yield org
@@ -61,7 +62,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_membership(org, role='mayor')
+        p.add_membership(org, role='mayor', chamber=chamber)
         if phone:
           p.add_contact('voice', phone, None)
         # Im excluding fax because that column isn't properly aligned
@@ -73,4 +74,3 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
           p.add_contact('address', address, 'legislature')
         yield p
     os.system('rm nl.pdf')
-    os.system('rm nl.txt')

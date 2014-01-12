@@ -21,7 +21,8 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       else:
         title = ''.join(title[:2])
 
-      organization = Organization(name=title.lower() + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      chamber = title.lower() + ' Municipal Council'
+      organization = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       organization.add_source(COUNCIL_PAGE)
       yield organization
 
@@ -41,9 +42,9 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:
-          p.add_membership(organization, role='councillor')
+          p.add_membership(organization, role='councillor', chamber=chamber)
         else:
-          p.add_membership(organization, role=positions[i])
+          p.add_membership(organization, role=positions[i], chamber=chamber)
 
         p.add_contact('address', address, 'legislature')
         p.add_contact('fax', fax, 'legislature')

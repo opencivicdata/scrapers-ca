@@ -5,6 +5,7 @@ from utils import lxmlize
 import re
 import urllib2
 import os
+import subprocess
 
 COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
 # See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx
@@ -18,9 +19,7 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
     pdf.write(response)
     pdf.close()
 
-    os.system('pdftotext sk.pdf -layout')
-    txt = open('sk.txt', 'r')
-    data = txt.read()
+    data = subprocess.check_output(['pdftotext', '-layout', 'sk.pdf', '-'])
 
     data = data.splitlines(True)
     pages = []
@@ -51,7 +50,8 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
 
       district_name = district.pop(0).split(',')[0].lower()
 
-      org = Organization(name=district_name + ' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      chamber = district_name + ' Council'
+      org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
 
       councillors = []
@@ -84,11 +84,9 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
       for councillor in councillors:
         p = Legislator(post_id=district_name, name=councillor[0])
         p.add_source(COUNCIL_PAGE)
-        p.add_membership(org, role=councillor[1])
+        p.add_membership(org, role=councillor[1], chamber=chamber)
 
         for key, value in contacts.iteritems():
           p.add_contact(key, value, None)
         yield p
-    txt.close()
     os.system('rm sk.pdf')
-    os.system('rm sk.txt')

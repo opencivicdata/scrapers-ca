@@ -5,6 +5,7 @@ from utils import lxmlize, CanadianScraper
 import re
 import urllib2
 import os
+import subprocess
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
@@ -17,9 +18,7 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
     pdf.write(response)
     pdf.close()
 
-    os.system('pdftotext ns.pdf')
-    txt = open('ns.txt', 'r')
-    data = txt.read()
+    data = subprocess.check_output(['pdftotext', 'ns.pdf', '-'])
     emails = re.findall(r'(?<=E-mail: ).+', data)
     data = re.split(r'Mayor |Warden ', data)[1:]
     for i, mayor in enumerate(data):
@@ -31,13 +30,14 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
       if not re.findall(r'[0-9]', lines[0]):
         district = district + ' ' + lines.pop(0).strip()
 
-      org = Organization(name=district + ' municipal council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      chamber = district + ' Municipal Council'
+      org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
       yield org
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(org, role='mayor')
+      p.add_membership(org, role='mayor', chamber=chamber)
 
       address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:
@@ -61,6 +61,4 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
           p.add_contact('email', emails.pop(i), None)
       yield p
 
-    txt.close()
     os.system('rm ns.pdf')
-    os.system('rm ns.txt')

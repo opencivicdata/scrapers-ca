@@ -21,8 +21,8 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         page = lxmlize(district_url)
         district = page.xpath('//div[@class="pageHeader"]/h1/text()')[0].split('-')[1].strip()
 
-        org_name = district + org_types[org_type]
-        org = Organization(name=org_name, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+        chamber = district + org_types[org_type]
+        org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
         org.add_source(district_url)
         yield org
 
@@ -48,9 +48,9 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
           p.add_source(district_url)
 
           if i == 0:
-            p.add_membership(org, role='mayor')
+            p.add_membership(org, role='mayor', chamber=chamber)
           else:
-            p.add_membership(org, role='councillor')
+            p.add_membership(org, role='councillor', chamber=chamber)
 
           p.add_contact('address', address, 'legislature')
           if phone:

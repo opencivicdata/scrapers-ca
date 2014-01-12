@@ -5,6 +5,7 @@ from utils import lxmlize
 import re
 import urllib2
 import os
+import subprocess
 
 COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 
@@ -13,13 +14,11 @@ class YukonMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()
-    pdf = open('yk.pdf', 'w')
+    pdf = open('/tmp/yt.pdf', 'w')
     pdf.write(response)
     pdf.close()
 
-    os.system('pdftotext -layout yk.pdf')
-    txt = open('yk.txt', 'r')
-    data = txt.read()
+    data = subprocess.check_output(['pdftotext', '-layout', '/tmp/yt.pdf', '-'])
     data = re.split(r'\n\s*\n', data)
     for municipality in data:
 
@@ -40,7 +39,8 @@ class YukonMunicipalitiesPersonScraper(Scraper):
         address = lines[1][:col1end - 1].strip() + ' ' + lines[2][:col1end - 1].strip()
         district = lines[0][:col1end - 1].strip()
 
-      organization = Organization(name=district + ' council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      chamber = district + ' Council'
+      organization = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       organization.add_source(COUNCIL_PAGE)
       yield organization
 
@@ -69,7 +69,7 @@ class YukonMunicipalitiesPersonScraper(Scraper):
             continue
           p = Legislator(name=councillor, post_id=district)
           p.add_source(COUNCIL_PAGE)
-          p.add_membership(organization, role=role)
+          p.add_membership(organization, role=role, chamber=chamber)
           p.add_contact('address', address, None)
           p.add_contact('voice', phone, None)
           p.add_contact('email', email, None)
@@ -79,6 +79,4 @@ class YukonMunicipalitiesPersonScraper(Scraper):
             p.add_link(website, None)
           yield p
 
-    txt.close()
-    os.system('rm yk.pdf')
-    os.system('rm yk.txt')
+    os.system('rm yt.pdf')
