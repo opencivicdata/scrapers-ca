@@ -36,11 +36,23 @@ reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/maste
 for row in reader:
   urls[row[0].decode('utf8')] = row[1]
 
+# Map census division type codes to names.
+census_division_type_names = {}
+document = lxml.html.fromstring(requests.get('http://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-4-eng.cfm').content)
+for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
+  census_division_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
+
 # Map census subdivision type codes to names.
 census_subdivision_type_names = {}
 document = lxml.html.fromstring(requests.get('http://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-5-eng.cfm').content)
 for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
   census_subdivision_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
+
+# Map OCD identifiers to census division types.
+census_division_types = {}
+reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-types/ca_census_divisions.csv')
+for row in reader:
+  census_division_types[row[0]] = census_division_type_names[row[1].decode('utf8')]
 
 # Map OCD identifiers to census subdivision types.
 census_subdivision_types = {}
@@ -54,6 +66,9 @@ reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/maste
 for row in reader:
   names[row[0].decode('utf8')] = row[1].decode('utf8')
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
+for row in reader:
+  names[row[0].decode('utf8')] = row[1].decode('utf8')
+reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv')
 for row in reader:
   names[row[0].decode('utf8')] = row[1].decode('utf8')
 reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')
@@ -102,6 +117,8 @@ for module_name in os.listdir('.'):
             length = len(geographic_code)
             if length == 2:
               division_id = province_and_territory_codes[geographic_code]
+            elif length == 4:
+              division_id = 'ocd-division/country:ca/cd:%s' % geographic_code
             elif length == 7:
               division_id = 'ocd-division/country:ca/csd:%s' % geographic_code
             else:
@@ -136,6 +153,14 @@ for module_name in os.listdir('.'):
             else:
               expected_name = 'Legislative Assembly of %s' % names[division_id]
             jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
+          elif ocd_type == 'cd':
+            province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
+            expected_module_name = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
+            name_infix = census_division_types[division_id]
+            if name_infix == 'County':
+              name_infix = 'County'
+            expected_name = '%s %s Council' % (names[division_id], name_infix)
+            jurisdiction_id_suffix = 'council'
           elif ocd_type == 'csd':
             province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
             expected_module_name = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
