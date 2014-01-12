@@ -70,11 +70,11 @@ class YukonMunicipalitiesPersonScraper(Scraper):
           p = Legislator(name=councillor, post_id=district)
           p.add_source(COUNCIL_PAGE)
           p.add_membership(organization, role=role, chamber=chamber)
-          p.add_contact('address', address, None)
-          p.add_contact('voice', phone, None)
+          p.add_contact('address', address, 'legislature')
+          p.add_contact('voice', phone, 'legislature')
           p.add_contact('email', email, None)
           if fax:
-            p.add_contact('fax', fax, None)
+            p.add_contact('fax', fax, 'legislature')
           if website:
             p.add_link(website, None)
           yield p
