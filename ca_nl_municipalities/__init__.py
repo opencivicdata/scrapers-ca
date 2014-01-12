@@ -6,6 +6,6 @@ from utils import CanadianJurisdiction
 class NewfoundlandAndLabradorMunicipalities(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/province:nl/municipalities'
   geographic_code = 10
-  division_name = 'Newfoundland Labrador'
+  division_name = 'Newfoundland and Labrador'
   name = 'Newfoundland and Labrador Municipalities'
   url = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
