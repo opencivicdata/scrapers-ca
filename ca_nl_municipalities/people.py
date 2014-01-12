@@ -9,7 +9,7 @@ import os
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
 
-class NewfoundlandAndLabradorPersonScraper(Scraper):
+class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

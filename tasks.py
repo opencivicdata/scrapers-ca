@@ -77,6 +77,7 @@ def slug(division_id):
 for module_name in os.listdir('.'):
   jurisdiction_ids = set()
   division_ids = set()
+  aggregation_division_ids = set()
 
   if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
     module = importlib.import_module(module_name)
@@ -106,24 +107,35 @@ for module_name in os.listdir('.'):
             else:
               raise Exception('%s: Unrecognized geographic code %s' % (module_name, geographic_code))
 
+        aggregation = bool(module_name.endswith('_municipalities'))
+
         if division_id:
           # Ensure division_id is unique.
-          if division_id in division_ids:
-            raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
+          if aggregation:
+            if division_id in aggregation_division_ids:
+              raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
+            else:
+              aggregation_division_ids.add(division_id)
           else:
-            division_ids.add(division_id)
+            if division_id in division_ids:
+              raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
+            else:
+              division_ids.add(division_id)
 
           sections = division_id.split('/')
           ocd_type, ocd_type_id = sections[-1].split(':')
 
-          # Determine the expected module name and jurisdiction_id.
+          # Determine the expected module name, name and jurisdiction_id.
           if ocd_type in ('province', 'territory'):
-            expected_module_name = 'ca_%s' % ocd_type_id
-            if ocd_type_id in ('nl', 'ns'):
+            pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
+            expected_module_name = pattern % ocd_type_id
+            if aggregation:
+              expected_name = '%s Municipalities' % names[division_id]
+            elif ocd_type_id in ('nl', 'ns'):
               expected_name = '%s House of Assembly' % names[division_id]
             else:
               expected_name = 'Legislative Assembly of %s' % names[division_id]
-            jurisdiction_id_suffix = 'legislature'
+            jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
           elif ocd_type == 'csd':
             province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
             expected_module_name = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
@@ -155,6 +167,8 @@ for module_name in os.listdir('.'):
           # Determine the expected class name.
           class_name_parts = re.split('[ -]', re.sub(u"[—–]", '-', re.sub("['.]", '', names[division_id])))
           expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
+          if aggregation:
+            expected_class_name += 'Municipalities'
 
           # Warn if there is no expected legislative URL.
           url = getattr(obj, 'url', None)
@@ -172,6 +186,7 @@ for module_name in os.listdir('.'):
           # Name the classes correctly.
           class_name = obj.__name__
           if class_name != expected_class_name:
+            # @note This for-loop will only run if the class name in __init__.py is incorrect.
             for basename in os.listdir(module_name):
               if basename.endswith('.py'):
                 with codecs.open(os.path.join(module_name, basename), 'r', 'utf8') as f:

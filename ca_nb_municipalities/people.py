@@ -9,7 +9,7 @@ COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_governme
 org_types = [' city council', ' town council', ' village council', ' community council']
 
 
-class NewBrunswickPersonScraper(Scraper):
+class NewBrunswickMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

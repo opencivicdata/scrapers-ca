@@ -9,7 +9,7 @@ import os
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
 
-class NovaScotiaPersonScraper(CanadianScraper):
+class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()

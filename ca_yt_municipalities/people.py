@@ -9,7 +9,7 @@ import os
 COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 
 
-class YukonPersonScraper(Scraper):
+class YukonMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()

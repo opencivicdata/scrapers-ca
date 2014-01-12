@@ -7,7 +7,7 @@ import re
 COUNCIL_PAGE = 'http://www.gov.pe.ca/mapp/municipalitites.php'
 
 
-class PrinceEdwardIslandPersonScraper(Scraper):
+class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

@@ -10,7 +10,7 @@ COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Direc
 # See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx
 
 
-class SaskatchewanPersonScraper(Scraper):
+class SaskatchewanMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()

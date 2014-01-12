@@ -8,7 +8,7 @@ import re
 COUNCIL_PAGE = 'http://web5.gov.mb.ca/Public/municipalities.aspx'
 
 
-class ManitobaPersonScraper(Scraper):
+class ManitobaMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

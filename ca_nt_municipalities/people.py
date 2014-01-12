@@ -9,7 +9,7 @@ import re
 COUNCIL_PAGE = 'http://www.nwtac.com/about/communities/'
 
 
-class NorthwestTerritoriesPersonScraper(Scraper):
+class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
