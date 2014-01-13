@@ -27,7 +27,7 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district) # @todo use Person
       p.add_source(COUNCIL_PAGE)
       p.add_membership(org, role=role, chamber=chamber)
 

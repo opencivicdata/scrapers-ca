@@ -59,7 +59,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         org.add_source(url)
         yield org
 
-        p = Legislator(name=name, post_id=district)
+        p = Legislator(name=name, post_id=district) # @todo use Person
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         p.add_membership(org, role='Mayor', chamber=chamber)

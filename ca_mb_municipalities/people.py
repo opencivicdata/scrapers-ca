@@ -38,7 +38,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       councillors = district.xpath('.//td[3]/text()')
       positions = district.xpath('.//td[2]/b/text()')
       for i, councillor in enumerate(councillors):
-        p = Legislator(name=councillor, post_id=title)
+        p = Legislator(name=councillor, post_id=title) # @todo use Person
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:

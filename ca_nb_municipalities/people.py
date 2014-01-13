@@ -42,7 +42,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         for i, councillor in enumerate(councillors):
           if 'Vacant' in councillor:
             continue
-          p = Legislator(name=councillor, post_id=district)
+          p = Legislator(name=councillor, post_id=district) # @todo use Person
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)

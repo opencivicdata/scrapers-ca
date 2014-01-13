@@ -82,7 +82,7 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         continue
       yield org
       for councillor in councillors:
-        p = Legislator(post_id=district_name, name=councillor[0])
+        p = Legislator(post_id=district_name, name=councillor[0]) # @todo use Person
         p.add_source(COUNCIL_PAGE)
         p.add_membership(org, role=councillor[1], chamber=chamber)
 

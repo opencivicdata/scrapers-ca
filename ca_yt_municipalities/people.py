@@ -67,7 +67,7 @@ class YukonMunicipalitiesPersonScraper(Scraper):
           councillor = line[col1end - 1:col2end - 1].strip()
           if not councillor:
             continue
-          p = Legislator(name=councillor, post_id=district)
+          p = Legislator(name=councillor, post_id=district) # @todo use Person
           p.add_source(COUNCIL_PAGE)
           p.add_membership(organization, role=role, chamber=chamber)
           p.add_contact('address', address, 'legislature')

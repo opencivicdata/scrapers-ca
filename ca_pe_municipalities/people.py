@@ -45,7 +45,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         role = councillor.replace(name, '').strip()
         if not role:
           role = 'Councillor'
-        p = Legislator(name=name, post_id=district.text_content())
+        p = Legislator(name=name, post_id=district.text_content()) # @todo use Person
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         p.add_membership(org, role=role, chamber=chamber)
