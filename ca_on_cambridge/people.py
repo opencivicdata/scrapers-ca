@@ -19,7 +19,7 @@ class CambridgePersonScraper(CanadianScraper):
       role = 'Councillor'
       if 'Regional' in district:
         district = 'cambridge'
-        role = 'regional councillor'
+        role = 'Regional Councillor'
       name = councillor.xpath('.//a')[0].text_content()
 
       url = councillor.xpath('.//a')[0].attrib['href']
