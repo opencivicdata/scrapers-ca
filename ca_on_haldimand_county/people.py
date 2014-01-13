@@ -1,13 +1,13 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 
 import re
 
 COUNCIL_PAGE = 'http://www.haldimandcounty.on.ca/OurCounty.aspx?id=338'
 
 
-class HaldimandCountyPersonScraper(CanadianScraper):
+class HaldimandCountyPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

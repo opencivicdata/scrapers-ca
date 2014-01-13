@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 
 import re
 import urllib
@@ -9,7 +9,7 @@ import HTMLParser
 COUNCIL_PAGE = 'http://www.ville.levis.qc.ca/Fr/Conseil/'
 
 
-class LevisPersonScraper(CanadianScraper):
+class LevisPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

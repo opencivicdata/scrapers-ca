@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 from pupa.models import Organization
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 
 import re
 import urllib2
@@ -10,7 +10,7 @@ import subprocess
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
 
-class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
+class NovaScotiaMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()

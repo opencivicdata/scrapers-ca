@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP
+from utils import lxmlize, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
@@ -8,7 +8,7 @@ COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/coun
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'
 
 
-class SummersidePersonScraper(CanadianScraper):
+class SummersidePersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

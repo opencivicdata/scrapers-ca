@@ -2,7 +2,7 @@
 from pupa.scrape import Scraper
 from pupa.models import Vote
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 import requests
 import re
 import csv
@@ -13,7 +13,7 @@ import os
 VOTES = {'Yes': 'yes', 'No': 'no', 'Absent': 'not-voting'}
 
 
-class TorontoVoteScraper(CanadianScraper):
+class TorontoVoteScraper(Scraper):
 
   def get_votes(self):
     # org.add_source("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")

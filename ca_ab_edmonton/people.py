@@ -2,14 +2,13 @@ from pupa.scrape import Scraper, Legislator
 from pupa.models import Organization
 
 from utils import lxmlize
-from utils import CanadianScraper
 import re
 
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
 MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor.aspx'
 
 
-class EdmontonPersonScraper(CanadianScraper):
+class EdmontonPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

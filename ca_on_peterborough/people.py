@@ -1,13 +1,13 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_NOTE_MAP
+from utils import lxmlize, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
 COUNCIL_PAGE = 'http://www.peterborough.ca/City_Hall/City_Council_2833/City_Council_Contact_Information.htm'
 
 
-class PeterboroughPersonScraper(CanadianScraper):
+class PeterboroughPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

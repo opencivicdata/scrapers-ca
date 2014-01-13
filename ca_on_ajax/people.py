@@ -1,13 +1,13 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP
+from utils import lxmlize, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
 COUNCIL_PAGE = 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp'
 
 
-class AjaxPersonScraper(CanadianScraper):
+class AjaxPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

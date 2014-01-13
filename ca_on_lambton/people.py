@@ -1,13 +1,13 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper, CONTACT_DETAIL_TYPE_MAP
+from utils import lxmlize, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
 COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
 
 
-class LambtonPersonScraper(CanadianScraper):
+class LambtonPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

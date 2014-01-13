@@ -1,13 +1,13 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 
 import re
 
 COUNCIL_PAGE = 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61'
 
 
-class WestmountPersonScraper(CanadianScraper):
+class WestmountPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

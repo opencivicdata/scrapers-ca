@@ -1,13 +1,13 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 import HTMLParser
 import re
 
 COUNCIL_PAGE = 'http://www.beaconsfield.ca/en/your-council.html'
 
 
-class BeaconsfieldPersonScraper(CanadianScraper):
+class BeaconsfieldPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)

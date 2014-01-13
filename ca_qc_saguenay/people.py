@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper, Legislator
 
-from utils import lxmlize, CanadianScraper
+from utils import lxmlize
 
 import re
 import os
@@ -11,7 +11,7 @@ import shutil
 COUNCIL_PAGE = 'http://ville.saguenay.ca/fr/administration-municipale/conseils-municipaux-et-darrondissement/membres-des-conseils'
 
 
-class SaguenayPersonScraper(CanadianScraper):
+class SaguenayPersonScraper(Scraper):
 
   def get_people(self):
 
