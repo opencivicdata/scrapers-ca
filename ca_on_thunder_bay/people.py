@@ -61,6 +61,3 @@ class ThunderBayPersonScraper(CanadianScraper):
       p.add_contact('email', email, None)
 
       yield p
-
-
-      # print name, district

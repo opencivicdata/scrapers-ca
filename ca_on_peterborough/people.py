@@ -34,7 +34,6 @@ class PeterboroughPersonScraper(CanadianScraper):
         for line in info:
           stuff = re.split(ur'(\xbb)|(\xa0)', line)
           tmp = [y for y in stuff if y and not re.match(ur'\xa0', y)]
-          # print tmp
           self.get_tel_numbers(tmp, p)
 
         email = councillor.xpath('.//a[contains(@href, "mailto")]/@href')[0].replace('mailto:', '')
@@ -70,7 +69,6 @@ class PeterboroughPersonScraper(CanadianScraper):
         elif 'Cell Phone' in line[i - 1]:
           contact_type = 'cell'
         else:
-          print line[i - 1]
           contact_type = 'voice'
         if 'Voice Mail' in line[i - 1]:
           number = line[i + 1] if not re.match(r'x[0-9]', line[i + 2]) else line[i + 1] + ' ' + line[i + 2]

@@ -30,7 +30,6 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
       p.role = role
 
       p.image = images[i]
-      print p.image
 
       email = councillor.xpath('.//a')
       if email:

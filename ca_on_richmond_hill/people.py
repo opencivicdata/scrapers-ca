@@ -24,7 +24,6 @@ class RichmondHillPersonScraper(CanadianScraper):
       else:
         district = 'Richmond Hill'
         role = 'Mayor'
-      # print page.xpath()[0].text_content()
 
       info = page.xpath('//table[2]/tbody/tr/td[2]')
       if info[0].text_content().strip():

@@ -45,7 +45,6 @@ class EdmontonPersonScraper(CanadianScraper):
           p.add_link(value, None)
         else:
           p.add_contact(contact_type, value, 'legislature')
-      print p._contact_details
       yield p
 
 
