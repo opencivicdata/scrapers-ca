@@ -87,6 +87,6 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         p.add_membership(org, role=councillor[1], chamber=chamber)
 
         for key, value in contacts.iteritems():
-          p.add_contact(key, value, None)
+          p.add_contact(key, value, None if key == 'email' else 'legislature')
         yield p
     os.system('rm sk.pdf')

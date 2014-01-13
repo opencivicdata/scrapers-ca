@@ -50,9 +50,11 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
       if 'Fax' in lines.pop(0):
         fax = lines.pop(0)
 
-      p.add_contact('address', address, None)
-      p.add_contact('voice', phone, None)
-      p.add_contact('fax', fax, None)
+      p.add_contact('address', address, 'legislature')
+      p.add_contact('voice', phone, 'legislature')
+      p.add_contact('fax', fax, 'legislature')
+      # @todo emails are being assigned incorrectly, e.g. Town of Berwick picks
+      # up Cape Breton Regional Municipality and Region of Queens Municipality
       for i, email in enumerate(emails):
         regex = name.split()[-1].lower() + '|' + '|'.join(district.split()[-2:]).replace('of', '').lower()
         regex = regex.replace('||', '|')

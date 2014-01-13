@@ -49,9 +49,9 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         p.add_membership(org, role=role, chamber=chamber)
-        p.add_contact('voice', phone, None)
-        p.add_contact('fax', fax, None)
-        p.add_contact('address', address, None)
+        p.add_contact('voice', phone, 'legislature')
+        p.add_contact('fax', fax, 'legislature')
+        p.add_contact('address', address, 'legislature')
         p.add_contact('email', email, None)
         if site:
           p.add_link(site, None)
