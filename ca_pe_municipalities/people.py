@@ -49,7 +49,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         p = Legislator(name=name, post_id=district.text_content(), chamber=chamber)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_membership(org, role=role, post_id=district.text_content(), chamber=chamber)
+        membership = p.add_membership(org, role=role, post_id=district.text_content(), chamber=chamber)
         membership.add_contact_detail('voice', phone, 'legislature')
         membership.add_contact_detail('fax', fax, 'legislature')
         membership.add_contact_detail('address', address, 'legislature')

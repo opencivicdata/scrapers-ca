@@ -38,7 +38,7 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
 
       p = Legislator(name=name, post_id=district, chamber=chamber)
       p.add_source(COUNCIL_PAGE)
-      membership.add_membership(org, role='Mayor', post_id=district, chamber=chamber)
+      membership = p.add_membership(org, role='Mayor', post_id=district, chamber=chamber)
 
       address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:

@@ -52,7 +52,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
           else:
             membership = p.add_membership(org, role='Councillor')
 
-          membership.post_id = title
+          membership.post_id = district
           membership.chamber = chamber
           membership.add_contact_detail('address', address, 'legislature')
           if phone:
