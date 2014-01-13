@@ -11,8 +11,6 @@ class StCatharinesPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//li[@class="withChildren"]/ul/li/a')[1:]
     for councillor in councillors:
@@ -20,15 +18,15 @@ class StCatharinesPersonScraper(CanadianScraper):
 
       name = councillor.text_content().split(',')[0]
       district = page.xpath('//p[contains(text(), "Ward")]/text()')[0]
-      role = 'councillor'
+      role = 'Councillor'
       if 'Mayor' in district:
         district = 'St. Catharines'
-        role = 'mayor'
+        role = 'Mayor'
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
-      p.add_membership(organization, role=role)
+      p.role = role
 
       image = page.xpath('//div[@class="right"]/p/img/@src')
       if image:

@@ -11,8 +11,6 @@ class BeaconsfieldPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//h1[@class="title"]')
     for councillor in councillors:
@@ -23,7 +21,7 @@ class BeaconsfieldPersonScraper(CanadianScraper):
       if 'Mayor' in district:
         p = Legislator(name=name, post_id='beaconsfield')
         p.add_source(COUNCIL_PAGE)
-        p.add_membership(organization, role='mayor')
+        p.role = 'Mayor'
         p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
         phone = phone.split(':')[1].strip().replace(' ', '-')
@@ -36,7 +34,7 @@ class BeaconsfieldPersonScraper(CanadianScraper):
       district = district.split('-')[1].strip()
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
 

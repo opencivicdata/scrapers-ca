@@ -42,7 +42,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:
-          p.add_membership(organization, role='councillor', chamber=chamber)
+          p.add_membership(organization, role='Councillor', chamber=chamber)
         else:
           p.add_membership(organization, role=positions[i], chamber=chamber)
 

@@ -48,9 +48,9 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
           p.add_source(district_url)
 
           if i == 0:
-            p.add_membership(org, role='mayor', chamber=chamber)
+            p.add_membership(org, role='Mayor', chamber=chamber)
           else:
-            p.add_membership(org, role='councillor', chamber=chamber)
+            p.add_membership(org, role='Councillor', chamber=chamber)
 
           p.add_contact('address', address, 'legislature')
           if phone:

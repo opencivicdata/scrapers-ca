@@ -11,11 +11,9 @@ class MonctonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
-    yield scrape_mayor(mayor_url, organization)
+    yield scrape_mayor(mayor_url)
 
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
@@ -30,7 +28,7 @@ class MonctonPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
       p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]
 
@@ -41,13 +39,13 @@ class MonctonPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(url, organization):
+def scrape_mayor(url):
   page = lxmlize(url)
   name = ' '.join(page.xpath('//div[@id="content"]/p[2]/text()')[0].split()[1:3])
 
   p = Legislator(name=name, post_id='moncton')
   p.add_source(url)
-  p.add_membership(organization, role='mayor')
+  p.role = 'Mayor'
 
   p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
 

@@ -11,8 +11,6 @@ class SaskatchewanPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@id="MLAs"]//tr')[1:]
     for councillor in councillors:
@@ -24,7 +22,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'MLA'
 
       contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
       website = contact.xpath('./td[3]//div[3]//a')

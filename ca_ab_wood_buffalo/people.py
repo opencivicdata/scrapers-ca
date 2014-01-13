@@ -11,11 +11,9 @@ class WoodBuffaloPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor_url = page.xpath('//li[@id="pageid1075"]/div/a/@href')[0]
-    yield scrape_mayor(mayor_url, organization)
+    yield scrape_mayor(mayor_url)
 
     councillors = page.xpath('//table//a')
     for councillor in councillors:
@@ -31,7 +29,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, 'councillor')
+      p.role = 'Councillor'
       p.image = image
 
       contacts = page.xpath('//div[@id="content"]//div[@class="block"]/p/text()')
@@ -56,7 +54,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(url, organization):
+def scrape_mayor(url):
   page = lxmlize(url)
   name = page.xpath('//h1[@id="pagetitle"]/text()')[0].replace('Mayor', '').strip()
   image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
@@ -71,7 +69,7 @@ def scrape_mayor(url, organization):
   p = Legislator(name=name, post_id='wood buffalo')
   p.add_source(url)
   p.add_source(contact_url)
-  p.add_membership(organization, role='mayor')
+  p.role = 'Mayor'
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('fax', fax, 'legislature')

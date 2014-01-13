@@ -11,8 +11,6 @@ class ThunderBayPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')[:-1]
     for councillor in councillors:
@@ -22,11 +20,11 @@ class ThunderBayPersonScraper(CanadianScraper):
       if len(info.xpath('./p[1]/strong')) > 1:
         name = info.xpath('./p/strong')[0].text_content()
         district = info.xpath('./p/strong')[1].text_content()
-        role = 'councillor'
+        role = 'Councillor'
       else:
         name = info.xpath('./p/strong/em/strong//text()')
         district = 'Thunder Bay'
-        role = 'mayor'
+        role = 'Mayor'
         if name:
           name = name[0]
           for text in name:
@@ -39,7 +37,7 @@ class ThunderBayPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = page.xpath('//td[@valign="top"]/img/@src')[0]
 

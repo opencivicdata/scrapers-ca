@@ -11,22 +11,20 @@ class FrederictonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table/tbody/tr/td')
     for councillor in councillors:
       name = councillor.xpath('.//strong/text()')[0].split(',')[0]
       if 'Mayor' in councillor.xpath('.//strong/text()')[0]:
-        role = 'mayor'
+        role = 'Mayor'
         district = 'fredericton'
       else:
         district = re.findall(r'(Ward:.*)(?=Address:)', councillor.text_content())[0].replace(':', '').strip()
-        role = 'councillor'
+        role = 'Councillor'
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = councillor.xpath('.//img/@src')[0]
 

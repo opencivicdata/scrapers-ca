@@ -11,8 +11,6 @@ class HaldimandCountyPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//a/parent::p')
     for councillor in councillors:
@@ -21,12 +19,12 @@ class HaldimandCountyPersonScraper(CanadianScraper):
       if 'Mayor' in councillor.text_content():
         name = councillor.text_content().replace('Mayor ', '')
         district = 'haldimand'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district, name = councillor.text_content().split(' - ')
         name = name.replace('Councillor', '').strip()
         district = district.strip()
-        role = 'councillor'
+        role = 'Councillor'
 
       url = councillor.xpath('.//a')[0].attrib['href']
       page = lxmlize(url)
@@ -34,7 +32,7 @@ class HaldimandCountyPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//tr[1]/td/img/@src')[0]
 

@@ -13,11 +13,9 @@ class MarkhamPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor_url = page.xpath('//a[contains(text(), "Office of the Mayor")]/@href')[0]
-    yield scrape_mayor(mayor_url, organization)
+    yield scrape_mayor(mayor_url)
 
     councillors = page.xpath('//div[@class="interiorContentWrapper"]//td')
     for councillor in councillors:
@@ -29,7 +27,7 @@ class MarkhamPersonScraper(CanadianScraper):
       district = councillor.xpath('.//a//text()')[0].strip()
       if 'Ward' in district:
         district = district.replace('Councillor', '')
-        role = 'councillor'
+        role = 'Councillor'
       else:
         role = district
         district = 'Markham'
@@ -38,7 +36,7 @@ class MarkhamPersonScraper(CanadianScraper):
       url = councillor.xpath('.//a/@href')[0]
 
       if 'Ward 4' in district:
-        yield scrape_4(name, url, organization, image)
+        yield scrape_4(name, url, image)
         continue
 
       page = lxmlize(url)
@@ -46,7 +44,7 @@ class MarkhamPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = image
 
@@ -65,13 +63,13 @@ class MarkhamPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_4(name, url, organization, image):
+def scrape_4(name, url, image):
   page = lxmlize(url)
 
   p = Legislator(name=name, post_id='Ward 4')
   p.add_source(url)
   p.add_source(COUNCIL_PAGE)
-  p.add_membership(organization, role='councillor')
+  p.role = 'Councillor'
 
   address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
   phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
@@ -83,7 +81,7 @@ def scrape_4(name, url, organization, image):
   return p
 
 
-def scrape_mayor(url, organization):
+def scrape_mayor(url):
   page = lxmlize(url)
   name = page.xpath('//div[@class="interiorContentWrapper"]/p/strong/text()')[0]
   address = ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p/text()')[1:3])
@@ -93,7 +91,7 @@ def scrape_mayor(url, organization):
 
   p = Legislator(name=name, post_id='markham')
   p.add_source(url)
-  p.add_membership(organization, 'mayor')
+  p.role = 'Mayor'
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('email', email, None)

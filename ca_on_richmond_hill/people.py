@@ -11,8 +11,6 @@ class RichmondHillPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//center/center//a')
     for councillor in councillors:
@@ -22,10 +20,10 @@ class RichmondHillPersonScraper(CanadianScraper):
       district = re.findall(r',(.*)-', page.xpath('//div[@class="sectionheading"]')[0].text_content())
       if district:
         district = district[0]
-        role = 'councillor'
+        role = 'Councillor'
       else:
         district = 'Richmond Hill'
-        role = 'mayor'
+        role = 'Mayor'
       # print page.xpath()[0].text_content()
 
       info = page.xpath('//table[2]/tbody/tr/td[2]')
@@ -43,7 +41,7 @@ class RichmondHillPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')

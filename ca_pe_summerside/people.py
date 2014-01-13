@@ -12,10 +12,8 @@ class SummersidePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
-    yield self.scrape_mayor(organization)
+    yield self.scrape_mayor()
 
     councillors = page.xpath('//div[@class="articlebody-inside"]//p[contains(text(),"-")]')
     for councillor in councillors:
@@ -28,7 +26,7 @@ class SummersidePersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
 
@@ -43,14 +41,14 @@ class SummersidePersonScraper(CanadianScraper):
         p.add_contact(contact_type, contact, None if contact_type == 'email' else 'legislature')
       yield p
 
-  def scrape_mayor(self, organization):
+  def scrape_mayor(self):
     page = lxmlize(MAYOR_PAGE)
 
     name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Mayor', '')
 
     p = Legislator(name=name, post_id='summerside')
     p.add_source(MAYOR_PAGE)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
     p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
 
     info = page.xpath('//div[@class="articlebody-inside"]/p')

@@ -11,8 +11,6 @@ class BellevillePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//font[@color="#000000"]')
     for i, councillor in enumerate(councillors):
@@ -22,14 +20,14 @@ class BellevillePersonScraper(CanadianScraper):
       name = name[0]
 
       district = councillor.xpath('./ancestor::tr/preceding-sibling::tr//font[@color="#000080"]')[0].text_content().lower().replace('councillors', '')
-      role = 'councillor'
+      role = 'Councillor'
       if not 'ward' in district:
         district = 'belleville'
-        role = 'mayor'
+        role = 'Mayor'
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = councillor.xpath('.//parent::*//img/@src')[0]
 

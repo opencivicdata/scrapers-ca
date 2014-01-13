@@ -14,20 +14,17 @@ COUNCIL_PAGE = 'http://depot.ville.montreal.qc.ca/bd-elus/data.json'
 class MontrealPersonScraper(CanadianScraper):
 
   def get_people(self):
-    organization = self.get_organization()
-    yield organization
-
     district = self.jurisdiction.name
     data = urllib2.urlopen(COUNCIL_PAGE)
     data = json.load(data, 'windows-1252')
     for line in data:
       if district == u'Montréal':
         if "Maire" in line['TITRE_MAIRIE'] or "Ville" in line['TITRE_CONSEIL'] or 'désigné'.decode('utf-8') in line['TITRE_CONSEIL']:
-          yield self.add_councillor(line, organization)
+          yield self.add_councillor(line)
       elif district in format(line['ARRONDISSEMENT']):
-        yield self.add_councillor(line, organization)
+        yield self.add_councillor(line)
 
-  def add_councillor(self, line, organization):
+  def add_councillor(self, line):
     name = line['PRENOM'] + ' ' + line['NOM']
     district = line['ARRONDISSEMENT']
 
@@ -35,9 +32,9 @@ class MontrealPersonScraper(CanadianScraper):
     p.add_source(COUNCIL_PAGE)
 
     if line['TITRE_MAIRIE']:
-      p.add_membership(organization, role='mayor')
+      p.role = 'Mayor'
     else:
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
     if line['ADRESSE_ARRONDISSEMENT']:
       p.add_contact('address', line['ADRESSE_ARRONDISSEMENT'], 'legislature')
     if line['ADRESSE_HOTEL_DE_VILLE']:

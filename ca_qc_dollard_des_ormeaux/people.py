@@ -11,8 +11,6 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     general_contacts = page.xpath('//p[@class="large_title"]/following-sibling::p/text()')
     general_phone = general_contacts[0]
@@ -25,15 +23,15 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
       if 'Mayor' in councillor.text_content():
         name = councillor.text_content().replace('Mayor', '')
         district = 'dollard-des-ormeaux'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         name = re.split(r'[0-9]', councillor.text_content())[1]
         district = 'District ' + re.findall(r'[0-9]', councillor.text_content())[0]
-        role = 'councillor'
+        role = 'Councillor'
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.image = councillor.xpath('./parent::p/parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
 
       email = councillor.xpath('./parent::p/following-sibling::p//a[contains(@href, "mailto:")]')

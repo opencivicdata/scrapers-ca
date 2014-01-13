@@ -11,8 +11,6 @@ class CapeBretonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@class="table_style"]/tbody/tr')[1:]
     for councillor in councillors:
@@ -25,7 +23,7 @@ class CapeBretonPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')

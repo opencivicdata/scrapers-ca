@@ -62,7 +62,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_membership(org, role='mayor', chamber=chamber)
+        p.add_membership(org, role='Mayor', chamber=chamber)
         if phone:
           p.add_contact('voice', phone, 'legislature')
         # Im excluding fax because that column isn't properly aligned

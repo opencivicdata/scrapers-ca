@@ -44,7 +44,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         name = councillor.replace('(Mayor)', '').replace('(Deputy Mayor)', '').replace('(Chairperson)', '').strip()
         role = councillor.replace(name, '').strip()
         if not role:
-          role = 'councillor'
+          role = 'Councillor'
         p = Legislator(name=name, post_id=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)

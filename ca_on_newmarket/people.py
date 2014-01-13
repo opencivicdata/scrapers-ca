@@ -11,13 +11,11 @@ class NewmarketPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="printArea"]//table//tr//td')[4:-1]
     for councillor in councillors:
       if councillor == councillors[0]:
-        yield self.scrape_mayor(councillor, organization)
+        yield self.scrape_mayor(councillor)
         continue
       name = councillor.xpath('.//a/text()')[0]
       district = councillor.xpath('.//strong/text()')[1].replace('Councillor- ', '')
@@ -28,7 +26,7 @@ class NewmarketPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role)
+      p.role = role
 
       p.image = councillor.xpath('.//img/@src')[0]
 
@@ -68,11 +66,11 @@ class NewmarketPersonScraper(CanadianScraper):
         p.add_link(site[0].text_content(), None)
       yield p
 
-  def scrape_mayor(self, div, organization):
+  def scrape_mayor(self, div):
     name = div.xpath('.//strong/text()')[0].replace(',', '')
     p = Legislator(name=name, post_id='newmarket')
     p.add_source(COUNCIL_PAGE)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
 
     numbers = div.xpath('.//p/text()')
     for number in numbers:

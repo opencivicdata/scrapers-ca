@@ -11,8 +11,6 @@ class LaSallePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@align="center" and not(@class="background")]//td/p')
     for councillor in councillors:
@@ -24,14 +22,14 @@ class LaSallePersonScraper(CanadianScraper):
       if 'e-mail' in name[0]:
         name = councillor.xpath('./b/font/text()')
       name = name[0]
-      role = 'councillor'
+      role = 'Councillor'
       if 'Mayor' in name:
         name = name.replace('Mayor', '')
         role = 'Mayor'
 
       p = Legislator(name=name, post_id="LaSalle")
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = councillor.xpath('./parent::td//img/@src')[0]
 

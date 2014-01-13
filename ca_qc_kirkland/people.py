@@ -11,8 +11,6 @@ class KirklandPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
     for councillor in councillors:
@@ -20,10 +18,10 @@ class KirklandPersonScraper(CanadianScraper):
         continue
       if councillor == councillors[0]:
         district = 'kirkland'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = councillor.xpath('.//h2')[0].text_content()
-        role = 'councillor'
+        role = 'Councillor'
 
       name = councillor.xpath('.//strong/text()')[0]
 
@@ -32,7 +30,7 @@ class KirklandPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]

@@ -11,8 +11,6 @@ class VaughanPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@class="PL_Column1"]//ul[@class="dfwp-list"][1]/li/div/div/a')
     for councillor in councillors:
@@ -22,14 +20,14 @@ class VaughanPersonScraper(CanadianScraper):
       title = page.xpath('//div[@class="PL_Title"]')[0].text_content()
       if "Councillor" in title:
         district, name = re.split(r'Councillor', title)
-        role = 'councillor'
+        role = 'Councillor'
         if "Regional" in district:
           district = "Vaughan"
           role = 'regional councillor'
       else:
         name = re.split(r'Mayor', title)[-1]
         district = 'Vaughan'
-        role = 'mayor'
+        role = 'Mayor'
       name = name.strip()
       if councillor == councillors[0]:
         contact_info = page.xpath('//div[@id="WebPartWPQ2"]')[0]
@@ -43,7 +41,7 @@ class VaughanPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
       p.add_contact('email', email, None)

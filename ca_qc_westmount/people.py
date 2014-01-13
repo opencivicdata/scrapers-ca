@@ -11,8 +11,6 @@ class WestmountPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor = page.xpath('//td[@class="LeftLinksSectionMenu"]/a')[0]
     name = mayor.text_content().replace('Mayor', '').strip()
@@ -21,7 +19,7 @@ class WestmountPersonScraper(CanadianScraper):
     p = Legislator(name=name, post_id='Westmount')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
     mayor_info = mayor_page.xpath('//div[@style="padding-right:10px;"]/table')[0]
     phone = mayor_info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
     fax = mayor_info.xpath('.//tr[3]/td[2]')[0].text_content().replace(' ', '-')
@@ -43,7 +41,7 @@ class WestmountPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
       p.image = info.xpath('./ancestor::td//div[not(@id="insert")]/img/@src')[0]
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

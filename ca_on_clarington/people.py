@@ -11,8 +11,6 @@ class ClaringtonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//*[@class="subtitle"]')
     emails = page.xpath('.//a[contains(@href, "mailto:")]')
@@ -21,10 +19,10 @@ class ClaringtonPersonScraper(CanadianScraper):
       district = re.findall(r'\((.*)\)?', councillor.text_content())
       if not district:
         district = 'clarington'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = district[0].replace(")", '')
-        role = 'councillor'
+        role = 'Councillor'
       email = emails.pop(0).attrib['href'].split(':')[1]
 
       image = councillor.xpath('.//following-sibling::img/@src')
@@ -35,7 +33,7 @@ class ClaringtonPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('email', email, None)
       p.image = image
       yield p

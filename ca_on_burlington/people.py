@@ -11,8 +11,6 @@ class BurlingtonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="subnav"]//a')
     for councillor in councillors:
@@ -22,7 +20,7 @@ class BurlingtonPersonScraper(CanadianScraper):
       url = councillor.attrib['href']
 
       if councillor == councillors[0]:
-        yield self.scrape_mayor(name, url, organization)
+        yield self.scrape_mayor(name, url)
         continue
 
       page = lxmlize(url)
@@ -36,7 +34,7 @@ class BurlingtonPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       p.image = page.xpath('//div[@id="subnav"]//img/@src')[0]
 
@@ -50,7 +48,7 @@ class BurlingtonPersonScraper(CanadianScraper):
       self.get_links(p, link_div)
       yield p
 
-  def scrape_mayor(self, name, url, organization):
+  def scrape_mayor(self, name, url):
     page = lxmlize(url)
 
     contact = page.xpath('//div[@id="grey-220"]//li')[0]
@@ -70,7 +68,7 @@ class BurlingtonPersonScraper(CanadianScraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_source('http://www.burlingtonmayor.com')
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
 
     p.image = page.xpath('//div[@id="grey-220"]/p/img/@src')[0]
     p.add_contact('voice', phone, 'legislature')

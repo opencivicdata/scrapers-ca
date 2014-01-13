@@ -57,11 +57,11 @@ class YukonMunicipalitiesPersonScraper(Scraper):
       for line in lines:
         if 'Mayor:' in line:
           councillor_or_mayor = True
-          role = 'mayor'
+          role = 'Mayor'
           continue
         if 'Councillors' in line:
           councillor_or_mayor = True
-          role = 'councillor'
+          role = 'Councillor'
           continue
         if councillor_or_mayor:
           councillor = line[col1end - 1:col2end - 1].strip()

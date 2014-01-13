@@ -11,14 +11,12 @@ class GatineauPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id = "submenu_content"]//li')
     for councillor in councillors:
       name = councillor.text_content()
       if "maire" in name:
-        yield self.scrape_mayor(councillor.xpath('.//a')[0].attrib['href'], organization)
+        yield self.scrape_mayor(councillor.xpath('.//a')[0].attrib['href'])
         continue
       url = councillor.xpath('.//a')[0].attrib['href']
       page = lxmlize(url)
@@ -34,7 +32,7 @@ class GatineauPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       p.image = content.xpath('//table//td/img/@src')[0]
@@ -44,7 +42,7 @@ class GatineauPersonScraper(CanadianScraper):
 
       yield p
 
-  def scrape_mayor(self, url, organization):
+  def scrape_mayor(self, url):
     page = lxmlize(url)
     contact_url = page.xpath('//a[contains(text(), "Communiquez")]')[0].attrib['href']
     page = lxmlize(contact_url)
@@ -57,7 +55,7 @@ class GatineauPersonScraper(CanadianScraper):
     p = Legislator(name=name, post_id='Gatineau')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('email', email, None)
 

@@ -11,8 +11,6 @@ class WellesleyPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@class="tbl w100"][2]//tr/td')[1::2]
     councillors = councillors + page.xpath('//table[@class="tbl w100"][1]//td[2]')
@@ -20,10 +18,10 @@ class WellesleyPersonScraper(CanadianScraper):
       district = councillor.xpath('./preceding-sibling::td/text()')
       if district:
         district = district[-1]
-        role = 'councillor'
+        role = 'Councillor'
       else:
         district = 'wellesley'
-        role = 'mayor'
+        role = 'Mayor'
 
       image = councillor.xpath('./preceding-sibling::td/img/@src')[-1]
 
@@ -35,7 +33,7 @@ class WellesleyPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

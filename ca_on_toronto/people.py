@@ -11,18 +11,16 @@ class TorontoPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     a = page.xpath('//a[contains(@href,"mayor")]')[0]
-    yield self.scrape_mayor(a.attrib['href'], organization)
+    yield self.scrape_mayor(a.attrib['href'])
 
     for a in page.xpath('//a[contains(@href,"councillors/")]'):
       if 'vacant' in a.attrib['href']:
         continue
-      yield self.scrape_councilor(a.attrib['href'], organization)
+      yield self.scrape_councilor(a.attrib['href'])
 
-  def scrape_councilor(self, url, organization):
+  def scrape_councilor(self, url):
     page = lxmlize(url)
     info = page.xpath("//div[@class='main']")[0]
     name = info.xpath("//h3")[1].text_content().replace('Councillor', '').strip()
@@ -37,7 +35,7 @@ class TorontoPersonScraper(CanadianScraper):
     # add links
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.add_membership(organization, role='councillor')
+    p.role = 'Councillor'
 
     p.image = page.xpath('//div[@class="two_column"]/div/img/@src')[0]
 
@@ -75,14 +73,14 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_contact('fax', fax, note)
     return p
 
-  def scrape_mayor(self, url, organization):
+  def scrape_mayor(self, url):
     page = lxmlize(url)
     name = page.xpath("//div[@class='detail']//h1/text()")[0].replace("Toronto Mayor", "").strip()
 
     p = Legislator(name, "Toronto")
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
 
     p.image = page.xpath('//div[@class="image"]/img/@src')[0]
 

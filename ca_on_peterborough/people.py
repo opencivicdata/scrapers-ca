@@ -11,11 +11,9 @@ class PeterboroughPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor_info = page.xpath('//h2[contains(text(), "MAYOR")]//following-sibling::p')[0]
-    yield self.scrape_mayor(mayor_info, organization)
+    yield self.scrape_mayor(mayor_info)
 
     wards = page.xpath('//h3')
     for ward in wards:
@@ -26,7 +24,7 @@ class PeterboroughPersonScraper(CanadianScraper):
 
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
-        p.add_membership(organization, role='councillor')
+        p.role = 'Councillor'
 
         info = councillor.xpath('./text()')
         address = info.pop(0)
@@ -45,7 +43,7 @@ class PeterboroughPersonScraper(CanadianScraper):
         if councillor == councillors[1]:
           break
 
-  def scrape_mayor(self, info, organization):
+  def scrape_mayor(self, info):
     name = info.xpath('./strong')[0].text_content()
     email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
@@ -56,7 +54,7 @@ class PeterboroughPersonScraper(CanadianScraper):
 
     p = Legislator(name=name, post_id="peterborough")
     p.add_source(COUNCIL_PAGE)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
 
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'legislature')

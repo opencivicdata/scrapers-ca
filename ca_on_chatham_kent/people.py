@@ -11,18 +11,16 @@ class ChathamKentPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     wards = page.xpath('//table[@class="ms-rteTable-4"]')
     for ward in wards:
       district = ward.xpath('.//p')[0].text_content()
       if 'Mayor' in district:
         district = 'chatham-kent'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = re.findall(r'(?<=Council )(.*)(?=\()', district)[0]
-        role = 'councillor'
+        role = 'Councillor'
 
       councillors = ward.xpath('.//a')
       for councillor in councillors:
@@ -33,7 +31,7 @@ class ChathamKentPersonScraper(CanadianScraper):
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_membership(organization, role=role)
+        p.role = role
 
         p.image = page.xpath('//div[@class="pageContent"]//img/@src')[0]
 

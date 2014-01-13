@@ -11,8 +11,6 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="content"]//td')
     councillors = [x for x in councillors if x.text_content().strip()]
@@ -21,15 +19,15 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
       if 'Maire' in councillor.text_content():
         name = councillor.xpath('.//a')[0].text_content()
         district = 'Sainte-Anne-de-Bellevue'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         name = re.findall(r'(?<=[0-9]).*', councillor.text_content(), flags=re.DOTALL)[0].strip()
         district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller', '')
-        role = 'councillor'
+        role = 'Councillor'
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = images[i]
       print p.image

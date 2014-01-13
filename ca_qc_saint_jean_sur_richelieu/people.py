@@ -11,8 +11,6 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@class="article-content"]//td[@class="ms-rteTableOddCol-0"]')
     for councillor in councillors:
@@ -20,7 +18,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
       if not councillor.xpath('.//a'):
         continue
       if 'maire' in councillor.xpath('.//a/@href')[0]:
-        yield scrape_mayor(councillor, organization)
+        yield scrape_mayor(councillor)
         continue
 
       name = councillor.xpath('.//a')[0].text_content()
@@ -31,7 +29,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       p.image = councillor.xpath('./preceding-sibling::td//img/@src')[-1]
 
@@ -44,7 +42,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(div, organization):
+def scrape_mayor(div):
   name = div.xpath('.//a')[0].text_content()
   url = div.xpath('.//a/@href')[0]
   page = lxmlize(url)
@@ -55,7 +53,7 @@ def scrape_mayor(div, organization):
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_source(contact_url)
-  p.add_membership(organization, role='mayor')
+  p.role = 'Mayor'
 
   p.image = div.xpath('./preceding-sibling::td//img/@src')[-1]
 

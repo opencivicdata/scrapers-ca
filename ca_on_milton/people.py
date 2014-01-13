@@ -11,8 +11,6 @@ class MiltonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@id="Table1table"]/tbody/tr')[1:]
     for councillor in councillors:
@@ -25,7 +23,7 @@ class MiltonPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = councillor.xpath('./td[1]/p/img/@src')[0]
 

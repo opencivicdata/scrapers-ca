@@ -12,8 +12,6 @@ class KawarthaLakesPersonScraper(CanadianScraper):
   def get_people(self):
 
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//p[@class="WSIndent"]/a')
     for councillor in councillors:
@@ -21,11 +19,11 @@ class KawarthaLakesPersonScraper(CanadianScraper):
       if district:
         district = district[0]
         name = councillor.text_content().replace(district, '').strip()
-        role = 'councillor'
+        role = 'Councillor'
       else:
         district = 'kawartha lakes'
         name = councillor.text_content().replace('Mayor', '').strip()
-        role = 'mayor'
+        role = 'Mayor'
 
       url = councillor.attrib['href']
       page = lxmlize(url)
@@ -35,7 +33,7 @@ class KawarthaLakesPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('email', email, None)
       p.image = image
       yield p

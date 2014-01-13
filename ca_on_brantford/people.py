@@ -11,10 +11,8 @@ class BrantfordPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
-    yield scrape_mayor(organization)
+    yield scrape_mayor()
 
     councillors = page.xpath('//div[@id="centre_content"]//tr')
     for councillor in councillors:
@@ -28,7 +26,7 @@ class BrantfordPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       page = lxmlize(url)
 
@@ -55,14 +53,14 @@ class BrantfordPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(organization):
+def scrape_mayor():
   mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
   page = lxmlize(mayor_url)
   name = re.findall(r'(?<=Mayor)(.*)(?=of)', page.xpath('//div[@id="header"]/h1/text()')[0])[0]
 
   p = Legislator(name=name, post_id='brantford')
   p.add_source(mayor_url)
-  p.add_membership(organization, role='mayor')
+  p.role = 'Mayor'
 
   contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]
   page = lxmlize(contact_url)

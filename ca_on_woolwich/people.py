@@ -11,8 +11,6 @@ class WoolwichPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="printArea"]//strong')
     for councillor in councillors:
@@ -23,14 +21,14 @@ class WoolwichPersonScraper(CanadianScraper):
       district = info.pop(0)
       if 'Mayor' in district:
         district = 'Woolwich'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = district.replace('Councillor', '').strip()
-        role = 'councillor'
+        role = 'Councillor'
 
       p = Legislator(name=councillor.text_content(), post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.image = councillor.xpath('./img/@src')[0]
 
       for contact in info:

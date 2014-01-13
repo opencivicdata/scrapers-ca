@@ -11,11 +11,9 @@ class SaskatoonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor_url = page.xpath('//td[@class="sask_LeftNavLinkContainer"]/a/@href')[0]
-    yield scrape_mayor(mayor_url, organization)
+    yield scrape_mayor(mayor_url)
 
     councillors = page.xpath('//td[@class="sask_LeftNavChildNodeContainer"]//a')
     for councillor in councillors:
@@ -25,7 +23,7 @@ class SaskatoonPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       page = lxmlize(url)
       contacts = page.xpath('//p[@class="para12"]')[0]
@@ -49,7 +47,7 @@ class SaskatoonPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(url, organization):
+def scrape_mayor(url):
   page = lxmlize(url)
   name = page.xpath('//tr/td/p')[-1]
   name = name.text_content().replace('Mayor', '')
@@ -65,7 +63,7 @@ def scrape_mayor(url, organization):
   p = Legislator(name=name, post_id='saskatoon')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
-  p.add_membership(organization, role='mayor')
+  p.role = 'Mayor'
   p.image = image
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')

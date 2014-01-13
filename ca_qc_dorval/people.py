@@ -11,8 +11,6 @@ class DorvalPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//p[@align="center"]')
     for councillor in councillors:
@@ -20,13 +18,13 @@ class DorvalPersonScraper(CanadianScraper):
       name = info[0]
       if len(info) < 3:
         district = 'dorval'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = info[2]
-        role = 'councillor'
+        role = 'Councillor'
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = councillor.xpath('./parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
 

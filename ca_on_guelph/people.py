@@ -11,13 +11,11 @@ class GuelphPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//*[@class="two_third last"]')
     for councillor in councillors:
       if councillor == councillors[0]:
-        yield self.scrape_mayor(councillor, organization)
+        yield self.scrape_mayor(councillor)
         continue
 
       name = councillor.xpath('.//a')[0].text_content().replace('Councillor', '').replace('Mayor', '')
@@ -27,7 +25,7 @@ class GuelphPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       p.add_contact('voice', councillor.xpath('.//text()[4]')[0].replace('x', 'ext.'), 'legislature')
       email = councillor.xpath('.//a[contains(@href,"mailto:")]')
@@ -59,14 +57,14 @@ class GuelphPersonScraper(CanadianScraper):
         p.add_link(twitter[0].attrib['href'], None)
       yield p
 
-  def scrape_mayor(self, div, organization):
+  def scrape_mayor(self, div):
     name = div.xpath('.//a')[0].text_content().replace('Mayor', '')
     url = div.xpath('.//a')[0].attrib['href']
 
     p = Legislator(name=name, post_id='guelph')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
 
     phone = div.xpath('.//text()[3]')[0]
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()

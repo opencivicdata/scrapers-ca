@@ -13,8 +13,6 @@ class LevisPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@id="Tableau_01"]//a/@href')
     for councillor in councillors:
@@ -23,15 +21,15 @@ class LevisPersonScraper(CanadianScraper):
       district = page.xpath('//table[@id="table1"]//td[2]//i')[0].text_content()
       if 'Maire' in district:
         district = 'levis'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]
-        role = 'councillor'
+        role = 'Councillor'
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.image = page.xpath('//img[@alt = "Photo du membre"]/@src')[0]
 
       script = page.xpath('//table[@id="table1"]//td[2]//script')[0].text_content()

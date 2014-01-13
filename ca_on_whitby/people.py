@@ -11,8 +11,6 @@ class WhitbyPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@class=" "]/tbody//tr')[1:]
     for councillor in councillors:
@@ -33,7 +31,7 @@ class WhitbyPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]
       yield p

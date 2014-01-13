@@ -11,8 +11,6 @@ class AjaxPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//ul[@class="subNav top"]/li/ul//li/a')
     for councillor in councillors:
@@ -23,7 +21,7 @@ class AjaxPersonScraper(CanadianScraper):
 
       if councillor == councillors[0]:
         district = 'Ajax'
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = re.findall(r'Ward.*', page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content())[0]
         role = page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content()
@@ -32,7 +30,7 @@ class AjaxPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = page.xpath('//div[@class="intQuicklinksPhoto"]/img/@src')[0]
 

@@ -11,8 +11,6 @@ class PickeringPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor_contacts = page.xpath('//table[@class="nicEdit-visualClass"]//tr/td[1]/text()')
     council_contacts = page.xpath('//table[@class="nicEdit-visualClass"]//tr/td[2]/text()')
@@ -30,12 +28,12 @@ class PickeringPersonScraper(CanadianScraper):
         ward = ' '.join(role_ward[2:])
       else:
         name = councillor.xpath('.//strong/text()')[1]
-        role = 'mayor'
+        role = 'Mayor'
         ward = 'pickering'
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
       p = Legislator(name=name, post_id=ward)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]
 
@@ -48,7 +46,7 @@ class PickeringPersonScraper(CanadianScraper):
         else:
           p.add_link(link.attrib['href'], None)
 
-      if role == 'mayor':
+      if role == 'Mayor':
         add_contacts(p, mayor_contacts)
       else:
         add_contacts(p, council_contacts)

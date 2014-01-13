@@ -11,8 +11,6 @@ class OakvillePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[contains(@class,"fourcol")]')
     # councillors.append(page.xpath('//div[@class = "fourcol multicollast"]')[1::-1])
@@ -21,7 +19,7 @@ class OakvillePersonScraper(CanadianScraper):
          name = councillor.xpath('.//h2')[1].text_content()
          p = Legislator(name=name, post_id="Oakville")
          url = councillor.xpath('.//a')[0].attrib['href']
-         self.scrape_mayor(url, p, organization)
+         self.scrape_mayor(url, p)
          yield p
       else:
         name = councillor.xpath('.//h2')[2].text_content()
@@ -29,14 +27,14 @@ class OakvillePersonScraper(CanadianScraper):
 
         p = Legislator(name=name, post_id=district)
         url = councillor.xpath('.//a')[0].attrib['href']
-        self.scrape_councillor(url, p, organization)
+        self.scrape_councillor(url, p)
         yield p
 
-  def scrape_mayor(self, url, mayor, organization):
+  def scrape_mayor(self, url, mayor):
     page = lxmlize(url)
     mayor.add_source(COUNCIL_PAGE)
     mayor.add_source(url)
-    mayor.add_membership(organization, role='mayor')
+    mayor.role = 'Mayor'
 
     mayor.image = page.xpath('//div[@class="twocol multicol"]//img/@src')[0]
 
@@ -55,11 +53,11 @@ class OakvillePersonScraper(CanadianScraper):
     mayor.add_link(info.xpath('.//a[contains(@href, "twitter")]')[0].attrib['href'], None)
     mayor.add_link(info.xpath('.//a[contains(@href, "facebook")]')[0].attrib['href'], None)
 
-  def scrape_councillor(self, url, councillor, organization):
+  def scrape_councillor(self, url, councillor):
     page = lxmlize(url)
     councillor.add_source(COUNCIL_PAGE)
     councillor.add_source(url)
-    councillor.add_membership(organization, role='councillor')
+    councillor.role = 'Councillor'
 
     councillor.image = page.xpath('//div[@class="fourcol multicollast" or @class="colsevenfive multicol"]//img/@src')[0]
 

@@ -11,15 +11,13 @@ class PointeClairePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     mayor = page.xpath('.//div[@class="item-page clearfix"]//table[1]//p')[1]
     name = mayor.xpath('.//strong/text()')[0]
 
     p = Legislator(name=name, post_id='pointe-claire')
     p.add_source(COUNCIL_PAGE)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
 
     phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')
     email = mayor.xpath('.//a/@href')[0]
@@ -38,7 +36,7 @@ class PointeClairePersonScraper(CanadianScraper):
 
         p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
-        p.add_membership(organization, role='councillor')
+        p.role = 'Councillor'
         p.image = councillor.xpath('.//img/@src')[0]
 
         phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i + 1].xpath('.//td')[j].text_content())[0].replace(' ', '-')

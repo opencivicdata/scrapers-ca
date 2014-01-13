@@ -11,8 +11,6 @@ class NorthDumfriesPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table/tbody/tr')[1:]
     for councillor in councillors:
@@ -22,13 +20,13 @@ class NorthDumfriesPersonScraper(CanadianScraper):
       if 'Mayor' in name:
         district = 'North Dumfries'
         name = name.replace('Mayor', '').strip()
-        role = 'mayor'
+        role = 'Mayor'
       else:
         district = info.pop(0)
-        role = 'councillor'
+        role = 'Councillor'
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('voice', info[0], 'legislature')
       p.add_contact('email', info[1], None)
       yield p

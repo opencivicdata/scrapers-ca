@@ -11,19 +11,17 @@ class WilmotPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@id="Main Content"]//td[@colspan="3"]//td/p/b')
     for councillor in councillors:
       district, name = councillor.xpath('./text()')[0].split(':')
       if 'Mayor' in district:
-        yield scrape_mayor(councillor, name, organization)
+        yield scrape_mayor(councillor, name)
         continue
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       base_info = councillor.xpath('./parent::p/text()')
       for info in councillor.xpath('./parent::p/following-sibling::p'):
@@ -53,11 +51,11 @@ class WilmotPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(div, name, organization):
+def scrape_mayor(div, name):
 
   p = Legislator(name=name, post_id='wilmont')
   p.add_source(COUNCIL_PAGE)
-  p.add_membership(organization, role='mayor')
+  p.role = 'Mayor'
 
   info = div.xpath('./parent::p//text()')
   info.pop(0)

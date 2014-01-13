@@ -11,8 +11,6 @@ class BritishColumbiaPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[3]//table[2]//table//td//a/@href')
     for councillor in councillors:
@@ -23,7 +21,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.add_membership(organization, role='MLA')
+      p.role = 'MLA'
 
       p.image = page.xpath('//a[contains(@href, "images/members")]/@href')[0]
 

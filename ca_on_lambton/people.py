@@ -11,8 +11,6 @@ class LambtonPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="WebPartWPQ1"]/table/tbody/tr[1]')
     for councillor in councillors:
@@ -20,14 +18,14 @@ class LambtonPersonScraper(CanadianScraper):
       name = name[0].text_content().strip().replace('Deputy ', '').replace('Warden ', '').replace('Mayor', '')
       role = councillor.xpath('.//td[1]//strong')[0].text_content().replace(name, '')
       if not role.strip():
-        role = 'councillor'
+        role = 'Councillor'
       if ',' in name:
         name = name.split(',')[0].strip()
       district = councillor.xpath('.//td[1]//p[contains(text(),",")]/text()')[0].split(',')[1].strip()
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role=role)
+      p.role = role
 
       p.image = councillor.xpath('.//td[1]//img/@src')[0]
 

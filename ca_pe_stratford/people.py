@@ -11,10 +11,8 @@ class StratfordPersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
-    yield self.scrape_mayor(page, organization)
+    yield self.scrape_mayor(page)
 
     councillors = page.xpath('//strong[contains(text(), "Councillor")]/parent::p')
     for councillor in councillors:
@@ -24,7 +22,7 @@ class StratfordPersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, role='councillor')
+      p.role = 'Councillor'
 
       p.image = councillor.xpath('./img/@src')[0]
 
@@ -43,7 +41,7 @@ class StratfordPersonScraper(CanadianScraper):
 
       yield p
 
-  def scrape_mayor(self, page, organization):
+  def scrape_mayor(self, page):
     info = page.xpath('//div[@class="entry-content"]/p')[:4]
     name = info[0].text_content().replace('Mayor', '')
     email = info[2].xpath('./a')[0].text_content()
@@ -51,7 +49,7 @@ class StratfordPersonScraper(CanadianScraper):
 
     p = Legislator(name=name, post_id='stratford')
     p.add_source(COUNCIL_PAGE)
-    p.add_membership(organization, role='mayor')
+    p.role = 'Mayor'
     p.image = page.xpath('//div[@class="entry-content"]/p/a/img/@src')[0]
     p.add_contact('email', email, None)
     p.add_contact('voice', phone, 'legislature')

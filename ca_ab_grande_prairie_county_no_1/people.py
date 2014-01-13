@@ -10,8 +10,6 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//table[@class="table-plain"]/tbody/tr/td[2]')
     for councillor in councillors:
@@ -20,7 +18,7 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
 
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(organization, 'councillor')
+      p.role = 'Councillor'
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
       p.image = image

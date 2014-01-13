@@ -11,14 +11,12 @@ class CambridgePersonScraper(CanadianScraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    organization = self.get_organization()
-    yield organization
 
     councillors = page.xpath('//div[@id="news"]//p')
     for councillor in councillors:
       district = councillor.xpath('./b')[0].text_content()
       district = re.findall(u'W|R.*', district)[0]
-      role = 'councillor'
+      role = 'Councillor'
       if 'Regional' in district:
         district = 'cambridge'
         role = 'regional councillor'
@@ -39,7 +37,7 @@ class CambridgePersonScraper(CanadianScraper):
       p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_membership(organization, role=role)
+      p.role = role
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
