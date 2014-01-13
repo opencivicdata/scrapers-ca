@@ -17,11 +17,11 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
     url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]
 
     response = urllib2.urlopen(url).read()
-    pdf = open('nl.pdf', 'w')
+    pdf = open('/tmp/nl.pdf', 'w')
     pdf.write(response)
     pdf.close()
 
-    data = subprocess.check_output(['pdftotext', '-layout', 'nl.pdf', '-'])
+    data = subprocess.check_output(['pdftotext', '-layout', '/tmp/nl.pdf', '-'])
     pages = data.split('Municipal Directory')[1:]
     for page in pages:
       page = page.splitlines(True)
@@ -73,4 +73,4 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         if address:
           p.add_contact('address', address, 'legislature')
         yield p
-    os.system('rm nl.pdf')
+    os.system('rm /tmp/nl.pdf')

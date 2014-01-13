@@ -15,11 +15,11 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()
-    pdf = open('sk.pdf', 'w')
+    pdf = open('/tmp/sk.pdf', 'w')
     pdf.write(response)
     pdf.close()
 
-    data = subprocess.check_output(['pdftotext', '-layout', 'sk.pdf', '-'])
+    data = subprocess.check_output(['pdftotext', '-layout', '/tmp/sk.pdf', '-'])
 
     data = data.splitlines(True)
     pages = []
@@ -89,4 +89,4 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         for key, value in contacts.iteritems():
           p.add_contact(key, value, None if key == 'email' else 'legislature')
         yield p
-    os.system('rm sk.pdf')
+    os.system('rm /tmp/sk.pdf')

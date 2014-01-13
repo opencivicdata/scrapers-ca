@@ -79,4 +79,4 @@ class YukonMunicipalitiesPersonScraper(Scraper):
             p.add_link(website, None)
           yield p
 
-    os.system('rm yt.pdf')
+    os.system('rm /tmp/yt.pdf')

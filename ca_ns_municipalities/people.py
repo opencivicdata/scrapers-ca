@@ -14,11 +14,11 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
 
   def get_people(self):
     response = urllib2.urlopen(COUNCIL_PAGE).read()
-    pdf = open('ns.pdf', 'w')
+    pdf = open('/tmp/ns.pdf', 'w')
     pdf.write(response)
     pdf.close()
 
-    data = subprocess.check_output(['pdftotext', 'ns.pdf', '-'])
+    data = subprocess.check_output(['pdftotext', '/tmp/ns.pdf', '-'])
     emails = re.findall(r'(?<=E-mail: ).+', data)
     data = re.split(r'Mayor |Warden ', data)[1:]
     for i, mayor in enumerate(data):
@@ -63,4 +63,4 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
           p.add_contact('email', emails.pop(i), None)
       yield p
 
-    os.system('rm ns.pdf')
+    os.system('rm /tmp/ns.pdf')
