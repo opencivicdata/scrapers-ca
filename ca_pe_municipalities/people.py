@@ -1,6 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
-from utils import lxmlize
+
+from utils import lxmlize, Legislator
 
 import re
 
@@ -45,14 +46,14 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         role = councillor.replace(name, '').strip()
         if not role:
           role = 'Councillor'
-        p = Legislator(name=name, post_id=district.text_content()) # @todo use Person
+        p = Legislator(name=name, post_id=district.text_content(), chamber=chamber)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_membership(org, role=role, chamber=chamber)
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('fax', fax, 'legislature')
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('email', email, None)
+        p.add_membership(org, role=role, post_id=district.text_content(), chamber=chamber)
+        membership.add_contact_detail('voice', phone, 'legislature')
+        membership.add_contact_detail('fax', fax, 'legislature')
+        membership.add_contact_detail('address', address, 'legislature')
+        membership.add_contact_detail('email', email, None)
         if site:
           p.add_link(site, None)
         yield p

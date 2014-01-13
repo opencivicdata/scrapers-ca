@@ -1,6 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
-from utils import lxmlize
+
+from utils import lxmlize, Legislator
 
 import re
 import urllib2
@@ -82,11 +83,11 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         continue
       yield org
       for councillor in councillors:
-        p = Legislator(post_id=district_name, name=councillor[0]) # @todo use Person
+        p = Legislator(name=councillor[0], post_id=district_name, chamber=chamber)
         p.add_source(COUNCIL_PAGE)
-        p.add_membership(org, role=councillor[1], chamber=chamber)
+        membership = p.add_membership(org, role=councillor[1], post_id=district_name, chamber=chamber)
 
         for key, value in contacts.iteritems():
-          p.add_contact(key, value, None if key == 'email' else 'legislature')
+          membership.add_contact_detail(key, value, None if key == 'email' else 'legislature')
         yield p
     os.system('rm /tmp/sk.pdf')

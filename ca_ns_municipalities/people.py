@@ -1,6 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
-from utils import lxmlize
+
+from utils import lxmlize, Legislator
 
 import re
 import urllib2
@@ -35,9 +36,9 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Legislator(name=name, post_id=district) # @todo use Person
+      p = Legislator(name=name, post_id=district, chamber=chamber)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(org, role='Mayor', chamber=chamber)
+      membership.add_membership(org, role='Mayor', post_id=district, chamber=chamber)
 
       address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:
@@ -50,9 +51,9 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
       if 'Fax' in lines.pop(0):
         fax = lines.pop(0)
 
-      p.add_contact('address', address, 'legislature')
-      p.add_contact('voice', phone, 'legislature')
-      p.add_contact('fax', fax, 'legislature')
+      membership.add_contact_detail('address', address, 'legislature')
+      membership.add_contact_detail('voice', phone, 'legislature')
+      membership.add_contact_detail('fax', fax, 'legislature')
       # @todo emails are being assigned incorrectly, e.g. Town of Berwick picks
       # up Cape Breton Regional Municipality and Region of Queens Municipality
       for i, email in enumerate(emails):
@@ -60,7 +61,7 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
         regex = regex.replace('||', '|')
         matches = re.findall(r'%s' % regex, email)
         if matches:
-          p.add_contact('email', emails.pop(i), None)
+          membership.add_contact_detail('email', emails.pop(i), None)
       yield p
 
     os.system('rm /tmp/ns.pdf')

@@ -1,8 +1,8 @@
-#!/usr/bin/python
 # coding: utf8
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
-from utils import lxmlize
+
+from utils import lxmlize, Legislator
 
 import re
 
@@ -27,22 +27,22 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Legislator(name=name, post_id=district) # @todo use Person
+      p = Legislator(name=name, post_id=district, chamber=chamber)
       p.add_source(COUNCIL_PAGE)
-      p.add_membership(org, role=role, chamber=chamber)
+      membership = p.add_membership(org, role=role, post_id=district, chamber=chamber)
 
       info = councillor.xpath('./ancestor::p/text()')
       for contact in info:
         if 'NT' in contact:
-          p.add_contact('address', contact.strip(), 'legislature')
+          membership.add_contact_detail('address', contact.strip(), 'legislature')
         if 'Tel' in contact:
           contact = contact.replace('Tel. ', '').replace('(', '').replace(') ', '-').strip()
-          p.add_contact('voice', contact, 'legislature')
+          membership.add_contact_detail('voice', contact, 'legislature')
         if 'Fax' in contact:
           contact = contact.replace('Fax ', '').replace('(', '').replace(') ', '-').strip()
-          p.add_contact('fax', contact, 'legislature')
+          membership.add_contact_detail('fax', contact, 'legislature')
       email = councillor.xpath('./parent::p//a[contains(@href, "mailto:")]/text()')[0]
-      p.add_contact('email', email, None)
+      membership.add_contact_detail('email', email, None)
 
       if 'Website' in councillor.xpath('./parent::p')[0].text_content():
         p.add_link(councillor.xpath('./parent::p//a')[1].attrib['href'], None)

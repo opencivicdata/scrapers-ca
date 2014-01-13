@@ -1,10 +1,9 @@
 # coding: utf-8
-from pupa.scrape import Jurisdiction, Scraper
-from pupa.models import Organization
-import os.path
-
-from scrapelib import urlopen
 import lxml.html
+from scrapelib import urlopen
+
+from pupa.scrape import Scraper, Jurisdiction
+from pupa.models.person import Person
 
 CONTACT_DETAIL_TYPE_MAP = {
   'Address': 'address',
@@ -94,6 +93,20 @@ class CanadianJurisdiction(Jurisdiction):
     return ['N/A']
 
 
+# Removes _is_legislator flag. Used by aggregations.
+# @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
+class Legislator(Person):
+    __slots__ = ('post_id', 'party', 'chamber', '_contact_details', '_role')
+
+    def __init__(self, name, post_id, party=None, chamber=None, role='member', **kwargs):
+        super(Legislator, self).__init__(name, **kwargs)
+        self.post_id = post_id
+        self.party = party
+        self.chamber = chamber
+        self._contact_details = []
+        self._role = role
+
+
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
   page = lxml.html.fromstring(entry)
@@ -105,7 +118,3 @@ def lxmlize(url, encoding='utf-8'):
   else:
     page.make_links_absolute(url)
     return page
-
-
-class CanadianScraper(Scraper):
-  pass

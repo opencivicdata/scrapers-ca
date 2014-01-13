@@ -1,6 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
-from utils import lxmlize
+
+from utils import lxmlize, Legislator
 
 import re
 import urllib2
@@ -67,14 +68,14 @@ class YukonMunicipalitiesPersonScraper(Scraper):
           councillor = line[col1end - 1:col2end - 1].strip()
           if not councillor:
             continue
-          p = Legislator(name=councillor, post_id=district) # @todo use Person
+          p = Legislator(name=councillor, post_id=district, chamber=chamber)
           p.add_source(COUNCIL_PAGE)
-          p.add_membership(organization, role=role, chamber=chamber)
-          p.add_contact('address', address, 'legislature')
-          p.add_contact('voice', phone, 'legislature')
-          p.add_contact('email', email, None)
+          membership = p.add_membership(organization, role=role, post_id=district, chamber=chamber)
+          membership.add_contact_detail('address', address, 'legislature')
+          membership.add_contact_detail('voice', phone, 'legislature')
+          membership.add_contact_detail('email', email, None)
           if fax:
-            p.add_contact('fax', fax, 'legislature')
+            membership.add_contact_detail('fax', fax, 'legislature')
           if website:
             p.add_link(website, None)
           yield p

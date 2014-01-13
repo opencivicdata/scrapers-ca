@@ -1,6 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
-from utils import lxmlize
+
+from utils import lxmlize, Legislator
 
 import re
 import urllib2
@@ -59,18 +60,18 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         org.add_source(url)
         yield org
 
-        p = Legislator(name=name, post_id=district) # @todo use Person
+        p = Legislator(name=name, post_id=district, chamber=chamber)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_membership(org, role='Mayor', chamber=chamber)
+        membership = p.add_membership(org, role='Mayor', post_id=district, chamber=chamber)
         if phone:
-          p.add_contact('voice', phone, 'legislature')
+          membership.add_contact_detail('voice', phone, 'legislature')
         # Im excluding fax because that column isn't properly aligned
         # if fax:
-        #   p.add_contact('fax', fax, None)
+        #   membership.add_contact_detail('fax', fax, None)
         if email:
-          p.add_contact('email', email, None)
+          membership.add_contact_detail('email', email, None)
         if address:
-          p.add_contact('address', address, 'legislature')
+          membership.add_contact_detail('address', address, 'legislature')
         yield p
     os.system('rm /tmp/nl.pdf')

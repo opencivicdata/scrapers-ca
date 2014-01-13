@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf8
 from pupa.scrape import Scraper
 from pupa.models import Event

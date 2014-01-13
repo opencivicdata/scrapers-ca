@@ -1,7 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
 
-from utils import lxmlize
+from utils import lxmlize, Legislator
 
 import re
 
@@ -42,23 +42,25 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         for i, councillor in enumerate(councillors):
           if 'Vacant' in councillor:
             continue
-          p = Legislator(name=councillor, post_id=district) # @todo use Person
+          p = Legislator(name=councillor, post_id=district, chamber=chamber)
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)
 
           if i == 0:
-            p.add_membership(org, role='Mayor', chamber=chamber)
+            membership = p.add_membership(org, role='Mayor')
           else:
-            p.add_membership(org, role='Councillor', chamber=chamber)
+            membership = p.add_membership(org, role='Councillor')
 
-          p.add_contact('address', address, 'legislature')
+          membership.post_id = title
+          membership.chamber = chamber
+          membership.add_contact_detail('address', address, 'legislature')
           if phone:
-            p.add_contact('voice', phone, 'legislature')
+            membership.add_contact_detail('voice', phone, 'legislature')
           if fax:
-            p.add_contact('fax', fax, 'legislature')
+            membership.add_contact_detail('fax', fax, 'legislature')
           if email:
-            p.add_contact('email', email, None)
+            membership.add_contact_detail('email', email, None)
           if site:
             p.add_link(site, None)
           yield p

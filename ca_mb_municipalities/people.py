@@ -1,7 +1,7 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 from pupa.models import Organization
 
-from utils import lxmlize
+from utils import lxmlize, Legislator
 
 import re
 
@@ -38,16 +38,18 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       councillors = district.xpath('.//td[3]/text()')
       positions = district.xpath('.//td[2]/b/text()')
       for i, councillor in enumerate(councillors):
-        p = Legislator(name=councillor, post_id=title) # @todo use Person
+        p = Legislator(name=councillor, post_id=title, chamber=chamber)
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:
-          p.add_membership(organization, role='Councillor', chamber=chamber)
+          membership = p.add_membership(organization, role='Councillor')
         else:
-          p.add_membership(organization, role=positions[i], chamber=chamber)
+          membership = p.add_membership(organization, role=positions[i])
 
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('fax', fax, 'legislature')
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('email', email, None)
+        membership.post_id = title
+        membership.chamber = chamber
+        membership.add_contact_detail('address', address, 'legislature')
+        membership.add_contact_detail('fax', fax, 'legislature')
+        membership.add_contact_detail('voice', phone, 'legislature')
+        membership.add_contact_detail('email', email, None)
         yield p
