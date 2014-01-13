@@ -93,18 +93,16 @@ class CanadianJurisdiction(Jurisdiction):
     return ['N/A']
 
 
-# Removes _is_legislator flag. Used by aggregations.
+# Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
 class Legislator(Person):
-    __slots__ = ('post_id', 'party', 'chamber', '_contact_details', '_role')
+    __slots__ = ('post_id', 'party', 'chamber')
 
-    def __init__(self, name, post_id, party=None, chamber=None, role='member', **kwargs):
+    def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
         super(Legislator, self).__init__(name, **kwargs)
         self.post_id = post_id
         self.party = party
         self.chamber = chamber
-        self._contact_details = []
-        self._role = role
 
 
 def lxmlize(url, encoding='utf-8'):
