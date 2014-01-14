@@ -1,3 +1,4 @@
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -26,7 +27,7 @@ class QuebecPersonScraper(Scraper):
         district = councillor.xpath('./parent::div/preceding-sibling::h2/text()')[-1]
 
       if 'Maire' in district:
-        district = 'quebec'
+        district = u'Québec'
         role = 'Mayor'
 
       p = Legislator(name=name, post_id=district, role=role)

@@ -15,10 +15,10 @@ class ClaringtonPersonScraper(Scraper):
     councillors = page.xpath('//*[@class="subtitle"]')
     emails = page.xpath('.//a[contains(@href, "mailto:")]')
     for councillor in councillors:
-      name = re.findall(r'(([A-Z]+ ?){2,})', councillor.text_content())[0][0].lower()
+      name = re.findall(r'(([A-Z]+ ?){2,})', councillor.text_content())[0][0].title()
       district = re.findall(r'\((.*)\)?', councillor.text_content())
       if not district:
-        district = 'clarington'
+        district = 'Clarington'
         role = 'Mayor'
       else:
         district = district[0].replace(")", '')

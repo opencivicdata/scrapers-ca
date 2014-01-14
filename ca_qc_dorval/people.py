@@ -17,7 +17,7 @@ class DorvalPersonScraper(Scraper):
       info = councillor.xpath('.//strong/text()')
       name = info[0]
       if len(info) < 3:
-        district = 'dorval'
+        district = 'Dorval'
         role = 'Mayor'
       else:
         district = info[2]

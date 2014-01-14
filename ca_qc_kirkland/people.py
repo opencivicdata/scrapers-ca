@@ -17,7 +17,7 @@ class KirklandPersonScraper(Scraper):
       if not councillor.text_content().strip():
         continue
       if councillor == councillors[0]:
-        district = 'kirkland'
+        district = 'Kirkland'
         role = 'Mayor'
       else:
         district = councillor.xpath('.//h2')[0].text_content()

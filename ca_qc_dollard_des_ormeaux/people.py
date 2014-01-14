@@ -22,7 +22,7 @@ class DollardDesOrmeauxPersonScraper(Scraper):
 
       if 'Mayor' in councillor.text_content():
         name = councillor.text_content().replace('Mayor', '')
-        district = 'dollard-des-ormeaux'
+        district = 'Dollard-Des Ormeaux'
         role = 'Mayor'
       else:
         name = re.split(r'[0-9]', councillor.text_content())[1]

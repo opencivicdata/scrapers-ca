@@ -19,7 +19,7 @@ class MercierPersonScraper(Scraper):
 
       if councillor == councillors[6]:
         name = councillor.xpath('.//span')[0].text_content().replace('Maire', '').strip()
-        district = 'mercier'
+        district = 'Mercier'
         role = 'Mayor'
       else:
         name, district = councillor.xpath('.//span')[0].text_content().split('Conseiller')

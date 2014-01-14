@@ -65,7 +65,7 @@ def scrape_mayor(url):
   phone = info[4]
   fax = info[5]
 
-  p = Legislator(name=name, post_id='wood buffalo', role='Mayor')
+  p = Legislator(name=name, post_id='Wood Buffalo', role='Mayor')
   p.add_source(url)
   p.add_source(contact_url)
   p.add_contact('address', address, 'legislature')

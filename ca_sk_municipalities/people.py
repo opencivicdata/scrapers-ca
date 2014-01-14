@@ -49,7 +49,7 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
 
     for district in districts:
 
-      district_name = district.pop(0).split(',')[0].lower()
+      district_name = district.pop(0).split(',')[0].title()
 
       chamber = district_name + ' Council'
       org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)

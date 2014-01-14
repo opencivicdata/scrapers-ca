@@ -20,7 +20,7 @@ class WellesleyPersonScraper(Scraper):
         district = district[-1]
         role = 'Councillor'
       else:
-        district = 'wellesley'
+        district = 'Wellesley'
         role = 'Mayor'
 
       image = councillor.xpath('./preceding-sibling::td/img/@src')[-1]

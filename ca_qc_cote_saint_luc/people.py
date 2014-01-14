@@ -1,3 +1,4 @@
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -51,7 +52,7 @@ class CoteSaintLucPersonScraper(Scraper):
     email = info.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
     phone = info.xpath('.//p[contains(text(), "phone")]/text()')[0].replace('Telephone: ', '')
 
-    p = Legislator(name=name, post_id='cote st-luc', role='Mayor')
+    p = Legislator(name=name, post_id=u'Côte-Saint-Luc', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.image = info.xpath('.//img/@src')[0]
     p.add_source(url)

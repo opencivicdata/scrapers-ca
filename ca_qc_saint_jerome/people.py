@@ -1,3 +1,4 @@
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -27,7 +28,7 @@ class SaintJeromePersonScraper(Scraper):
 
       # if theres still no district, it must be the mayor
       if not district:
-        district = 'sainte-jerome'
+        district = 'Saint-Jérôme'
         role = 'Mayor'
       else:
         district = district[0]

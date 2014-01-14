@@ -20,7 +20,7 @@ class BrossardPersonScraper(Scraper):
       district = re.sub(r'(?<=[0-9]) (.) (?=S)', ', ', info.pop(0))
       role = 'Councillor'
       if 'Mayor' in district:
-        district = 'brossard'
+        district = 'Brossard'
         role = 'Mayor'
       phone = info.pop(0).replace('ext. ', 'x').strip()
 

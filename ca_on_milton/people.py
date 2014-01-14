@@ -17,7 +17,7 @@ class MiltonPersonScraper(Scraper):
       name = councillor.xpath('./td[2]/p/text()')[1]
       role = councillor.xpath('./td[2]/p/text()')[0]
       if len(councillor.xpath('./td[2]/p/text()')) < 3:
-        district = 'milton'
+        district = 'Milton'
       else:
         district = councillor.xpath('./td[2]/p/text()')[2]
 

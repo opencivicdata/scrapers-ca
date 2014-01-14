@@ -21,7 +21,7 @@ class KawarthaLakesPersonScraper(Scraper):
         name = councillor.text_content().replace(district, '').strip()
         role = 'Councillor'
       else:
-        district = 'kawartha lakes'
+        district = 'Kawartha Lakes'
         name = councillor.text_content().replace('Mayor', '').strip()
         role = 'Mayor'
 

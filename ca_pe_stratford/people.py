@@ -46,7 +46,7 @@ class StratfordPersonScraper(Scraper):
     email = info[2].xpath('./a')[0].text_content()
     phone = info[3].text_content().replace('Phone ', '')
 
-    p = Legislator(name=name, post_id='stratford', role='Mayor')
+    p = Legislator(name=name, post_id='Stratford', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.image = page.xpath('//div[@class="entry-content"]/p/a/img/@src')[0]
     p.add_contact('email', email, None)

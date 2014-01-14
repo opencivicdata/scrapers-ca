@@ -1,3 +1,4 @@
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -19,7 +20,7 @@ class MontrealEstPersonScraper(Scraper):
         continue
       if 'maire' in name:
         name = name.split('maire')[1].strip()
-        district = 'montreal-est'
+        district = u'Montréal-Est'
       else:
         district = councillor.xpath('./ancestor::td/following-sibling::td//strong')[-1].text_content()
         district = ' '.join(district.split()[1:])

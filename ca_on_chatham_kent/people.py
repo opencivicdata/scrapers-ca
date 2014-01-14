@@ -16,7 +16,7 @@ class ChathamKentPersonScraper(Scraper):
     for ward in wards:
       district = ward.xpath('.//p')[0].text_content()
       if 'Mayor' in district:
-        district = 'chatham-kent'
+        district = 'Chatham-Kent'
         role = 'Mayor'
       else:
         district = re.findall(r'(?<=Council )(.*)(?=\()', district)[0]

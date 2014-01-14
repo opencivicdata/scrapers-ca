@@ -45,7 +45,7 @@ class SummersidePersonScraper(Scraper):
 
     name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Mayor', '')
 
-    p = Legislator(name=name, post_id='summerside', role='Mayor')
+    p = Legislator(name=name, post_id='Summerside', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
 

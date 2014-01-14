@@ -29,7 +29,7 @@ class PickeringPersonScraper(Scraper):
       else:
         name = councillor.xpath('.//strong/text()')[1]
         role = 'Mayor'
-        ward = 'pickering'
+        ward = 'Pickering'
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
       p = Legislator(name=name, post_id=ward, role=role)
       p.add_source(COUNCIL_PAGE)

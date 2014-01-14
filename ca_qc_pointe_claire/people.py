@@ -15,7 +15,7 @@ class PointeClairePersonScraper(Scraper):
     mayor = page.xpath('.//div[@class="item-page clearfix"]//table[1]//p')[1]
     name = mayor.xpath('.//strong/text()')[0]
 
-    p = Legislator(name=name, post_id='pointe-claire', role='Mayor')
+    p = Legislator(name=name, post_id='Pointe-Claire', role='Mayor')
     p.add_source(COUNCIL_PAGE)
 
     phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')

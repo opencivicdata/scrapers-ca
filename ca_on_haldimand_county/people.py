@@ -18,7 +18,7 @@ class HaldimandCountyPersonScraper(Scraper):
         continue
       if 'Mayor' in councillor.text_content():
         name = councillor.text_content().replace('Mayor ', '')
-        district = 'haldimand'
+        district = 'Haldimand County'
         role = 'Mayor'
       else:
         district, name = councillor.text_content().split(' - ')

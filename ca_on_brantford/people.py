@@ -57,7 +57,7 @@ def scrape_mayor():
   page = lxmlize(mayor_url)
   name = re.findall(r'(?<=Mayor)(.*)(?=of)', page.xpath('//div[@id="header"]/h1/text()')[0])[0]
 
-  p = Legislator(name=name, post_id='brantford', role='Mayor')
+  p = Legislator(name=name, post_id='Brantford', role='Mayor')
   p.add_source(mayor_url)
 
   contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]

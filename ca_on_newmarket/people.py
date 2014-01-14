@@ -67,7 +67,7 @@ class NewmarketPersonScraper(Scraper):
 
   def scrape_mayor(self, div):
     name = div.xpath('.//strong/text()')[0].replace(',', '')
-    p = Legislator(name=name, post_id='newmarket', role='Councillor')
+    p = Legislator(name=name, post_id='Newmarket', role='Councillor')
     p.add_source(COUNCIL_PAGE)
 
     numbers = div.xpath('.//p/text()')

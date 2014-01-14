@@ -19,10 +19,10 @@ class BellevillePersonScraper(Scraper):
         continue
       name = name[0]
 
-      district = councillor.xpath('./ancestor::tr/preceding-sibling::tr//font[@color="#000080"]')[0].text_content().lower().replace('councillors', '')
+      district = councillor.xpath('./ancestor::tr/preceding-sibling::tr//font[@color="#000080"]')[0].text_content().title().replace('Councillors', '')
       role = 'Councillor'
       if not 'ward' in district:
-        district = 'belleville'
+        district = 'Belleville'
         role = 'Mayor'
 
       p = Legislator(name=name, post_id=district, role=role)

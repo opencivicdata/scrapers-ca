@@ -60,7 +60,7 @@ class GuelphPersonScraper(Scraper):
     name = div.xpath('.//a')[0].text_content().replace('Mayor', '')
     url = div.xpath('.//a')[0].attrib['href']
 
-    p = Legislator(name=name, post_id='guelph', role='Mayor')
+    p = Legislator(name=name, post_id='Guelph', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 

@@ -1,3 +1,4 @@
+# coding: utf8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -20,7 +21,7 @@ class LevisPersonScraper(Scraper):
       name = page.xpath('//table[@id="table1"]//td[2]//b')[0].text_content()
       district = page.xpath('//table[@id="table1"]//td[2]//i')[0].text_content()
       if 'Maire' in district:
-        district = 'levis'
+        district = u'Lévis'
         role = 'Mayor'
       else:
         district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]

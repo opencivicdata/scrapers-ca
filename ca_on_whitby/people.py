@@ -25,7 +25,7 @@ class WhitbyPersonScraper(Scraper):
       if role == 'Councillor':
         district = councillor.xpath('./td[2]/p/strong/text()')[0].replace('Councillor', '')
       else:
-        district = 'whitby'
+        district = 'Whitby'
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
 

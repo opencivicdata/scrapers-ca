@@ -59,7 +59,7 @@ def scrape_mayor(url):
   phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(', '').replace(') ', '-')
   fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
 
-  p = Legislator(name=name, post_id='saskatoon', role='Mayor')
+  p = Legislator(name=name, post_id='Saskatoon', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = image

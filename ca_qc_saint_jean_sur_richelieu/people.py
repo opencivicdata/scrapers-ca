@@ -48,7 +48,7 @@ def scrape_mayor(div):
   contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
   contact_page = lxmlize(contact_url)
 
-  p = Legislator(name=name, post_id='saint-jean-sur-richelieu', role='Mayor')
+  p = Legislator(name=name, post_id='Saint-Jean-sur-Richelieu', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_source(contact_url)

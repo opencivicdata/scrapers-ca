@@ -52,7 +52,7 @@ def scrape_mayor(url):
   address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':', '').strip()
   phone = page.xpath('//strong[contains(text(), "phone")]/parent::p/text()')[1].split()[1]
 
-  p = Legislator(name=name, post_id='caledon', role='Mayor')
+  p = Legislator(name=name, post_id='Caledon', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = page.xpath('//h2[contains(text(), "About me")]/img/@src')[0]

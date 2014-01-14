@@ -50,7 +50,7 @@ def scrape_mayor():
   page = lxmlize(MAYOR_PAGE)
   name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[1].replace('Mayor', '').strip()
 
-  p = Legislator(name=name, post_id='edmonton', role='Mayor')
+  p = Legislator(name=name, post_id='Edmonton', role='Mayor')
   p.add_source(MAYOR_PAGE)
 
   image = page.xpath('//div[@id="contentArea"]//img/@src')[0]
