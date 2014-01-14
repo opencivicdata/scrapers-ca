@@ -35,9 +35,8 @@ class SaintJeromePersonScraper(Scraper):
 
       phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', councillor)[0].replace(' ', '-')
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.image = image[0]
       p.add_contact('voice', phone, 'legislature')
       yield p

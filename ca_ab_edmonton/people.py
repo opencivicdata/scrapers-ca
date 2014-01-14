@@ -19,10 +19,9 @@ class EdmontonPersonScraper(Scraper):
       page = lxmlize(councillor)
       district, name = page.xpath('//div[@id="contentArea"]/h1/text()')[0].split('-')
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.role = 'Councillor'
 
       image = page.xpath('//div[@id="contentArea"]//img/@src')
       if image:
@@ -51,9 +50,8 @@ def scrape_mayor():
   page = lxmlize(MAYOR_PAGE)
   name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[1].replace('Mayor', '').strip()
 
-  p = Legislator(name=name, post_id='edmonton')
+  p = Legislator(name=name, post_id='edmonton', role='Mayor')
   p.add_source(MAYOR_PAGE)
-  p.role = 'Mayor'
 
   image = page.xpath('//div[@id="contentArea"]//img/@src')[0]
   p.image = image

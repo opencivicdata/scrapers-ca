@@ -16,9 +16,8 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
       name = councillor.xpath('./h2')[0].text_content().split('Division')[0]
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
-      p.role = 'Councillor'
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
       p.image = image

@@ -26,10 +26,9 @@ class LevisPersonScraper(Scraper):
         district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]
         role = 'Councillor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.role = role
       p.image = page.xpath('//img[@alt = "Photo du membre"]/@src')[0]
 
       script = page.xpath('//table[@id="table1"]//td[2]//script')[0].text_content()

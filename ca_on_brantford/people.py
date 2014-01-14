@@ -23,10 +23,9 @@ class BrantfordPersonScraper(Scraper):
       name = councillor.xpath('./td')[1].text_content()
       url = councillor.xpath('./td/a')[0].attrib['href']
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = 'Councillor'
 
       page = lxmlize(url)
 
@@ -58,9 +57,8 @@ def scrape_mayor():
   page = lxmlize(mayor_url)
   name = re.findall(r'(?<=Mayor)(.*)(?=of)', page.xpath('//div[@id="header"]/h1/text()')[0])[0]
 
-  p = Legislator(name=name, post_id='brantford')
+  p = Legislator(name=name, post_id='brantford', role='Mayor')
   p.add_source(mayor_url)
-  p.role = 'Mayor'
 
   contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]
   page = lxmlize(contact_url)

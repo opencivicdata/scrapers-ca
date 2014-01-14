@@ -23,10 +23,9 @@ class CoteSaintLucPersonScraper(Scraper):
       district = councillor.xpath('.//h3/text()')[0]
       name = councillor.xpath('.//p[contains(text(), "Councillor")]/strong/text()')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillors_url)
-      p.role = 'Councillor'
 
       p.image = councillor.xpath('.//img/@src')[0]
 
@@ -52,9 +51,8 @@ class CoteSaintLucPersonScraper(Scraper):
     email = info.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
     phone = info.xpath('.//p[contains(text(), "phone")]/text()')[0].replace('Telephone: ', '')
 
-    p = Legislator(name=name, post_id='cote st-luc')
+    p = Legislator(name=name, post_id='cote st-luc', role='Mayor')
     p.add_source(COUNCIL_PAGE)
-    p.role = 'Mayor'
     p.image = info.xpath('.//img/@src')[0]
     p.add_source(url)
     p.add_contact('email', email, None)

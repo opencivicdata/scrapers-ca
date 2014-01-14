@@ -28,10 +28,9 @@ class ChathamKentPersonScraper(Scraper):
         url = councillor.attrib['href']
         page = lxmlize(url)
 
-        p = Legislator(name=name, post_id=district)
+        p = Legislator(name=name, post_id=district, role=role)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.role = role
 
         p.image = page.xpath('//div[@class="pageContent"]//img/@src')[0]
 

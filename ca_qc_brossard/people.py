@@ -24,9 +24,8 @@ class BrossardPersonScraper(Scraper):
         role = 'Mayor'
       phone = info.pop(0).replace('ext. ', 'x').strip()
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
 
       image = page.xpath('//div[@class="slide_wrap"]//a[contains(@style, "background-image:url") and contains(@style, "%s")]/@style' % name.split()[0])[0]
       p.image = re.findall(r'\((.*)\)', image)[0]

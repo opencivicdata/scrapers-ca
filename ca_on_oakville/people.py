@@ -17,7 +17,7 @@ class OakvillePersonScraper(Scraper):
     for councillor in councillors:
       if len(councillor.xpath('.//h2')) < 3:
          name = councillor.xpath('.//h2')[1].text_content()
-         p = Legislator(name=name, post_id="Oakville")
+         p = Legislator(name=name, post_id="Oakville", role='Mayor')
          url = councillor.xpath('.//a')[0].attrib['href']
          self.scrape_mayor(url, p)
          yield p
@@ -25,7 +25,7 @@ class OakvillePersonScraper(Scraper):
         name = councillor.xpath('.//h2')[2].text_content()
         district = councillor.xpath('.//h2')[0].text_content()
 
-        p = Legislator(name=name, post_id=district)
+        p = Legislator(name=name, post_id=district, role='Councillor')
         url = councillor.xpath('.//a')[0].attrib['href']
         self.scrape_councillor(url, p)
         yield p
@@ -34,7 +34,6 @@ class OakvillePersonScraper(Scraper):
     page = lxmlize(url)
     mayor.add_source(COUNCIL_PAGE)
     mayor.add_source(url)
-    mayor.role = 'Mayor'
 
     mayor.image = page.xpath('//div[@class="twocol multicol"]//img/@src')[0]
 
@@ -57,7 +56,6 @@ class OakvillePersonScraper(Scraper):
     page = lxmlize(url)
     councillor.add_source(COUNCIL_PAGE)
     councillor.add_source(url)
-    councillor.role = 'Councillor'
 
     councillor.image = page.xpath('//div[@class="fourcol multicollast" or @class="colsevenfive multicol"]//img/@src')[0]
 

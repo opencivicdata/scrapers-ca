@@ -25,9 +25,8 @@ class BellevillePersonScraper(Scraper):
         district = 'belleville'
         role = 'Mayor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
 
       p.image = councillor.xpath('.//parent::*//img/@src')[0]
 

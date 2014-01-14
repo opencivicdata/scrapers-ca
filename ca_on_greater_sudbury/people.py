@@ -32,10 +32,9 @@ class GreaterSudburyPersonScraper(Scraper):
       fax = re.findall(r'([0-9].*)', fax)[0].replace(') ', '-')
       email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
-      p.role = 'Councillor'
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
@@ -61,10 +60,9 @@ class GreaterSudburyPersonScraper(Scraper):
     fax = fax.split(' ')[-1]
     email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p = Legislator(name=name, post_id='Sudbury')
+    p = Legislator(name=name, post_id='Sudbury', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
-    p.role = 'Mayor'
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('fax', fax, 'legislature')

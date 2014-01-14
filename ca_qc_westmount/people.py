@@ -16,10 +16,9 @@ class WestmountPersonScraper(Scraper):
     name = mayor.text_content().replace('Mayor', '').strip()
     url = mayor.attrib['href']
     mayor_page = lxmlize(url)
-    p = Legislator(name=name, post_id='Westmount')
+    p = Legislator(name=name, post_id='Westmount', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.role = 'Mayor'
     mayor_info = mayor_page.xpath('//div[@style="padding-right:10px;"]/table')[0]
     phone = mayor_info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
     fax = mayor_info.xpath('.//tr[3]/td[2]')[0].text_content().replace(' ', '-')
@@ -38,10 +37,9 @@ class WestmountPersonScraper(Scraper):
       info = page.xpath('.//div[@style="padding-right:10px;"]/table')[0]
       phone = info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
       email = info.xpath('.//tr[3]/td[2]')[0].text_content().strip()
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = 'Councillor'
       p.image = info.xpath('./ancestor::td//div[not(@id="insert")]/img/@src')[0]
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

@@ -25,9 +25,8 @@ class SainteAnneDeBellevuePersonScraper(Scraper):
         district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller', '')
         role = 'Councillor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
 
       p.image = images[i]
 

@@ -28,14 +28,13 @@ class TorontoPersonScraper(Scraper):
       name = "Ana Bailao"
     district = info.xpath("//p")[0].text_content()
 
-    p = Legislator(name=name, post_id=district)
+    p = Legislator(name=name, post_id=district, role='Councillor')
 
     info = info.xpath("//div[@class='last']")[0]
 
     # add links
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.role = 'Councillor'
 
     p.image = page.xpath('//div[@class="two_column"]/div/img/@src')[0]
 
@@ -77,10 +76,9 @@ class TorontoPersonScraper(Scraper):
     page = lxmlize(url)
     name = page.xpath("//div[@class='detail']//h1/text()")[0].replace("Toronto Mayor", "").strip()
 
-    p = Legislator(name, "Toronto")
+    p = Legislator(name, post_id="Toronto", role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.role = 'Mayor'
 
     p.image = page.xpath('//div[@class="image"]/img/@src')[0]
 

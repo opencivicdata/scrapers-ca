@@ -31,9 +31,8 @@ class ClaringtonPersonScraper(Scraper):
       else:
         image = councillor.xpath('.//parent::*/following-sibling::*//@src')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.add_contact('email', email, None)
       p.image = image
       yield p

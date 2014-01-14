@@ -23,10 +23,9 @@ class NewmarketPersonScraper(Scraper):
       role = councillor.xpath('.//strong/text()')[1].split('-')[0]
       url = councillor.xpath('.//a/@href')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = role
 
       p.image = councillor.xpath('.//img/@src')[0]
 
@@ -68,9 +67,8 @@ class NewmarketPersonScraper(Scraper):
 
   def scrape_mayor(self, div):
     name = div.xpath('.//strong/text()')[0].replace(',', '')
-    p = Legislator(name=name, post_id='newmarket')
+    p = Legislator(name=name, post_id='newmarket', role='Councillor')
     p.add_source(COUNCIL_PAGE)
-    p.role = 'Mayor'
 
     numbers = div.xpath('.//p/text()')
     for number in numbers:

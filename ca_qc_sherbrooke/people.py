@@ -22,10 +22,9 @@ class SherbrookePersonScraper(Scraper):
       if 'Maire' in district:
         district = 'Sherbrooke'
         role = 'Mayor'
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = role
       p.image = page.xpath('//div[@id="conseiller-photo"]//img/@src')[0]
       phone = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')[1].strip().replace(' ', '-')
       p.add_contact('voice', phone, None)

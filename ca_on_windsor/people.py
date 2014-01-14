@@ -20,9 +20,8 @@ class WindsorPersonScraper(Scraper):
       phone = councillor.xpath('./text()')[3].split(':')[1].strip().replace('(', '').replace(') ', '-')
       email = councillor.xpath('./a[contains(@href, "mailto")]/text()')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
-      p.role = 'Councillor'
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
@@ -38,9 +37,8 @@ class WindsorPersonScraper(Scraper):
     fax = fax.strip().replace('(', '').replace(') ', '-')
     email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
 
-    p = Legislator(name=name, post_id='Windsor')
+    p = Legislator(name=name, post_id='Windsor', role='Mayor')
     p.add_source(MAYOR_PAGE)
-    p.role = 'Mayor'
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('fax', fax, 'legislature')

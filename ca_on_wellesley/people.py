@@ -31,9 +31,8 @@ class WellesleyPersonScraper(Scraper):
       phone = councillor.xpath('./text()')[4].strip().replace('.', '-')
       email = councillor.xpath('./a/text()')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

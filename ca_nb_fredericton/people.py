@@ -22,9 +22,8 @@ class FrederictonPersonScraper(Scraper):
         district = re.findall(r'(Ward:.*)(?=Address:)', councillor.text_content())[0].replace(':', '').strip()
         role = 'Councillor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
 
       p.image = councillor.xpath('.//img/@src')[0]
 

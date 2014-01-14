@@ -18,10 +18,9 @@ class BritishColumbiaPersonScraper(Scraper):
       name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').strip()
       district = page.xpath('//em/strong/text()')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='MLA')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.role = 'MLA'
 
       p.image = page.xpath('//a[contains(@href, "images/members")]/@href')[0]
 

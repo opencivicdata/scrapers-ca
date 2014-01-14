@@ -19,10 +19,9 @@ class SaskatchewanPersonScraper(Scraper):
       url = councillor.xpath('./td[1]/a/@href')[0]
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='MLA')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = 'MLA'
 
       contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
       website = contact.xpath('./td[3]//div[3]//a')

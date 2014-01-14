@@ -22,9 +22,8 @@ class DorvalPersonScraper(Scraper):
       else:
         district = info[2]
         role = 'Councillor'
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
 
       p.image = councillor.xpath('./parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
 

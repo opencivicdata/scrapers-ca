@@ -26,10 +26,9 @@ class WoodBuffaloPersonScraper(Scraper):
       url = councillor.attrib['href']
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = 'Councillor'
       p.image = image
 
       contacts = page.xpath('//div[@id="content"]//div[@class="block"]/p/text()')
@@ -66,10 +65,9 @@ def scrape_mayor(url):
   phone = info[4]
   fax = info[5]
 
-  p = Legislator(name=name, post_id='wood buffalo')
+  p = Legislator(name=name, post_id='wood buffalo', role='Mayor')
   p.add_source(url)
   p.add_source(contact_url)
-  p.role = 'Mayor'
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('fax', fax, 'legislature')

@@ -29,9 +29,8 @@ class DollardDesOrmeauxPersonScraper(Scraper):
         district = 'District ' + re.findall(r'[0-9]', councillor.text_content())[0]
         role = 'Councillor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.image = councillor.xpath('./parent::p/parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
 
       email = councillor.xpath('./parent::p/following-sibling::p//a[contains(@href, "mailto:")]')

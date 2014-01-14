@@ -19,9 +19,8 @@ class WilmotPersonScraper(Scraper):
         yield scrape_mayor(councillor, name)
         continue
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
-      p.role = 'Councillor'
 
       base_info = councillor.xpath('./parent::p/text()')
       for info in councillor.xpath('./parent::p/following-sibling::p'):
@@ -53,9 +52,8 @@ class WilmotPersonScraper(Scraper):
 
 def scrape_mayor(div, name):
 
-  p = Legislator(name=name, post_id='wilmont')
+  p = Legislator(name=name, post_id='wilmont', role='Mayor')
   p.add_source(COUNCIL_PAGE)
-  p.role = 'Mayor'
 
   info = div.xpath('./parent::p//text()')
   info.pop(0)

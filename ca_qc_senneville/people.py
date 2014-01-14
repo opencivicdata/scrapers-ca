@@ -21,9 +21,8 @@ class SennevillePersonScraper(Scraper):
         role = 'Mayor'
       name = councillor.xpath('./td[2]//strong/text()')[0].lower()
       email = councillor.xpath('.//a/text()')[0]
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.image = councillor.xpath('.//img/@src')[0]
       p.add_contact('email', email, None)
       yield p

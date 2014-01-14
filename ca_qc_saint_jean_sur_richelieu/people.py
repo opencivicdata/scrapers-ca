@@ -26,10 +26,9 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
       url = councillor.xpath('.//a/@href')[0]
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = 'Councillor'
 
       p.image = councillor.xpath('./preceding-sibling::td//img/@src')[-1]
 
@@ -49,11 +48,10 @@ def scrape_mayor(div):
   contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
   contact_page = lxmlize(contact_url)
 
-  p = Legislator(name=name, post_id='saint-jean-sur-richelieu')
+  p = Legislator(name=name, post_id='saint-jean-sur-richelieu', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_source(contact_url)
-  p.role = 'Mayor'
 
   p.image = div.xpath('./preceding-sibling::td//img/@src')[-1]
 

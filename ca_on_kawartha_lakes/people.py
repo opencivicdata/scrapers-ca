@@ -30,10 +30,9 @@ class KawarthaLakesPersonScraper(Scraper):
       email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
       image = page.xpath('//img[@class="image-right"]/@src')[0]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.role = role
       p.add_contact('email', email, None)
       p.image = image
       yield p

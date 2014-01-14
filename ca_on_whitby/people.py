@@ -29,9 +29,8 @@ class WhitbyPersonScraper(Scraper):
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]
       yield p

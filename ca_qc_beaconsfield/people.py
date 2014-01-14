@@ -19,9 +19,8 @@ class BeaconsfieldPersonScraper(Scraper):
       name, district = councillor.text_content().split(',')
       name = name.strip()
       if 'Mayor' in district:
-        p = Legislator(name=name, post_id='beaconsfield')
+        p = Legislator(name=name, post_id='beaconsfield', role='Mayor')
         p.add_source(COUNCIL_PAGE)
-        p.role = 'Mayor'
         p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
         phone = phone.split(':')[1].strip().replace(' ', '-')
@@ -32,9 +31,8 @@ class BeaconsfieldPersonScraper(Scraper):
         continue
 
       district = district.split('-')[1].strip()
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
-      p.role = 'Councillor'
 
       p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
 

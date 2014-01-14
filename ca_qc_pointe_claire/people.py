@@ -15,9 +15,8 @@ class PointeClairePersonScraper(Scraper):
     mayor = page.xpath('.//div[@class="item-page clearfix"]//table[1]//p')[1]
     name = mayor.xpath('.//strong/text()')[0]
 
-    p = Legislator(name=name, post_id='pointe-claire')
+    p = Legislator(name=name, post_id='pointe-claire', role='Mayor')
     p.add_source(COUNCIL_PAGE)
-    p.role = 'Mayor'
 
     phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')
     email = mayor.xpath('.//a/@href')[0]
@@ -34,9 +33,8 @@ class PointeClairePersonScraper(Scraper):
         name = councillor.text_content()
         district = rows[i + 1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] + ', ' + rows[i + 1].xpath('.//td/p[1]/text()')[j]
 
-        p = Legislator(name=name, post_id=district)
+        p = Legislator(name=name, post_id=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
-        p.role = 'Councillor'
         p.image = councillor.xpath('.//img/@src')[0]
 
         phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i + 1].xpath('.//td')[j].text_content())[0].replace(' ', '-')

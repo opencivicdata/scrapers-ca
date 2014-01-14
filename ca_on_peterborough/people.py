@@ -22,9 +22,8 @@ class PeterboroughPersonScraper(Scraper):
       for councillor in councillors:
         name = councillor.xpath('./strong')[0].text_content()
 
-        p = Legislator(name=name, post_id=district)
+        p = Legislator(name=name, post_id=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
-        p.role = 'Councillor'
 
         info = councillor.xpath('./text()')
         address = info.pop(0)
@@ -51,9 +50,8 @@ class PeterboroughPersonScraper(Scraper):
     phone = re.findall(r'[0-9].*', info[1])[0].replace(u'\xa0', ' ')
     fax = re.findall(r'[0-9].*', info[2])[0]
 
-    p = Legislator(name=name, post_id="peterborough")
+    p = Legislator(name=name, post_id="peterborough", role='Mayor')
     p.add_source(COUNCIL_PAGE)
-    p.role = 'Mayor'
 
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'legislature')

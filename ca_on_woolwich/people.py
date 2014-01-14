@@ -26,9 +26,8 @@ class WoolwichPersonScraper(Scraper):
         district = district.replace('Councillor', '').strip()
         role = 'Councillor'
 
-      p = Legislator(name=councillor.text_content(), post_id=district)
+      p = Legislator(name=councillor.text_content(), post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.image = councillor.xpath('./img/@src')[0]
 
       for contact in info:

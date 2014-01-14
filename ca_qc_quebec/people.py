@@ -29,9 +29,8 @@ class QuebecPersonScraper(Scraper):
         district = 'quebec'
         role = 'Mayor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
       p.image = councillor.xpath('./p/img/@src')[0]
 
       phone = re.findall(r'T.l\. : ([0-9]{3} [0-9]{3}-[0-9]{4})(,.*([0-9]{4}))?', councillor.text_content())[0]

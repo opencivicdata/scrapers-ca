@@ -23,10 +23,9 @@ class StCatharinesPersonScraper(Scraper):
         district = 'St. Catharines'
         role = 'Mayor'
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
-      p.role = role
 
       image = page.xpath('//div[@class="right"]/p/img/@src')
       if image:

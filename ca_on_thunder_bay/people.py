@@ -34,10 +34,9 @@ class ThunderBayPersonScraper(Scraper):
           name = info.xpath('./p/strong/em/text()')[0]
       name = name.replace('Councillor', '').replace('Mayor', '').strip()
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
-      p.role = role
 
       p.image = page.xpath('//td[@valign="top"]/img/@src')[0]
 

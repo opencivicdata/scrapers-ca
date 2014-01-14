@@ -23,9 +23,8 @@ class LambtonPersonScraper(Scraper):
         name = name.split(',')[0].strip()
       district = councillor.xpath('.//td[1]//p[contains(text(),",")]/text()')[0].split(',')[1].strip()
 
-      p = Legislator(name=name, post_id=district)
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.role = role
 
       p.image = councillor.xpath('.//td[1]//img/@src')[0]
 
