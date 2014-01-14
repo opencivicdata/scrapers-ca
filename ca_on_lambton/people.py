@@ -16,8 +16,8 @@ class LambtonPersonScraper(Scraper):
     for councillor in councillors:
       name = councillor.xpath('.//td[1]//strong')
       name = name[0].text_content().strip().replace('Deputy ', '').replace('Warden ', '').replace('Mayor', '')
-      role = councillor.xpath('.//td[1]//strong')[0].text_content().replace(name, '')
-      if not role.strip():
+      role = councillor.xpath('.//td[1]//strong')[0].text_content().replace(name, '').strip()
+      if not role:
         role = 'Councillor'
       if ',' in name:
         name = name.split(',')[0].strip()

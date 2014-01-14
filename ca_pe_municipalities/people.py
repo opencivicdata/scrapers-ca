@@ -43,7 +43,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
       councillors = page.xpath('//div[@style="WIDTH:750"]/dl/dt[contains(text(), "Elected Officials")]/parent::dl/dd/pre/text()')[0].splitlines(True)
       for councillor in councillors:
         name = councillor.replace('(Mayor)', '').replace('(Deputy Mayor)', '').replace('(Chairperson)', '').strip()
-        role = councillor.replace(name, '').strip()
+        role = councillor.replace(name, '').translate(None, '()').strip()
         if not role:
           role = 'Councillor'
         p = Legislator(name=name, post_id=district.text_content(), chamber=chamber)

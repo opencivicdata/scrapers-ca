@@ -13,7 +13,7 @@ class MontrealEstPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@width="455"]//tr/td[1]//strong')
-    for councillor in councillors:
+    for i, councillor in enumerate(councillors):
       name = councillor.text_content().strip()
       if not name:
         continue
@@ -24,7 +24,8 @@ class MontrealEstPersonScraper(Scraper):
         district = councillor.xpath('./ancestor::td/following-sibling::td//strong')[-1].text_content()
         district = ' '.join(district.split()[1:])
       email = councillor.xpath('./ancestor::tr/following-sibling::tr//a[contains(@href, "mailto:")]')[0].text_content().strip()
-      p = Legislator(name=name, post_id=district)
+      role = 'Mayor' if i == 0 else 'Councillor'
+      p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       yield p
