@@ -17,13 +17,17 @@ class RichmondHillPersonScraper(Scraper):
       name = councillor.text_content().strip()
       url = councillor.attrib['href']
       page = lxmlize(url)
-      district = re.findall(r',(.*)-', page.xpath('//div[@class="sectionheading"]')[0].text_content())
-      if district:
-        district = district[0]
-        role = 'Councillor'
-      else:
+      header = page.xpath('//div[@class="sectionheading"]')[0].text_content()
+      if header == 'Mayor of Richmond Hill':
         district = 'Richmond Hill'
         role = 'Mayor'
+      else:
+        district = re.findall(r',(.*)-', header)
+        if district:
+          district = district[0]
+        else:
+          district = 'Richmond Hill'
+        role = 'Councillor'
 
       info = page.xpath('//table[2]/tbody/tr/td[2]')
       if info[0].text_content().strip():

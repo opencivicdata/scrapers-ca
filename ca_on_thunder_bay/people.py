@@ -21,18 +21,15 @@ class ThunderBayPersonScraper(Scraper):
         name = info.xpath('./p/strong')[0].text_content()
         district = info.xpath('./p/strong')[1].text_content()
         role = 'Councillor'
+      elif 'At Large' in info.text_content():
+        name = info.xpath('./p/strong')[0].text_content()
+        district = 'Thunder Bay'
+        role = 'Councillor'
       else:
-        name = info.xpath('./p/strong/em/strong//text()')
+        name = info.xpath('./p/strong')[0].text_content()
         district = 'Thunder Bay'
         role = 'Mayor'
-        if name:
-          name = name[0]
-          for text in name:
-            if 'Ward' in text:
-              district = text
-        else:
-          name = info.xpath('./p/strong/em/text()')[0]
-      name = name.replace('Councillor', '').replace('Mayor', '').strip()
+      name = name.replace('Councillor', '').replace('At Large', '').replace('Mayor', '').strip()
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)

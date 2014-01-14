@@ -6,7 +6,7 @@ from utils import lxmlize, Legislator
 import re
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
-org_types = [' city council', ' town council', ' village council', ' community council']
+org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']
 
 
 class NewBrunswickMunicipalitiesPersonScraper(Scraper):
@@ -19,7 +19,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
       district_urls = page.xpath('//div[@class="parbase list section cplist"]/table/tr/td[1]/b/a/@href')
       for district_url in district_urls:
         page = lxmlize(district_url)
-        district = page.xpath('//div[@class="pageHeader"]/h1/text()')[0].split('-')[1].strip()
+        district = page.xpath('//div[@class="pageHeader"]/h1/text()')[0].split(' - ')[1].strip()
 
         chamber = district + org_types[org_type]
         org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)

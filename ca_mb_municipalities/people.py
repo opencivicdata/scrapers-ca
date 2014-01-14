@@ -21,7 +21,9 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       else:
         title = ''.join(title[:2])
 
-      chamber = title.title() + ' Municipal Council'
+      # @todo Need to distinguish between, e.g., R.M. and Town
+      title = title.title()
+      chamber = title + ' Municipal Council'
       organization = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       organization.add_source(COUNCIL_PAGE)
       yield organization

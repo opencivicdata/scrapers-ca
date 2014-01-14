@@ -14,8 +14,12 @@ class FrederictonPersonScraper(Scraper):
 
     councillors = page.xpath('//table/tbody/tr/td')
     for councillor in councillors:
-      name = councillor.xpath('.//strong/text()')[0].split(',')[0]
-      if 'Mayor' in councillor.xpath('.//strong/text()')[0]:
+      text = councillor.xpath('.//strong/text()')[0]
+      name = text.split(',')[0]
+      if 'Deputy Mayor' in text:
+        role = 'Deputy Mayor'
+        district = 'Fredericton'
+      elif 'Mayor' in text:
         role = 'Mayor'
         district = 'Fredericton'
       else:
