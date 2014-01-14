@@ -44,7 +44,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
         if i >= 2:
           membership = p.add_membership(organization, role='Councillor')
         else:
-          membership = p.add_membership(organization, role=positions[i])
+          membership = p.add_membership(organization, role=positions[i]) # @todo "Resident Administrator & Chief Administrative Officer" is split on two lines
 
         membership.post_id = title
         membership.chamber = chamber
