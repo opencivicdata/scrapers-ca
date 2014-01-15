@@ -19,8 +19,8 @@ class NewmarketPersonScraper(Scraper):
         continue
       name = councillor.xpath('.//a/text()')[0]
       district = councillor.xpath('.//strong/text()')[1].replace('Councillor- ', '')
-      district = district if not 'Regional' in district else 'newmarket'
-      role = councillor.xpath('.//strong/text()')[1].split('-')[0]
+      district = district if not 'Regional' in district else 'Newmarket'
+      role = councillor.xpath('.//strong/text()')[1].split('-')[0] # @todo Mayor is not being set
       url = councillor.xpath('.//a/@href')[0]
 
       p = Legislator(name=name, post_id=district, role=role)

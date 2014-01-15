@@ -25,7 +25,7 @@ class ThunderBayPersonScraper(Scraper):
         name = info.xpath('./p/strong')[0].text_content()
         district = 'Thunder Bay'
         role = 'Councillor'
-      else:
+      else: # @todo Two Mayors are being set
         name = info.xpath('./p/strong')[0].text_content()
         district = 'Thunder Bay'
         role = 'Mayor'

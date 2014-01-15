@@ -9,6 +9,7 @@ COUNCIL_PAGE = 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&s
 
 class CambridgePersonScraper(Scraper):
 
+  # @todo Need to scrape Mayor
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
