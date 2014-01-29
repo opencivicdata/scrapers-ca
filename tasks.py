@@ -75,6 +75,21 @@ reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/maste
 for row in reader:
   names[row[0].decode('utf8')] = row[1].decode('utf8')
 
+# Map OCD identifiers to styles of address.
+leader_styles = {}
+member_styles = {}
+reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=0&output=csv')
+reader.next()
+for row in reader:
+  key = row[0].decode('utf-8')
+  leader_styles[key] = row[2].decode('utf8')
+  member_styles[key] = row[3].decode('utf8')
+reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=1&output=csv')
+reader.next()
+for row in reader:
+  leader_styles[key] = row[2].decode('utf8')
+  member_styles[key] = row[3].decode('utf8')
+
 repo = Repo('.')
 index = repo.index
 
@@ -141,6 +156,12 @@ for module_name in os.listdir('.'):
 
           sections = division_id.split('/')
           ocd_type, ocd_type_id = sections[-1].split(':')
+
+          # Ensure presence of styles of address.
+          if not member_styles.get(division_id):
+            print '%-60s No member style of address' % module_name
+          if not leader_styles.get(division_id):
+            print '%-60s No leader style of address' % module_name
 
           # Determine the expected module name, name and jurisdiction_id.
           if ocd_type in ('province', 'territory'):

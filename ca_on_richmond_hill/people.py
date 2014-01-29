@@ -27,7 +27,7 @@ class RichmondHillPersonScraper(Scraper):
           district = district[0]
         else:
           district = 'Richmond Hill'
-        role = 'Councillor'
+        role = 'Councillor' # @todo Need to distinguish between Local Councillor and Regional Councillor
 
       info = page.xpath('//table[2]/tbody/tr/td[2]')
       if info[0].text_content().strip():
