@@ -26,6 +26,10 @@ To tidy all whitespace, run:
 
     autopep8 -i -a -r --ignore=E111,E121,E501,W6 .
 
+To print all jurisdiction URLs:
+
+    python urls.py
+
 Scraper code rarely undergoes code review. The focus is on the quality of the data.
 
 ## Bugs? Questions?
