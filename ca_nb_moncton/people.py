@@ -1,3 +1,4 @@
+# coding: utf-8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -10,7 +11,7 @@ COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 class MonctonPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
     yield scrape_mayor(mayor_url)
@@ -18,7 +19,7 @@ class MonctonPersonScraper(Scraper):
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
       name = councillor.xpath('.//a')[0].text_content()
-      district = councillor.xpath('.//span/text()')[1]
+      district = [x for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()][1]
       if district == 'At Large':
         district = 'Moncton'
 
