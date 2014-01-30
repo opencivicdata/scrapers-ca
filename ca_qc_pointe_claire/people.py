@@ -31,7 +31,8 @@ class PointeClairePersonScraper(Scraper):
       councillors = row.xpath('./td')
       for j, councillor in enumerate(councillors):
         name = councillor.text_content()
-        district = rows[i + 1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] + ', ' + rows[i + 1].xpath('.//td/p[1]/text()')[j]
+        # rows[i + 1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] # district number
+        district = rows[i + 1].xpath('.//td/p[1]/text()')[j]
 
         p = Legislator(name=name, post_id=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
