@@ -16,7 +16,7 @@ class CambridgePersonScraper(Scraper):
     councillors = page.xpath('//div[@id="news"]//p')
     for councillor in councillors:
       district = councillor.xpath('./b')[0].text_content()
-      district = re.findall(u'(W|R).*', district)[0]
+      district = re.findall(u'(?:W|R).*', district)[0]
       role = 'Councillor'
       if 'Regional' in district:
         district = 'Cambridge'
