@@ -14,20 +14,22 @@ class StratfordPersonScraper(Scraper):
 
     yield self.scrape_mayor(page)
 
-    councillors = page.xpath('//strong[contains(text(), "Councillor")]/parent::p')
+    councillors = page.xpath('//strong[contains(text(), "Councillor")]/parent::p|//b[contains(text(), "Councillor")]/parent::p')
     for councillor in councillors:
 
-      name = councillor.xpath('./strong/text()')[0].replace('Councillor', '')
+      name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '')
       district = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
 
-      p.image = councillor.xpath('./img/@src')[0]
+      p.image = councillor.xpath('.//img/@src')[0]
 
       phone = re.findall(r'Phone(.*)', councillor.text_content())
-      if not phone:
-        phone = re.findall(r'Phone(.*)', councillor.xpath('./following-sibling::p')[1].text_content())
+      node = councillor
+      while not phone:
+        node = node.xpath('./following-sibling::p')[1]
+        phone = re.findall(r'Phone(.*)', node.text_content())
       phone = phone[0].strip()
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')

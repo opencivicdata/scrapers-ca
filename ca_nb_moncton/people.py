@@ -19,7 +19,7 @@ class MonctonPersonScraper(Scraper):
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
       name = councillor.xpath('.//a')[0].text_content()
-      district = [x for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()][1]
+      district = [x for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()][1].strip()
       if district == 'At Large':
         district = 'Moncton'
 
