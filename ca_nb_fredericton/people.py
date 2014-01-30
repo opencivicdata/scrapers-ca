@@ -1,3 +1,4 @@
+
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -16,14 +17,12 @@ class FrederictonPersonScraper(Scraper):
     for councillor in councillors:
       text = councillor.xpath('.//strong/text()')[0]
       name = text.split(',')[0]
-      if 'Deputy Mayor' in text:
-        role = 'Deputy Mayor'
-        district = 'Fredericton'
-      elif 'Mayor' in text:
+      if 'Mayor' in text:
         role = 'Mayor'
         district = 'Fredericton'
       else:
         district = re.findall(r'(Ward:.*)(?=Address:)', councillor.text_content())[0].replace(':', '').strip()
+        district = re.search('\((.+?)(?: Area)?\)', district).group(1)
         role = 'Councillor'
 
       p = Legislator(name=name, post_id=district, role=role)

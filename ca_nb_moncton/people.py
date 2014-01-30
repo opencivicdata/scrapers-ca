@@ -19,6 +19,8 @@ class MonctonPersonScraper(Scraper):
     for councillor in councillors:
       name = councillor.xpath('.//a')[0].text_content()
       district = councillor.xpath('.//span/text()')[1]
+      if district == 'At Large':
+        district = 'Moncton'
 
       email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:', '')
 

@@ -22,7 +22,7 @@ class NorthDumfriesPersonScraper(Scraper):
         name = name.replace('Mayor', '').strip()
         role = 'Mayor'
       else:
-        district = info.pop(0)
+        district = info.pop(0).strip()
         role = 'Councillor'
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)

@@ -19,7 +19,7 @@ class VaughanPersonScraper(Scraper):
 
       title = page.xpath('//div[@class="PL_Title"]')[0].text_content()
       if "Councillor" in title:
-        district, name = re.split(r'Councillor', title)
+        district, name = re.split(r'Councillor', title).strip()
         role = 'Councillor'
         if "Regional" in district:
           district = "Vaughan"

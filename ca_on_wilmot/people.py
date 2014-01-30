@@ -52,7 +52,7 @@ class WilmotPersonScraper(Scraper):
 
 def scrape_mayor(div, name):
 
-  p = Legislator(name=name, post_id='Wilmont', role='Mayor')
+  p = Legislator(name=name, post_id='Wilmot', role='Mayor')
   p.add_source(COUNCIL_PAGE)
 
   info = div.xpath('./parent::p//text()')

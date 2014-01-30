@@ -24,7 +24,7 @@ class RichmondHillPersonScraper(Scraper):
       else:
         district = re.findall(r',(.*)-', header)
         if district:
-          district = district[0]
+          district = district[0].strip()
         else:
           district = 'Richmond Hill'
         role = 'Councillor' # @todo Need to distinguish between Local Councillor and Regional Councillor

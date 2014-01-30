@@ -19,7 +19,7 @@ class ThunderBayPersonScraper(Scraper):
 
       if len(info.xpath('./p[1]/strong')) > 1:
         name = info.xpath('./p/strong')[0].text_content()
-        district = info.xpath('./p/strong')[1].text_content()
+        district = re.sub(' Ward\Z', '', info.xpath('./p/strong')[1].text_content())
         role = 'Councillor'
       elif 'At Large' in info.text_content():
         name = info.xpath('./p/strong')[0].text_content()

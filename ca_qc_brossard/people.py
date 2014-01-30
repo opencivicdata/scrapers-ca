@@ -17,7 +17,7 @@ class BrossardPersonScraper(Scraper):
     for num, councillor in enumerate(councillors):
       name = councillor.text_content()
       email = councillor.attrib['href'].split(':')[1].split('?')[0]
-      district = re.sub(r'(?<=[0-9]) (.) (?=S)', ', ', info.pop(0))
+      district = re.sub(r'(?<=[0-9]).+', '', info.pop(0)).strip()
       role = 'Councillor'
       if 'Mayor' in district:
         district = 'Brossard'

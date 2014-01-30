@@ -17,7 +17,7 @@ class CaledonPersonScraper(Scraper):
 
     councillors = page.xpath('//div[@id="printAreaContent"]//table//td')[2:]
     for councillor in councillors:
-      district, name = councillor.text_content().split('-')
+      district, name = councillor.text_content().split('-').strip()
       url = councillor.xpath('.//a')[0].attrib['href']
 
       p = Legislator(name=name, post_id=district, role='Councillor') # @todo Need to distinguish between Area Councillor and Regional Councillor
