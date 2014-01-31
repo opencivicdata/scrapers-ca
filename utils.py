@@ -2,7 +2,7 @@
 import lxml.html
 from scrapelib import urlopen
 
-from pupa.scrape import Scraper, Jurisdiction
+from pupa.scrape import Scraper, Jurisdiction, Legislator
 from pupa.models.person import Person
 
 CONTACT_DETAIL_TYPE_MAP = {
@@ -93,17 +93,19 @@ class CanadianJurisdiction(Jurisdiction):
     return ['N/A']
 
 
+class CanadianLegislator(Legislator):
+    def __init__(self, name, post_id, **kwargs):
+      super(CanadianLegislator, self).__init__(name, post_id.replace(u' ', ' ').replace(u'’', "'"), **kwargs)
+
+
 # Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
-class Legislator(Person):
+class AggregationLegislator(Person):
   __slots__ = ('post_id', 'party', 'chamber')
 
   def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
-    if post_id:
-      post_id = post_id.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
-
-    super(Legislator, self).__init__(name, **kwargs)
-    self.post_id = post_id
+    super(AggregationLegislator, self).__init__(name, **kwargs)
+    self.post_id = post_id.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
     self.party = party
     self.chamber = chamber
 
