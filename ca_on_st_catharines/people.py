@@ -4,7 +4,7 @@ from utils import lxmlize
 
 import re
 
-COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/BrianMcMullanMayor.asp'
+COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/MayorCouncil.asp'
 
 
 class StCatharinesPersonScraper(Scraper):

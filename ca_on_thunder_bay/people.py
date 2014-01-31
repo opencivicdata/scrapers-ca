@@ -17,16 +17,19 @@ class ThunderBayPersonScraper(Scraper):
       page = lxmlize(councillor)
       info = page.xpath('//table/tbody/tr/td[2]')[0]
 
-      if len(info.xpath('./p[1]/strong')) > 1:
-        name = info.xpath('./p/strong')[0].text_content()
-        district = re.sub(' Ward\s*\Z', '', info.xpath('./p/strong')[1].text_content())
+      for br in info.xpath('*//br'):
+        br.tail = '\n' + br.tail if br.tail else '\n'
+      lines = [line.strip() for line in info.text_content().split('\n') if line.strip()]
+      text = '\n'.join(lines)
+      name = lines[0].replace('Councillor ', '').replace('Mayor ', '')
+
+      if lines[1].endswith(' Ward'):
+        district = lines[1].replace(' Ward', '')
         role = 'Councillor'
-      elif 'At Large' in info.text_content():
-        name = info.xpath('./p/strong')[0].text_content()
+      elif lines[1] == 'At Large':
         district = 'Thunder Bay'
         role = 'Councillor'
-      else: # @todo Two Mayors are being set
-        name = info.xpath('./p/strong')[0].text_content()
+      else:
         district = 'Thunder Bay'
         role = 'Mayor'
       name = name.replace('Councillor', '').replace('At Large', '').replace('Mayor', '').strip()
