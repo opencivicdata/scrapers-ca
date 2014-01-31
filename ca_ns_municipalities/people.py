@@ -1,7 +1,7 @@
 from pupa.scrape import Scraper
 from pupa.models import Organization
 
-from utils import lxmlize, Legislator
+from utils import lxmlize, AggregationLegislator as Legislator
 
 import re
 import urllib2
