@@ -3,6 +3,7 @@ from pupa.scrape import Scraper, Legislator
 from utils import lxmlize
 
 import re
+import pdb
 
 COUNCIL_PAGE = 'http://www.brantford.ca/govt/council/members/Pages/default.aspx'
 
@@ -55,7 +56,8 @@ class BrantfordPersonScraper(Scraper):
 def scrape_mayor():
   mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
   page = lxmlize(mayor_url)
-  name = re.findall(r'(?<=Mayor)(.*)(?=of)', page.xpath('//div[@id="header"]/h1/text()')[0])[0]
+  # pdb.set_trace()
+  name = re.findall(r'(?<=Mayor )(.*)(?=\r)', page.xpath('//div[@id="main_content"]/h1/text()')[0])[0]
 
   p = Legislator(name=name, post_id='Brantford', role='Mayor')
   p.add_source(mayor_url)
