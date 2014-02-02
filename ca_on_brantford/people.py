@@ -3,7 +3,6 @@ from pupa.scrape import Scraper, Legislator
 from utils import lxmlize
 
 import re
-import pdb
 
 COUNCIL_PAGE = 'http://www.brantford.ca/govt/council/members/Pages/default.aspx'
 
@@ -35,7 +34,7 @@ class BrantfordPersonScraper(Scraper):
       p.add_contact('address', address, 'legislature')
       p.add_contact('email', email, None)
 
-      p.image = page.xpath('//div[@id="centre_content"]/h2/img/@src')[0]
+      p.image = page.xpath('//div[@id="centre_content"]//img/@src')[0]
 
       numbers = page.xpath('//div[@id="centre_content"]//p[contains(text(),"-")]')[0].text_content()
       if 'tel' in numbers:
@@ -56,7 +55,6 @@ class BrantfordPersonScraper(Scraper):
 def scrape_mayor():
   mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
   page = lxmlize(mayor_url)
-  # pdb.set_trace()
   name = re.findall(r'(?<=Mayor )(.*)(?=\r)', page.xpath('//div[@id="main_content"]/h1/text()')[0])[0]
 
   p = Legislator(name=name, post_id='Brantford', role='Mayor')
