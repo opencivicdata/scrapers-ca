@@ -4,7 +4,6 @@ from pupa.models import Organization
 from utils import lxmlize, Legislator
 
 import re
-import pdb;
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']
