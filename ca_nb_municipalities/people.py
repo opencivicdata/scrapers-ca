@@ -4,6 +4,7 @@ from pupa.models import Organization
 from utils import lxmlize, Legislator
 
 import re
+import pdb;
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']
@@ -27,7 +28,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         yield org
 
         address = ', '.join(page.xpath('//div[@class="left_contents"]/p[1]/text()'))
-        contacts = page.xpath('//div[@class="left_contents"]/p[3]/text()')
+        contacts = page.xpath('//div[@class="left_contents"]/p[b[text() = "Contact"]]/text()')
         phone = contacts[0].split(':')[1].strip().replace(' ', '-')
         fax = contacts[1].split(':')[1].strip().replace(' ', '-')
         email = page.xpath('//div[@class="left_contents"]//a[contains(@href, "mailto:")]')
