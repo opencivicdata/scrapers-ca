@@ -48,7 +48,7 @@ class EdmontonPersonScraper(Scraper):
 
 def scrape_mayor():
   page = lxmlize(MAYOR_PAGE)
-  name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[1].replace('Mayor', '').strip()
+  name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
 
   p = Legislator(name=name, post_id='Edmonton', role='Mayor')
   p.add_source(MAYOR_PAGE)
