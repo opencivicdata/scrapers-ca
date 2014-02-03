@@ -49,12 +49,12 @@ class BurlingtonPersonScraper(Scraper):
 
   def scrape_mayor(self, name, url):
     page = lxmlize(url)
+    
+    contact = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/text()')
 
-    contact = page.xpath('//div[@id="grey-220"]//li')[0]
-
-    phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact.text_content())[0].replace('Ext. ', 'x')
-    fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
-    email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
+    phone = contact[0]
+    fax = contact[2]
+    email = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/a[contains(@href, "mailto:")]/text()')[0]
 
     link_div = page.xpath('//div[@id="leftnav-grey"]')[0]
 
@@ -68,7 +68,7 @@ class BurlingtonPersonScraper(Scraper):
     p.add_source(url)
     p.add_source('http://www.burlingtonmayor.com')
 
-    p.image = page.xpath('//div[@id="grey-220"]/p/img/@src')[0]
+    p.image = page.xpath('//div[@id="secondary align_RightSideBar"]/p/img/@src')[0]
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('fax', fax, 'legislature')
     p.add_contact('email', email, None)
