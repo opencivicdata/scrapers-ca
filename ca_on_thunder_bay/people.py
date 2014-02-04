@@ -48,7 +48,7 @@ class ThunderBayPersonScraper(Scraper):
       contacts = info.xpath('./p[2]/text()')
       for contact in contacts:
         contact_type, contact = contact.split(':')
-        contact = contact.replace('(', '').replace(') ', '-').strip()
+        contact = contact.replace('(1st)', '').replace('(2nd)', '').strip()
         if 'Fax' in contact_type:
           p.add_contact('fax', contact, 'legislature')
         elif 'Email' in contact_type:
