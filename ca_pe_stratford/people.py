@@ -17,7 +17,7 @@ class StratfordPersonScraper(Scraper):
     councillors = page.xpath('//strong[contains(text(), "Councillor")]/parent::p|//b[contains(text(), "Councillor")]/parent::p')
     for councillor in councillors:
 
-      name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '')
+      name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '').strip()
       district = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
       p = Legislator(name=name, post_id=district, role='Councillor')
