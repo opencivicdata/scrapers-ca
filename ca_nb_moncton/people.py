@@ -37,6 +37,8 @@ class MonctonPersonScraper(Scraper):
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
       for phone in phone_nos:
+        if len(re.sub(r'\D', '', phone[0])) == 7:
+          phone = '506-%s' % phone[0]
         p.add_contact('voice', phone[0], 'legislature')
       yield p
 
@@ -58,6 +60,8 @@ def scrape_mayor(url):
   email = info.xpath('.//a/@href')[0].split(':')[1].strip()
 
   p.add_contact('address', address, 'legislature')
+  if len(re.sub(r'\D', '', phone)) == 7:
+    phone = '506-%s' % phone
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('fax', fax, 'legislature')
   p.add_contact('email', email, None)

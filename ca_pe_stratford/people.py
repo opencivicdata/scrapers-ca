@@ -37,6 +37,8 @@ class StratfordPersonScraper(Scraper):
         email = councillor.xpath('./following-sibling::p//a[contains(@href, "mailto")]')
       email = email[0].text_content()
 
+      if len(re.sub(r'\D', '', phone)) == 7:
+        phone = '902-%s' % phone
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
 
@@ -52,5 +54,7 @@ class StratfordPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     p.image = page.xpath('//div[@class="entry-content"]/p/a/img/@src')[0]
     p.add_contact('email', email, None)
+    if len(re.sub(r'\D', '', phone)) == 7:
+      phone = '902-%s' % phone
     p.add_contact('voice', phone, 'legislature')
     return p
