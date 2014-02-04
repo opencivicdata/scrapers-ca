@@ -36,10 +36,12 @@ class MonctonPersonScraper(Scraper):
 
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
-      for phone in phone_nos:
-        if len(re.sub(r'\D', '', phone[0])) == 7:
-          phone = '506-%s' % phone[0]
-        p.add_contact('voice', phone[0], 'legislature')
+      for phone_no in phone_nos:
+        if len(re.sub(r'\D', '', phone_no[0])) == 7:
+          phone = '506-%s' % phone_no[0]
+        else:
+          phone = phone_no[0]
+        p.add_contact('voice', phone, 'legislature')
       yield p
 
 
