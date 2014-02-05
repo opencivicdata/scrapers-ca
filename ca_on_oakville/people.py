@@ -35,7 +35,7 @@ class OakvillePersonScraper(Scraper):
     mayor.add_source(COUNCIL_PAGE)
     mayor.add_source(url)
 
-    mayor.image = page.xpath('//div[@class="twocol multicol"]//img/@src')[0]
+    mayor.image = page.xpath('//div[@class="colsevenfive multicollast"]//img/@src')[0]
 
     # gather contact details
     info = page.xpath('//div[@class="fourcol multicol"]//p')[0]
@@ -47,10 +47,6 @@ class OakvillePersonScraper(Scraper):
     mayor.add_contact('voice', phone, 'legislature')
     mayor.add_contact('fax', fax, 'legislature')
     mayor.add_contact('email', email, None)
-
-    # extra sites
-    mayor.add_link(info.xpath('.//a[contains(@href, "twitter")]')[0].attrib['href'], None)
-    mayor.add_link(info.xpath('.//a[contains(@href, "facebook")]')[0].attrib['href'], None)
 
   def scrape_councillor(self, url, councillor):
     page = lxmlize(url)
