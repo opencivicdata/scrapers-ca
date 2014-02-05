@@ -44,10 +44,9 @@ class TorontoPersonScraper(Scraper):
     if "Twitter" in info.text_content():
       p.add_link(info.xpath('.//a[contains(@href,"twitter.com")]')[0].attrib['href'], None)
 
-    # add contact info
     p.add_contact('email', info.xpath('.//a[contains(@href,"mailto:")]')[0].text_content(), None)
     contacts = info.xpath('.//p[text()[contains(.,"Phone:")]]')
-    for contact in contacts: # @todo
+    for contact in contacts:
       lines = [line.strip() for line in contact.xpath('.//text()')]
 
       note = contact.getprevious()
