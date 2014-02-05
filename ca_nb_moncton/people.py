@@ -1,3 +1,4 @@
+# coding: utf-8
 from pupa.scrape import Scraper, Legislator
 
 from utils import lxmlize
@@ -10,7 +11,7 @@ COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 class MonctonPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
     yield scrape_mayor(mayor_url)
@@ -18,7 +19,9 @@ class MonctonPersonScraper(Scraper):
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
       name = councillor.xpath('.//a')[0].text_content()
-      district = councillor.xpath('.//span/text()')[1]
+      district = [x for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()][1].strip()
+      if district == 'At Large':
+        district = 'Moncton'
 
       email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:', '')
 
@@ -33,8 +36,12 @@ class MonctonPersonScraper(Scraper):
 
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
-      for phone in phone_nos:
-        p.add_contact('voice', phone[0], 'legislature')
+      for phone_no in phone_nos:
+        if len(re.sub(r'\D', '', phone_no[0])) == 7:
+          phone = '506-%s' % phone_no[0]
+        else:
+          phone = phone_no[0]
+        p.add_contact('voice', phone, 'legislature')
       yield p
 
 
@@ -55,6 +62,8 @@ def scrape_mayor(url):
   email = info.xpath('.//a/@href')[0].split(':')[1].strip()
 
   p.add_contact('address', address, 'legislature')
+  if len(re.sub(r'\D', '', phone)) == 7:
+    phone = '506-%s' % phone
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('fax', fax, 'legislature')
   p.add_contact('email', email, None)

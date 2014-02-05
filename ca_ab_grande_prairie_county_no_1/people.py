@@ -8,6 +8,7 @@ COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'
 
 class GrandePrairieCountyNo1PersonScraper(Scraper):
 
+  # @todo The Reeve is also a Councillor.
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 

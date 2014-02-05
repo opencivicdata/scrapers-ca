@@ -21,7 +21,7 @@ class SummersidePersonScraper(Scraper):
       page = lxmlize(url)
 
       name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Councillor', '').replace('Deputy Mayor', '')
-      district = page.xpath('//div[@class="articlebody-inside"]/p')[0].text_content()
+      district = 'Ward %s' % re.sub('\D+', '', page.xpath('//div[@class="articlebody-inside"]/p')[0].text_content())
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)

@@ -12,21 +12,24 @@ class ThunderBayPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')[:-1]
+    councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')
     for councillor in councillors:
       page = lxmlize(councillor)
       info = page.xpath('//table/tbody/tr/td[2]')[0]
 
-      if len(info.xpath('./p[1]/strong')) > 1:
-        name = info.xpath('./p/strong')[0].text_content()
-        district = info.xpath('./p/strong')[1].text_content()
+      for br in info.xpath('*//br'):
+        br.tail = '\n' + br.tail if br.tail else '\n'
+      lines = [line.strip() for line in info.text_content().split('\n') if line.strip()]
+      text = '\n'.join(lines)
+      name = lines[0].replace('Councillor ', '').replace('Mayor ', '')
+
+      if lines[1].endswith(' Ward'):
+        district = lines[1].replace(' Ward', '')
         role = 'Councillor'
-      elif 'At Large' in info.text_content():
-        name = info.xpath('./p/strong')[0].text_content()
+      elif lines[1] == 'At Large':
         district = 'Thunder Bay'
         role = 'Councillor'
       else:
-        name = info.xpath('./p/strong')[0].text_content()
         district = 'Thunder Bay'
         role = 'Mayor'
       name = name.replace('Councillor', '').replace('At Large', '').replace('Mayor', '').strip()
@@ -45,7 +48,7 @@ class ThunderBayPersonScraper(Scraper):
       contacts = info.xpath('./p[2]/text()')
       for contact in contacts:
         contact_type, contact = contact.split(':')
-        contact = contact.replace('(', '').replace(') ', '-').strip()
+        contact = contact.replace('(1st)', '').replace('(2nd)', '').strip()
         if 'Fax' in contact_type:
           p.add_contact('fax', contact, 'legislature')
         elif 'Email' in contact_type:

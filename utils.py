@@ -1,8 +1,10 @@
 # coding: utf-8
+import re
+
 import lxml.html
 from scrapelib import urlopen
 
-from pupa.scrape import Scraper, Jurisdiction
+from pupa.scrape import Scraper, Jurisdiction, Legislator
 from pupa.models.person import Person
 
 CONTACT_DETAIL_TYPE_MAP = {
@@ -93,22 +95,39 @@ class CanadianJurisdiction(Jurisdiction):
     return ['N/A']
 
 
+class CanadianLegislator(Legislator):
+    def __init__(self, name, post_id, **kwargs):
+      super(CanadianLegislator, self).__init__(clean_name(name), clean_post_id(post_id), **kwargs)
+
+    def add_link(self, url, note=None):
+        if url.startswith('www.'):
+          url = 'http://%s' % url
+        if re.match('\A@[A-Za-z]+\Z', url):
+          url = 'https://twitter.com/%s' % url[1:]
+        self.links.append({"note": note, "url": url})
+
+
 # Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
-class Legislator(Person):
-    __slots__ = ('post_id', 'party', 'chamber')
+class AggregationLegislator(Person):
+  __slots__ = ('post_id', 'party', 'chamber')
 
-    def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
-        super(Legislator, self).__init__(name, **kwargs)
-        self.post_id = post_id
-        self.party = party
-        self.chamber = chamber
+  def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
+    super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
+    self.post_id = clean_post_id(post_id)
+    self.party = party
+    self.chamber = chamber
 
+
+def clean_name(value):
+  return value.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
+
+def clean_post_id(value):
+  return value.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
 
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
   page = lxml.html.fromstring(entry)
-
   meta = page.xpath('//meta[@http-equiv="refresh"]')
   if meta:
     _, url = meta[0].attrib['content'].split('=', 1)

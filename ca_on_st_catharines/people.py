@@ -4,7 +4,7 @@ from utils import lxmlize
 
 import re
 
-COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/BrianMcMullanMayor.asp'
+COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/MayorCouncil.asp'
 
 
 class StCatharinesPersonScraper(Scraper):
@@ -18,6 +18,7 @@ class StCatharinesPersonScraper(Scraper):
 
       name = councillor.text_content().split(',')[0]
       district = page.xpath('//p[contains(text(), "Ward")]/text()')[0]
+      district = re.sub(', Ward \d+', '', district)
       role = 'Councillor'
       if 'Mayor' in district:
         district = 'St. Catharines'

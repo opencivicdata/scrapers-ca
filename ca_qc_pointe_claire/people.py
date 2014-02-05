@@ -19,9 +19,7 @@ class PointeClairePersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
 
     phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')
-    email = mayor.xpath('.//a/@href')[0]
     p.add_contact('voice', phone, 'legislature')
-    p.add_contact('email', email, None)
     yield p
 
     rows = page.xpath('//tr')
@@ -31,16 +29,15 @@ class PointeClairePersonScraper(Scraper):
       councillors = row.xpath('./td')
       for j, councillor in enumerate(councillors):
         name = councillor.text_content()
-        district = rows[i + 1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] + ', ' + rows[i + 1].xpath('.//td/p[1]/text()')[j]
+        # rows[i + 1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] # district number
+        district = rows[i + 1].xpath('.//td/p[1]/text()')[j].replace(' / ', '/')
 
         p = Legislator(name=name, post_id=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         p.image = councillor.xpath('.//img/@src')[0]
 
         phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i + 1].xpath('.//td')[j].text_content())[0].replace(' ', '-')
-        email = rows[i + 1].xpath('.//td')[j].xpath('.//a/@href')[1].replace('mailto:', '')
 
         p.add_contact('voice', phone, 'legislature')
-        p.add_contact('email', email, None)
 
         yield p

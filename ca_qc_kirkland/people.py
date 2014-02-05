@@ -10,7 +10,7 @@ COUNCIL_PAGE = 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-munic
 class KirklandPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
     for councillor in councillors:
@@ -21,6 +21,7 @@ class KirklandPersonScraper(Scraper):
         role = 'Mayor'
       else:
         district = councillor.xpath('.//h2')[0].text_content()
+        district = re.search('- (.+)', district).group(1).strip()
         role = 'Councillor'
 
       name = councillor.xpath('.//strong/text()')[0]

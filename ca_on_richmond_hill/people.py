@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -24,10 +24,10 @@ class RichmondHillPersonScraper(Scraper):
       else:
         district = re.findall(r',(.*)-', header)
         if district:
-          district = district[0]
+          district = district[0].strip()
         else:
           district = 'Richmond Hill'
-        role = 'Councillor'
+        role = 'Councillor' # @todo Need to distinguish between Local Councillor and Regional Councillor
 
       info = page.xpath('//table[7]/tbody/tr/td[2]')
       if info[0].text_content().strip():

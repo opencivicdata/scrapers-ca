@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize, CONTACT_DETAIL_TYPE_MAP
+from utils import lxmlize, CONTACT_DETAIL_TYPE_MAP, CanadianLegislator as Legislator
 
 import re
 
@@ -23,7 +23,7 @@ class AjaxPersonScraper(Scraper):
         district = 'Ajax'
         role = 'Mayor'
       else:
-        district = re.findall(r'Ward.*', page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content())[0]
+        district = re.findall(r'Ward.*', page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content())[0].strip()
         role = page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content()
         role = re.findall('((Regional)? ?(Councillor))', role)[0][0]
 

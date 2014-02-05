@@ -60,7 +60,7 @@ class GreaterSudburyPersonScraper(Scraper):
     fax = fax.split(' ')[-1]
     email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p = Legislator(name=name, post_id='Sudbury', role='Mayor')
+    p = Legislator(name=name, post_id='Greater Sudbury', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
     p.add_contact('address', address, 'legislature')

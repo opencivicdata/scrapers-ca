@@ -16,7 +16,7 @@ class BritishColumbiaPersonScraper(Scraper):
     for councillor in councillors:
       page = lxmlize(councillor)
       name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').strip()
-      district = page.xpath('//em/strong/text()')[0]
+      district = page.xpath('//em/strong/text()')[0].strip()
 
       p = Legislator(name=name, post_id=district, role='MLA')
       p.add_source(COUNCIL_PAGE)

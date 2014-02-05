@@ -9,13 +9,14 @@ COUNCIL_PAGE = 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&s
 
 class CambridgePersonScraper(Scraper):
 
+  # @todo Need to scrape Mayor
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="news"]//p')
     for councillor in councillors:
       district = councillor.xpath('./b')[0].text_content()
-      district = re.findall(u'W|R.*', district)[0]
+      district = re.findall(u'(?:W|R).*', district)[0]
       role = 'Councillor'
       if 'Regional' in district:
         district = 'Cambridge'
