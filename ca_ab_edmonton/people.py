@@ -1,7 +1,7 @@
-from pupa.scrape import Scraper, Legislator
-from pupa.models import Organization
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
+
 import re
 
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'

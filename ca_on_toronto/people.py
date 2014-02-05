@@ -1,7 +1,7 @@
 # coding: utf-8
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -47,7 +47,7 @@ class TorontoPersonScraper(Scraper):
     p.add_contact('email', info.xpath('.//a[contains(@href,"mailto:")]')[0].text_content(), None)
     contacts = info.xpath('.//p[text()[contains(.,"Phone:")]]')
     for contact in contacts:
-      lines = [line.strip() for line in contact.xpath('.//text()')]
+      lines = [line.strip() for line in contact.xpath('.//text()') if line.strip()]
 
       note = contact.getprevious()
       if note is not None and len(note.xpath('.//text()')) == 1:

@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -66,23 +66,8 @@ def scrape_mayor():
   address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
   address = re.sub(r'\s{2,}', ' ', address).strip()
   email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
-  phone = page.xpath('//ul[@id="legal_info"]/li[6]/text()')[0].strip().replace('.', '-')
 
   p.add_contact('address', address, 'legislature')
   p.add_contact('email', email, None)
-  p.add_contact('voice', phone, 'legislature')
-
-  get_links(p, page.xpath('//ul[@id="social_media"]')[0])
 
   return p
-
-
-def get_links(councillor, div):
-  links = div.xpath('.//a')
-  for link in links:
-    link = link.attrib['href']
-
-    if 'mailto:' in link:
-      continue
-    else:
-      councillor.add_link(link, None)

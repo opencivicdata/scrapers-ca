@@ -77,8 +77,8 @@ class OakvillePersonScraper(Scraper):
     councillor.add_contact('voice', str(phone), 'legislature')
     if fax:
       councillor.add_contact('fax', str(fax[0]), 'legislature')
-    councillor.add_contact('email', emails[0].text_content(), councillor.name)
-    councillor.add_contact('email', emails[1].text_content(), 'district')
+    councillor.add_contact('email', emails[0].text_content(), None)
+    councillor.add_contact('email', emails[1].text_content(), None)
 
     # extra links
     if "Twitter" in info:

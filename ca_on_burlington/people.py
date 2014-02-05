@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -43,8 +43,6 @@ class BurlingtonPersonScraper(Scraper):
       p.add_contact('fax', fax, 'legislature')
       p.add_contact('email', email, None)
 
-      link_div = contact.xpath('following-sibling::p')[0]
-      self.get_links(p, link_div)
       yield p
 
   def scrape_mayor(self, name, url):
@@ -55,8 +53,6 @@ class BurlingtonPersonScraper(Scraper):
     phone = contact[0]
     fax = contact[2]
     email = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/a[contains(@href, "mailto:")]/text()')[0]
-
-    link_div = page.xpath('//div[@id="leftnav-grey"]')[0]
 
     mayor_page = lxmlize('http://www.burlingtonmayor.com')
     contact_url = mayor_page.xpath('//div[@class="menu"]//a[contains(text(),"Contact")]')[0].attrib['href']
@@ -74,16 +70,4 @@ class BurlingtonPersonScraper(Scraper):
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'legislature')
 
-    self.get_links(p, link_div)
-
     return p
-
-  def get_links(self, councillor, div):
-    links = div.xpath('.//a')
-    for link in links:
-      link = link.attrib['href']
-
-      if 'mailto:' in link:
-        continue
-      else:
-        councillor.add_link(link, None)

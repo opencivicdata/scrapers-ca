@@ -1,8 +1,6 @@
-from pupa.scrape import Scraper, Legislator
-from pupa.models import Person
-from pupa.models import Organization
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 

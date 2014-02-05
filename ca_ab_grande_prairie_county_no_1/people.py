@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'

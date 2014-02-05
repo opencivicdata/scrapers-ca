@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize, CONTACT_DETAIL_NOTE_MAP
+from utils import lxmlize, CanadianLegislator as Legislator, CONTACT_DETAIL_NOTE_MAP
 
 import re
 
