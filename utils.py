@@ -97,7 +97,7 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianLegislator(Legislator):
     def __init__(self, name, post_id, **kwargs):
-      super(CanadianLegislator, self).__init__(clean_name(name), clean(post_id), **kwargs)
+      super(CanadianLegislator, self).__init__(clean_name(name), clean_post_id(post_id), **kwargs)
 
     def add_link(self, url, note=None):
         if url.startswith('www.'):
@@ -114,7 +114,7 @@ class AggregationLegislator(Person):
 
   def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
     super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
-    self.post_id = clean(post_id)
+    self.post_id = clean_post_id(post_id)
     self.party = party
     self.chamber = chamber
 
