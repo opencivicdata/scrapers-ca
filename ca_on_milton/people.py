@@ -24,7 +24,7 @@ class MiltonPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
-      p.image = councillor.xpath('./td[1]/p/img/@src')[0]
+      p.image = councillor.xpath('./td[1]/p//img/@src')[0]
 
       if councillor == councillors[0]:
         address = ', '.join(councillor.xpath('./td[3]/p[1]/text()')).replace('Email:', '').strip()
