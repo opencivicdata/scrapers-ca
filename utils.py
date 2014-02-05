@@ -97,7 +97,7 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianLegislator(Legislator):
     def __init__(self, name, post_id, **kwargs):
-      super(CanadianLegislator, self).__init__(name.replace(u'’', "'"), post_id.replace(u' ', ' ').replace(u'’', "'"), **kwargs)
+      super(CanadianLegislator, self).__init__(clean_name(name), clean(post_id), **kwargs)
 
     def add_link(self, url, note=None):
         if url.startswith('www.'):
@@ -113,11 +113,17 @@ class AggregationLegislator(Person):
   __slots__ = ('post_id', 'party', 'chamber')
 
   def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
-    super(AggregationLegislator, self).__init__(name.replace(u'’', "'"), **kwargs)
-    self.post_id = post_id.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
+    super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
+    self.post_id = clean(post_id)
     self.party = party
     self.chamber = chamber
 
+
+def clean_name(value):
+  return value.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
+
+def clean_post_id(name):
+  return value.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
 
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
