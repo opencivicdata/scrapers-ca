@@ -62,14 +62,14 @@ class OakvillePersonScraper(Scraper):
     if address:
       address = re.sub(r'\W{2,}', ' ', str(address[0])).decode()
       address = address.replace("u'", '').replace(' n ', ', ').replace("(", '')
-    phone = re.findall(r'tel: (\S*)|phone: (\S*)', info)
+    phone = re.findall(r'(?:tel|phone): ([\d\s-]*)', info)
     if not phone:
       phone = re.findall(r'([0-9]{3}[- ][0-9]{3}[- ][0-9]{4})', info)
     if 'tuple' in str(type(phone[0])):
       phone = next(x for x in phone[0] if x != '')
     else:
       phone = phone[0]
-    fax = re.findall(r'fax: (\S*) ', info)
+    fax = re.findall(r'fax: ([\d\s-]*)', info)
     emails = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "mailto:")]')
     # save contact info to councillor object
     if address:
