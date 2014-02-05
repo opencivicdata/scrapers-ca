@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -34,8 +34,5 @@ class MiltonPersonScraper(Scraper):
       for number in numbers:
         num_type, number = number.split(':')
         number = number.replace(', ext ', ' x').strip()
-        if 'Fax' in num_type:
-          p.add_contact('fax', number, 'legislature')
-        else:
-          p.add_contact('voice', number, num_type)
+        p.add_contact(num_type, number, num_type)
       yield p

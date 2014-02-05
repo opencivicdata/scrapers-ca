@@ -106,6 +106,15 @@ class CanadianLegislator(Legislator):
           url = 'https://twitter.com/%s' % url[1:]
         self.links.append({"note": note, "url": url})
 
+    def add_contact(self, type, value, note):
+      if type in CONTACT_DETAIL_TYPE_MAP:
+        type = CONTACT_DETAIL_TYPE_MAP[type]
+      if note in CONTACT_DETAIL_NOTE_MAP:
+        note = CONTACT_DETAIL_NOTE_MAP[note]
+      if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
+        value = clean_telephone_number(value)
+      self._contact_details.append({'type': type, 'value': value, 'note': note})
+
 
 # Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
@@ -119,11 +128,28 @@ class AggregationLegislator(Person):
     self.chamber = chamber
 
 
-def clean_name(value):
-  return value.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
+def clean_name(s):
+  return s.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
 
-def clean_post_id(value):
-  return value.replace(u' ', ' ').replace(u'’', "'").strip() # non-breaking space
+def clean_post_id(s):
+  return s.replace(u' ', ' ').replace(u'’', "'").strip() # non-breaking space
+
+# @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
+def clean_telephone_number(s):
+  splits = re.split(r'[\s-](?:x|ext\.?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
+  digits = re.sub(r'\D', '', splits[0])
+
+  if len(digits) == 10:
+    digits = '1' + digits
+
+  if len(digits) == 11 and digits[0] == '1' and len(splits) <= 2:
+    digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1-\2-\3-\4', digits)
+    if len(splits) == 2:
+      return '%s x%s' % (digits, splits[1])
+    else:
+      return digits
+  else:
+    return s
 
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)

@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -39,7 +39,7 @@ class OakvillePersonScraper(Scraper):
 
     # gather contact details
     info = page.xpath('//div[@class="fourcol multicol"]//p')[0]
-    phone = re.findall(r'tel: (\S*)', info.text_content())[0]
+    phone = re.findall(r'tel: ([\d\s]*)', info.text_content())[0]
     fax = re.findall(r'fax: (\S*)', info.text_content())[0]
     email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
