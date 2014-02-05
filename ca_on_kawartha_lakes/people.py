@@ -1,6 +1,6 @@
-from pupa.scrape import Scraper, Legislator
+from pupa.scrape import Scraper
 
-from utils import lxmlize
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -27,7 +27,7 @@ class KawarthaLakesPersonScraper(Scraper):
 
       url = councillor.attrib['href']
       page = lxmlize(url)
-      email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
+      email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].rsplit(':', 1)[1].strip()
       image = page.xpath('//img[@class="image-right"]/@src')[0]
 
       p = Legislator(name=name, post_id=district, role=role)

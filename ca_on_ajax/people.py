@@ -14,7 +14,7 @@ class AjaxPersonScraper(Scraper):
 
     councillors = page.xpath('//ul[@class="subNav top"]/li/ul//li/a')
     for councillor in councillors:
-      name = councillor.text_content()
+      name = councillor.text_content().replace('Councillor', '').strip()
 
       url = councillor.attrib['href']
       page = lxmlize(url)

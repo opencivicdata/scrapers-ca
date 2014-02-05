@@ -21,7 +21,7 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
         yield scrape_mayor(councillor)
         continue
 
-      name = councillor.xpath('.//a')[0].text_content()
+      name = councillor.xpath('.//a')[0].text_content().strip()
       district = councillor.xpath('.//a')[1].text_content()
       url = councillor.xpath('.//a/@href')[0]
       page = lxmlize(url)

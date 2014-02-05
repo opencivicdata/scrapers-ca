@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 import lxml.html
 from scrapelib import urlopen
 
@@ -95,7 +97,14 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianLegislator(Legislator):
     def __init__(self, name, post_id, **kwargs):
-      super(CanadianLegislator, self).__init__(name, post_id.replace(u' ', ' ').replace(u'’', "'"), **kwargs)
+      super(CanadianLegislator, self).__init__(name.replace(u'’', "'"), post_id.replace(u' ', ' ').replace(u'’', "'"), **kwargs)
+
+    def add_link(self, url, note=None):
+        if url.startswith('www.'):
+          url = 'http://%s' % url
+        if re.match('\A@[A-Za-z]+\Z', url):
+          url = 'https://twitter.com/%s' % url[1:]
+        self.links.append({"note": note, "url": url})
 
 
 # Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
@@ -104,7 +113,7 @@ class AggregationLegislator(Person):
   __slots__ = ('post_id', 'party', 'chamber')
 
   def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
-    super(AggregationLegislator, self).__init__(name, **kwargs)
+    super(AggregationLegislator, self).__init__(name.replace(u'’', "'"), **kwargs)
     self.post_id = post_id.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
     self.party = party
     self.chamber = chamber
