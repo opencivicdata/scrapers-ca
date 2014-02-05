@@ -12,7 +12,7 @@ class ThunderBayPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')[:-1]
+    councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')
     for councillor in councillors:
       page = lxmlize(councillor)
       info = page.xpath('//table/tbody/tr/td[2]')[0]
