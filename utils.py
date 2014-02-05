@@ -122,7 +122,7 @@ class AggregationLegislator(Person):
 def clean_name(value):
   return value.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
 
-def clean_post_id(name):
+def clean_post_id(value):
   return value.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
 
 def lxmlize(url, encoding='utf-8'):
