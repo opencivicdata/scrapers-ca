@@ -123,7 +123,7 @@ def clean_name(value):
   return value.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
 
 def clean_post_id(value):
-  return value.replace(u' ', ' ').replace(u'’', "'") # non-breaking space
+  return value.replace(u' ', ' ').replace(u'’', "'").strip() # non-breaking space
 
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
