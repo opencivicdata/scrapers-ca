@@ -29,6 +29,7 @@ CONTACT_DETAIL_TYPE_MAP = {
   'Res/Bus': 'voice',
   'Residence': 'voice',
   'Voice Mail': 'voice',
+  'Work': 'voice',
 }
 # In Newmarket, for example, there are both "Phone" and "Business" numbers.
 CONTACT_DETAIL_NOTE_MAP = {
@@ -53,6 +54,7 @@ CONTACT_DETAIL_NOTE_MAP = {
   'Res/Bus': 'office',
   'Residence': 'residence',
   'Voice Mail': 'legislature',
+  'Work': 'legislature',
 }
 
 
