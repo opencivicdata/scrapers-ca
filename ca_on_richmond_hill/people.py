@@ -29,11 +29,11 @@ class RichmondHillPersonScraper(Scraper):
           district = 'Richmond Hill'
         role = 'Councillor' # @todo Need to distinguish between Local Councillor and Regional Councillor
 
-      info = page.xpath('//table[2]/tbody/tr/td[2]')
+      info = page.xpath('//table[7]/tbody/tr/td[2]')
       if info[0].text_content().strip():
         info = info[0].text_content().replace(' - office:', ':')
       else:
-        info = page.xpath('//table[2]/tbody/tr/td[3]')[0].text_content().replace(' - office:', ':')
+        info = page.xpath('//table[7]/tbody/tr/td[3]')[0].text_content().replace(' - office:', ':')
 
       address = re.findall(r'(?<=Town of Richmond Hill).*(?=Telephone)', info)[0]
       address = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
