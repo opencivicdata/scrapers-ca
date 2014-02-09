@@ -14,12 +14,12 @@ class ChathamKentPersonScraper(Scraper):
 
     wards = page.xpath('//table[@class="ms-rteTable-4"]')
     for ward in wards:
-      district = re.sub('(?<=\d).+', '', ward.xpath('.//p')[0].text_content())
-      if 'Mayor' in district:
+      district_info = ward.xpath('.//p')[0].text_content()
+      if 'Mayor' in district_info:
         district = 'Chatham-Kent'
         role = 'Mayor'
       else:
-        district = re.findall(r'(?<=Council )(.*)(?=\()', district)[0].strip()
+        district = re.findall(r'(?<=Council Ward \d )(.*)(?= \()', district_info)[0]
         role = 'Councillor'
 
       councillors = ward.xpath('.//a')
