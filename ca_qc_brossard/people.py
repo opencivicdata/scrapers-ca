@@ -1,3 +1,4 @@
+# coding: utf-8
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -16,6 +17,8 @@ class BrossardPersonScraper(Scraper):
     info = councillors[1].xpath('.//parent::div/text()')
     for num, councillor in enumerate(councillors):
       name = councillor.text_content()
+      if u'Ã©' in name:
+        name = name.encode('iso-8859-1').decode('utf-8')
       email = councillor.attrib['href'].split(':')[1].split('?')[0]
       district = re.sub(r'(?<=[0-9]).+', '', info.pop(0)).strip()
       role = 'Councillor'
@@ -27,7 +30,7 @@ class BrossardPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
-      image = page.xpath('//div[@class="slide_wrap"]//a[contains(@style, "background-image:url") and contains(@style, "%s")]/@style' % name.split()[0])[0]
+      image = page.xpath('//div[@class="slide_wrap"]//a[@class="slide item-%d"]/@style' % num)[0]
       p.image = re.findall(r'\((.*)\)', image)[0]
 
       p.add_contact('email', email, None)
