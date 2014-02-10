@@ -131,10 +131,10 @@ class AggregationLegislator(Person):
 
 
 def clean_name(s):
-  return s.replace(u' ', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()
+  return s.replace(u' ', ' ').replace(u'​', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()  # non-breaking space, zero-width space
 
 def clean_post_id(s):
-  return s.replace(u' ', ' ').replace(u'’', "'").strip() # non-breaking space
+  return s.replace(u' ', ' ').replace(u'​', ' ').replace(u'’', "'").strip()  # non-breaking space, zero-width space
 
 # @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
 def clean_telephone_number(s):
