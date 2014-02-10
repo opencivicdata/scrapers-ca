@@ -49,9 +49,8 @@ class BurlingtonPersonScraper(Scraper):
     page = lxmlize(url)
     
     contact = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/text()')
-
     phone = contact[0]
-    fax = contact[2]
+    fax = contact[1]
     email = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/a[contains(@href, "mailto:")]/text()')[0]
 
     mayor_page = lxmlize('http://www.burlingtonmayor.com')
