@@ -1,4 +1,5 @@
 # coding: utf-8
+from copy import deepcopy
 import re
 
 import lxml.html
@@ -6,6 +7,7 @@ from scrapelib import urlopen
 
 from pupa.scrape import Scraper, Jurisdiction, Legislator
 from pupa.models.person import Person
+from pupa.models.utils import DatetimeValidator
 
 CONTACT_DETAIL_TYPE_MAP = {
   'Address': 'address',
@@ -58,6 +60,40 @@ CONTACT_DETAIL_NOTE_MAP = {
 }
 
 
+class CanadianValidator(DatetimeValidator):
+  social_re = re.compile(r'(?:facebook|twitter|youtube)\.com')
+  social_re_list = [
+    re.compile(r'facebook\.com'),
+    re.compile(r'twitter\.com'),
+    re.compile(r'youtube\.com'),
+  ]
+
+  def validate_maxSocialItems(self, x, fieldname, schema, length=None):
+    value = x.get(fieldname)
+    for pattern in self.social_re_list:
+      count = 0
+      for link in value:
+        if pattern.search(link['url']):
+          count += 1
+        if count > length:
+          self._error("Number of items in %(value)r for field '%(fieldname)s' "
+                      "with the same social media URL "
+                      "must be less than or equal to %(length)d",
+                      value, fieldname, length=length)
+
+  def validate_maxNonSocialItems(self, x, fieldname, schema, length=None):
+    value = x.get(fieldname)
+    count = 0
+    for link in value:
+      if not self.social_re.search(link['url']):
+        count += 1
+      if count > length:
+        self._error("Number of items in %(value)r for field '%(fieldname)s' "
+                    "with a non-social media URL "
+                    "must be less than or equal to %(length)d",
+                    value, fieldname, length=length)
+
+
 class CanadianJurisdiction(Jurisdiction):
   session_details = {
     'N/A': {
@@ -99,12 +135,13 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianLegislator(Legislator):
     def __init__(self, name, post_id, **kwargs):
-      super(CanadianLegislator, self).__init__(clean_name(name), clean_post_id(post_id), **kwargs)
+      super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
 
+    # @todo clean_string all the slots and contact detail values
     def add_link(self, url, note=None):
         if url.startswith('www.'):
           url = 'http://%s' % url
-        if re.match('\A@[A-Za-z]+\Z', url):
+        if re.match(r'\A@[A-Za-z]+\Z', url):
           url = 'https://twitter.com/%s' % url[1:]
         self.links.append({"note": note, "url": url})
 
@@ -115,7 +152,19 @@ class CanadianLegislator(Legislator):
         note = CONTACT_DETAIL_NOTE_MAP[note]
       if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
         value = clean_telephone_number(value)
+      elif type == 'address':
+        value = clean_address(value)
       self._contact_details.append({'type': type, 'value': value, 'note': note})
+
+    def validate(self):
+      schema = deepcopy(self._schema)
+      # @todo do a simple test to see if these changes to the schema cause warnings on invalid objects
+      schema['properties']['contact_details']['maxItems'] = 0
+      schema['properties']['links']['items']['properties']['note']['type'] = 'null'
+      schema['properties']['links']['maxSocialItems'] = 1
+      schema['properties']['links']['maxNonSocialItems'] = 1
+      validator = CanadianValidator(required_by_default=False)
+      validator.validate(self.as_dict(), schema)
 
 
 # Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
@@ -125,16 +174,44 @@ class AggregationLegislator(Person):
 
   def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
     super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
-    self.post_id = clean_post_id(post_id)
+    self.post_id = clean_string(post_id)
     self.party = party
     self.chamber = chamber
 
 
-def clean_name(s):
-  return s.replace(u' ', ' ').replace(u'​', ' ').replace(u'’', "'").replace('Mayor', '').replace('Councillor', '').strip()  # non-breaking space, zero-width space
+whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
+honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\b\.? ')
 
-def clean_post_id(s):
-  return s.replace(u' ', ' ').replace(u'​', ' ').replace(u'’', "'").strip()  # non-breaking space, zero-width space
+table = {
+  ord(u'​'): u' ', # zero-width space
+  ord(u'’'): u"'",
+}
+
+# @see https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca/ca_provinces_and_territories.csv
+# @see https://github.com/opencivicdata/ocd-division-ids/blob/master/mappings/country-ca-fr/ca_provinces_and_territories.csv
+abbreviations = {
+  u'Newfoundland and Labrador': 'NL',
+  u'Prince Edward Island': 'PE',
+  u'Nova Scotia': 'NS',
+  u'New Brunswick': 'NB',
+  u'Québec': 'QC',
+  u'Ontario': 'ON',
+  u'Manitoba': 'MB',
+  u'Saskatchewan': 'SK',
+  u'Alberta': 'AB',
+  u'British Columbia': 'BC',
+  u'Yukon': 'YT',
+  u'Northwest Territories': 'NT',
+  u'Nunavut': 'NU',
+
+  u'PEI': 'PE',
+}
+
+def clean_string(s):
+  return re.sub(r' *\n *', '\n', whitespace_re.sub(' ', unicode(s).translate(table)).strip())
+
+def clean_name(s):
+  return honorific_prefix_re.sub('', clean_string(s))
 
 # @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
 def clean_telephone_number(s):
@@ -152,6 +229,15 @@ def clean_telephone_number(s):
       return digits
   else:
     return s
+
+# Corrects the postal code, abbreviates the province or territory name, and
+# formats the last line of the address.
+def clean_address(s):
+  # The letter "O" instead of the numeral "0" is a common mistake.
+  s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), s)
+  for k, v in abbreviations.iteritems():
+      s = re.sub(r'[,\n ]+\(?' + k + r'\)?(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
+  return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
 
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
