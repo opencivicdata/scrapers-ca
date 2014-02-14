@@ -1,5 +1,5 @@
 lxml==3.3.0beta3
--e git+git://github.com/jpmckinney/pupa.git@hotfix#egg=pupa
+-e git+git://github.com/opencivicdata/pupa.git#egg=pupa
 -e git+git://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
 
 # Maintenance
