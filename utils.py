@@ -1,13 +1,12 @@
 # coding: utf-8
-from copy import deepcopy
 import re
 
 import lxml.html
 from scrapelib import urlopen
-
 from pupa.scrape import Scraper, Jurisdiction, Legislator
-from pupa.models.person import Person
-from pupa.models.utils import DatetimeValidator
+from pupa.models import Membership, Person
+
+import patch
 
 CONTACT_DETAIL_TYPE_MAP = {
   'Address': 'address',
@@ -60,40 +59,6 @@ CONTACT_DETAIL_NOTE_MAP = {
 }
 
 
-class CanadianValidator(DatetimeValidator):
-  social_re = re.compile(r'(?:facebook|twitter|youtube)\.com')
-  social_re_list = [
-    re.compile(r'facebook\.com'),
-    re.compile(r'twitter\.com'),
-    re.compile(r'youtube\.com'),
-  ]
-
-  def validate_maxSocialItems(self, x, fieldname, schema, length=None):
-    value = x.get(fieldname)
-    for pattern in self.social_re_list:
-      count = 0
-      for link in value:
-        if pattern.search(link['url']):
-          count += 1
-        if count > length:
-          self._error("Number of items in %(value)r for field '%(fieldname)s' "
-                      "with the same social media URL "
-                      "must be less than or equal to %(length)d",
-                      value, fieldname, length=length)
-
-  def validate_maxNonSocialItems(self, x, fieldname, schema, length=None):
-    value = x.get(fieldname)
-    count = 0
-    for link in value:
-      if not self.social_re.search(link['url']):
-        count += 1
-      if count > length:
-        self._error("Number of items in %(value)r for field '%(fieldname)s' "
-                    "with a non-social media URL "
-                    "must be less than or equal to %(length)d",
-                    value, fieldname, length=length)
-
-
 class CanadianJurisdiction(Jurisdiction):
   session_details = {
     'N/A': {
@@ -134,40 +99,30 @@ class CanadianJurisdiction(Jurisdiction):
 
 
 class CanadianLegislator(Legislator):
-    def __init__(self, name, post_id, **kwargs):
-      super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
+  def __init__(self, name, post_id, **kwargs):
+    super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
 
-    # @todo clean_string all the slots and contact detail values
-    def add_link(self, url, note=None):
-        if url.startswith('www.'):
-          url = 'http://%s' % url
-        if re.match(r'\A@[A-Za-z]+\Z', url):
-          url = 'https://twitter.com/%s' % url[1:]
-        self.links.append({"note": note, "url": url})
+  # @todo clean_string all the slots and contact detail values
+  def add_link(self, url, note=None):
+      if url.startswith('www.'):
+        url = 'http://%s' % url
+      if re.match(r'\A@[A-Za-z]+\Z', url):
+        url = 'https://twitter.com/%s' % url[1:]
+      self.links.append({"note": note, "url": url})
 
-    def add_contact(self, type, value, note):
-      if type in CONTACT_DETAIL_TYPE_MAP:
-        type = CONTACT_DETAIL_TYPE_MAP[type]
-      if note in CONTACT_DETAIL_NOTE_MAP:
-        note = CONTACT_DETAIL_NOTE_MAP[note]
-      if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
-        value = clean_telephone_number(value)
-      elif type == 'address':
-        value = clean_address(value)
-      self._contact_details.append({'type': type, 'value': value, 'note': note})
-
-    def validate(self):
-      schema = deepcopy(self._schema)
-      # @todo do a simple test to see if these changes to the schema cause warnings on invalid objects
-      schema['properties']['contact_details']['maxItems'] = 0
-      schema['properties']['links']['items']['properties']['note']['type'] = 'null'
-      schema['properties']['links']['maxSocialItems'] = 1
-      schema['properties']['links']['maxNonSocialItems'] = 1
-      validator = CanadianValidator(required_by_default=False)
-      validator.validate(self.as_dict(), schema)
+  def add_contact(self, type, value, note):
+    if type in CONTACT_DETAIL_TYPE_MAP:
+      type = CONTACT_DETAIL_TYPE_MAP[type]
+    if note in CONTACT_DETAIL_NOTE_MAP:
+      note = CONTACT_DETAIL_NOTE_MAP[note]
+    if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
+      value = clean_telephone_number(value)
+    elif type == 'address':
+      value = clean_address(value)
+    self._contact_details.append({'type': type, 'value': value, 'note': note})
 
 
-# Removes _is_legislator flag, _contact_details and _role. Used by aggregations.
+# Removes _is_legislator flag and _contact_details. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
 class AggregationLegislator(Person):
   __slots__ = ('post_id', 'party', 'chamber')
