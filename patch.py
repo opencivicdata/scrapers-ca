@@ -7,6 +7,8 @@ from pupa.models.schemas.person import schema as person_schema
 from pupa.models.schemas.membership import schema as membership_schema
 from pupa.models.schemas.organization import schema as organization_schema
 
+from constants import names, posts, styles
+
 # Enumerations.
 _contact_details['items']['properties']['type']['enum'] = [
   'address',
@@ -122,23 +124,53 @@ membership_schema['properties']['role']['enum'] = [
   'Warden', 'Deputy Warden',
 ]
 
-membership_schema['properties']['contact_details']   = membership_contact_details
-membership_schema['properties']['links']             = membership_links
-organization_schema['properties']['contact_details'] = organization_contact_details
-organization_schema['properties']['links']           = organization_links
-person_schema['properties']['contact_details']       = person_contact_details
-person_schema['properties']['links']                 = person_links
+membership_schema['properties']['role']['enumeration'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), [])
+membership_schema['properties']['contact_details']     = membership_contact_details
+membership_schema['properties']['links']               = membership_links
+organization_schema['properties']['contact_details']   = organization_contact_details
+organization_schema['properties']['links']             = organization_links
+person_schema['properties']['contact_details']         = person_contact_details
+person_schema['properties']['links']                   = person_links
+
+"""
+# @todo Add membership_schema['properties']['post_id'] validation.
+
+division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
+
+(
+  # Not among the known posts for the division.
+  (posts.get(division_id) and membership['post_id'] not in posts[division_id]) or
+  (not posts.get(division_id) and (
+    # Not a unique role.
+    membership['role'] not in uniqueRoles or
+    # A unique role that's not among the known roles for the division.
+    styles.get(division_id) and membership['role'] not in styles[division_id] or
+    # A unique role that's among the known roles for the division, but where the post doesn't match the name of the division.
+    membership['post_id'] != names[division_id]
+  )
+)
+"""
+
+def validate_enumeration(self, x, fieldname, schema, method=None):
+  value = x.get(fieldname)
+  if value is not None:
+    options = method(x)
+    if value not in options:
+      self._error("Value %(value)r for field '%(fieldname)s' is not "
+                  "in the enumeration: %(options)r",
+                  value, fieldname, options=options)
 
 
 def validate_maxMatchingItems(self, x, fieldname, schema, tuples=None):
   value = x.get(fieldname)
   if isinstance(value, list):
-    for length, match, message in tuples:
+    for length, method, message in tuples:
       count = 0
       for v in value:
-        if match(v):
+        if method(v):
           count += 1
         if count > length:
           self._error(message, value, fieldname)
 
+DatetimeValidator.validate_enumeration = validate_enumeration
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
