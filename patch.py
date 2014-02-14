@@ -1,5 +1,4 @@
 from copy import deepcopy
-import inspect
 import re
 
 from pupa.models.utils import DatetimeValidator
@@ -39,19 +38,26 @@ youtube_re  = re.compile(r'youtube\.com')
 matchers = [
   (
     0,
-    lambda x: x['type'] == 'email' and x['note'] != None
+    lambda x: x['type'] == 'email' and x['note'] != None,
+    'Membership has email with non-empty note',
   ), (
     0,
-    lambda x: x['type'] != 'email' and x['note'] == None
+    lambda x: x['type'] != 'email' and x['note'] == None,
+    'Membership has non-email with empty note',
   ), (
     1,
-    lambda x: x['type'] == 'email'
+    lambda x: x['type'] == 'email',
+    'Membership has multiple contact_details with same type: email',
   ),
 ]
 
 for type in ('address', 'cell', 'fax', 'voice'):
   for note in ('constituency', 'legislature', 'office', 'residence'):
-    matchers.append((1, lambda x, type=type, note=note: x['type'] == type and x['note'] == note))
+    matchers.append((
+      1,
+      lambda x, type=type, note=note: x['type'] == type and x['note'] == note,
+      'Membership has multiple contact_details with same type and note',
+    ))
 
 # A membership should not have notes on emails, should have notes on non-emails,
 # should have at most one email, and should, in most cases, have at most one of
@@ -72,17 +78,48 @@ person_links['items']['properties']['note']['type'] = 'null'
 person_links['maxMatchingItems'] = [
   (
     1,
-    lambda x: not social_re.search(x['url'])
+    lambda x: not social_re.search(x['url']),
+    'Person has multiple non-social media links',
   ), (
     1,
-    lambda x: facebook_re.search(x['url'])
+    lambda x: facebook_re.search(x['url']),
+    'Person has multiple facebook.com links',
   ), (
     1,
-    lambda x: twitter_re.search(x['url'])
+    lambda x: twitter_re.search(x['url']),
+    'Person has multiple twitter.com links',
   ), (
     1,
-    lambda x: youtube_re.search(x['url'])
+    lambda x: youtube_re.search(x['url']),
+    'Person has multiple youtube.com links',
   ),
+]
+
+membership_schema['properties']['role']['enum'] = [
+  # Provincial
+  'MHA',
+  'MLA',
+  'MNA',
+  'MPP',
+  # Municipal
+  'Alderman',
+  'Area Councillor',
+  'Councillor',
+  'Local Councillor',
+  'Regional Councillor',
+
+  # Provincial
+  'Premier',
+  # Municipal
+  'Acting Chief Administrative Officer',
+  'Chairperson',
+  'Chief Administrative Officer',
+  'Chief Executive Officer',
+  'City Manager',
+  'Mayor', 'Deputy Mayor',
+  'Municipal Administrator',
+  'Reeve', 'Deputy Reeve',
+  'Warden', 'Deputy Warden',
 ]
 
 membership_schema['properties']['contact_details']   = membership_contact_details
@@ -93,17 +130,15 @@ person_schema['properties']['contact_details']       = person_contact_details
 person_schema['properties']['links']                 = person_links
 
 
-def validate_maxMatchingItems(self, x, fieldname, schema, pairs=None):
+def validate_maxMatchingItems(self, x, fieldname, schema, tuples=None):
   value = x.get(fieldname)
   if isinstance(value, list):
-    for length, match in pairs:
+    for length, match, message in tuples:
       count = 0
       for v in value:
         if match(v):
           count += 1
         if count > length:
-          self._error("Items in %(value)r for field '%(fieldname)s' matching %(match)s "
-                      "must be less than or equal to %(length)d",
-                      value, fieldname, match=inspect.getsource(match).strip(), length=length)
+          self._error(message, value, fieldname)
 
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
