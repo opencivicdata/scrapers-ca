@@ -36,9 +36,7 @@ facebook_re = re.compile(r'facebook\.com')
 twitter_re  = re.compile(r'twitter\.com')
 youtube_re  = re.compile(r'youtube\.com')
 
-# A membership should not have notes on emails, should have notes on non-emails,
-# should have at most one email.
-membership_contact_details['maxMatchingItems'] = [
+matchers = [
   (
     0,
     lambda x: x['type'] == 'email' and x['note'] != None
@@ -50,6 +48,15 @@ membership_contact_details['maxMatchingItems'] = [
     lambda x: x['type'] == 'email'
   ),
 ]
+
+for type in ('address', 'cell', 'fax', 'voice'):
+  for note in ('constituency', 'legislature', 'office', 'residence'):
+    matchers.append((1, lambda x, type=type, note=note: x['type'] == type and x['note'] == note))
+
+# A membership should not have notes on emails, should have notes on non-emails,
+# should have at most one email, and should, in most cases, have at most one of
+# each combination of type and note.
+membership_contact_details['maxMatchingItems'] = matchers
 # A membership should not have links.
 membership_links['maxItems'] = 0
 # An organization should not have contact details.
