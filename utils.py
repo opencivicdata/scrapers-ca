@@ -1,7 +1,12 @@
 # coding: utf-8
+import csv
+from ftplib import FTP
 import re
+from StringIO import StringIO
+from urlparse import urlparse
 
 import lxml.html
+import requests
 from scrapelib import urlopen
 from pupa.scrape import Scraper, Jurisdiction, Legislator
 from pupa.models import Membership, Person
@@ -204,3 +209,19 @@ def lxmlize(url, encoding='utf-8'):
   else:
     page.make_links_absolute(url)
     return page
+
+def csv_reader(url, headers=False):
+  result = urlparse(url)
+  if result.scheme == 'ftp':
+    data = StringIO()
+    ftp = FTP(result.hostname)
+    ftp.login(result.username, result.password)
+    ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(block))
+    ftp.quit()
+    data.seek(0)
+  else:
+    data = StringIO(requests.get(url).content)
+  if headers:
+    return csv.DictReader(data)
+  else:
+    return csv.reader(data)

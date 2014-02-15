@@ -12583,6 +12583,9 @@ styles[u'ocd-division/country:ca/csd:4816037'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:4819006'] = []
 styles[u'ocd-division/country:ca/csd:4819006'].append(u"Reeve")
 styles[u'ocd-division/country:ca/csd:4819006'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:5915022'] = []
+styles[u'ocd-division/country:ca/csd:5915022'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:5915022'].append(u"Councillor")
 styles[u'ocd-division/country:ca/province:nl'] = []
 styles[u'ocd-division/country:ca/province:nl'].append(u"Premier")
 styles[u'ocd-division/country:ca/province:nl'].append(u"MHA")

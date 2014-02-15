@@ -2,10 +2,12 @@
 
 import importlib
 import codecs
+import csv
 import os
 import os.path
 import re
 import string
+from StringIO import StringIO
 
 from git import Repo
 from invoke import run, task
@@ -25,8 +27,6 @@ def province_and_territory_codes():
 
 # Reads a remote CSV file.
 def csv_reader(url):
-  import csv
-  from StringIO import StringIO
   return csv.reader(StringIO(requests.get(url).content))
 
 def slug(name):
