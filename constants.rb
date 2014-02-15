@@ -35,7 +35,7 @@ File.open('constants.py', 'w') do |f|
 
   headers = ['Leader', 'Member', 'Member At Large']
 
-  [0, 1].each do |gid|
+  [0, 1, 2].each do |gid|
     CSV.parse(open("https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=#{gid}&output=csv"), headers: true) do |row|
       if headers.any?{|header| row[header]}
         f.write "styles[u'#{row['Identifier']}'] = []\n"

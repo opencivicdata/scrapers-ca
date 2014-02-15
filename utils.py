@@ -210,7 +210,7 @@ def lxmlize(url, encoding='utf-8'):
     page.make_links_absolute(url)
     return page
 
-def csv_reader(url, headers=False):
+def csv_reader(url, header=False, **kwargs):
   result = urlparse(url)
   if result.scheme == 'ftp':
     data = StringIO()
@@ -220,8 +220,8 @@ def csv_reader(url, headers=False):
     ftp.quit()
     data.seek(0)
   else:
-    data = StringIO(requests.get(url).content)
-  if headers:
+    data = StringIO(requests.get(url, **kwargs).content)
+  if header:
     return csv.DictReader(data)
   else:
     return csv.reader(data)

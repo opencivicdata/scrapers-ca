@@ -6,3 +6,4 @@ class Peel(CanadianJurisdiction):
   geographic_code = 3521
   division_name = u'Peel'
   name = u'Peel Regional Council'
+  url = 'http://www.peelregion.ca'

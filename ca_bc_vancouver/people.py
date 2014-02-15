@@ -10,9 +10,9 @@ COUNCIL_PAGE = 'ftp://webftp.vancouver.ca/OpenData/csv/CouncilContactInformation
 class VancouverPersonScraper(Scraper):
 
   def get_people(self):
-    for row in csv_reader(COUNCIL_PAGE, headers=True):
+    for row in csv_reader(COUNCIL_PAGE, header=True):
       p = Legislator(
-        name='%s %s' % (row['First Name'], row['Last Name']),
+        name='%(First Name)s %(Last Name)s' % row,
         post_id='Vancouver',
         role=row['Elected Office'],
         gender=row['Gender'],

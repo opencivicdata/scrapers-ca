@@ -178,8 +178,9 @@ def new(division_id):
   run('mkdir -p %s' % module_name, echo=True)
 
   with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
-    if expected['url']:
-      f.write("""# coding: utf-8
+    if not expected['url']:
+      expected['url'] = ''
+    f.write("""# coding: utf-8
 from utils import CanadianJurisdiction
 
 class %(class_name)s(CanadianJurisdiction):
@@ -188,16 +189,6 @@ class %(class_name)s(CanadianJurisdiction):
   division_name = u'%(division_name)s'
   name = u'%(name)s'
   url = '%(url)s'
-""" % expected)
-    else:
-      f.write("""# coding: utf-8
-from utils import CanadianJurisdiction
-
-class %(class_name)s(CanadianJurisdiction):
-  jurisdiction_id = u'%(jurisdiction_id)s'
-  geographic_code = %(geographic_code)s
-  division_name = u'%(division_name)s'
-  name = u'%(name)s'
 """ % expected)
 
   with codecs.open(os.path.join(module_name, 'people.py'), 'w', 'utf8') as f:
