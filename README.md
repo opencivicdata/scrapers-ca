@@ -14,9 +14,9 @@ Most jurisdictions have a `geographic_code` that corresponds to the [Standard Ge
 
 ## Maintenance
 
-The `tasks.py` script will correct module names, class names, and `jurisdiction_id`, `division_name`, `name` and `url` in `__init.py__` files. It will report any module without an OCD division or with a `name` or `url` that requires manual verification.
+The `tidy.py` script will correct module names, class names, and `jurisdiction_id`, `division_name`, `name` and `url` in `__init.py__` files. It will report any module without an OCD division or with a `name` or `url` that requires manual verification.
 
-    python tasks.py
+    python tidy.py
 
 To test [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance, run:
 

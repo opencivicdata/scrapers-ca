@@ -87,6 +87,7 @@ for row in reader:
 reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=1&output=csv')
 reader.next()
 for row in reader:
+  key = row[0].decode('utf-8')
   leader_styles[key] = row[2].decode('utf8')
   member_styles[key] = row[3].decode('utf8')
 
@@ -95,7 +96,7 @@ index = repo.index
 
 
 def slug(division_id):
-  return unidecode(unicode(names[division_id]).lower().translate({
+  return unidecode(unicode(names[division_id]).lower().translate({ # @todo memo
     ord(u' '): u'_',
     ord(u"'"): u'_',
     ord(u'-'): u'_',  # dash
@@ -103,6 +104,76 @@ def slug(division_id):
     ord(u'–'): u'_',  # n-dash
     ord(u'.'): None,
   }))
+
+def get_definition(division_id, aggregation=False):
+  expected = {}
+
+  sections = division_id.split('/')
+  ocd_type, ocd_type_id = sections[-1].split(':')
+
+  # Determine the module name, name and jurisdiction_id.
+  if ocd_type in ('province', 'territory'):
+    pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
+    expected['module_name'] = pattern % ocd_type_id
+    if aggregation:
+      expected['name'] = '%s Municipalities' % names[division_id] # @todo memo
+    elif ocd_type_id in ('nl', 'ns'):
+      expected['name'] = '%s House of Assembly' % names[division_id]
+    else:
+      expected['name'] = 'Legislative Assembly of %s' % names[division_id]
+    jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
+  elif ocd_type == 'cd':
+    province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1] # @todo memo
+    expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
+    name_infix = census_division_types[division_id] # @todo memo
+    if name_infix == 'County':
+      name_infix = 'County'
+    expected['name'] = '%s %s Council' % (names[division_id], name_infix)
+    jurisdiction_id_suffix = 'council'
+  elif ocd_type == 'csd':
+    province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
+    expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
+    if ocd_type_id[:2] == '24':
+      expected['name'] = 'Conseil municipal de %s' % names[division_id]
+    else:
+      name_infix = census_subdivision_types[division_id]
+      if name_infix in ('Municipality', 'Specialized municipality'):
+        name_infix = 'Municipal'
+      elif name_infix == 'Regional municipality':
+        name_infix = 'Regional'
+      expected['name'] = '%s %s Council' % (names[division_id], name_infix)
+    jurisdiction_id_suffix = 'council'
+  elif ocd_type == 'arrondissement':
+    census_subdivision_type_id = sections[-2].split(':')[-1]
+    province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
+    expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug('/'.join(sections[:-1])), slug(division_id))
+    if names[division_id][0] in ('A', 'E', 'I', 'O', 'U'):
+      expected['name'] = "Conseil d'arrondissement d'%s" % names[division_id]
+    elif names[division_id][:3] == 'Le ':
+      expected['name'] = "Conseil d'arrondissement du %s" % names[division_id][3:]
+    else:
+      expected['name'] = "Conseil d'arrondissement de %s" % names[division_id]
+    jurisdiction_id_suffix = 'council'
+  else:
+    raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
+  expected['jurisdiction_id'] = division_id.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
+
+  # Determine the class name.
+  class_name_parts = re.split('[ -]', re.sub(u"[—–]", '-', re.sub("['.]", '', names[division_id])))
+  expected['class_name'] = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
+  if aggregation:
+    expected['class_name'] += 'Municipalities'
+
+  # Determine the url.
+  expected['url'] = None
+  if urls.get(division_id):
+    expected['url'] = urls[division_id] # @todo memo
+
+  # Determine the division name.
+  expected['division_name'] = names[division_id]
+
+  return expected
+
 
 for module_name in os.listdir('.'):
   jurisdiction_ids = set()
@@ -139,9 +210,9 @@ for module_name in os.listdir('.'):
             else:
               raise Exception('%s: Unrecognized geographic code %s' % (module_name, geographic_code))
 
-        aggregation = bool(module_name.endswith('_municipalities'))
-
         if division_id:
+          aggregation = bool(module_name.endswith('_municipalities'))
+
           # Ensure division_id is unique.
           if aggregation:
             if division_id in aggregation_division_ids:
@@ -154,110 +225,51 @@ for module_name in os.listdir('.'):
             else:
               division_ids.add(division_id)
 
-          sections = division_id.split('/')
-          ocd_type, ocd_type_id = sections[-1].split(':')
+          expected = get_definition(division_id, aggregation)
 
-          # Ensure presence of styles of address.
+          class_name    = obj.__name__
+          division_name = getattr(obj, 'division_name', None)
+          name          = getattr(obj, 'name', None)
+          url           = getattr(obj, 'url', None)
+
+          # Ensure presence of url and styles of address.
           if not member_styles.get(division_id):
-            print '%-60s No member style of address' % module_name
+            print '%-60s No member style of address: %s' % (module_name, division_id)
           if not leader_styles.get(division_id):
-            print '%-60s No leader style of address' % module_name
-
-          # Determine the expected module name, name and jurisdiction_id.
-          if ocd_type in ('province', 'territory'):
-            pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
-            expected_module_name = pattern % ocd_type_id
-            if aggregation:
-              expected_name = '%s Municipalities' % names[division_id]
-            elif ocd_type_id in ('nl', 'ns'):
-              expected_name = '%s House of Assembly' % names[division_id]
-            else:
-              expected_name = 'Legislative Assembly of %s' % names[division_id]
-            jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
-          elif ocd_type == 'cd':
-            province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
-            expected_module_name = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
-            name_infix = census_division_types[division_id]
-            if name_infix == 'County':
-              name_infix = 'County'
-            expected_name = '%s %s Council' % (names[division_id], name_infix)
-            jurisdiction_id_suffix = 'council'
-          elif ocd_type == 'csd':
-            province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
-            expected_module_name = 'ca_%s_%s' % (province_or_territory_type_id, slug(division_id))
-            if ocd_type_id[:2] == '24':
-              expected_name = 'Conseil municipal de %s' % names[division_id]
-            else:
-              name_infix = census_subdivision_types[division_id]
-              if name_infix in ('Municipality', 'Specialized municipality'):
-                name_infix = 'Municipal'
-              elif name_infix == 'Regional municipality':
-                name_infix = 'Regional'
-              expected_name = '%s %s Council' % (names[division_id], name_infix)
-            jurisdiction_id_suffix = 'council'
-          elif ocd_type == 'arrondissement':
-            census_subdivision_type_id = sections[-2].split(':')[-1]
-            province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
-            expected_module_name = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug('/'.join(sections[:-1])), slug(division_id))
-            if names[division_id][0] in ('A', 'E', 'I', 'O', 'U'):
-              expected_name = "Conseil d'arrondissement d'%s" % names[division_id]
-            elif names[division_id][:3] == 'Le ':
-              expected_name = "Conseil d'arrondissement du %s" % names[division_id][3:]
-            else:
-              expected_name = "Conseil d'arrondissement de %s" % names[division_id]
-            jurisdiction_id_suffix = 'council'
-          else:
-            raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
-          expected_jurisdiction_id = division_id.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
-
-          # Determine the expected class name.
-          class_name_parts = re.split('[ -]', re.sub(u"[—–]", '-', re.sub("['.]", '', names[division_id])))
-          expected_class_name = unidecode(unicode(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
-          if aggregation:
-            expected_class_name += 'Municipalities'
-
-          # Warn if there is no expected legislative URL.
-          url = getattr(obj, 'url', None)
-          expected_url = None
-          if urls.get(division_id):
-            expected_url = urls[division_id]
-          else:
+            print '%-60s No leader style of address: %s' % (module_name, division_id)
+          if not expected['url']:
             print '%-60s %s' % (module_name, url)
 
           # Warn if the name may be incorrect.
-          name = getattr(obj, 'name', None)
-          if name != expected_name:
-            print '%-60s %s' % (name, expected_name)
+          if name != expected['name']:
+            print '%-60s %s' % (name, expected['name'])
 
           # Name the classes correctly.
-          class_name = obj.__name__
-          if class_name != expected_class_name:
+          if class_name != expected['class_name']:
             # @note This for-loop will only run if the class name in __init__.py is incorrect.
             for basename in os.listdir(module_name):
               if basename.endswith('.py'):
                 with codecs.open(os.path.join(module_name, basename), 'r', 'utf8') as f:
                   content = f.read()
                 with codecs.open(os.path.join(module_name, basename), 'w', 'utf8') as f:
-                  content = content.replace(class_name, expected_class_name)
+                  content = content.replace(class_name, expected['class_name'])
                   f.write(content)
 
-          # Set the division_name, jurisdiction_id and url appropriately.
-          division_name = getattr(obj, 'division_name', None)
-          expected_division_name = names[division_id]
-          if division_name != expected_division_name or jurisdiction_id != expected_jurisdiction_id or (expected_url and url != expected_url):
+          # Set the jurisdiction_id, division_name and url appropriately.
+          if jurisdiction_id != expected['jurisdiction_id'] or division_name != expected['division_name'] or (expected['url'] and url != expected['url']):
            with codecs.open(os.path.join(module_name, '__init__.py'), 'r', 'utf8') as f:
               content = f.read()
            with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
-              if division_name != expected_division_name:
-                content = content.replace(division_name, expected_division_name)
-              if jurisdiction_id != expected_jurisdiction_id:
-                content = content.replace(jurisdiction_id, expected_jurisdiction_id)
-              if expected_url and url != expected_url:
-                content = content.replace(url, expected_url)
+              if jurisdiction_id != expected['jurisdiction_id']:
+                content = content.replace(jurisdiction_id, expected['jurisdiction_id'])
+              if division_name != expected['division_name']:
+                content = content.replace(division_name, expected['division_name'])
+              if expected['url'] and url != expected['url']:
+                content = content.replace(url, expected['url'])
               f.write(content)
 
           # Name the module correctly.
-          if module_name != expected_module_name:
-            index.move([module_name, expected_module_name])
+          if module_name != expected['module_name']:
+            index.move([module_name, expected['module_name']])
         else:
           print 'No OCD division for %s' % module_name
