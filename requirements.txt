@@ -1,9 +1,11 @@
 lxml==3.3.0beta3
 -e git+git://github.com/opencivicdata/pupa.git#egg=pupa
 -e git+git://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
+-e git+git://github.com/sunlightlabs/validictory.git#egg=validictory
 
 # Maintenance
 autopep8==0.9.7
 GitPython==0.3.2.RC1
+invoke==0.7.0
 pep8==1.4.6
 Unidecode==0.04.14

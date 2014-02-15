@@ -124,15 +124,16 @@ membership_schema['properties']['role']['enum'] = [
   'Warden', 'Deputy Warden',
 ]
 
-membership_schema['properties']['role']['enumeration'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), [])
-membership_schema['properties']['contact_details']     = membership_contact_details
-membership_schema['properties']['links']               = membership_links
-organization_schema['properties']['contact_details']   = organization_contact_details
-organization_schema['properties']['links']             = organization_links
-person_schema['properties']['contact_details']         = person_contact_details
-person_schema['properties']['links']                   = person_links
+membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), [])
+membership_schema['properties']['contact_details']   = membership_contact_details
+membership_schema['properties']['links']             = membership_links
+organization_schema['properties']['contact_details'] = organization_contact_details
+organization_schema['properties']['links']           = organization_links
+person_schema['properties']['contact_details']       = person_contact_details
+person_schema['properties']['links']                 = person_links
 
 """
+# @todo Have cron.py log the warnings somehow.
 # @todo Add membership_schema['properties']['post_id'] validation.
 
 division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
@@ -151,15 +152,6 @@ division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].re
 )
 """
 
-def validate_enumeration(self, x, fieldname, schema, method=None):
-  value = x.get(fieldname)
-  if value is not None:
-    options = method(x)
-    if value not in options:
-      self._error("Value %(value)r for field '%(fieldname)s' is not "
-                  "in the enumeration: %(options)r",
-                  value, fieldname, options=options)
-
 
 def validate_maxMatchingItems(self, x, fieldname, schema, tuples=None):
   value = x.get(fieldname)
@@ -172,5 +164,4 @@ def validate_maxMatchingItems(self, x, fieldname, schema, tuples=None):
         if count > length:
           self._error(message, value, fieldname)
 
-DatetimeValidator.validate_enumeration = validate_enumeration
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
