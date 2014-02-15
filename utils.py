@@ -244,7 +244,7 @@ def lxmlize(url, encoding='utf-8'):
     page.make_links_absolute(url)
     return page
 
-def csv_reader(url, header=False, encoding=None, **kwargs):
+def csv_reader(url, header=False, encoding='utf-8', **kwargs):
   result = urlparse(url)
   if result.scheme == 'ftp':
     data = StringIO()
