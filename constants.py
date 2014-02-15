@@ -1,7 +1,7 @@
 # coding: utf-8
 names = {}
 posts = {}
-styles = {}
+styles = {u'ocd-division/country:ca': u'MP'}
 names[u'ocd-division/country:ca/province:nl'] = u"Newfoundland and Labrador"
 names[u'ocd-division/country:ca/province:pe'] = u"Prince Edward Island"
 names[u'ocd-division/country:ca/province:ns'] = u"Nova Scotia"

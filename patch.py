@@ -98,6 +98,8 @@ person_links['maxMatchingItems'] = [
 ]
 
 membership_schema['properties']['role']['enum'] = [
+  # Federal
+  'MP',
   # Provincial
   'MHA',
   'MLA',
@@ -124,7 +126,7 @@ membership_schema['properties']['role']['enum'] = [
   'Warden', 'Deputy Warden',
 ]
 
-membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), [])
+membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature|lower)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), [])
 membership_schema['properties']['contact_details']   = membership_contact_details
 membership_schema['properties']['links']             = membership_links
 organization_schema['properties']['contact_details'] = organization_contact_details

@@ -1,4 +1,6 @@
 # coding: utf-8
+import codecs
+import cStringIO
 import csv
 from ftplib import FTP
 import re
@@ -62,6 +64,38 @@ CONTACT_DETAIL_NOTE_MAP = {
   'Voice Mail': 'legislature',
   'Work': 'legislature',
 }
+
+
+class UTF8Recoder:
+    """
+    Iterator that reads an encoded stream and reencodes the input to UTF-8
+    """
+    def __init__(self, f, encoding):
+        self.reader = codecs.getreader(encoding)(f)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return self.reader.next().encode("utf-8")
+
+
+class UnicodeReader:
+    """
+    A CSV reader which will iterate over lines in the CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        f = UTF8Recoder(f, encoding)
+        self.reader = csv.DictReader(f, dialect=dialect, **kwds)
+
+    def next(self):
+        row = self.reader.next()
+        return {k: unicode(v, "utf-8") for (k, v) in row.iteritems()}
+
+    def __iter__(self):
+        return self
 
 
 class CanadianJurisdiction(Jurisdiction):
@@ -210,7 +244,7 @@ def lxmlize(url, encoding='utf-8'):
     page.make_links_absolute(url)
     return page
 
-def csv_reader(url, header=False, **kwargs):
+def csv_reader(url, header=False, encoding=None, **kwargs):
   result = urlparse(url)
   if result.scheme == 'ftp':
     data = StringIO()
@@ -222,6 +256,6 @@ def csv_reader(url, header=False, **kwargs):
   else:
     data = StringIO(requests.get(url, **kwargs).content)
   if header:
-    return csv.DictReader(data)
+    return UnicodeReader(data, encoding=encoding)
   else:
     return csv.reader(data)

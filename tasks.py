@@ -79,6 +79,7 @@ def get_definition(division_id, aggregation=False):
 
   # Map OCD identifiers and Standard Geographical Classification codes to names.
   if not names:
+    names['ocd-division/country:ca'] = 'Canada'
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv')
     for row in reader:
       names[row[0].decode('utf8')] = row[1].decode('utf8')
@@ -100,7 +101,12 @@ def get_definition(division_id, aggregation=False):
   ocd_type, ocd_type_id = sections[-1].split(':')
 
   # Determine the module name, name and jurisdiction_id.
-  if ocd_type in ('province', 'territory'):
+  if ocd_type == 'country':
+    expected['module_name'] = 'ca'
+    expected['name'] = 'House of Commons'
+    expected['geographic_code'] = '01'
+    jurisdiction_id_suffix = 'lower'
+  elif ocd_type in ('province', 'territory'):
     pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
     expected['module_name'] = pattern % ocd_type_id
     if aggregation:
@@ -145,7 +151,7 @@ def get_definition(division_id, aggregation=False):
       expected['name'] = "Conseil d'arrondissement de %s" % names[division_id]
     jurisdiction_id_suffix = 'council'
   else:
-    raise Exception('%s: Unrecognized OCD type %s' % (module_name, ocd_type))
+    raise Exception('%s: Unrecognized OCD type %s' % (division_id, ocd_type))
   expected['jurisdiction_id'] = division_id.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
 
   # Determine the class name.
@@ -183,6 +189,7 @@ def new(division_id):
     f.write("""# coding: utf-8
 from utils import CanadianJurisdiction
 
+
 class %(class_name)s(CanadianJurisdiction):
   jurisdiction_id = u'%(jurisdiction_id)s'
   geographic_code = %(geographic_code)s
@@ -200,6 +207,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = ''
+
 
 class %(class_name)sPersonScraper(Scraper):
 
