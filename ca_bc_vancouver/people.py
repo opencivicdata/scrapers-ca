@@ -22,6 +22,6 @@ class VancouverPersonScraper(Scraper):
       p.add_contact('voice', row['Phone'], 'legislature')
       p.add_contact('fax', row['Fax'], 'legislature')
       p.add_contact('address', '%(Address line 1)s\n%(Locality)s %(Province)s %  %(Postal Code)s' % row, 'legislature')
-      p.add_link(row['URL'], None)
       p.add_source(COUNCIL_PAGE)
+      p.add_source(row['URL'])
       yield p
