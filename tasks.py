@@ -117,6 +117,7 @@ def get_definition(division_id, aggregation=False):
     if name_infix == 'County':
       name_infix = 'County'
     expected['name'] = '%s %s Council' % (names[division_id], name_infix)
+    expected['geographic_code'] = ocd_type_id
     jurisdiction_id_suffix = 'council'
   elif ocd_type == 'csd':
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
@@ -130,6 +131,7 @@ def get_definition(division_id, aggregation=False):
       elif name_infix == 'Regional municipality':
         name_infix = 'Regional'
       expected['name'] = '%s %s Council' % (names[division_id], name_infix)
+    expected['geographic_code'] = ocd_type_id
     jurisdiction_id_suffix = 'council'
   elif ocd_type == 'arrondissement':
     census_subdivision_type_id = sections[-2].split(':')[-1]
@@ -161,6 +163,30 @@ def get_definition(division_id, aggregation=False):
   expected['division_name'] = names[division_id]
 
   return expected
+
+@task
+def urls():
+  for module_name in os.listdir('.'):
+    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
+      module = importlib.import_module('%s.people' % module_name)
+      print '%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE'])
+
+@task
+def new(division_id):
+  expected = get_definition(division_id)
+  module_name = expected['module_name']
+  run('mkdir -p %s' % module_name, echo=True)
+  with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
+     f.write("""# coding: utf-8
+from utils import CanadianJurisdiction
+
+class %(class_name)s(CanadianJurisdiction):
+  jurisdiction_id = u'%(jurisdiction_id)s'
+  geographic_code = %(geographic_code)s
+  division_name = u'%(division_name)s'
+  name = u'%(name)s'
+  url = '%(url)s'
+""" % expected)
 
 @task
 def tidy():

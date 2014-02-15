@@ -4,9 +4,11 @@ See [blank-pupa](https://github.com/opennorth/blank-pupa) to install dependencie
 
 ## Run a scraper
 
-```
-python -m pupa.cli update ca_ab_edmonton
-```
+    python -m pupa.cli update ca_ab_edmonton
+
+## Create a scraper
+
+    invoke new --division-id ocd-division/country:ca/csd:5915022
 
 ## Geographic codes
 
@@ -16,7 +18,7 @@ Most jurisdictions have a `geographic_code` that corresponds to the [Standard Ge
 
 The `tidy.py` script will correct module names, class names, and `jurisdiction_id`, `division_name`, `name` and `url` in `__init.py__` files. It will report any module without an OCD division or with a `name` or `url` that requires manual verification.
 
-    python tidy.py
+    invoke tidy
 
 To test [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance, run:
 
@@ -28,7 +30,7 @@ To tidy all whitespace, run:
 
 To print all jurisdiction URLs:
 
-    python urls.py
+    invoke urls
 
 Scraper code rarely undergoes code review. The focus is on the quality of the data.
 
