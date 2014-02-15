@@ -39,19 +39,19 @@ def slug(name):
     ord(u'.'): None,
   }))
 
-urls = {}
+urls_memo = {}
 census_division_types = {}
 census_subdivision_types = {}
 names = {}
 def get_definition(division_id, aggregation=False):
-  if not urls:
+  if not urls_memo:
     # Map OCD identifiers to URLs.
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/ca_census_subdivisions.csv')
     for row in reader:
-      urls[row[0].decode('utf8')] = row[1]
+      urls_memo[row[0].decode('utf8')] = row[1]
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv')
     for row in reader:
-      urls[row[0].decode('utf8')] = row[1]
+      urls_memo[row[0].decode('utf8')] = row[1]
 
   if not census_division_types:
     # Map census division type codes to names.
@@ -156,8 +156,8 @@ def get_definition(division_id, aggregation=False):
 
   # Determine the url.
   expected['url'] = None
-  if urls.get(division_id):
-    expected['url'] = urls[division_id]
+  if urls_memo.get(division_id):
+    expected['url'] = urls_memo[division_id]
 
   # Determine the division name.
   expected['division_name'] = names[division_id]
@@ -176,6 +176,7 @@ def new(division_id):
   expected = get_definition(division_id)
   module_name = expected['module_name']
   run('mkdir -p %s' % module_name, echo=True)
+
   with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
      f.write("""# coding: utf-8
 from utils import CanadianJurisdiction
@@ -186,6 +187,22 @@ class %(class_name)s(CanadianJurisdiction):
   division_name = u'%(division_name)s'
   name = u'%(name)s'
   url = '%(url)s'
+""" % expected)
+
+  with codecs.open(os.path.join(module_name, 'people.py'), 'w', 'utf8') as f:
+     f.write("""# coding: utf-8
+from pupa.scrape import Scraper
+
+from utils import lxmlize, CanadianLegislator as Legislator
+
+import re
+
+COUNCIL_PAGE = ''
+
+class %(class_name)sPersonScraper(Scraper):
+
+  def get_people(self):
+    pass
 """ % expected)
 
 @task
