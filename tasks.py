@@ -114,8 +114,8 @@ def get_definition(division_id, aggregation=False):
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
     expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(names[division_id]))
     name_infix = census_division_types[division_id]
-    if name_infix == 'County':
-      name_infix = 'County'
+    if name_infix == 'Regional municipality':
+      name_infix = 'Regional'
     expected['name'] = '%s %s Council' % (names[division_id], name_infix)
     expected['geographic_code'] = ocd_type_id
     jurisdiction_id_suffix = 'council'
@@ -178,7 +178,8 @@ def new(division_id):
   run('mkdir -p %s' % module_name, echo=True)
 
   with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
-     f.write("""# coding: utf-8
+    if expected['url']:
+      f.write("""# coding: utf-8
 from utils import CanadianJurisdiction
 
 class %(class_name)s(CanadianJurisdiction):
@@ -188,9 +189,19 @@ class %(class_name)s(CanadianJurisdiction):
   name = u'%(name)s'
   url = '%(url)s'
 """ % expected)
+    else:
+      f.write("""# coding: utf-8
+from utils import CanadianJurisdiction
+
+class %(class_name)s(CanadianJurisdiction):
+  jurisdiction_id = u'%(jurisdiction_id)s'
+  geographic_code = %(geographic_code)s
+  division_name = u'%(division_name)s'
+  name = u'%(name)s'
+""" % expected)
 
   with codecs.open(os.path.join(module_name, 'people.py'), 'w', 'utf8') as f:
-     f.write("""# coding: utf-8
+    f.write("""# coding: utf-8
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -290,7 +301,7 @@ def tidy():
               print '%-60s No member style of address: %s' % (module_name, division_id)
             if not leader_styles.get(division_id):
               print '%-60s No leader style of address: %s' % (module_name, division_id)
-            if not expected['url']:
+            if url and not expected['url']:
               print '%-60s %s' % (module_name, url)
 
             # Warn if the name may be incorrect.
