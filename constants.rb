@@ -5,7 +5,7 @@ File.open('constants.py', 'w') do |f|
   f.write "# coding: utf-8\n"
   f.write "names = {}\n"
   f.write "posts = {}\n"
-  f.write "styles = {u'ocd-division/country:ca': u'MP'}\n"
+  f.write "styles = {u'ocd-division/country:ca': [u'MP']}\n"
 
   %w(ca_provinces_and_territories ca_census_divisions ca_census_subdivisions).each do |filename|
     CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/#{filename}.csv")) do |row|

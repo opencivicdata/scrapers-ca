@@ -97,36 +97,39 @@ person_links['maxMatchingItems'] = [
   ),
 ]
 
-membership_schema['properties']['role']['enum'] = [
-  # Federal
-  'MP',
-  # Provincial
-  'MHA',
-  'MLA',
-  'MNA',
-  'MPP',
-  # Municipal
-  'Alderman',
-  'Area Councillor',
-  'Councillor',
-  'Local Councillor',
-  'Regional Councillor',
+# membership_schema['properties']['role']['enum'] = [
+#   # Parties
+#   'member',
 
-  # Provincial
-  'Premier',
-  # Municipal
-  'Acting Chief Administrative Officer',
-  'Chairperson',
-  'Chief Administrative Officer',
-  'Chief Executive Officer',
-  'City Manager',
-  'Mayor', 'Deputy Mayor',
-  'Municipal Administrator',
-  'Reeve', 'Deputy Reeve',
-  'Warden', 'Deputy Warden',
-]
+#   # Federal
+#   'MP',
+#   # Provincial
+#   'MHA',
+#   'MLA',
+#   'MNA',
+#   'MPP',
+#   # Municipal
+#   'Alderman',
+#   'Area Councillor',
+#   'Councillor',
+#   'Local Councillor',
+#   'Regional Councillor',
 
-membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature|lower)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), [])
+#   # Provincial
+#   'Premier',
+#   # Municipal
+#   'Acting Chief Administrative Officer',
+#   'Chairperson',
+#   'Chief Administrative Officer',
+#   'Chief Executive Officer',
+#   'City Manager',
+#   'Mayor', 'Deputy Mayor',
+#   'Municipal Administrator',
+#   'Reeve', 'Deputy Reeve',
+#   'Warden', 'Deputy Warden',
+# ]
+
+membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details']   = membership_contact_details
 membership_schema['properties']['links']             = membership_links
 organization_schema['properties']['contact_details'] = organization_contact_details
