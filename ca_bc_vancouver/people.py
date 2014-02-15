@@ -7,6 +7,7 @@ import re
 
 COUNCIL_PAGE = 'ftp://webftp.vancouver.ca/OpenData/csv/CouncilContactInformation.csv'
 
+
 class VancouverPersonScraper(Scraper):
 
   def get_people(self):
