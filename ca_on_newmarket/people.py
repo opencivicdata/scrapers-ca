@@ -20,7 +20,7 @@ class NewmarketPersonScraper(Scraper):
       name = councillor.xpath('.//a/text()')[0]
       district = councillor.xpath('.//strong/text()')[1].replace('Councillor- ', '')
       district = district if not 'Regional' in district else 'Newmarket'
-      role = councillor.xpath('.//strong/text()')[1].split('-')[0] # @todo Mayor is not being set
+      role = councillor.xpath('.//strong/text()')[1].split('-')[0]  # @todo Mayor is not being set
       url = councillor.xpath('.//a/@href')[0]
 
       p = Legislator(name=name, post_id=district, role=role)
@@ -46,7 +46,7 @@ class NewmarketPersonScraper(Scraper):
         if i == 0:
           continue
         if '@' in contact:
-          continue # executive assistant email
+          continue  # executive assistant email
         else:
           number = re.findall(r'([0-9]{3}-[0-9]{3}-[0-9]{4})', contact)[0]
           ext = re.findall(r'(Ext\. [0-9]{3,4})', contact)

@@ -98,7 +98,7 @@ class TorontoPersonScraper(Scraper):
     p.image = page.xpath('//div[@class="image"]/img/@src')[0]
 
     url = page.xpath('//a[contains(text(), "Contact the Mayor")]')[0].attrib['href']
-    url = url.replace('www.', 'www1.') # @todo fix lxmlize to use the redirected URL to make links absolute
+    url = url.replace('www.', 'www1.')  # @todo fix lxmlize to use the redirected URL to make links absolute
     p.add_source(url)
     page = lxmlize(url)
 

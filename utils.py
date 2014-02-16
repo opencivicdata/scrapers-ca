@@ -67,9 +67,11 @@ CONTACT_DETAIL_NOTE_MAP = {
 
 
 class UTF8Recoder:
+
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8
     """
+
     def __init__(self, f, encoding):
         self.reader = codecs.getreader(encoding)(f)
 
@@ -81,6 +83,7 @@ class UTF8Recoder:
 
 
 class UnicodeReader:
+
     """
     A CSV reader which will iterate over lines in the CSV file "f",
     which is encoded in the given encoding.
@@ -138,6 +141,7 @@ class CanadianJurisdiction(Jurisdiction):
 
 
 class CanadianLegislator(Legislator):
+
   def __init__(self, name, post_id, **kwargs):
     super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
 
@@ -177,7 +181,7 @@ whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
 honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\b\.? ')
 
 table = {
-  ord(u'​'): u' ', # zero-width space
+  ord(u'​'): u' ',  # zero-width space
   ord(u'’'): u"'",
 }
 
@@ -201,13 +205,17 @@ abbreviations = {
   u'PEI': 'PE',
 }
 
+
 def clean_string(s):
   return re.sub(r' *\n *', '\n', whitespace_re.sub(' ', unicode(s).translate(table)).strip())
+
 
 def clean_name(s):
   return honorific_prefix_re.sub('', clean_string(s))
 
 # @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
+
+
 def clean_telephone_number(s):
   splits = re.split(r'[\s-](?:x|ext\.?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
   digits = re.sub(r'\D', '', splits[0])
@@ -226,12 +234,15 @@ def clean_telephone_number(s):
 
 # Corrects the postal code, abbreviates the province or territory name, and
 # formats the last line of the address.
+
+
 def clean_address(s):
   # The letter "O" instead of the numeral "0" is a common mistake.
   s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), s)
   for k, v in abbreviations.iteritems():
       s = re.sub(r'[,\n ]+\(?' + k + r'\)?(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
   return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
+
 
 def lxmlize(url, encoding='utf-8'):
   entry = urlopen(url).encode(encoding)
@@ -243,6 +254,7 @@ def lxmlize(url, encoding='utf-8'):
   else:
     page.make_links_absolute(url)
     return page
+
 
 def csv_reader(url, header=False, encoding='utf-8', **kwargs):
   result = urlparse(url)

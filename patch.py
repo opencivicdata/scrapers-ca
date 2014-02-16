@@ -25,26 +25,26 @@ _contact_details['items']['properties']['note']['enum'] = [
 ]
 
 # We must copy the subschema for each model.
-membership_contact_details   = deepcopy(_contact_details)
-membership_links             = deepcopy(_links)
+membership_contact_details = deepcopy(_contact_details)
+membership_links = deepcopy(_links)
 organization_contact_details = deepcopy(_contact_details)
-organization_links           = deepcopy(_links)
-person_contact_details       = deepcopy(_contact_details)
-person_links                 = deepcopy(_links)
+organization_links = deepcopy(_links)
+person_contact_details = deepcopy(_contact_details)
+person_links = deepcopy(_links)
 
-social_re   = re.compile(r'(?:facebook|twitter|youtube)\.com')
+social_re = re.compile(r'(?:facebook|twitter|youtube)\.com')
 facebook_re = re.compile(r'facebook\.com')
-twitter_re  = re.compile(r'twitter\.com')
-youtube_re  = re.compile(r'youtube\.com')
+twitter_re = re.compile(r'twitter\.com')
+youtube_re = re.compile(r'youtube\.com')
 
 matchers = [
   (
     0,
-    lambda x: x['type'] == 'email' and x['note'] != None,
+    lambda x: x['type'] == 'email' and x['note'] is not None,
     'Membership has email with non-empty note',
   ), (
     0,
-    lambda x: x['type'] != 'email' and x['note'] == None,
+    lambda x: x['type'] != 'email' and x['note'] is None,
     'Membership has non-email with empty note',
   ), (
     1,
@@ -97,14 +97,14 @@ person_links['maxMatchingItems'] = [
   ),
 ]
 
-membership_schema['properties']['post_id']['post']   = True
-membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
-membership_schema['properties']['contact_details']   = membership_contact_details
-membership_schema['properties']['links']             = membership_links
+membership_schema['properties']['post_id']['post'] = True
+membership_schema['properties']['role']['enum'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
+membership_schema['properties']['contact_details'] = membership_contact_details
+membership_schema['properties']['links'] = membership_links
 organization_schema['properties']['contact_details'] = organization_contact_details
-organization_schema['properties']['links']           = organization_links
-person_schema['properties']['contact_details']       = person_contact_details
-person_schema['properties']['links']                 = person_links
+organization_schema['properties']['links'] = organization_links
+person_schema['properties']['contact_details'] = person_contact_details
+person_schema['properties']['links'] = person_links
 
 
 def validate_post(self, x, fieldname, schema, post):
@@ -135,6 +135,7 @@ def validate_post(self, x, fieldname, schema, post):
                     value, fieldname, options=[names[division_id]])
 
 DatetimeValidator.validate_post = validate_post
+
 
 def validate_maxMatchingItems(self, x, fieldname, schema, tuples=None):
   value = x.get(fieldname)

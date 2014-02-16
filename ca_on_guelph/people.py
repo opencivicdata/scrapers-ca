@@ -68,7 +68,7 @@ class GuelphPersonScraper(Scraper):
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
 
     page = lxmlize(url)
-    
+
     address = re.findall(r'Address: (.*)\r', page.xpath('//div[@class="entry-content"]')[0].text_content())[0].encode('utf-8')
     fax = re.findall(r'Fax: (.*)\r', page.xpath('//div[@class="entry-content"]')[0].text_content())[0].encode('utf-8')
 

@@ -17,6 +17,8 @@ from unidecode import unidecode
 
 # Map Standard Geographical Classification codes to the OCD identifiers of provinces and territories.
 province_and_territory_codes_memo = {}
+
+
 def province_and_territory_codes():
   if not province_and_territory_codes_memo:
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-sgc/ca_provinces_and_territories.csv')
@@ -25,8 +27,11 @@ def province_and_territory_codes():
   return province_and_territory_codes_memo
 
 # Reads a remote CSV file.
+
+
 def csv_reader(url):
   return csv.reader(StringIO(requests.get(url).content))
+
 
 def slug(name):
   return unidecode(unicode(name).lower().translate({
@@ -42,6 +47,8 @@ urls_memo = {}
 census_division_types = {}
 census_subdivision_types = {}
 names = {}
+
+
 def get_definition(division_id, aggregation=False):
   if not urls_memo:
     # Map OCD identifiers to URLs.
@@ -169,12 +176,14 @@ def get_definition(division_id, aggregation=False):
 
   return expected
 
+
 @task
 def urls():
   for module_name in os.listdir('.'):
     if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
       module = importlib.import_module('%s.people' % module_name)
       print '%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE'])
+
 
 @task
 def new(division_id):
@@ -211,6 +220,7 @@ class %(class_name)sPersonScraper(Scraper):
   def get_people(self):
     pass
 """ % expected)
+
 
 @task
 def tidy():
@@ -287,10 +297,10 @@ def tidy():
 
             expected = get_definition(division_id, aggregation)
 
-            class_name    = obj.__name__
+            class_name = obj.__name__
             division_name = getattr(obj, 'division_name', None)
-            name          = getattr(obj, 'name', None)
-            url           = getattr(obj, 'url', None)
+            name = getattr(obj, 'name', None)
+            url = getattr(obj, 'url', None)
 
             # Ensure presence of url and styles of address.
             if not member_styles.get(division_id):

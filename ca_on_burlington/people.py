@@ -47,7 +47,7 @@ class BurlingtonPersonScraper(Scraper):
 
   def scrape_mayor(self, name, url):
     page = lxmlize(url)
-    
+
     contact = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/text()')
     phone = contact[0]
     fax = contact[1]

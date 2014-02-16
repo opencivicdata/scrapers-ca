@@ -26,7 +26,7 @@ class QuebecPersonScraper(Scraper):
       else:
         district = councillor.xpath('./parent::div/preceding-sibling::h2/text()')[-1]
 
-      if 'Maire' in district: # @todo Mayor is not being set
+      if 'Maire' in district:  # @todo Mayor is not being set
         district = u'Québec'
         role = 'Mayor'
 

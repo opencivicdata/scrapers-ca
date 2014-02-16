@@ -20,7 +20,7 @@ class CaledonPersonScraper(Scraper):
       district, name = councillor.text_content().split('-')
       url = councillor.xpath('.//a')[0].attrib['href']
 
-      p = Legislator(name=name, post_id=district.strip(), role='Councillor') # @todo Need to distinguish between Area Councillor and Regional Councillor
+      p = Legislator(name=name, post_id=district.strip(), role='Councillor')  # @todo Need to distinguish between Area Councillor and Regional Councillor
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
