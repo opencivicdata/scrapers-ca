@@ -137,18 +137,15 @@ def validate_post(self, x, fieldname, schema, post):
     else:
       # Not a unique role.
       if x['role'] not in uniqueRoles:
-        self._error("Post: Value %(value)r for field '%(fieldname)s' is not "
-                    "in the enumeration: %(options)r",
+        self._error("Post: No known posts for this organization for non-unique role %(value)r",
                     x['role'], 'role', options=uniqueRoles)
       # A unique role that's not among the known roles for the division.
       if styles.get(division_id) and x['role'] not in styles[division_id]:
-        self._error("Post: Value %(value)r for field '%(fieldname)s' is not "
-                    "in the enumeration: %(options)r",
+        self._error("Post: Unique role %(value)r is not in the enumeration: %(options)r",
                     x['role'], 'role', options=styles[division_id])
       # A unique role that's among the known roles for the division, but where the post doesn't match the name of the division.
       if value != names[division_id]:
-        self._error("Post: Value %(value)r for field '%(fieldname)s' is not "
-                    "in the enumeration: %(options)r",
+        self._error("Post: Unique role's post %(value)r is not in the enumeration: %(options)r",
                     value, fieldname, options=[names[division_id]])
 
 DatetimeValidator.validate_post = validate_post
