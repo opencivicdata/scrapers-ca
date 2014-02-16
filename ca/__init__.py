@@ -4,7 +4,7 @@ from utils import CanadianJurisdiction
 
 class Canada(CanadianJurisdiction):
   jurisdiction_id = u'ocd-jurisdiction/country:ca/legislature'
-  geographic_code = 01
+  geographic_code = 1
   division_name = u'Canada'
   name = u'Parliament of Canada'
   url = 'http://www.parl.gc.ca'

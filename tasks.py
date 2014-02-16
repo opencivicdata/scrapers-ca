@@ -110,8 +110,8 @@ def get_definition(division_id, aggregation=False):
   if ocd_type == 'country':
     expected['module_name'] = 'ca'
     expected['name'] = 'House of Commons'
-    expected['geographic_code'] = '01'
-    jurisdiction_id_suffix = 'lower'
+    expected['geographic_code'] = '1'
+    jurisdiction_id_suffix = 'legislature'
   elif ocd_type in ('province', 'territory'):
     pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
     expected['module_name'] = pattern % ocd_type_id
@@ -271,7 +271,9 @@ def tidy():
             if geographic_code:
               geographic_code = str(geographic_code)
               length = len(geographic_code)
-              if length == 2:
+              if length == 1:
+                division_id = 'ocd-division/country:ca'
+              elif length == 2:
                 division_id = codes[geographic_code]
               elif length == 4:
                 division_id = 'ocd-division/country:ca/cd:%s' % geographic_code
