@@ -10,8 +10,6 @@ COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members/export?output=
 
 class CanadaPersonScraper(Scraper):
 
-  # @todo Need to create chambers. Look at import_billy.py.
-  # @todo Check if Constituency is unique to Province / Territory.
   def get_people(self):
     for row in csv_reader(COUNCIL_PAGE, header=True, encoding='cp1252'):
       p = Legislator(

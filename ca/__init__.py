@@ -21,7 +21,9 @@ class Canada(CanadianJurisdiction):
   parties = [
     {'name': u'Bloc Québécois'},
     {'name': u'Conservative'},
+    {'name': u'Conservative Independent'},
     {'name': u'Green Party'},
+    {'name': u'Independent'},
     {'name': u'Liberal'},
     {'name': u'NDP'},
   ]
