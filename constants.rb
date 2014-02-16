@@ -33,7 +33,7 @@ File.open('constants.py', 'w') do |f|
     end
   end
 
-  headers = ['Leader', 'Member', 'Member At Large']
+  headers = ['Leader', 'Deputy Leader', 'Member', 'Member At Large']
 
   [0, 1, 2].each do |gid|
     CSV.parse(open("https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=#{gid}&output=csv"), headers: true) do |row|

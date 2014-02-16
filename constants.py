@@ -12628,3 +12628,7 @@ styles[u'ocd-division/country:ca/territory:nu'].append(u"MLA")
 styles[u'ocd-division/country:ca/cd:3521'] = []
 styles[u'ocd-division/country:ca/cd:3521'].append(u"Chair")
 styles[u'ocd-division/country:ca/cd:3521'].append(u"Councillor")
+styles[u'ocd-division/country:ca/cd:3538'] = []
+styles[u'ocd-division/country:ca/cd:3538'].append(u"Warden")
+styles[u'ocd-division/country:ca/cd:3538'].append(u"Deputy Warden")
+styles[u'ocd-division/country:ca/cd:3538'].append(u"Councillor")
