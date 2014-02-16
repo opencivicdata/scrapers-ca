@@ -106,7 +106,6 @@ person_schema['properties']['contact_details']       = person_contact_details
 person_schema['properties']['links']                 = person_links
 
 """
-# @todo Have cron.py log the warnings by piping the logger to a stream.
 # @todo Add membership_schema['properties']['post_id'] validation.
 
 division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
