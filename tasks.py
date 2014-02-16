@@ -4,7 +4,6 @@ import importlib
 import codecs
 import csv
 import os
-import os.path
 import re
 import string
 from StringIO import StringIO
