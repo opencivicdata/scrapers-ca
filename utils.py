@@ -144,8 +144,10 @@ class CanadianLegislator(Legislator):
 
   def __init__(self, name, post_id, **kwargs):
     super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
+    for k, v in kwargs.items():
+      if isinstance(v, basestring):
+        setattr(self, k, clean_string(v))
 
-  # @todo clean_string all the slots and contact detail values
   def add_link(self, url, note=None):
       if url.startswith('www.'):
         url = 'http://%s' % url
@@ -162,6 +164,8 @@ class CanadianLegislator(Legislator):
       value = clean_telephone_number(value)
     elif type == 'address':
       value = clean_address(value)
+    else:
+      value = clean_string(value)
     self._contact_details.append({'type': type, 'value': value, 'note': note})
 
 
@@ -173,8 +177,11 @@ class AggregationLegislator(Person):
   def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
     super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
     self.post_id = clean_string(post_id)
-    self.party = party
-    self.chamber = chamber
+    self.party = clean_string(party)
+    self.chamber = clean_string(chamber)
+    for k, v in kwargs.items():
+      if isinstance(v, basestring):
+        setattr(self, k, clean_string(v))
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
