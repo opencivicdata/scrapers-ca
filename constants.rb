@@ -4,7 +4,7 @@ require 'open-uri'
 File.open('constants.py', 'w') do |f|
   f.write "# coding: utf-8\n"
   f.write "names = {}\n"
-  f.write "posts = {}\n"
+  f.write "subdivisions = {}\n"
   f.write "styles = {u'ocd-division/country:ca': [u'MP']}\n"
 
   %w(ca_provinces_and_territories ca_census_divisions ca_census_subdivisions).each do |filename|
@@ -14,22 +14,22 @@ File.open('constants.py', 'w') do |f|
   end
 
   %w(pe ns nb qc on mb sk ab bc).each do |type_id|
-    f.write %(posts['ocd-division/country:ca/province:#{type_id}'] = []\n)
+    f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'] = []\n)
     CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/province-#{type_id}-electoral_districts.csv")) do |row|
-      f.write %(posts[u'ocd-division/country:ca/province:#{type_id}'].append(u"#{row[1]}")\n)
+      f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'].append(u"#{row[1]}")\n)
     end
   end
 
   CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')) do |row|
-    f.write %(posts[u'#{row[0]}'] = [u"#{row[1]}"]\n)
+    f.write %(subdivisions[u'#{row[0]}'] = [u"#{row[1]}"]\n)
   end
 
   CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_municipal_subdivisions.csv')) do |row|
     identifier, _, pair = row[0].rpartition('/')
-    f.write %(posts[u'#{identifier}'].append(u"#{row[1]}")\n)
+    f.write %(subdivisions[u'#{identifier}'].append(u"#{row[1]}")\n)
     if pair[/:\d+\z/]
       alternative_name = pair.capitalize.sub(':', ' ')
-      f.write %(posts[u'#{identifier}'].append(u"#{alternative_name}")\n) unless row[1] == alternative_name
+      f.write %(subdivisions[u'#{identifier}'].append(u"#{alternative_name}")\n) unless row[1] == alternative_name
     end
   end
 

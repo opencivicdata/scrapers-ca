@@ -4,7 +4,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
-COUNCIL_PAGE = 'http://www.city.belleville.on.ca/CITYHALL/MAYORANDCOUNCIL/Pages/CityCouncil.aspx'
+COUNCIL_PAGE = 'http://www.belleville.ca/city-hall/page/city-council'
 
 
 class BellevillePersonScraper(Scraper):

@@ -7,7 +7,7 @@ from pupa.models.schemas.person import schema as person_schema
 from pupa.models.schemas.membership import schema as membership_schema
 from pupa.models.schemas.organization import schema as organization_schema
 
-from constants import names, posts, styles
+from constants import names, subdivisions, styles
 
 # Enumerations.
 _contact_details['items']['properties']['type']['enum'] = [
@@ -128,16 +128,16 @@ def validate_post(self, x, fieldname, schema, post):
   if post:
     division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
     value = x.get(fieldname)
-    if posts.get(division_id):
-      # Not among the known posts for the division.
-      if value not in posts[division_id]:
+    if subdivisions.get(division_id):
+      # Not among the known subdivisions for the division.
+      if value not in subdivisions[division_id]:
         self._error("Post: Value %(value)r for field '%(fieldname)s' is not "
                     "in the enumeration: %(options)r",
-                    value, fieldname, options=posts[division_id])
+                    value, fieldname, options=subdivisions[division_id])
     else:
       # Not a unique role.
       if x['role'] not in uniqueRoles:
-        self._error("Post: No known posts for this organization for non-unique role %(value)r",
+        self._error("Post: No known subdivisions for this division for non-unique role %(value)r",
                     x['role'], 'role', options=uniqueRoles)
       # A unique role that's not among the known roles for the division.
       if styles.get(division_id) and x['role'] not in styles[division_id]:

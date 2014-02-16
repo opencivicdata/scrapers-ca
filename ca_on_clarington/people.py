@@ -4,7 +4,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
-COUNCIL_PAGE = 'http://www.clarington.net/htdocs/council_bios.html'
+COUNCIL_PAGE = 'http://www.clarington.net/index.php?content=townhall/council'
 
 
 class ClaringtonPersonScraper(Scraper):
