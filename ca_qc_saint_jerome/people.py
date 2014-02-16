@@ -28,7 +28,7 @@ class SaintJeromePersonScraper(Scraper):
 
       # if theres still no district, it must be the mayor
       if not district:
-        district = 'Saint-Jérôme'
+        district = u'Saint-Jérôme'
         role = 'Mayor'
       else:
         district = district[0]
