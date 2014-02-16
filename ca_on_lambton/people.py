@@ -23,7 +23,7 @@ class LambtonPersonScraper(Scraper):
       if ',' in name:
         name = name.split(',')[0].strip()
       district = councillor.xpath('.//td[1]//p[contains(text(),",")]/text()')[0].split(',')[1].strip()
-      district = re.sub(r'\A(?:City|Municipality|Town|Township|Village) of | Township\Z', '', district)
+      district = re.sub(r'\A(?:City|Municipality|Town|Township|Village) of\b| Township\Z', '', district)
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
