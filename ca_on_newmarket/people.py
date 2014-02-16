@@ -40,9 +40,8 @@ class NewmarketPersonScraper(Scraper):
         info.pop(0)
 
       numbers = info.pop(0).text_content().split(':')
-      email = info.pop(0).xpath('.//a[contains(@href, "mailto:")]/text()')
-      if email:
-        p.add_contact('email', email[0], None)
+      email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+      p.add_contact('email', email, None)
       for i, contact in enumerate(numbers):
         if i == 0:
           continue
