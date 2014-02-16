@@ -97,38 +97,6 @@ person_links['maxMatchingItems'] = [
   ),
 ]
 
-# membership_schema['properties']['role']['enum'] = [
-#   # Parties
-#   'member',
-
-#   # Federal
-#   'MP',
-#   # Provincial
-#   'MHA',
-#   'MLA',
-#   'MNA',
-#   'MPP',
-#   # Municipal
-#   'Alderman',
-#   'Area Councillor',
-#   'Councillor',
-#   'Local Councillor',
-#   'Regional Councillor',
-
-#   # Provincial
-#   'Premier',
-#   # Municipal
-#   'Acting Chief Administrative Officer',
-#   'Chairperson',
-#   'Chief Administrative Officer',
-#   'Chief Executive Officer',
-#   'City Manager',
-#   'Mayor', 'Deputy Mayor',
-#   'Municipal Administrator',
-#   'Reeve', 'Deputy Reeve',
-#   'Warden', 'Deputy Warden',
-# ]
-
 membership_schema['properties']['role']['enum']      = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details']   = membership_contact_details
 membership_schema['properties']['links']             = membership_links
@@ -138,7 +106,7 @@ person_schema['properties']['contact_details']       = person_contact_details
 person_schema['properties']['links']                 = person_links
 
 """
-# @todo Have cron.py log the warnings somehow.
+# @todo Have cron.py log the warnings by piping the logger to a stream.
 # @todo Add membership_schema['properties']['post_id'] validation.
 
 division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
