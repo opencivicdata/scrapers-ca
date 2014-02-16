@@ -107,6 +107,23 @@ person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
 
 
+uniqueRoles = [
+  # Provincial
+  'Premier',
+  # Municipal
+  'Acting Chief Administrative Officer',
+  'Administrator',
+  'Chairperson',
+  'Chief Administrative Officer',
+  'Chief Executive Officer',
+  'City Manager',
+  'Mayor', 'Acting Mayor', 'Deputy Mayor', 'Interim Mayor',
+  'Municipal Administrator',
+  'Regional Chair',
+  'Reeve', 'Deputy Reeve',
+  'Warden', 'Deputy Warden',
+]
+
 def validate_post(self, x, fieldname, schema, post):
   if post:
     division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
