@@ -161,7 +161,7 @@ def get_definition(division_id, aggregation=False):
     expected['class_name'] += 'Municipalities'
 
   # Determine the url.
-  expected['url'] = None
+  expected['url'] = ''
   if urls_memo.get(division_id):
     expected['url'] = urls_memo[division_id]
 
@@ -184,8 +184,6 @@ def new(division_id):
   run('mkdir -p %s' % module_name, echo=True)
 
   with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
-    if not expected['url']:
-      expected['url'] = ''
     f.write("""# coding: utf-8
 from utils import CanadianJurisdiction
 
