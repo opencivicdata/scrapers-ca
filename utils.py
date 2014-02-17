@@ -144,15 +144,17 @@ class CanadianLegislator(Legislator):
 
   def __init__(self, name, post_id, **kwargs):
     super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
-
-    if self.gender == 'M':
-      self.gender = 'male'
-    elif self.gender == 'F':
-      self.gender = 'female'
-
     for k, v in kwargs.items():
       if isinstance(v, basestring):
         setattr(self, k, clean_string(v))
+
+  def __setattr__(self, name, value):
+    if name == 'gender':
+      if value == 'M':
+        value = 'male'
+      elif value == 'F':
+        value = 'female'
+    super(CanadianLegislator, self).__setattr__(name, value)
 
   def add_link(self, url, note=None):
       if url.startswith('www.'):
@@ -169,7 +171,7 @@ class CanadianLegislator(Legislator):
       note = CONTACT_DETAIL_NOTE_MAP[note]
 
     if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
-      value = clean_telephone_number(value)
+      value = clean_telephone_number(clean_string(value))
     elif type == 'address':
       value = clean_address(value)
     else:
@@ -188,15 +190,17 @@ class AggregationLegislator(Person):
     self.post_id = clean_string(post_id)
     self.party = clean_string(party)
     self.chamber = clean_string(chamber)
-
-    if self.gender == 'M':
-      self.gender = 'male'
-    elif self.gender == 'F':
-      self.gender = 'female'
-
     for k, v in kwargs.items():
       if isinstance(v, basestring):
         setattr(self, k, clean_string(v))
+
+  def __setattr__(self, name, value):
+    if name == 'gender':
+      if value == 'M':
+        value = 'male'
+      elif value == 'F':
+        value = 'female'
+    super(CanadianLegislator, self).__setattr__(name, value)
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
