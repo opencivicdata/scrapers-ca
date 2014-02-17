@@ -19,11 +19,11 @@ class SainteAnneDeBellevuePersonScraper(Scraper):
       if 'Maire' in councillor.text_content():
         name = councillor.xpath('.//a')[0].text_content()
         district = 'Sainte-Anne-de-Bellevue'
-        role = 'Mayor'
+        role = 'Maire'
       else:
         name = re.findall(r'(?<=[0-9]).*', councillor.text_content(), flags=re.DOTALL)[0].strip()
         district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller', '')
-        role = 'Councillor'
+        role = 'Conseiller'
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)

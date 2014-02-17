@@ -17,7 +17,7 @@ class QuebecPersonScraper(Scraper):
     for councillor in councillors:
 
       name = ' '.join(councillor.xpath('.//h3')[0].text_content().strip().split(', ')[::-1])
-      role = 'Councillor'
+      role = 'Conseiller'
       if 'vacant' in name:
         continue
       district = councillor.xpath('./preceding-sibling::h2/text()')
@@ -28,7 +28,7 @@ class QuebecPersonScraper(Scraper):
 
       if 'Maire' in district:  # @todo Mayor is not being set
         district = u'Québec'
-        role = 'Mayor'
+        role = 'Maire'
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)

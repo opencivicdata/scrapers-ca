@@ -26,7 +26,7 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
       url = councillor.xpath('.//a/@href')[0]
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Legislator(name=name, post_id=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -48,7 +48,7 @@ def scrape_mayor(div):
   contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
   contact_page = lxmlize(contact_url)
 
-  p = Legislator(name=name, post_id='Saint-Jean-sur-Richelieu', role='Mayor')
+  p = Legislator(name=name, post_id='Saint-Jean-sur-Richelieu', role='Maire')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_source(contact_url)

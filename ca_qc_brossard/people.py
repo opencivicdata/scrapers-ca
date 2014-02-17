@@ -21,10 +21,10 @@ class BrossardPersonScraper(Scraper):
         name = name.encode('iso-8859-1').decode('utf-8')
       email = councillor.attrib['href'].split(':')[1].split('?')[0]
       district = re.sub(r'(?<=[0-9]).+', '', info.pop(0)).strip()
-      role = 'Councillor'
+      role = 'Conseiller'
       if 'Mayor' in district:
         district = 'Brossard'
-        role = 'Mayor'
+        role = 'Maire'
       phone = info.pop(0).replace('ext. ', 'x').strip()
 
       p = Legislator(name=name, post_id=district, role=role)

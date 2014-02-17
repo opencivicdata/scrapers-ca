@@ -18,10 +18,10 @@ class SherbrookePersonScraper(Scraper):
       url = councillor.attrib['href']
       page = lxmlize(url)
       district = page.xpath('//h2/text()')[0]
-      role = 'Councillor'
+      role = 'Conseiller'
       if 'Maire' in district:
         district = 'Sherbrooke'
-        role = 'Mayor'
+        role = 'Maire'
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)

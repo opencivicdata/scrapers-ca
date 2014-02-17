@@ -29,10 +29,10 @@ class SaintJeromePersonScraper(Scraper):
       # if theres still no district, it must be the mayor
       if not district:
         district = u'Saint-Jérôme'
-        role = 'Mayor'
+        role = 'Maire'
       else:
         district = district[0]
-        role = 'Councillor'
+        role = 'Conseiller'
 
       phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', councillor)[0].replace(' ', '-')
 

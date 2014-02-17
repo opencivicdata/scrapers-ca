@@ -23,11 +23,11 @@ class DollardDesOrmeauxPersonScraper(Scraper):
       if 'Mayor' in councillor.text_content():
         name = councillor.text_content().replace('Mayor', '')
         district = 'Dollard-Des Ormeaux'
-        role = 'Mayor'
+        role = 'Maire'
       else:
         name = re.split(r'[0-9]', councillor.text_content())[1]
         district = 'District ' + re.findall(r'[0-9]', councillor.text_content())[0]
-        role = 'Councillor'
+        role = 'Conseiller'
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)

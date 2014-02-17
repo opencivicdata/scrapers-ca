@@ -18,12 +18,12 @@ class KirklandPersonScraper(Scraper):
         continue
       if councillor == councillors[0]:
         district = 'Kirkland'
-        role = 'Mayor'
+        role = 'Maire'
       else:
         district = councillor.xpath('.//h2')[0].text_content()
         district = re.search('- (.+)', district).group(1).strip()
         district = district.replace(' Ouest', ' ouest').replace(' Est', ' est')
-        role = 'Councillor'
+        role = 'Conseiller'
 
       name = councillor.xpath('.//strong/text()')[0]
 

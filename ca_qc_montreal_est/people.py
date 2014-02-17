@@ -25,7 +25,7 @@ class MontrealEstPersonScraper(Scraper):
         district = councillor.xpath('./ancestor::td/following-sibling::td//strong')[-1].text_content()
         district = 'District %d' % re.sub('\D+', '', district)
       email = councillor.xpath('./ancestor::tr/following-sibling::tr//a[contains(@href, "mailto:")]')[0].text_content().strip()
-      role = 'Mayor' if i == 0 else 'Councillor'
+      role = 'Maire' if i == 0 else 'Conseiller'
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)

@@ -18,10 +18,10 @@ class DorvalPersonScraper(Scraper):
       name = info[0]
       if len(info) < 3:
         district = 'Dorval'
-        role = 'Mayor'
+        role = 'Maire'
       else:
         district = info[2]
-        role = 'Councillor'
+        role = 'Conseiller'
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
 

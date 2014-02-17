@@ -117,6 +117,7 @@ uniqueRoles = [
   'Chief Administrative Officer',
   'Chief Executive Officer',
   'City Manager',
+  'Maire',
   'Mayor', 'Acting Mayor', 'Deputy Mayor', 'Interim Mayor',
   'Municipal Administrator',
   'Regional Chair',

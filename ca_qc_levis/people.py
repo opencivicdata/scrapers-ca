@@ -22,10 +22,10 @@ class LevisPersonScraper(Scraper):
       district = page.xpath('//table[@id="table1"]//td[2]//i')[0].text_content()
       if 'Maire' in district:
         district = u'Lévis'
-        role = 'Mayor'
+        role = 'Maire'
       else:
         district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]
-        role = 'Councillor'
+        role = 'Conseiller'
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
