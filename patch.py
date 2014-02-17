@@ -19,10 +19,10 @@ _contact_details['items']['properties']['type']['enum'] = [
 ]
 _contact_details['items']['properties']['value']['blank'] = False
 _contact_details['items']['properties']['value']['conditionalPattern'] = (
-  r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
+  re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
   lambda x: x['type'] == 'email')
 _contact_details['items']['properties']['value']['conditionalPattern'] = (
-  r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z',
+  re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
   lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager'))
 _contact_details['items']['properties']['note']['enum'] = [
   'constituency',
@@ -33,11 +33,11 @@ _contact_details['items']['properties']['note']['enum'] = [
 _contact_details['items']['additionalProperties'] = False
 
 _links['items']['properties']['url']['blank'] = False
-_links['items']['properties']['url']['pattern'] = r'\A(?:ftp|http)://'
+_links['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
 _links['items']['additionalProperties'] = False
 
 _sources['items']['properties']['url']['blank'] = False
-_sources['items']['properties']['url']['pattern'] = r'\A(?:ftp|http)://'
+_sources['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
 _sources['items']['additionalProperties'] = False
 
 # We must copy the subschema for each model.
@@ -107,8 +107,8 @@ person_schema['properties']['name']['blank'] = False
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
 name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['pattern'] = r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z"
-person_schema['properties']['name']['negativePattern'] = r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?"
+person_schema['properties']['name']['compiledPattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
+person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
 person_schema['properties']['gender']['enum'] = ['male', 'female']
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
@@ -151,19 +151,33 @@ def validate_post(self, x, fieldname, schema, post):
         self._error("Post: Unique role %(value)r is not in the enumeration: %(options)r",
                     x['role'], 'role', options=styles[division_id])
       # A unique role that's among the known roles for the division, but where the post doesn't match the name of the division.
-      if value != names[division_id]:
+      if names.get(division_id) and value != names[division_id]:
         self._error("Post: Unique role's post %(value)r is not in the enumeration: %(options)r",
                     value, fieldname, options=[names[division_id]])
+      else:
+        self._error("Post: Cannot validate unique role's post %(value)r in division %(division_id)r",
+                    value, fieldname, division_id=division_id)
 
 DatetimeValidator.validate_post = validate_post
+
+
+def validate_compiledPattern(self, x, fieldname, schema, pattern=None):
+  value = x.get(fieldname)
+  if isinstance(value, _str_type):
+    if not pattern.search(value):
+      self._error("Value %(value)r for field '%(fieldname)s' does "
+                  "not match regular expression '%(pattern)s'",
+                  value, fieldname, pattern=pattern)
+
+DatetimeValidator.validate_compiledPattern = validate_compiledPattern
 
 
 def validate_negativePattern(self, x, fieldname, schema, pattern=None):
   value = x.get(fieldname)
   if isinstance(value, _str_type):
-    if re.match(pattern, value):
-      self._error("Value %(value)r for field '%(fieldname)s' matches "
-                  "match regular expression '%(pattern)s'",
+    if pattern.search(value):
+      self._error("Value %(value)r for field '%(fieldname)s' "
+                  "matches regular expression '%(pattern)s'",
                   value, fieldname, pattern=pattern)
 
 DatetimeValidator.validate_negativePattern = validate_negativePattern
@@ -173,12 +187,12 @@ def validate_conditionalPattern(self, x, fieldname, schema, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, _str_type):
     pattern, method = arguments
-    if method(x) and re.match(pattern, value):
+    if method(x) and pattern.search(value):
       self._error("Value %(value)r for field '%(fieldname)s' matches "
                   "match regular expression '%(pattern)s'",
                   value, fieldname, pattern=pattern)
 
-DatetimeValidator.validate_negativePattern = validate_negativePattern
+DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
 
 
 def validate_maxMatchingItems(self, x, fieldname, schema, arguments=None):
