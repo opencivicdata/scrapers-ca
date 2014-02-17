@@ -3,9 +3,14 @@ lxml==3.3.0beta3
 -e git+git://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
 -e git+git://github.com/sunlightlabs/validictory.git#egg=validictory
 
+# Validation
+regex==2014.02.16
+
 # Maintenance
 autopep8==0.9.7
+Django==1.6
 GitPython==0.3.2.RC1
 invoke==0.7.0
 pep8==1.4.6
+requests==1.0.0
 Unidecode==0.04.14
