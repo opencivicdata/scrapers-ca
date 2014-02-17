@@ -5561,7 +5561,7 @@ names[u'ocd-division/country:ca/csd:6208073'] = u"Cambridge Bay"
 names[u'ocd-division/country:ca/csd:6208081'] = u"Gjoa Haven"
 names[u'ocd-division/country:ca/csd:6208087'] = u"Taloyoak"
 names[u'ocd-division/country:ca/csd:6208098'] = u"Kitikmeot, Unorganized"
-subdivisions['ocd-division/country:ca/province:pe'] = []
+subdivisions[u'ocd-division/country:ca/province:pe'] = []
 subdivisions[u'ocd-division/country:ca/province:pe'].append(u"Souris-Elmira")
 subdivisions[u'ocd-division/country:ca/province:pe'].append(u"Georgetown-St. Peters")
 subdivisions[u'ocd-division/country:ca/province:pe'].append(u"Montague-Kilmuir")
@@ -5589,7 +5589,7 @@ subdivisions[u'ocd-division/country:ca/province:pe'].append(u"Evangeline-Miscouc
 subdivisions[u'ocd-division/country:ca/province:pe'].append(u"O'Leary-Inverness")
 subdivisions[u'ocd-division/country:ca/province:pe'].append(u"Alberton-Roseville")
 subdivisions[u'ocd-division/country:ca/province:pe'].append(u"Tignish-Palmer Road")
-subdivisions['ocd-division/country:ca/province:ns'] = []
+subdivisions[u'ocd-division/country:ca/province:ns'] = []
 subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Annapolis")
 subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Antigonish")
 subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Argyle-Barrington")
@@ -5641,7 +5641,7 @@ subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Truro-Bible Hill-M
 subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Victoria-The Lakes")
 subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Waverley-Fall River-Beaver Bank")
 subdivisions[u'ocd-division/country:ca/province:ns'].append(u"Yarmouth")
-subdivisions['ocd-division/country:ca/province:nb'] = []
+subdivisions[u'ocd-division/country:ca/province:nb'] = []
 subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Campbellton-Restigouche Centre")
 subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Dalhousie-Restigouche East")
 subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Nigadoo-Chaleur")
@@ -5697,7 +5697,7 @@ subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Grand Falls-Drummo
 subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Restigouche-la-Vallée")
 subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Edmundston-Saint-Basile")
 subdivisions[u'ocd-division/country:ca/province:nb'].append(u"Madawaska-les-Lacs")
-subdivisions['ocd-division/country:ca/province:qc'] = []
+subdivisions[u'ocd-division/country:ca/province:qc'] = []
 subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Abitibi-Est")
 subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Abitibi-Ouest")
 subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Acadie")
@@ -5823,7 +5823,7 @@ subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Verdun")
 subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Viau")
 subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Vimont")
 subdivisions[u'ocd-division/country:ca/province:qc'].append(u"Westmount-Saint-Louis")
-subdivisions['ocd-division/country:ca/province:on'] = []
+subdivisions[u'ocd-division/country:ca/province:on'] = []
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Ajax—Pickering")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Algoma—Manitoulin")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Ancaster—Dundas—Flamborough—Westdale")
@@ -5931,7 +5931,7 @@ subdivisions[u'ocd-division/country:ca/province:on'].append(u"York Centre")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"York—Simcoe")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"York South—Weston")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"York West")
-subdivisions['ocd-division/country:ca/province:mb'] = []
+subdivisions[u'ocd-division/country:ca/province:mb'] = []
 subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Agassiz")
 subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Arthur-Virden")
 subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Assiniboia")
@@ -5989,7 +5989,7 @@ subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Transcona")
 subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Tuxedo")
 subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Tyndall Park")
 subdivisions[u'ocd-division/country:ca/province:mb'].append(u"Wolseley")
-subdivisions['ocd-division/country:ca/province:sk'] = []
+subdivisions[u'ocd-division/country:ca/province:sk'] = []
 subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Arm River-Watrous")
 subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Athabasca")
 subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Batoche")
@@ -6048,7 +6048,7 @@ subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Thunder Creek")
 subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Weyburn-Big Muddy")
 subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Wood River")
 subdivisions[u'ocd-division/country:ca/province:sk'].append(u"Yorkton")
-subdivisions['ocd-division/country:ca/province:ab'] = []
+subdivisions[u'ocd-division/country:ca/province:ab'] = []
 subdivisions[u'ocd-division/country:ca/province:ab'].append(u"Dunvegan-Central Peace-Notley")
 subdivisions[u'ocd-division/country:ca/province:ab'].append(u"Lesser Slave Lake")
 subdivisions[u'ocd-division/country:ca/province:ab'].append(u"Calgary-Acadia")
@@ -6136,7 +6136,7 @@ subdivisions[u'ocd-division/country:ca/province:ab'].append(u"Vermilion-Lloydmin
 subdivisions[u'ocd-division/country:ca/province:ab'].append(u"West Yellowhead")
 subdivisions[u'ocd-division/country:ca/province:ab'].append(u"Wetaskiwin-Camrose")
 subdivisions[u'ocd-division/country:ca/province:ab'].append(u"Whitecourt-Ste. Anne")
-subdivisions['ocd-division/country:ca/province:bc'] = []
+subdivisions[u'ocd-division/country:ca/province:bc'] = []
 subdivisions[u'ocd-division/country:ca/province:bc'].append(u"Abbotsford-Mission")
 subdivisions[u'ocd-division/country:ca/province:bc'].append(u"Abbotsford South")
 subdivisions[u'ocd-division/country:ca/province:bc'].append(u"Abbotsford West")
@@ -11524,7 +11524,7 @@ subdivisions[u'ocd-division/country:ca/csd:1103025'].append(u"Wilmot")
 subdivisions[u'ocd-division/country:ca/csd:1103025'].append(u"Ward 8")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Waverley - Fall River - Musquodoboit Valley")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 1")
-subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Preston - Porters Lake - Eastern Shore")
+subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Preston - Chezzetcook - Eastern Shore")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 2")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Dartmouth South - Eastern Passage")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 3")
@@ -11538,17 +11538,17 @@ subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Peninsula South - 
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 7")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Peninsula North")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 8")
-subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Peninsula West - Armdale")
+subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Armdale - Peninsula West")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 9")
-subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Birch Cove - Rockingham - Fairview")
+subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Halifax - Bedford Basin West")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 10")
-subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Spryfield - Sambro - Prospect Road")
+subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Spryfield - Sambro Loop - Prospect Road")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 11")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Timberlea - Beechville - Clayton Park West")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 12")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Hammonds Plains - St. Margarets")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 13")
-subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Upper/Middle Sackville - Beaver Bank")
+subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Middle/Upper Sackville - Beaver Bank - Lucasville")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 14")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"Lower Sackville")
 subdivisions[u'ocd-division/country:ca/csd:1209034'].append(u"District 15")
@@ -11636,6 +11636,18 @@ subdivisions[u'ocd-division/country:ca/csd:2425213'].append(u"Lauzon")
 subdivisions[u'ocd-division/country:ca/csd:2425213'].append(u"District 14")
 subdivisions[u'ocd-division/country:ca/csd:2425213'].append(u"Pintendre")
 subdivisions[u'ocd-division/country:ca/csd:2425213'].append(u"District 15")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Arrondissement de Brompton")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Borough 1")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Arrondissement de Fleurimont")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Borough 2")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Arrondissement de Lennoxville")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Borough 3")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Arrondissement du Mont-Bellevue")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Borough 4")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Arrondissement de Rock ForestSaint-ÉlieDeauville")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Borough 5")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Arrondissement de Jacques-Cartier")
+subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"Borough 6")
 subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"de Beauvoir")
 subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"District 11")
 subdivisions[u'ocd-division/country:ca/csd:2443027'].append(u"des Moulins")
@@ -11706,25 +11718,6 @@ subdivisions[u'ocd-division/country:ca/csd:2466007'].append(u"District 3")
 subdivisions[u'ocd-division/country:ca/csd:2466007'].append(u"District 4")
 subdivisions[u'ocd-division/country:ca/csd:2466007'].append(u"District 5")
 subdivisions[u'ocd-division/country:ca/csd:2466007'].append(u"District 6")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Ahuntsic-Cartierville")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Anjou")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Cote-des-Neiges—Notre-Dame-de-Grace")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"L'Ile-Bizard—Sainte-Genevieve")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"LaSalle")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Lachine")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Mercier-Hochelaga-Maisonneuve")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Montreal-Nord")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Outremont")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Pierrefonds—Roxboro")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Plateau-Mont-Royal")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Pointe-aux-Trembles-Rivieres-des-Prairies")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Rosemont—La-Petite-Patrie")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Saint-Laurent")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"St-Leonard")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Sud-Ouest")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Verdun—Ile-des-Soeurs")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Ville-Marie")
-subdivisions[u'ocd-division/country:ca/csd:2466023'].append(u"Villeray-Saint-Michel-Parc-Extension")
 subdivisions[u'ocd-division/country:ca/csd:2466032'].append(u"District 1")
 subdivisions[u'ocd-division/country:ca/csd:2466032'].append(u"District 2")
 subdivisions[u'ocd-division/country:ca/csd:2466032'].append(u"District 3")
@@ -11924,6 +11917,30 @@ subdivisions[u'ocd-division/country:ca/csd:3506008'].append(u"Gloucester—South
 subdivisions[u'ocd-division/country:ca/csd:3506008'].append(u"Ward 22")
 subdivisions[u'ocd-division/country:ca/csd:3506008'].append(u"Kanata South")
 subdivisions[u'ocd-division/country:ca/csd:3506008'].append(u"Ward 23")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Countryside")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 1")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Loyalist-Cataraqui")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 2")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Collins-Bayridge")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 3")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Lakeside")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 4")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Portsmouth")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 5")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Trillium")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 6")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Cataraqui")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 7")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Kingscourt-Strathcona")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 8")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Williamsville")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 9")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Sydenham")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 10")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"King's Town")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 11")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Pittsburgh")
+subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Ward 12")
 subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Countryside")
 subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"District 1")
 subdivisions[u'ocd-division/country:ca/csd:3510010'].append(u"Loyalist-Cataraqui")
@@ -12138,11 +12155,17 @@ subdivisions[u'ocd-division/country:ca/csd:3521024'].append(u"Ward 2")
 subdivisions[u'ocd-division/country:ca/csd:3521024'].append(u"Ward 3")
 subdivisions[u'ocd-division/country:ca/csd:3521024'].append(u"Ward 4")
 subdivisions[u'ocd-division/country:ca/csd:3521024'].append(u"Ward 5")
+subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"St. Patrick's")
 subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"Ward 1")
+subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"St. George's")
 subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"Ward 2")
+subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"St. John's")
 subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"Ward 3")
+subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"St. David's")
 subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"Ward 4")
+subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"St. Andrew's")
 subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"Ward 5")
+subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"St. Jame's")
 subdivisions[u'ocd-division/country:ca/csd:3523008'].append(u"Ward 6")
 subdivisions[u'ocd-division/country:ca/csd:3524001'].append(u"Ward 1")
 subdivisions[u'ocd-division/country:ca/csd:3524001'].append(u"Ward 2")
@@ -12410,63 +12433,3315 @@ styles[u'ocd-division/country:ca/csd:1307022'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:1310032'] = []
 styles[u'ocd-division/country:ca/csd:1310032'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:1310032'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2401023'] = []
+styles[u'ocd-division/country:ca/csd:2401023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2401023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2401042'] = []
+styles[u'ocd-division/country:ca/csd:2401042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2401042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2402005'] = []
+styles[u'ocd-division/country:ca/csd:2402005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2402005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2402010'] = []
+styles[u'ocd-division/country:ca/csd:2402010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2402010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2402015'] = []
+styles[u'ocd-division/country:ca/csd:2402015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2402015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2402028'] = []
+styles[u'ocd-division/country:ca/csd:2402028'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2402028'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2402047'] = []
+styles[u'ocd-division/country:ca/csd:2402047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2402047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2403005'] = []
+styles[u'ocd-division/country:ca/csd:2403005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2403005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2403010'] = []
+styles[u'ocd-division/country:ca/csd:2403010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2403010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2403015'] = []
+styles[u'ocd-division/country:ca/csd:2403015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2403015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2403020'] = []
+styles[u'ocd-division/country:ca/csd:2403020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2403020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2403025'] = []
+styles[u'ocd-division/country:ca/csd:2403025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2403025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404005'] = []
+styles[u'ocd-division/country:ca/csd:2404005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404010'] = []
+styles[u'ocd-division/country:ca/csd:2404010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404015'] = []
+styles[u'ocd-division/country:ca/csd:2404015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404020'] = []
+styles[u'ocd-division/country:ca/csd:2404020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404025'] = []
+styles[u'ocd-division/country:ca/csd:2404025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404030'] = []
+styles[u'ocd-division/country:ca/csd:2404030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404037'] = []
+styles[u'ocd-division/country:ca/csd:2404037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2404047'] = []
+styles[u'ocd-division/country:ca/csd:2404047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2404047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405010'] = []
+styles[u'ocd-division/country:ca/csd:2405010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405015'] = []
+styles[u'ocd-division/country:ca/csd:2405015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405020'] = []
+styles[u'ocd-division/country:ca/csd:2405020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405025'] = []
+styles[u'ocd-division/country:ca/csd:2405025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405032'] = []
+styles[u'ocd-division/country:ca/csd:2405032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405040'] = []
+styles[u'ocd-division/country:ca/csd:2405040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405045'] = []
+styles[u'ocd-division/country:ca/csd:2405045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405050'] = []
+styles[u'ocd-division/country:ca/csd:2405050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405055'] = []
+styles[u'ocd-division/country:ca/csd:2405055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405060'] = []
+styles[u'ocd-division/country:ca/csd:2405060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405065'] = []
+styles[u'ocd-division/country:ca/csd:2405065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405070'] = []
+styles[u'ocd-division/country:ca/csd:2405070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2405077'] = []
+styles[u'ocd-division/country:ca/csd:2405077'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2405077'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406005'] = []
+styles[u'ocd-division/country:ca/csd:2406005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406013'] = []
+styles[u'ocd-division/country:ca/csd:2406013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406020'] = []
+styles[u'ocd-division/country:ca/csd:2406020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406025'] = []
+styles[u'ocd-division/country:ca/csd:2406025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406030'] = []
+styles[u'ocd-division/country:ca/csd:2406030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406035'] = []
+styles[u'ocd-division/country:ca/csd:2406035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406040'] = []
+styles[u'ocd-division/country:ca/csd:2406040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406045'] = []
+styles[u'ocd-division/country:ca/csd:2406045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406050'] = []
+styles[u'ocd-division/country:ca/csd:2406050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406055'] = []
+styles[u'ocd-division/country:ca/csd:2406055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2406060'] = []
+styles[u'ocd-division/country:ca/csd:2406060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2406060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407005'] = []
+styles[u'ocd-division/country:ca/csd:2407005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407010'] = []
+styles[u'ocd-division/country:ca/csd:2407010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407018'] = []
+styles[u'ocd-division/country:ca/csd:2407018'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407018'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407025'] = []
+styles[u'ocd-division/country:ca/csd:2407025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407030'] = []
+styles[u'ocd-division/country:ca/csd:2407030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407035'] = []
+styles[u'ocd-division/country:ca/csd:2407035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407040'] = []
+styles[u'ocd-division/country:ca/csd:2407040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407047'] = []
+styles[u'ocd-division/country:ca/csd:2407047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407057'] = []
+styles[u'ocd-division/country:ca/csd:2407057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407065'] = []
+styles[u'ocd-division/country:ca/csd:2407065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407070'] = []
+styles[u'ocd-division/country:ca/csd:2407070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407075'] = []
+styles[u'ocd-division/country:ca/csd:2407075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407080'] = []
+styles[u'ocd-division/country:ca/csd:2407080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407085'] = []
+styles[u'ocd-division/country:ca/csd:2407085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407090'] = []
+styles[u'ocd-division/country:ca/csd:2407090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407095'] = []
+styles[u'ocd-division/country:ca/csd:2407095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407100'] = []
+styles[u'ocd-division/country:ca/csd:2407100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2407105'] = []
+styles[u'ocd-division/country:ca/csd:2407105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2407105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408005'] = []
+styles[u'ocd-division/country:ca/csd:2408005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408010'] = []
+styles[u'ocd-division/country:ca/csd:2408010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408015'] = []
+styles[u'ocd-division/country:ca/csd:2408015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408023'] = []
+styles[u'ocd-division/country:ca/csd:2408023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408030'] = []
+styles[u'ocd-division/country:ca/csd:2408030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408035'] = []
+styles[u'ocd-division/country:ca/csd:2408035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408040'] = []
+styles[u'ocd-division/country:ca/csd:2408040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408053'] = []
+styles[u'ocd-division/country:ca/csd:2408053'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408053'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408065'] = []
+styles[u'ocd-division/country:ca/csd:2408065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408073'] = []
+styles[u'ocd-division/country:ca/csd:2408073'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408073'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2408080'] = []
+styles[u'ocd-division/country:ca/csd:2408080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2408080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409005'] = []
+styles[u'ocd-division/country:ca/csd:2409005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409010'] = []
+styles[u'ocd-division/country:ca/csd:2409010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409015'] = []
+styles[u'ocd-division/country:ca/csd:2409015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409020'] = []
+styles[u'ocd-division/country:ca/csd:2409020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409025'] = []
+styles[u'ocd-division/country:ca/csd:2409025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409030'] = []
+styles[u'ocd-division/country:ca/csd:2409030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409035'] = []
+styles[u'ocd-division/country:ca/csd:2409035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409040'] = []
+styles[u'ocd-division/country:ca/csd:2409040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409048'] = []
+styles[u'ocd-division/country:ca/csd:2409048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409055'] = []
+styles[u'ocd-division/country:ca/csd:2409055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409060'] = []
+styles[u'ocd-division/country:ca/csd:2409060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409065'] = []
+styles[u'ocd-division/country:ca/csd:2409065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409070'] = []
+styles[u'ocd-division/country:ca/csd:2409070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409077'] = []
+styles[u'ocd-division/country:ca/csd:2409077'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409077'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409085'] = []
+styles[u'ocd-division/country:ca/csd:2409085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2409092'] = []
+styles[u'ocd-division/country:ca/csd:2409092'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2409092'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410005'] = []
+styles[u'ocd-division/country:ca/csd:2410005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410010'] = []
+styles[u'ocd-division/country:ca/csd:2410010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410015'] = []
+styles[u'ocd-division/country:ca/csd:2410015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410025'] = []
+styles[u'ocd-division/country:ca/csd:2410025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410030'] = []
+styles[u'ocd-division/country:ca/csd:2410030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410043'] = []
+styles[u'ocd-division/country:ca/csd:2410043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410060'] = []
+styles[u'ocd-division/country:ca/csd:2410060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410070'] = []
+styles[u'ocd-division/country:ca/csd:2410070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2410075'] = []
+styles[u'ocd-division/country:ca/csd:2410075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2410075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411005'] = []
+styles[u'ocd-division/country:ca/csd:2411005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411010'] = []
+styles[u'ocd-division/country:ca/csd:2411010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411015'] = []
+styles[u'ocd-division/country:ca/csd:2411015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411020'] = []
+styles[u'ocd-division/country:ca/csd:2411020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411025'] = []
+styles[u'ocd-division/country:ca/csd:2411025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411030'] = []
+styles[u'ocd-division/country:ca/csd:2411030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411035'] = []
+styles[u'ocd-division/country:ca/csd:2411035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411040'] = []
+styles[u'ocd-division/country:ca/csd:2411040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411045'] = []
+styles[u'ocd-division/country:ca/csd:2411045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411050'] = []
+styles[u'ocd-division/country:ca/csd:2411050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2411055'] = []
+styles[u'ocd-division/country:ca/csd:2411055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2411055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412005'] = []
+styles[u'ocd-division/country:ca/csd:2412005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412010'] = []
+styles[u'ocd-division/country:ca/csd:2412010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412015'] = []
+styles[u'ocd-division/country:ca/csd:2412015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412020'] = []
+styles[u'ocd-division/country:ca/csd:2412020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412025'] = []
+styles[u'ocd-division/country:ca/csd:2412025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412030'] = []
+styles[u'ocd-division/country:ca/csd:2412030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412035'] = []
+styles[u'ocd-division/country:ca/csd:2412035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412043'] = []
+styles[u'ocd-division/country:ca/csd:2412043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412045'] = []
+styles[u'ocd-division/country:ca/csd:2412045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412057'] = []
+styles[u'ocd-division/country:ca/csd:2412057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412065'] = []
+styles[u'ocd-division/country:ca/csd:2412065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412072'] = []
+styles[u'ocd-division/country:ca/csd:2412072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2412080'] = []
+styles[u'ocd-division/country:ca/csd:2412080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2412080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413005'] = []
+styles[u'ocd-division/country:ca/csd:2413005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413010'] = []
+styles[u'ocd-division/country:ca/csd:2413010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413015'] = []
+styles[u'ocd-division/country:ca/csd:2413015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413020'] = []
+styles[u'ocd-division/country:ca/csd:2413020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413025'] = []
+styles[u'ocd-division/country:ca/csd:2413025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413030'] = []
+styles[u'ocd-division/country:ca/csd:2413030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413040'] = []
+styles[u'ocd-division/country:ca/csd:2413040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413045'] = []
+styles[u'ocd-division/country:ca/csd:2413045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413050'] = []
+styles[u'ocd-division/country:ca/csd:2413050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413055'] = []
+styles[u'ocd-division/country:ca/csd:2413055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413060'] = []
+styles[u'ocd-division/country:ca/csd:2413060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413065'] = []
+styles[u'ocd-division/country:ca/csd:2413065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413073'] = []
+styles[u'ocd-division/country:ca/csd:2413073'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413073'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413075'] = []
+styles[u'ocd-division/country:ca/csd:2413075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413080'] = []
+styles[u'ocd-division/country:ca/csd:2413080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413085'] = []
+styles[u'ocd-division/country:ca/csd:2413085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413090'] = []
+styles[u'ocd-division/country:ca/csd:2413090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413095'] = []
+styles[u'ocd-division/country:ca/csd:2413095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2413100'] = []
+styles[u'ocd-division/country:ca/csd:2413100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2413100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414005'] = []
+styles[u'ocd-division/country:ca/csd:2414005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414010'] = []
+styles[u'ocd-division/country:ca/csd:2414010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414018'] = []
+styles[u'ocd-division/country:ca/csd:2414018'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414018'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414025'] = []
+styles[u'ocd-division/country:ca/csd:2414025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414030'] = []
+styles[u'ocd-division/country:ca/csd:2414030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414035'] = []
+styles[u'ocd-division/country:ca/csd:2414035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414040'] = []
+styles[u'ocd-division/country:ca/csd:2414040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414045'] = []
+styles[u'ocd-division/country:ca/csd:2414045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414050'] = []
+styles[u'ocd-division/country:ca/csd:2414050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414055'] = []
+styles[u'ocd-division/country:ca/csd:2414055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414060'] = []
+styles[u'ocd-division/country:ca/csd:2414060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414065'] = []
+styles[u'ocd-division/country:ca/csd:2414065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414070'] = []
+styles[u'ocd-division/country:ca/csd:2414070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414075'] = []
+styles[u'ocd-division/country:ca/csd:2414075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414080'] = []
+styles[u'ocd-division/country:ca/csd:2414080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414085'] = []
+styles[u'ocd-division/country:ca/csd:2414085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2414090'] = []
+styles[u'ocd-division/country:ca/csd:2414090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2414090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415005'] = []
+styles[u'ocd-division/country:ca/csd:2415005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415013'] = []
+styles[u'ocd-division/country:ca/csd:2415013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415025'] = []
+styles[u'ocd-division/country:ca/csd:2415025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415030'] = []
+styles[u'ocd-division/country:ca/csd:2415030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415035'] = []
+styles[u'ocd-division/country:ca/csd:2415035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415058'] = []
+styles[u'ocd-division/country:ca/csd:2415058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2415065'] = []
+styles[u'ocd-division/country:ca/csd:2415065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2415065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2416005'] = []
+styles[u'ocd-division/country:ca/csd:2416005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2416005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2416013'] = []
+styles[u'ocd-division/country:ca/csd:2416013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2416013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2416023'] = []
+styles[u'ocd-division/country:ca/csd:2416023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2416023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2416048'] = []
+styles[u'ocd-division/country:ca/csd:2416048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2416048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2416050'] = []
+styles[u'ocd-division/country:ca/csd:2416050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2416050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2416055'] = []
+styles[u'ocd-division/country:ca/csd:2416055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2416055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417005'] = []
+styles[u'ocd-division/country:ca/csd:2417005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417010'] = []
+styles[u'ocd-division/country:ca/csd:2417010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417015'] = []
+styles[u'ocd-division/country:ca/csd:2417015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417020'] = []
+styles[u'ocd-division/country:ca/csd:2417020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417025'] = []
+styles[u'ocd-division/country:ca/csd:2417025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417030'] = []
+styles[u'ocd-division/country:ca/csd:2417030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417035'] = []
+styles[u'ocd-division/country:ca/csd:2417035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417040'] = []
+styles[u'ocd-division/country:ca/csd:2417040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417045'] = []
+styles[u'ocd-division/country:ca/csd:2417045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417055'] = []
+styles[u'ocd-division/country:ca/csd:2417055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417060'] = []
+styles[u'ocd-division/country:ca/csd:2417060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417065'] = []
+styles[u'ocd-division/country:ca/csd:2417065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417070'] = []
+styles[u'ocd-division/country:ca/csd:2417070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2417078'] = []
+styles[u'ocd-division/country:ca/csd:2417078'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2417078'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418005'] = []
+styles[u'ocd-division/country:ca/csd:2418005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418010'] = []
+styles[u'ocd-division/country:ca/csd:2418010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418015'] = []
+styles[u'ocd-division/country:ca/csd:2418015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418020'] = []
+styles[u'ocd-division/country:ca/csd:2418020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418025'] = []
+styles[u'ocd-division/country:ca/csd:2418025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418030'] = []
+styles[u'ocd-division/country:ca/csd:2418030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418035'] = []
+styles[u'ocd-division/country:ca/csd:2418035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418040'] = []
+styles[u'ocd-division/country:ca/csd:2418040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418045'] = []
+styles[u'ocd-division/country:ca/csd:2418045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418050'] = []
+styles[u'ocd-division/country:ca/csd:2418050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418055'] = []
+styles[u'ocd-division/country:ca/csd:2418055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418060'] = []
+styles[u'ocd-division/country:ca/csd:2418060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418065'] = []
+styles[u'ocd-division/country:ca/csd:2418065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2418070'] = []
+styles[u'ocd-division/country:ca/csd:2418070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2418070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419005'] = []
+styles[u'ocd-division/country:ca/csd:2419005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419010'] = []
+styles[u'ocd-division/country:ca/csd:2419010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419015'] = []
+styles[u'ocd-division/country:ca/csd:2419015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419020'] = []
+styles[u'ocd-division/country:ca/csd:2419020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419025'] = []
+styles[u'ocd-division/country:ca/csd:2419025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419030'] = []
+styles[u'ocd-division/country:ca/csd:2419030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419037'] = []
+styles[u'ocd-division/country:ca/csd:2419037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419045'] = []
+styles[u'ocd-division/country:ca/csd:2419045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419050'] = []
+styles[u'ocd-division/country:ca/csd:2419050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419055'] = []
+styles[u'ocd-division/country:ca/csd:2419055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419062'] = []
+styles[u'ocd-division/country:ca/csd:2419062'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419062'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419068'] = []
+styles[u'ocd-division/country:ca/csd:2419068'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419068'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419070'] = []
+styles[u'ocd-division/country:ca/csd:2419070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419075'] = []
+styles[u'ocd-division/country:ca/csd:2419075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419082'] = []
+styles[u'ocd-division/country:ca/csd:2419082'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419082'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419090'] = []
+styles[u'ocd-division/country:ca/csd:2419090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419097'] = []
+styles[u'ocd-division/country:ca/csd:2419097'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419097'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419105'] = []
+styles[u'ocd-division/country:ca/csd:2419105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419110'] = []
+styles[u'ocd-division/country:ca/csd:2419110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2419117'] = []
+styles[u'ocd-division/country:ca/csd:2419117'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2419117'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2420005'] = []
+styles[u'ocd-division/country:ca/csd:2420005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2420005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2420010'] = []
+styles[u'ocd-division/country:ca/csd:2420010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2420010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2420015'] = []
+styles[u'ocd-division/country:ca/csd:2420015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2420015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2420020'] = []
+styles[u'ocd-division/country:ca/csd:2420020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2420020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2420025'] = []
+styles[u'ocd-division/country:ca/csd:2420025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2420025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2420030'] = []
+styles[u'ocd-division/country:ca/csd:2420030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2420030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421005'] = []
+styles[u'ocd-division/country:ca/csd:2421005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421010'] = []
+styles[u'ocd-division/country:ca/csd:2421010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421020'] = []
+styles[u'ocd-division/country:ca/csd:2421020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421025'] = []
+styles[u'ocd-division/country:ca/csd:2421025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421030'] = []
+styles[u'ocd-division/country:ca/csd:2421030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421035'] = []
+styles[u'ocd-division/country:ca/csd:2421035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421040'] = []
+styles[u'ocd-division/country:ca/csd:2421040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2421045'] = []
+styles[u'ocd-division/country:ca/csd:2421045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2421045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422005'] = []
+styles[u'ocd-division/country:ca/csd:2422005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422010'] = []
+styles[u'ocd-division/country:ca/csd:2422010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422015'] = []
+styles[u'ocd-division/country:ca/csd:2422015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422020'] = []
+styles[u'ocd-division/country:ca/csd:2422020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422025'] = []
+styles[u'ocd-division/country:ca/csd:2422025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422030'] = []
+styles[u'ocd-division/country:ca/csd:2422030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422035'] = []
+styles[u'ocd-division/country:ca/csd:2422035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422040'] = []
+styles[u'ocd-division/country:ca/csd:2422040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2422045'] = []
+styles[u'ocd-division/country:ca/csd:2422045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2422045'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2423027'] = []
-styles[u'ocd-division/country:ca/csd:2423027'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2423027'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2423027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2423027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2423057'] = []
+styles[u'ocd-division/country:ca/csd:2423057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2423057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2423072'] = []
+styles[u'ocd-division/country:ca/csd:2423072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2423072'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2425213'] = []
-styles[u'ocd-division/country:ca/csd:2425213'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2425213'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2425213'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2425213'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426005'] = []
+styles[u'ocd-division/country:ca/csd:2426005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426010'] = []
+styles[u'ocd-division/country:ca/csd:2426010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426015'] = []
+styles[u'ocd-division/country:ca/csd:2426015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426022'] = []
+styles[u'ocd-division/country:ca/csd:2426022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426030'] = []
+styles[u'ocd-division/country:ca/csd:2426030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426035'] = []
+styles[u'ocd-division/country:ca/csd:2426035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426040'] = []
+styles[u'ocd-division/country:ca/csd:2426040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426048'] = []
+styles[u'ocd-division/country:ca/csd:2426048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426055'] = []
+styles[u'ocd-division/country:ca/csd:2426055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426063'] = []
+styles[u'ocd-division/country:ca/csd:2426063'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426063'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2426070'] = []
+styles[u'ocd-division/country:ca/csd:2426070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2426070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427008'] = []
+styles[u'ocd-division/country:ca/csd:2427008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427015'] = []
+styles[u'ocd-division/country:ca/csd:2427015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427028'] = []
+styles[u'ocd-division/country:ca/csd:2427028'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427028'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427035'] = []
+styles[u'ocd-division/country:ca/csd:2427035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427043'] = []
+styles[u'ocd-division/country:ca/csd:2427043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427050'] = []
+styles[u'ocd-division/country:ca/csd:2427050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427055'] = []
+styles[u'ocd-division/country:ca/csd:2427055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427060'] = []
+styles[u'ocd-division/country:ca/csd:2427060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427065'] = []
+styles[u'ocd-division/country:ca/csd:2427065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2427070'] = []
+styles[u'ocd-division/country:ca/csd:2427070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2427070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428005'] = []
+styles[u'ocd-division/country:ca/csd:2428005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428015'] = []
+styles[u'ocd-division/country:ca/csd:2428015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428020'] = []
+styles[u'ocd-division/country:ca/csd:2428020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428025'] = []
+styles[u'ocd-division/country:ca/csd:2428025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428030'] = []
+styles[u'ocd-division/country:ca/csd:2428030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428035'] = []
+styles[u'ocd-division/country:ca/csd:2428035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428040'] = []
+styles[u'ocd-division/country:ca/csd:2428040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428045'] = []
+styles[u'ocd-division/country:ca/csd:2428045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428053'] = []
+styles[u'ocd-division/country:ca/csd:2428053'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428053'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428060'] = []
+styles[u'ocd-division/country:ca/csd:2428060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428065'] = []
+styles[u'ocd-division/country:ca/csd:2428065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428070'] = []
+styles[u'ocd-division/country:ca/csd:2428070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2428075'] = []
+styles[u'ocd-division/country:ca/csd:2428075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2428075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429005'] = []
+styles[u'ocd-division/country:ca/csd:2429005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429013'] = []
+styles[u'ocd-division/country:ca/csd:2429013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429020'] = []
+styles[u'ocd-division/country:ca/csd:2429020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429025'] = []
+styles[u'ocd-division/country:ca/csd:2429025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429030'] = []
+styles[u'ocd-division/country:ca/csd:2429030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429038'] = []
+styles[u'ocd-division/country:ca/csd:2429038'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429038'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429045'] = []
+styles[u'ocd-division/country:ca/csd:2429045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429050'] = []
+styles[u'ocd-division/country:ca/csd:2429050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429057'] = []
+styles[u'ocd-division/country:ca/csd:2429057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429065'] = []
+styles[u'ocd-division/country:ca/csd:2429065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429073'] = []
+styles[u'ocd-division/country:ca/csd:2429073'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429073'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429095'] = []
+styles[u'ocd-division/country:ca/csd:2429095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429100'] = []
+styles[u'ocd-division/country:ca/csd:2429100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429112'] = []
+styles[u'ocd-division/country:ca/csd:2429112'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429112'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429120'] = []
+styles[u'ocd-division/country:ca/csd:2429120'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429120'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2429125'] = []
+styles[u'ocd-division/country:ca/csd:2429125'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2429125'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430005'] = []
+styles[u'ocd-division/country:ca/csd:2430005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430010'] = []
+styles[u'ocd-division/country:ca/csd:2430010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430015'] = []
+styles[u'ocd-division/country:ca/csd:2430015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430020'] = []
+styles[u'ocd-division/country:ca/csd:2430020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430025'] = []
+styles[u'ocd-division/country:ca/csd:2430025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430035'] = []
+styles[u'ocd-division/country:ca/csd:2430035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430040'] = []
+styles[u'ocd-division/country:ca/csd:2430040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430045'] = []
+styles[u'ocd-division/country:ca/csd:2430045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430050'] = []
+styles[u'ocd-division/country:ca/csd:2430050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430055'] = []
+styles[u'ocd-division/country:ca/csd:2430055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430070'] = []
+styles[u'ocd-division/country:ca/csd:2430070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430072'] = []
+styles[u'ocd-division/country:ca/csd:2430072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430080'] = []
+styles[u'ocd-division/country:ca/csd:2430080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430085'] = []
+styles[u'ocd-division/country:ca/csd:2430085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430090'] = []
+styles[u'ocd-division/country:ca/csd:2430090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430095'] = []
+styles[u'ocd-division/country:ca/csd:2430095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430100'] = []
+styles[u'ocd-division/country:ca/csd:2430100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430105'] = []
+styles[u'ocd-division/country:ca/csd:2430105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2430110'] = []
+styles[u'ocd-division/country:ca/csd:2430110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2430110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431008'] = []
+styles[u'ocd-division/country:ca/csd:2431008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431015'] = []
+styles[u'ocd-division/country:ca/csd:2431015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431020'] = []
+styles[u'ocd-division/country:ca/csd:2431020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431025'] = []
+styles[u'ocd-division/country:ca/csd:2431025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431030'] = []
+styles[u'ocd-division/country:ca/csd:2431030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431035'] = []
+styles[u'ocd-division/country:ca/csd:2431035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431040'] = []
+styles[u'ocd-division/country:ca/csd:2431040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431045'] = []
+styles[u'ocd-division/country:ca/csd:2431045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431050'] = []
+styles[u'ocd-division/country:ca/csd:2431050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431056'] = []
+styles[u'ocd-division/country:ca/csd:2431056'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431056'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431060'] = []
+styles[u'ocd-division/country:ca/csd:2431060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431084'] = []
+styles[u'ocd-division/country:ca/csd:2431084'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431084'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431095'] = []
+styles[u'ocd-division/country:ca/csd:2431095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431100'] = []
+styles[u'ocd-division/country:ca/csd:2431100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431105'] = []
+styles[u'ocd-division/country:ca/csd:2431105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431122'] = []
+styles[u'ocd-division/country:ca/csd:2431122'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431122'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431130'] = []
+styles[u'ocd-division/country:ca/csd:2431130'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431130'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431135'] = []
+styles[u'ocd-division/country:ca/csd:2431135'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431135'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2431140'] = []
+styles[u'ocd-division/country:ca/csd:2431140'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2431140'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432013'] = []
+styles[u'ocd-division/country:ca/csd:2432013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432023'] = []
+styles[u'ocd-division/country:ca/csd:2432023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432033'] = []
+styles[u'ocd-division/country:ca/csd:2432033'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432033'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432040'] = []
+styles[u'ocd-division/country:ca/csd:2432040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432045'] = []
+styles[u'ocd-division/country:ca/csd:2432045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432050'] = []
+styles[u'ocd-division/country:ca/csd:2432050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432058'] = []
+styles[u'ocd-division/country:ca/csd:2432058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432065'] = []
+styles[u'ocd-division/country:ca/csd:2432065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432072'] = []
+styles[u'ocd-division/country:ca/csd:2432072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432080'] = []
+styles[u'ocd-division/country:ca/csd:2432080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2432085'] = []
+styles[u'ocd-division/country:ca/csd:2432085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2432085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433007'] = []
+styles[u'ocd-division/country:ca/csd:2433007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433017'] = []
+styles[u'ocd-division/country:ca/csd:2433017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433025'] = []
+styles[u'ocd-division/country:ca/csd:2433025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433030'] = []
+styles[u'ocd-division/country:ca/csd:2433030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433035'] = []
+styles[u'ocd-division/country:ca/csd:2433035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433040'] = []
+styles[u'ocd-division/country:ca/csd:2433040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433045'] = []
+styles[u'ocd-division/country:ca/csd:2433045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433052'] = []
+styles[u'ocd-division/country:ca/csd:2433052'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433052'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433060'] = []
+styles[u'ocd-division/country:ca/csd:2433060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433065'] = []
+styles[u'ocd-division/country:ca/csd:2433065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433070'] = []
+styles[u'ocd-division/country:ca/csd:2433070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433080'] = []
+styles[u'ocd-division/country:ca/csd:2433080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433085'] = []
+styles[u'ocd-division/country:ca/csd:2433085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433090'] = []
+styles[u'ocd-division/country:ca/csd:2433090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433095'] = []
+styles[u'ocd-division/country:ca/csd:2433095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433102'] = []
+styles[u'ocd-division/country:ca/csd:2433102'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433102'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433115'] = []
+styles[u'ocd-division/country:ca/csd:2433115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2433123'] = []
+styles[u'ocd-division/country:ca/csd:2433123'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2433123'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434007'] = []
+styles[u'ocd-division/country:ca/csd:2434007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434017'] = []
+styles[u'ocd-division/country:ca/csd:2434017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434025'] = []
+styles[u'ocd-division/country:ca/csd:2434025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434030'] = []
+styles[u'ocd-division/country:ca/csd:2434030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434038'] = []
+styles[u'ocd-division/country:ca/csd:2434038'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434038'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434048'] = []
+styles[u'ocd-division/country:ca/csd:2434048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434058'] = []
+styles[u'ocd-division/country:ca/csd:2434058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434060'] = []
+styles[u'ocd-division/country:ca/csd:2434060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434065'] = []
+styles[u'ocd-division/country:ca/csd:2434065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434078'] = []
+styles[u'ocd-division/country:ca/csd:2434078'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434078'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434085'] = []
+styles[u'ocd-division/country:ca/csd:2434085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434090'] = []
+styles[u'ocd-division/country:ca/csd:2434090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434097'] = []
+styles[u'ocd-division/country:ca/csd:2434097'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434097'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434105'] = []
+styles[u'ocd-division/country:ca/csd:2434105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434115'] = []
+styles[u'ocd-division/country:ca/csd:2434115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434120'] = []
+styles[u'ocd-division/country:ca/csd:2434120'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434120'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434128'] = []
+styles[u'ocd-division/country:ca/csd:2434128'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434128'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2434135'] = []
+styles[u'ocd-division/country:ca/csd:2434135'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2434135'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435005'] = []
+styles[u'ocd-division/country:ca/csd:2435005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435010'] = []
+styles[u'ocd-division/country:ca/csd:2435010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435015'] = []
+styles[u'ocd-division/country:ca/csd:2435015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435020'] = []
+styles[u'ocd-division/country:ca/csd:2435020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435027'] = []
+styles[u'ocd-division/country:ca/csd:2435027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435035'] = []
+styles[u'ocd-division/country:ca/csd:2435035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435040'] = []
+styles[u'ocd-division/country:ca/csd:2435040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435045'] = []
+styles[u'ocd-division/country:ca/csd:2435045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435050'] = []
+styles[u'ocd-division/country:ca/csd:2435050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2435055'] = []
+styles[u'ocd-division/country:ca/csd:2435055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2435055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2436033'] = []
+styles[u'ocd-division/country:ca/csd:2436033'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2436033'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437067'] = []
+styles[u'ocd-division/country:ca/csd:2437067'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437067'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437205'] = []
+styles[u'ocd-division/country:ca/csd:2437205'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437205'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437210'] = []
+styles[u'ocd-division/country:ca/csd:2437210'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437210'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437215'] = []
+styles[u'ocd-division/country:ca/csd:2437215'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437215'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437220'] = []
+styles[u'ocd-division/country:ca/csd:2437220'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437220'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437225'] = []
+styles[u'ocd-division/country:ca/csd:2437225'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437225'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437230'] = []
+styles[u'ocd-division/country:ca/csd:2437230'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437230'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437235'] = []
+styles[u'ocd-division/country:ca/csd:2437235'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437235'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437240'] = []
+styles[u'ocd-division/country:ca/csd:2437240'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437240'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437245'] = []
+styles[u'ocd-division/country:ca/csd:2437245'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437245'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2437250'] = []
+styles[u'ocd-division/country:ca/csd:2437250'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2437250'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438005'] = []
+styles[u'ocd-division/country:ca/csd:2438005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438010'] = []
+styles[u'ocd-division/country:ca/csd:2438010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438015'] = []
+styles[u'ocd-division/country:ca/csd:2438015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438020'] = []
+styles[u'ocd-division/country:ca/csd:2438020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438028'] = []
+styles[u'ocd-division/country:ca/csd:2438028'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438028'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438035'] = []
+styles[u'ocd-division/country:ca/csd:2438035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438040'] = []
+styles[u'ocd-division/country:ca/csd:2438040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438047'] = []
+styles[u'ocd-division/country:ca/csd:2438047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438055'] = []
+styles[u'ocd-division/country:ca/csd:2438055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438060'] = []
+styles[u'ocd-division/country:ca/csd:2438060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438065'] = []
+styles[u'ocd-division/country:ca/csd:2438065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2438070'] = []
+styles[u'ocd-division/country:ca/csd:2438070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2438070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439005'] = []
+styles[u'ocd-division/country:ca/csd:2439005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439010'] = []
+styles[u'ocd-division/country:ca/csd:2439010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439015'] = []
+styles[u'ocd-division/country:ca/csd:2439015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439020'] = []
+styles[u'ocd-division/country:ca/csd:2439020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439025'] = []
+styles[u'ocd-division/country:ca/csd:2439025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439030'] = []
+styles[u'ocd-division/country:ca/csd:2439030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439035'] = []
+styles[u'ocd-division/country:ca/csd:2439035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439043'] = []
+styles[u'ocd-division/country:ca/csd:2439043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439060'] = []
+styles[u'ocd-division/country:ca/csd:2439060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439062'] = []
+styles[u'ocd-division/country:ca/csd:2439062'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439062'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439077'] = []
+styles[u'ocd-division/country:ca/csd:2439077'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439077'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439085'] = []
+styles[u'ocd-division/country:ca/csd:2439085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439090'] = []
+styles[u'ocd-division/country:ca/csd:2439090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439097'] = []
+styles[u'ocd-division/country:ca/csd:2439097'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439097'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439105'] = []
+styles[u'ocd-division/country:ca/csd:2439105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439117'] = []
+styles[u'ocd-division/country:ca/csd:2439117'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439117'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439130'] = []
+styles[u'ocd-division/country:ca/csd:2439130'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439130'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439135'] = []
+styles[u'ocd-division/country:ca/csd:2439135'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439135'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439145'] = []
+styles[u'ocd-division/country:ca/csd:2439145'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439145'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439150'] = []
+styles[u'ocd-division/country:ca/csd:2439150'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439150'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439155'] = []
+styles[u'ocd-division/country:ca/csd:2439155'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439155'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439165'] = []
+styles[u'ocd-division/country:ca/csd:2439165'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439165'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2439170'] = []
+styles[u'ocd-division/country:ca/csd:2439170'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2439170'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440005'] = []
+styles[u'ocd-division/country:ca/csd:2440005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440010'] = []
+styles[u'ocd-division/country:ca/csd:2440010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440017'] = []
+styles[u'ocd-division/country:ca/csd:2440017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440025'] = []
+styles[u'ocd-division/country:ca/csd:2440025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440032'] = []
+styles[u'ocd-division/country:ca/csd:2440032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440043'] = []
+styles[u'ocd-division/country:ca/csd:2440043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2440047'] = []
+styles[u'ocd-division/country:ca/csd:2440047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2440047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441012'] = []
+styles[u'ocd-division/country:ca/csd:2441012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441020'] = []
+styles[u'ocd-division/country:ca/csd:2441020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441027'] = []
+styles[u'ocd-division/country:ca/csd:2441027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441037'] = []
+styles[u'ocd-division/country:ca/csd:2441037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441038'] = []
+styles[u'ocd-division/country:ca/csd:2441038'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441038'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441055'] = []
+styles[u'ocd-division/country:ca/csd:2441055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441060'] = []
+styles[u'ocd-division/country:ca/csd:2441060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441065'] = []
+styles[u'ocd-division/country:ca/csd:2441065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441070'] = []
+styles[u'ocd-division/country:ca/csd:2441070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441075'] = []
+styles[u'ocd-division/country:ca/csd:2441075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441080'] = []
+styles[u'ocd-division/country:ca/csd:2441080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441085'] = []
+styles[u'ocd-division/country:ca/csd:2441085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441098'] = []
+styles[u'ocd-division/country:ca/csd:2441098'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441098'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2441117'] = []
+styles[u'ocd-division/country:ca/csd:2441117'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2441117'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442005'] = []
+styles[u'ocd-division/country:ca/csd:2442005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442020'] = []
+styles[u'ocd-division/country:ca/csd:2442020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442025'] = []
+styles[u'ocd-division/country:ca/csd:2442025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442032'] = []
+styles[u'ocd-division/country:ca/csd:2442032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442040'] = []
+styles[u'ocd-division/country:ca/csd:2442040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442045'] = []
+styles[u'ocd-division/country:ca/csd:2442045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442050'] = []
+styles[u'ocd-division/country:ca/csd:2442050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442055'] = []
+styles[u'ocd-division/country:ca/csd:2442055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442060'] = []
+styles[u'ocd-division/country:ca/csd:2442060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442065'] = []
+styles[u'ocd-division/country:ca/csd:2442065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442070'] = []
+styles[u'ocd-division/country:ca/csd:2442070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442075'] = []
+styles[u'ocd-division/country:ca/csd:2442075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442078'] = []
+styles[u'ocd-division/country:ca/csd:2442078'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442078'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442088'] = []
+styles[u'ocd-division/country:ca/csd:2442088'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442088'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442095'] = []
+styles[u'ocd-division/country:ca/csd:2442095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442098'] = []
+styles[u'ocd-division/country:ca/csd:2442098'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442098'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442100'] = []
+styles[u'ocd-division/country:ca/csd:2442100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2442110'] = []
+styles[u'ocd-division/country:ca/csd:2442110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2442110'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2443027'] = []
-styles[u'ocd-division/country:ca/csd:2443027'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2443027'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2443027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2443027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444003'] = []
+styles[u'ocd-division/country:ca/csd:2444003'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444003'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444005'] = []
+styles[u'ocd-division/country:ca/csd:2444005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444010'] = []
+styles[u'ocd-division/country:ca/csd:2444010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444015'] = []
+styles[u'ocd-division/country:ca/csd:2444015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444023'] = []
+styles[u'ocd-division/country:ca/csd:2444023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444037'] = []
+styles[u'ocd-division/country:ca/csd:2444037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444045'] = []
+styles[u'ocd-division/country:ca/csd:2444045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444050'] = []
+styles[u'ocd-division/country:ca/csd:2444050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444055'] = []
+styles[u'ocd-division/country:ca/csd:2444055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444060'] = []
+styles[u'ocd-division/country:ca/csd:2444060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444071'] = []
+styles[u'ocd-division/country:ca/csd:2444071'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444071'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2444080'] = []
+styles[u'ocd-division/country:ca/csd:2444080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2444080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445008'] = []
+styles[u'ocd-division/country:ca/csd:2445008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445020'] = []
+styles[u'ocd-division/country:ca/csd:2445020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445025'] = []
+styles[u'ocd-division/country:ca/csd:2445025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445030'] = []
+styles[u'ocd-division/country:ca/csd:2445030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445035'] = []
+styles[u'ocd-division/country:ca/csd:2445035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445043'] = []
+styles[u'ocd-division/country:ca/csd:2445043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445050'] = []
+styles[u'ocd-division/country:ca/csd:2445050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445055'] = []
+styles[u'ocd-division/country:ca/csd:2445055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445060'] = []
+styles[u'ocd-division/country:ca/csd:2445060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445072'] = []
+styles[u'ocd-division/country:ca/csd:2445072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445085'] = []
+styles[u'ocd-division/country:ca/csd:2445085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445093'] = []
+styles[u'ocd-division/country:ca/csd:2445093'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445093'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445095'] = []
+styles[u'ocd-division/country:ca/csd:2445095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445100'] = []
+styles[u'ocd-division/country:ca/csd:2445100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445105'] = []
+styles[u'ocd-division/country:ca/csd:2445105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2445115'] = []
+styles[u'ocd-division/country:ca/csd:2445115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2445115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446005'] = []
+styles[u'ocd-division/country:ca/csd:2446005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446010'] = []
+styles[u'ocd-division/country:ca/csd:2446010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446017'] = []
+styles[u'ocd-division/country:ca/csd:2446017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446025'] = []
+styles[u'ocd-division/country:ca/csd:2446025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446030'] = []
+styles[u'ocd-division/country:ca/csd:2446030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446035'] = []
+styles[u'ocd-division/country:ca/csd:2446035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446040'] = []
+styles[u'ocd-division/country:ca/csd:2446040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446045'] = []
+styles[u'ocd-division/country:ca/csd:2446045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446050'] = []
+styles[u'ocd-division/country:ca/csd:2446050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446058'] = []
+styles[u'ocd-division/country:ca/csd:2446058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446065'] = []
+styles[u'ocd-division/country:ca/csd:2446065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446070'] = []
+styles[u'ocd-division/country:ca/csd:2446070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446075'] = []
+styles[u'ocd-division/country:ca/csd:2446075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446078'] = []
+styles[u'ocd-division/country:ca/csd:2446078'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446078'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446080'] = []
+styles[u'ocd-division/country:ca/csd:2446080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446085'] = []
+styles[u'ocd-division/country:ca/csd:2446085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446090'] = []
+styles[u'ocd-division/country:ca/csd:2446090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446095'] = []
+styles[u'ocd-division/country:ca/csd:2446095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446100'] = []
+styles[u'ocd-division/country:ca/csd:2446100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446105'] = []
+styles[u'ocd-division/country:ca/csd:2446105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2446112'] = []
+styles[u'ocd-division/country:ca/csd:2446112'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2446112'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447010'] = []
+styles[u'ocd-division/country:ca/csd:2447010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447017'] = []
+styles[u'ocd-division/country:ca/csd:2447017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447025'] = []
+styles[u'ocd-division/country:ca/csd:2447025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447030'] = []
+styles[u'ocd-division/country:ca/csd:2447030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447035'] = []
+styles[u'ocd-division/country:ca/csd:2447035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447040'] = []
+styles[u'ocd-division/country:ca/csd:2447040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447047'] = []
+styles[u'ocd-division/country:ca/csd:2447047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2447055'] = []
+styles[u'ocd-division/country:ca/csd:2447055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2447055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448005'] = []
+styles[u'ocd-division/country:ca/csd:2448005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448010'] = []
+styles[u'ocd-division/country:ca/csd:2448010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448015'] = []
+styles[u'ocd-division/country:ca/csd:2448015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448020'] = []
+styles[u'ocd-division/country:ca/csd:2448020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448028'] = []
+styles[u'ocd-division/country:ca/csd:2448028'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448028'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448038'] = []
+styles[u'ocd-division/country:ca/csd:2448038'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448038'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448045'] = []
+styles[u'ocd-division/country:ca/csd:2448045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2448050'] = []
+styles[u'ocd-division/country:ca/csd:2448050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2448050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449005'] = []
+styles[u'ocd-division/country:ca/csd:2449005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449015'] = []
+styles[u'ocd-division/country:ca/csd:2449015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449020'] = []
+styles[u'ocd-division/country:ca/csd:2449020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449025'] = []
+styles[u'ocd-division/country:ca/csd:2449025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449030'] = []
+styles[u'ocd-division/country:ca/csd:2449030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449040'] = []
+styles[u'ocd-division/country:ca/csd:2449040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449048'] = []
+styles[u'ocd-division/country:ca/csd:2449048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449058'] = []
+styles[u'ocd-division/country:ca/csd:2449058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449070'] = []
+styles[u'ocd-division/country:ca/csd:2449070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449075'] = []
+styles[u'ocd-division/country:ca/csd:2449075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449080'] = []
+styles[u'ocd-division/country:ca/csd:2449080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449085'] = []
+styles[u'ocd-division/country:ca/csd:2449085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449095'] = []
+styles[u'ocd-division/country:ca/csd:2449095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449100'] = []
+styles[u'ocd-division/country:ca/csd:2449100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449105'] = []
+styles[u'ocd-division/country:ca/csd:2449105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449113'] = []
+styles[u'ocd-division/country:ca/csd:2449113'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449113'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449125'] = []
+styles[u'ocd-division/country:ca/csd:2449125'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449125'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2449130'] = []
+styles[u'ocd-division/country:ca/csd:2449130'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2449130'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450005'] = []
+styles[u'ocd-division/country:ca/csd:2450005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450013'] = []
+styles[u'ocd-division/country:ca/csd:2450013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450023'] = []
+styles[u'ocd-division/country:ca/csd:2450023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450030'] = []
+styles[u'ocd-division/country:ca/csd:2450030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450035'] = []
+styles[u'ocd-division/country:ca/csd:2450035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450042'] = []
+styles[u'ocd-division/country:ca/csd:2450042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450050'] = []
+styles[u'ocd-division/country:ca/csd:2450050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450057'] = []
+styles[u'ocd-division/country:ca/csd:2450057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450065'] = []
+styles[u'ocd-division/country:ca/csd:2450065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450072'] = []
+styles[u'ocd-division/country:ca/csd:2450072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450085'] = []
+styles[u'ocd-division/country:ca/csd:2450085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450090'] = []
+styles[u'ocd-division/country:ca/csd:2450090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450095'] = []
+styles[u'ocd-division/country:ca/csd:2450095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450100'] = []
+styles[u'ocd-division/country:ca/csd:2450100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450113'] = []
+styles[u'ocd-division/country:ca/csd:2450113'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450113'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2450128'] = []
+styles[u'ocd-division/country:ca/csd:2450128'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2450128'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451008'] = []
+styles[u'ocd-division/country:ca/csd:2451008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451015'] = []
+styles[u'ocd-division/country:ca/csd:2451015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451020'] = []
+styles[u'ocd-division/country:ca/csd:2451020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451025'] = []
+styles[u'ocd-division/country:ca/csd:2451025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451030'] = []
+styles[u'ocd-division/country:ca/csd:2451030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451035'] = []
+styles[u'ocd-division/country:ca/csd:2451035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451040'] = []
+styles[u'ocd-division/country:ca/csd:2451040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451045'] = []
+styles[u'ocd-division/country:ca/csd:2451045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451050'] = []
+styles[u'ocd-division/country:ca/csd:2451050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451055'] = []
+styles[u'ocd-division/country:ca/csd:2451055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451060'] = []
+styles[u'ocd-division/country:ca/csd:2451060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451065'] = []
+styles[u'ocd-division/country:ca/csd:2451065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451070'] = []
+styles[u'ocd-division/country:ca/csd:2451070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451075'] = []
+styles[u'ocd-division/country:ca/csd:2451075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451080'] = []
+styles[u'ocd-division/country:ca/csd:2451080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451085'] = []
+styles[u'ocd-division/country:ca/csd:2451085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2451090'] = []
+styles[u'ocd-division/country:ca/csd:2451090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2451090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452007'] = []
+styles[u'ocd-division/country:ca/csd:2452007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452017'] = []
+styles[u'ocd-division/country:ca/csd:2452017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452030'] = []
+styles[u'ocd-division/country:ca/csd:2452030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452035'] = []
+styles[u'ocd-division/country:ca/csd:2452035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452040'] = []
+styles[u'ocd-division/country:ca/csd:2452040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452045'] = []
+styles[u'ocd-division/country:ca/csd:2452045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452050'] = []
+styles[u'ocd-division/country:ca/csd:2452050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452055'] = []
+styles[u'ocd-division/country:ca/csd:2452055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452062'] = []
+styles[u'ocd-division/country:ca/csd:2452062'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452062'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452070'] = []
+styles[u'ocd-division/country:ca/csd:2452070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452075'] = []
+styles[u'ocd-division/country:ca/csd:2452075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452080'] = []
+styles[u'ocd-division/country:ca/csd:2452080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452085'] = []
+styles[u'ocd-division/country:ca/csd:2452085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452090'] = []
+styles[u'ocd-division/country:ca/csd:2452090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2452095'] = []
+styles[u'ocd-division/country:ca/csd:2452095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2452095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453005'] = []
+styles[u'ocd-division/country:ca/csd:2453005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453010'] = []
+styles[u'ocd-division/country:ca/csd:2453010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453015'] = []
+styles[u'ocd-division/country:ca/csd:2453015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453020'] = []
+styles[u'ocd-division/country:ca/csd:2453020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453025'] = []
+styles[u'ocd-division/country:ca/csd:2453025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453032'] = []
+styles[u'ocd-division/country:ca/csd:2453032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453040'] = []
+styles[u'ocd-division/country:ca/csd:2453040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453050'] = []
+styles[u'ocd-division/country:ca/csd:2453050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453052'] = []
+styles[u'ocd-division/country:ca/csd:2453052'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453052'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453065'] = []
+styles[u'ocd-division/country:ca/csd:2453065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453072'] = []
+styles[u'ocd-division/country:ca/csd:2453072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2453085'] = []
+styles[u'ocd-division/country:ca/csd:2453085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2453085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454008'] = []
+styles[u'ocd-division/country:ca/csd:2454008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454017'] = []
+styles[u'ocd-division/country:ca/csd:2454017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454025'] = []
+styles[u'ocd-division/country:ca/csd:2454025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454030'] = []
+styles[u'ocd-division/country:ca/csd:2454030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454035'] = []
+styles[u'ocd-division/country:ca/csd:2454035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454048'] = []
+styles[u'ocd-division/country:ca/csd:2454048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454060'] = []
+styles[u'ocd-division/country:ca/csd:2454060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454065'] = []
+styles[u'ocd-division/country:ca/csd:2454065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454072'] = []
+styles[u'ocd-division/country:ca/csd:2454072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454072'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454090'] = []
+styles[u'ocd-division/country:ca/csd:2454090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454095'] = []
+styles[u'ocd-division/country:ca/csd:2454095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454100'] = []
+styles[u'ocd-division/country:ca/csd:2454100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454105'] = []
+styles[u'ocd-division/country:ca/csd:2454105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454110'] = []
+styles[u'ocd-division/country:ca/csd:2454110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454115'] = []
+styles[u'ocd-division/country:ca/csd:2454115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454120'] = []
+styles[u'ocd-division/country:ca/csd:2454120'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454120'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2454125'] = []
+styles[u'ocd-division/country:ca/csd:2454125'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2454125'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455008'] = []
+styles[u'ocd-division/country:ca/csd:2455008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455015'] = []
+styles[u'ocd-division/country:ca/csd:2455015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455023'] = []
+styles[u'ocd-division/country:ca/csd:2455023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455030'] = []
+styles[u'ocd-division/country:ca/csd:2455030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455037'] = []
+styles[u'ocd-division/country:ca/csd:2455037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455048'] = []
+styles[u'ocd-division/country:ca/csd:2455048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455057'] = []
+styles[u'ocd-division/country:ca/csd:2455057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2455065'] = []
+styles[u'ocd-division/country:ca/csd:2455065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2455065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456005'] = []
+styles[u'ocd-division/country:ca/csd:2456005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456010'] = []
+styles[u'ocd-division/country:ca/csd:2456010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456015'] = []
+styles[u'ocd-division/country:ca/csd:2456015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456023'] = []
+styles[u'ocd-division/country:ca/csd:2456023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456023'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456030'] = []
+styles[u'ocd-division/country:ca/csd:2456030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456035'] = []
+styles[u'ocd-division/country:ca/csd:2456035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456042'] = []
+styles[u'ocd-division/country:ca/csd:2456042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456050'] = []
+styles[u'ocd-division/country:ca/csd:2456050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456055'] = []
+styles[u'ocd-division/country:ca/csd:2456055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456060'] = []
+styles[u'ocd-division/country:ca/csd:2456060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456065'] = []
+styles[u'ocd-division/country:ca/csd:2456065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456065'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2456083'] = []
-styles[u'ocd-division/country:ca/csd:2456083'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2456083'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2456083'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456083'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456097'] = []
+styles[u'ocd-division/country:ca/csd:2456097'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456097'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2456105'] = []
+styles[u'ocd-division/country:ca/csd:2456105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2456105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457005'] = []
+styles[u'ocd-division/country:ca/csd:2457005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457010'] = []
+styles[u'ocd-division/country:ca/csd:2457010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457020'] = []
+styles[u'ocd-division/country:ca/csd:2457020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457025'] = []
+styles[u'ocd-division/country:ca/csd:2457025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457030'] = []
+styles[u'ocd-division/country:ca/csd:2457030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457033'] = []
+styles[u'ocd-division/country:ca/csd:2457033'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457033'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457035'] = []
+styles[u'ocd-division/country:ca/csd:2457035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457040'] = []
+styles[u'ocd-division/country:ca/csd:2457040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457045'] = []
+styles[u'ocd-division/country:ca/csd:2457045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457050'] = []
+styles[u'ocd-division/country:ca/csd:2457050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457057'] = []
+styles[u'ocd-division/country:ca/csd:2457057'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457057'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457068'] = []
+styles[u'ocd-division/country:ca/csd:2457068'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457068'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2457075'] = []
+styles[u'ocd-division/country:ca/csd:2457075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2457075'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2458007'] = []
-styles[u'ocd-division/country:ca/csd:2458007'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2458007'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2458007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2458007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2458012'] = []
+styles[u'ocd-division/country:ca/csd:2458012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2458012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2458033'] = []
+styles[u'ocd-division/country:ca/csd:2458033'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2458033'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2458037'] = []
+styles[u'ocd-division/country:ca/csd:2458037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2458037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2458227'] = []
+styles[u'ocd-division/country:ca/csd:2458227'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2458227'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2459010'] = []
+styles[u'ocd-division/country:ca/csd:2459010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2459010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2459015'] = []
+styles[u'ocd-division/country:ca/csd:2459015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2459015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2459020'] = []
+styles[u'ocd-division/country:ca/csd:2459020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2459020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2459025'] = []
+styles[u'ocd-division/country:ca/csd:2459025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2459025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2459030'] = []
+styles[u'ocd-division/country:ca/csd:2459030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2459030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2459035'] = []
+styles[u'ocd-division/country:ca/csd:2459035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2459035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2460005'] = []
+styles[u'ocd-division/country:ca/csd:2460005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2460005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2460013'] = []
+styles[u'ocd-division/country:ca/csd:2460013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2460013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2460020'] = []
+styles[u'ocd-division/country:ca/csd:2460020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2460020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2460028'] = []
+styles[u'ocd-division/country:ca/csd:2460028'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2460028'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2460035'] = []
+styles[u'ocd-division/country:ca/csd:2460035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2460035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2460040'] = []
+styles[u'ocd-division/country:ca/csd:2460040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2460040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461005'] = []
+styles[u'ocd-division/country:ca/csd:2461005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461013'] = []
+styles[u'ocd-division/country:ca/csd:2461013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461020'] = []
+styles[u'ocd-division/country:ca/csd:2461020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461025'] = []
+styles[u'ocd-division/country:ca/csd:2461025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461027'] = []
+styles[u'ocd-division/country:ca/csd:2461027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461030'] = []
+styles[u'ocd-division/country:ca/csd:2461030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461035'] = []
+styles[u'ocd-division/country:ca/csd:2461035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461040'] = []
+styles[u'ocd-division/country:ca/csd:2461040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461045'] = []
+styles[u'ocd-division/country:ca/csd:2461045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2461050'] = []
+styles[u'ocd-division/country:ca/csd:2461050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2461050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462007'] = []
+styles[u'ocd-division/country:ca/csd:2462007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462015'] = []
+styles[u'ocd-division/country:ca/csd:2462015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462020'] = []
+styles[u'ocd-division/country:ca/csd:2462020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462025'] = []
+styles[u'ocd-division/country:ca/csd:2462025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462030'] = []
+styles[u'ocd-division/country:ca/csd:2462030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462037'] = []
+styles[u'ocd-division/country:ca/csd:2462037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462047'] = []
+styles[u'ocd-division/country:ca/csd:2462047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462053'] = []
+styles[u'ocd-division/country:ca/csd:2462053'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462053'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462055'] = []
+styles[u'ocd-division/country:ca/csd:2462055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462060'] = []
+styles[u'ocd-division/country:ca/csd:2462060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462065'] = []
+styles[u'ocd-division/country:ca/csd:2462065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462070'] = []
+styles[u'ocd-division/country:ca/csd:2462070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462075'] = []
+styles[u'ocd-division/country:ca/csd:2462075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462080'] = []
+styles[u'ocd-division/country:ca/csd:2462080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2462085'] = []
+styles[u'ocd-division/country:ca/csd:2462085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2462085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463005'] = []
+styles[u'ocd-division/country:ca/csd:2463005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463013'] = []
+styles[u'ocd-division/country:ca/csd:2463013'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463013'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463030'] = []
+styles[u'ocd-division/country:ca/csd:2463030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463035'] = []
+styles[u'ocd-division/country:ca/csd:2463035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463040'] = []
+styles[u'ocd-division/country:ca/csd:2463040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463048'] = []
+styles[u'ocd-division/country:ca/csd:2463048'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463048'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463055'] = []
+styles[u'ocd-division/country:ca/csd:2463055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463060'] = []
+styles[u'ocd-division/country:ca/csd:2463060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2463065'] = []
+styles[u'ocd-division/country:ca/csd:2463065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2463065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2464008'] = []
+styles[u'ocd-division/country:ca/csd:2464008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2464008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2464015'] = []
+styles[u'ocd-division/country:ca/csd:2464015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2464015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2465005'] = []
+styles[u'ocd-division/country:ca/csd:2465005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2465005'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466007'] = []
-styles[u'ocd-division/country:ca/csd:2466007'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466007'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2466023'] = []
+styles[u'ocd-division/country:ca/csd:2466023'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466023'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466032'] = []
-styles[u'ocd-division/country:ca/csd:2466032'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466032'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2466047'] = []
+styles[u'ocd-division/country:ca/csd:2466047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466047'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466058'] = []
-styles[u'ocd-division/country:ca/csd:2466058'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466058'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2466062'] = []
+styles[u'ocd-division/country:ca/csd:2466062'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466062'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2466072'] = []
+styles[u'ocd-division/country:ca/csd:2466072'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466072'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466087'] = []
-styles[u'ocd-division/country:ca/csd:2466087'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466087'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466087'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466087'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2466092'] = []
+styles[u'ocd-division/country:ca/csd:2466092'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466092'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466097'] = []
-styles[u'ocd-division/country:ca/csd:2466097'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466097'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466097'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466097'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466102'] = []
-styles[u'ocd-division/country:ca/csd:2466102'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466102'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466102'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466102'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466107'] = []
-styles[u'ocd-division/country:ca/csd:2466107'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466107'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466107'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466107'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2466112'] = []
+styles[u'ocd-division/country:ca/csd:2466112'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466112'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466117'] = []
-styles[u'ocd-division/country:ca/csd:2466117'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466117'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466117'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466117'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466127'] = []
-styles[u'ocd-division/country:ca/csd:2466127'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466127'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466127'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466127'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2466142'] = []
-styles[u'ocd-division/country:ca/csd:2466142'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2466142'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2466142'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2466142'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467005'] = []
+styles[u'ocd-division/country:ca/csd:2467005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467010'] = []
+styles[u'ocd-division/country:ca/csd:2467010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467015'] = []
+styles[u'ocd-division/country:ca/csd:2467015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467020'] = []
+styles[u'ocd-division/country:ca/csd:2467020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467025'] = []
+styles[u'ocd-division/country:ca/csd:2467025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467030'] = []
+styles[u'ocd-division/country:ca/csd:2467030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467035'] = []
+styles[u'ocd-division/country:ca/csd:2467035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467040'] = []
+styles[u'ocd-division/country:ca/csd:2467040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467040'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2467045'] = []
-styles[u'ocd-division/country:ca/csd:2467045'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2467045'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2467045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467050'] = []
+styles[u'ocd-division/country:ca/csd:2467050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2467055'] = []
+styles[u'ocd-division/country:ca/csd:2467055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2467055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468005'] = []
+styles[u'ocd-division/country:ca/csd:2468005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468010'] = []
+styles[u'ocd-division/country:ca/csd:2468010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468015'] = []
+styles[u'ocd-division/country:ca/csd:2468015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468020'] = []
+styles[u'ocd-division/country:ca/csd:2468020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468025'] = []
+styles[u'ocd-division/country:ca/csd:2468025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468030'] = []
+styles[u'ocd-division/country:ca/csd:2468030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468035'] = []
+styles[u'ocd-division/country:ca/csd:2468035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468040'] = []
+styles[u'ocd-division/country:ca/csd:2468040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468045'] = []
+styles[u'ocd-division/country:ca/csd:2468045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468050'] = []
+styles[u'ocd-division/country:ca/csd:2468050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2468055'] = []
+styles[u'ocd-division/country:ca/csd:2468055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2468055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469005'] = []
+styles[u'ocd-division/country:ca/csd:2469005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469010'] = []
+styles[u'ocd-division/country:ca/csd:2469010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469017'] = []
+styles[u'ocd-division/country:ca/csd:2469017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469025'] = []
+styles[u'ocd-division/country:ca/csd:2469025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469030'] = []
+styles[u'ocd-division/country:ca/csd:2469030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469037'] = []
+styles[u'ocd-division/country:ca/csd:2469037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469045'] = []
+styles[u'ocd-division/country:ca/csd:2469045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469050'] = []
+styles[u'ocd-division/country:ca/csd:2469050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469055'] = []
+styles[u'ocd-division/country:ca/csd:2469055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469060'] = []
+styles[u'ocd-division/country:ca/csd:2469060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469065'] = []
+styles[u'ocd-division/country:ca/csd:2469065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469070'] = []
+styles[u'ocd-division/country:ca/csd:2469070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2469075'] = []
+styles[u'ocd-division/country:ca/csd:2469075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2469075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470005'] = []
+styles[u'ocd-division/country:ca/csd:2470005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470012'] = []
+styles[u'ocd-division/country:ca/csd:2470012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470022'] = []
+styles[u'ocd-division/country:ca/csd:2470022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470030'] = []
+styles[u'ocd-division/country:ca/csd:2470030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470035'] = []
+styles[u'ocd-division/country:ca/csd:2470035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470040'] = []
+styles[u'ocd-division/country:ca/csd:2470040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2470052'] = []
+styles[u'ocd-division/country:ca/csd:2470052'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2470052'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471005'] = []
+styles[u'ocd-division/country:ca/csd:2471005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471015'] = []
+styles[u'ocd-division/country:ca/csd:2471015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471020'] = []
+styles[u'ocd-division/country:ca/csd:2471020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471025'] = []
+styles[u'ocd-division/country:ca/csd:2471025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471033'] = []
+styles[u'ocd-division/country:ca/csd:2471033'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471033'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471040'] = []
+styles[u'ocd-division/country:ca/csd:2471040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471045'] = []
+styles[u'ocd-division/country:ca/csd:2471045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471050'] = []
+styles[u'ocd-division/country:ca/csd:2471050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471055'] = []
+styles[u'ocd-division/country:ca/csd:2471055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471060'] = []
+styles[u'ocd-division/country:ca/csd:2471060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471065'] = []
+styles[u'ocd-division/country:ca/csd:2471065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471070'] = []
+styles[u'ocd-division/country:ca/csd:2471070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471075'] = []
+styles[u'ocd-division/country:ca/csd:2471075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471083'] = []
+styles[u'ocd-division/country:ca/csd:2471083'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471083'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471090'] = []
+styles[u'ocd-division/country:ca/csd:2471090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471095'] = []
+styles[u'ocd-division/country:ca/csd:2471095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471100'] = []
+styles[u'ocd-division/country:ca/csd:2471100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471105'] = []
+styles[u'ocd-division/country:ca/csd:2471105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471110'] = []
+styles[u'ocd-division/country:ca/csd:2471110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471115'] = []
+styles[u'ocd-division/country:ca/csd:2471115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471125'] = []
+styles[u'ocd-division/country:ca/csd:2471125'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471125'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471133'] = []
+styles[u'ocd-division/country:ca/csd:2471133'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471133'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2471140'] = []
+styles[u'ocd-division/country:ca/csd:2471140'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2471140'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472005'] = []
+styles[u'ocd-division/country:ca/csd:2472005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472010'] = []
+styles[u'ocd-division/country:ca/csd:2472010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472015'] = []
+styles[u'ocd-division/country:ca/csd:2472015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472020'] = []
+styles[u'ocd-division/country:ca/csd:2472020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472025'] = []
+styles[u'ocd-division/country:ca/csd:2472025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472032'] = []
+styles[u'ocd-division/country:ca/csd:2472032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2472043'] = []
+styles[u'ocd-division/country:ca/csd:2472043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2472043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473005'] = []
+styles[u'ocd-division/country:ca/csd:2473005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473010'] = []
+styles[u'ocd-division/country:ca/csd:2473010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473015'] = []
+styles[u'ocd-division/country:ca/csd:2473015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473020'] = []
+styles[u'ocd-division/country:ca/csd:2473020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473025'] = []
+styles[u'ocd-division/country:ca/csd:2473025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473030'] = []
+styles[u'ocd-division/country:ca/csd:2473030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2473035'] = []
+styles[u'ocd-division/country:ca/csd:2473035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2473035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2474005'] = []
+styles[u'ocd-division/country:ca/csd:2474005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2474005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2475005'] = []
+styles[u'ocd-division/country:ca/csd:2475005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2475005'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2475017'] = []
-styles[u'ocd-division/country:ca/csd:2475017'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2475017'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2475017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2475017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2475028'] = []
+styles[u'ocd-division/country:ca/csd:2475028'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2475028'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2475040'] = []
+styles[u'ocd-division/country:ca/csd:2475040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2475040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2475045'] = []
+styles[u'ocd-division/country:ca/csd:2475045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2475045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476008'] = []
+styles[u'ocd-division/country:ca/csd:2476008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476020'] = []
+styles[u'ocd-division/country:ca/csd:2476020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476025'] = []
+styles[u'ocd-division/country:ca/csd:2476025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476030'] = []
+styles[u'ocd-division/country:ca/csd:2476030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476035'] = []
+styles[u'ocd-division/country:ca/csd:2476035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476043'] = []
+styles[u'ocd-division/country:ca/csd:2476043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476052'] = []
+styles[u'ocd-division/country:ca/csd:2476052'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476052'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476055'] = []
+styles[u'ocd-division/country:ca/csd:2476055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2476065'] = []
+styles[u'ocd-division/country:ca/csd:2476065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2476065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477011'] = []
+styles[u'ocd-division/country:ca/csd:2477011'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477011'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477012'] = []
+styles[u'ocd-division/country:ca/csd:2477012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477022'] = []
+styles[u'ocd-division/country:ca/csd:2477022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477030'] = []
+styles[u'ocd-division/country:ca/csd:2477030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477035'] = []
+styles[u'ocd-division/country:ca/csd:2477035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477043'] = []
+styles[u'ocd-division/country:ca/csd:2477043'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477043'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477050'] = []
+styles[u'ocd-division/country:ca/csd:2477050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477055'] = []
+styles[u'ocd-division/country:ca/csd:2477055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477060'] = []
+styles[u'ocd-division/country:ca/csd:2477060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2477065'] = []
+styles[u'ocd-division/country:ca/csd:2477065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2477065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478005'] = []
+styles[u'ocd-division/country:ca/csd:2478005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478010'] = []
+styles[u'ocd-division/country:ca/csd:2478010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478015'] = []
+styles[u'ocd-division/country:ca/csd:2478015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478020'] = []
+styles[u'ocd-division/country:ca/csd:2478020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478032'] = []
+styles[u'ocd-division/country:ca/csd:2478032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478042'] = []
+styles[u'ocd-division/country:ca/csd:2478042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478047'] = []
+styles[u'ocd-division/country:ca/csd:2478047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478050'] = []
+styles[u'ocd-division/country:ca/csd:2478050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478055'] = []
+styles[u'ocd-division/country:ca/csd:2478055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478060'] = []
+styles[u'ocd-division/country:ca/csd:2478060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478065'] = []
+styles[u'ocd-division/country:ca/csd:2478065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478070'] = []
+styles[u'ocd-division/country:ca/csd:2478070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478075'] = []
+styles[u'ocd-division/country:ca/csd:2478075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478095'] = []
+styles[u'ocd-division/country:ca/csd:2478095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478100'] = []
+styles[u'ocd-division/country:ca/csd:2478100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478102'] = []
+styles[u'ocd-division/country:ca/csd:2478102'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478102'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478115'] = []
+styles[u'ocd-division/country:ca/csd:2478115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478120'] = []
+styles[u'ocd-division/country:ca/csd:2478120'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478120'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478127'] = []
+styles[u'ocd-division/country:ca/csd:2478127'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478127'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2478130'] = []
+styles[u'ocd-division/country:ca/csd:2478130'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2478130'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479005'] = []
+styles[u'ocd-division/country:ca/csd:2479005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479010'] = []
+styles[u'ocd-division/country:ca/csd:2479010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479015'] = []
+styles[u'ocd-division/country:ca/csd:2479015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479022'] = []
+styles[u'ocd-division/country:ca/csd:2479022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479025'] = []
+styles[u'ocd-division/country:ca/csd:2479025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479030'] = []
+styles[u'ocd-division/country:ca/csd:2479030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479037'] = []
+styles[u'ocd-division/country:ca/csd:2479037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479047'] = []
+styles[u'ocd-division/country:ca/csd:2479047'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479047'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479050'] = []
+styles[u'ocd-division/country:ca/csd:2479050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479060'] = []
+styles[u'ocd-division/country:ca/csd:2479060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479065'] = []
+styles[u'ocd-division/country:ca/csd:2479065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479078'] = []
+styles[u'ocd-division/country:ca/csd:2479078'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479078'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479088'] = []
+styles[u'ocd-division/country:ca/csd:2479088'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479088'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479097'] = []
+styles[u'ocd-division/country:ca/csd:2479097'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479097'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479105'] = []
+styles[u'ocd-division/country:ca/csd:2479105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479110'] = []
+styles[u'ocd-division/country:ca/csd:2479110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2479115'] = []
+styles[u'ocd-division/country:ca/csd:2479115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2479115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480005'] = []
+styles[u'ocd-division/country:ca/csd:2480005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480010'] = []
+styles[u'ocd-division/country:ca/csd:2480010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480015'] = []
+styles[u'ocd-division/country:ca/csd:2480015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480020'] = []
+styles[u'ocd-division/country:ca/csd:2480020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480027'] = []
+styles[u'ocd-division/country:ca/csd:2480027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480037'] = []
+styles[u'ocd-division/country:ca/csd:2480037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480045'] = []
+styles[u'ocd-division/country:ca/csd:2480045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480050'] = []
+styles[u'ocd-division/country:ca/csd:2480050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480055'] = []
+styles[u'ocd-division/country:ca/csd:2480055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480060'] = []
+styles[u'ocd-division/country:ca/csd:2480060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480065'] = []
+styles[u'ocd-division/country:ca/csd:2480065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480070'] = []
+styles[u'ocd-division/country:ca/csd:2480070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480078'] = []
+styles[u'ocd-division/country:ca/csd:2480078'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480078'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480085'] = []
+styles[u'ocd-division/country:ca/csd:2480085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480090'] = []
+styles[u'ocd-division/country:ca/csd:2480090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480095'] = []
+styles[u'ocd-division/country:ca/csd:2480095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480103'] = []
+styles[u'ocd-division/country:ca/csd:2480103'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480103'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480110'] = []
+styles[u'ocd-division/country:ca/csd:2480110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480115'] = []
+styles[u'ocd-division/country:ca/csd:2480115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480125'] = []
+styles[u'ocd-division/country:ca/csd:2480125'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480125'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480130'] = []
+styles[u'ocd-division/country:ca/csd:2480130'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480130'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480135'] = []
+styles[u'ocd-division/country:ca/csd:2480135'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480135'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480140'] = []
+styles[u'ocd-division/country:ca/csd:2480140'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480140'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2480145'] = []
+styles[u'ocd-division/country:ca/csd:2480145'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2480145'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2481017'] = []
-styles[u'ocd-division/country:ca/csd:2481017'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2481017'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2481017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2481017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482005'] = []
+styles[u'ocd-division/country:ca/csd:2482005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482010'] = []
+styles[u'ocd-division/country:ca/csd:2482010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482015'] = []
+styles[u'ocd-division/country:ca/csd:2482015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482020'] = []
+styles[u'ocd-division/country:ca/csd:2482020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482025'] = []
+styles[u'ocd-division/country:ca/csd:2482025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482030'] = []
+styles[u'ocd-division/country:ca/csd:2482030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2482035'] = []
+styles[u'ocd-division/country:ca/csd:2482035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2482035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483005'] = []
+styles[u'ocd-division/country:ca/csd:2483005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483010'] = []
+styles[u'ocd-division/country:ca/csd:2483010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483015'] = []
+styles[u'ocd-division/country:ca/csd:2483015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483020'] = []
+styles[u'ocd-division/country:ca/csd:2483020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483032'] = []
+styles[u'ocd-division/country:ca/csd:2483032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483040'] = []
+styles[u'ocd-division/country:ca/csd:2483040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483045'] = []
+styles[u'ocd-division/country:ca/csd:2483045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483050'] = []
+styles[u'ocd-division/country:ca/csd:2483050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483055'] = []
+styles[u'ocd-division/country:ca/csd:2483055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483060'] = []
+styles[u'ocd-division/country:ca/csd:2483060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483065'] = []
+styles[u'ocd-division/country:ca/csd:2483065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483070'] = []
+styles[u'ocd-division/country:ca/csd:2483070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483075'] = []
+styles[u'ocd-division/country:ca/csd:2483075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483085'] = []
+styles[u'ocd-division/country:ca/csd:2483085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483088'] = []
+styles[u'ocd-division/country:ca/csd:2483088'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483088'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483090'] = []
+styles[u'ocd-division/country:ca/csd:2483090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2483095'] = []
+styles[u'ocd-division/country:ca/csd:2483095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2483095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484005'] = []
+styles[u'ocd-division/country:ca/csd:2484005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484010'] = []
+styles[u'ocd-division/country:ca/csd:2484010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484015'] = []
+styles[u'ocd-division/country:ca/csd:2484015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484020'] = []
+styles[u'ocd-division/country:ca/csd:2484020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484025'] = []
+styles[u'ocd-division/country:ca/csd:2484025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484030'] = []
+styles[u'ocd-division/country:ca/csd:2484030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484035'] = []
+styles[u'ocd-division/country:ca/csd:2484035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484040'] = []
+styles[u'ocd-division/country:ca/csd:2484040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484045'] = []
+styles[u'ocd-division/country:ca/csd:2484045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484050'] = []
+styles[u'ocd-division/country:ca/csd:2484050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484055'] = []
+styles[u'ocd-division/country:ca/csd:2484055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484060'] = []
+styles[u'ocd-division/country:ca/csd:2484060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484065'] = []
+styles[u'ocd-division/country:ca/csd:2484065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484070'] = []
+styles[u'ocd-division/country:ca/csd:2484070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484082'] = []
+styles[u'ocd-division/country:ca/csd:2484082'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484082'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484090'] = []
+styles[u'ocd-division/country:ca/csd:2484090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484095'] = []
+styles[u'ocd-division/country:ca/csd:2484095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2484100'] = []
+styles[u'ocd-division/country:ca/csd:2484100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2484100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485005'] = []
+styles[u'ocd-division/country:ca/csd:2485005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485010'] = []
+styles[u'ocd-division/country:ca/csd:2485010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485015'] = []
+styles[u'ocd-division/country:ca/csd:2485015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485020'] = []
+styles[u'ocd-division/country:ca/csd:2485020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485025'] = []
+styles[u'ocd-division/country:ca/csd:2485025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485030'] = []
+styles[u'ocd-division/country:ca/csd:2485030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485037'] = []
+styles[u'ocd-division/country:ca/csd:2485037'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485037'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485045'] = []
+styles[u'ocd-division/country:ca/csd:2485045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485050'] = []
+styles[u'ocd-division/country:ca/csd:2485050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485055'] = []
+styles[u'ocd-division/country:ca/csd:2485055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485060'] = []
+styles[u'ocd-division/country:ca/csd:2485060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485065'] = []
+styles[u'ocd-division/country:ca/csd:2485065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485070'] = []
+styles[u'ocd-division/country:ca/csd:2485070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485075'] = []
+styles[u'ocd-division/country:ca/csd:2485075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485080'] = []
+styles[u'ocd-division/country:ca/csd:2485080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485085'] = []
+styles[u'ocd-division/country:ca/csd:2485085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485090'] = []
+styles[u'ocd-division/country:ca/csd:2485090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485095'] = []
+styles[u'ocd-division/country:ca/csd:2485095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485100'] = []
+styles[u'ocd-division/country:ca/csd:2485100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2485105'] = []
+styles[u'ocd-division/country:ca/csd:2485105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2485105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2486042'] = []
+styles[u'ocd-division/country:ca/csd:2486042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2486042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487005'] = []
+styles[u'ocd-division/country:ca/csd:2487005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487010'] = []
+styles[u'ocd-division/country:ca/csd:2487010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487015'] = []
+styles[u'ocd-division/country:ca/csd:2487015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487020'] = []
+styles[u'ocd-division/country:ca/csd:2487020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487025'] = []
+styles[u'ocd-division/country:ca/csd:2487025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487030'] = []
+styles[u'ocd-division/country:ca/csd:2487030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487035'] = []
+styles[u'ocd-division/country:ca/csd:2487035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487042'] = []
+styles[u'ocd-division/country:ca/csd:2487042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487050'] = []
+styles[u'ocd-division/country:ca/csd:2487050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487058'] = []
+styles[u'ocd-division/country:ca/csd:2487058'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487058'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487070'] = []
+styles[u'ocd-division/country:ca/csd:2487070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487075'] = []
+styles[u'ocd-division/country:ca/csd:2487075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487080'] = []
+styles[u'ocd-division/country:ca/csd:2487080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487085'] = []
+styles[u'ocd-division/country:ca/csd:2487085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487090'] = []
+styles[u'ocd-division/country:ca/csd:2487090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487095'] = []
+styles[u'ocd-division/country:ca/csd:2487095'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487095'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487100'] = []
+styles[u'ocd-division/country:ca/csd:2487100'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487100'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487105'] = []
+styles[u'ocd-division/country:ca/csd:2487105'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487105'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487110'] = []
+styles[u'ocd-division/country:ca/csd:2487110'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487110'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487115'] = []
+styles[u'ocd-division/country:ca/csd:2487115'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487115'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2487120'] = []
+styles[u'ocd-division/country:ca/csd:2487120'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2487120'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488005'] = []
+styles[u'ocd-division/country:ca/csd:2488005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488010'] = []
+styles[u'ocd-division/country:ca/csd:2488010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488015'] = []
+styles[u'ocd-division/country:ca/csd:2488015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488022'] = []
+styles[u'ocd-division/country:ca/csd:2488022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488030'] = []
+styles[u'ocd-division/country:ca/csd:2488030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488035'] = []
+styles[u'ocd-division/country:ca/csd:2488035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488040'] = []
+styles[u'ocd-division/country:ca/csd:2488040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488045'] = []
+styles[u'ocd-division/country:ca/csd:2488045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488050'] = []
+styles[u'ocd-division/country:ca/csd:2488050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488055'] = []
+styles[u'ocd-division/country:ca/csd:2488055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488060'] = []
+styles[u'ocd-division/country:ca/csd:2488060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488065'] = []
+styles[u'ocd-division/country:ca/csd:2488065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488070'] = []
+styles[u'ocd-division/country:ca/csd:2488070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488075'] = []
+styles[u'ocd-division/country:ca/csd:2488075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488080'] = []
+styles[u'ocd-division/country:ca/csd:2488080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488080'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488085'] = []
+styles[u'ocd-division/country:ca/csd:2488085'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488085'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2488090'] = []
+styles[u'ocd-division/country:ca/csd:2488090'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2488090'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2489008'] = []
+styles[u'ocd-division/country:ca/csd:2489008'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2489008'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2489010'] = []
+styles[u'ocd-division/country:ca/csd:2489010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2489010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2489015'] = []
+styles[u'ocd-division/country:ca/csd:2489015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2489015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2489040'] = []
+styles[u'ocd-division/country:ca/csd:2489040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2489040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2489045'] = []
+styles[u'ocd-division/country:ca/csd:2489045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2489045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2489050'] = []
+styles[u'ocd-division/country:ca/csd:2489050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2489050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2490012'] = []
+styles[u'ocd-division/country:ca/csd:2490012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2490012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2490017'] = []
+styles[u'ocd-division/country:ca/csd:2490017'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2490017'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2490027'] = []
+styles[u'ocd-division/country:ca/csd:2490027'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2490027'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491005'] = []
+styles[u'ocd-division/country:ca/csd:2491005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491010'] = []
+styles[u'ocd-division/country:ca/csd:2491010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491015'] = []
+styles[u'ocd-division/country:ca/csd:2491015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491020'] = []
+styles[u'ocd-division/country:ca/csd:2491020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491025'] = []
+styles[u'ocd-division/country:ca/csd:2491025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491030'] = []
+styles[u'ocd-division/country:ca/csd:2491030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491035'] = []
+styles[u'ocd-division/country:ca/csd:2491035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491042'] = []
+styles[u'ocd-division/country:ca/csd:2491042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2491050'] = []
+styles[u'ocd-division/country:ca/csd:2491050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2491050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492005'] = []
+styles[u'ocd-division/country:ca/csd:2492005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492010'] = []
+styles[u'ocd-division/country:ca/csd:2492010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492015'] = []
+styles[u'ocd-division/country:ca/csd:2492015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492022'] = []
+styles[u'ocd-division/country:ca/csd:2492022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492030'] = []
+styles[u'ocd-division/country:ca/csd:2492030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492040'] = []
+styles[u'ocd-division/country:ca/csd:2492040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492045'] = []
+styles[u'ocd-division/country:ca/csd:2492045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492050'] = []
+styles[u'ocd-division/country:ca/csd:2492050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492055'] = []
+styles[u'ocd-division/country:ca/csd:2492055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492060'] = []
+styles[u'ocd-division/country:ca/csd:2492060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492065'] = []
+styles[u'ocd-division/country:ca/csd:2492065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2492070'] = []
+styles[u'ocd-division/country:ca/csd:2492070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2492070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493005'] = []
+styles[u'ocd-division/country:ca/csd:2493005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493012'] = []
+styles[u'ocd-division/country:ca/csd:2493012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493020'] = []
+styles[u'ocd-division/country:ca/csd:2493020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493025'] = []
+styles[u'ocd-division/country:ca/csd:2493025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493030'] = []
+styles[u'ocd-division/country:ca/csd:2493030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493035'] = []
+styles[u'ocd-division/country:ca/csd:2493035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493042'] = []
+styles[u'ocd-division/country:ca/csd:2493042'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493042'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493045'] = []
+styles[u'ocd-division/country:ca/csd:2493045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493055'] = []
+styles[u'ocd-division/country:ca/csd:2493055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493060'] = []
+styles[u'ocd-division/country:ca/csd:2493060'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493060'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493065'] = []
+styles[u'ocd-division/country:ca/csd:2493065'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493065'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493070'] = []
+styles[u'ocd-division/country:ca/csd:2493070'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493070'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493075'] = []
+styles[u'ocd-division/country:ca/csd:2493075'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493075'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2493080'] = []
+styles[u'ocd-division/country:ca/csd:2493080'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2493080'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:2494068'] = []
-styles[u'ocd-division/country:ca/csd:2494068'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:2494068'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:2494068'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494068'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494205'] = []
+styles[u'ocd-division/country:ca/csd:2494205'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494205'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494210'] = []
+styles[u'ocd-division/country:ca/csd:2494210'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494210'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494215'] = []
+styles[u'ocd-division/country:ca/csd:2494215'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494215'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494220'] = []
+styles[u'ocd-division/country:ca/csd:2494220'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494220'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494225'] = []
+styles[u'ocd-division/country:ca/csd:2494225'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494225'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494230'] = []
+styles[u'ocd-division/country:ca/csd:2494230'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494230'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494235'] = []
+styles[u'ocd-division/country:ca/csd:2494235'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494235'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494240'] = []
+styles[u'ocd-division/country:ca/csd:2494240'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494240'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494245'] = []
+styles[u'ocd-division/country:ca/csd:2494245'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494245'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494250'] = []
+styles[u'ocd-division/country:ca/csd:2494250'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494250'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494255'] = []
+styles[u'ocd-division/country:ca/csd:2494255'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494255'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494260'] = []
+styles[u'ocd-division/country:ca/csd:2494260'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494260'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2494265'] = []
+styles[u'ocd-division/country:ca/csd:2494265'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2494265'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495005'] = []
+styles[u'ocd-division/country:ca/csd:2495005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495010'] = []
+styles[u'ocd-division/country:ca/csd:2495010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495018'] = []
+styles[u'ocd-division/country:ca/csd:2495018'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495018'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495025'] = []
+styles[u'ocd-division/country:ca/csd:2495025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495032'] = []
+styles[u'ocd-division/country:ca/csd:2495032'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495032'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495040'] = []
+styles[u'ocd-division/country:ca/csd:2495040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495045'] = []
+styles[u'ocd-division/country:ca/csd:2495045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2495050'] = []
+styles[u'ocd-division/country:ca/csd:2495050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2495050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496005'] = []
+styles[u'ocd-division/country:ca/csd:2496005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496010'] = []
+styles[u'ocd-division/country:ca/csd:2496010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496015'] = []
+styles[u'ocd-division/country:ca/csd:2496015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496020'] = []
+styles[u'ocd-division/country:ca/csd:2496020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496025'] = []
+styles[u'ocd-division/country:ca/csd:2496025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496030'] = []
+styles[u'ocd-division/country:ca/csd:2496030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496035'] = []
+styles[u'ocd-division/country:ca/csd:2496035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2496040'] = []
+styles[u'ocd-division/country:ca/csd:2496040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2496040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2497007'] = []
+styles[u'ocd-division/country:ca/csd:2497007'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2497007'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2497022'] = []
+styles[u'ocd-division/country:ca/csd:2497022'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2497022'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2497035'] = []
+styles[u'ocd-division/country:ca/csd:2497035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2497035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498005'] = []
+styles[u'ocd-division/country:ca/csd:2498005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498010'] = []
+styles[u'ocd-division/country:ca/csd:2498010'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498010'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498012'] = []
+styles[u'ocd-division/country:ca/csd:2498012'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498012'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498014'] = []
+styles[u'ocd-division/country:ca/csd:2498014'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498014'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498020'] = []
+styles[u'ocd-division/country:ca/csd:2498020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498025'] = []
+styles[u'ocd-division/country:ca/csd:2498025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498025'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498030'] = []
+styles[u'ocd-division/country:ca/csd:2498030'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498030'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498035'] = []
+styles[u'ocd-division/country:ca/csd:2498035'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498035'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498040'] = []
+styles[u'ocd-division/country:ca/csd:2498040'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498040'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498045'] = []
+styles[u'ocd-division/country:ca/csd:2498045'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498045'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498050'] = []
+styles[u'ocd-division/country:ca/csd:2498050'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498050'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2498055'] = []
+styles[u'ocd-division/country:ca/csd:2498055'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2498055'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2499005'] = []
+styles[u'ocd-division/country:ca/csd:2499005'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2499005'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2499015'] = []
+styles[u'ocd-division/country:ca/csd:2499015'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2499015'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2499020'] = []
+styles[u'ocd-division/country:ca/csd:2499020'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2499020'].append(u"Conseiller")
+styles[u'ocd-division/country:ca/csd:2499025'] = []
+styles[u'ocd-division/country:ca/csd:2499025'].append(u"Maire")
+styles[u'ocd-division/country:ca/csd:2499025'].append(u"Conseiller")
 styles[u'ocd-division/country:ca/csd:3512005'] = []
 styles[u'ocd-division/country:ca/csd:3512005'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:3512005'].append(u"Councillor")
