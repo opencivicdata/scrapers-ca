@@ -1,6 +1,6 @@
 from copy import deepcopy
-import re
 
+import regex as re
 from pupa.models.utils import DatetimeValidator
 from pupa.models.schemas.common import contact_details as _contact_details, links as _links, sources as _sources
 from pupa.models.schemas.person import schema as person_schema
@@ -9,6 +9,7 @@ from pupa.models.schemas.organization import schema as organization_schema
 
 from constants import names, subdivisions, styles
 
+_contact_details['items']['properties']['type']['blank'] = False
 _contact_details['items']['properties']['type']['enum'] = [
   'address',
   'cell',
@@ -16,18 +17,28 @@ _contact_details['items']['properties']['type']['enum'] = [
   'fax',
   'voice',
 ]
+_contact_details['items']['properties']['value']['blank'] = False
+_contact_details['items']['properties']['value']['conditionalPattern'] = (
+  re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
+  lambda x: x['type'] == 'email')
+_contact_details['items']['properties']['value']['conditionalPattern'] = (
+  re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
+  lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager'))
 _contact_details['items']['properties']['note']['enum'] = [
   'constituency',
   'legislature',
   'office',
   'residence',
 ]
-_contact_details['items']['properties']['type']['blank'] = False
-_contact_details['items']['properties']['value']['blank'] = False
+_contact_details['items']['additionalProperties'] = False
+
 _links['items']['properties']['url']['blank'] = False
 _links['items']['properties']['url']['pattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_links['items']['additionalProperties'] = False
+
 _sources['items']['properties']['url']['blank'] = False
 _sources['items']['properties']['url']['pattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_sources['items']['additionalProperties'] = False
 
 # We must copy the subschema for each model.
 membership_contact_details = deepcopy(_contact_details)
@@ -43,28 +54,18 @@ twitter_re = re.compile(r'twitter\.com')
 youtube_re = re.compile(r'youtube\.com')
 
 matchers = [
-  (
-    0,
-    lambda x: x['type'] == 'email' and x['note'] is not None,
-    'Membership has email with non-empty note',
-  ), (
-    0,
-    lambda x: x['type'] != 'email' and x['note'] is None,
-    'Membership has non-email with empty note',
-  ), (
-    1,
-    lambda x: x['type'] == 'email',
-    'Membership has multiple contact_details with same type: email',
-  ),
+  (0, lambda x: x['type'] == 'email' and x['note'] is not None,
+    'Membership has email with non-empty note'),
+  (0, lambda x: x['type'] != 'email' and x['note'] is None,
+    'Membership has non-email with empty note'),
+  (1, lambda x: x['type'] == 'email',
+    'Membership has multiple contact_details with same type: email'),
 ]
 
 for type in ('address', 'cell', 'fax', 'voice'):
   for note in ('constituency', 'legislature', 'office', 'residence'):
-    matchers.append((
-      1,
-      lambda x, type=type, note=note: x['type'] == type and x['note'] == note,
-      'Membership has multiple contact_details with same type and note',
-    ))
+    matchers.append((1, lambda x, type=type, note=note: x['type'] == type and x['note'] == note,
+      'Membership has multiple contact_details with same type and note'))
 
 # A membership should not have notes on emails, should have notes on non-emails,
 # should have at most one email, and should, in most cases, have at most one of
@@ -83,23 +84,14 @@ person_links['items']['properties']['note']['type'] = 'null'
 # A person should have, in most cases, at most one non-social media link, and
 # should have at most one link per social media website.
 person_links['maxMatchingItems'] = [
-  (
-    1,
-    lambda x: not social_re.search(x['url']),
-    'Person has multiple non-social media links',
-  ), (
-    1,
-    lambda x: facebook_re.search(x['url']),
-    'Person has multiple facebook.com links',
-  ), (
-    1,
-    lambda x: twitter_re.search(x['url']),
-    'Person has multiple twitter.com links',
-  ), (
-    1,
-    lambda x: youtube_re.search(x['url']),
-    'Person has multiple youtube.com links',
-  ),
+  (1, lambda x: not social_re.search(x['url']),
+    'Person has multiple non-social media links'),
+  (1, lambda x: facebook_re.search(x['url']),
+    'Person has multiple facebook.com links'),
+  (1, lambda x: twitter_re.search(x['url']),
+    'Person has multiple twitter.com links'),
+  (1, lambda x: youtube_re.search(x['url']),
+    'Person has multiple youtube.com links'),
 ]
 
 membership_schema['properties']['role']['blank'] = False
@@ -107,9 +99,16 @@ membership_schema['properties']['post_id']['post'] = True
 membership_schema['properties']['role']['enum'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
+
 organization_schema['properties']['contact_details'] = organization_contact_details
 organization_schema['properties']['links'] = organization_links
+
 person_schema['properties']['name']['blank'] = False
+# Match initials, all-caps, short words, parenthesized nickname, and regular names.
+name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
+# Name components can be joined by apostrophes, hyphens or spaces.
+person_schema['properties']['name']['pattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
+person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
 person_schema['properties']['gender']['enum'] = ['male', 'female']
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
@@ -159,10 +158,33 @@ def validate_post(self, x, fieldname, schema, post):
 DatetimeValidator.validate_post = validate_post
 
 
-def validate_maxMatchingItems(self, x, fieldname, schema, tuples=None):
+def validate_negativePattern(self, x, fieldname, schema, pattern=None):
+  value = x.get(fieldname)
+  if isinstance(value, _str_type):
+    if re.match(pattern, value):
+      self._error("Value %(value)r for field '%(fieldname)s' matches "
+                  "match regular expression '%(pattern)s'",
+                  value, fieldname, pattern=pattern)
+
+DatetimeValidator.validate_negativePattern = validate_negativePattern
+
+
+def validate_conditionalPattern(self, x, fieldname, schema, arguments=None):
+  value = x.get(fieldname)
+  if isinstance(value, _str_type):
+    pattern, method = arguments
+    if method(x) and re.match(pattern, value):
+      self._error("Value %(value)r for field '%(fieldname)s' matches "
+                  "match regular expression '%(pattern)s'",
+                  value, fieldname, pattern=pattern)
+
+DatetimeValidator.validate_negativePattern = validate_negativePattern
+
+
+def validate_maxMatchingItems(self, x, fieldname, schema, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, list):
-    for length, method, message in tuples:
+    for length, method, message in arguments:
       count = 0
       for v in value:
         if method(v):
