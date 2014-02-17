@@ -2,14 +2,13 @@ from copy import deepcopy
 import re
 
 from pupa.models.utils import DatetimeValidator
-from pupa.models.schemas.common import links as _links, contact_details as _contact_details
+from pupa.models.schemas.common import contact_details as _contact_details, links as _links, sources as _sources
 from pupa.models.schemas.person import schema as person_schema
 from pupa.models.schemas.membership import schema as membership_schema
 from pupa.models.schemas.organization import schema as organization_schema
 
 from constants import names, subdivisions, styles
 
-# Enumerations.
 _contact_details['items']['properties']['type']['enum'] = [
   'address',
   'cell',
@@ -23,6 +22,12 @@ _contact_details['items']['properties']['note']['enum'] = [
   'office',
   'residence',
 ]
+_contact_details['items']['properties']['type']['blank'] = False
+_contact_details['items']['properties']['value']['blank'] = False
+_links['items']['properties']['url']['blank'] = False
+_links['items']['properties']['url']['pattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_sources['items']['properties']['url']['blank'] = False
+_sources['items']['properties']['url']['pattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
 
 # We must copy the subschema for each model.
 membership_contact_details = deepcopy(_contact_details)
@@ -97,15 +102,17 @@ person_links['maxMatchingItems'] = [
   ),
 ]
 
+membership_schema['properties']['role']['blank'] = False
 membership_schema['properties']['post_id']['post'] = True
 membership_schema['properties']['role']['enum'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
 organization_schema['properties']['contact_details'] = organization_contact_details
 organization_schema['properties']['links'] = organization_links
+person_schema['properties']['name']['blank'] = False
+person_schema['properties']['gender']['enum'] = ['male', 'female']
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
-
 
 uniqueRoles = [
   # Provincial

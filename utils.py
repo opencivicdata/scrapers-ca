@@ -144,6 +144,12 @@ class CanadianLegislator(Legislator):
 
   def __init__(self, name, post_id, **kwargs):
     super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
+
+    if self.gender == 'M':
+      self.gender = 'male'
+    elif self.gender == 'F':
+      self.gender = 'female'
+
     for k, v in kwargs.items():
       if isinstance(v, basestring):
         setattr(self, k, clean_string(v))
@@ -153,6 +159,7 @@ class CanadianLegislator(Legislator):
         url = 'http://%s' % url
       if re.match(r'\A@[A-Za-z]+\Z', url):
         url = 'https://twitter.com/%s' % url[1:]
+
       self.links.append({"note": note, "url": url})
 
   def add_contact(self, type, value, note):
@@ -160,12 +167,14 @@ class CanadianLegislator(Legislator):
       type = CONTACT_DETAIL_TYPE_MAP[type]
     if note in CONTACT_DETAIL_NOTE_MAP:
       note = CONTACT_DETAIL_NOTE_MAP[note]
+
     if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
       value = clean_telephone_number(value)
     elif type == 'address':
       value = clean_address(value)
     else:
       value = clean_string(value)
+
     self._contact_details.append({'type': type, 'value': value, 'note': note})
 
 
@@ -179,6 +188,12 @@ class AggregationLegislator(Person):
     self.post_id = clean_string(post_id)
     self.party = clean_string(party)
     self.chamber = clean_string(chamber)
+
+    if self.gender == 'M':
+      self.gender = 'male'
+    elif self.gender == 'F':
+      self.gender = 'female'
+
     for k, v in kwargs.items():
       if isinstance(v, basestring):
         setattr(self, k, clean_string(v))
