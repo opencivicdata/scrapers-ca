@@ -187,9 +187,9 @@ def validate_conditionalPattern(self, x, fieldname, schema, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
     pattern, method = arguments
-    if method(x) and pattern.search(value):
-      self._error("Value %(value)r for field '%(fieldname)s' matches "
-                  "match regular expression '%(pattern)s'",
+    if method(x) and not pattern.search(value):
+      self._error("Value %(value)r for field '%(fieldname)s' does "
+                  "not match regular expression '%(pattern)s'",
                   value, fieldname, pattern=pattern)
 
 DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
