@@ -19,10 +19,10 @@ _contact_details['items']['properties']['type']['enum'] = [
 ]
 _contact_details['items']['properties']['value']['blank'] = False
 _contact_details['items']['properties']['value']['conditionalPattern'] = (
-  re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
+  r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
   lambda x: x['type'] == 'email')
 _contact_details['items']['properties']['value']['conditionalPattern'] = (
-  re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
+  r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z',
   lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager'))
 _contact_details['items']['properties']['note']['enum'] = [
   'constituency',
@@ -33,11 +33,11 @@ _contact_details['items']['properties']['note']['enum'] = [
 _contact_details['items']['additionalProperties'] = False
 
 _links['items']['properties']['url']['blank'] = False
-_links['items']['properties']['url']['pattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_links['items']['properties']['url']['pattern'] = r'\A(?:ftp|http)://'
 _links['items']['additionalProperties'] = False
 
 _sources['items']['properties']['url']['blank'] = False
-_sources['items']['properties']['url']['pattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_sources['items']['properties']['url']['pattern'] = r'\A(?:ftp|http)://'
 _sources['items']['additionalProperties'] = False
 
 # We must copy the subschema for each model.
@@ -107,8 +107,8 @@ person_schema['properties']['name']['blank'] = False
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
 name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['pattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
-person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
+person_schema['properties']['name']['pattern'] = r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z"
+person_schema['properties']['name']['negativePattern'] = r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?"
 person_schema['properties']['gender']['enum'] = ['male', 'female']
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
