@@ -33,11 +33,11 @@ _contact_details['items']['properties']['note']['enum'] = [
 _contact_details['items']['additionalProperties'] = False
 
 _links['items']['properties']['url']['blank'] = False
-_links['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_links['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|https?)://', flags=re.U)
 _links['items']['additionalProperties'] = False
 
 _sources['items']['properties']['url']['blank'] = False
-_sources['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|http)://', flags=re.U)
+_sources['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|https?)://', flags=re.U)
 _sources['items']['additionalProperties'] = False
 
 # We must copy the subschema for each model.
