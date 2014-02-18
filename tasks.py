@@ -369,11 +369,3 @@ def populations():
           print '  u"%s": %s,' % (expected['name'], row[4])
     else:
       break
-
-
-# Update posts.rb in the represent-dashboard repository.
-@task
-def posts():
-  for row in csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-posts/ca_municipal_subdivisions.csv'):
-    expected = get_definition(row[0])
-    print '  "%s" => %s,' % (slugify(expected['name']), row[1])
