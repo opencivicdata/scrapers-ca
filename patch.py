@@ -24,6 +24,11 @@ _contact_details['items']['properties']['value']['conditionalPattern'] = (
 _contact_details['items']['properties']['value']['conditionalPattern'] = (
   re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
   lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager'))
+# @todo Uncomment.
+# _contact_details['items']['properties']['value']['conditionalPattern'] = (
+#   # Ends with a locality, a province or territory code, and an optional postal code.
+#   re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
+#   lambda x: x['type'] == 'address')
 _contact_details['items']['properties']['note']['enum'] = [
   'constituency',
   'legislature',
