@@ -9,6 +9,8 @@ from pupa.models.schemas.organization import schema as organization_schema
 
 from constants import names, subdivisions, styles
 
+# @todo Test that image resolves.
+
 _contact_details['items']['properties']['type']['blank'] = False
 _contact_details['items']['properties']['type']['enum'] = [
   'address',
@@ -104,6 +106,21 @@ membership_schema['properties']['post_id']['post'] = True
 membership_schema['properties']['role']['enum'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
+membership_schema['matches'] = [(
+  lambda x: next((True for y in x['_data']['contact_details'] if y['type'] == 'email'), False),
+  lambda x: x['_data']['organization_id'] in (
+    # Javascript-encoded email
+    'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council', # Cape Breton
+    # Webform email
+    'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
+    'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
+    'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
+  ) or x['_data']['organization_id'] in (
+    'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
+    'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
+  ) and x['role'] == 'Mayor',
+  '%(organization_id)s %(post_id)s membership lacks email',
+)]
 
 organization_schema['properties']['contact_details'] = organization_contact_details
 organization_schema['properties']['links'] = organization_links
@@ -212,3 +229,11 @@ def validate_maxMatchingItems(self, x, fieldname, schema, arguments=None):
           self._error('%s (%s)' % (message, v), value, fieldname)
 
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
+
+
+def validate_matches(self, x, fieldname, schema, arguments=None):
+  for method, condition, message in arguments:
+    if not condition(x) and not method(x):
+      self._error(message % x['_data'], None, fieldname)
+
+DatetimeValidator.validate_matches = validate_matches
