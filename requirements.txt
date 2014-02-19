@@ -1,5 +1,7 @@
 lxml==3.3.0beta3
--e git+git://github.com/opencivicdata/pupa.git#egg=pupa
+# @see https://github.com/opencivicdata/pupa/pull/55
+#-e git+git://github.com/opencivicdata/pupa.git#egg=pupa
+-e git+git://github.com/jpmckinney/pupa.git@chambers#egg=pupa
 -e git+git://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
 -e git+git://github.com/sunlightlabs/validictory.git#egg=validictory
 
