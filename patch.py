@@ -108,32 +108,38 @@ membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
 membership_schema['matches'] = [(
   lambda x: next((True for y in x['_data']['contact_details'] if y['type'] == 'email'), False),
-  lambda x: x['_data']['organization_id'] in (
-    # Javascript-encoded email
-    'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council', # Cape Breton
-    # Webform email
-    'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
-    'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
-    'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
-  ) or x['_data']['organization_id'] in (
-    'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
-    'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
-  ) and x['role'] == 'Mayor',
+  lambda x: (
+    x['_data']['organization_id'].startswith('party:') or
+    x['_data']['organization_id'] in (
+      # Javascript-encoded email
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council', # Cape Breton
+      # Webform email
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
+    ) or x['_data']['organization_id'] in (
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
+    ) and x['role'] == 'Mayor'
+  ),
   '%(organization_id)s %(post_id)s membership lacks email',
 )]
 
 organization_schema['properties']['contact_details'] = organization_contact_details
 organization_schema['properties']['links'] = organization_links
 
-person_schema['properties']['name']['blank'] = False
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
 name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
+
+person_schema['properties']['name']['blank'] = False
 # Name components can be joined by apostrophes, hyphens or spaces.
 person_schema['properties']['name']['compiledPattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
 person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
 person_schema['properties']['gender']['enum'] = ['male', 'female']
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
+# post_id is used to disambiguate people within a jurisdiction.
+person_schema['properties']['post_id'] = {'type': 'string', 'blank': False}
 
 uniqueRoles = [
   # Provincial
@@ -154,7 +160,7 @@ uniqueRoles = [
 ]
 
 def validate_post(self, x, fieldname, schema, post):
-  if post:
+  if post and x['role'] != 'member':
     division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
     value = x.get(fieldname)
     if subdivisions.get(division_id):
