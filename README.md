@@ -22,7 +22,7 @@ If, while developing your scraper, you created duplicates, you may need to:
 * Run the MongoDB command
 * Run the `cron.py` command
 
-If the duplicates exist in [Represent](http://represent.opennorth.ca/), re-import the data into Represent.
+If the duplicates exist in [Represent](http://represent.opennorth.ca/), perform the MongoDB and `cron.py` steps against Heroku and re-import the data into Represent.
 
 ## Maintenance
 
