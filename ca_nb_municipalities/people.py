@@ -21,8 +21,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         page = lxmlize(district_url)
         district = page.xpath('//div[@class="pageHeader"]/h1/text()')[0].split(' - ')[1].strip()
 
-        chamber = district + org_types[org_type]
-        org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+        org = Organization(name=district + org_types[org_type], classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
         org.add_source(district_url)
         yield org
 
@@ -42,7 +41,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         for i, councillor in enumerate(councillors):
           if 'Vacant' in councillor:
             continue
-          p = Legislator(name=councillor, post_id=district, chamber=chamber)
+          p = Legislator(name=councillor, post_id=district)
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)
@@ -53,7 +52,6 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
             membership = p.add_membership(org, role='Councillor')
 
           membership.post_id = district
-          membership.chamber = chamber
           membership.add_contact_detail('address', address, 'legislature')
           if phone:
             membership.add_contact_detail('voice', phone, 'legislature')

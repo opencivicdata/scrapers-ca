@@ -22,14 +22,13 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
       if 'SAO' in role or not role:
         continue
 
-      chamber = district + ' Municipal Council'
-      org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district + ' Municipal Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Legislator(name=name, post_id=district, chamber=chamber)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      membership = p.add_membership(org, role=role, post_id=district, chamber=chamber)
+      membership = p.add_membership(org, role=role, post_id=district)
 
       info = councillor.xpath('./ancestor::p/text()')
       for contact in info:

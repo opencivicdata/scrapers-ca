@@ -31,14 +31,13 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
       if not re.findall(r'[0-9]', lines[0]):
         district = district + ' ' + lines.pop(0).strip()
 
-      chamber = district + ' Municipal Council'
-      org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district + ' Municipal Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Legislator(name=name, post_id=district, chamber=chamber)
+      p = Legislator(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
-      membership = p.add_membership(org, role='Mayor', post_id=district, chamber=chamber)
+      membership = p.add_membership(org, role='Mayor', post_id=district)
 
       address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:

@@ -23,8 +23,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
 
       # @todo Need to distinguish between, e.g., R.M. and Town
       title = title.title()
-      chamber = title + ' Municipal Council'
-      organization = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      organization = Organization(name=title + ' Municipal Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       organization.add_source(COUNCIL_PAGE)
       yield organization
 
@@ -40,7 +39,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       councillors = district.xpath('.//td[3]/text()')
       positions = district.xpath('.//td[2]/b/text()')
       for i, councillor in enumerate(councillors):
-        p = Legislator(name=councillor, post_id=title, chamber=chamber)
+        p = Legislator(name=councillor, post_id=title)
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:
@@ -49,7 +48,6 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
           membership = p.add_membership(organization, role=positions[i])  # @todo "Resident Administrator & Chief Administrative Officer" is split on two lines
 
         membership.post_id = title
-        membership.chamber = chamber
         membership.add_contact_detail('address', address, 'legislature')
         membership.add_contact_detail('fax', fax, 'legislature')
         membership.add_contact_detail('voice', phone, 'legislature')

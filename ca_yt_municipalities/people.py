@@ -40,8 +40,7 @@ class YukonMunicipalitiesPersonScraper(Scraper):
         address = lines[1][:col1end - 1].strip() + ' ' + lines[2][:col1end - 1].strip()
         district = lines[0][:col1end - 1].strip()
 
-      chamber = district + ' Council'
-      organization = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      organization = Organization(name=district + ' Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       organization.add_source(COUNCIL_PAGE)
       yield organization
 
@@ -68,9 +67,9 @@ class YukonMunicipalitiesPersonScraper(Scraper):
           councillor = line[col1end - 1:col2end - 1].strip()
           if not councillor:
             continue
-          p = Legislator(name=councillor, post_id=district, chamber=chamber)
+          p = Legislator(name=councillor, post_id=district)
           p.add_source(COUNCIL_PAGE)
-          membership = p.add_membership(organization, role=role, post_id=district, chamber=chamber)
+          membership = p.add_membership(organization, role=role, post_id=district)
           membership.add_contact_detail('address', address, 'legislature')
           membership.add_contact_detail('voice', phone, 'legislature')
           membership.add_contact_detail('email', email, None)

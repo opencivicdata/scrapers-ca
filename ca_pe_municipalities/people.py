@@ -18,8 +18,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
       url = district.attrib['href']
       page = lxmlize(url)
 
-      chamber = district.text_content() + ' Council'
-      org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district.text_content() + ' Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(url)
       yield org
 
@@ -46,10 +45,10 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         role = councillor.replace(name, '').translate(None, '()').strip()
         if not role:
           role = 'Councillor'
-        p = Legislator(name=name, post_id=district.text_content(), chamber=chamber)
+        p = Legislator(name=name, post_id=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        membership = p.add_membership(org, role=role, post_id=district.text_content(), chamber=chamber)
+        membership = p.add_membership(org, role=role, post_id=district.text_content())
         membership.add_contact_detail('voice', phone, 'legislature')
         membership.add_contact_detail('fax', fax, 'legislature')
         membership.add_contact_detail('address', address, 'legislature')

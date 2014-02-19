@@ -51,8 +51,7 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
 
       district_name = district.pop(0).split(',')[0].title()
 
-      chamber = district_name + ' Council'
-      org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+      org = Organization(name=district_name + ' Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(COUNCIL_PAGE)
 
       councillors = []
@@ -83,9 +82,9 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         continue
       yield org
       for councillor in councillors:
-        p = Legislator(name=councillor[0], post_id=district_name, chamber=chamber)
+        p = Legislator(name=councillor[0], post_id=district_name)
         p.add_source(COUNCIL_PAGE)
-        membership = p.add_membership(org, role=councillor[1], post_id=district_name, chamber=chamber)
+        membership = p.add_membership(org, role=councillor[1], post_id=district_name)
 
         for key, value in contacts.iteritems():
           membership.add_contact_detail(key, value, None if key == 'email' else 'legislature')

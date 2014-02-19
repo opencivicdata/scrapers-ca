@@ -54,16 +54,15 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         if not name or not district:
           continue
 
-        chamber = district + ' Municipal Council'
-        org = Organization(name=chamber, chamber=chamber, classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
+        org = Organization(name=district + ' Municipal Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
         org.add_source(COUNCIL_PAGE)
         org.add_source(url)
         yield org
 
-        p = Legislator(name=name, post_id=district, chamber=chamber)
+        p = Legislator(name=name, post_id=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        membership = p.add_membership(org, role='Mayor', post_id=district, chamber=chamber)
+        membership = p.add_membership(org, role='Mayor', post_id=district)
         if phone:
           membership.add_contact_detail('voice', phone, 'legislature')
         # Im excluding fax because that column isn't properly aligned
