@@ -183,13 +183,11 @@ class CanadianLegislator(Legislator):
 # Removes _is_legislator flag and _contact_details. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
 class AggregationLegislator(Person):
-  __slots__ = ('post_id', 'party', 'chamber')
+  __slots__ = ('post_id')
 
-  def __init__(self, name, post_id, party=None, chamber=None, **kwargs):
+  def __init__(self, name, post_id, **kwargs):
     super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
     self.post_id = clean_string(post_id)
-    self.party = clean_string(party)
-    self.chamber = clean_string(chamber)
     for k, v in kwargs.items():
       if isinstance(v, basestring):
         setattr(self, k, clean_string(v))
