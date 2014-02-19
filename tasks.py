@@ -354,6 +354,26 @@ def tidy():
             print 'No OCD division for %s' % module_name
 
 
+@task
+def flush(division_id):
+  division_id = re.sub('/(?:council|legislature)\Z', '', re.sub(r'\A(?:jurisdiction:)?ocd-jurisdiction/', 'ocd-division/', division_id))
+  expected = get_definition(division_id)
+
+  print """jurisdiction_id = '%(jurisdiction_id)s';
+if (db.jurisdictions.count({_id: jurisdiction_id})) {
+  db.memberships.find({jurisdiction_id: jurisdiction_id}).forEach(function (membership) {
+    db.people.remove({_id: membership.person_id})
+  });
+  db.memberships.remove({jurisdiction_id: jurisdiction_id});
+} else {
+  print("Couldn't find jurisdiction_id " + jurisdiction_id);
+}""" % expected
+
+  print 'heroku run python cron.py %(module_name)s' % expected
+  print expected['name']
+  print 'http://represent.opennorth.ca/admin/representatives/representativeset/?o=1'
+
+
 # Update populations.py in the represent-canada repository.
 @task
 def populations():
