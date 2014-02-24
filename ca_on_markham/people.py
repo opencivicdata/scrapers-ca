@@ -22,7 +22,7 @@ class MarkhamPersonScraper(Scraper):
       if not councillor.xpath('.//a'):
         break
       name = councillor.xpath('.//strong')[1].text_content().strip()
-      district = councillor.xpath('.//a//text()')[0].strip()
+      district = councillor.xpath('.//a//text()')[1].strip()
       if 'Ward' in district:
         district = district.replace('Councillor', '')
         role = 'Councillor'
