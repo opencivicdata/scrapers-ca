@@ -18,6 +18,7 @@ class DollardDesOrmeauxPersonScraper(Scraper):
     general_email = page.xpath('//p[@class="large_title"]/following-sibling::p//a[contains(@href, "mailto:")]')[0].text_content()
 
     councillors = page.xpath('//tr/td/p/strong')
+    councillors = [councillor for councillor in councillors if not "@" in councillor.text_content()]
     for councillor in councillors:
 
       if 'Mayor' in councillor.text_content():
