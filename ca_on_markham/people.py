@@ -44,10 +44,15 @@ class MarkhamPersonScraper(Scraper):
       p.add_source(url)
 
       p.image = image
-
       contact = page.xpath('//div[@class="microSiteLinksWrapper"]')[1]
-      address = re.sub(r'\s{2,}', ' ', ' '.join(contact.xpath('.//p/text()')[:2])).strip()
-      phone = contact.xpath('.//p/text()')[2].split(':')[1].strip()
+
+      if contact.xpath('.//p/text()'):
+        infos = contact.xpath('.//p/text()')
+      else:
+        infos = contact.xpath('.//div/text()')
+
+      address = re.sub(r'\s{2,}', ' ', ' '.join(infos[:2])).strip()
+      phone = infos[2].split(':')[1].strip()
       email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
       website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
       if website:
