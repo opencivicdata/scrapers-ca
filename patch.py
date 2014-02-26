@@ -107,17 +107,17 @@ membership_schema['properties']['role']['enum'] = lambda x: styles.get(re.sub(r'
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
 membership_schema['matches'] = [(
-  lambda x: next((True for y in x['_data']['contact_details'] if y['type'] == 'email'), False),
+  lambda x: next((True for y in x['contact_details'] if y['type'] == 'email'), False),
   lambda x: (
-    x['_data']['organization_id'].startswith('party:') or
-    x['_data']['organization_id'] in (
+    x['organization_id'].startswith('party:') or
+    x['organization_id'] in (
       # Javascript-encoded email
       'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council', # Cape Breton
       # Webform email
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
       'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
-    ) or x['_data']['organization_id'] in (
+    ) or x['organization_id'] in (
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
     ) and x['role'] == 'Mayor'
@@ -238,8 +238,9 @@ DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
 
 
 def validate_matches(self, x, fieldname, schema, arguments=None):
+  value = x['_data']
   for method, condition, message in arguments:
-    if not condition(x) and not method(x):
-      self._error(message % x['_data'], None, fieldname)
+    if not condition(value) and not method(value):
+      self._error(message % value, None, fieldname)
 
 DatetimeValidator.validate_matches = validate_matches
