@@ -31,7 +31,6 @@ CONTACT_DETAIL_TYPE_MAP = {
   'Home Phone*': 'voice',
   'Office': 'voice',
   'ph': 'voice',
-  u'ph\xc2': 'voice',
   'Phone': 'voice',
   'Res': 'voice',
   'Res/Bus': 'voice',
@@ -55,7 +54,6 @@ CONTACT_DETAIL_NOTE_MAP = {
   'Home Phone': 'residence',
   'Home Phone*': 'residence',
   'ph': 'legislature',
-  u'ph\xc2': 'legislature',
   'Phone': 'legislature',
   'Office': 'legislature',
   'Res': 'residence',
@@ -165,6 +163,7 @@ class CanadianLegislator(Legislator):
       self.links.append({"note": note, "url": url})
 
   def add_contact(self, type, value, note):
+    note = clean_string(note)
     if type in CONTACT_DETAIL_TYPE_MAP:
       type = CONTACT_DETAIL_TYPE_MAP[type]
     if note in CONTACT_DETAIL_NOTE_MAP:
@@ -198,7 +197,7 @@ class AggregationLegislator(Person):
         value = 'male'
       elif value == 'F':
         value = 'female'
-    super(CanadianLegislator, self).__setattr__(name, value)
+    super(AggregationLegislator, self).__setattr__(name, value)
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
@@ -237,10 +236,13 @@ def clean_string(s):
 def clean_name(s):
   return honorific_prefix_re.sub('', clean_string(s))
 
-# @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
-
 
 def clean_telephone_number(s):
+
+  """
+  @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
+  """
+
   splits = re.split(r'[\s-](?:x|ext\.?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
   digits = re.sub(r'\D', '', splits[0])
 
@@ -256,11 +258,14 @@ def clean_telephone_number(s):
   else:
     return s
 
-# Corrects the postal code, abbreviates the province or territory name, and
-# formats the last line of the address.
-
 
 def clean_address(s):
+
+  """
+  Corrects the postal code, abbreviates the province or territory name, and
+  formats the last line of the address.
+  """
+
   # The letter "O" instead of the numeral "0" is a common mistake.
   s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), s)
   for k, v in abbreviations.iteritems():
