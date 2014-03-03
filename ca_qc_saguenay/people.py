@@ -19,31 +19,26 @@ class SaguenayPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor = page.xpath('//div[@class="box"]/p/text()')
-    m_name = mayor[1].strip().split('.')[1].strip()
-    m_phone = mayor[2].strip().split(':')[1].strip()
+    m_name = mayor[0].strip().split('.')[1].strip()
+    m_phone = mayor[1].strip().split(':')[1].strip()
 
     m = Legislator(name=m_name, post_id='Saguenay', role='Maire')
     m.add_source(COUNCIL_PAGE)
     m.add_contact('voice', m_phone, 'legislature')
-    m.image = page.xpath('//div[@class="box"]/p/img/@src')[0]
 
     yield m
 
     councillors = page.xpath('//div[@class="box"]//div')
     for councillor in councillors:
-      district = councillor.xpath('./h3')[0].text_content()
-      name = councillor.xpath('.//p/text()')[1].replace('M. ', '').replace('Mme ', '').strip()
-
-      phone = councillor.xpath('.//p/text()')[2].split(':')[1].strip().replace(' ', '-')
+      district = councillor.xpath('./h3')[0].text_content().replace('#', '')
+      name = councillor.xpath('.//p/text()')[0].replace('M. ', '').replace('Mme ', '').strip()
+      phone = councillor.xpath('.//p/text()')[1].split(':')[1].strip().replace(' ', '-')
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
       url = councillor.xpath('./p/a')[0].attrib['href']
 
       p = Legislator(name=name, post_id=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
-      p.add_source(url)
-
-      p.image = councillor.xpath('./p/img/@src')[0]
 
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
