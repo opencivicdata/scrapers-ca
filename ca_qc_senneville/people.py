@@ -19,7 +19,7 @@ class SennevillePersonScraper(Scraper):
       if 'Maire' in district:
         district = 'Senneville'
         role = 'Maire'
-      name = councillor.xpath('./td[2]//strong/text()')[0].title()
+      name = councillor.xpath('./td[2]//p//text()')[0].title()
       email = councillor.xpath('.//a/text()')[0]
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
