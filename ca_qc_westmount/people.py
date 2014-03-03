@@ -29,11 +29,16 @@ class WestmountPersonScraper(Scraper):
     yield p
 
     councillors = page.xpath('//td[@class="LeftLinksSectionMenu" and contains(@style, "border-bottom-style: dashed;")]/a')
-    for councillor in councillors:
+    for i, councillor in enumerate(councillors):
       name = councillor.text_content().strip()
       url = councillor.attrib['href']
       page = lxmlize(url)
-      district = page.xpath('.//div[@class="SectionTitle"]')[1].text_content().split('-')[0].strip()
+
+      if page.xpath('boolean(.//div[@class="SectionTitle"][2])'):
+        district = page.xpath('.//div[@class="SectionTitle"]')[1].text_content().split('-')[0].strip()
+      else:
+        district = 'District ' + str(i + 1)
+
       info = page.xpath('.//div[@style="padding-right:10px;"]/table')[0]
       phone = info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
       email = info.xpath('.//tr[3]/td[2]')[0].text_content().strip()
