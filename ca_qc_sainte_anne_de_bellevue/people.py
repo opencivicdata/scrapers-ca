@@ -12,23 +12,20 @@ class SainteAnneDeBellevuePersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//div[@id="content"]//td')
-    councillors = [x for x in councillors if x.text_content().strip()]
-    images = page.xpath('//div[@id="content"]//td//img/@src')
+    councillors = page.xpath('//div[@id="content"]//tr')
+
     for i, councillor in enumerate(councillors):
       if 'Maire' in councillor.text_content():
-        name = councillor.xpath('.//a')[0].text_content()
+        name = councillor.xpath('./td')[1].text_content()
         district = 'Sainte-Anne-de-Bellevue'
         role = 'Maire'
       else:
-        name = re.findall(r'(?<=[0-9]).*', councillor.text_content(), flags=re.DOTALL)[0].strip()
-        district = re.findall(r'(.*[0-9])', councillor.text_content())[0].replace('Conseiller', '')
+        name = councillor.xpath('./td')[1].text_content()
+        district = 'District ' + re.findall(r'\d', councillor.xpath('./td')[0].text_content())[0]
         role = 'Conseiller'
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-
-      p.image = images[i]
 
       email = councillor.xpath('.//a')
       if email:
