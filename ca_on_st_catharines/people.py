@@ -18,14 +18,11 @@ class StCatharinesPersonScraper(Scraper):
 
       name = councillor.text_content().split(',')[0]
 
-      if 'Laura Ip' in name:
-        district = "St. George's"
-      else:
-        district = page.xpath('//p[contains(text(), "Ward")]/text()')[0]
-        district = re.sub(', Ward \d+', '', district)
+      district = page.xpath('//p[preceding::h2[contains(text(), "Ward")]]/text()')[0]
+      district = re.sub(', Ward \d+', '', district)
 
       role = 'Councillor'
-      if 'Mayor' in district:
+      if 'Mayor' or 'At large' in district:
         district = 'St. Catharines'
         role = 'Mayor'
 
