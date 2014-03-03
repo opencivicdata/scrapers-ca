@@ -14,7 +14,7 @@ class SennevillePersonScraper(Scraper):
 
     councillors = page.xpath('//div[@class="field-item even"]//tr')
     for councillor in councillors:
-      district = councillor.xpath('./td[1]//strong/text()')[0]
+      district = councillor.xpath('./td[1]//strong/text()')[0].replace('no. ', '')
       role = 'Conseiller'
       if 'Maire' in district:
         district = 'Senneville'
