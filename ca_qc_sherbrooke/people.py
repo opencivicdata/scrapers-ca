@@ -25,7 +25,7 @@ class SherbrookePersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.image = page.xpath('//div[@id="conseiller-photo"]//img/@src')[0]
+      p.image = page.xpath('//div[@class="csc-textpic-image csc-textpic-last"]//img/@src')[0]
       phone = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')[1].strip().replace(' ', '-')
       p.add_contact('voice', phone, None)
       email = page.xpath('//a[contains(@href, "mailto:")]/@href')
