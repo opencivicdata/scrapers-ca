@@ -66,13 +66,13 @@ matchers = [
   (0, lambda x: x['type'] != 'email' and x['note'] is None,
     'Membership has non-email with empty note (%s)'),
   (1, lambda x: x['type'] == 'email',
-    'Membership has multiple contact_details with same type: email (%s)'),
+    'Membership has many emails (%s)'),
 ]
 
 for type in ('address', 'cell', 'fax', 'voice'):
   for note in ('constituency', 'legislature', 'office', 'residence'):
     matchers.append((1, lambda x, type=type, note=note: x['type'] == type and x['note'] == note,
-      'Membership has multiple contact_details with same type and note (%s)'))
+      'Membership has contact_details with same type and note (%s)'))
 
 # A membership should not have notes on emails, should have notes on non-emails,
 # should have at most one email, and should, in most cases, have at most one of
@@ -92,13 +92,13 @@ person_links['items']['properties']['note']['type'] = 'null'
 # should have at most one link per social media website.
 person_links['maxMatchingItems'] = [
   (1, lambda x: not social_re.search(x['url']),
-    'Person has multiple non-social media links (%s)'),
+    'Person has many non-social media links (%s)'),
   (1, lambda x: facebook_re.search(x['url']),
-    'Person has multiple facebook.com links (%s)'),
+    'Person has many facebook.com links (%s)'),
   (1, lambda x: twitter_re.search(x['url']),
-    'Person has multiple twitter.com links (%s)'),
+    'Person has many twitter.com links (%s)'),
   (1, lambda x: youtube_re.search(x['url']),
-    'Person has multiple youtube.com links (%s)'),
+    'Person has many youtube.com links (%s)'),
 ]
 
 membership_schema['properties']['role']['blank'] = False
@@ -122,7 +122,7 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
     ) and x['role'] == 'Mayor'
   ),
-  '%(organization_id)s %(post_id)r membership lacks email',
+  'Membership has no emails %(organization_id)s %(post_id)r',
 )]
 
 organization_schema['properties']['contact_details'] = organization_contact_details
