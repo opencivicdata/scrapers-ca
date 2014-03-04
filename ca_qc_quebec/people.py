@@ -17,18 +17,16 @@ class QuebecPersonScraper(Scraper):
     for councillor in councillors:
 
       name = ' '.join(councillor.xpath('.//h3')[0].text_content().strip().split(', ')[::-1])
-      role = 'Conseiller'
       if 'vacant' in name:
         continue
-      district = councillor.xpath('./preceding-sibling::h2/text()')
-      if district:
-        district = district[-1]
-      else:
-        district = councillor.xpath('./parent::div/preceding-sibling::h2/text()')[-1]
-
-      if 'Maire' in district:  # @todo Mayor is not being set
+      district = councillor.xpath('./preceding-sibling::h2/text()')[-1]
+      if 'Mairie' in district:
         district = u'Québec'
         role = 'Maire'
+      else:
+        text = councillor.xpath('./a[@target="_blank"]/text()')
+        district = re.search(u'\ADistrict électoral (?:de|du|des) (.+) - ?\d+\Z', text[0].strip(), flags=re.U).group(1)
+        role = 'Conseiller'
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
