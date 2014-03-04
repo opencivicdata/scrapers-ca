@@ -209,6 +209,7 @@ honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|
 table = {
   ord(u'​'): u' ',  # zero-width space
   ord(u'’'): u"'",
+  ord(u'\xc2'): u" ", # non-breaking space if mixing ISO-8869-1 into UTF-8
 }
 
 # @see https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca/ca_provinces_and_territories.csv
