@@ -163,6 +163,8 @@ class CanadianLegislator(Legislator):
       self.links.append({"note": note, "url": url})
 
   def add_contact(self, type, value, note):
+    if type:
+      type = clean_string(type)
     if note:
       note = clean_string(note)
     if type in CONTACT_DETAIL_TYPE_MAP:

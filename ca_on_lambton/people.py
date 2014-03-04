@@ -1,6 +1,6 @@
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator, CONTACT_DETAIL_TYPE_MAP
+from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
@@ -56,4 +56,4 @@ class LambtonPersonScraper(Scraper):
       elif 'email' in contact_type:
         councillor.add_contact('email', contact, None)
       else:
-        councillor.add_contact(CONTACT_DETAIL_TYPE_MAP[contact_type], contact, note)
+        councillor.add_contact(contact_type, contact, note)
