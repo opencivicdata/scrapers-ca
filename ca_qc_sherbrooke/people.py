@@ -17,17 +17,20 @@ class SherbrookePersonScraper(Scraper):
       name = councillor.text_content()
       url = councillor.attrib['href']
       page = lxmlize(url)
-      district = page.xpath('//h2/text()')[0]
-      role = 'Conseiller'
-      if 'Maire' in district:
+      if 'Maire' in page.xpath('//h2/text()')[0]:
         district = 'Sherbrooke'
         role = 'Maire'
+      else:
+        district = page.xpath('//div[@class="csc-default"]//a[@target="_blank"]/text()')[0].replace('district', '').replace('Domaine Howard', 'Domaine-Howard')
+        role = 'Conseiller'
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = page.xpath('//div[@class="csc-textpic-image csc-textpic-last"]//img/@src')[0]
-      phone = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')[1].strip().replace(' ', '-')
-      p.add_contact('voice', phone, None)
+      parts = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')
+      note = parts[0]
+      phone = parts[1]
+      p.add_contact(note, phone, note)
       email = page.xpath('//a[contains(@href, "mailto:")]/@href')
       if email:
         email = email[0].split(':')[1]
