@@ -56,7 +56,7 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/ca_census_subdivisions.csv')
     for row in reader:
       urls_memo[row[0].decode('utf8')] = row[1]
-    reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/census_subdivision-montreal-arrondissements.csv')
+    reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-urls/census_subdivision-montreal-boroughs.csv')
     for row in reader:
       urls_memo[row[0].decode('utf8')] = row[1]
 
@@ -88,7 +88,7 @@ def get_definition(division_id, aggregation=False):
   # Map OCD identifiers and Standard Geographical Classification codes to names.
   if not ocdid_to_name_map:
     ocdid_to_name_map['ocd-division/country:ca'] = 'Canada'
-    reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv')
+    reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv')
     for row in reader:
       ocdid_to_name_map[row[0].decode('utf8')] = row[1].decode('utf8')
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
