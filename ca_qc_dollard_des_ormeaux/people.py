@@ -10,12 +10,11 @@ COUNCIL_PAGE = 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17'
 class DollardDesOrmeauxPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     general_contacts = page.xpath('//p[@class="large_title"]/following-sibling::p/text()')
     general_phone = general_contacts[0]
     general_fax = general_contacts[1]
-    general_email = page.xpath('//p[@class="large_title"]/following-sibling::p//a[contains(@href, "mailto:")]')[0].text_content()
 
     councillors = page.xpath('//tr/td/p/strong')
     councillors = [councillor for councillor in councillors if not "@" in councillor.text_content()]
@@ -40,6 +39,5 @@ class DollardDesOrmeauxPersonScraper(Scraper):
 
       p.add_contact('voice', general_phone, 'legislature')
       p.add_contact('fax', general_fax, 'legislature')
-      p.add_contact('email', general_email, None)
 
       yield p
