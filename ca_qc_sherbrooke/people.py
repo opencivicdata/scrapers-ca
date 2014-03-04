@@ -23,6 +23,8 @@ class SherbrookePersonScraper(Scraper):
       else:
         district = page.xpath('//div[@class="csc-default"]//a[@target="_blank"]/text()')[0].replace('district', '').replace('Domaine Howard', 'Domaine-Howard')
         role = 'Conseiller'
+      if district in (' de Brompton', ' de Lennoxville'):
+        district = 'Arrondissement%s' % district
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
