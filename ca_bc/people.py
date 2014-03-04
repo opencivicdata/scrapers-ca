@@ -12,10 +12,10 @@ class BritishColumbiaPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('body/table[3]//table[3]//table//td//a/@href')
+    councillors = page.xpath('//table[@cellpadding="3"]//td//a/@href')
     for councillor in councillors:
       page = lxmlize(councillor)
-      name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').strip()
+      name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').replace(', Q.C.', '').strip()
       district = page.xpath('//em/strong/text()')[0].strip()
 
       p = Legislator(name=name, post_id=district, role='MLA')
