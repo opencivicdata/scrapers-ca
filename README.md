@@ -26,7 +26,7 @@ Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID
 
 This command creates an `__init__.py` file and a stub `people.py` file within a new directory for the scraper. The `__init_.py` file, which describes the jurisdiction, should not require any editing.
 
-Most jurisdictions have a `geographic_code` that corresponds to a [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) code. Other jurisdictions have a `division_id` that corresponds to am [OCD-ID](https://github.com/opencivicdata/ocd-division-ids).
+Most jurisdictions have a `geographic_code` that corresponds to a [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) code. Other jurisdictions have a `division_id` that corresponds to an [OCD-ID](https://github.com/opencivicdata/ocd-division-ids).
 
 ## Develop a scraper
 
