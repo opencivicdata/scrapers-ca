@@ -46,7 +46,7 @@ def mayor_data(page):
   address = ''.join(address_node.xpath('./p/text()')[:3])
   phone = address_node.xpath('string(./p/text()[4])')
 
-  p = Legislator(name=name, post_id='London', role='Mayor')
+  p = Legislator(name=name, post_id='Brampton', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('address', address, 'legislature')
