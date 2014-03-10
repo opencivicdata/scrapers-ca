@@ -221,7 +221,7 @@ table = {
 }
 
 # @see https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca/ca_provinces_and_territories.csv
-# @see https://github.com/opencivicdata/ocd-division-ids/blob/master/mappings/country-ca-fr/ca_provinces_and_territories.csv
+# @see https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca/ca_provinces_and_territories-name_fr.csv
 abbreviations = {
   u'Newfoundland and Labrador': 'NL',
   u'Prince Edward Island': 'PE',
