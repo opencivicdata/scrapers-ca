@@ -43,7 +43,7 @@ def councillor_data(url):
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
-  p.add_contact('phone', phone, 'legislature')
+  p.add_contact('voice', phone, 'legislature')
   p.image = photo
 
   return p
