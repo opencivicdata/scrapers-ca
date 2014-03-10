@@ -7,7 +7,7 @@ from urlparse import urljoin
 
 import re
 
-COUNCIL_PAGE = 'http://www.cityofkingston.ca/city-hall/city-council/mayor-and-council'
+COUNCIL_PAGE = 'http://www.kitchener.ca/en/insidecityhall/WhoIsMyCouncillor.asp'
 
 
 class KingstonPersonScraper(Scraper):
@@ -20,10 +20,8 @@ class KingstonPersonScraper(Scraper):
     mayor_url = mayor_and_council_urls[0]
     council_urls = mayor_and_council_urls[1:]
 
-    """
     for councillor_url in council_urls:
       yield councillor_data(councillor_url)
-    """
 
     yield mayor_data(mayor_url)
 
