@@ -30,6 +30,8 @@ Most jurisdictions have a `geographic_code` that corresponds to a [Standard Geog
 
 ## Develop a scraper
 
+Read the [Pupa documentation](http://docs.opencivicdata.org/en/latest/scrape/new.html) or an existing scraper's code.
+
 ### Troubleshooting
 
 If the `pupa.cli` command raises the error below, ensure that MongoDB is running.
