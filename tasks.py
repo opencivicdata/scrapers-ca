@@ -8,7 +8,6 @@ import re
 import string
 from StringIO import StringIO
 
-from django.template.defaultfilters import slugify
 from git import Repo
 from invoke import run, task
 import lxml.html
