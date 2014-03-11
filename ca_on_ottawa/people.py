@@ -8,6 +8,7 @@ import re
 from urllib2 import urlopen
 from csv import DictReader
 
+COUNCIL_PAGE = 'http://ottawa.ca/en/city-council'
 COUNCIL_CSV_URL = 'http://data.ottawa.ca/en/storage/f/2013-10-29T130227/Elected-Officials-%282010-2014%29-v.3.csv'
 
 
