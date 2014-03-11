@@ -43,7 +43,7 @@ def councillor_data(url):
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
-  p.add_contact('phone', phone, 'legislature')
+  p.add_contact('voice', phone, 'legislature')
   p.image = photo
 
   return p
@@ -52,13 +52,13 @@ def mayor_data(url):
   page = lxmlize(url)
 
   name = page.xpath('string(//h1[@id="TitleOfPage"])').split('Mayor')[-1]
-  photo = page.xpath('string(//div[@class="imageLeftDiv"]/img/@src)')
+  photo_url = page.xpath('string(//div[@class="imageLeftDiv"]/img/@src)')
   phone = get_phone_data(page)
 
   p = Legislator(name=name, post_id='London', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_source(url)
-  p.image = phone
+  p.image = photo_url
   return p
 
 def get_phone_data(page):
@@ -67,3 +67,4 @@ def get_phone_data(page):
   phone_text = page.xpath('string((//span[contains(@class, "contactValue")]'
                           '[contains(text(), "hone")])[1])')
   return re.search(r'[0-9].*$', phone_text).group()
+
