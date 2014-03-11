@@ -31,7 +31,7 @@ def councillor_data(url):
   # largely based on old scraper
   contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
 
-  name = contact_node.xpath('./span[1]')
+  name = contact_node.xpath('string(./span[1])')
   district = contact_node.xpath('string(./text()[2])')
   email = contact_node.xpath('string(.//a)')
   phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]
@@ -53,7 +53,7 @@ def mayor_data(url):
   # largely based on old scraper
   contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
 
-  name = contact_node.xpath('./span[1]')
+  name = contact_node.xpath('string(./span[1])')
   address = contact_node.xpath('string(.//p)')
   email = contact_node.xpath('string(.//a)')
   phone = contact_node.xpath('string(./text()[3])').split('\n')[1].split(':')[1]

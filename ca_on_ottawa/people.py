@@ -19,8 +19,20 @@ class OttawaPersonScraper(Scraper):
       cr = DictReader(response)
       for councillor in cr:
         name = '%s %s' % (councillor['First name'], councillor['Last name'])
-        district = councillor['District name'] or None
         role = councillor['Elected office']
+        if role == 'Mayor':
+          district = 'Ottawa'
+        else:
+          district = councillor['District name']
+
+        # Correct typos. The City has been notified of the errors.
+        if district == u'Knoxdale Merivale':
+          district = u'Knoxdale-Merivale'
+        if district == u'Rideau Vanier':
+          district = u'Rideau-Vanier'
+        if district == u'Orleans':
+          district = u'Orléans'
+
         email = councillor['Email']
         address = ', '.join([councillor['Address line 1'],
                              councillor['Address line 2'],
@@ -33,8 +45,8 @@ class OttawaPersonScraper(Scraper):
         p = Legislator(name=name, post_id=district, role=role)
         p.add_source(COUNCIL_CSV_URL)
         p.add_contact('email', email, None)
-        p.add_contact('address', address, 'Legislature')
-        p.add_contact('voice', phone, 'Legislature')
+        p.add_contact('address', address, 'legislature')
+        p.add_contact('voice', phone, 'legislature')
         p.image = photo_url
         yield p
 
