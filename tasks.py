@@ -197,7 +197,10 @@ def urls():
   for module_name in os.listdir('.'):
     if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
       module = importlib.import_module('%s.people' % module_name)
-      print '%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE'])
+      if module.__dict__.get('COUNCIL_PAGE'):
+        print '%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE'])
+      else:
+        print '%-60s COUNCIL_PAGE not defined' % module_name
 
 
 @task
