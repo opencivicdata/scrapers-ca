@@ -52,10 +52,5 @@ def mayor_data(page):
   p.add_contact('address', address, 'legislature')
   p.add_contact('email', email, None)
   p.image = photo_url
-  print name
-  print email
-  print address
-  print phone
-  print photo_url
   return p
 
