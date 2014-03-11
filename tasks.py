@@ -376,6 +376,7 @@ if (db.jurisdictions.count({_id: jurisdiction_id})) {
     db.people.remove({_id: membership.person_id})
   });
   db.memberships.remove({jurisdiction_id: jurisdiction_id});
+  db.organizations.remove({jurisdiction_id: jurisdiction_id});
 } else {
   print("Couldn't find jurisdiction_id " + jurisdiction_id);
 }""" % expected
