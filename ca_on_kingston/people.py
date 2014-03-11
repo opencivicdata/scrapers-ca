@@ -43,7 +43,6 @@ def councillor_data(url):
   p.add_source(url)
   p.add_contact('email', email, None)
   p.add_contact('voice', phone, 'legislature')
-  p.add_contact('address', address, 'legislature')
   p.image = photo_url
 
   return p
@@ -66,6 +65,7 @@ def mayor_data(url):
   p.add_source(url)
   p.add_contact('email', email, None)
   p.add_contact('voice', phone, 'legislature')
+  p.add_contact('address', address, 'legislature')
   p.image = photo_url
 
   return p
