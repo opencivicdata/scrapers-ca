@@ -101,7 +101,7 @@ person_links['maxMatchingItems'] = [
 
 membership_schema['properties']['role']['blank'] = False
 membership_schema['properties']['post_id']['post'] = True
-membership_schema['properties']['role']['enum'] = lambda x: styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
+membership_schema['properties']['role']['enum'] = lambda x: ['candidate'] + styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
 membership_schema['matches'] = [(
@@ -127,7 +127,7 @@ organization_schema['properties']['contact_details'] = organization_contact_deta
 organization_schema['properties']['links'] = organization_links
 
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
-name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
+name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|la|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
 
 person_schema['properties']['name']['blank'] = False
 # Name components can be joined by apostrophes, hyphens or spaces.
