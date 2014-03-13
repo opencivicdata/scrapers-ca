@@ -20,17 +20,15 @@ _contact_details['items']['properties']['type']['enum'] = [
   'voice',
 ]
 _contact_details['items']['properties']['value']['blank'] = False
-_contact_details['items']['properties']['value']['conditionalPattern'] = (
-  re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
-  lambda x: x['type'] == 'email')
-_contact_details['items']['properties']['value']['conditionalPattern'] = (
-  re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
-  lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager'))
-# @todo Uncomment.
-# _contact_details['items']['properties']['value']['conditionalPattern'] = (
-#   # Ends with a locality, a province or territory code, and an optional postal code.
-#   re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
-#   lambda x: x['type'] == 'address')
+_contact_details['items']['properties']['value']['conditionalPattern'] = [
+  (re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
+    lambda x: x['type'] == 'email'),
+  (re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
+    lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
+  # # Ends with a locality, a province or territory code, and an optional postal code.
+  # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
+  #  lambda x: x['type'] == 'address'),
+]
 _contact_details['items']['properties']['note']['enum'] = [
   'constituency',
   'legislature',
@@ -214,11 +212,11 @@ DatetimeValidator.validate_negativePattern = validate_negativePattern
 def validate_conditionalPattern(self, x, fieldname, schema, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
-    pattern, method = arguments
-    if method(x) and not pattern.search(value):
-      self._error("Value %(value)r for field '%(fieldname)s' does "
-                  "not match regular expression '%(pattern)s'",
-                  value, fieldname, pattern=pattern)
+    for pattern, method in arguments:
+      if method(x) and not pattern.search(value):
+        self._error("Value %(value)r for field '%(fieldname)s' does "
+                    "not match regular expression '%(pattern)s'",
+                    value, fieldname, pattern=pattern)
 
 DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
 
