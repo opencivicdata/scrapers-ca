@@ -19,7 +19,9 @@ class KitchenerPersonScraper(Scraper):
     councillor_urls = page.xpath('//div[@id="printArea"]//li/a/@href')
 
     for councillor_url in councillor_urls:
-      yield councillor_data(councillor_url)
+      cd = councillor_data(councillor_url)
+      if cd: # see below about rep page with no ward
+        yield cd
 
     yield mayor_data(MAYOR_PAGE)
 
@@ -27,28 +29,30 @@ def councillor_data(url):
   page = lxmlize(url)
 
   infobox_node = page.xpath('//div[@id="printArea"]')[0]
-  # strip "Councillor" from name
-  name = infobox_node.xpath('string(.//strong[1])')[11:]
-  district = infobox_node.xpath('string(.//strong[2])')
+  name = infobox_node.xpath('string(.//h1[1])')[len('Councillor'):]
+  district = infobox_node.xpath('string(.//h2[contains(., "Ward")])')
 
-  contact_node = infobox_node.xpath('.//p[last()]')[0]
-  email = contact_node.xpath('string(.//a[1])')
-  address = '\n'.join(contact_node.xpath('./text()')[:4])
-  phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
+  contact_node = infobox_node.xpath('.//p[contains(text(), "Coun.")]')[0]
+  email = contact_node.xpath('string(.//text()[contains(., "@")])').split()[-1]
+
+  # TODO: contact details are tricky
+  #address = '\n'.join(contact_node.xpath('./text()')[:4])
+  #phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
   
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-  p = Legislator(name=name, post_id=district, role='Councillor')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  if email:
-    p.add_contact('email', email, None)
-  p.add_contact('voice', phone, 'legislature')
-  p.add_contact('address', address, 'legislature')
-  p.image = photo_url
+  # if statement below because one rep page doesn't list ward:
+  # http://www.kitchener.ca/en/insidecityhall/Yvonne.asp
+  if district:
+    p = Legislator(name=name, post_id=district, role='Councillor')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    if email:
+      p.add_contact('email', email, None)
+    p.image = photo_url
 
-  return p
+    return p
 
 def mayor_data(url):
   page = lxmlize(url)
