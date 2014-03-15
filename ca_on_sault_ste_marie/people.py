@@ -9,6 +9,14 @@ import re
 
 COUNCIL_PAGE = 'http://www.city.sault-ste-marie.on.ca/Open_Page.aspx?ID=174&deptid=1'
 
+def word_to_number(word):
+  words = ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
+           'nine', 'ten')
+  return words.index(word.lower()) + 1
+
+def district_name_using_number(name):
+  district_split = name.split()
+  return ' '.join([district_split[0], str(word_to_number(district_split[1]))])
 
 class SaultSteMariePersonScraper(Scraper):
 
@@ -23,7 +31,8 @@ class SaultSteMariePersonScraper(Scraper):
     photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
     contact_node = mayor_row.xpath('./td')[1]
     name = contact_node.xpath('string(.//strong)')
-    email = contact_node.xpath('string(.//a[2])')
+    raw_email = contact_node.xpath('string(.//a[contains(., "@")]/@href)')
+    email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
 
     p = Legislator(name=name, post_id='Sault Ste. Marie', role='Mayor')
     p.add_source(COUNCIL_PAGE)
@@ -34,16 +43,22 @@ class SaultSteMariePersonScraper(Scraper):
     #alternate between a row represneting a ward name and councilors
     for ward_row, data_row in zip(*[iter(council_data)]*2):
       district = ward_row.xpath('string(.//text()[contains(., "Ward")])')
+      district_num = district_name_using_number(district)
       for councillor_node in data_row.xpath('./td'):
         name = councillor_node.xpath('string(.//strong)')
-        email = councillor_node.xpath('string(.//a)')
+        if not name: #bad markup
+          name = councillor_node.xpath('string(.//strong/following-sibling::'
+                                       'text())')
+        raw_email = councillor_node.xpath('string(.//a[contains(., "@")]/@href)')
+        email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
         photo_url_rel = councillor_node.xpath('string(.//img/@src)')
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
         # address and phone are brittle, inconsistent
 
-        p = Legislator(name=name, post_id=district, role='Councillor')
+        p = Legislator(name=name, post_id=district_num, role='Councillor')
         p.add_source(COUNCIL_PAGE)
-        p.add_contact('email', email, None)
+        if email:
+          p.add_contact('email', email, None)
         p.image = photo_url
 
         yield p
