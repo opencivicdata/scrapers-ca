@@ -30,7 +30,7 @@ LOGGING_CONFIG = {
         }
     },
     'handlers': {
-        'default': {'level': 'DEBUG',
+        'default': {'level': 'INFO',
                     'class': 'pupa.ext.ansistrm.ColorizingStreamHandler',
                     'formatter': 'standard'},
     },
