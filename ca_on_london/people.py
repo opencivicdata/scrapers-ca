@@ -30,9 +30,7 @@ def councillor_data(url):
   name = page.xpath('string(//h1[@id="TitleOfPage"])')
   district = page.xpath('string(//h2)')
 
-  # TODO: They seem to give the same address for all councilors. Do we care?
-  # TODO: Councillor emails are built with js specifically to prevent scraping.
-  # TODO: The JS can be scraped.
+  # TODO: Councillor emails are built with JS to prevent scraping, but the JS can be scraped.
 
   address = page.xpath('string(//div[@class="asideContent"])')
 

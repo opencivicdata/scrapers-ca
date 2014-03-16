@@ -42,7 +42,7 @@ def councillor_data(url):
 def mayor_data(url):
   page = lxmlize(url)
 
-  #TODO: Consider getting photo. It's on a separate page.
+  # TODO: Consider getting photo. It's on a separate page.
   name_text = page.xpath('//p[contains(text(), "Worship Mayor")]/text()')[0]
   name = ' '.join(name_text.split()[3:]) # TODO: probably too brittle
   email = page.xpath('//a[contains(@href, "mailto")]/text()')[0]
