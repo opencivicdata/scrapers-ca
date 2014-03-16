@@ -164,7 +164,7 @@ def validate_post(self, x, fieldname, schema, post):
     value = x.get(fieldname)
     if subdivisions.get(division_id):
       # Not among the known subdivisions for the division.
-      if value not in subdivisions[division_id]:
+      if value not in subdivisions[division_id] and not re.search(r'\AWards \d(?:(?:,| & | and )\d+)+\Z', value):
         self._error("Post: Value %(value)r for field '%(fieldname)s' is not "
                     "in the enumeration: %(options)r",
                     value, fieldname, options=subdivisions[division_id])
