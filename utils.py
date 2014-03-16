@@ -126,8 +126,11 @@ class CanadianJurisdiction(Jurisdiction):
     for scraper_type in ('bills', 'events', 'people', 'speeches', 'votes'):
       try:
         __import__(self.__module__ + '.' + scraper_type)
-      except ImportError:
-        pass
+      except ImportError as e:
+        if e.message == 'No module named %s' % scraper_type:
+          pass
+        else:
+          raise
       else:
         self.provides.append(scraper_type)
 
