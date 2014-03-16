@@ -127,7 +127,7 @@ class CanadianJurisdiction(Jurisdiction):
       try:
         __import__(self.__module__ + '.' + scraper_type)
       except ImportError as e:
-        if e.message == 'No module named %s' % scraper_type:
+        if 'No module named %s' % scraper_type in e.args:
           pass
         else:
           raise
