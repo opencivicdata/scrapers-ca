@@ -6,6 +6,19 @@ import re
 
 COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
 
+SGC = {
+  'St. Clair'        : '3538003',
+  'Dawn-Euphemia'    : '3538007',
+  'Brooke-Alvinston' : '3538015',
+  'Enniskillen'      : '3538016',
+  'Oil Springs'      : '3538018',
+  'Petrolia'         : '3538019',
+  'Sarnia'           : '3538030',
+  'Point Edward'     : '3538031',
+  'Plympton-Wyoming' : '3538035',
+  'Lambton Shores'   : '3538040',
+  'Warwick'          : '3538043',
+}
 
 class LambtonPersonScraper(Scraper):
 
@@ -35,6 +48,10 @@ class LambtonPersonScraper(Scraper):
       self.get_contacts(residential_info, 'residence', p)
       municipal_info = re.findall(r'(?<=Municipal Office:)(.*)', info, flags=re.DOTALL)[0]
       self.get_contacts(municipal_info, 'legislature', p)
+
+      # Needed for Represent integration.
+      p.add_extra('sgc', SGC[district.strip()])
+
       yield p
 
   def get_contacts(self, text, note, councillor):
