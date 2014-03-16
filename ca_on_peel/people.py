@@ -20,7 +20,7 @@ class PeelPersonScraper(Scraper): # @todo creates two people if that person repr
       )
       p.add_contact('email', row['email0'], None)
       p.add_contact('voice', row['Phone0'], 'legislature')
-      p.add_extra('boundary_url', '/boundaries/%s-wards/ward:%s' % (row['MUNIC'].lower(), row['WARDNUM']))
+      p.add_extra('boundary_url', '/boundaries/%s-wards/ward-%s/' % (row['MUNIC'].lower(), row['WARDNUM']))
       p.add_source(COUNCIL_PAGE)
       yield p
 
@@ -32,6 +32,6 @@ class PeelPersonScraper(Scraper): # @todo creates two people if that person repr
         )
         p.add_contact('email', row['email1'], None)
         p.add_contact('voice', row['Phone1'], 'legislature')
-        p.add_extra('boundary_url', '/boundaries/%s-wards/ward:%s' % (row['MUNIC'].lower(), row['WARDNUM']))
+        p.add_extra('boundary_url', '/boundaries/%s-wards/ward-%s/' % (row['MUNIC'].lower(), row['WARDNUM']))
         p.add_source(COUNCIL_PAGE)
         yield p
