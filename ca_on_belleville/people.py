@@ -44,5 +44,5 @@ class BellevillePersonScraper(Scraper):
         elif 'phone' in contact_type:
           p.add_contact('voice', number, 'legislature')
         else:
-          p.add_contact('voice', number, contact_type)  # @todo
+          p.add_contact('voice', number, contact_type)
       yield p
