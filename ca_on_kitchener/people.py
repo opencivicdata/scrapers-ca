@@ -8,7 +8,7 @@ from urlparse import urljoin
 import re
 
 COUNCIL_PAGE = 'http://www.kitchener.ca/en/insidecityhall/WhoIsMyCouncillor.asp'
-MAYOR_PAGE = 'http://www.kitchener.ca//en/insidecityhall/MayorSLandingPage.asp'
+MAYOR_PAGE = 'http://www.kitchener.ca/en/insidecityhall/MayorSLandingPage.asp'
 
 
 class KitchenerPersonScraper(Scraper):
