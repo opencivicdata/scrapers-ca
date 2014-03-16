@@ -7,11 +7,14 @@ File.open('constants.py', 'w') do |f|
   f.write "subdivisions = {}\n"
   f.write "styles = {u'ocd-division/country:ca': [u'MP']}\n"
 
+  names = {}
+
   %w(ca_provinces_and_territories ca_census_divisions ca_census_subdivisions).each do |filename|
     rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/#{filename}.csv"))
     rows.shift
-    rows.each do |row|
-      f.write %(names[u'#{row[0]}'] = u"#{row[1]}"\n)
+    rows.each do |id,name|
+      names[id] = name
+      f.write %(names[u'#{id}'] = u"#{name}"\n)
     end
   end
 
@@ -19,26 +22,37 @@ File.open('constants.py', 'w') do |f|
     f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'] = []\n)
     rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/province-#{type_id}-electoral_districts.csv"))
     rows.shift
-    rows.each do |row|
-      f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'].append(u"#{row[1]}")\n)
+    rows.each do |_,name|
+      f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'].append(u"#{name}")\n)
     end
   end
 
   rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv'))
   rows.shift
-  rows.each do |row|
-    f.write %(subdivisions[u'#{row[0]}'] = [u"#{row[1]}"]\n)
+  rows.each do |id,name|
+    f.write %(subdivisions[u'#{id}'] = [u"#{name}"]\n)
   end
 
   rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_municipal_subdivisions.csv'))
   rows.shift
-  rows.each do |row|
-    identifier, _, pair = row[0].rpartition('/')
-    f.write %(subdivisions[u'#{identifier}'].append(u"#{row[1]}")\n)
-    if pair[/:\d+\z/]
-      alternative_name = pair.capitalize.sub(':', ' ')
-      f.write %(subdivisions[u'#{identifier}'].append(u"#{alternative_name}")\n) unless row[1] == alternative_name
+  rows.each do |id,name|
+    identifier, _, pair = id.rpartition('/')
+    f.write %(subdivisions[u'#{identifier}'].append(u"#{name}")\n)
+    if pair[/:\d+\z/] # Alternate number-based names
+      alternate_name = pair.capitalize.sub(':', ' ')
+      f.write %(subdivisions[u'#{identifier}'].append(u"#{alternate_name}")\n) unless name == alternate_name
     end
+  end
+
+  seen = {}
+  rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_municipal_subdivisions-parent_id.csv'))
+  rows.shift
+  rows.sort_by(&:last).each do |id,parent_id|
+    unless seen.key?(parent_id)
+      f.write %(subdivisions[u'#{parent_id}'] = []\n)
+      seen[parent_id] = true
+    end
+    f.write %(subdivisions[u'#{parent_id}'].append(u"#{names.fetch(id)}")\n)
   end
 
   headers = ['Leader', 'Deputy Leader', 'Member', 'Member At Large']
