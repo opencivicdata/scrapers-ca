@@ -8,10 +8,11 @@ import re
 COUNCIL_PAGE = 'http://opendata.peelregion.ca/media/25713/ward20102014_csv_12.2013.csv'
 
 
-class PeelPersonScraper(Scraper):
+class PeelPersonScraper(Scraper): # @todo creates two people if that person represents two wards
 
   def get_people(self):
     for row in csv_reader(COUNCIL_PAGE, header=True, headers={'Cookie': 'incap_ses_168_68279=7jCHCh608QQSFVti3dtUAviu/1IAAAAAIRf6OsZL0NttnlzANkVb6w=='}):
+
       p = Legislator(
         name='%(FirstName0)s %(LastName0)s' % row,
         post_id='%(MUNIC)s Ward %(WARDNUM)s' % row,
@@ -19,6 +20,7 @@ class PeelPersonScraper(Scraper):
       )
       p.add_contact('email', row['email0'], None)
       p.add_contact('voice', row['Phone0'], 'legislature')
+      p.add_extra('boundary_url', '/boundaries/%s-wards/ward:%s' % (row['MUNIC'].lower(), row['WARDNUM']))
       p.add_source(COUNCIL_PAGE)
       yield p
 
@@ -30,5 +32,6 @@ class PeelPersonScraper(Scraper):
         )
         p.add_contact('email', row['email1'], None)
         p.add_contact('voice', row['Phone1'], 'legislature')
+        p.add_extra('boundary_url', '/boundaries/%s-wards/ward:%s' % (row['MUNIC'].lower(), row['WARDNUM']))
         p.add_source(COUNCIL_PAGE)
         yield p
