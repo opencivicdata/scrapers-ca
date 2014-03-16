@@ -134,6 +134,7 @@ person_schema['properties']['name']['blank'] = False
 person_schema['properties']['name']['compiledPattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
 person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
 person_schema['properties']['gender']['enum'] = ['male', 'female']
+# person_schema['properties']['image']['blank'] = False
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
 # post_id is used to disambiguate people within a jurisdiction.
