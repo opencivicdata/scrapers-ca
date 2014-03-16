@@ -33,10 +33,9 @@ def councillor_data(url):
 
   name = contact_node.xpath('string(./span[1])')
   district = contact_node.xpath('string(./text()[2])')
-  district_id = district.split(':')[0] #TODO: don't reject name?
+  district_id = district.split(':')[0] # TODO: don't reject name?
   email = contact_node.xpath('string(.//a)')
-  #TODO: this mostly doesn't work
-  phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]
+  phone = contact_node.xpath('string(./text()[5])').split(': ')[-1] # TODO: this mostly doesn't work
   photo_url_rel = contact_node.xpath('string(.//img/@src)')
   photo_url = urljoin(url, photo_url_rel)
 
@@ -57,7 +56,6 @@ def mayor_data(url):
   contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
 
   name = contact_node.xpath('string(./span[1])')
-  address = contact_node.xpath('string(.//p)')
   email = contact_node.xpath('string(.//a)')
   photo_url_rel = contact_node.xpath('string(.//img/@src)')
   photo_url = urljoin(url, photo_url_rel)
@@ -66,7 +64,6 @@ def mayor_data(url):
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
-  p.add_contact('address', address, 'legislature')
   p.image = photo_url
 
   return p
