@@ -27,6 +27,8 @@ def councillor_data(html):
   district, phone = html.xpath('./div[@class="wardInfo"]/text()')
   photo = html.xpath('string((.//@src)[1])')
 
+
+  #TODO: councillors represent multiple wards. right now this creates a warning.
   p = Legislator(name=name, post_id=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_contact('voice', phone, 'legislature')

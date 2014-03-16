@@ -13,7 +13,7 @@ class HamiltonPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
     council_node = page.xpath('//span[@id="RadEditorPlaceHolderControl0"]')[0]
-    councillor_urls = council_node.xpath('./table[2]//a/@href')
+    councillor_urls = council_node.xpath('./table[2]//p/a[not(img)]/@href')
 
     for councillor_url in councillor_urls:
       yield councillor_data(councillor_url)
@@ -35,8 +35,11 @@ def councillor_data(url):
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
-  p.add_contact('voice', phone, 'legislature')
-  p.image = photo_url
+
+  if phone:
+    p.add_contact('voice', phone, 'legislature')
+  if photo_url:
+    p.image = photo_url
 
   return p
 

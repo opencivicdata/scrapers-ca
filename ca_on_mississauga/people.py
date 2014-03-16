@@ -27,7 +27,8 @@ def councillor_data(url):
 
   name = page.xpath('string(//strong[1]/text())')
   district = page.xpath('string(//span[@class="pageHeader"])')
-  email = page.xpath('string(//div[@class="blockcontentclear"]//a[1])')
+  email = page.xpath('string(//div[@class="blockcontentclear"]//a/'
+                     '@href[contains(., "@")][1])')
   photo = page.xpath('string(//div[@class="blockcontentclear"]//img[1]/@src)')
 
   p = Legislator(name=name, post_id=district, role='Councillor')
