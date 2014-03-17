@@ -16,21 +16,20 @@ class KitchenerPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillor_urls = page.xpath('//div[@id="printArea"]//li/a/@href')
+    councillor_nodes = page.xpath('//div[@id="printArea"]//li')
 
-    for councillor_url in councillor_urls:
-      cd = councillor_data(councillor_url)
-      if cd: # see below about rep page with no ward
-        yield cd
+    for node in councillor_nodes:
+      councillor_url = node.xpath('string(./a/@href)')
+      ward = node.xpath('string(./strong)').split('-')[0]
+      yield councillor_data(councillor_url, ward)
 
     yield mayor_data(MAYOR_PAGE)
 
-def councillor_data(url):
+def councillor_data(url, ward):
   page = lxmlize(url)
 
   infobox_node = page.xpath('//div[@id="printArea"]')[0]
   name = infobox_node.xpath('string(.//h1[1])')[len('Councillor'):]
-  district = infobox_node.xpath('string(.//h2[contains(., "Ward")])')
 
   contact_node = infobox_node.xpath('.//p[contains(text(), "Coun.")]')[0]
   email = contact_node.xpath('string(.//text()[contains(., "@")])').split()[-1]
@@ -42,17 +41,14 @@ def councillor_data(url):
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-  # if statement below because one rep page doesn't list ward:
-  # http://www.kitchener.ca/en/insidecityhall/Yvonne.asp
-  if district:
-    p = Legislator(name=name, post_id=district, role='Councillor')
-    p.add_source(COUNCIL_PAGE)
-    p.add_source(url)
-    if email:
-      p.add_contact('email', email, None)
-    p.image = photo_url
+  p = Legislator(name=name, post_id=ward, role='Councillor')
+  p.add_source(COUNCIL_PAGE)
+  p.add_source(url)
+  if email:
+    p.add_contact('email', email, None)
+  p.image = photo_url
 
-    return p
+  return p
 
 def mayor_data(url):
   page = lxmlize(url)
