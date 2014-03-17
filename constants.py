@@ -12761,12 +12761,26 @@ subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"Greater Madawaska")
 subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"North Algona Wilberforce")
 subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"McNab/Braeside")
 subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"Petawawa")
+styles[u'ocd-division/country:ca/csd:1001365'] = []
+styles[u'ocd-division/country:ca/csd:1001365'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:1001365'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:1001519'] = []
+styles[u'ocd-division/country:ca/csd:1001519'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:1001519'].append(u"Deputy Mayor")
+styles[u'ocd-division/country:ca/csd:1001519'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:1001519'].append(u"Councillor at Large")
+styles[u'ocd-division/country:ca/csd:1010013'] = []
+styles[u'ocd-division/country:ca/csd:1010013'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:1010013'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:1102080'] = []
 styles[u'ocd-division/country:ca/csd:1102080'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:1102080'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:1103025'] = []
 styles[u'ocd-division/country:ca/csd:1103025'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:1103025'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:1209034'] = []
+styles[u'ocd-division/country:ca/csd:1209034'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:1209034'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:1217030'] = []
 styles[u'ocd-division/country:ca/csd:1217030'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:1217030'].append(u"Councillor")
