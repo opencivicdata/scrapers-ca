@@ -6,7 +6,6 @@ import re
 
 COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
 
-
 class LambtonPersonScraper(Scraper):
 
   def get_people(self):
@@ -35,6 +34,7 @@ class LambtonPersonScraper(Scraper):
       self.get_contacts(residential_info, 'residence', p)
       municipal_info = re.findall(r'(?<=Municipal Office:)(.*)', info, flags=re.DOTALL)[0]
       self.get_contacts(municipal_info, 'legislature', p)
+
       yield p
 
   def get_contacts(self, text, note, councillor):

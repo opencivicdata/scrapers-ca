@@ -95,6 +95,4 @@ class QuebecPersonScraper(Scraper):
         p.add_contact(**contact)
       for k, v in extra.items():
         p.add_extra(k, v)
-      if kwargs.get('party'):
-        p.add_extra('party', kwargs['party'])
       yield p
