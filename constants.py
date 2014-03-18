@@ -12766,9 +12766,9 @@ styles[u'ocd-division/country:ca/csd:1001519'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:1001519'].append(u"Deputy Mayor")
 styles[u'ocd-division/country:ca/csd:1001519'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:1001519'].append(u"Councillor at Large")
-styles[u'ocd-division/country:ca/csd:1010013'] = []
-styles[u'ocd-division/country:ca/csd:1010013'].append(u"Mayor")
-styles[u'ocd-division/country:ca/csd:1010013'].append(u"Councillor")
+styles[u'ocd-division/country:ca/csd:1102075'] = []
+styles[u'ocd-division/country:ca/csd:1102075'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:1102075'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:1102080'] = []
 styles[u'ocd-division/country:ca/csd:1102080'].append(u"Mayor")
 styles[u'ocd-division/country:ca/csd:1102080'].append(u"Councillor")
