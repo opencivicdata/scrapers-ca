@@ -38,7 +38,7 @@ def councillor_data(url, name, ward):
   m = Legislator(name=name, post_id=ward, role='Councillor')
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
-  m.add_contact('Voice', phone, 'legislature')
+  m.add_contact('voice', phone, 'legislature')
   m.image = photo_url
   yield m
 

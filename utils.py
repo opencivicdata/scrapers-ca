@@ -183,6 +183,8 @@ class CanadianLegislator(Legislator):
     if note in CONTACT_DETAIL_NOTE_MAP:
       note = CONTACT_DETAIL_NOTE_MAP[note]
 
+    type = type.lower()
+
     if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
       value = clean_telephone_number(clean_string(value))
     elif type == 'address':
