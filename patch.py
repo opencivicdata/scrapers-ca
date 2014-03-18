@@ -1,3 +1,4 @@
+# coding: utf-8
 from copy import deepcopy
 
 import regex as re
@@ -113,13 +114,18 @@ membership_schema['matches'] = [(
       # Javascript-encoded email
       'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council', # Cape Breton
       # Webform email
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
       'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2423027/council', # Québec
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530016/council', # Waterloo
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4706027/council', # Regina
     ) or x['organization_id'] in (
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council', # Saguenay
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
-    ) and x['role'] == 'Mayor'
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530013/council', # Kitchener
+    ) and x['role'] in ('Maire', 'Mayor')
   ),
   'Membership has no emails %(organization_id)s %(post_id)r',
 )]

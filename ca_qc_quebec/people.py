@@ -28,6 +28,14 @@ class QuebecPersonScraper(Scraper):
         district = re.search(u'\ADistrict électoral (?:de|du|des) (.+) - ?\d+\Z', text[0].strip(), flags=re.U).group(1)
         role = 'Conseiller'
 
+      if district == 'Monts':
+        district = 'Les Monts'
+      elif district == 'Plateau':
+        district = 'Le Plateau'
+      else:
+        district = re.sub(u'–', u'—', district) # n-dash, m-dash
+        district = re.sub('\Ala ', 'La ', district)
+
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = councillor.xpath('./p/img/@src')[0]
