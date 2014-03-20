@@ -86,6 +86,9 @@ class QuebecPersonScraper(Scraper):
             contacts.push({'note': office['note'], type: type, 'value': office[type]})
 
       if 'name' in kwargs:
+        if kwargs.get('party') == u'Québec Solidaire':
+          kwargs['party'] = u'Québec solidaire'
+
         p = Legislator(**kwargs)
         p.add_source(COUNCIL_PAGE)
         if email:
