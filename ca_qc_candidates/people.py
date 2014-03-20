@@ -85,14 +85,15 @@ class QuebecPersonScraper(Scraper):
           if office.get(type):
             contacts.push({'note': office['note'], type: type, 'value': office[type]})
 
-      p = Legislator(**kwargs)
-      p.add_source(COUNCIL_PAGE)
-      if email:
-        p.add_contact('email', email, None)
-      for link in links:
-        p.add_link(**links)
-      for contact in contacts:
-        p.add_contact(**contact)
-      for k, v in extra.items():
-        p.add_extra(k, v)
-      yield p
+      if 'name' in kwargs:
+        p = Legislator(**kwargs)
+        p.add_source(COUNCIL_PAGE)
+        if email:
+          p.add_contact('email', email, None)
+        for link in links:
+          p.add_link(**links)
+        for contact in contacts:
+          p.add_contact(**contact)
+        for k, v in extra.items():
+          p.add_extra(k, v)
+        yield p
