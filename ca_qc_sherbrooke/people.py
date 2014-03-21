@@ -37,4 +37,8 @@ class SherbrookePersonScraper(Scraper):
       if email:
         email = email[0].split(':')[1]
         p.add_contact('email', email, None)
+      if district == 'Arrondissement de Brompton':
+        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/arrondissement-de-brompton/')
+      elif district == 'Arrondissement de Lennoxville':
+        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/arrondissement-de-lennoxville/')
       yield p
