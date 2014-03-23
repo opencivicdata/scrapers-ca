@@ -21,10 +21,8 @@ class SherbrookePersonScraper(Scraper):
         district = 'Sherbrooke'
         role = 'Maire'
       else:
-        district = page.xpath('//div[@class="csc-default"]//a[@target="_blank"]/text()')[0].replace('district', '').replace('Domaine Howard', 'Domaine-Howard')
+        district = page.xpath('//div[@class="csc-default"]//a[@target="_blank"]/text()')[0].replace('district', '').replace('Domaine Howard', 'Domaine-Howard').strip()
         role = 'Conseiller'
-      if district in (' de Brompton', ' de Lennoxville'):
-        district = 'Arrondissement%s' % district
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
@@ -37,8 +35,8 @@ class SherbrookePersonScraper(Scraper):
       if email:
         email = email[0].split(':')[1]
         p.add_contact('email', email, None)
-      if district == 'Arrondissement de Brompton':
-        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/arrondissement-de-brompton/')
-      elif district == 'Arrondissement de Lennoxville':
-        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/arrondissement-de-lennoxville/')
+      if district == 'de Brompton':
+        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/brompton/')
+      elif district == 'de Lennoxville':
+        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/lennoxville/')
       yield p
