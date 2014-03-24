@@ -23,7 +23,7 @@ class CalgaryPersonScraper(Scraper):
 
     mayor_node = page.xpath('//div[contains(@class, "cocis-image-panel")]')[0]
     photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('string(.//img/@src)'))
-    name = mayor_node.xpath('string(.//a[2])')
+    name = mayor_node.xpath('string(.//a//text())')
     mayor_page = lxmlize(MAYOR_PAGE)
     email = mayor_page.xpath('string(//a[contains(., "@")])')
     phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
