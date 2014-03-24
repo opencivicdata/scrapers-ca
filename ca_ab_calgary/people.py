@@ -16,7 +16,7 @@ class CalgaryPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
     nodes = page.xpath('//div[contains(@class,"cocis-has-caption")]')[1:]
     for node in nodes:
-      url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a[1]/href)'))
+      url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a[1]/@href)'))
       name = node.xpath('string(.//a[2])')
       ward = ' '.join(node.xpath('string(.//strong)').split()[:-1])
       yield councillor_data(url, name, ward)
@@ -38,14 +38,15 @@ class CalgaryPersonScraper(Scraper):
 
 def councillor_data(url, name, ward):
   page = lxmlize(url)
-  photo_url_rel = page.xpath('div[@id="contactInfo"]//img[1]/@src')
+  photo_url_rel = page.xpath('string(//div[@id="contactInfo"]//img[1]/@src)')
   photo_url = urljoin(url, photo_url_rel)
   # no email, there's a contact form!
-  phone = page.xpath('//strong[contains(., "Phone")]/following-sibling::text()')
+  phone = page.xpath('string(//p[contains(./strong, "Phone")]/text())').strip()
 
   p = Legislator(name=name, post_id=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
-  p.add_contact('voice', phone, 'legislature')
+  if phone:
+    p.add_contact('voice', phone, 'legislature')
   p.image = photo_url
 
   return p
