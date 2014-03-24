@@ -18,6 +18,13 @@ File.open('constants.py', 'w') do |f|
     end
   end
 
+  f.write %(subdivisions[u'ocd-division/country:ca'] = []\n)
+  rows = CSV.parse(open("https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_federal_electoral_districts.csv"))
+  rows.shift
+  rows.each do |_,name|
+    f.write %(subdivisions[u'ocd-division/country:ca'].append(u"#{name}")\n)
+  end
+
   %w(pe ns nb qc on mb sk ab bc).each do |type_id|
     f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'] = []\n)
     rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/province-#{type_id}-electoral_districts.csv"))

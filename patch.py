@@ -120,6 +120,7 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530016/council', # Waterloo
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4706027/council', # Regina
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4806016/council', # Calgary
     ) or x['organization_id'] in (
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council', # Saguenay
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto

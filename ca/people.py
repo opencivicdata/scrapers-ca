@@ -30,7 +30,7 @@ class CanadaPersonScraper(Scraper):
       photo = mp_page.xpath('string(//div[@class="profile overview header"]//'
                             'img/@src)')
 
-      m = Legislator(name=name, post_id=constituency, role='MP')
+      m = Legislator(name=name, post_id=constituency, role='MP', chamber='lower', party=party)
       m.add_source(COUNCIL_PAGE)
       m.add_contact('email', email, None)
       m.add_contact('voice', phone, 'legislature')
