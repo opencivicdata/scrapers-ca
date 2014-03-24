@@ -25,6 +25,8 @@ class WinnipegPersonScraper(Scraper):
     mayor_photo_url = mayor_node.xpath('string(./img/@src)')
     m = Legislator(name=mayor_name, post_id='Winnipeg', role='Mayor')
     m.add_source(COUNCIL_PAGE)
+    # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail
+    m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca', None)
     m.image = mayor_photo_url
     yield m
 
