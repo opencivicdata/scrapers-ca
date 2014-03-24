@@ -110,6 +110,7 @@ def get_definition(division_id, aggregation=False):
       ocdid_to_name_map[row[0].decode('utf8')] = row[1].decode('utf8')
 
   codes = province_and_territory_codes()
+  ocd_id_to_code_map = {v: k for k, v in codes.items()}
 
   expected = {}
 
@@ -131,6 +132,7 @@ def get_definition(division_id, aggregation=False):
       expected['name'] = '%s House of Assembly' % ocdid_to_name_map[division_id]
     else:
       expected['name'] = 'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
+    expected['geographic_code'] = ocd_id_to_code_map[division_id]
     jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
   elif ocd_type == 'cd':
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
