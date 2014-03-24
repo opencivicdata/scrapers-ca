@@ -17,13 +17,13 @@ class CalgaryPersonScraper(Scraper):
     nodes = page.xpath('//div[contains(@class,"cocis-has-caption")]')[1:]
     for node in nodes:
       url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a[1]/@href)'))
-      name = node.xpath('string(.//a//text()')
+      name = node.xpath('string(.//a//text())')
       ward = ' '.join(node.xpath('string(.//strong)').split()[:-1])
       yield councillor_data(url, name, ward)
 
     mayor_node = page.xpath('//div[contains(@class, "cocis-image-panel")]')[0]
     photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('string(.//img/@src)'))
-    name = mayor_node.xpath('string(.//a//text()')
+    name = mayor_node.xpath('string(.//a//text())')
     mayor_page = lxmlize(MAYOR_PAGE)
     email = mayor_page.xpath('string(//a[contains(., "@")])')
     phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
