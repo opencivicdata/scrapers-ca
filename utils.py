@@ -291,7 +291,9 @@ def clean_address(s):
 
 
 def lxmlize(url, encoding='utf-8'):
-  entry = urlopen(url).encode(encoding)
+  entry = urlopen(url)
+  if encoding != 'utf-8' or not isinstance(entry, unicode):
+    entry = entry.encode(encoding)
   page = lxml.html.fromstring(entry)
   meta = page.xpath('//meta[@http-equiv="refresh"]')
   if meta:
