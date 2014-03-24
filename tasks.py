@@ -27,10 +27,10 @@ def province_and_territory_codes():
       province_and_territory_codes_memo[row[4]] = row[0]
   return province_and_territory_codes_memo
 
-# Reads a remote CSV file.
-
-
 def csv_reader(url):
+  """
+  Reads a remote CSV file.
+  """
   return csv.reader(StringIO(requests.get(url).content))
 
 
@@ -386,9 +386,11 @@ if (db.jurisdictions.count({_id: jurisdiction_id})) {
   print 'http://represent.opennorth.ca/admin/representatives/representativeset/?o=1'
 
 
-# Update populations.py in the represent-canada repository.
 @task
 def populations():
+  """
+  Update populations.py in the represent-canada repository.
+  """
   reader = csv_reader('http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/hlt-fst/pd-pl/FullFile.cfm?T=301&LANG=Eng&OFT=CSV&OFN=98-310-XWE2011002-301.CSV')
   reader.next()  # title
   reader.next()  # headers
