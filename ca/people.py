@@ -15,8 +15,8 @@ class CanadaPersonScraper(Scraper):
     rows = page.xpath('//div[@class="main-content"]//tr')[1:]
     for row in rows:
       name_cell = row.xpath('./td[1]')[0]
-      last_name = name_cell.xpath('string(.//span[2])')
-      first_name = name_cell.xpath('string(.//span[1])')
+      last_name = name_cell.xpath('string(.//span[1])')
+      first_name = name_cell.xpath('string(.//span[2])')
       name = '%s %s' % (first_name, last_name)
       constituency = row.xpath('string(./td[2])')
       province = row.xpath('string(./td[3])')
