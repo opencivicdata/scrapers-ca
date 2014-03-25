@@ -15,3 +15,4 @@ invoke==0.7.0
 pep8==1.4.6
 requests==1.0.0
 Unidecode==0.04.14
+cssselect==0.9.1
