@@ -7,4 +7,4 @@ class Manitoba(CanadianJurisdiction):
   geographic_code = 46
   division_name = u'Manitoba'
   name = u'Legislative Assembly of Manitoba'
-  url = ''
+  url = 'http://www.gov.mb.ca/legislature/'

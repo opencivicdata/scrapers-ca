@@ -7,4 +7,4 @@ class Alberta(CanadianJurisdiction):
   geographic_code = 48
   division_name = u'Alberta'
   name = u'Legislative Assembly of Alberta'
-  url = ''
+  url = 'https://www.assembly.ab.ca'
