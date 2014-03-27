@@ -1,0 +1,37 @@
+# coding: utf-8
+from pupa.scrape import Scraper
+
+from utils import lxmlize, CanadianLegislator as Legislator
+from lxml import etree
+
+import re
+
+from urlparse import urljoin
+
+COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
+
+class NewBrunswickPersonScraper(Scraper):
+
+  def get_people(self):
+    page = lxmlize(COUNCIL_PAGE)
+    councillor_table = page.xpath('//body/div[2]/table[2]')[0]
+    for row in councillor_table.xpath('.//tr'):
+      riding, table_name, email = (' '.join(td.xpath('string(.)').split())
+          for td in row[1:])
+      riding_fixed = riding.replace(u'\x97', '-')
+      name_with_status, party = re.match(r'(.+) \((.+)\)', table_name).groups()
+      name = name_with_status.split(',')[0]
+      photo_page_url = row[2][0].attrib['href']
+      photo_url = get_photo_url(photo_page_url)
+
+      p = Legislator(name=name, post_id=riding_fixed, role='MLA', 
+          image=photo_url)
+      p.add_contact('email', email, None)
+      p.add_source(photo_page_url)
+      p.add_source(COUNCIL_PAGE)
+      yield p
+
+def get_photo_url(url):
+  page = lxmlize(url)
+  rel = page.xpath('string(//img[2]/@src)')
+  return urljoin(url, rel)
