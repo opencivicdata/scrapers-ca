@@ -10,7 +10,7 @@ COUNCIL_PAGE = 'http://www.townofstratford.ca/town-hall/government/town-council/
 class StratfordPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
 
     yield self.scrape_mayor(page)
 

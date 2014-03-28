@@ -13,7 +13,7 @@ MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
 class HalifaxPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
     nodes = page.xpath('//table[@width="484"]//tr')
     try:
       for district_row, councillor_row, contact_row, _ in chunks(nodes, 4):
@@ -32,9 +32,9 @@ class HalifaxPersonScraper(Scraper):
       # on the last run through, there will be less than 4 rows to unpack
       pass
 
-    mayor_page = lxmlize(MAYOR_PAGE)
+    mayor_page = lxmlize(MAYOR_PAGE, 'iso-8859-1')
     name = mayor_page.xpath('string(//h1[contains(., "Bio")])')[:-len(' Bio')]
-    contact_page = lxmlize(MAYOR_CONTACT_URL)
+    contact_page = lxmlize(MAYOR_CONTACT_URL, 'iso-8859-1')
     email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
     p = Legislator(name=name, post_id='Halifax', role='Councillor')

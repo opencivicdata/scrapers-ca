@@ -9,7 +9,7 @@ from urlparse import urlparse
 
 import lxml.html
 import requests
-from scrapelib import urlopen
+from scrapelib import Scraper as Scrapelib
 from pupa.scrape import Scraper, Jurisdiction, Legislator
 from pupa.models import Membership, Person
 
@@ -290,8 +290,10 @@ def clean_address(s):
   return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
 
 
-def lxmlize(url, encoding='utf-8'):
-  entry = urlopen(url)
+def lxmlize(url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
+  scraper = Scrapelib(follow_robots=False, requests_per_minute=0)
+  scraper.user_agent = user_agent
+  entry = scraper.urlopen(url)
   if encoding != 'utf-8' or not isinstance(entry, unicode):
     entry = entry.encode(encoding)
   page = lxml.html.fromstring(entry)
