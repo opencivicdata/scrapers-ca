@@ -9,6 +9,11 @@ COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members?view=ListAll'
 
 
 class CanadaPersonScraper(Scraper):
+  """
+  The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
+  accessible from http://www.parl.gc.ca/Parliamentarians/en/members has no
+  contact information or photo URLs.
+  """
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
