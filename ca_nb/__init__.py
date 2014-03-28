@@ -7,4 +7,4 @@ class NewBrunswick(CanadianJurisdiction):
   geographic_code = 13
   division_name = u'New Brunswick'
   name = u'Legislative Assembly of New Brunswick'
-  url = ''
+  url = 'http://www.gnb.ca/legis/index.asp'

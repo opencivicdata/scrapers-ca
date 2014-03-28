@@ -19,6 +19,8 @@ class NewBrunswickPersonScraper(Scraper):
       riding, table_name, email = (' '.join(td.xpath('string(.)').split())
           for td in row[1:])
       riding_fixed = riding.replace(u'\x97', '-')
+      if riding_fixed == u'Miramichi Bay-Neguac':
+        riding_fixed = u'Miramichi-Bay-Neguac'
       name_with_status, party = re.match(r'(.+) \((.+)\)', table_name).groups()
       name = name_with_status.split(',')[0]
       photo_page_url = row[2][0].attrib['href']

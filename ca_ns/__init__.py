@@ -7,4 +7,4 @@ class NovaScotia(CanadianJurisdiction):
   geographic_code = 12
   division_name = u'Nova Scotia'
   name = u'Nova Scotia House of Assembly'
-  url = ''
+  url = 'http://nslegislature.ca/'
