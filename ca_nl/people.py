@@ -21,6 +21,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
         continue # there is a vacant district
       photo_page = lxmlize(photo_page_url)
       photo_url = photo_page.xpath('string(//table//img/@src)')
+      district = district.replace(' - ', u'—')  # m-dash
       p = Legislator(name=name, post_id=district, role='MHA', image=photo_url)
       p.add_source(PARL_URL)
       p.add_source(photo_page_url)

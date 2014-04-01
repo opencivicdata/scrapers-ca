@@ -25,7 +25,7 @@ File.open('constants.py', 'w') do |f|
     f.write %(subdivisions[u'ocd-division/country:ca'].append(u"#{name}")\n)
   end
 
-  %w(pe ns nb qc on mb sk ab bc).each do |type_id|
+  %w(nl pe ns nb qc on mb sk ab bc).each do |type_id|
     f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'] = []\n)
     rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/province-#{type_id}-electoral_districts.csv"))
     rows.shift

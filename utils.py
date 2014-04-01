@@ -217,7 +217,8 @@ class AggregationLegislator(Person):
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
-honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\b\.? ')
+honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ')
+honorific_suffix_re = re.compile(r', Ph\.D\Z')
 
 table = {
   ord(u'​'): u' ',  # zero-width space
@@ -251,7 +252,7 @@ def clean_string(s):
 
 
 def clean_name(s):
-  return honorific_prefix_re.sub('', clean_string(s))
+  return honorific_suffix_re.sub('', honorific_prefix_re.sub('', clean_string(s)))
 
 
 def clean_telephone_number(s):
@@ -260,7 +261,7 @@ def clean_telephone_number(s):
   @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
   """
 
-  splits = re.split(r'[\s-](?:x|ext\.?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
+  splits = re.split(r'(?:/|x|ext\.?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
   digits = re.sub(r'\D', '', splits[0])
 
   if len(digits) == 10:
