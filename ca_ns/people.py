@@ -5,20 +5,20 @@ from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
-SOURCE_URL = 'http://nslegislature.ca/index.php/people/members/'
+COUNCIL_PAGE = 'http://nslegislature.ca/index.php/people/members/'
 
 
 class NovaScotiaPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(SOURCE_URL)
+    page = lxmlize(COUNCIL_PAGE)
     for row in page.xpath('//div[@id="content"]/table/tbody/tr'):
       full_name, party, post = row.xpath('./td//text()')[:3]
       name = ' '.join(reversed(full_name.split(',')))
       detail_url = row[0][0].attrib['href']
       image, phone = get_details(detail_url)
       p = Legislator(name=name, post_id=post, role='MLA', image=image)
-      p.add_source(SOURCE_URL)
+      p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       p.add_contact('voice', phone, 'legislature')
       yield p

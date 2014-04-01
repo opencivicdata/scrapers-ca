@@ -10,7 +10,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 import csv
 
-CSV_CREATION_URL = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
+COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 
 class AlbertaPersonScraper(Scraper):
 
@@ -23,13 +23,13 @@ class AlbertaPersonScraper(Scraper):
       name_without_status = name.split(',')[0]
       p = Legislator(name=name_without_status, post_id=mla['Riding Name'], 
           role='MLA')
-      p.add_source(CSV_CREATION_URL)
+      p.add_source(COUNCIL_PAGE)
       p.add_contact('email', mla['Email'], None)
       p.add_contact('voice', mla['Phone Number'], 'legislature')
       yield p
 
 def get_csv_url():
-  csv_gen_page = lxmlize(CSV_CREATION_URL)
+  csv_gen_page = lxmlize(COUNCIL_PAGE)
 
   # ASP forms store session state. Looks like we can't just play back a POST.
   get_hidden_val = lambda p, v: p.xpath('string(//input[@id="%s"]/@value)' % v)
@@ -45,7 +45,7 @@ def get_csv_url():
     '__EVENTVALIDATION': asp_event_validation
   }
 
-  resp = requests.post(CSV_CREATION_URL, data=post_data)
+  resp = requests.post(COUNCIL_PAGE, data=post_data)
   result_page = lxml.html.fromstring(resp.text)
   return result_page.xpath('string(//a[@id="_ctl0_HL_file"]/@href)')
 

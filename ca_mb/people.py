@@ -7,12 +7,12 @@ import re
 
 from urlparse import urljoin
 
-MEMBER_LIST_URL = 'http://www.gov.mb.ca/legislature/members/alphabetical.html'
+COUNCIL_PAGE = 'http://www.gov.mb.ca/legislature/members/alphabetical.html'
 
 class ManitobaPersonScraper(Scraper):
 
   def get_people(self):
-    member_page = lxmlize(MEMBER_LIST_URL)
+    member_page = lxmlize(COUNCIL_PAGE)
     table = member_page.cssselect('table[width="496"] table[width="537"]:'
                                   'contains("Constituency")')[0]
     rows = table.cssselect('tr')[1:]
@@ -26,14 +26,14 @@ class ManitobaPersonScraper(Scraper):
       district = ' '.join(constitcell.text_content().split())
       data = {
                   'elected_office': 'MLA',
-                  'source_url': MEMBER_LIST_URL
+                  'source_url': COUNCIL_PAGE
               }
 
       url = namecell.cssselect('a')[0].get('href')
       photo, email = get_details(url)
 
       p = Legislator(name=name, post_id=district, role='MLA')
-      p.add_source(MEMBER_LIST_URL)
+      p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = photo
       p.add_contact('email', email, None)
