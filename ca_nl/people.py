@@ -12,7 +12,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    for row in page.xpath('//table[1]/tr')[1:]:
+    for row in page.xpath('//table[not(@id="footer")]/tr')[1:]:
       name, district, _, email = [cell.xpath('string(.)') for cell in row]
       phone = row[2].xpath('string(text()[1])')
       try:
