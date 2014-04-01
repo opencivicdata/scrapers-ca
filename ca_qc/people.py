@@ -19,9 +19,11 @@ class QuebecPersonScraper(Scraper):
       detail_url = row[0][0].attrib['href']
       detail_page = lxmlize(detail_url)
       photo_url = detail_page.xpath('string(//img[@class="photoDepute"]/@src)')
+      division = division.replace(u'–', u'—')  # n-dash, m-dash
       p = Legislator(name=name, post_id=division, role='MNA', image=photo_url)
       p.add_source(ASSEMBLY_PAGE)
       p.add_source(detail_url)
-      p.add_contact('email', email, None)
+      if email:  # Premier may not have email.
+        p.add_contact('email', email, None)
       yield p
 
