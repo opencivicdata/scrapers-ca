@@ -130,6 +130,8 @@ def get_definition(division_id, aggregation=False):
       expected['name'] = '%s Municipalities' % ocdid_to_name_map[division_id]
     elif ocd_type_id in ('nl', 'ns'):
       expected['name'] = '%s House of Assembly' % ocdid_to_name_map[division_id]
+    elif ocd_type_id == 'qc':
+      expected['name'] = 'Assemblée nationale du Québec'
     else:
       expected['name'] = 'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
     expected['geographic_code'] = ocd_id_to_code_map[division_id]

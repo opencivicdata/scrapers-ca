@@ -7,4 +7,4 @@ class Ontario(CanadianJurisdiction):
   geographic_code = 35
   division_name = u'Ontario'
   name = u'Legislative Assembly of Ontario'
-  url = ''
+  url = 'http://www.ontla.on.ca'
