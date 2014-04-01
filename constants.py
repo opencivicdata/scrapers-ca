@@ -6177,7 +6177,7 @@ subdivisions[u'ocd-division/country:ca/province:on'].append(u"Lanark—Frontenac
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Leeds—Grenville")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"London—Fanshawe")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"London North Centre")
-subdivisions[u'ocd-division/country:ca/province:on'].append(u"LondonWest")
+subdivisions[u'ocd-division/country:ca/province:on'].append(u"London West")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Markham—Unionville")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Mississauga—Brampton South")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Mississauga East—Cooksville")
