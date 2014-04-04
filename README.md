@@ -66,6 +66,10 @@ To print all jurisdiction URLs:
 
     invoke urls
 
+Periodically, update the metadata about OCD-IDs:
+
+    ruby constants.rb
+
 Scraper code rarely undergoes code review. The focus is on the quality of the data.
 
 ## Bugs? Questions?
