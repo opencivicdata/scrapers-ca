@@ -27,7 +27,8 @@ class CanadaPersonScraper(Scraper):
       province = row.xpath('string(./td[3])')
       party = row.xpath('string(./td[4])')
 
-      mp_page = lxmlize(name_cell.xpath('string(.//a/@href)'))
+      url = name_cell.xpath('string(.//a/@href)')
+      mp_page = lxmlize(url)
       email = mp_page.xpath('string(//span[@class="caucus"]/'
                             'a[contains(., "@")])')
       phone = mp_page.xpath('string(//div[@class="hilloffice"]/'
@@ -37,6 +38,7 @@ class CanadaPersonScraper(Scraper):
 
       m = Legislator(name=name, post_id=constituency, role='MP', chamber='lower', party=party)
       m.add_source(COUNCIL_PAGE)
+      m.add_source(url)
       m.add_contact('email', email, None)
       m.add_contact('voice', phone, 'legislature')
       m.image = photo
