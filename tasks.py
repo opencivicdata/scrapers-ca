@@ -120,20 +120,20 @@ def get_definition(division_id, aggregation=False):
   # Determine the module name, name and jurisdiction_id.
   if ocd_type == 'country':
     expected['module_name'] = 'ca'
-    expected['name'] = 'House of Commons'
+    expected['name'] = u'House of Commons'
     expected['geographic_code'] = '1'
     jurisdiction_id_suffix = 'legislature'
   elif ocd_type in ('province', 'territory'):
     pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
     expected['module_name'] = pattern % ocd_type_id
     if aggregation:
-      expected['name'] = '%s Municipalities' % ocdid_to_name_map[division_id]
+      expected['name'] = u'%s Municipalities' % ocdid_to_name_map[division_id]
     elif ocd_type_id in ('nl', 'ns'):
-      expected['name'] = '%s House of Assembly' % ocdid_to_name_map[division_id]
+      expected['name'] = u'%s House of Assembly' % ocdid_to_name_map[division_id]
     elif ocd_type_id == 'qc':
-      expected['name'] = 'Assemblée nationale du Québec'
+      expected['name'] = u'Assemblée nationale du Québec'
     else:
-      expected['name'] = 'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
+      expected['name'] = u'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
     expected['geographic_code'] = ocd_id_to_code_map[division_id]
     jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
   elif ocd_type == 'cd':
@@ -142,7 +142,7 @@ def get_definition(division_id, aggregation=False):
     name_infix = ocdid_to_type_name_map[division_id]
     if name_infix == 'Regional municipality':
       name_infix = 'Regional'
-    expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
+    expected['name'] = u'%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
     expected['geographic_code'] = ocd_type_id
     expected['type'] = ocdid_to_type_map[division_id]
     jurisdiction_id_suffix = 'council'
@@ -151,16 +151,16 @@ def get_definition(division_id, aggregation=False):
     expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
     if ocd_type_id[:2] == '24':
       if ocdid_to_name_map[division_id][0] in ('A', 'E', 'I', 'O', 'U'):
-        expected['name'] = "Conseil municipal d'%s" % ocdid_to_name_map[division_id]
+        expected['name'] = u"Conseil municipal d'%s" % ocdid_to_name_map[division_id]
       else:
-        expected['name'] = "Conseil municipal de %s" % ocdid_to_name_map[division_id]
+        expected['name'] = u"Conseil municipal de %s" % ocdid_to_name_map[division_id]
     else:
       name_infix = ocdid_to_type_name_map[division_id]
       if name_infix in ('Municipality', 'Specialized municipality'):
         name_infix = 'Municipal'
       elif name_infix == 'Regional municipality':
         name_infix = 'Regional'
-      expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
+      expected['name'] = u'%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
     expected['geographic_code'] = ocd_type_id
     expected['type'] = ocdid_to_type_map[division_id]
     jurisdiction_id_suffix = 'council'
@@ -169,11 +169,11 @@ def get_definition(division_id, aggregation=False):
     province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
     expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map['/'.join(sections[:-1])]), slug(ocdid_to_name_map[division_id]))
     if ocdid_to_name_map[division_id][0] in ('A', 'E', 'I', 'O', 'U'):
-      expected['name'] = "Conseil d'arrondissement d'%s" % ocdid_to_name_map[division_id]
+      expected['name'] = u"Conseil d'arrondissement d'%s" % ocdid_to_name_map[division_id]
     elif ocdid_to_name_map[division_id][:3] == 'Le ':
-      expected['name'] = "Conseil d'arrondissement du %s" % ocdid_to_name_map[division_id][3:]
+      expected['name'] = u"Conseil d'arrondissement du %s" % ocdid_to_name_map[division_id][3:]
     else:
-      expected['name'] = "Conseil d'arrondissement de %s" % ocdid_to_name_map[division_id]
+      expected['name'] = u"Conseil d'arrondissement de %s" % ocdid_to_name_map[division_id]
     jurisdiction_id_suffix = 'council'
   else:
     raise Exception('%s: Unrecognized OCD type %s' % (division_id, ocd_type))
