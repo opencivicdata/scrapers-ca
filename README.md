@@ -54,6 +54,10 @@ The `tidy.py` script will correct module names, class names, and `jurisdiction_i
 
     invoke tidy
 
+To check that all sources are credited, run:
+
+    invoke sources
+
 To test [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance, run:
 
     pep8 .

@@ -370,6 +370,17 @@ def tidy():
 
 
 @task
+def sources():
+  for module_name in os.listdir('.'):
+    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
+      path = os.path.join(module_name, 'people.py')
+      with codecs.open(path, 'r', 'utf8') as f:
+        content = f.read()
+        if content.count('add_source') < content.count('lxmlize') - 1:  # exclude the import
+          print 'Add source? %s' % path
+
+
+@task
 def flush(division_id):
   division_id = re.sub('/(?:council|legislature)\Z', '', re.sub(r'\A(?:jurisdiction:)?ocd-jurisdiction/', 'ocd-division/', division_id))
   expected = get_definition(division_id)

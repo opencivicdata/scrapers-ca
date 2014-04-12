@@ -62,6 +62,7 @@ def scrape_mayor():
 
   contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]
   page = lxmlize(contact_url)
+  p.add_source(contact_url)
 
   address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
   address = re.sub(r'\s{2,}', ' ', address).strip()
