@@ -399,22 +399,3 @@ if (db.jurisdictions.count({_id: jurisdiction_id})) {
   print 'heroku run python cron.py %(module_name)s' % expected
   print expected['name']
   print 'http://represent.opennorth.ca/admin/representatives/representativeset/?o=1'
-
-
-@task
-def populations():
-  """
-  Update populations.py in the represent-canada repository.
-  """
-  reader = csv_reader('http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/hlt-fst/pd-pl/FullFile.cfm?T=301&LANG=Eng&OFT=CSV&OFN=98-310-XWE2011002-301.CSV')
-  reader.next()  # title
-  reader.next()  # headers
-  for row in reader:
-    if row:
-      if row[1] != 'Canada':
-        division_id = 'ocd-division/country:ca/csd:%s' % row[0]
-        expected = get_definition(division_id)
-        if expected['type'] in ('C', 'CV', 'CY', 'MD', 'MU', 'RGM', 'T', 'TP', 'V', 'VL'):
-          print '  u"%s": %s,' % (expected['name'], row[4])
-    else:
-      break

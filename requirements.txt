@@ -1,4 +1,6 @@
+requests==1.0.0
 lxml==3.3.0beta3
+cssselect==0.9.1
 pupa==0.3.0
 -e git+git://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
 -e git+git://github.com/sunlightlabs/validictory.git#egg=validictory
@@ -11,6 +13,4 @@ autopep8==0.9.7
 GitPython==0.3.2.RC1
 invoke==0.7.0
 pep8==1.4.6
-requests==1.0.0
 Unidecode==0.04.14
-cssselect==0.9.1
