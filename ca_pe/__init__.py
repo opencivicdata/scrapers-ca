@@ -8,3 +8,5 @@ class PrinceEdwardIsland(CanadianJurisdiction):
   division_name = u'Prince Edward Island'
   name = u'Legislative Assembly of Prince Edward Island'
   url = 'http://www.assembly.pe.ca'
+  # no obvious way to scrape parties
+
