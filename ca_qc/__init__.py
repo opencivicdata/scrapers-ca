@@ -9,8 +9,8 @@ class Quebec(CanadianJurisdiction):
   name = u'Assemblée nationale du Québec'
   url = 'http://www.assnat.qc.ca'
   parties = [
-      u'Parti libéral du Québec',
-      u'Parti québécois',
-      u'Coalition avenir Québec',
+      {'name': u'Parti libéral du Québec'},
+      {'name': u'Parti québécois'},
+      {'name': u'Coalition avenir Québec'},
   ]
 

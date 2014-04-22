@@ -9,7 +9,7 @@ class Manitoba(CanadianJurisdiction):
   name = u'Legislative Assembly of Manitoba'
   url = 'http://www.gov.mb.ca/legislature/'
   parties = [
-      'New Democratic Party of Manitoba',
-      'Progressive Conservative Party of Manitoba',
-      'Manitoba Liberal Party'
+      {'name': 'New Democratic Party of Manitoba'},
+      {'name': 'Progressive Conservative Party of Manitoba'},
+      {'name': 'Manitoba Liberal Party'},
   ]
