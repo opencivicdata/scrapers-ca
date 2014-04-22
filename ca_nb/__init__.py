@@ -9,8 +9,8 @@ class NewBrunswick(CanadianJurisdiction):
   name = u'Legislative Assembly of New Brunswick'
   url = 'http://www.gnb.ca/legis/index.asp'
   parties = [
-      'Progressive Conservative',
-      'Liberal',
+      'Progressive Conservative Party of New Brunswick',
+      'New Brunswick Liberal Association',
       'Independent'
   ]
 

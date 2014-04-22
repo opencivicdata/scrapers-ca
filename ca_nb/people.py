@@ -10,6 +10,16 @@ from urlparse import urljoin
 
 COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
 
+PARTIES = {
+    'PC': 'Progressive Conservative Party of New Brunswick',
+    'L': 'New Brunswick Liberal Association',
+    'IND': 'Independent'
+}
+
+def get_party(abbr):
+  """Return full party name based on abbreviation"""
+  return PARTIES[abbr]
+
 class NewBrunswickPersonScraper(Scraper):
 
   def get_people(self):
