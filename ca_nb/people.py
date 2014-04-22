@@ -10,6 +10,16 @@ from urlparse import urljoin
 
 COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
 
+PARTIES = [
+      'Progressive Conservative',
+      'Liberal',
+      'Independent'
+  ]
+
+def get_party(abbreviation):
+  """Return a political party based on party abbreviation"""
+  return next((party for party in PARTIES if party[0] == abbreviation[0]), None)
+
 class NewBrunswickPersonScraper(Scraper):
 
   def get_people(self):
@@ -21,13 +31,14 @@ class NewBrunswickPersonScraper(Scraper):
       riding_fixed = riding.replace(u'\x97', '-')
       if riding_fixed == u'Miramichi Bay-Neguac':
         riding_fixed = u'Miramichi-Bay-Neguac'
-      name_with_status, party = re.match(r'(.+) \((.+)\)', table_name).groups()
+      name_with_status, party_abbr = re.match(
+          r'(.+) \((.+)\)', table_name).groups()
       name = name_with_status.split(',')[0]
       photo_page_url = row[2][0].attrib['href']
       photo_url = get_photo_url(photo_page_url)
 
       p = Legislator(name=name, post_id=riding_fixed, role='MLA', 
-          image=photo_url)
+          party=get_party(party_abbr), image=photo_url)
       p.add_contact('email', email, None)
       p.add_source(photo_page_url)
       p.add_source(COUNCIL_PAGE)
