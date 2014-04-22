@@ -9,8 +9,8 @@ class NewfoundlandAndLabrador(CanadianJurisdiction):
   name = u'Newfoundland and Labrador House of Assembly'
   url = 'http://www.assembly.nl.ca'
   parties = [
-      {'name': u'Progressive Conservative'},
-      {'name': u'New Democrat'},
-      {'name': u'Liberal'},
+      {'name': u'Progressive Conservative Party of Newfoundland and Labrador'},
+      {'name': u'New Democratic Party of Newfoundland and Labrador'},
+      {'name': u'Liberal Party of Newfoundland and Labrador'},
   ]
 
