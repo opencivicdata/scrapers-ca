@@ -17,7 +17,8 @@ class NovaScotiaPersonScraper(Scraper):
       name = ' '.join(reversed(full_name.split(',')))
       detail_url = row[0][0].attrib['href']
       image, phone = get_details(detail_url)
-      p = Legislator(name=name, post_id=post, role='MLA', image=image)
+      p = Legislator(name=name, post_id=post, role='MLA', party=party,
+          image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       p.add_contact('voice', phone, 'legislature')
