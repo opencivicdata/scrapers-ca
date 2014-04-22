@@ -15,11 +15,12 @@ class SaskatchewanPersonScraper(Scraper):
     councillors = page.xpath('//table[@id="MLAs"]//tr')[1:]
     for councillor in councillors:
       name = councillor.xpath('./td')[0].text_content().split('. ', 1)[1]
+      party = councillor.xpath('./td')[1].text
       district = councillor.xpath('./td')[2].text_content()
       url = councillor.xpath('./td[1]/a/@href')[0]
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district, role='MLA')
+      p = Legislator(name=name, post_id=district, role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 

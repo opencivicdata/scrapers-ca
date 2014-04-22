@@ -7,3 +7,7 @@ class Saskatchewan(CanadianJurisdiction):
   division_name = 'Saskatchewan'
   name = 'Legislative Assembly of Saskatchewan'
   url = 'http://www.legassembly.sk.ca'
+  parties = [
+      'Saskatchewan Party',
+      'New Democratic Party of Saskatchewan',
+  ]
