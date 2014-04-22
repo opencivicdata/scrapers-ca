@@ -13,8 +13,4 @@ class NovaScotia(CanadianJurisdiction):
       'Progressive Conservative',
       'New Democratic Party'
   ]
-  parties = [
-      'Liberal',
-      'PC',
-      'NDP'
-  ]
+
