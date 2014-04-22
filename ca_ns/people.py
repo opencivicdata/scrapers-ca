@@ -7,15 +7,15 @@ import re
 
 COUNCIL_PAGE = 'http://nslegislature.ca/index.php/people/members/'
 
-PARTIES = [
-      'Progressive Conservative',
-      'Liberal',
-      'Independent'
-  ]
+PARTIES = {
+    'Liberal': 'Nova Scotia Liberal Party',
+    'PC': 'Progressive Conservative Association of Nova Scotia',
+    'NDP': 'Nova Scotia New Democratic Party'
+}
 
 def get_party(abbreviation):
   """Return a political party based on party abbreviation"""
-  return next((party for party in PARTIES if party[0] == abbreviation[0]), None)
+  return PARTIES[abbreviation]
 
 class NovaScotiaPersonScraper(Scraper):
 
