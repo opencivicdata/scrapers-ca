@@ -10,16 +10,6 @@ from urlparse import urljoin
 
 COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
 
-PARTIES = [
-      'Progressive Conservative',
-      'Liberal',
-      'Independent'
-  ]
-
-def get_party(abbreviation):
-  """Return a political party based on party abbreviation"""
-  return next((party for party in PARTIES if party[0] == abbreviation[0]), None)
-
 class NewBrunswickPersonScraper(Scraper):
 
   def get_people(self):

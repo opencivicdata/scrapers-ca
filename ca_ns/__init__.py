@@ -10,6 +10,11 @@ class NovaScotia(CanadianJurisdiction):
   url = 'http://nslegislature.ca/'
   parties = [
       'Liberal',
+      'Progressive Conservative',
+      'New Democratic Party'
+  ]
+  parties = [
+      'Liberal',
       'PC',
       'NDP'
   ]
