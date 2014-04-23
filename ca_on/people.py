@@ -21,8 +21,11 @@ class OntarioPersonScraper(Scraper):
       email = mpp_page.xpath('string(//div[@class="email"])')
       phone = mpp_page.xpath('string(//div[@class="phone"][1])')
       photo_url = mpp_page.xpath('string(//img[@class="mppimg"]/@src)')
+      party = mpp_page.xpath(
+          'string(//h2[contains(text(), "Party")]/following-sibling::p)')
 
-      p = Legislator(name=name, post_id=u_riding, role='MPP', image=photo_url)
+      p = Legislator(name=name, post_id=u_riding, role='MPP', 
+          party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(mpp_url)
       p.add_contact('email', email, None)

@@ -8,5 +8,8 @@ class PrinceEdwardIsland(CanadianJurisdiction):
   division_name = u'Prince Edward Island'
   name = u'Legislative Assembly of Prince Edward Island'
   url = 'http://www.assembly.pe.ca'
-  # parties in PDF: http://www.gov.pe.ca/photos/original/leg_memberlist.pdf
+  parties = [
+      {'name': u'Liberal Party of Prince Edward Island'},
+      {'name': u'Progressive Conservative Party of Prince Edward Island'},
+  ]
 

@@ -8,3 +8,8 @@ class Ontario(CanadianJurisdiction):
   division_name = u'Ontario'
   name = u'Legislative Assembly of Ontario'
   url = 'http://www.ontla.on.ca'
+  parties = [
+      {'name': u'Ontario Liberal Party'},
+      {'name': u'New Democratic Party of Ontario'},
+      {'name': u'Progressive Conservative Party of Ontario'},
+  ]

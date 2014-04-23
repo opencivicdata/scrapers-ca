@@ -7,7 +7,14 @@ import re
 
 from urlparse import urljoin
 
-COUNCIL_PAGE = 'http://www.gov.mb.ca/legislature/members/alphabetical.html'
+COUNCIL_PAGE = 'http://www.gov.mb.ca/legislature/members/mla_list_alphabetical.html'
+
+def get_party(abbreviation):
+  return {
+      'NDP': 'New Democratic Party of Manitoba',
+      'PC': 'Progressive Conservative Party of Manitoba',
+      'L': 'Manitoba Liberal Party'
+  }[abbreviation]
 
 class ManitobaPersonScraper(Scraper):
 
@@ -24,6 +31,7 @@ class ManitobaPersonScraper(Scraper):
       (last, first) = full_name.split(',')
       name = first.replace('Hon.', '').strip() + ' ' + last.title().strip()
       district = ' '.join(constitcell.text_content().split())
+      party = get_party(partycell.text)
       data = {
                   'elected_office': 'MLA',
                   'source_url': COUNCIL_PAGE
@@ -32,10 +40,10 @@ class ManitobaPersonScraper(Scraper):
       url = namecell.cssselect('a')[0].get('href')
       photo, email = get_details(url)
 
-      p = Legislator(name=name, post_id=district, role='MLA')
+      p = Legislator(name=name, post_id=district, role='MLA', 
+          party=party, image=photo)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.image = photo
       p.add_contact('email', email, None)
       yield p
 

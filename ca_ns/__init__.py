@@ -8,3 +8,9 @@ class NovaScotia(CanadianJurisdiction):
   division_name = u'Nova Scotia'
   name = u'Nova Scotia House of Assembly'
   url = 'http://nslegislature.ca/'
+  parties = [
+      {'name': 'Nova Scotia Liberal Party'},
+      {'name': 'Progressive Conservative Association of Nova Scotia'},
+      {'name': 'Nova Scotia New Democratic Party'},
+  ]
+
