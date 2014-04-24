@@ -36,7 +36,7 @@ def councillor_data(url):
   district_id = district.split(':')[0] # TODO: don't reject name?
   email = contact_node.xpath('string(.//a)')
   phone = contact_node.xpath('string(./text()[5])').split(': ')[-1] # TODO: this mostly doesn't work
-  photo_url_rel = contact_node.xpath('string(.//img/@src)')
+  photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
   photo_url = urljoin(url, photo_url_rel)
 
   p = Legislator(name=name, post_id=district_id, role='Councillor')
