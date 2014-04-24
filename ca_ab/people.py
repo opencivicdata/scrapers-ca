@@ -12,6 +12,18 @@ import csv
 
 COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 
+PARTIES = {
+    'AL': 'Alberta Liberal Party',
+    'ND': 'Alberta New Democratic Party',
+    'PC': 'Progressive Conservative Association of Alberta',
+    'W': 'Wildrose Alliance Party',
+    'IND': 'Independent',
+}
+
+def get_party(abbr):
+  """Return full party name from abbreviation"""
+  return PARTIES[abbr]
+
 class AlbertaPersonScraper(Scraper):
 
   def get_people(self):
@@ -20,9 +32,10 @@ class AlbertaPersonScraper(Scraper):
     for mla in cr:
       name = '%s %s %s' % (mla['MLA First Name'], mla['MLA Middle Names'],
         mla['MLA Last Name'])
+      party = get_party(mla['Caucus'])
       name_without_status = name.split(',')[0]
       p = Legislator(name=name_without_status, post_id=mla['Riding Name'], 
-          role='MLA')
+          role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', mla['Email'], None)
       p.add_contact('voice', mla['Phone Number'], 'legislature')
