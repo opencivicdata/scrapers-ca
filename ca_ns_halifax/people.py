@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -47,5 +49,5 @@ class HalifaxPersonScraper(Scraper):
 def chunks(l, n):
   """ Yield successive n-sized chunks from l.
   """
-  for i in xrange(0, len(l), n):
+  for i in range(0, len(l), n):
     yield l[i:i + n]

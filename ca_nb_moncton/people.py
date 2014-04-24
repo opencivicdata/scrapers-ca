@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -18,7 +20,7 @@ class MonctonPersonScraper(Scraper):
 
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
-      parts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()]
+      parts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub('\xa0', ' ', x).strip()]
       name = ' '.join(parts[:2])
 
       district = parts[2]

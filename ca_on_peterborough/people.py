@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -31,8 +33,8 @@ class PeterboroughPersonScraper(Scraper):
 
         # get phone numbers
         for line in info:
-          stuff = re.split(ur'(\xbb)|(\xa0)', line)
-          tmp = [y for y in stuff if y and not re.match(ur'\xa0', y)]
+          stuff = re.split(r'(\xbb)|(\xa0)', line)
+          tmp = [y for y in stuff if y and not re.match(r'\xa0', y)]
           self.get_tel_numbers(tmp, p)
 
         email = councillor.xpath('string(./a)')
@@ -48,7 +50,7 @@ class PeterboroughPersonScraper(Scraper):
 
     info = info.xpath('./text()')[0:3]
     address = info[0]
-    phone = re.findall(r'[0-9].*', info[1])[0].replace(u'\xa0', ' ')
+    phone = re.findall(r'[0-9].*', info[1])[0].replace('\xa0', ' ')
     fax = re.findall(r'[0-9].*', info[2])[0]
 
     p = Legislator(name=name, post_id='Peterborough', role='Mayor')
@@ -62,7 +64,7 @@ class PeterboroughPersonScraper(Scraper):
 
   def get_tel_numbers(self, line, councillor):
     for i, x in enumerate(line):
-      if u'\xbb' in x and not 'E-Mail' in line[i - 1]:
+      if '\xbb' in x and not 'E-Mail' in line[i - 1]:
         if "Fax" in line[i - 1]:
           contact_type = 'fax'
         elif 'Cell Phone' in line[i - 1]:

@@ -1,10 +1,12 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.city.charlottetown.pe.ca/mayorandcouncil.php'
 
@@ -30,7 +32,7 @@ class CharlottetownPersonScraper(Scraper):
 
     for span in root.xpath('//span[@class="Title"]')[1:]:
       spantext = ' '.join(span.xpath('.//text()'))
-      header = spantext.replace(u'\u2013', '-').split('-')
+      header = spantext.replace('\u2013', '-').split('-')
       if len(header) != 2:
           continue
 

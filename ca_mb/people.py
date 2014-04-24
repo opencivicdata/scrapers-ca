@@ -1,11 +1,13 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.gov.mb.ca/legislature/members/mla_list_alphabetical.html'
 

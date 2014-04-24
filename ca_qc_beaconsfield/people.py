@@ -1,7 +1,9 @@
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
-import HTMLParser
+from six.moves import html_parser
 import re
 
 COUNCIL_PAGE = 'http://www.beaconsfield.ca/en/your-council.html'
@@ -49,6 +51,6 @@ class BeaconsfieldPersonScraper(Scraper):
 def get_email(script):
   var = re.findall(r'var addy\d{4,5} = \'(.*)\'', script)[0].replace('\' + \'', '').replace('\'', '')
   ext = re.findall(r'addy\d{4,5} = addy\d{4,5} \+ \'(.*);', script)[0].replace('\' + \'', '').replace('\'', '')
-  h = HTMLParser.HTMLParser()
+  h = html_parser.HTMLParser()
   email = h.unescape(var + ext)
   return email

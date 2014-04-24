@@ -1,10 +1,12 @@
+from __future__ import unicode_literals
+
 from utils import CanadianJurisdiction, lxmlize
 
 import re
 
 
 class Oakville(CanadianJurisdiction):
-  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:3524001/council'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:3524001/council'
   geographic_code = 3524001
   division_name = 'Oakville'
   name = 'Oakville Town Council'

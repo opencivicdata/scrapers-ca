@@ -1,9 +1,11 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 import re
 

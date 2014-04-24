@@ -1,11 +1,11 @@
-# coding: utf8
+# coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
-import urllib
-import HTMLParser
 
 COUNCIL_PAGE = 'http://www.ville.levis.qc.ca/Fr/Conseil/'
 
@@ -22,7 +22,7 @@ class LevisPersonScraper(Scraper):
         role, district = position.title().split(', ')
       else:
         role = 'Maire'
-        district = u'Lévis'
+        district = 'Lévis'
 
       info_div = person.xpath('./following-sibling::div[1]')[0]
       photo_url = info_div[0].attrib['src']

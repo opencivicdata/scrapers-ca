@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -19,7 +21,7 @@ class TroisRivieresPersonScraper(Scraper):
     page = lxmlize(MAYOR_URL)
     photo_url = page.xpath('string(//img/@src[contains(., "Maire")])')
     name = page.xpath('string(//td[@class="contenu"]/text()[last()])')
-    p = Legislator(name=name, post_id=u"Trois-Rivières", role="Maire",
+    p = Legislator(name=name, post_id="Trois-Rivières", role="Maire",
                    image=photo_url)
     p.add_source(MAYOR_URL)
     yield p

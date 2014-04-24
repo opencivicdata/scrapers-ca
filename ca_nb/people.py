@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -6,7 +8,7 @@ from lxml import etree
 
 import re
 
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
 
@@ -28,11 +30,10 @@ class NewBrunswickPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
     councillor_table = page.xpath('//body/div[2]/table[2]')[0]
     for row in councillor_table.xpath('.//tr'):
-      riding, table_name, email = (' '.join(td.xpath('string(.)').split())
-                                   for td in row[1:])
-      riding_fixed = riding.replace(u'\x97', '-')
-      if riding_fixed == u'Miramichi Bay-Neguac':
-        riding_fixed = u'Miramichi-Bay-Neguac'
+      riding, table_name, email = (' '.join(td.xpath('string(.)').split()) for td in row[1:])
+      riding_fixed = riding.replace('\x97', '-')
+      if riding_fixed == 'Miramichi Bay-Neguac':
+        riding_fixed = 'Miramichi-Bay-Neguac'
       name_with_status, party_abbr = re.match(
           r'(.+) \((.+)\)', table_name).groups()
       name = name_with_status.split(',')[0]

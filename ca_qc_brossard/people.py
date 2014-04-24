@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -33,7 +35,7 @@ class BrossardPersonScraper(Scraper):
 
       try:
         email_elem = [link for link in email_links
-                      if name in link.text_content().replace(u'\u2019', "'")][0]
+                      if name in link.text_content().replace('\u2019', "'")][0]
         email = re.match('mailto:(.+@brossard.ca)', email_elem.attrib['href']).group(1)
         p.add_contact('email', email, None)
         phone = email_elem.xpath(

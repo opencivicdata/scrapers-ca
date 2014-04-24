@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -15,7 +17,7 @@ class KelownaPersonScraper(Scraper):
     links = page.xpath('//td[@width=720]//a[contains(text(), "Councillor") or '
                        'contains(text(), "Mayor")]')
     for link in links:
-      role, name = link.text_content().replace(u'\xa0', u' ').split(' ', 1)
+      role, name = link.text_content().replace('\xa0', ' ').split(' ', 1)
       url = link.attrib['href']
       page = lxmlize(url)
       photo_url = page.xpath('string(//li/img/@src)')

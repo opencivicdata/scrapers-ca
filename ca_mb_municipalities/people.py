@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 from pupa.models import Organization
 

@@ -1,12 +1,14 @@
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 from pupa.models import Organization
 
 from utils import lxmlize, AggregationLegislator as Legislator
 
 import re
-import urllib2
 import os
 import subprocess
+from six.moves.urllib.request import urlopen
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
@@ -17,7 +19,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
     url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]
 
-    response = urllib2.urlopen(url).read()
+    response = urlopen(url).read()
     pdf = open('/tmp/nl.pdf', 'w')
     pdf.write(response)
     pdf.close()

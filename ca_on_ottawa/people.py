@@ -1,11 +1,13 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
 
-from urllib2 import urlopen
+from six.moves.urllib.request import urlopen
 from csv import DictReader
 
 COUNCIL_PAGE = 'http://ottawa.ca/en/city-council'
@@ -26,12 +28,12 @@ class OttawaPersonScraper(Scraper):
           district = councillor['District name']
 
         # Correct typos. The City has been notified of the errors.
-        if district == u'Knoxdale Merivale':
-          district = u'Knoxdale-Merivale'
-        if district == u'Rideau Vanier':
-          district = u'Rideau-Vanier'
-        if district == u'Orleans':
-          district = u'Orléans'
+        if district == 'Knoxdale Merivale':
+          district = 'Knoxdale-Merivale'
+        if district == 'Rideau Vanier':
+          district = 'Rideau-Vanier'
+        if district == 'Orleans':
+          district = 'Orléans'
 
         email = councillor['Email']
         address = ', '.join([councillor['Address line 1'],

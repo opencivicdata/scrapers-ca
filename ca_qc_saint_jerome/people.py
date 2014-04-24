@@ -1,4 +1,6 @@
-# coding: utf8
+# coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -19,10 +21,10 @@ class SaintJeromePersonScraper(Scraper):
 
       if len(desc) == 3:
         role = 'Maire'
-        district = u'Saint-Jérôme'
+        district = 'Saint-Jérôme'
       else:
         role = 'Conseiller'
-        district = desc[0].replace(u'numéro ', '')
+        district = desc[0].replace('numéro ', '')
 
       name = desc[-3]
       phone = desc[-2]

@@ -1,12 +1,15 @@
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 from pupa.models import Organization
 
 from utils import lxmlize, AggregationLegislator as Legislator
 
 import re
-import urllib2
 import os
 import subprocess
+
+from six.moves.urllib.request import urlopen
 
 COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 
@@ -14,7 +17,7 @@ COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 class YukonMunicipalitiesPersonScraper(Scraper):
 
   def get_people(self):
-    response = urllib2.urlopen(COUNCIL_PAGE).read()
+    response = urlopen(COUNCIL_PAGE).read()
     pdf = open('/tmp/yt.pdf', 'w')
     pdf.write(response)
     pdf.close()

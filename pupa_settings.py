@@ -1,5 +1,5 @@
 import os
-from urlparse import urlsplit
+from six.moves.urllib.parse import urlsplit
 url = os.getenv('MONGOHQ_URL', 'mongodb://localhost:27017/pupa')
 
 # @see https://raw.github.com/opencivicdata/pupa/master/pupa/core/default_settings.py

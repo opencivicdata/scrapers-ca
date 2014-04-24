@@ -1,10 +1,12 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from utils import CanadianJurisdiction
 
 
 class GrandePrairie(CanadianJurisdiction):
-  jurisdiction_id = u'ocd-jurisdiction/country:ca/csd:4819012/council'
+  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:4819012/council'
   geographic_code = 4819012
-  division_name = u'Grande Prairie'
-  name = u'Grande Prairie City Council'
+  division_name = 'Grande Prairie'
+  name = 'Grande Prairie City Council'
   url = 'http://www.cityofgp.com'

@@ -1,4 +1,6 @@
-# coding: utf8
+# coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -21,11 +23,11 @@ class QuebecPersonScraper(Scraper):
         continue
       district = councillor.xpath('./preceding-sibling::h2/text()')[-1]
       if 'Mairie' in district:
-        district = u'Québec'
+        district = 'Québec'
         role = 'Maire'
       else:
         text = councillor.xpath('./a[@target="_blank"]/text()')
-        district = re.search(u'\ADistrict électoral (?:de|du|des) (.+) - ?\d+\Z', text[0].strip(), flags=re.U).group(1)
+        district = re.search('\ADistrict électoral (?:de|du|des) (.+) - ?\d+\Z', text[0].strip(), flags=re.U).group(1)
         role = 'Conseiller'
 
       if district == 'Monts':
@@ -33,7 +35,7 @@ class QuebecPersonScraper(Scraper):
       elif district == 'Plateau':
         district = 'Le Plateau'
       else:
-        district = re.sub(u'–', u'—', district)  # n-dash, m-dash
+        district = re.sub('–', '—', district)  # n-dash, m-dash
         district = re.sub('\Ala ', 'La ', district)
 
       p = Legislator(name=name, post_id=district, role=role)

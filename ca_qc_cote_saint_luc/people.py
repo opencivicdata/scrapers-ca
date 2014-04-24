@@ -1,4 +1,6 @@
-# coding: utf8
+# coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -50,7 +52,7 @@ class CoteSaintLucPersonScraper(Scraper):
     email = page.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
     phone = page.xpath('//table[1]/tbody/tr/td[1]/p[last()]/text()')[2].replace('Telephone: ', '')
 
-    p = Legislator(name=name, post_id=u'Côte-Saint-Luc', role='Maire')
+    p = Legislator(name=name, post_id='Côte-Saint-Luc', role='Maire')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.image = page.xpath('.//img/@src')[0]

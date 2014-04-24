@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from copy import deepcopy
 
 import regex as re
@@ -7,6 +9,7 @@ from pupa.models.schemas.common import contact_details as _contact_details, link
 from pupa.models.schemas.person import schema as person_schema
 from pupa.models.schemas.membership import schema as membership_schema
 from pupa.models.schemas.organization import schema as organization_schema
+from six import string_types
 
 from constants import names, subdivisions, styles
 
@@ -205,7 +208,7 @@ DatetimeValidator.validate_post = validate_post
 
 def validate_compiledPattern(self, x, fieldname, schema, path, pattern=None):
   value = x.get(fieldname)
-  if isinstance(value, basestring):
+  if isinstance(value, string_types):
     if not pattern.search(value):
       self._error("Value {value!r} for field '{fieldname}' does "
                   "not match regular expression '{pattern}'",
@@ -216,7 +219,7 @@ DatetimeValidator.validate_compiledPattern = validate_compiledPattern
 
 def validate_negativePattern(self, x, fieldname, schema, path, pattern=None):
   value = x.get(fieldname)
-  if isinstance(value, basestring):
+  if isinstance(value, string_types):
     if pattern.search(value):
       self._error("Value {value!r} for field '{fieldname}' "
                   "matches regular expression '{pattern}'",
@@ -227,7 +230,7 @@ DatetimeValidator.validate_negativePattern = validate_negativePattern
 
 def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
   value = x.get(fieldname)
-  if isinstance(value, basestring):
+  if isinstance(value, string_types):
     for pattern, method in arguments:
       if method(x) and not pattern.search(value):
         self._error("Value {value!r} for field '{fieldname}' does "

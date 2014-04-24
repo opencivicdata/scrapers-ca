@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -20,7 +22,7 @@ class QuebecPersonScraper(Scraper):
       detail_url = row[0][0].attrib['href']
       detail_page = lxmlize(detail_url)
       photo_url = detail_page.xpath('string(//img[@class="photoDepute"]/@src)')
-      division = division.replace(u'–', u'—')  # n-dash, m-dash
+      division = division.replace('–', '—')  # n-dash, m-dash
       p = Legislator(name=name, post_id=division, role='MNA',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)

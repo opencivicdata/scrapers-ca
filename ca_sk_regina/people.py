@@ -1,10 +1,12 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.regina.ca/residents/council-committees/meet-city-council/'
 MAYOR_CONTACT_URL = 'http://www.regina.ca/residents/regina-mayor/contact_mayor'

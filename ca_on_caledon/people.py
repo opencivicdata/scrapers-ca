@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -32,7 +34,7 @@ class CaledonPersonScraper(Scraper):
 
       info = page.xpath('//table[@summary="Councillor"]/tbody/tr/td[2]')[0]
       info = info.text_content().strip().splitlines(True)
-      info = [x for x in info if not x == u'\xa0\n']
+      info = [x for x in info if not x == '\xa0\n']
       address = info[1]
       email = re.findall(r'[a-z]+.[a-z]+@caledon.ca', info[2])[0]
       numbers = re.findall(r'[0-9]{3}.[0-9]{3}. ?[0-9]{4}', info[2])

@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
@@ -16,7 +18,7 @@ class OntarioPersonScraper(Scraper):
       name_elem = block.xpath('.//a[@class="mpp"]')[0]
       name = ' '.join(name_elem.text.split())
       riding = block.xpath(
-          'string(.//div[@class="riding"])').replace('--', u'\u2014').replace(u'Chatham—Kent', 'Chatham-Kent')  # m-dash to hyphen
+          'string(.//div[@class="riding"])').replace('--', '\u2014').replace('Chatham—Kent', 'Chatham-Kent')  # m-dash to hyphen
       email = block.xpath('string(.//a[contains(@href, "mailto:")])')
       phone = block.xpath('string(.//div[@class="phone"])')
       mpp_url = name_elem.attrib['href']
