@@ -29,8 +29,10 @@ class LaSallePersonScraper(Scraper):
 
       p = Legislator(name=name, post_id="LaSalle", role=role)
       p.add_source(COUNCIL_PAGE)
-
-      p.image = councillor.xpath('./parent::td//img/@src')[0]
+      
+      photo_url = councillor.xpath('./parent::td//img/@src')[0]
+      print photo_url
+      p.image = photo_url
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)

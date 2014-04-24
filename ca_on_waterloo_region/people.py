@@ -58,7 +58,7 @@ def councillor_data(url):
   email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
   phone = page.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
   address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))
-  photo_url_src = page.xpath('string(//div[id="contentIntleft"]/img[1]/@src)')
+  photo_url_src = page.xpath('string(//div[@id="contentIntleft"]//img[1]/@src)')
   photo_url = urljoin(url, photo_url_src)
   return email, phone, address, photo_url
 
