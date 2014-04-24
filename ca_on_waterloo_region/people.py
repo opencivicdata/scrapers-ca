@@ -43,7 +43,7 @@ class WaterlooPersonScraper(Scraper):
     address = '\n'.join(
         chairpage.xpath('//div[@class="contactBody"]//p[1]/text()'))
     photo_url_src = chairpage.xpath(
-        'string(//div[id="contentIntleft"]/img[1]/@src)')
+        'string(//div[@id="contentIntleft"]//img[1]/@src)')
     photo_url = urljoin(CHAIR_URL, photo_url_src)
     p = Legislator(name=name, post_id='Waterloo', role='Regional Chair')
     p.add_source(CHAIR_URL)
@@ -58,7 +58,7 @@ def councillor_data(url):
   email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
   phone = page.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
   address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))
-  photo_url_src = page.xpath('string(//div[id="contentIntleft"]/img[1]/@src)')
+  photo_url_src = page.xpath('string(//div[@id="contentIntleft"]//img[1]/@src)')
   photo_url = urljoin(url, photo_url_src)
   return email, phone, address, photo_url
 
