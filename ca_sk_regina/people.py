@@ -6,7 +6,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 from urlparse import urljoin
 
-COUNCIL_PAGE = 'http://regina.ca/residents/council-committees/meet-city-council/'
+COUNCIL_PAGE = 'http://www.regina.ca/residents/council-committees/meet-city-council/'
 MAYOR_CONTACT_URL = 'http://www.regina.ca/residents/regina-mayor/contact_mayor'
 
 
