@@ -7,3 +7,7 @@ class BritishColumbia(CanadianJurisdiction):
   division_name = 'British Columbia'
   name = 'Legislative Assembly of British Columbia'
   url = 'http://www.leg.bc.ca'
+  parties = [
+      {'name': 'New Democratic Party of British Columbia'},
+      {'name': 'British Columbia Liberal Party'},
+  ]

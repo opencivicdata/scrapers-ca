@@ -6,7 +6,6 @@ import re
 
 COUNCIL_PAGE = 'http://www.leg.bc.ca/mla/3-2.htm'
 
-
 class BritishColumbiaPersonScraper(Scraper):
 
   def get_people(self):
@@ -23,6 +22,8 @@ class BritishColumbiaPersonScraper(Scraper):
       p.add_source(councillor)
 
       p.image = page.xpath('//a[contains(@href, "images/members")]/@href')[0]
+      party_caps = page.xpath('string((//table[@width=440]//b)[last()])')
+      p.party = party_caps.strip().title().replace('Of', 'of')
 
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
       p.add_contact('email', email, None)
