@@ -33,8 +33,8 @@ def councillor_data(url, name, ward):
   page = lxmlize(url)
   # sadly, email is a form on a separate page
   phone = page.xpath('string(//strong[contains(., "Phone")])').split(':')[1]
-  photo_url = urljoin(url, 
-      page.xpath('(div[@id="contentcontainer"]//img)[2]/@src'))
+  photo_url_rel = page.xpath('string(//div[@id="contentcontainer"]//img/@src)')
+  photo_url = urljoin(url, photo_url_rel)
   m = Legislator(name=name, post_id=ward, role='Councillor')
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
