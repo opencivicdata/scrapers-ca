@@ -292,7 +292,7 @@ def clean_address(s):
 
 
 def lxmlize(url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
-  scraper = Scrapelib(requests_per_minute=0)
+  scraper = Scrapelib(follow_robots=False, requests_per_minute=0)
   scraper.user_agent = user_agent
   entry = scraper.urlopen(url)
   if encoding != 'utf-8' or not isinstance(entry, unicode):

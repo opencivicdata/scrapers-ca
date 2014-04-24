@@ -167,7 +167,7 @@ uniqueRoles = [
   'Warden', 'Deputy Warden',
 ]
 
-def validate_post(self, x, fieldname, schema, post):
+def validate_post(self, x, fieldname, schema, path, post):
   if post and not x['organization_id'].startswith('party:'):
     division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
     value = x.get(fieldname)
@@ -197,7 +197,7 @@ def validate_post(self, x, fieldname, schema, post):
 DatetimeValidator.validate_post = validate_post
 
 
-def validate_compiledPattern(self, x, fieldname, schema, pattern=None):
+def validate_compiledPattern(self, x, fieldname, schema, path, pattern=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
     if not pattern.search(value):
@@ -208,7 +208,7 @@ def validate_compiledPattern(self, x, fieldname, schema, pattern=None):
 DatetimeValidator.validate_compiledPattern = validate_compiledPattern
 
 
-def validate_negativePattern(self, x, fieldname, schema, pattern=None):
+def validate_negativePattern(self, x, fieldname, schema, path, pattern=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
     if pattern.search(value):
@@ -219,7 +219,7 @@ def validate_negativePattern(self, x, fieldname, schema, pattern=None):
 DatetimeValidator.validate_negativePattern = validate_negativePattern
 
 
-def validate_conditionalPattern(self, x, fieldname, schema, arguments=None):
+def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
     for pattern, method in arguments:
@@ -231,7 +231,7 @@ def validate_conditionalPattern(self, x, fieldname, schema, arguments=None):
 DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
 
 
-def validate_maxMatchingItems(self, x, fieldname, schema, arguments=None):
+def validate_maxMatchingItems(self, x, fieldname, schema, path, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, list):
     for length, method, message in arguments:
@@ -245,8 +245,8 @@ def validate_maxMatchingItems(self, x, fieldname, schema, arguments=None):
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
 
 
-def validate_matches(self, x, fieldname, schema, arguments=None):
-  value = x['_data']
+def validate_matches(self, x, fieldname, schema, path, arguments=None):
+  value = x['data']
   for method, condition, message in arguments:
     if not condition(value) and not method(value):
       self._error(message % value, None, fieldname)

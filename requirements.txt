@@ -2,7 +2,7 @@ requests==1.0.0
 lxml==3.3.0beta3
 cssselect==0.9.1
 pupa==0.3.0
--e git+git://github.com/sunlightlabs/scrapelib.git#egg=scrapelib
+scrapelib==0.9.1
 -e git+git://github.com/sunlightlabs/validictory.git#egg=validictory
 
 # Validation
