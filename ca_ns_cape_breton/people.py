@@ -11,7 +11,6 @@ MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor.html'
 class CapeBretonPersonScraper(Scraper):
 
   def get_people(self):
-    """
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@class="table_style"]/tbody/tr')[1:]
@@ -35,7 +34,6 @@ class CapeBretonPersonScraper(Scraper):
       p.image = page.xpath('//img[@class="image_left"]/@src')[0]
       yield p
 
-    """
     mayorpage = lxmlize(MAYOR_PAGE)
     name_elem = mayorpage.xpath('//strong[contains(text(), "About")]')[0]
     name = re.search('About Mayor (.+):', name_elem.text).group(1)
