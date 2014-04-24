@@ -31,7 +31,6 @@ class LaSallePersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       
       photo_url = councillor.xpath('./parent::td//img/@src')[0]
-      print photo_url
       p.image = photo_url
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
