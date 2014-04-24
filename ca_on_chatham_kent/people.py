@@ -19,7 +19,7 @@ class ChathamKentPersonScraper(Scraper):
         district = 'Chatham-Kent'
         role = 'Mayor'
       else:
-        district = re.findall(r'(Ward \d)', district_info)[0]
+        district = re.search(r'Ward (\d+)', district_info).group(1)
         role = 'Councillor'
 
       councillors = ward.xpath('.//a')
