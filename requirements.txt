@@ -1,7 +1,7 @@
 requests==1.0.0
 lxml==3.3.0beta3
 cssselect==0.9.1
-pupa==0.3.0
+-e git+git://github.com/opencivicdata/pupa.git@ad2d919268a3fa8857a28b94a6490d57728bc78b#egg=pupa
 scrapelib==0.9.1
 -e git+git://github.com/sunlightlabs/validictory.git#egg=validictory
 
