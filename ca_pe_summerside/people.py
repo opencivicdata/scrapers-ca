@@ -28,9 +28,8 @@ class SummersidePersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-      photo_url_rel = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
+      photo_url_rel = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0].replace('/..', '')
       p.image = urljoin(url, photo_url_rel)
-      print p.image
 
       contacts = page.xpath('//div[@class="articlebody-inside"]/p')[1].text_content().replace('Biography', '').replace('Committees', '').split(':')
       for i, contact in enumerate(contacts):
@@ -50,7 +49,7 @@ class SummersidePersonScraper(Scraper):
 
     p = Legislator(name=name, post_id='Summerside', role='Mayor')
     p.add_source(MAYOR_PAGE)
-    p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
+    p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0].replace('..', '')
 
     info = page.xpath('//div[@class="articlebody-inside"]/p')
     phone = re.findall(r'to (.*)', info[1].text_content())[0]
