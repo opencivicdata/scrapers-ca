@@ -3,6 +3,7 @@ from pupa.scrape import Scraper
 from utils import lxmlize, CanadianLegislator as Legislator, CONTACT_DETAIL_TYPE_MAP
 
 import re
+from urlparse import urljoin
 
 COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/councillors/'
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'
@@ -27,7 +28,9 @@ class SummersidePersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-      p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
+      photo_url_rel = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0]
+      p.image = urljoin(url, photo_url_rel)
+      print p.image
 
       contacts = page.xpath('//div[@class="articlebody-inside"]/p')[1].text_content().replace('Biography', '').replace('Committees', '').split(':')
       for i, contact in enumerate(contacts):
