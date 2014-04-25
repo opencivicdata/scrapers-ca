@@ -108,19 +108,10 @@ class UnicodeReader:
 
 
 class CanadianJurisdiction(Jurisdiction):
-  session_details = {
-    'N/A': {
-      '_scraped_name': 'N/A',
-    }
-  }
-  terms = [
-    {
-      'name': 'N/A',
-      'sessions': ['N/A'],
-      'start_year': 1900,
-      'end_year': 2030,
-    }
-  ]
+  sessions = [{
+    'name': 'N/A',
+    '_scraped_name': 'N/A',
+  }]
 
   def __init__(self):
     for scraper_type in ('bills', 'events', 'people', 'speeches', 'votes'):
@@ -134,7 +125,7 @@ class CanadianJurisdiction(Jurisdiction):
       else:
         self.provides.append(scraper_type)
 
-  def get_scraper(self, term, session, scraper_type):
+  def get_scraper(self, session, scraper_type):
     if scraper_type in self.provides:
       class_name = self.__class__.__name__ + {
         'bills': 'Bill',
