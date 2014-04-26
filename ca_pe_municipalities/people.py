@@ -1,7 +1,7 @@
 from pupa.scrape import Scraper
 from pupa.models import Organization
 
-from utils import lxmlize, AggregationLegislator as Legislator
+from utils import lxmlize, clean_telephone_number, clean_address, AggregationLegislator as Legislator
 
 import re
 
@@ -42,16 +42,16 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
       councillors = page.xpath('//div[@style="WIDTH:750"]/dl/dt[contains(text(), "Elected Officials")]/parent::dl/dd/pre/text()')[0].splitlines(True)
       for councillor in councillors:
         name = councillor.replace('(Mayor)', '').replace('(Deputy Mayor)', '').replace('(Chairperson)', '').strip()
-        role = councillor.replace(name, '').translate(None, '()').strip()
+        role = re.sub(r'\(|\)', '', councillor.replace(name, '').strip())
         if not role:
           role = 'Councillor'
         p = Legislator(name=name, post_id=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         membership = p.add_membership(org, role=role, post_id=district.text_content())
-        membership.add_contact_detail('voice', phone, 'legislature')
-        membership.add_contact_detail('fax', fax, 'legislature')
-        membership.add_contact_detail('address', address, 'legislature')
+        membership.add_contact_detail('voice', clean_telephone_number(phone), 'legislature')
+        membership.add_contact_detail('fax', clean_telephone_number(fax), 'legislature')
+        membership.add_contact_detail('address', clean_address(address), 'legislature')
         membership.add_contact_detail('email', email, None)
         if site:
           p.add_link(site, None)

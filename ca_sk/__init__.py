@@ -9,5 +9,5 @@ class Saskatchewan(CanadianJurisdiction):
   url = 'http://www.legassembly.sk.ca'
   parties = [
       {'name': 'Saskatchewan Party'},
-      {'name': 'New Democratic Party of Saskatchewan'},
+      {'name': 'New Democratic Party'},
   ]

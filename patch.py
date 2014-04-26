@@ -62,17 +62,17 @@ youtube_re = re.compile(r'youtube\.com')
 
 matchers = [
   (0, lambda x: x['type'] == 'email' and x['note'] is not None,
-    'Membership has email with non-empty note (%s)'),
+    'Membership has email with non-empty note'),
   (0, lambda x: x['type'] != 'email' and x['note'] is None,
-    'Membership has non-email with empty note (%s)'),
+    'Membership has non-email with empty note'),
   (1, lambda x: x['type'] == 'email',
-    'Membership has many emails (%s)'),
+    'Membership has many emails'),
 ]
 
 for type in ('address', 'cell', 'fax', 'voice'):
   for note in ('constituency', 'legislature', 'office', 'residence'):
     matchers.append((1, lambda x, type=type, note=note: x['type'] == type and x['note'] == note,
-      'Membership has contact_details with same type and note (%s)'))
+      'Membership has contact_details with same type and note'))
 
 # A membership should not have notes on emails, should have notes on non-emails,
 # should have at most one email, and should, in most cases, have at most one of
@@ -92,13 +92,13 @@ person_links['items']['properties']['note']['type'] = 'null'
 # should have at most one link per social media website.
 person_links['maxMatchingItems'] = [
   (1, lambda x: not social_re.search(x['url']),
-    'Person has many non-social media links (%s)'),
+    'Person has many non-social media links'),
   (1, lambda x: facebook_re.search(x['url']),
-    'Person has many facebook.com links (%s)'),
+    'Person has many facebook.com links'),
   (1, lambda x: twitter_re.search(x['url']),
-    'Person has many twitter.com links (%s)'),
+    'Person has many twitter.com links'),
   (1, lambda x: youtube_re.search(x['url']),
-    'Person has many youtube.com links (%s)'),
+    'Person has many youtube.com links'),
 ]
 
 membership_schema['properties']['role']['blank'] = False
@@ -128,7 +128,7 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530013/council', # Kitchener
     ) and x['role'] in ('Maire', 'Mayor')
   ),
-  'Membership has no emails %(organization_id)s %(post_id)r',
+  'Membership has no emails {organization_id} {post_id!r}',
 )]
 
 organization_schema['properties']['contact_details'] = organization_contact_details
@@ -174,24 +174,24 @@ def validate_post(self, x, fieldname, schema, path, post):
     if subdivisions.get(division_id):
       # Not among the known subdivisions for the division.
       if value not in subdivisions[division_id] and not re.search(r'\AWards \d(?:(?:,| & | and )\d+)+\Z', value):
-        self._error("Post: Value %(value)r for field '%(fieldname)s' is not "
-                    "in the enumeration: %(options)r",
+        self._error("Post: Value {value!r} for field '{fieldname}' is not "
+                    "in the enumeration: {options!r}",
                     value, fieldname, options=subdivisions[division_id])
     else:
       # Not a unique role.
       if x['role'] not in uniqueRoles:
-        self._error("Post: No known subdivisions for this division for non-unique role %(value)r",
+        self._error("Post: No known subdivisions for this division for non-unique role {value!r}",
                     x['role'], 'role', options=uniqueRoles)
       # A unique role that's not among the known roles for the division.
       if styles.get(division_id) and x['role'] not in styles[division_id]:
-        self._error("Post: Unique role %(value)r is not in the enumeration: %(options)r",
+        self._error("Post: Unique role {value!r} is not in the enumeration: {options!r}",
                     x['role'], 'role', options=styles[division_id])
       # A unique role that's among the known roles for the division, but where the post doesn't match the name of the division.
       if names.get(division_id) and value != names[division_id]:
-        self._error("Post: Unique role's post %(value)r is not in the enumeration: %(options)r",
+        self._error("Post: Unique role's post {value!r} is not in the enumeration: {options!r}",
                     value, fieldname, options=[names[division_id]])
       else:
-        self._error("Post: Cannot validate unique role's post %(value)r in division %(division_id)r",
+        self._error("Post: Cannot validate unique role's post {value!r} in division {division_id!r}",
                     value, fieldname, division_id=division_id)
 
 DatetimeValidator.validate_post = validate_post
@@ -201,8 +201,8 @@ def validate_compiledPattern(self, x, fieldname, schema, path, pattern=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
     if not pattern.search(value):
-      self._error("Value %(value)r for field '%(fieldname)s' does "
-                  "not match regular expression '%(pattern)s'",
+      self._error("Value {value!r} for field '{fieldname}' does "
+                  "not match regular expression '{pattern}'",
                   value, fieldname, pattern=pattern)
 
 DatetimeValidator.validate_compiledPattern = validate_compiledPattern
@@ -212,8 +212,8 @@ def validate_negativePattern(self, x, fieldname, schema, path, pattern=None):
   value = x.get(fieldname)
   if isinstance(value, basestring):
     if pattern.search(value):
-      self._error("Value %(value)r for field '%(fieldname)s' "
-                  "matches regular expression '%(pattern)s'",
+      self._error("Value {value!r} for field '{fieldname}' "
+                  "matches regular expression '{pattern}'",
                   value, fieldname, pattern=pattern)
 
 DatetimeValidator.validate_negativePattern = validate_negativePattern
@@ -224,8 +224,8 @@ def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None
   if isinstance(value, basestring):
     for pattern, method in arguments:
       if method(x) and not pattern.search(value):
-        self._error("Value %(value)r for field '%(fieldname)s' does "
-                    "not match regular expression '%(pattern)s'",
+        self._error("Value {value!r} for field '{fieldname}' does "
+                    "not match regular expression '{pattern}'",
                     value, fieldname, pattern=pattern)
 
 DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
@@ -240,7 +240,7 @@ def validate_maxMatchingItems(self, x, fieldname, schema, path, arguments=None):
         if method(v):
           count += 1
         if count > length:
-          self._error(message % v, value, fieldname)
+          self._error(message, value, fieldname)
 
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
 
@@ -249,6 +249,6 @@ def validate_matches(self, x, fieldname, schema, path, arguments=None):
   value = x['data']
   for method, condition, message in arguments:
     if not condition(value) and not method(value):
-      self._error(message % value, None, fieldname)
+      self._error(message, None, fieldname, **value)
 
 DatetimeValidator.validate_matches = validate_matches
