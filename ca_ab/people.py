@@ -20,9 +20,11 @@ PARTIES = {
     'IND': 'Independent',
 }
 
+
 def get_party(abbr):
   """Return full party name from abbreviation"""
   return PARTIES[abbr]
+
 
 class AlbertaPersonScraper(Scraper):
 
@@ -31,15 +33,16 @@ class AlbertaPersonScraper(Scraper):
     cr = csv.DictReader(csv_text.split('\n'))
     for mla in cr:
       name = '%s %s %s' % (mla['MLA First Name'], mla['MLA Middle Names'],
-        mla['MLA Last Name'])
+                           mla['MLA Last Name'])
       party = get_party(mla['Caucus'])
       name_without_status = name.split(',')[0]
-      p = Legislator(name=name_without_status, post_id=mla['Riding Name'], 
-          role='MLA', party=party)
+      p = Legislator(name=name_without_status, post_id=mla['Riding Name'],
+                     role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', mla['Email'], None)
       p.add_contact('voice', mla['Phone Number'], 'legislature')
       yield p
+
 
 def get_csv_url():
   csv_gen_page = lxmlize(COUNCIL_PAGE)
@@ -61,4 +64,3 @@ def get_csv_url():
   resp = requests.post(COUNCIL_PAGE, data=post_data)
   result_page = lxml.html.fromstring(resp.text)
   return result_page.xpath('string(//a[@id="_ctl0_HL_file"]/@href)')
-
