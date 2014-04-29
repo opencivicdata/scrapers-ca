@@ -11,17 +11,19 @@ MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor
 class EdmontonPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
-
     yield scrape_mayor()
-    councillors = page.xpath('//div[@id="contentArea"]//h3//a/@href')
-    for councillor in councillors:
-      page = lxmlize(councillor)
-      district, name = page.xpath('//div[@id="contentArea"]/h1/text()')[0].split('-')
+
+    page = lxmlize(COUNCIL_PAGE)
+    councillor_cells = page.xpath('//th[contains(text(), "Ward")]')
+    for cell in councillor_cells:
+      district = cell.text
+      name = cell[1].text
+      page_url = cell[1].attrib['href']
+      page = lxmlize(page_url)
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
-      p.add_source(councillor)
+      p.add_source(page_url)
 
       image = page.xpath('//div[@id="contentArea"]//img/@src')
       if image:
@@ -38,11 +40,15 @@ class EdmontonPersonScraper(Scraper):
         value = contact.xpath('./td//text()')[0]
         if 'Title' in contact_type:
           continue
-        if 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
+        elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
           value = contact.xpath('./td/a/text()')[0]
           p.add_link(value, None)
-        else:
-          p.add_contact(contact_type, value, 'legislature')
+        elif 'Telephone' in contact_type:
+          p.add_contact('voice', value, 'legislature')
+        elif 'Fax' in contact_type:
+          p.add_contact('fax', value, 'legislature')
+        elif 'Email' in contact_type:
+          p.add_contact('email', value, None)
       yield p
 
 

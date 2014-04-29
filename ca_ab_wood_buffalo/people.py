@@ -3,6 +3,7 @@ from pupa.scrape import Scraper
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
+from urlparse import urljoin
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
@@ -15,42 +16,44 @@ class WoodBuffaloPersonScraper(Scraper):
     mayor_url = page.xpath('//li[@id="pageid1075"]/div/a/@href')[0]
     yield scrape_mayor(mayor_url)
 
-    councillors = page.xpath('//table//a')
-    for councillor in councillors:
-      name = councillor.text_content().strip()
-      if not name:
-        continue
-      district = councillor.xpath('./ancestor::table/preceding-sibling::h2/text()')[-1].split('-')[1]
-      image = councillor.xpath('./parent::h3/preceding-sibling::a/img/@src')[0]
+    wards = page.xpath('//b')
+    for ward in wards:
+      ward_name = ward.text_content()
+      councillor_links = ward.xpath('./parent::p/a')
+      for councillor_link in councillor_links:
+        name = councillor_link.text
+        p = Legislator(name=name, post_id=ward_name, role='Councillor')
+        url = councillor_link.attrib['href']
+        p.add_source(COUNCIL_PAGE)
+        p.add_source(url)
+        cpage = lxmlize(url)
+        image_url_rel = cpage.xpath('string(//div[@id="content"]/img)')
+        image_url = urljoin(url, image_url_rel)
+        p.image = image_url
 
-      url = councillor.attrib['href']
-      page = lxmlize(url)
-
-      p = Legislator(name=name, post_id=district, role='Councillor')
-      p.add_source(COUNCIL_PAGE)
-      p.add_source(url)
-      p.image = image
-
-      contacts = page.xpath('//div[@id="content"]//div[@class="block"]/p/text()')
-      for contact in contacts:
-        if not re.search(r'[0-9]', contact):
-          continue
-        if not '(' in contact:
-          contact_type = 'T'
-        else:
-          contact_type, contact = contact.split('(')
-        contact = contact.replace(') ', '-').strip()
-        if 'T' in contact_type:
-          p.add_contact('voice', contact, 'legislature')
-        if 'H' in contact_type:
-          p.add_contact('voice', contact, 'residence')
-        if 'C' in contact_type:
-          p.add_contact('cell', contact, 'legislature')
-        if 'F' in contact_type:
-          p.add_contact('fax', contact, 'legislature')
-      email = page.xpath('//div[@id="content"]//div[@class="block"]//a[contains(@href, "mailto:")]')[0].text_content()
-      p.add_contact('email', email, None)
-      yield p
+        contacts = page.xpath(
+                '//div[@id="content"]//div[@class="block"]/text()')
+        for contact in contacts:
+          if not re.search(r'[0-9]', contact):
+            continue
+          if not '(' in contact:
+            contact_type = 'T'
+          else:
+            contact_type, contact = contact.split('(')
+          contact = contact.replace(') ', '-').strip()
+          if 'T' in contact_type:
+            p.add_contact('voice', contact, 'legislature')
+          if 'H' in contact_type:
+            p.add_contact('voice', contact, 'residence')
+          if 'C' in contact_type:
+            p.add_contact('cell', contact, 'legislature')
+          if 'F' in contact_type:
+            p.add_contact('fax', contact, 'legislature')
+        email = cpage.xpath(
+            '//div[@id="content"]//div[@class="block"]//'
+            'a[contains(@href, "mailto:")]')[0].text_content()
+        p.add_contact('email', email, None)
+        yield p
 
 
 def scrape_mayor(url):

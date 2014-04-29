@@ -43,4 +43,3 @@ class CanadaPersonScraper(Scraper):
       m.add_contact('voice', phone, 'legislature')
       m.image = photo
       yield m
-
