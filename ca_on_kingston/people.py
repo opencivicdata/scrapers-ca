@@ -57,8 +57,7 @@ def mayor_data(url):
 
   name = contact_node.xpath('string(./span[1])')
   email = contact_node.xpath('string(.//a)')
-  photo_url_rel = contact_node.xpath('string(.//img/@src)')
-  photo_url = urljoin(url, photo_url_rel)
+  photo_url= page.xpath('string(//img[@class="innerimage"]/@src)')
 
   p = Legislator(name=name, post_id='Kingston', role='Mayor')
   p.add_source(COUNCIL_PAGE)
