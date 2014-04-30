@@ -42,7 +42,8 @@ class TorontoPersonScraper(Scraper):
     p.add_contact('voice', phone, 'legislature')
     
     address = '\n'.join(addr_cell.xpath('./p[2]/text()')[:2])
-    p.add_contact('address', address, 'legislature')
+    if address:
+        p.add_contact('address', address, 'legislature')
 
     return p
 
