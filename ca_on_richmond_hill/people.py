@@ -50,5 +50,5 @@ class RichmondHillPersonScraper(Scraper):
       p.add_contact('email', email, None)
       p.image = page.xpath('//img[contains(@alt, "%s")]/@src' % name)[0]
       if 'Website' in info:
-        p.add_link(re.findall(r'www\..*\.com', info)[0], None)
+        p.add_link(re.findall(r'www\..*\.[a-z]+', info)[0], None)
       yield p
