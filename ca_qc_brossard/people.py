@@ -13,27 +13,37 @@ class BrossardPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//a[contains(@href, "mailto:")]')[1:]
-    info = councillors[1].xpath('.//parent::div/text()')
-    print info
-    for num, councillor in enumerate(councillors):
-      name = councillor.text_content()
-      if u'Ã©' in name:
-        name = name.encode('iso-8859-1').decode('utf-8')
-      email = councillor.attrib['href'].split(':')[1].split('?')[0]
-      district = re.sub(r'(?<=[0-9]).+', '', info.pop(0)).strip()
+    councillor_elems = page.xpath('//a[contains(@class, "slide item-")]')
+    email_links = page.xpath('//a[contains(@href, "mailto:")]')
+    for elem in councillor_elems:
+      name_elem = elem.xpath('.//strong')[0]
+      name = re.search('(Mr\. )?(.+)', name_elem.text).group(2)
+      position = name_elem.xpath('string(following-sibling::text())')
       role = 'Conseiller'
-      if 'Mayor' in district:
+      if 'Mayor' in position:
         district = 'Brossard'
         role = 'Maire'
-      phone = info.pop(0).replace('ext. ', 'x').strip()
+      else:
+          district = re.sub(r'(?<=[0-9]).+', '', position).strip()
 
-      p = Legislator(name=name, post_id=district, role=role)
+      photo = re.search(r'url\((.+)\)', elem.attrib['style']).group(1)
+
+      p = Legislator(name=name, post_id=district, role=role, image=photo)
       p.add_source(COUNCIL_PAGE)
 
-      image = page.xpath('//div[@class="slide_wrap"]//a[@class="slide item-%d"]/@style' % num)[0]
-      p.image = re.findall(r'\((.*)\)', image)[0]
+      try:
+        email_elem = [link for link in email_links 
+                      if name in link.text_content().replace(u'\u2019', "'")][0]
+        email = re.match('mailto:(.+@brossard.ca)', email_elem.attrib['href']).group(1)
+        p.add_contact('email', email, None)
+        phone = email_elem.xpath(
+            './following-sibling::text()[contains(., "450")]')[0]
+        p.add_contact('voice', phone, 'legislature')
+      except IndexError: # oh Francyne/Francine Raymond, who are you, really?
+        pass
 
-      p.add_contact('email', email, None)
-      p.add_contact('voice', phone, 'legislature')
       yield p
+
+      """
+      phone = info.pop(0).replace('ext. ', 'x').strip()
+      """
