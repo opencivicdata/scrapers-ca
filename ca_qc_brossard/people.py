@@ -43,7 +43,3 @@ class BrossardPersonScraper(Scraper):
         pass
 
       yield p
-
-      """
-      phone = info.pop(0).replace('ext. ', 'x').strip()
-      """
