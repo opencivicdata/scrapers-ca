@@ -18,21 +18,29 @@ class MonctonPersonScraper(Scraper):
 
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
-      name = councillor.xpath('.//a')[0].text_content()
+      try:
+          name = councillor.xpath('.//a')[0].text_content()
+      except IndexError:
+          continue
       district = [x for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()][1].strip()
       if district == 'At Large':
         district = 'Moncton'
 
-      email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:', '')
+      #not always here
+      #email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:', '')
 
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
 
+
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]
+
+      email = page.xpath(
+          'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+      p.add_contact('email', email, None)
 
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
