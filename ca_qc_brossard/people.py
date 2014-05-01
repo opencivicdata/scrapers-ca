@@ -15,6 +15,7 @@ class BrossardPersonScraper(Scraper):
 
     councillors = page.xpath('//a[contains(@href, "mailto:")]')[1:]
     info = councillors[1].xpath('.//parent::div/text()')
+    print info
     for num, councillor in enumerate(councillors):
       name = councillor.text_content()
       if u'Ã©' in name:
