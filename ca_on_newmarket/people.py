@@ -65,17 +65,20 @@ class NewmarketPersonScraper(Scraper):
       yield p
 
   def scrape_mayor(self, div):
-    name = div.xpath('.//strong/text()')[0].replace(',', '')
-    p = Legislator(name=name, post_id='Newmarket', role='Councillor')
+    name = ' '.join(div.xpath('.//strong/text()')[0].replace(',', '').split())
+    p = Legislator(name=name, post_id='Newmarket', role='Mayor')
     p.add_source(COUNCIL_PAGE)
 
-    numbers = div.xpath('.//p/text()')
+    numbers = div.xpath('./p/text()')
     for number in numbers:
-      num_type, number = number.split(':')
-      if 'Fax' in num_type:
-        p.add_contact('fax', number, 'legislature')
-      else:
-        p.add_contact(num_type, number, num_type)
+      try:
+        num_type, number = number.split(':')
+        if 'Fax' in num_type:
+          p.add_contact('fax', number, 'legislature')
+        else:
+          p.add_contact(num_type, number, num_type)
+      except ValueError:
+        pass
     email = div.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
     p.add_contact('email', email, None)
     return p
