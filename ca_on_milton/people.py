@@ -12,7 +12,7 @@ class MiltonPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//table[@id="Table1table"]/tbody/tr')[1:]
+    councillors = page.xpath('//table[@id="Table1table"]/tbody/tr')
     for councillor in councillors:
       name = councillor.xpath('./td[2]/p/text()')[1]
       role = councillor.xpath('./td[2]/p/text()')[0].strip()
