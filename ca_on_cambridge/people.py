@@ -5,13 +5,15 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&sid=57'
+MAYOR_PAGE = 'http://www.cambridge.ca/article.php?ssid=167'
 
 
 class CambridgePersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    yield mayor_info(MAYOR_PAGE)
 
+    page = lxmlize(COUNCIL_PAGE)
     councillors = page.xpath('//div[@id="news"]//p')
     for councillor in councillors:
       district = councillor.xpath('./b')[0].text_content()
@@ -43,3 +45,22 @@ class CambridgePersonScraper(Scraper):
       p.add_contact('email', email, None)
       p.image = image
       yield p
+
+def mayor_info(url):
+  page = lxmlize(url)
+  name = page.xpath('string(//h3)').split(',')[1]
+  email = page.xpath('string(//a[contains(@href, "@")])')
+  phone = page.xpath('string(//td[contains(text(), "Tel:")])').split(':')[1]
+
+  addr_row = page.xpath('//td[text()="3): "]/parent::tr')
+  addr_rows = addr_row + addr_row[0].xpath('./following-sibling::tr')[:3]
+  addr = '\n'.join(row[2].text for row in addr_rows)
+  
+  photo_url = page.xpath('string(//center/img/@src)')
+
+  p = Legislator(name=name, post_id="Cambridge", role='Mayor', image=photo_url)
+  p.add_source(url)
+  p.add_contact('email', email, None)
+  p.add_contact('voice', phone, 'legislature')
+  p.add_contact('address', addr, 'legislature')
+  return p
