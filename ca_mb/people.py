@@ -13,15 +13,16 @@ def get_party(abbreviation):
   return {
       'NDP': 'New Democratic Party of Manitoba',
       'PC': 'Progressive Conservative Party of Manitoba',
-      'L': 'Manitoba Liberal Party'
+      'L': 'Manitoba Liberal Party',
+      'Liberal': 'Manitoba Liberal Party', # needed for a formatting error
+      'IND': 'Independent',
   }[abbreviation]
 
 class ManitobaPersonScraper(Scraper):
 
   def get_people(self):
     member_page = lxmlize(COUNCIL_PAGE)
-    table = member_page.cssselect('table[width="496"] table[width="537"]:'
-                                  'contains("Constituency")')[0]
+    table = member_page.xpath('//table')[0]
     rows = table.cssselect('tr')[1:]
     for row in rows:
       (namecell, constitcell, partycell) = row.cssselect('td')
@@ -49,10 +50,7 @@ class ManitobaPersonScraper(Scraper):
 
 def get_details(url):
   page = lxmlize(url)
-  try:
-    photo = urljoin(url, page.cssselect('img[hspace="30"]')[0].get('src'))
-  except IndexError:
-    photo = None
-  infocell = page.cssselect('td[valign=top]:contains("Office:")')[0]
-  email = infocell.cssselect('a[href^=mailto]')[0].get('href')[len('mailto:'):]
+  photo = page.xpath('string(//img[@class="page_graphic"]/@src)')
+  email = page.xpath(
+      'string(//a[contains(@href, "mailto:")][1]/@href)')[len('mailto:'):]
   return photo, email

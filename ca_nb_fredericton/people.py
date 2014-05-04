@@ -42,7 +42,4 @@ class FrederictonPersonScraper(Scraper):
         phone = phone[0].replace(') ', '-')
         p.add_contact('voice', phone, 'legislature')
 
-      fax = re.findall(r'(?<=Fax: \().*(?=E-mail)', councillor.text_content())[0].replace(') ', '-')
-      p.add_contact('fax', fax, 'legislature')
-
       yield p

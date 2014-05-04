@@ -27,7 +27,8 @@ class RichmondHillPersonScraper(Scraper):
           district = district[0].strip()
         else:
           district = 'Richmond Hill'
-        role = 'Councillor'  # @todo Need to distinguish between Councillor and Regional Councillor
+
+        role = 'Regional Councillor' if 'Regional' in header else 'Councillor'
 
       info = page.xpath('//table[7]/tbody/tr/td[2]')
       if info[0].text_content().strip():
@@ -50,5 +51,5 @@ class RichmondHillPersonScraper(Scraper):
       p.add_contact('email', email, None)
       p.image = page.xpath('//img[contains(@alt, "%s")]/@src' % name)[0]
       if 'Website' in info:
-        p.add_link(re.findall(r'www\..*\.com', info)[0], None)
+        p.add_link(re.findall(r'www\..*\.[a-z]+', info)[0], None)
       yield p

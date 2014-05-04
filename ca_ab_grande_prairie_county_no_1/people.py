@@ -4,20 +4,27 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'
+REEVE_URL = 'http://www.countygp.ab.ca/EN/main/government/council/reeve-message.html'
 
 
 class GrandePrairieCountyNo1PersonScraper(Scraper):
 
   # @todo The Reeve is also a Councillor.
   def get_people(self):
+    reeve_page = lxmlize(REEVE_URL)
+    reeve_name = reeve_page.xpath('string(//b)').split(',')[0]
+
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@class="table-plain"]/tbody/tr/td[2]')
     for councillor in councillors:
-      name = councillor.xpath('./h2')[0].text_content().split('Division')[0]
+      name = councillor.xpath('./h2')[0].text_content().split(
+          'Division')[0].strip()
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
       p = Legislator(name=name, post_id=district, role='Councillor')
+      if name == reeve_name:
+        p.add_committee_membership('Grande Prairie County No. 1', role='Reeve')
       p.add_source(COUNCIL_PAGE)
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
