@@ -8,7 +8,7 @@ import re
 COUNCIL_PAGE = 'http://opendata.peelregion.ca/media/25713/ward20102014_csv_12.2013.csv'
 CHAIR_URL = 'https://www.peelregion.ca/council/councill/kolb.htm'
 
-class PeelPersonScraper(Scraper): # @todo creates two people if that person represents two wards
+class PeelPersonScraper(Scraper): # @todo creates two people if that person represents two wards; instead, create two memberships as in ca_ab_grande_prairie_county_no_1
 
   def get_people(self):
     yield chair_info(CHAIR_URL)

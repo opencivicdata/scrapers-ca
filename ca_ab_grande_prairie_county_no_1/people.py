@@ -9,7 +9,6 @@ REEVE_URL = 'http://www.countygp.ab.ca/EN/main/government/council/reeve-message.
 
 class GrandePrairieCountyNo1PersonScraper(Scraper):
 
-  # @todo The Reeve is also a Councillor.
   def get_people(self):
     reeve_page = lxmlize(REEVE_URL)
     reeve_name = reeve_page.xpath('string(//b)').split(',')[0]
@@ -23,8 +22,6 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
       p = Legislator(name=name, post_id=district, role='Councillor')
-      if name == reeve_name:
-        p.add_committee_membership('Grande Prairie County No. 1', role='Reeve')
       p.add_source(COUNCIL_PAGE)
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
@@ -50,4 +47,15 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
           p.add_contact('voice', number, 'residence')
         else:
           raise Exception('Unrecognized contact type %s' % contact_type)
+
+      # @todo Uncomment when upgrading from Pupa 0.0.3.
+      # if name == reeve_name:
+      #   membership = Membership(
+      #       p._id,
+      #       'jurisdiction::ocd-jurisdiction/country:ca/csd:4819006/council',
+      #       post_id='district::Grande Prairie County No. 1',
+      #       contact_details=p._contact_details,
+      #       role='Reeve')
+      #   p._related.append(membership)
+
       yield p
