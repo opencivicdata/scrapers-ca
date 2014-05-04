@@ -27,6 +27,8 @@ class CoteSaintLucPersonScraper(Scraper):
          'string(.//span[contains(text(), "Councillor")])')[len('Councillor '):]
       district = info_cell.xpath('string(.//p[contains(text(), "District")])')
       email = info_cell.xpath('string(.//a[contains(@href, "mailto:")])')
+      if not email:
+        email = info_cell.xpath('string(.//strong[contains(text(), "E-mail")]/following-sibling::text())')
       phone = info_cell.xpath(
           'string(.//p[contains(.//text(), "Telephone:")])').split(':')[1]
       img_url_rel = img_cell.xpath('string(//img/@href)')
