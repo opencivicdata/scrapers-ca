@@ -6580,6 +6580,26 @@ subdivisions[u'ocd-division/country:ca/province:bc'].append(u"Victoria-Swan Lake
 subdivisions[u'ocd-division/country:ca/province:bc'].append(u"West Vancouver-Capilano")
 subdivisions[u'ocd-division/country:ca/province:bc'].append(u"West Vancouver-Sea to Sky")
 subdivisions[u'ocd-division/country:ca/province:bc'].append(u"Westside-Kelowna")
+subdivisions[u'ocd-division/country:ca/territory:nt'] = []
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Nunakput")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Inuvik Boot Lake")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Inuvik Twin Lakes")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Mackenzie-Delta")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Sahtu")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Nahendeh")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Monfwi")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Tu Nedhe")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Deh Cho")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Thebacha")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Weledeh")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Hay River South")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Hay River North")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Range Lake")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Yellowknife South")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Kam Lake")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Frame Lake")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Yellowknife Centre")
+subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Great Slave")
 subdivisions[u'ocd-division/country:ca/csd:1001101'] = [u"Division No. 1, Subd. V"]
 subdivisions[u'ocd-division/country:ca/csd:1001105'] = [u"Portugal Cove South"]
 subdivisions[u'ocd-division/country:ca/csd:1001113'] = [u"Trepassey"]

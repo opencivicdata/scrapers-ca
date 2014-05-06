@@ -18,6 +18,7 @@ File.open('constants.py', 'w') do |f|
     end
   end
 
+  # Federal subdivisions
   f.write %(subdivisions[u'ocd-division/country:ca'] = []\n)
   rows = CSV.parse(open("https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_federal_electoral_districts.csv"))
   rows.shift
@@ -25,6 +26,7 @@ File.open('constants.py', 'w') do |f|
     f.write %(subdivisions[u'ocd-division/country:ca'].append(u"#{name}")\n)
   end
 
+  # Provincial subdivisions
   %w(nl pe ns nb qc on mb sk ab bc).each do |type_id|
     f.write %(subdivisions[u'ocd-division/country:ca/province:#{type_id}'] = []\n)
     rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/province-#{type_id}-electoral_districts.csv"))
@@ -34,12 +36,24 @@ File.open('constants.py', 'w') do |f|
     end
   end
 
+  # Territorial subdivisions
+  %w(nt).each do |type_id|
+    f.write %(subdivisions[u'ocd-division/country:ca/territory:#{type_id}'] = []\n)
+    rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/territory-#{type_id}-electoral_districts.csv"))
+    rows.shift
+    rows.each do |_,name|
+      f.write %(subdivisions[u'ocd-division/country:ca/territory:#{type_id}'].append(u"#{name}")\n)
+    end
+  end
+
+  # Census subdivisions
   rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv'))
   rows.shift
   rows.each do |id,name|
     f.write %(subdivisions[u'#{id}'] = [u"#{name}"]\n)
   end
 
+  # Municipal subdivisions
   rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_municipal_subdivisions.csv'))
   rows.shift
   rows.each do |id,name|
