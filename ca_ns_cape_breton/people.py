@@ -13,7 +13,6 @@ class CapeBretonPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    """
     councillors = page.xpath('//table[@class="table_style"]/tbody/tr')[1:]
     for councillor in councillors:
       name = councillor.xpath('.//a')[0].text_content()
@@ -34,7 +33,6 @@ class CapeBretonPersonScraper(Scraper):
       page = lxmlize(councillor_url)
       p.image = page.xpath('//img[@class="image_left"]/@src')[0]
       yield p
-    """
 
     mayorpage = lxmlize(MAYOR_PAGE)
     name_elem = mayorpage.xpath('//strong[contains(text(), "About")]')[0]
