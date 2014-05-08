@@ -27,7 +27,7 @@ class WoodBuffaloPersonScraper(Scraper):
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         cpage = lxmlize(url)
-        image_url_rel = cpage.xpath('string(//div[@id="content"]/img)')
+        image_url_rel = cpage.xpath('string(//div[@id="content"]/img/@src)')
         image_url = urljoin(url, image_url_rel)
         p.image = image_url
 
