@@ -43,10 +43,10 @@ If the `pupa.cli` command raises the error below, ensure that MongoDB is running
 If, while developing your scraper, you created duplicates, you may need to:
 
 1. Run `invoke flush --division-id=JURISDICTION-ID-OR-DIVISION-ID`
-1. Run the MongoDB command
-1. Run this repository's `pupa.cli` command or [scrapers_ca_app](https://github.com/opennorth/scrapers_ca_app)'s' `cron.py` command
+1. Run the MongoDB command output by the above command
+1. Run this repository's `pupa.cli` command or [scrapers_ca_app](https://github.com/opennorth/scrapers_ca_app)'s' `update` command
 
-If the duplicates exist in [Represent](http://represent.opennorth.ca/), perform the MongoDB and `cron.py` steps on Heroku and re-import the data into Represent.
+If the duplicates exist in [Represent](http://represent.opennorth.ca/), perform the MongoDB and `update` steps on Heroku and re-import the data into Represent.
 
 ## Maintenance
 

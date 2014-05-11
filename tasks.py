@@ -396,6 +396,6 @@ if (db.jurisdictions.count({_id: jurisdiction_id})) {
   print("Couldn't find jurisdiction_id " + jurisdiction_id);
 }""" % expected
 
-  print 'heroku run python cron.py %(module_name)s' % expected
+  print 'heroku run python manage.py update %(module_name)s' % expected
   print expected['name']
   print 'http://represent.opennorth.ca/admin/representatives/representativeset/?o=1'
