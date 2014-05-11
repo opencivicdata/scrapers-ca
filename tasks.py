@@ -199,7 +199,7 @@ def get_definition(division_id, aggregation=False):
 @task
 def urls():
   for module_name in os.listdir('.'):
-    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
+    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data', '__pycache__'):
       module = importlib.import_module('%s.people' % module_name)
       if module.__dict__.get('COUNCIL_PAGE'):
         print '%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE'])
@@ -272,7 +272,7 @@ def tidy():
     aggregation_division_ids = set()
     division_ids = set()
 
-    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data') and not module_name.endswith('_candidates'):
+    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data', '__pycache__') and not module_name.endswith('_candidates'):
       module = importlib.import_module(module_name)
       for obj in module.__dict__.values():
         jurisdiction_id = getattr(obj, 'jurisdiction_id', None)
@@ -372,7 +372,7 @@ def tidy():
 @task
 def sources():
   for module_name in os.listdir('.'):
-    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data'):
+    if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data', '__pycache__'):
       path = os.path.join(module_name, 'people.py')
       with codecs.open(path, 'r', 'utf8') as f:
         content = f.read()
@@ -395,7 +395,3 @@ if (db.jurisdictions.count({_id: jurisdiction_id})) {
 } else {
   print("Couldn't find jurisdiction_id " + jurisdiction_id);
 }""" % expected
-
-  print 'heroku run python manage.py update %(module_name)s' % expected
-  print expected['name']
-  print 'http://represent.opennorth.ca/admin/representatives/representativeset/?o=1'
