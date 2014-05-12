@@ -378,20 +378,3 @@ def sources():
         content = f.read()
         if content.count('add_source') < content.count('lxmlize') - 1:  # exclude the import
           print 'Add source? %s' % path
-
-
-@task
-def flush(division_id):
-  division_id = re.sub('/(?:council|legislature)\Z', '', re.sub(r'\A(?:jurisdiction:)?ocd-jurisdiction/', 'ocd-division/', division_id))
-  expected = get_definition(division_id)
-
-  print """jurisdiction_id = '%(jurisdiction_id)s';
-if (db.jurisdictions.count({_id: jurisdiction_id})) {
-  db.memberships.find({jurisdiction_id: jurisdiction_id}).forEach(function (membership) {
-    db.people.remove({_id: membership.person_id})
-  });
-  db.memberships.remove({jurisdiction_id: jurisdiction_id});
-  db.organizations.remove({jurisdiction_id: jurisdiction_id});
-} else {
-  print("Couldn't find jurisdiction_id " + jurisdiction_id);
-}""" % expected
