@@ -21,7 +21,7 @@ class CaledonPersonScraper(Scraper):
       url = councillor.xpath('.//a')[0].attrib['href']
 
       page = lxmlize(url)
-      if 'Regional' in page.xpath('string(//title)'):
+      if 'Regional' in page.xpath('string(//h1)'):
         role = 'Regional Councillor'
       else:
         role = 'Area Councillor'
