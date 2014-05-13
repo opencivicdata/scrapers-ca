@@ -13,14 +13,16 @@ class NewmarketPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="printArea"]//table//tr//td')[4:-1]
-    for councillor in councillors:
-      if councillor == councillors[0]:
-        yield self.scrape_mayor(councillor)
-        continue
-      name = councillor.xpath('.//a/text()')[0]
-      district = councillor.xpath('.//strong/text()')[1].replace('Councillor- ', '')
-      district = district if not 'Regional' in district else 'Newmarket'
-      role = councillor.xpath('.//strong/text()')[1].split('-')[0]  # @todo Mayor is not being set
+    yield self.scrape_mayor(councillors[0])
+    for councillor in councillors[1:]:
+      name = ' '.join(councillor.xpath('string(.//strong/a[last()])').split())
+      infostr = councillor.xpath('string(.//strong)')
+      try:
+        district = infostr.split('-')[1]
+        role = 'Councillor'
+      except IndexError:
+        district = 'Newmarket'
+        role = 'Regional Councillor'
       url = councillor.xpath('.//a/@href')[0]
 
       p = Legislator(name=name, post_id=district, role=role)
