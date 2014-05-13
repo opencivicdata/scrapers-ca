@@ -13,12 +13,9 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="article-content"]//td[@class="ms-rteTableOddCol-0"]')
-    for councillor in councillors:
-
+    yield scrape_mayor(councillors[0])
+    for councillor in councillors[1:]:
       if not councillor.xpath('.//a'):
-        continue
-      if 'maire' in councillor.xpath('.//a/@href')[0]:
-        yield scrape_mayor(councillor)
         continue
 
       name = councillor.xpath('.//a')[0].text_content().strip()
@@ -38,6 +35,10 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
           phone = contact.strip().replace(' ', '-')
           p.add_contact('voice', phone, 'legislature')
       get_links(p, page.xpath('.//td[@class="ms-rteTableOddCol-0"]')[0])
+
+      email = page.xpath(
+        'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+      p.add_contact('email', email, None)
       yield p
 
 
@@ -59,6 +60,7 @@ def scrape_mayor(div):
   address = ' '.join(contacts[:4])
   phone = contacts[-3].split(':')[1].strip().replace(' ', '-')
   fax = contacts[-2].split(':')[1].strip().replace(' ', '-')
+  # mayor's email is a form
   return p
 
 

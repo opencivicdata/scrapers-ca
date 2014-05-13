@@ -15,6 +15,7 @@ class LondonPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
     councillor_pages = page.xpath('//div[@class="imageLinkContent"]/'
                                   'a[starts-with(text(), "Ward")]/@href')
+
     for councillor_page in councillor_pages:
       yield councillor_data(councillor_page)
 
@@ -37,11 +38,15 @@ def councillor_data(url):
   photo = page.xpath('string(//div[@id="contentright"]//img[1]/@src)')
   phone = get_phone_data(page)
 
+  js = page.xpath('string(//span/script)')
+  email = email_js(js)
+
   p = Legislator(name=name, post_id=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
+  p.add_contact('email', email, None)
   p.image = photo
 
   return p
@@ -53,10 +58,18 @@ def mayor_data(url):
   photo_url = page.xpath('string(//div[@class="imageLeftDiv"]/img/@src)')
   phone = get_phone_data(page)
 
+  js = page.xpath('string(//span/script)')
+  email = email_js(js)
+
+  phone_str = page.xpath('string(//span[contains(@class, "iconPhone")])')
+  phone = phone_str.split(':')[1]
+
   p = Legislator(name=name, post_id='London', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_source(url)
   p.image = photo_url
+  p.add_contact('email', email, None)
+  p.add_contact('phone', phone, 'legislature')
   return p
 
 def get_phone_data(page):
@@ -65,4 +78,9 @@ def get_phone_data(page):
   phone_text = page.xpath('string((//span[contains(@class, "contactValue")]'
                           '[contains(text(), "hone")])[1])')
   return re.search(r'[0-9].*$', phone_text).group()
+
+def email_js(js):
+  user, domain, suffix = re.findall(r'trim\("(.+?)"', js)[:3]
+  email = user + '@' + domain + '.' + suffix
+  return email
 

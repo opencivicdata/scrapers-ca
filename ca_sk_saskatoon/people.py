@@ -5,6 +5,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = "http://www.saskatoon.ca/CITY%20COUNCIL/YOUR%20WARD%20COUNCILLORS/Pages/default.aspx"
+EMAIL_URL = "http://apps2.saskatoon.ca/app/aForms/councillor.aspx"
 
 
 class SaskatoonPersonScraper(Scraper):
@@ -15,6 +16,14 @@ class SaskatoonPersonScraper(Scraper):
     mayor_url = page.xpath('//td[@class="sask_LeftNavLinkContainer"]/a/@href')[0]
     yield scrape_mayor(mayor_url)
 
+    email_page = lxmlize(EMAIL_URL)
+    c_options = email_page.xpath(
+        '//select[@id="councillorList"]/option[contains(text(), "Ward")]')
+    email_dict = dict((opt.text.split(' - ')[0], opt.attrib['value']) for 
+        opt in c_options)
+    print 'DICT'
+    print email_dict
+
     councillors = page.xpath('//td[@class="sask_LeftNavChildNodeContainer"]//a')
     for councillor in councillors:
       district, name = councillor.text_content().split(' - Councillor ')
@@ -23,6 +32,10 @@ class SaskatoonPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+      try:
+        p.add_contact('email', email_dict[district], None)
+      except KeyError:
+        pass
 
       page = lxmlize(url)
       contacts = page.xpath('//p[@class="para12"]')[0]
@@ -41,8 +54,6 @@ class SaskatoonPersonScraper(Scraper):
           p.add_contact('fax', value, 'legislature')
         if 'Phone' in contact_type:
           p.add_contact(contact_type, value, contact_type)
-        if 'Email' in contact_type:
-          p.add_contact('email', value, None)
       yield p
 
 
