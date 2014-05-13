@@ -21,8 +21,6 @@ class SaskatoonPersonScraper(Scraper):
         '//select[@id="councillorList"]/option[contains(text(), "Ward")]')
     email_dict = dict((opt.text.split(' - ')[0], opt.attrib['value']) for 
         opt in c_options)
-    print 'DICT'
-    print email_dict
 
     councillors = page.xpath('//td[@class="sask_LeftNavChildNodeContainer"]//a')
     for councillor in councillors:
