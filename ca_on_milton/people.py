@@ -39,4 +39,10 @@ class MiltonPersonScraper(Scraper):
         num_type, number = number.split(':')
         number = number.replace(', ext ', ' x').strip()
         p.add_contact(num_type, number, num_type)
+
+      email = councillor.xpath(
+        'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+      # only works for some, others use forms
+      if email:
+        p.add_contact('email', email, None)
       yield p
