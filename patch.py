@@ -123,12 +123,15 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4806016/council', # Calgary
     ) or x['organization_id'] in ( # Leader has no email
       'jurisdiction:ocd-jurisdiction/country:ca/cd:3521/council', # Peel
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2456083/council', # Saint-Jean-sur-Richelieu
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council', # Saguenay
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530013/council', # Kitchener
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4711066/council', # Saskatoon
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4811061/council', # Edmonton
-    ) and x['role'] in ('Chair', 'Maire', 'Mayor')
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4816037/council', # Wood Buffalo
+    ) and x['role'] in ('Chair', 'Maire', 'Mayor', 'Regional Chair')
   ),
   'Membership has no emails {organization_id} {post_id!r}',
 )]
