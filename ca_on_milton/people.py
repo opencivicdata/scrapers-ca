@@ -16,7 +16,7 @@ class MiltonPersonScraper(Scraper):
     for councillor in councillors:
       name = councillor.xpath('./td[2]/p/text()')[1]
       role = councillor.xpath('./td[2]/p/text()')[0].strip()
-      if role == 'Mayor & Regional Councillor':
+      if role == 'Mayor and Regional Councillor':
         role = 'Mayor'
       elif role == 'Local & Regional Councillor':
         role = 'Regional Councillor'

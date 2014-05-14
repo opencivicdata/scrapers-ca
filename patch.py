@@ -10,8 +10,6 @@ from pupa.models.schemas.organization import schema as organization_schema
 
 from constants import names, subdivisions, styles
 
-# @todo Test that image resolves.
-
 _contact_details['items']['properties']['type']['blank'] = False
 _contact_details['items']['properties']['type']['enum'] = [
   'address',
@@ -27,7 +25,7 @@ _contact_details['items']['properties']['value']['conditionalPattern'] = [
   (re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
     lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
   # Ends with a locality, a province or territory code, and an optional postal code.
-  # @todo Uncomment.
+  # @note We realistically will never uncomment this, as addresses are not important.
   # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
   #  lambda x: x['type'] == 'address'),
 ]
@@ -147,8 +145,9 @@ person_schema['properties']['name']['blank'] = False
 person_schema['properties']['name']['compiledPattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
 person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
 person_schema['properties']['gender']['enum'] = ['male', 'female']
-# @todo Uncomment.
-# person_schema['properties']['image']['blank'] = False
+person_schema['properties']['image']['blank'] = False
+# @note https://github.com/opennorth/represent-canada-images checks whether an
+# image resolves. Testing URLs here would slow down scraping.
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
 # post_id is used to disambiguate people within a jurisdiction.
