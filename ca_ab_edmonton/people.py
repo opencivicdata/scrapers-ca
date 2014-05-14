@@ -63,11 +63,6 @@ def scrape_mayor():
   p.image = image
 
   address = ' '.join(page.xpath('//address/p/text()'))
-  phone = page.xpath('.//address/following-sibling::table/tbody/tr/td/text()')[0]
-  fax = page.xpath('.//address/following-sibling::table/tbody/tr/td/text()')[1]
-
   p.add_contact('address', address, 'legislature')
-  p.add_contact('voice', phone, 'legislature')
-  p.add_contact('fax', fax, 'legislature')
 
   return p

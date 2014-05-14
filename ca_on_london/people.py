@@ -69,7 +69,7 @@ def mayor_data(url):
   p.add_source(url)
   p.image = photo_url
   p.add_contact('email', email, None)
-  p.add_contact('phone', phone, 'legislature')
+  p.add_contact('voice', phone, 'legislature')
   return p
 
 def get_phone_data(page):
