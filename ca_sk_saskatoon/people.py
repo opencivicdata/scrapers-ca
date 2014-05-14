@@ -21,8 +21,6 @@ class SaskatoonPersonScraper(Scraper):
         '//select[@id="councillorList"]/option[contains(text(), "Ward")]')
     email_dict = dict((opt.text.split(' - ')[0], opt.attrib['value']) for 
         opt in c_options)
-    print 'DICT'
-    print email_dict
 
     councillors = page.xpath('//td[@class="sask_LeftNavChildNodeContainer"]//a')
     for councillor in councillors:
@@ -32,12 +30,14 @@ class SaskatoonPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+
+      page = lxmlize(url)
       try:
         p.add_contact('email', email_dict[district], None)
       except KeyError:
-        pass
+        email = page.xpath('string(//a[contains(@href, "mailto:")]/@href)')
+        p.add_contact('email', email, None)
 
-      page = lxmlize(url)
       contacts = page.xpath('//p[@class="para12"]')[0]
       if not contacts.text_content().strip():
         contacts = page.xpath('//p[@class="para12"]')[1]
