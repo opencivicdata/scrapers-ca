@@ -30,12 +30,14 @@ class SaskatoonPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+
+      page = lxmlize(url)
       try:
         p.add_contact('email', email_dict[district], None)
       except KeyError:
-        pass
+        email = page.xpath('string(//a[contains(@href, "mailto:")]/@href)')
+        p.add_contact('email', email, None)
 
-      page = lxmlize(url)
       contacts = page.xpath('//p[@class="para12"]')[0]
       if not contacts.text_content().strip():
         contacts = page.xpath('//p[@class="para12"]')[1]
