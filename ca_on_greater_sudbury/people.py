@@ -22,6 +22,8 @@ class GreaterSudburyPersonScraper(Scraper):
         break
 
       district, name = councillor.text_content().split(' - ')
+      if name == 'Vacant':
+        continue
 
       page = lxmlize(councillor.attrib['href'])
 
