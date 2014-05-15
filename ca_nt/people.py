@@ -19,6 +19,8 @@ class NorthwestTerritoriesPersonScraper(Scraper):
     for cell in member_cells:
       name = cell[1].text_content().replace(' .', '. ') # typo on page
       riding = cell[2].text_content()
+      if 'Mackenzie Delta' in riding:
+        riding = 'Mackenzie-Delta'
       detail_url = cell[0].xpath('string(.//a/@href)')
       detail_page = lxmlize(detail_url)
       photo_url = detail_page.xpath(
