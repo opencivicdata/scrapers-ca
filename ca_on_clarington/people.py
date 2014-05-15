@@ -12,27 +12,19 @@ class ClaringtonPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//*[@class="subtitle"]')
-    emails = page.xpath('.//a[contains(@href, "mailto:")]')
-    for councillor in councillors:
-      name = re.findall(r'(([A-Z]+ ?){2,})', councillor.text_content())[0][0].title()
-      district = re.findall(r'\((.*)\)?', councillor.text_content())
-      if not district:
-        district = 'Clarington'
-        role = 'Mayor'
-      else:
-        district = district[0].replace(")", '')
-        role = 'Councillor'
-      email = emails.pop(0).attrib['href'].split(':')[1]
-
-      image = councillor.xpath('.//following-sibling::img/@src')
-      if image:
-        image = image[0]
-      else:
-        image = councillor.xpath('.//parent::*/following-sibling::*//@src')[0]
-
-      p = Legislator(name=name, post_id=district, role=role)
+    for person_header_elem in page.xpath('//h2'):
+      role, name_post = person_header_elem.text.split(' - ')
+      try:
+        name, caps_post = re.match(r'(.+) \((.+)\)', name_post).groups()
+        post = caps_post.title()
+      except AttributeError:
+        name = name_post
+        post = "Clarington"
+      email = person_header_elem.xpath(
+          'string(./following-sibling::a[1]/@href)')[len('mailto:'):]
+      photo_url = person_header_elem.xpath(
+          'string(./following-sibling::img[1]/@src)')
+      p = Legislator(name=name, post_id=post, role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
-      p.image = image
       yield p
