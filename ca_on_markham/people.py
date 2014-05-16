@@ -87,8 +87,9 @@ def scrape_mayor(url):
   name = page.xpath('//div[@class="interiorContentWrapper"]/p/strong/text()')[0]
   address = ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p/text()')[1:3])
   address = re.sub(r'\s{2,}', ' ', address)
-  phone = page.xpath('//div[@class="interiorContentWrapper"]/p/text()')[3].split(':')[1].strip()
-  email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+  contact_elem = page.xpath('//div[@class="interiorContentWrapper"]/p[3]')[0]
+  phone = contact_elem.text.split(':')[1].strip()
+  email = contact_elem.xpath('string(./a)')
 
   p = Legislator(name=name, post_id='Markham', role='Mayor')
   p.add_source(url)
