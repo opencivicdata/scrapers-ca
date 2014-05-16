@@ -19,14 +19,15 @@ class GuelphPersonScraper(Scraper):
         continue
 
       name = councillor.xpath('.//a')[0].text_content().replace('Councillor', '').replace('Mayor', '')
-      district = councillor.xpath('.//text()[3]')[0]
+      district = councillor.xpath('.//text()[4]')[0]
       url = councillor.xpath('.//a')[0].attrib['href']
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-      p.add_contact('voice', councillor.xpath('.//text()[4]')[0].replace('x', 'ext.'), 'legislature')
+      p.add_contact('voice', councillor.xpath('.//text()[5]')[0].replace(
+          'extension', 'x'), 'legislature')
       email = councillor.xpath('.//a[contains(@href,"mailto:")]')
       if email:
         email = email[0].text_content()
@@ -64,7 +65,7 @@ class GuelphPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
-    phone = div.xpath('.//text()[3]')[0]
+    phone = div.xpath('.//text()[4]')[0]
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
 
     page = lxmlize(url)
@@ -76,7 +77,6 @@ class GuelphPersonScraper(Scraper):
     p.add_contact('email', email, None)
     p.add_contact('address', address, 'legislature')
     p.add_contact('fax', fax, 'legislature')
-    p.add_link(div.xpath('.//a[2]')[0].attrib['href'], None)
     p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href'], None)
     p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href'], None)
     p.image = page.xpath('//header/img/@src')[0]
