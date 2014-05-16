@@ -33,7 +33,7 @@ class HaldimandCountyPersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-      p.image = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//tr[1]/td/img/@src')[0]
+      p.image = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//tr[1]/td//img/@src')[0]
 
       info = page.xpath('//a[contains(@href, "mailto:")]/parent::*/text()')
       for i, field, in enumerate(info):
