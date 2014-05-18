@@ -8,6 +8,7 @@ File.open('constants.py', 'w') do |f|
   f.write "styles = {u'ocd-division/country:ca': [u'MP']}\n"
 
   names = {}
+  seen = {}
 
   %w(ca_provinces_and_territories ca_census_divisions ca_census_subdivisions).each do |filename|
     rows = CSV.parse(open("https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/#{filename}.csv"))
@@ -46,11 +47,20 @@ File.open('constants.py', 'w') do |f|
     end
   end
 
+  # Census divisions
+  rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv'))
+  rows.shift
+  rows.each do |id,name|
+    f.write %(subdivisions[u'#{id}'] = [u"#{name}"]\n)
+    seen[id] = true
+  end
+
   # Census subdivisions
   rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv'))
   rows.shift
   rows.each do |id,name|
     f.write %(subdivisions[u'#{id}'] = [u"#{name}"]\n)
+    seen[id] = true
   end
 
   # Municipal subdivisions
@@ -65,7 +75,6 @@ File.open('constants.py', 'w') do |f|
     end
   end
 
-  seen = {}
   rows = CSV.parse(open('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_municipal_subdivisions-parent_id.csv'))
   rows.shift
   rows.sort_by(&:last).each do |id,parent_id|

@@ -6600,6 +6600,299 @@ subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Kam Lake")
 subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Frame Lake")
 subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Yellowknife Centre")
 subdivisions[u'ocd-division/country:ca/territory:nt'].append(u"Great Slave")
+subdivisions[u'ocd-division/country:ca/cd:1001'] = [u"Division No. 1"]
+subdivisions[u'ocd-division/country:ca/cd:1002'] = [u"Division No. 2"]
+subdivisions[u'ocd-division/country:ca/cd:1003'] = [u"Division No. 3"]
+subdivisions[u'ocd-division/country:ca/cd:1004'] = [u"Division No. 4"]
+subdivisions[u'ocd-division/country:ca/cd:1005'] = [u"Division No. 5"]
+subdivisions[u'ocd-division/country:ca/cd:1006'] = [u"Division No. 6"]
+subdivisions[u'ocd-division/country:ca/cd:1007'] = [u"Division No. 7"]
+subdivisions[u'ocd-division/country:ca/cd:1008'] = [u"Division No. 8"]
+subdivisions[u'ocd-division/country:ca/cd:1009'] = [u"Division No. 9"]
+subdivisions[u'ocd-division/country:ca/cd:1010'] = [u"Division No. 10"]
+subdivisions[u'ocd-division/country:ca/cd:1011'] = [u"Division No. 11"]
+subdivisions[u'ocd-division/country:ca/cd:1101'] = [u"Kings"]
+subdivisions[u'ocd-division/country:ca/cd:1102'] = [u"Queens"]
+subdivisions[u'ocd-division/country:ca/cd:1103'] = [u"Prince"]
+subdivisions[u'ocd-division/country:ca/cd:1201'] = [u"Shelburne"]
+subdivisions[u'ocd-division/country:ca/cd:1202'] = [u"Yarmouth"]
+subdivisions[u'ocd-division/country:ca/cd:1203'] = [u"Digby"]
+subdivisions[u'ocd-division/country:ca/cd:1204'] = [u"Queens"]
+subdivisions[u'ocd-division/country:ca/cd:1205'] = [u"Annapolis"]
+subdivisions[u'ocd-division/country:ca/cd:1206'] = [u"Lunenburg"]
+subdivisions[u'ocd-division/country:ca/cd:1207'] = [u"Kings"]
+subdivisions[u'ocd-division/country:ca/cd:1208'] = [u"Hants"]
+subdivisions[u'ocd-division/country:ca/cd:1209'] = [u"Halifax"]
+subdivisions[u'ocd-division/country:ca/cd:1210'] = [u"Colchester"]
+subdivisions[u'ocd-division/country:ca/cd:1211'] = [u"Cumberland"]
+subdivisions[u'ocd-division/country:ca/cd:1212'] = [u"Pictou"]
+subdivisions[u'ocd-division/country:ca/cd:1213'] = [u"Guysborough"]
+subdivisions[u'ocd-division/country:ca/cd:1214'] = [u"Antigonish"]
+subdivisions[u'ocd-division/country:ca/cd:1215'] = [u"Inverness"]
+subdivisions[u'ocd-division/country:ca/cd:1216'] = [u"Richmond"]
+subdivisions[u'ocd-division/country:ca/cd:1217'] = [u"Cape Breton"]
+subdivisions[u'ocd-division/country:ca/cd:1218'] = [u"Victoria"]
+subdivisions[u'ocd-division/country:ca/cd:1301'] = [u"Saint John"]
+subdivisions[u'ocd-division/country:ca/cd:1302'] = [u"Charlotte"]
+subdivisions[u'ocd-division/country:ca/cd:1303'] = [u"Sunbury"]
+subdivisions[u'ocd-division/country:ca/cd:1304'] = [u"Queens"]
+subdivisions[u'ocd-division/country:ca/cd:1305'] = [u"Kings"]
+subdivisions[u'ocd-division/country:ca/cd:1306'] = [u"Albert"]
+subdivisions[u'ocd-division/country:ca/cd:1307'] = [u"Westmorland"]
+subdivisions[u'ocd-division/country:ca/cd:1308'] = [u"Kent"]
+subdivisions[u'ocd-division/country:ca/cd:1309'] = [u"Northumberland"]
+subdivisions[u'ocd-division/country:ca/cd:1310'] = [u"York"]
+subdivisions[u'ocd-division/country:ca/cd:1311'] = [u"Carleton"]
+subdivisions[u'ocd-division/country:ca/cd:1312'] = [u"Victoria"]
+subdivisions[u'ocd-division/country:ca/cd:1313'] = [u"Madawaska"]
+subdivisions[u'ocd-division/country:ca/cd:1314'] = [u"Restigouche"]
+subdivisions[u'ocd-division/country:ca/cd:1315'] = [u"Gloucester"]
+subdivisions[u'ocd-division/country:ca/cd:2401'] = [u"Les Îles-de-la-Madeleine"]
+subdivisions[u'ocd-division/country:ca/cd:2402'] = [u"Le Rocher-Percé"]
+subdivisions[u'ocd-division/country:ca/cd:2403'] = [u"La Côte-de-Gaspé"]
+subdivisions[u'ocd-division/country:ca/cd:2404'] = [u"La Haute-Gaspésie"]
+subdivisions[u'ocd-division/country:ca/cd:2405'] = [u"Bonaventure"]
+subdivisions[u'ocd-division/country:ca/cd:2406'] = [u"Avignon"]
+subdivisions[u'ocd-division/country:ca/cd:2407'] = [u"La Matapédia"]
+subdivisions[u'ocd-division/country:ca/cd:2408'] = [u"Matane"]
+subdivisions[u'ocd-division/country:ca/cd:2409'] = [u"La Mitis"]
+subdivisions[u'ocd-division/country:ca/cd:2410'] = [u"Rimouski-Neigette"]
+subdivisions[u'ocd-division/country:ca/cd:2411'] = [u"Les Basques"]
+subdivisions[u'ocd-division/country:ca/cd:2412'] = [u"Rivière-du-Loup"]
+subdivisions[u'ocd-division/country:ca/cd:2413'] = [u"Témiscouata"]
+subdivisions[u'ocd-division/country:ca/cd:2414'] = [u"Kamouraska"]
+subdivisions[u'ocd-division/country:ca/cd:2415'] = [u"Charlevoix-Est"]
+subdivisions[u'ocd-division/country:ca/cd:2416'] = [u"Charlevoix"]
+subdivisions[u'ocd-division/country:ca/cd:2417'] = [u"L'Islet"]
+subdivisions[u'ocd-division/country:ca/cd:2418'] = [u"Montmagny"]
+subdivisions[u'ocd-division/country:ca/cd:2419'] = [u"Bellechasse"]
+subdivisions[u'ocd-division/country:ca/cd:2420'] = [u"L'Île-d'Orléans"]
+subdivisions[u'ocd-division/country:ca/cd:2421'] = [u"La Côte-de-Beaupré"]
+subdivisions[u'ocd-division/country:ca/cd:2422'] = [u"La Jacques-Cartier"]
+subdivisions[u'ocd-division/country:ca/cd:2423'] = [u"Québec"]
+subdivisions[u'ocd-division/country:ca/cd:2425'] = [u"Lévis"]
+subdivisions[u'ocd-division/country:ca/cd:2426'] = [u"La Nouvelle-Beauce"]
+subdivisions[u'ocd-division/country:ca/cd:2427'] = [u"Robert-Cliche"]
+subdivisions[u'ocd-division/country:ca/cd:2428'] = [u"Les Etchemins"]
+subdivisions[u'ocd-division/country:ca/cd:2429'] = [u"Beauce-Sartigan"]
+subdivisions[u'ocd-division/country:ca/cd:2430'] = [u"Le Granit"]
+subdivisions[u'ocd-division/country:ca/cd:2431'] = [u"Les Appalaches"]
+subdivisions[u'ocd-division/country:ca/cd:2432'] = [u"L'Érable"]
+subdivisions[u'ocd-division/country:ca/cd:2433'] = [u"Lotbinière"]
+subdivisions[u'ocd-division/country:ca/cd:2434'] = [u"Portneuf"]
+subdivisions[u'ocd-division/country:ca/cd:2435'] = [u"Mékinac"]
+subdivisions[u'ocd-division/country:ca/cd:2436'] = [u"Shawinigan"]
+subdivisions[u'ocd-division/country:ca/cd:2437'] = [u"Francheville"]
+subdivisions[u'ocd-division/country:ca/cd:2438'] = [u"Bécancour"]
+subdivisions[u'ocd-division/country:ca/cd:2439'] = [u"Arthabaska"]
+subdivisions[u'ocd-division/country:ca/cd:2440'] = [u"Les Sources"]
+subdivisions[u'ocd-division/country:ca/cd:2441'] = [u"Le Haut-Saint-François"]
+subdivisions[u'ocd-division/country:ca/cd:2442'] = [u"Le Val-Saint-François"]
+subdivisions[u'ocd-division/country:ca/cd:2443'] = [u"Sherbrooke"]
+subdivisions[u'ocd-division/country:ca/cd:2444'] = [u"Coaticook"]
+subdivisions[u'ocd-division/country:ca/cd:2445'] = [u"Memphrémagog"]
+subdivisions[u'ocd-division/country:ca/cd:2446'] = [u"Brome-Missisquoi"]
+subdivisions[u'ocd-division/country:ca/cd:2447'] = [u"La Haute-Yamaska"]
+subdivisions[u'ocd-division/country:ca/cd:2448'] = [u"Acton"]
+subdivisions[u'ocd-division/country:ca/cd:2449'] = [u"Drummond"]
+subdivisions[u'ocd-division/country:ca/cd:2450'] = [u"Nicolet-Yamaska"]
+subdivisions[u'ocd-division/country:ca/cd:2451'] = [u"Maskinongé"]
+subdivisions[u'ocd-division/country:ca/cd:2452'] = [u"D'Autray"]
+subdivisions[u'ocd-division/country:ca/cd:2453'] = [u"Pierre-De Saurel"]
+subdivisions[u'ocd-division/country:ca/cd:2454'] = [u"Les Maskoutains"]
+subdivisions[u'ocd-division/country:ca/cd:2455'] = [u"Rouville"]
+subdivisions[u'ocd-division/country:ca/cd:2456'] = [u"Le Haut-Richelieu"]
+subdivisions[u'ocd-division/country:ca/cd:2457'] = [u"La Vallée-du-Richelieu"]
+subdivisions[u'ocd-division/country:ca/cd:2458'] = [u"Longueuil"]
+subdivisions[u'ocd-division/country:ca/cd:2459'] = [u"Lajemmerais"]
+subdivisions[u'ocd-division/country:ca/cd:2460'] = [u"L'Assomption"]
+subdivisions[u'ocd-division/country:ca/cd:2461'] = [u"Joliette"]
+subdivisions[u'ocd-division/country:ca/cd:2462'] = [u"Matawinie"]
+subdivisions[u'ocd-division/country:ca/cd:2463'] = [u"Montcalm"]
+subdivisions[u'ocd-division/country:ca/cd:2464'] = [u"Les Moulins"]
+subdivisions[u'ocd-division/country:ca/cd:2465'] = [u"Laval"]
+subdivisions[u'ocd-division/country:ca/cd:2466'] = [u"Montréal"]
+subdivisions[u'ocd-division/country:ca/cd:2467'] = [u"Roussillon"]
+subdivisions[u'ocd-division/country:ca/cd:2468'] = [u"Les Jardins-de-Napierville"]
+subdivisions[u'ocd-division/country:ca/cd:2469'] = [u"Le Haut-Saint-Laurent"]
+subdivisions[u'ocd-division/country:ca/cd:2470'] = [u"Beauharnois-Salaberry"]
+subdivisions[u'ocd-division/country:ca/cd:2471'] = [u"Vaudreuil-Soulanges"]
+subdivisions[u'ocd-division/country:ca/cd:2472'] = [u"Deux-Montagnes"]
+subdivisions[u'ocd-division/country:ca/cd:2473'] = [u"Thérèse-De Blainville"]
+subdivisions[u'ocd-division/country:ca/cd:2474'] = [u"Mirabel"]
+subdivisions[u'ocd-division/country:ca/cd:2475'] = [u"La Rivière-du-Nord"]
+subdivisions[u'ocd-division/country:ca/cd:2476'] = [u"Argenteuil"]
+subdivisions[u'ocd-division/country:ca/cd:2477'] = [u"Les Pays-d'en-Haut"]
+subdivisions[u'ocd-division/country:ca/cd:2478'] = [u"Les Laurentides"]
+subdivisions[u'ocd-division/country:ca/cd:2479'] = [u"Antoine-Labelle"]
+subdivisions[u'ocd-division/country:ca/cd:2480'] = [u"Papineau"]
+subdivisions[u'ocd-division/country:ca/cd:2481'] = [u"Gatineau"]
+subdivisions[u'ocd-division/country:ca/cd:2482'] = [u"Les Collines-de-l'Outaouais"]
+subdivisions[u'ocd-division/country:ca/cd:2483'] = [u"La Vallée-de-la-Gatineau"]
+subdivisions[u'ocd-division/country:ca/cd:2484'] = [u"Pontiac"]
+subdivisions[u'ocd-division/country:ca/cd:2485'] = [u"Témiscamingue"]
+subdivisions[u'ocd-division/country:ca/cd:2486'] = [u"Rouyn-Noranda"]
+subdivisions[u'ocd-division/country:ca/cd:2487'] = [u"Abitibi-Ouest"]
+subdivisions[u'ocd-division/country:ca/cd:2488'] = [u"Abitibi"]
+subdivisions[u'ocd-division/country:ca/cd:2489'] = [u"La Vallée-de-l'Or"]
+subdivisions[u'ocd-division/country:ca/cd:2490'] = [u"La Tuque"]
+subdivisions[u'ocd-division/country:ca/cd:2491'] = [u"Le Domaine-du-Roy"]
+subdivisions[u'ocd-division/country:ca/cd:2492'] = [u"Maria-Chapdelaine"]
+subdivisions[u'ocd-division/country:ca/cd:2493'] = [u"Lac-Saint-Jean-Est"]
+subdivisions[u'ocd-division/country:ca/cd:2494'] = [u"Le Saguenay-et-son-Fjord"]
+subdivisions[u'ocd-division/country:ca/cd:2495'] = [u"La Haute-Côte-Nord"]
+subdivisions[u'ocd-division/country:ca/cd:2496'] = [u"Manicouagan"]
+subdivisions[u'ocd-division/country:ca/cd:2497'] = [u"Sept-Rivières—Caniapiscau"]
+subdivisions[u'ocd-division/country:ca/cd:2498'] = [u"Minganie—Le Golfe-du-Saint-Laurent"]
+subdivisions[u'ocd-division/country:ca/cd:2499'] = [u"Nord-du-Québec"]
+subdivisions[u'ocd-division/country:ca/cd:3501'] = [u"Stormont, Dundas and Glengarry"]
+subdivisions[u'ocd-division/country:ca/cd:3502'] = [u"Prescott and Russell"]
+subdivisions[u'ocd-division/country:ca/cd:3506'] = [u"Ottawa"]
+subdivisions[u'ocd-division/country:ca/cd:3507'] = [u"Leeds and Grenville"]
+subdivisions[u'ocd-division/country:ca/cd:3509'] = [u"Lanark"]
+subdivisions[u'ocd-division/country:ca/cd:3510'] = [u"Frontenac"]
+subdivisions[u'ocd-division/country:ca/cd:3511'] = [u"Lennox and Addington"]
+subdivisions[u'ocd-division/country:ca/cd:3512'] = [u"Hastings"]
+subdivisions[u'ocd-division/country:ca/cd:3513'] = [u"Prince Edward"]
+subdivisions[u'ocd-division/country:ca/cd:3514'] = [u"Northumberland"]
+subdivisions[u'ocd-division/country:ca/cd:3515'] = [u"Peterborough"]
+subdivisions[u'ocd-division/country:ca/cd:3516'] = [u"Kawartha Lakes"]
+subdivisions[u'ocd-division/country:ca/cd:3518'] = [u"Durham"]
+subdivisions[u'ocd-division/country:ca/cd:3519'] = [u"York"]
+subdivisions[u'ocd-division/country:ca/cd:3520'] = [u"Toronto"]
+subdivisions[u'ocd-division/country:ca/cd:3521'] = [u"Peel"]
+subdivisions[u'ocd-division/country:ca/cd:3522'] = [u"Dufferin"]
+subdivisions[u'ocd-division/country:ca/cd:3523'] = [u"Wellington"]
+subdivisions[u'ocd-division/country:ca/cd:3524'] = [u"Halton"]
+subdivisions[u'ocd-division/country:ca/cd:3525'] = [u"Hamilton"]
+subdivisions[u'ocd-division/country:ca/cd:3526'] = [u"Niagara"]
+subdivisions[u'ocd-division/country:ca/cd:3528'] = [u"Haldimand-Norfolk"]
+subdivisions[u'ocd-division/country:ca/cd:3529'] = [u"Brant"]
+subdivisions[u'ocd-division/country:ca/cd:3530'] = [u"Waterloo"]
+subdivisions[u'ocd-division/country:ca/cd:3531'] = [u"Perth"]
+subdivisions[u'ocd-division/country:ca/cd:3532'] = [u"Oxford"]
+subdivisions[u'ocd-division/country:ca/cd:3534'] = [u"Elgin"]
+subdivisions[u'ocd-division/country:ca/cd:3536'] = [u"Chatham-Kent"]
+subdivisions[u'ocd-division/country:ca/cd:3537'] = [u"Essex"]
+subdivisions[u'ocd-division/country:ca/cd:3538'] = [u"Lambton"]
+subdivisions[u'ocd-division/country:ca/cd:3539'] = [u"Middlesex"]
+subdivisions[u'ocd-division/country:ca/cd:3540'] = [u"Huron"]
+subdivisions[u'ocd-division/country:ca/cd:3541'] = [u"Bruce"]
+subdivisions[u'ocd-division/country:ca/cd:3542'] = [u"Grey"]
+subdivisions[u'ocd-division/country:ca/cd:3543'] = [u"Simcoe"]
+subdivisions[u'ocd-division/country:ca/cd:3544'] = [u"Muskoka"]
+subdivisions[u'ocd-division/country:ca/cd:3546'] = [u"Haliburton"]
+subdivisions[u'ocd-division/country:ca/cd:3547'] = [u"Renfrew"]
+subdivisions[u'ocd-division/country:ca/cd:3548'] = [u"Nipissing"]
+subdivisions[u'ocd-division/country:ca/cd:3549'] = [u"Parry Sound"]
+subdivisions[u'ocd-division/country:ca/cd:3551'] = [u"Manitoulin"]
+subdivisions[u'ocd-division/country:ca/cd:3552'] = [u"Sudbury"]
+subdivisions[u'ocd-division/country:ca/cd:3553'] = [u"Greater Sudbury"]
+subdivisions[u'ocd-division/country:ca/cd:3554'] = [u"Timiskaming"]
+subdivisions[u'ocd-division/country:ca/cd:3556'] = [u"Cochrane"]
+subdivisions[u'ocd-division/country:ca/cd:3557'] = [u"Algoma"]
+subdivisions[u'ocd-division/country:ca/cd:3558'] = [u"Thunder Bay"]
+subdivisions[u'ocd-division/country:ca/cd:3559'] = [u"Rainy River"]
+subdivisions[u'ocd-division/country:ca/cd:3560'] = [u"Kenora"]
+subdivisions[u'ocd-division/country:ca/cd:4601'] = [u"Division No. 1"]
+subdivisions[u'ocd-division/country:ca/cd:4602'] = [u"Division No. 2"]
+subdivisions[u'ocd-division/country:ca/cd:4603'] = [u"Division No. 3"]
+subdivisions[u'ocd-division/country:ca/cd:4604'] = [u"Division No. 4"]
+subdivisions[u'ocd-division/country:ca/cd:4605'] = [u"Division No. 5"]
+subdivisions[u'ocd-division/country:ca/cd:4606'] = [u"Division No. 6"]
+subdivisions[u'ocd-division/country:ca/cd:4607'] = [u"Division No. 7"]
+subdivisions[u'ocd-division/country:ca/cd:4608'] = [u"Division No. 8"]
+subdivisions[u'ocd-division/country:ca/cd:4609'] = [u"Division No. 9"]
+subdivisions[u'ocd-division/country:ca/cd:4610'] = [u"Division No. 10"]
+subdivisions[u'ocd-division/country:ca/cd:4611'] = [u"Division No. 11"]
+subdivisions[u'ocd-division/country:ca/cd:4612'] = [u"Division No. 12"]
+subdivisions[u'ocd-division/country:ca/cd:4613'] = [u"Division No. 13"]
+subdivisions[u'ocd-division/country:ca/cd:4614'] = [u"Division No. 14"]
+subdivisions[u'ocd-division/country:ca/cd:4615'] = [u"Division No. 15"]
+subdivisions[u'ocd-division/country:ca/cd:4616'] = [u"Division No. 16"]
+subdivisions[u'ocd-division/country:ca/cd:4617'] = [u"Division No. 17"]
+subdivisions[u'ocd-division/country:ca/cd:4618'] = [u"Division No. 18"]
+subdivisions[u'ocd-division/country:ca/cd:4619'] = [u"Division No. 19"]
+subdivisions[u'ocd-division/country:ca/cd:4620'] = [u"Division No. 20"]
+subdivisions[u'ocd-division/country:ca/cd:4621'] = [u"Division No. 21"]
+subdivisions[u'ocd-division/country:ca/cd:4622'] = [u"Division No. 22"]
+subdivisions[u'ocd-division/country:ca/cd:4623'] = [u"Division No. 23"]
+subdivisions[u'ocd-division/country:ca/cd:4701'] = [u"Division No. 1"]
+subdivisions[u'ocd-division/country:ca/cd:4702'] = [u"Division No. 2"]
+subdivisions[u'ocd-division/country:ca/cd:4703'] = [u"Division No. 3"]
+subdivisions[u'ocd-division/country:ca/cd:4704'] = [u"Division No. 4"]
+subdivisions[u'ocd-division/country:ca/cd:4705'] = [u"Division No. 5"]
+subdivisions[u'ocd-division/country:ca/cd:4706'] = [u"Division No. 6"]
+subdivisions[u'ocd-division/country:ca/cd:4707'] = [u"Division No. 7"]
+subdivisions[u'ocd-division/country:ca/cd:4708'] = [u"Division No. 8"]
+subdivisions[u'ocd-division/country:ca/cd:4709'] = [u"Division No. 9"]
+subdivisions[u'ocd-division/country:ca/cd:4710'] = [u"Division No. 10"]
+subdivisions[u'ocd-division/country:ca/cd:4711'] = [u"Division No. 11"]
+subdivisions[u'ocd-division/country:ca/cd:4712'] = [u"Division No. 12"]
+subdivisions[u'ocd-division/country:ca/cd:4713'] = [u"Division No. 13"]
+subdivisions[u'ocd-division/country:ca/cd:4714'] = [u"Division No. 14"]
+subdivisions[u'ocd-division/country:ca/cd:4715'] = [u"Division No. 15"]
+subdivisions[u'ocd-division/country:ca/cd:4716'] = [u"Division No. 16"]
+subdivisions[u'ocd-division/country:ca/cd:4717'] = [u"Division No. 17"]
+subdivisions[u'ocd-division/country:ca/cd:4718'] = [u"Division No. 18"]
+subdivisions[u'ocd-division/country:ca/cd:4801'] = [u"Division No. 1"]
+subdivisions[u'ocd-division/country:ca/cd:4802'] = [u"Division No. 2"]
+subdivisions[u'ocd-division/country:ca/cd:4803'] = [u"Division No. 3"]
+subdivisions[u'ocd-division/country:ca/cd:4804'] = [u"Division No. 4"]
+subdivisions[u'ocd-division/country:ca/cd:4805'] = [u"Division No. 5"]
+subdivisions[u'ocd-division/country:ca/cd:4806'] = [u"Division No. 6"]
+subdivisions[u'ocd-division/country:ca/cd:4807'] = [u"Division No. 7"]
+subdivisions[u'ocd-division/country:ca/cd:4808'] = [u"Division No. 8"]
+subdivisions[u'ocd-division/country:ca/cd:4809'] = [u"Division No. 9"]
+subdivisions[u'ocd-division/country:ca/cd:4810'] = [u"Division No. 10"]
+subdivisions[u'ocd-division/country:ca/cd:4811'] = [u"Division No. 11"]
+subdivisions[u'ocd-division/country:ca/cd:4812'] = [u"Division No. 12"]
+subdivisions[u'ocd-division/country:ca/cd:4813'] = [u"Division No. 13"]
+subdivisions[u'ocd-division/country:ca/cd:4814'] = [u"Division No. 14"]
+subdivisions[u'ocd-division/country:ca/cd:4815'] = [u"Division No. 15"]
+subdivisions[u'ocd-division/country:ca/cd:4816'] = [u"Division No. 16"]
+subdivisions[u'ocd-division/country:ca/cd:4817'] = [u"Division No. 17"]
+subdivisions[u'ocd-division/country:ca/cd:4818'] = [u"Division No. 18"]
+subdivisions[u'ocd-division/country:ca/cd:4819'] = [u"Division No. 19"]
+subdivisions[u'ocd-division/country:ca/cd:5901'] = [u"East Kootenay"]
+subdivisions[u'ocd-division/country:ca/cd:5903'] = [u"Central Kootenay"]
+subdivisions[u'ocd-division/country:ca/cd:5905'] = [u"Kootenay Boundary"]
+subdivisions[u'ocd-division/country:ca/cd:5907'] = [u"Okanagan-Similkameen"]
+subdivisions[u'ocd-division/country:ca/cd:5909'] = [u"Fraser Valley"]
+subdivisions[u'ocd-division/country:ca/cd:5915'] = [u"Greater Vancouver"]
+subdivisions[u'ocd-division/country:ca/cd:5917'] = [u"Capital"]
+subdivisions[u'ocd-division/country:ca/cd:5919'] = [u"Cowichan Valley"]
+subdivisions[u'ocd-division/country:ca/cd:5921'] = [u"Nanaimo"]
+subdivisions[u'ocd-division/country:ca/cd:5923'] = [u"Alberni-Clayoquot"]
+subdivisions[u'ocd-division/country:ca/cd:5924'] = [u"Strathcona"]
+subdivisions[u'ocd-division/country:ca/cd:5926'] = [u"Comox Valley"]
+subdivisions[u'ocd-division/country:ca/cd:5927'] = [u"Powell River"]
+subdivisions[u'ocd-division/country:ca/cd:5929'] = [u"Sunshine Coast"]
+subdivisions[u'ocd-division/country:ca/cd:5931'] = [u"Squamish-Lillooet"]
+subdivisions[u'ocd-division/country:ca/cd:5933'] = [u"Thompson-Nicola"]
+subdivisions[u'ocd-division/country:ca/cd:5935'] = [u"Central Okanagan"]
+subdivisions[u'ocd-division/country:ca/cd:5937'] = [u"North Okanagan"]
+subdivisions[u'ocd-division/country:ca/cd:5939'] = [u"Columbia-Shuswap"]
+subdivisions[u'ocd-division/country:ca/cd:5941'] = [u"Cariboo"]
+subdivisions[u'ocd-division/country:ca/cd:5943'] = [u"Mount Waddington"]
+subdivisions[u'ocd-division/country:ca/cd:5945'] = [u"Central Coast"]
+subdivisions[u'ocd-division/country:ca/cd:5947'] = [u"Skeena-Queen Charlotte"]
+subdivisions[u'ocd-division/country:ca/cd:5949'] = [u"Kitimat-Stikine"]
+subdivisions[u'ocd-division/country:ca/cd:5951'] = [u"Bulkley-Nechako"]
+subdivisions[u'ocd-division/country:ca/cd:5953'] = [u"Fraser-Fort George"]
+subdivisions[u'ocd-division/country:ca/cd:5955'] = [u"Peace River"]
+subdivisions[u'ocd-division/country:ca/cd:5957'] = [u"Stikine"]
+subdivisions[u'ocd-division/country:ca/cd:5959'] = [u"Northern Rockies"]
+subdivisions[u'ocd-division/country:ca/cd:6001'] = [u"Yukon"]
+subdivisions[u'ocd-division/country:ca/cd:6101'] = [u"Region 1"]
+subdivisions[u'ocd-division/country:ca/cd:6102'] = [u"Region 2"]
+subdivisions[u'ocd-division/country:ca/cd:6103'] = [u"Region 3"]
+subdivisions[u'ocd-division/country:ca/cd:6104'] = [u"Region 4"]
+subdivisions[u'ocd-division/country:ca/cd:6105'] = [u"Region 5"]
+subdivisions[u'ocd-division/country:ca/cd:6106'] = [u"Region 6"]
+subdivisions[u'ocd-division/country:ca/cd:6204'] = [u"Baffin"]
+subdivisions[u'ocd-division/country:ca/cd:6205'] = [u"Keewatin"]
+subdivisions[u'ocd-division/country:ca/cd:6208'] = [u"Kitikmeot"]
 subdivisions[u'ocd-division/country:ca/csd:1001101'] = [u"Division No. 1, Subd. V"]
 subdivisions[u'ocd-division/country:ca/csd:1001105'] = [u"Portugal Cove South"]
 subdivisions[u'ocd-division/country:ca/csd:1001113'] = [u"Trepassey"]
@@ -15129,14 +15422,12 @@ subdivisions[u'ocd-division/country:ca/csd:4819006'].append(u"Division 6")
 subdivisions[u'ocd-division/country:ca/csd:4819006'].append(u"Division 7")
 subdivisions[u'ocd-division/country:ca/csd:4819006'].append(u"Division 8")
 subdivisions[u'ocd-division/country:ca/csd:4819006'].append(u"Division 9")
-subdivisions[u'ocd-division/country:ca/cd:3501'] = []
 subdivisions[u'ocd-division/country:ca/cd:3501'].append(u"South Dundas")
 subdivisions[u'ocd-division/country:ca/cd:3501'].append(u"North Stormont")
 subdivisions[u'ocd-division/country:ca/cd:3501'].append(u"North Glengarry")
 subdivisions[u'ocd-division/country:ca/cd:3501'].append(u"South Stormont")
 subdivisions[u'ocd-division/country:ca/cd:3501'].append(u"North Dundas")
 subdivisions[u'ocd-division/country:ca/cd:3501'].append(u"South Glengarry")
-subdivisions[u'ocd-division/country:ca/cd:3502'] = []
 subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"Clarence-Rockland")
 subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"Alfred and Plantagenet")
 subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"Hawkesbury")
@@ -15145,7 +15436,6 @@ subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"Russell")
 subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"The Nation")
 subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"Champlain")
 subdivisions[u'ocd-division/country:ca/cd:3502'].append(u"East Hawkesbury")
-subdivisions[u'ocd-division/country:ca/cd:3507'] = []
 subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"North Grenville")
 subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"Augusta")
 subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"Front of Yonge")
@@ -15156,7 +15446,6 @@ subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"Merrickville-Wolford")
 subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"Leeds and the Thousand Islands")
 subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"Rideau Lakes")
 subdivisions[u'ocd-division/country:ca/cd:3507'].append(u"Edwardsburgh/Cardinal")
-subdivisions[u'ocd-division/country:ca/cd:3509'] = []
 subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Tay Valley")
 subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Drummond/North Elmsley")
 subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Beckwith")
@@ -15165,17 +15454,14 @@ subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Lanark Highlands")
 subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Mississippi Mills")
 subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Montague")
 subdivisions[u'ocd-division/country:ca/cd:3509'].append(u"Carleton Place")
-subdivisions[u'ocd-division/country:ca/cd:3510'] = []
 subdivisions[u'ocd-division/country:ca/cd:3510'].append(u"South Frontenac")
 subdivisions[u'ocd-division/country:ca/cd:3510'].append(u"Central Frontenac")
 subdivisions[u'ocd-division/country:ca/cd:3510'].append(u"Frontenac Islands")
 subdivisions[u'ocd-division/country:ca/cd:3510'].append(u"North Frontenac")
-subdivisions[u'ocd-division/country:ca/cd:3511'] = []
 subdivisions[u'ocd-division/country:ca/cd:3511'].append(u"Stone Mills")
 subdivisions[u'ocd-division/country:ca/cd:3511'].append(u"Addington Highlands")
 subdivisions[u'ocd-division/country:ca/cd:3511'].append(u"Greater Napanee")
 subdivisions[u'ocd-division/country:ca/cd:3511'].append(u"Loyalist")
-subdivisions[u'ocd-division/country:ca/cd:3512'] = []
 subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Tudor and Cashel")
 subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Hastings Highlands")
 subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Centre Hastings")
@@ -15190,7 +15476,6 @@ subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Carlow/Mayo")
 subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Stirling-Rawdon")
 subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Madoc")
 subdivisions[u'ocd-division/country:ca/cd:3512'].append(u"Tweed")
-subdivisions[u'ocd-division/country:ca/cd:3514'] = []
 subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Brighton")
 subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Cobourg")
 subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Trent Hills")
@@ -15198,7 +15483,6 @@ subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Port Hope")
 subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Cramahe")
 subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Hamilton")
 subdivisions[u'ocd-division/country:ca/cd:3514'].append(u"Alnwick/Haldimand")
-subdivisions[u'ocd-division/country:ca/cd:3515'] = []
 subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"Galway-Cavendish and Harvey")
 subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"Havelock-Belmont-Methuen")
 subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"Douro-Dummer")
@@ -15207,7 +15491,6 @@ subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"Otonabee-South Monagha
 subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"North Kawartha")
 subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"Smith-Ennismore-Lakefield")
 subdivisions[u'ocd-division/country:ca/cd:3515'].append(u"Asphodel-Norwood")
-subdivisions[u'ocd-division/country:ca/cd:3518'] = []
 subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Oshawa")
 subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Pickering")
 subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Ajax")
@@ -15216,7 +15499,6 @@ subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Clarington")
 subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Uxbridge")
 subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Whitby")
 subdivisions[u'ocd-division/country:ca/cd:3518'].append(u"Brock")
-subdivisions[u'ocd-division/country:ca/cd:3519'] = []
 subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"Whitchurch-Stouffville")
 subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"Vaughan")
 subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"King")
@@ -15226,11 +15508,9 @@ subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"Georgina")
 subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"Richmond Hill")
 subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"East Gwillimbury")
 subdivisions[u'ocd-division/country:ca/cd:3519'].append(u"Markham")
-subdivisions[u'ocd-division/country:ca/cd:3521'] = []
 subdivisions[u'ocd-division/country:ca/cd:3521'].append(u"Brampton")
 subdivisions[u'ocd-division/country:ca/cd:3521'].append(u"Mississauga")
 subdivisions[u'ocd-division/country:ca/cd:3521'].append(u"Caledon")
-subdivisions[u'ocd-division/country:ca/cd:3522'] = []
 subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"Mono")
 subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"Mulmur")
 subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"Amaranth")
@@ -15239,7 +15519,6 @@ subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"East Garafraxa")
 subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"Melancthon")
 subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"East Luther Grand Valley")
 subdivisions[u'ocd-division/country:ca/cd:3522'].append(u"Orangeville")
-subdivisions[u'ocd-division/country:ca/cd:3523'] = []
 subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Erin")
 subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Wellington North")
 subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Puslinch")
@@ -15247,12 +15526,10 @@ subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Centre Wellington")
 subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Minto")
 subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Guelph/Eramosa")
 subdivisions[u'ocd-division/country:ca/cd:3523'].append(u"Mapleton")
-subdivisions[u'ocd-division/country:ca/cd:3524'] = []
 subdivisions[u'ocd-division/country:ca/cd:3524'].append(u"Oakville")
 subdivisions[u'ocd-division/country:ca/cd:3524'].append(u"Halton Hills")
 subdivisions[u'ocd-division/country:ca/cd:3524'].append(u"Burlington")
 subdivisions[u'ocd-division/country:ca/cd:3524'].append(u"Milton")
-subdivisions[u'ocd-division/country:ca/cd:3526'] = []
 subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Fort Erie")
 subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Port Colborne")
 subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Thorold")
@@ -15265,7 +15542,6 @@ subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Niagara-on-the-Lake")
 subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Wainfleet")
 subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Welland")
 subdivisions[u'ocd-division/country:ca/cd:3526'].append(u"Grimsby")
-subdivisions[u'ocd-division/country:ca/cd:3530'] = []
 subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"Waterloo")
 subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"Cambridge")
 subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"Wellesley")
@@ -15273,12 +15549,10 @@ subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"North Dumfries")
 subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"Woolwich")
 subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"Wilmot")
 subdivisions[u'ocd-division/country:ca/cd:3530'].append(u"Kitchener")
-subdivisions[u'ocd-division/country:ca/cd:3531'] = []
 subdivisions[u'ocd-division/country:ca/cd:3531'].append(u"West Perth")
 subdivisions[u'ocd-division/country:ca/cd:3531'].append(u"Perth East")
 subdivisions[u'ocd-division/country:ca/cd:3531'].append(u"North Perth")
 subdivisions[u'ocd-division/country:ca/cd:3531'].append(u"Perth South")
-subdivisions[u'ocd-division/country:ca/cd:3532'] = []
 subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"Woodstock")
 subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"Blandford-Blenheim")
 subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"South-West Oxford")
@@ -15287,7 +15561,6 @@ subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"East Zorra-Tavistock")
 subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"Tillsonburg")
 subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"Ingersoll")
 subdivisions[u'ocd-division/country:ca/cd:3532'].append(u"Zorra")
-subdivisions[u'ocd-division/country:ca/cd:3534'] = []
 subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"Dutton/Dunwich")
 subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"Central Elgin")
 subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"Southwold")
@@ -15295,7 +15568,6 @@ subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"Bayham")
 subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"Aylmer")
 subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"Malahide")
 subdivisions[u'ocd-division/country:ca/cd:3534'].append(u"West Elgin")
-subdivisions[u'ocd-division/country:ca/cd:3537'] = []
 subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"Amherstburg")
 subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"Kingsville")
 subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"Essex")
@@ -15303,7 +15575,6 @@ subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"Leamington")
 subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"Lakeshore")
 subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"Tecumseh")
 subdivisions[u'ocd-division/country:ca/cd:3537'].append(u"LaSalle")
-subdivisions[u'ocd-division/country:ca/cd:3538'] = []
 subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Petrolia")
 subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Lambton Shores")
 subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Sarnia")
@@ -15315,7 +15586,6 @@ subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Point Edward")
 subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Plympton-Wyoming")
 subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Enniskillen")
 subdivisions[u'ocd-division/country:ca/cd:3538'].append(u"Warwick")
-subdivisions[u'ocd-division/country:ca/cd:3539'] = []
 subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"North Middlesex")
 subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"Strathroy-Caradoc")
 subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"Southwest Middlesex")
@@ -15324,7 +15594,6 @@ subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"Thames Centre")
 subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"Newbury")
 subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"Lucan Biddulph")
 subdivisions[u'ocd-division/country:ca/cd:3539'].append(u"Middlesex Centre")
-subdivisions[u'ocd-division/country:ca/cd:3540'] = []
 subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"Huron East")
 subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"Howick")
 subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"Morris-Turnberry")
@@ -15334,7 +15603,6 @@ subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"South Huron")
 subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"Goderich")
 subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"Ashfield-Colborne-Wawanosh")
 subdivisions[u'ocd-division/country:ca/cd:3540'].append(u"North Huron")
-subdivisions[u'ocd-division/country:ca/cd:3541'] = []
 subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"South Bruce")
 subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"Northern Bruce Peninsula")
 subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"Saugeen Shores")
@@ -15343,7 +15611,6 @@ subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"Huron-Kinloss")
 subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"Kincardine")
 subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"South Bruce Peninsula")
 subdivisions[u'ocd-division/country:ca/cd:3541'].append(u"Arran-Elderslie")
-subdivisions[u'ocd-division/country:ca/cd:3542'] = []
 subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"Georgian Bluffs")
 subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"Grey Highlands")
 subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"Hanover")
@@ -15353,7 +15620,6 @@ subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"The Blue Mountains")
 subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"Owen Sound")
 subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"Southgate")
 subdivisions[u'ocd-division/country:ca/cd:3542'].append(u"West Grey")
-subdivisions[u'ocd-division/country:ca/cd:3543'] = []
 subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Innisfil")
 subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Springwater")
 subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Essa")
@@ -15370,19 +15636,16 @@ subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Penetanguishene")
 subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Adjala-Tosorontio")
 subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Severn")
 subdivisions[u'ocd-division/country:ca/cd:3543'].append(u"Tiny")
-subdivisions[u'ocd-division/country:ca/cd:3544'] = []
 subdivisions[u'ocd-division/country:ca/cd:3544'].append(u"Huntsville")
 subdivisions[u'ocd-division/country:ca/cd:3544'].append(u"Bracebridge")
 subdivisions[u'ocd-division/country:ca/cd:3544'].append(u"Gravenhurst")
 subdivisions[u'ocd-division/country:ca/cd:3544'].append(u"Lake of Bays")
 subdivisions[u'ocd-division/country:ca/cd:3544'].append(u"Georgian Bay")
 subdivisions[u'ocd-division/country:ca/cd:3544'].append(u"Muskoka Lakes")
-subdivisions[u'ocd-division/country:ca/cd:3546'] = []
 subdivisions[u'ocd-division/country:ca/cd:3546'].append(u"Algonquin Highlands")
 subdivisions[u'ocd-division/country:ca/cd:3546'].append(u"Highlands East")
 subdivisions[u'ocd-division/country:ca/cd:3546'].append(u"Dysart and Others")
 subdivisions[u'ocd-division/country:ca/cd:3546'].append(u"Minden Hills")
-subdivisions[u'ocd-division/country:ca/cd:3547'] = []
 subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"Killaloe, Hagarty and Richards")
 subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"Renfrew")
 subdivisions[u'ocd-division/country:ca/cd:3547'].append(u"Madawaska Valley")

@@ -47,7 +47,7 @@ def chair_info(url):
   phone = page.xpath(
       'string(//div[@id="co-content"]/p[2]/text())').split(':')[1]
 
-  p = Legislator(name=name, post_id='Peel Region', role='Regional Chair',
+  p = Legislator(name=name, post_id='Peel', role='Regional Chair',
                  image=photo_url)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
