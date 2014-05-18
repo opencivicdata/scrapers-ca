@@ -18761,6 +18761,7 @@ styles[u'ocd-division/country:ca/csd:3518005'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:3518005'].append(u"Regional Councillor")
 styles[u'ocd-division/country:ca/csd:3518009'] = []
 styles[u'ocd-division/country:ca/csd:3518009'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:3518009'].append(u"Deputy Mayor")
 styles[u'ocd-division/country:ca/csd:3518009'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:3518009'].append(u"Regional Councillor")
 styles[u'ocd-division/country:ca/csd:3518017'] = []
@@ -21283,7 +21284,7 @@ styles[u'ocd-division/country:ca'] = []
 styles[u'ocd-division/country:ca'].append(u"Prime Minister")
 styles[u'ocd-division/country:ca'].append(u"MP")
 styles[u'ocd-division/country:ca/cd:3521'] = []
-styles[u'ocd-division/country:ca/cd:3521'].append(u"Chair")
+styles[u'ocd-division/country:ca/cd:3521'].append(u"Regional Chair")
 styles[u'ocd-division/country:ca/cd:3521'].append(u"Councillor")
 styles[u'ocd-division/country:ca/cd:3530'] = []
 styles[u'ocd-division/country:ca/cd:3530'].append(u"Regional Chair")
