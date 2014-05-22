@@ -5,7 +5,7 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
-
+MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/conseil_municipal/maire'
 
 class GatineauPersonScraper(Scraper):
 
@@ -17,6 +17,16 @@ class GatineauPersonScraper(Scraper):
     districts = re.findall(r'arrayDistricts\[a.+"(.+)"', js)
     members = re.findall(r'arrayMembres\[a.+"(.+)"', js)
     urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)
+    # first item in list is mayor
+    p = Legislator(name=members[0], post_id = 'Gatineau', role='Maire')
+    p.add_source(COUNCIL_PAGE)
+    mayor_page = lxmlize(MAYOR_CONTACT_PAGE)
+    p.add_source(MAYOR_CONTACT_PAGE)
+    email = mayor_page.xpath(
+        'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+    p.add_contact('email', email, None)
+    yield p
+
     for district, member, url in zip(districts, members, urls)[1:]:
       profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
       profile_page = lxmlize(profile_url)
