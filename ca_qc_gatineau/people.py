@@ -22,8 +22,7 @@ class GatineauPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     mayor_page = lxmlize(MAYOR_CONTACT_PAGE)
     p.add_source(MAYOR_CONTACT_PAGE)
-    email = mayor_page.xpath(
-        'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+    email = 'maire@gatineau.ca' # hardcoded
     p.add_contact('email', email, None)
     yield p
 
