@@ -5,56 +5,38 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
-
+MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/conseil_municipal/maire'
 
 class GatineauPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//div[@id = "submenu_content"]//li')
-    for councillor in councillors:
-      name = councillor.text_content()
-      if "maire" in name:
-        yield self.scrape_mayor(councillor.xpath('.//a')[0].attrib['href'])
-        continue
-      url = councillor.xpath('.//a')[0].attrib['href']
-      page = lxmlize(url)
-      content = page.xpath('//div[@id="pagecontent"]')[0]
-      district = content.xpath('.//h2')
-      if not district:
-        continue
-      district = district[0].text_content()
-
-      phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ', '-')
-      email = content.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
-
-      p = Legislator(name=name, post_id=district, role='Conseiller')
-      p.add_source(COUNCIL_PAGE)
-      p.add_source(url)
-      p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
-      p.image = content.xpath('//table//td/img/@src')[0]
-
-      if "site" in content.text_content():
-        p.add_link(content.xpath('.//a')[1].attrib['href'], None)
-
-      yield p
-
-  def scrape_mayor(self, url):
-    page = lxmlize(url)
-    contact_url = page.xpath('//a[contains(text(), "Communiquez")]')[0].attrib['href']
-    page = lxmlize(contact_url)
-
-    content = page.xpath('//div[@id="pagecontent"]')[0]
-    name = content.xpath('.//h2')[0].text_content()
-    phone = re.findall(r'([0-9]{3} [0-9]{3}-[0-9]{4})', content.text_content())[0].replace(' ', '-')
-    email = content.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-
-    p = Legislator(name=name, post_id='Gatineau', role='Maire')
+    # it's all javascript rendered on the client... wow.
+    js = page.xpath('string(//div[@class="inner_container"]/div/script[2])')
+    districts = re.findall(r'arrayDistricts\[a.+"(.+)"', js)
+    members = re.findall(r'arrayMembres\[a.+"(.+)"', js)
+    urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)
+    # first item in list is mayor
+    p = Legislator(name=members[0], post_id = 'Gatineau', role='Maire')
     p.add_source(COUNCIL_PAGE)
-    p.add_source(contact_url)
-    p.add_contact('voice', phone, 'legislature')
+    mayor_page = lxmlize(MAYOR_CONTACT_PAGE)
+    p.add_source(MAYOR_CONTACT_PAGE)
+    email = mayor_page.xpath(
+        'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
     p.add_contact('email', email, None)
+    yield p
 
-    return p
+    for district, member, url in zip(districts, members, urls)[1:]:
+      profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
+      profile_page = lxmlize(profile_url)
+      photo_url = profile_page.xpath('string(//img/@src)')
+      post_id = 'District ' + re.search('\d+', district).group(0)
+      email = profile_page.xpath(
+          'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+      p = Legislator(name=member, post_id=post_id, role='Conseiller')
+      p.add_source(COUNCIL_PAGE)
+      p.add_source(profile_url)
+      p.image = photo_url
+      p.add_contact('email', email, None)
+      yield p

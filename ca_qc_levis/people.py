@@ -15,30 +15,22 @@ class LevisPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//table[@id="Tableau_01"]//a/@href')
-    for councillor in councillors:
-      page = lxmlize(councillor)
-      name = page.xpath('//table[@id="table1"]//td[2]//b')[0].text_content()
-      district = page.xpath('//table[@id="table1"]//td[2]//i')[0].text_content()
-      if 'Maire' in district:
-        district = u'Lévis'
-        role = 'Maire'
+    people_links = page.xpath('//h3')
+    for person in people_links:
+      name, position = person.text.split(' - ')
+      if ',' in position:
+        role, district = position.title().split(', ')
       else:
-        district = re.findall(r'[dD]istrict [0-9]{1,2}', district)[0]
-        role = 'Conseiller'
+        role = 'Maire'
+        district = u'Lévis'
+
+      info_div = person.xpath('./following-sibling::div[1]')[0]
+      photo_url = info_div[0].attrib['src']
+      role = 'Conseiller'
+      email = info_div.xpath('string(.//a/@href)')[len('mailto:'):]
 
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.add_source(councillor)
-      p.image = page.xpath('//img[@alt = "Photo du membre"]/@src')[0]
-
-      script = page.xpath('//table[@id="table1"]//td[2]//script')[0].text_content()
-      email = get_email(script)
+      p.image = photo_url
       p.add_contact('email', email, None)
       yield p
-
-
-def get_email(script):
-  h = HTMLParser.HTMLParser()
-  email = h.unescape(re.search('(?<=")[^"]+', urllib.unquote(''.join(re.findall("(?<=\(\')[^']+", script)))).group(0))
-  return email + '@ville.levis.qc.ca'

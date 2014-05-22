@@ -13,31 +13,27 @@ class SaintJeromePersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillors = page.xpath('//table[1]/tbody//tr')[6:]
-    for councillor in councillors:
-      image = councillor.xpath('.//img/@src')
-      councillor = councillor.text_content().strip()
-
-      name = councillor.split(',')[0]
-
-      if 'district' in name:
-        continue
-      district = re.findall(ur'no\xa0([0-9]{1,2})', councillor)
-      if not district:
-        district = re.findall(ur'no ([0-9]{1,2})', councillor)
-
-      # if theres still no district, it must be the mayor
-      if not district:
-        district = u'Saint-Jérôme'
+    councillor_trs = [tr for tr in page.xpath('//table//tr[1]') if 
+            len(tr) == 2][:-1]
+    for councillor_tr in councillor_trs:
+      desc = [line.strip() for line in 
+              councillor_tr.text_content().strip().split('\n')]
+      if len(desc) == 3:
         role = 'Maire'
+        district = u'Saint-Jérôme'
       else:
-        district = district[0]
         role = 'Conseiller'
+        district = desc[0].replace(u'numéro ', '')
 
-      phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', councillor)[0].replace(' ', '-')
+      name = desc[-3]
+      phone = desc[-2]
+      email = desc[-1]
 
+      image = councillor_tr.xpath('string(.//img/@src)')[0]
+      
       p = Legislator(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.image = image[0]
+      p.image = image
       p.add_contact('voice', phone, 'legislature')
+      p.add_contact('email', email, None)
       yield p
