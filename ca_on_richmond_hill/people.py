@@ -30,11 +30,8 @@ class RichmondHillPersonScraper(Scraper):
 
         role = 'Regional Councillor' if 'Regional' in header else 'Councillor'
 
-      info = page.xpath('//table[@cellpadding>0]/tbody/tr/td[2]|//table[not(@cellpadding)]/tbody/tr/td[2]')
-      if info[0].text_content().strip():
-        info = info[0].text_content().replace(' - office:', ':')
-      else:
-        info = page.xpath('//table[7]/tbody/tr/td[3]')[0].text_content().replace(' - office:', ':')
+      info = page.xpath('//table[@cellpadding>0]/tbody/tr/td[last()]|//table[not(@cellpadding)]/tbody/tr/td[last()]')
+      info = info[0].text_content().replace(' - office:', ':')
 
       address = re.findall(r'(?<=Town of Richmond Hill).*(?=Telephone)', info)[0]
       address = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
