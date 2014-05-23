@@ -6195,7 +6195,7 @@ subdivisions[u'ocd-division/country:ca/province:on'].append(u"Bruce—Grey—Owe
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Burlington")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Cambridge")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Carleton—Mississippi Mills")
-subdivisions[u'ocd-division/country:ca/province:on'].append(u"Chatham—Kent—Essex")
+subdivisions[u'ocd-division/country:ca/province:on'].append(u"Chatham-Kent—Essex")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Davenport")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Don Valley East")
 subdivisions[u'ocd-division/country:ca/province:on'].append(u"Don Valley West")
