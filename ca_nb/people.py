@@ -46,5 +46,5 @@ class NewBrunswickPersonScraper(Scraper):
 
 def get_photo_url(url):
   page = lxmlize(url)
-  rel = page.xpath('string(//img[2]/@src)')
+  rel = page.xpath('string(//td/img/@src)')
   return urljoin(url, rel)

@@ -65,7 +65,7 @@ class GuelphPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
-    phone = div.xpath('.//text()[4]')[0]
+    phone = div.xpath('.//text()[normalize-space()]')[2]
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
 
     page = lxmlize(url)
