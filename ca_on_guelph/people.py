@@ -70,13 +70,8 @@ class GuelphPersonScraper(Scraper):
 
     page = lxmlize(url)
 
-    address = re.findall(r'Address: (.*)\r', page.xpath('//div[@class="entry-content"]')[0].text_content())[0].encode('utf-8')
-    fax = re.findall(r'Fax: (.*)\r', page.xpath('//div[@class="entry-content"]')[0].text_content())[0].encode('utf-8')
-
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('email', email, None)
-    p.add_contact('address', address, 'legislature')
-    p.add_contact('fax', fax, 'legislature')
     p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href'], None)
     p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href'], None)
     p.image = page.xpath('//header/img/@src')[0]

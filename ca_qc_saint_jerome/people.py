@@ -13,11 +13,10 @@ class SaintJeromePersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    councillor_trs = [tr for tr in page.xpath('//table//tr[1]') if 
-            len(tr) == 2][:-1]
+    councillor_trs = [tr for tr in page.xpath('//table//tr[1]') if len(tr) == 2][:-1]
     for councillor_tr in councillor_trs:
-      desc = [line.strip() for line in 
-              councillor_tr.text_content().strip().split('\n')]
+      desc = [text.strip() for text in councillor_tr.xpath('.//text()[normalize-space()]') if text.strip()]
+
       if len(desc) == 3:
         role = 'Maire'
         district = u'Saint-Jérôme'

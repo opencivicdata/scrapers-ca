@@ -30,7 +30,7 @@ class RichmondHillPersonScraper(Scraper):
 
         role = 'Regional Councillor' if 'Regional' in header else 'Councillor'
 
-      info = page.xpath('//table[7]/tbody/tr/td[2]')
+      info = page.xpath('//table[@cellpadding>0]/tbody/tr/td[2]|//table[not(@cellpadding)]/tbody/tr/td[2]')
       if info[0].text_content().strip():
         info = info[0].text_content().replace(' - office:', ':')
       else:

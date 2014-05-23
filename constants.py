@@ -19037,6 +19037,7 @@ styles[u'ocd-division/country:ca/csd:3519028'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:3519028'].append(u"Regional Councillor")
 styles[u'ocd-division/country:ca/csd:3519036'] = []
 styles[u'ocd-division/country:ca/csd:3519036'].append(u"Mayor")
+styles[u'ocd-division/country:ca/csd:3519036'].append(u"Deputy Mayor")
 styles[u'ocd-division/country:ca/csd:3519036'].append(u"Councillor")
 styles[u'ocd-division/country:ca/csd:3519036'].append(u"Regional Councillor")
 styles[u'ocd-division/country:ca/csd:3519038'] = []

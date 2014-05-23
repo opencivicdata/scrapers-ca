@@ -15,12 +15,8 @@ class MarkhamPersonScraper(Scraper):
     mayor_url = page.xpath('//a[contains(text(), "Office of the Mayor")]/@href')[0]
     yield scrape_mayor(mayor_url)
 
-    councillors = page.xpath('//div[@class="interiorContentWrapper"]//td')
+    councillors = page.xpath('//div[@class="interiorContentWrapper"]//td[./a]')
     for councillor in councillors:
-      if not councillor.text_content().strip() or "Address" in councillor.text_content():
-        continue
-      if not councillor.xpath('.//a'):
-        break
       name = councillor.xpath('.//strong')[1].text_content().strip()
       district = councillor.xpath('.//a//text()')[1].strip()
       if 'Ward' in district:
