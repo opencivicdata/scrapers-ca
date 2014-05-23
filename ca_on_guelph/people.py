@@ -19,13 +19,15 @@ class GuelphPersonScraper(Scraper):
         continue
 
       name = councillor.xpath('.//a')[0].text_content().replace('Councillor', '').replace('Mayor', '')
-      district = councillor.xpath('.//text()[4]')[0]
+      info = councillor.xpath('.//text()[normalize-space()]')
+      district = info[2]
       url = councillor.xpath('.//a')[0].attrib['href']
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
+      p.add_contact('voice', info[3].replace('extension', 'x'), 'legislature')
       email = councillor.xpath('.//a[contains(@href,"mailto:")]')
       if email:
         email = email[0].text_content()

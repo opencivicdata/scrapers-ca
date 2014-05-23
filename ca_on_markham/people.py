@@ -18,7 +18,7 @@ class MarkhamPersonScraper(Scraper):
     councillors = page.xpath('//div[@class="interiorContentWrapper"]//td[./a]')
     for councillor in councillors:
       name = councillor.xpath('.//strong')[1].text_content().strip()
-      district = councillor.xpath('.//a//text()')[1].strip()
+      district = councillor.xpath('.//a//text()[normalize-space()]')[0]
       if 'Ward' in district:
         district = district.replace('Councillor', '')
         role = 'Councillor'
