@@ -37,7 +37,12 @@ EXTRA_KEYS = set((
   'Instagram',
   'Flickr',
 ))
-
+PARTY_MAP = {
+  'GRN': 'Green Party of Ontario',
+  'LIB': 'Ontario Liberal Party',
+  'NDP': 'New Democratic Party of Ontario',
+  'PC': 'Progressive Conservative Party of Ontario',
+}
 
 class OntarioPersonScraper(Scraper):
 
@@ -67,6 +72,8 @@ class OntarioPersonScraper(Scraper):
             offices[index - 1][CONTACT_TYPE_KEYS[k[10:]]] = v
           else:
             raise Exception(k)
+        elif k == 'Party Name':
+          kwargs['party'] = PARTY_MAP[v]
         elif k in KEYS:
           kwargs[KEYS[k]] = v
         elif k == 'Email':
