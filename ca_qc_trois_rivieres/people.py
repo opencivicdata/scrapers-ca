@@ -9,10 +9,20 @@ import re
 
 COUNCIL_PAGE = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=150&CPage=1'
 
+MAYOR_URL = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=1&CPage=1'
 
 class TroisRivieresPersonScraper(Scraper):
 
   def get_people(self):
+    # mayor first, can't find email
+    page = lxmlize(MAYOR_URL)
+    photo_url = page.xpath('string(//img/@src[contains(., "Maire")])')
+    name = page.xpath('string(//td[@class="contenu"]/text()[last()])')
+    p = Legislator(name=name, post_id=u"Trois Rivières", role="Maire",
+                   image=photo_url)
+    p.add_source(MAYOR_URL)
+    yield p
+
     resp = requests.get(COUNCIL_PAGE)
     # page rendering through JS on the client
     page_re = re.compile(r'createItemNiv3.+"District (.+?)".+(index.+)\\"')
