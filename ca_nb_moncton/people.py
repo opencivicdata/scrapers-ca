@@ -22,16 +22,15 @@ class MonctonPersonScraper(Scraper):
           name = councillor.xpath('.//a')[0].text_content()
       except IndexError:
           continue
-      district = [x for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()][1].strip()
+      districts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()]
+      district = districts[1]
       if district == 'At Large':
         district = 'Moncton'
-
-      #not always here
-      #email = councillor.xpath('.//a')[0].attrib['href'].replace('mailto:', '')
+      elif district == 'Deputy Mayor':
+        district = districts[2]
 
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
-
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
