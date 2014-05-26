@@ -12,15 +12,13 @@ class MercierPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
 
-    councillors = page.xpath('//table//table//table/tr/td/p[descendant::strong]')
-
+    councillors = page.xpath('//table[@width="800"]/tr')
     for councillor in councillors:
-
-      if councillor == councillors[1]:
-        name = councillor.xpath('./strong/text()')[0].replace('Monsieur', '').replace('Madame', '').strip()
+      if councillor == councillors[0]:
+        name = councillor.xpath('.//strong/text()')[0].replace('Monsieur', '').replace('Madame', '').strip()
         role = 'Maire'
       else:
-        name = councillor.xpath('./strong/text()')[0]
+        name = councillor.xpath('.//strong/text()')[0]
         name = name.replace('Monsieur', '').replace('Madame', '').strip()
         role = 'Conseiller'
 
