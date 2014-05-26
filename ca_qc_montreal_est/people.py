@@ -11,7 +11,7 @@ COUNCIL_PAGE = 'http://ville.montreal-est.qc.ca/site2/index.php?option=com_conte
 class MontrealEstPersonScraper(Scraper):
 
   def get_people(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
 
     councillors = page.xpath('//table[@width="455"]//tr/td[1]//strong')
     for i, councillor in enumerate(councillors):
