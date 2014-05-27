@@ -114,6 +114,7 @@ membership_schema['matches'] = [(
       # Webform email
       'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2423027/council', # Québec
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2464008/council', # Terrebonne
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530016/council', # Waterloo
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
@@ -121,6 +122,7 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4806016/council', # Calgary
     ) or x['organization_id'] in ( # Leader has no email
       'jurisdiction:ocd-jurisdiction/country:ca/cd:3521/council', # Peel
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2437067/council', # Trois-Rivières
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2456083/council', # Saint-Jean-sur-Richelieu
       'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council', # Saguenay
       'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
@@ -129,6 +131,7 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4711066/council', # Saskatoon
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4811061/council', # Edmonton
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4816037/council', # Wood Buffalo
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:5915004/council', # Surrey
     ) and x['role'] in ('Chair', 'Maire', 'Mayor', 'Regional Chair')
   ),
   'Membership has no emails {organization_id} {post_id!r}',

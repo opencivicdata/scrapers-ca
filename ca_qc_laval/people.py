@@ -14,12 +14,12 @@ class LavalPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
     for councillor_row in page.xpath('//tr'):
       post = councillor_row.xpath('string(./td[2]/p/text())')
-      try:
-        district = post.split()[-1]
-        role = 'Conseiller'
-      except IndexError:
+      if post == 'Maire de Laval':
         district = 'Laval'
         role = 'Maire'
+      else:
+        district = re.sub('^C.?irconscription (?:no )?\d+\D- ', '', post).replace("L'", '').replace(' ', '').replace('bois', 'Bois')
+        role = 'Conseiller'
       full_name = councillor_row.xpath('string(./td[2]/p/text()[2])').strip()
       name = ' '.join(full_name.split()[1:])
           

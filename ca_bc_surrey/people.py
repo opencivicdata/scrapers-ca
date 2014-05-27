@@ -19,7 +19,7 @@ class SurreyPersonScraper(Scraper):
       url = link.attrib['href']
       councillor_page = lxmlize(url)
       photo_url = councillor_page.xpath(
-          'string(.//div[@class="inner-wrapper"]/p/img/@src)')
+          'string(.//div[@class="inner-wrapper"]//img/@src)')
       phone = councillor_page.xpath(
           'string(//text()[contains(., "hone:")][1])')
       email = councillor_page.xpath(

@@ -18,7 +18,7 @@ class TroisRivieresPersonScraper(Scraper):
     page = lxmlize(MAYOR_URL)
     photo_url = page.xpath('string(//img/@src[contains(., "Maire")])')
     name = page.xpath('string(//td[@class="contenu"]/text()[last()])')
-    p = Legislator(name=name, post_id=u"Trois Rivières", role="Maire",
+    p = Legislator(name=name, post_id=u"Trois-Rivières", role="Maire",
                    image=photo_url)
     p.add_source(MAYOR_URL)
     yield p
@@ -27,8 +27,8 @@ class TroisRivieresPersonScraper(Scraper):
     # page rendering through JS on the client
     page_re = re.compile(r'createItemNiv3.+"District (.+?)".+(index.+)\\"')
     for district, url_rel in page_re.findall(resp.text):
-        if district.startswith('de '):
-            district = district[len('de '):]
+        if district not in ('des Estacades', 'des Plateaux', 'des Terrasses', 'du Sanctuaire'):
+            district = re.sub('\A(?:de(?: la)?|des|du) ', '', district)
 
         url = urljoin(COUNCIL_PAGE, url_rel)
         page = lxmlize(url)

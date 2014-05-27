@@ -21,6 +21,11 @@ class OshawaPersonScraper(Scraper):
       email = rep_cell.xpath('string(.//a)')
       photo_url = rep_cell.xpath('string(./following-sibling::td[1]/img/@src)')
 
+      if role == 'City Councillor':
+        role = 'Councillor'
+      elif role == 'Regional and City Councillor':
+        role = 'Regional Councillor'
+
       p = Legislator(name=name, post_id='Oshawa', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', phone, 'legislature')
