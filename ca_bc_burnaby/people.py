@@ -20,7 +20,7 @@ def scrape_person(url):
   page = lxmlize(url)
 
   role, name = page.xpath('string(//title)').split(' ', 1)
-  photo_url = page.xpath('string(//div[@id="content"]/img/@src)')
+  photo_url = page.xpath('string(//div[@id="content"]//img[@style]/@src)')
   email = page.xpath('string(//a[contains(@href, "mailto:")])')
   phone = page.xpath('string(//li[contains(text(), "Phone:")])')
 

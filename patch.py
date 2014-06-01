@@ -131,6 +131,7 @@ membership_schema['matches'] = [(
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4711066/council', # Saskatoon
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4811061/council', # Edmonton
       'jurisdiction:ocd-jurisdiction/country:ca/csd:4816037/council', # Wood Buffalo
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:5909052/council', # Abbotsford
       'jurisdiction:ocd-jurisdiction/country:ca/csd:5915004/council', # Surrey
     ) and x['role'] in ('Chair', 'Maire', 'Mayor', 'Regional Chair')
   ),
