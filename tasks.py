@@ -158,6 +158,8 @@ def get_definition(division_id, aggregation=False):
       name_infix = ocdid_to_type_name_map[division_id]
       if name_infix in ('Municipality', 'Specialized municipality'):
         name_infix = 'Municipal'
+      elif name_infix == 'District municipality':
+        name_infix = 'District'
       elif name_infix == 'Regional municipality':
         name_infix = 'Regional'
       expected['name'] = u'%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
