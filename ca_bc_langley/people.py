@@ -25,13 +25,12 @@ class LangleyPersonScraper(Scraper):
     infos_page = lxmlize(url)
     infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
-    role = 'member'
     name = ' '.join(infos.xpath('p[2]/text()')[0].split(' ')[1:3])
     lname = name.lower()
     email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
-    p = Legislator(name=name, post_id='Langley', role=role, image=photo_url)
+    p = Legislator(name=name, post_id='Langley', role='Councillor', image=photo_url)
     p.add_source(url)
     p.add_contact('email', email, None)
 
@@ -49,13 +48,12 @@ class LangleyPersonScraper(Scraper):
     infos_page = lxmlize(url)
     infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
-    role = 'member'
     name = ' '.join(infos.xpath('p[2]/text()')[0].split(' ')[2:4])
     lname = name.lower()
     email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
-    p = Legislator(name=name, post_id='Langley', role=role, image=photo_url)
+    p = Legislator(name=name, post_id='Langley', role='Mayor', image=photo_url)
     p.add_source(url)
     p.add_contact('email', email, None)
 
