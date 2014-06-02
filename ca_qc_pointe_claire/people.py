@@ -18,7 +18,7 @@ class PointeClairePersonScraper(Scraper):
     p = Legislator(name=name, post_id='Pointe-Claire', role='Maire')
     p.add_source(COUNCIL_PAGE)
 
-    phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')
+    phone = re.findall(r'[0-9]{3}[ -][0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')
     p.add_contact('voice', phone, 'legislature')
     yield p
 
@@ -36,7 +36,7 @@ class PointeClairePersonScraper(Scraper):
         p.add_source(COUNCIL_PAGE)
         p.image = councillor.xpath('.//img/@src')[0]
 
-        phone = re.findall(r'[0-9]{3} [0-9]{3}-[0-9]{4}', rows[i + 1].xpath('.//td')[j].text_content())[0].replace(' ', '-')
+        phone = re.findall(r'[0-9]{3}[ -][0-9]{3}-[0-9]{4}', rows[i + 1].xpath('.//td')[j].text_content())[0].replace(' ', '-')
 
         p.add_contact('voice', phone, 'legislature')
 
