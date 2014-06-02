@@ -31,8 +31,6 @@ class CanadaPersonScraper(Scraper):
       mp_page = lxmlize(url)
       email = mp_page.xpath('string(//span[@class="caucus"]/'
                             'a[contains(., "@")])')
-      phone = mp_page.xpath('string(//div[@class="hilloffice"]/'
-                            'span[contains(., "Telephone")])').split(': ')[1]
       photo = mp_page.xpath('string(//div[@class="profile overview header"]//'
                             'img/@src)')
 
@@ -40,6 +38,28 @@ class CanadaPersonScraper(Scraper):
       m.add_source(COUNCIL_PAGE)
       m.add_source(url)
       m.add_contact('email', email, None)
-      m.add_contact('voice', phone, 'legislature')
       m.image = photo
+
+      m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
+      voice = mp_page.xpath('string(//div[@class="hilloffice"]//span[contains(text(), "Telephone:")])')
+      if voice:
+        m.add_contact('voice', voice.replace('Telephone: ', ''), 'legislature')
+      fax = mp_page.xpath('string(//div[@class="hilloffice"]//span[contains(text(), "Fax:")])').replace('Fax: ', '')
+      if fax:
+        m.add_contact('fax', fax, 'legislature')
+
+      for li in mp_page.xpath('//div[@class="constituencyoffices"]//li'):
+        spans = li.xpath('./span[not(@class="spacer")]')
+        m.add_contact('address', '\n'.join([
+          spans[0].text_content(), # address
+          spans[1].text_content(), # city, region
+          spans[2].text_content(), # postal code
+        ]), 'constituency')
+        voice = li.xpath('string(./span[contains(text(), "Telephone:")])').replace('Telephone: ', '')
+        if voice:
+          m.add_contact('voice', voice, 'constituency')
+        fax = li.xpath('string(./span[contains(text(), "Fax:")])').replace('Fax: ', '')
+        if fax:
+          m.add_contact('fax', fax, 'constituency')
+
       yield m
