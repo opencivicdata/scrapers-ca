@@ -13,18 +13,18 @@ class TorontoPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
 
-    for a in page.xpath('//a[contains(@href,"councillors/")]'):
-      if 'vacant' in a.attrib['href']:
-        continue
-      yield self.scrape_councilor(a.attrib['href'])
-
     a = page.xpath('//a[contains(@href,"mayor")]')[0]
     yield self.scrape_mayor(a.attrib['href'])
 
-  def scrape_councilor(self, url):
-    page = lxmlize(url)
-    name = page.xpath('string(//h1)').split('Councillor')[1]
-    ward_full = page.xpath('string(//strong[contains(text(), "Ward")][1])')
+    for a in page.xpath('//a[contains(@href,"councillors/")]'):
+      page = lxmlize(a.attrib['href'])
+      h1 = page.xpath('string(//h1)')
+      if 'Council seat is vacant' not in h1:
+        yield self.scrape_councilor(page, h1, a.attrib['href'])
+
+  def scrape_councilor(self, page, h1, url):
+    name = h1.split('Councillor')[1]
+    ward_full = page.xpath('string(//strong[not(@class)])').replace(u'\xa0', u' ')
     ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
 
     p = Legislator(name=name, post_id=ward_num, role='Councillor')
