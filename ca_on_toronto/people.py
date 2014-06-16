@@ -31,7 +31,7 @@ class TorontoPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
-    p.image = page.xpath('string(//main//img/@src)')
+    p.image = page.xpath('string(//main//img/@src)').replace('www.', 'www1.')  # @todo fix lxmlize to use the redirected URL to make links absolute
     email = page.xpath('string((//a[contains(@href, "@")])[1])')
     p.add_contact('email', email, None)
 
@@ -55,10 +55,9 @@ class TorontoPersonScraper(Scraper):
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
-    p.image = page.xpath('string(//article/img/@src)')
+    p.image = page.xpath('string(//article/img/@src)').replace('www.', 'www1.')
 
-    url = page.xpath('//a[contains(text(), "Contact the Mayor")]')[0].attrib['href']
-    url = url.replace('www.', 'www1.')  # @todo fix lxmlize to use the redirected URL to make links absolute
+    url = page.xpath('//a[contains(text(), "Contact the Mayor")]')[0].attrib['href'].replace('www.', 'www1.')
     p.add_source(url)
     page = lxmlize(url)
 
