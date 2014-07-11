@@ -27,7 +27,10 @@ class OntarioPersonScraper(Scraper):
           party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(mpp_url)
-      p.add_contact('email', email, None)
+      if email:
+        p.add_contact('email', email, None)
+      elif name == 'Arthur Potts':
+        p.add_contact('email', 'apotts.mpp.co@liberal.ola.org', None)
       p.add_contact('voice', phone, 'legislature')
       yield p
 
