@@ -42,7 +42,7 @@ class CanadaPersonScraper(Scraper):
         m.add_contact('email', email, None)
       m.image = photo
 
-      if mp_page.xpath('string(//span[@class="province"][0])') == u'Québec':
+      if mp_page.xpath('string(//span[@class="province"][1])') == u'Québec':
         m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
       else:
         m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
