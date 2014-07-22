@@ -252,7 +252,7 @@ def clean_telephone_number(s):
   @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
   """
 
-  splits = re.split(r'(?:/|x|ext\.?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
+  splits = re.split(r'(?:/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
   digits = re.sub(r'\D', '', splits[0])
 
   if len(digits) == 10:

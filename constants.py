@@ -5868,7 +5868,7 @@ subdivisions[u'ocd-division/country:ca'].append(u"Vancouver South")
 subdivisions[u'ocd-division/country:ca'].append(u"Victoria")
 subdivisions[u'ocd-division/country:ca'].append(u"West Vancouver—Sunshine Coast—Sea to Sky Country")
 subdivisions[u'ocd-division/country:ca'].append(u"Yukon")
-subdivisions[u'ocd-division/country:ca'].append(u"Western Arctic")
+subdivisions[u'ocd-division/country:ca'].append(u"Northwest Territories")
 subdivisions[u'ocd-division/country:ca'].append(u"Nunavut")
 subdivisions[u'ocd-division/country:ca/province:nl'] = []
 subdivisions[u'ocd-division/country:ca/province:nl'].append(u"Baie Verte—Springdale")

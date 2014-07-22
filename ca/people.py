@@ -37,10 +37,15 @@ class CanadaPersonScraper(Scraper):
       m = Legislator(name=name, post_id=constituency, role='MP', chamber='lower', party=party)
       m.add_source(COUNCIL_PAGE)
       m.add_source(url)
-      m.add_contact('email', email, None)
+      # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
+      if email:
+        m.add_contact('email', email, None)
       m.image = photo
 
-      m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
+      if mp_page.xpath('string(//span[@class="province"][0])') == u'Québec':
+        m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
+      else:
+        m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
       voice = mp_page.xpath('string(//div[@class="hilloffice"]//span[contains(text(), "Telephone:")])')
       if voice:
         m.add_contact('voice', voice.replace('Telephone: ', ''), 'legislature')
@@ -51,9 +56,10 @@ class CanadaPersonScraper(Scraper):
       for li in mp_page.xpath('//div[@class="constituencyoffices"]//li'):
         spans = li.xpath('./span[not(@class="spacer")]')
         m.add_contact('address', '\n'.join([
-          spans[0].text_content(), # address
-          spans[1].text_content(), # city, region
-          spans[2].text_content(), # postal code
+          spans[0].text_content(), # address line 1
+          spans[1].text_content(), # address line 2
+          spans[2].text_content(), # city, region
+          spans[3].text_content(), # postal code
         ]), 'constituency')
         voice = li.xpath('string(./span[contains(text(), "Telephone:")])').replace('Telephone: ', '')
         if voice:
