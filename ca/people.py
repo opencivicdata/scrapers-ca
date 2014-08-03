@@ -40,6 +40,8 @@ class CanadaPersonScraper(Scraper):
       # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
       if email:
         m.add_contact('email', email, None)
+      elif name == 'Adam Vaughan':
+        m.add_contact('email', 'Adam.Vaughan@parl.gc.ca', None)
       m.image = photo
 
       if mp_page.xpath('string(//span[@class="province"][1])') == u'Québec':
