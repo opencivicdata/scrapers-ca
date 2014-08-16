@@ -42,9 +42,9 @@ class CanadaPersonScraper(Scraper):
       m = Legislator(name=name, post_id=constituency, role='MP', chamber='lower', party=party)
       m.add_source(COUNCIL_PAGE)
       m.add_source(url)
-      twitter = screen_names.get(name)
-      if twitter:
-        m.add_link('https://twitter.com/%s' % twitter.get('screen_name'))
+      screen_name = screen_names.get(name)
+      if screen_name:
+        m.add_link('https://twitter.com/%s' % screen_name)
       # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
       if email:
         m.add_contact('email', email, None)
