@@ -1,6 +1,15 @@
 # Canadian Legislative Scrapers
 
-See [blank-pupa](https://github.com/opennorth/blank-pupa) to install dependencies and get started.
+## Installation
+
+Follow the instructions in the [Python Quick Start Guide](https://github.com/opennorth/opennorth.ca/wiki/Python-Quick-Start%3A-OS-X) to install Homebrew, Git, MongoDB, Python and virtualenv. You must use Python 2.7 (for now). You may need to make virtualenv use your Python 2.7 executable by running, for example, `VIRTUALENV_PYTHON=/usr/bin/python`.
+
+```
+mkvirtualenv scrapers-ca
+git clone git://github.com/opencivicdata/scrapers-ca.git
+cd scrapers-ca
+pip install -r requirements.txt
+```
 
 ## Run a scraper
 
