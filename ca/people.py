@@ -63,19 +63,22 @@ class CanadaPersonScraper(Scraper):
       if fax:
         m.add_contact('fax', fax, 'legislature')
 
-      for li in mp_page.xpath('//div[@class="constituencyoffices"]//li'):
+      for i, li in enumerate(mp_page.xpath('//div[@class="constituencyoffices"]//li')):
         spans = li.xpath('./span[not(@class="spacer")]')
+        note = "constituency"
+        if i:
+          note += ' ({})'.format(i+1)
         m.add_contact('address', '\n'.join([
           spans[0].text_content(), # address line 1
           spans[1].text_content(), # address line 2
           spans[2].text_content(), # city, region
           spans[3].text_content(), # postal code
-        ]), 'constituency')
+        ]), note)
         voice = li.xpath('string(./span[contains(text(), "Telephone:")])').replace('Telephone: ', '')
         if voice:
-          m.add_contact('voice', voice, 'constituency')
+          m.add_contact('voice', voice, note)
         fax = li.xpath('string(./span[contains(text(), "Fax:")])').replace('Fax: ', '')
         if fax:
-          m.add_contact('fax', fax, 'constituency')
+          m.add_contact('fax', fax, note)
 
       yield m

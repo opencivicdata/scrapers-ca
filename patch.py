@@ -29,12 +29,9 @@ _contact_details['items']['properties']['value']['conditionalPattern'] = [
   # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
   #  lambda x: x['type'] == 'address'),
 ]
-_contact_details['items']['properties']['note']['enum'] = [
-  'constituency',
-  'legislature',
-  'office',
-  'residence',
-]
+_contact_details['items']['properties']['note']['compiledPattern'] = re.compile(
+  r'^(?:constituency|legislature|office|residence)(?: \(\d\))?$')
+
 _contact_details['items']['additionalProperties'] = False
 
 _links['items']['properties']['url']['blank'] = False
