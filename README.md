@@ -2,7 +2,7 @@
 
 ## Installation
 
-Follow the instructions in the [Python Quick Start Guide](https://github.com/opennorth/opennorth.ca/wiki/Python-Quick-Start%3A-OS-X) to install Homebrew, Git, MongoDB, Python and virtualenv. You must use Python 2.7 (for now). You may need to make virtualenv use your Python 2.7 executable by running, for example, `VIRTUALENV_PYTHON=/usr/bin/python`.
+Follow the instructions in the [Python Quick Start Guide](https://github.com/opennorth/opennorth.ca/wiki/Python-Quick-Start%3A-OS-X) to install Homebrew, Git, MongoDB, Python and virtualenv. You must use Python 2.7. You may need to force virtualenv to use your Python 2.7 executable by running, for example, `export VIRTUALENV_PYTHON=/usr/bin/python`.
 
 ```
 mkvirtualenv scrapers-ca
