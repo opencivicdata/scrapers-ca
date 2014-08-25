@@ -65,9 +65,9 @@ class CanadaPersonScraper(Scraper):
 
       for i, li in enumerate(mp_page.xpath('//div[@class="constituencyoffices"]//li')):
         spans = li.xpath('./span[not(@class="spacer")]')
-        note = "constituency"
+        note = 'constituency'
         if i:
-          note += ' ({})'.format(i+1)
+          note += ' ({})'.format(i + 1)
         m.add_contact('address', '\n'.join([
           spans[0].text_content(), # address line 1
           spans[1].text_content(), # address line 2
