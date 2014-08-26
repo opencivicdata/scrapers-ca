@@ -18,16 +18,14 @@ class MonctonPersonScraper(Scraper):
 
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
-      try:
-          name = councillor.xpath('.//a')[0].text_content()
-      except IndexError:
-          continue
-      districts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()]
-      district = districts[1]
+      parts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub(u'\xa0', ' ', x).strip()]
+      name = ' '.join(parts[:2])
+
+      district = parts[2]
       if district == 'At Large':
         district = 'Moncton'
       elif district == 'Deputy Mayor':
-        district = districts[2]
+        district = parts[3]
 
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
@@ -54,7 +52,7 @@ class MonctonPersonScraper(Scraper):
 
 def scrape_mayor(url):
   page = lxmlize(url)
-  name = ' '.join(page.xpath('//div[@id="content"]/p[2]/text()')[0].split()[1:3])
+  name = page.xpath('//meta[@name="description"]/@content')[0].split(',')[1]
 
   p = Legislator(name=name, post_id='Moncton', role='Mayor')
   p.add_source(url)
