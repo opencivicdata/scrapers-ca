@@ -50,7 +50,9 @@ class CanadaPersonScraper(Scraper):
         m.add_contact('email', email, None)
       elif name == 'Adam Vaughan':
         m.add_contact('email', 'Adam.Vaughan@parl.gc.ca', None)
-      m.image = photo
+
+      if photo and requests.head(photo).status_code == 200:
+        m.image = photo
 
       personal_url = mp_page.xpath('//a[contains(@title, "Personal Web Site")]/@href')
       if personal_url:
