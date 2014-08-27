@@ -44,13 +44,17 @@ class CanadaPersonScraper(Scraper):
       m.add_source(url)
       screen_name = screen_names.get(name)
       if screen_name:
-        m.add_link('https://twitter.com/%s' % screen_name)
+        m.add_link('https://twitter.com/%s' % screen_name, note='Twitter')
       # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
       if email:
         m.add_contact('email', email, None)
       elif name == 'Adam Vaughan':
         m.add_contact('email', 'Adam.Vaughan@parl.gc.ca', None)
       m.image = photo
+
+      personal_url = mp_page.xpath('//a[contains(@title, "Personal Web Site")]/@href')
+      if personal_url:
+        m.add_link(personal_url[0], note='Personal site')
 
       if mp_page.xpath('string(//span[@class="province"][1])') == u'Québec':
         m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
