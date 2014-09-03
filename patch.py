@@ -30,7 +30,7 @@ _contact_details['items']['properties']['value']['conditionalPattern'] = [
   #  lambda x: x['type'] == 'address'),
 ]
 _contact_details['items']['properties']['note']['compiledPattern'] = re.compile(
-  r'^(?:constituency|legislature|office|residence)(?: \(\d\))?$')
+  r'^(?:constituency|legislature|office|residence|Twitter|Personal site)(?: \(\d\))?$')
 
 _contact_details['items']['additionalProperties'] = False
 

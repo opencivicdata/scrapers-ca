@@ -30,16 +30,16 @@ LOGGING_CONFIG = {
         }
     },
     'handlers': {
-        'default': {'level': 'DEBUG',
+        'default': {'level': 'INFO',
                     'class': 'pupa.ext.ansistrm.ColorizingStreamHandler',
                     'formatter': 'standard'},
     },
     'loggers': {
         '': {
-            'handlers': ['default'], 'level': 'DEBUG', 'propagate': True
+            'handlers': ['default'], 'level': 'WARN', 'propagate': True
         },
         'scrapelib': {
-            'handlers': ['default'], 'level': 'INFO', 'propagate': False
+            'handlers': ['default'], 'level': 'WARN', 'propagate': False
         },
         'requests': {
             'handlers': ['default'], 'level': 'WARN', 'propagate': False

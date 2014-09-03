@@ -31,8 +31,10 @@ class CanadaPersonScraper(Scraper):
       constituency = row.xpath('string(./td[2])')
       province = row.xpath('string(./td[3])')
       party = row.xpath('string(./td[4])')
-
       url = name_cell.xpath('string(.//a/@href)')
+      if province == u'Québec':
+        url = url.replace('/en/', '/fr/')
+
       mp_page = lxmlize(url)
       email = mp_page.xpath('string(//span[@class="caucus"]/'
                             'a[contains(., "@")])')
@@ -58,7 +60,7 @@ class CanadaPersonScraper(Scraper):
       if personal_url:
         m.add_link(personal_url[0], note='Personal site')
 
-      if mp_page.xpath('string(//span[@class="province"][1])') == u'Québec':
+      if province == u'Québec':
         m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
       else:
         m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
