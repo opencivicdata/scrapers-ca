@@ -3,12 +3,14 @@ from pupa.scrape import Scraper
 
 from utils import lxmlize, CanadianLegislator as Legislator
 
+import hashlib
 import json
 import re
 
 import requests
 
 COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members?view=ListAll'
+BAD_PHOTO_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d'] # hashes of no-good photos
 
 
 class CanadaPersonScraper(Scraper):
@@ -51,8 +53,12 @@ class CanadaPersonScraper(Scraper):
       elif name == 'Adam Vaughan':
         m.add_contact('email', 'Adam.Vaughan@parl.gc.ca', None)
 
-      if photo and requests.head(photo).status_code == 200:
-        m.image = photo
+      if photo:
+        # Determine whether the photo is actually a generic silhouette
+        photo_response = requests.get(photo)
+        if (photo_response.status_code == 200 and
+            hashlib.sha1(photo_response.content).hexdigest() not in BAD_PHOTO_SHA1):
+          m.image = photo
 
       personal_url = mp_page.xpath('//a[contains(@title, "Personal Web Site")]/@href')
       if personal_url:
