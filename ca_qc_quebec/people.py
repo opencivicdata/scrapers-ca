@@ -33,7 +33,7 @@ class QuebecPersonScraper(Scraper):
       elif district == 'Plateau':
         district = 'Le Plateau'
       else:
-        district = re.sub(u'–', u'—', district) # n-dash, m-dash
+        district = re.sub(u'–', u'—', district)  # n-dash, m-dash
         district = re.sub('\Ala ', 'La ', district)
 
       p = Legislator(name=name, post_id=district, role=role)

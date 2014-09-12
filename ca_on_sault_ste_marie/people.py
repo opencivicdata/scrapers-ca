@@ -9,14 +9,17 @@ import re
 
 COUNCIL_PAGE = 'http://www.city.sault-ste-marie.on.ca/Open_Page.aspx?ID=174&deptid=1'
 
+
 def word_to_number(word):
   words = ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
            'nine', 'ten')
   return words.index(word.lower()) + 1
 
+
 def district_name_using_number(name):
   district_split = name.split()
   return ' '.join([district_split[0], str(word_to_number(district_split[1]))])
+
 
 class SaultSteMariePersonScraper(Scraper):
 
@@ -26,7 +29,7 @@ class SaultSteMariePersonScraper(Scraper):
     council_data = table_data[2:-1]
 
     mayor_row = table_data[0]
-    
+
     photo_url_rel = mayor_row.xpath('string(.//img/@src)')
     photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
     contact_node = mayor_row.xpath('./td')[1]
@@ -40,13 +43,13 @@ class SaultSteMariePersonScraper(Scraper):
     p.image = photo_url
     yield p
 
-    #alternate between a row represneting a ward name and councilors
-    for ward_row, data_row in zip(*[iter(council_data)]*2):
+    # alternate between a row represneting a ward name and councilors
+    for ward_row, data_row in zip(*[iter(council_data)] * 2):
       district = ward_row.xpath('string(.//text()[contains(., "Ward")])')
       district_num = district_name_using_number(district)
       for councillor_node in data_row.xpath('./td'):
         name = councillor_node.xpath('string(.//strong)')
-        if not name: #bad markup
+        if not name:  # bad markup
           name = councillor_node.xpath('string(.//strong/following-sibling::'
                                        'text())')
         raw_email = councillor_node.xpath('string(.//a[contains(., "@")]/@href)')
@@ -62,4 +65,3 @@ class SaultSteMariePersonScraper(Scraper):
         p.image = photo_url
 
         yield p
-

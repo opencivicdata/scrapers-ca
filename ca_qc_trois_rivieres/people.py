@@ -11,6 +11,7 @@ COUNCIL_PAGE = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module
 
 MAYOR_URL = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=1&CPage=1'
 
+
 class TroisRivieresPersonScraper(Scraper):
 
   def get_people(self):

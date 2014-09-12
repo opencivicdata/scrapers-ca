@@ -23,7 +23,7 @@ class TerrebonnePersonScraper(Scraper):
     mayor_elem = page.xpath('//div[@class="protraits maire"]')[0][0]
     name = mayor_elem.xpath('./span/text()')[1]
     photo_url = mayor_elem[0].attrib['src']
-    p = Legislator(name=name, post_id='Terrebonne', role='Maire', 
+    p = Legislator(name=name, post_id='Terrebonne', role='Maire',
                    image=photo_url)
     p.add_source(COUNCIL_PAGE)
     yield p

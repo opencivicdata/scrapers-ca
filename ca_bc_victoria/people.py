@@ -26,15 +26,15 @@ class VictoriaPersonScraper(Scraper):
     mayor_name = mayor_node.xpath('string(.)')
     yield mayor_data(mayor_url, mayor_name, 'Mayor')
 
+
 def councillor_data(url, name, role):
   page = lxmlize(url)
   email = page.xpath('string(//a[contains(@href, "mailto")])')
   phone_str = page.xpath('string(//div[@id="content"]//strong[1]/'
                          'following-sibling::text()[contains(., "Phone")])')
   phone = phone_str.split(':')[1]
-  photo_url = urljoin(url, 
-      page.xpath('string(//div[@id="content"]//img[1]/@src)'))
-
+  photo_url = urljoin(url,
+                      page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
   # TODO: should post_id be "Nieghborhood Liaison"?
   m = Legislator(name=name, post_id='Victoria', role=role)
@@ -45,16 +45,16 @@ def councillor_data(url, name, role):
   m.image = photo_url
   return m
 
+
 def mayor_data(url, name, role):
   page = lxmlize(url)
   email = unquote((page.xpath('string(//a[contains(@href, "mailto")]/@href)')).
-      split(':')[1])
+                  split(':')[1])
   phone_str = page.xpath('string(//div[@id="content"]//strong[1]/'
                          'following-sibling::text()[contains(., "phone")])')
   phone = phone_str.split(':')[1]
-  photo_url = urljoin(url, 
-      page.xpath('string(//div[@id="content"]//img[1]/@src)'))
-
+  photo_url = urljoin(url,
+                      page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
   # TODO: should post_id be "Nieghborhood Liaison"?
   m = Legislator(name=name, post_id='Victoria', role=role)

@@ -34,4 +34,3 @@ class StJohnsPersonScraper(Scraper):
       p.add_contact('email', email, None)
       p.image = photo_url
       yield p
-

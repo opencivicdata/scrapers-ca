@@ -17,7 +17,7 @@ class NorthwestTerritoriesPersonScraper(Scraper):
         '//div[@class="views-field views-field-field-picture"]/'
         'parent::td')
     for cell in member_cells:
-      name = cell[1].text_content().replace(' .', '. ') # typo on page
+      name = cell[1].text_content().replace(' .', '. ')  # typo on page
       riding = cell[2].text_content()
       if 'Mackenzie Delta' in riding:
         riding = 'Mackenzie-Delta'

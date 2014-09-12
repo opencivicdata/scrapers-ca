@@ -13,9 +13,11 @@ PARTIES = {
     'NDP': 'Nova Scotia New Democratic Party'
 }
 
+
 def get_party(abbreviation):
   """Return a political party based on party abbreviation"""
   return PARTIES[abbreviation]
+
 
 class NovaScotiaPersonScraper(Scraper):
 
@@ -26,13 +28,14 @@ class NovaScotiaPersonScraper(Scraper):
       name = ' '.join(reversed(full_name.split(',')))
       detail_url = row[0][0].attrib['href']
       image, phone, email = get_details(detail_url)
-      p = Legislator(name=name, post_id=post, role='MLA', 
-          party=get_party(party_abbr), image=image)
+      p = Legislator(name=name, post_id=post, role='MLA',
+                     party=get_party(party_abbr), image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p
+
 
 def get_details(url):
   page = lxmlize(url)
@@ -42,8 +45,10 @@ def get_details(url):
   email_addr = process_email(email_js)
   return image, phone, email_addr
 
+
 def process_email(js):
   charcodes = reversed(re.findall(r"]='(.+?)'", js))
+
   def convert_char(code):
     try:
       return chr(int(code))
@@ -51,4 +56,3 @@ def process_email(js):
       return code
   content = ''.join(convert_char(code) for code in charcodes)
   return re.search(r'>(.+)<', content).group(1)
-  

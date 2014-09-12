@@ -15,7 +15,7 @@ class WhitbyPersonScraper(Scraper):
     person_elems = page.xpath('//tr')
     for person in person_elems:
       info = person[1]
-      try: # Mayor and regional councillors
+      try:  # Mayor and regional councillors
         name, role = info[0].text_content().split(',')
         role = role.strip()
         post_id = 'Whitby'
@@ -28,4 +28,3 @@ class WhitbyPersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       yield p
-      

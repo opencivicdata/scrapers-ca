@@ -49,4 +49,3 @@ class OttawaPersonScraper(Scraper):
         p.add_contact('voice', phone, 'legislature')
         p.image = photo_url
         yield p
-

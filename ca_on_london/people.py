@@ -21,7 +21,7 @@ class LondonPersonScraper(Scraper):
 
     mayor_page = lxmlize(MAYOR_PAGE)
     mayor_connecting_url = mayor_page.xpath('string(//a[@class="headingLink"]'
-      '[contains(text(), "Connecting")]/@href)')
+                                            '[contains(text(), "Connecting")]/@href)')
     yield mayor_data(mayor_connecting_url)
 
 
@@ -51,6 +51,7 @@ def councillor_data(url):
 
   return p
 
+
 def mayor_data(url):
   page = lxmlize(url)
 
@@ -72,6 +73,7 @@ def mayor_data(url):
   p.add_contact('voice', phone, 'legislature')
   return p
 
+
 def get_phone_data(page):
   # We search for "hone" because the first "p" can change case... oh, xpath.
   # We also only return the first phone number we get. There's no consistency.
@@ -79,8 +81,8 @@ def get_phone_data(page):
                           '[contains(text(), "hone")])[1])')
   return re.search(r'[0-9].*$', phone_text).group()
 
+
 def email_js(js):
   user, domain, suffix = re.findall(r'trim\("(.+?)"', js)[:3]
   email = user + '@' + domain + '.' + suffix
   return email
-

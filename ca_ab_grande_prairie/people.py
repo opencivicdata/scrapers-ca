@@ -20,7 +20,7 @@ class GrandePrairiePersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.post_id = 'Grande Prairie'
       p.add_contact('voice', celltext[3], 'legislature')
-      p.add_contact('email', 
+      p.add_contact('email',
                     row.xpath('string(./td[last()]//a/@href)').split(':')[1],
                     None)
       yield p

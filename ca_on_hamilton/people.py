@@ -20,6 +20,7 @@ class HamiltonPersonScraper(Scraper):
 
     yield mayor_data(council_node.xpath('./table[1]/tbody/tr')[0])
 
+
 def councillor_data(url):
   page = lxmlize(url)
 
@@ -43,6 +44,7 @@ def councillor_data(url):
 
   return p
 
+
 def mayor_data(node):
   name = node.xpath('string(.//strong)')[6:]
   phone = node.xpath('string(.//p[2]/text()[1])')
@@ -56,4 +58,3 @@ def mayor_data(node):
   p.image = photo_url
 
   return p
-

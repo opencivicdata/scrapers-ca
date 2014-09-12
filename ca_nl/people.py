@@ -14,9 +14,11 @@ PARTIES = [
       u'Liberal Party of Newfoundland and Labrador',
 ]
 
+
 def get_party(abbr):
   """Return a full party name from an abbreviation"""
   return next((party for party in PARTIES if party[0] == abbr[0]), None)
+
 
 class NewfoundlandAndLabradorPersonScraper(Scraper):
 
@@ -31,13 +33,13 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
       try:
         photo_page_url = row[0].xpath('./a/@href')[0]
       except IndexError:
-        continue # there is a vacant district
+        continue  # there is a vacant district
       photo_page = lxmlize(photo_page_url)
       photo_url = photo_page.xpath('string(//table//img/@src)')
       district = district.replace(' - ', u'—')  # m-dash
       party = get_party(member_parties[name.strip()])
-      p = Legislator(name=name, post_id=district, role='MHA', 
-          party=party, image=photo_url)
+      p = Legislator(name=name, post_id=district, role='MHA',
+                     party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(PARTY_PAGE)
       p.add_source(photo_page_url)
@@ -45,6 +47,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
       # TODO: either fix phone regex or tweak phone value
       p.add_contact('voice', phone, 'legislature')
       yield p
+
 
 def process_parties(partypage):
   # return generator of (name, party) tuples for MHAs

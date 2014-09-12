@@ -13,4 +13,3 @@ class Quebec(CanadianJurisdiction):
       {'name': u'Parti québécois'},
       {'name': u'Coalition avenir Québec'},
   ]
-

@@ -8,6 +8,7 @@ from urlparse import urljoin
 COUNCIL_PAGE = 'http://www.cbrm.ns.ca/councillors.html'
 MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor.html'
 
+
 class CapeBretonPersonScraper(Scraper):
 
   def get_people(self):
@@ -47,8 +48,7 @@ class CapeBretonPersonScraper(Scraper):
     p = Legislator(name=name, post_id='Cape Breton', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.add_contact('address', address, 'legislature')
-    p.add_contact('voice',  phone, 'legislature')
+    p.add_contact('voice', phone, 'legislature')
     # email is protected through JS
     p.image = photo_url
     yield p
-

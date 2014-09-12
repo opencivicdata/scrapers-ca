@@ -36,6 +36,7 @@ class CalgaryPersonScraper(Scraper):
     m.image = photo_url
     yield m
 
+
 def councillor_data(url, name, ward):
   page = lxmlize(url)
   photo_url_rel = page.xpath('string(//div[@id="contactInfo"]//img[1]/@src)')
@@ -51,4 +52,3 @@ def councillor_data(url, name, ward):
     p.image = photo_url
 
   return p
-

@@ -9,6 +9,7 @@ COUNCIL_PAGE = 'http://www.abbotsford.ca/mayorcouncil/city_council/email_mayor_a
 
 MAYOR_URL = 'http://www.abbotsford.ca/mayorcouncil/city_council/mayor_banman.htm'
 
+
 class AbbotsfordPersonScraper(Scraper):
 
   def get_people(self):
@@ -37,4 +38,3 @@ class AbbotsfordPersonScraper(Scraper):
     p = Legislator(name=name, post_id='Abbotsford', role='Mayor', image=photo_url)
     p.add_source(MAYOR_URL)
     yield p
-

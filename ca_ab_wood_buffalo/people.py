@@ -32,7 +32,7 @@ class WoodBuffaloPersonScraper(Scraper):
         p.image = image_url
 
         contacts = page.xpath(
-                '//div[@id="content"]//div[@class="block"]/text()')
+            '//div[@id="content"]//div[@class="block"]/text()')
         for contact in contacts:
           if not re.search(r'[0-9]', contact):
             continue

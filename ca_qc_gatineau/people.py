@@ -7,6 +7,7 @@ import re
 COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
 MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/conseil_municipal/maire'
 
+
 class GatineauPersonScraper(Scraper):
 
   def get_people(self):
@@ -18,11 +19,11 @@ class GatineauPersonScraper(Scraper):
     members = re.findall(r'arrayMembres\[a.+"(.+)"', js)
     urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)
     # first item in list is mayor
-    p = Legislator(name=members[0], post_id = 'Gatineau', role='Maire')
+    p = Legislator(name=members[0], post_id='Gatineau', role='Maire')
     p.add_source(COUNCIL_PAGE)
     mayor_page = lxmlize(MAYOR_CONTACT_PAGE)
     p.add_source(MAYOR_CONTACT_PAGE)
-    email = 'maire@gatineau.ca' # hardcoded
+    email = 'maire@gatineau.ca'  # hardcoded
     p.add_contact('email', email, None)
     yield p
 

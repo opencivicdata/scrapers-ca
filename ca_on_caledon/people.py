@@ -30,7 +30,6 @@ class CaledonPersonScraper(Scraper):
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-
       info = page.xpath('//table[@summary="Councillor"]/tbody/tr/td[2]')[0]
       info = info.text_content().strip().splitlines(True)
       info = [x for x in info if not x == u'\xa0\n']

@@ -30,13 +30,14 @@ class WinnipegPersonScraper(Scraper):
     m.image = mayor_photo_url
     yield m
 
+
 def councillor_data(url, name, ward):
   page = lxmlize(url)
   # email is, sadly, a form
   photo_url = urljoin(url, page.xpath('string(//img[@class="bio_pic"]/@src)'))
   phone = page.xpath('string(//td[contains(., "Phone")]/following-sibling::td)')
   email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
-      split('=')[1] + '@winnipeg.ca')
+           split('=')[1] + '@winnipeg.ca')
 
   p = Legislator(name=name, post_id=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)

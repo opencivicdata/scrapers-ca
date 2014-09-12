@@ -22,7 +22,7 @@ class LavalPersonScraper(Scraper):
         role = 'Conseiller'
       full_name = councillor_row.xpath('string(./td[2]/p/text()[2])').strip()
       name = ' '.join(full_name.split()[1:])
-          
+
       phone = councillor_row.xpath(
           'string(.//span[@class="icon-phone"]/following::text())')
       email = councillor_row.xpath(
@@ -33,4 +33,3 @@ class LavalPersonScraper(Scraper):
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p
-

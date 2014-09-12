@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.leg.bc.ca/mla/3-2.htm'
 
+
 class BritishColumbiaPersonScraper(Scraper):
 
   def get_people(self):

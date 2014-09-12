@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.wellesley.ca/council/councillors/?q=council/councillors'
 
+
 def post_number(name):
     return {
       'Ward One': 'Ward 1',
@@ -13,6 +14,7 @@ def post_number(name):
       'Ward Three': 'Ward 3',
       'Ward Four': 'Ward 4'
     }[name]
+
 
 class WellesleyPersonScraper(Scraper):
 
@@ -29,8 +31,8 @@ class WellesleyPersonScraper(Scraper):
         post_id = post_number(post_id)
       else:
         post_id = 'Wellesley'
-      addr = '\n'.join(addr_str.strip() for addr_str in 
-                      councillor_elem.xpath('./p/text()')).strip()
+      addr = '\n'.join(addr_str.strip() for addr_str in
+                       councillor_elem.xpath('./p/text()')).strip()
       phone = councillor_elem.xpath('string(.//a[starts-with(@href, "tel:")])')
       email = councillor_elem.xpath(
           'string(.//a[starts-with(@href, "mailto:")])')
@@ -41,4 +43,3 @@ class WellesleyPersonScraper(Scraper):
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p
-

@@ -46,6 +46,7 @@ class CambridgePersonScraper(Scraper):
       p.image = image
       yield p
 
+
 def mayor_info(url):
   page = lxmlize(url)
   name = page.xpath('string(//h3)').split(',')[1]
@@ -55,7 +56,7 @@ def mayor_info(url):
   addr_row = page.xpath('//td[text()="3): "]/parent::tr')
   addr_rows = addr_row + addr_row[0].xpath('./following-sibling::tr')[:3]
   addr = '\n'.join(row[2].text for row in addr_rows)
-  
+
   photo_url = page.xpath('string(//center/img/@src)')
 
   p = Legislator(name=name, post_id="Cambridge", role='Mayor', image=photo_url)

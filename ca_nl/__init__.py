@@ -13,4 +13,3 @@ class NewfoundlandAndLabrador(CanadianJurisdiction):
       {'name': u'New Democratic Party of Newfoundland and Labrador'},
       {'name': u'Liberal Party of Newfoundland and Labrador'},
   ]
-

@@ -6,6 +6,7 @@ import re
 
 COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
 
+
 class LambtonPersonScraper(Scraper):
 
   def get_people(self):

@@ -25,6 +25,7 @@ class KingstonPersonScraper(Scraper):
 
     yield mayor_data(mayor_url)
 
+
 def councillor_data(url):
   page = lxmlize(url)
 
@@ -33,9 +34,9 @@ def councillor_data(url):
 
   name = contact_node.xpath('string(./span[1])')
   district = contact_node.xpath('string(./text()[2])')
-  district_id = district.split(':')[0] # TODO: don't reject name?
+  district_id = district.split(':')[0]  # TODO: don't reject name?
   email = contact_node.xpath('string(.//a)')
-  phone = contact_node.xpath('string(./text()[5])').split(': ')[-1] # TODO: this mostly doesn't work
+  phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]  # TODO: this mostly doesn't work
   photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
   photo_url = urljoin(url, photo_url_rel)
 
@@ -49,6 +50,7 @@ def councillor_data(url):
 
   return p
 
+
 def mayor_data(url):
   page = lxmlize(url)
 
@@ -57,7 +59,7 @@ def mayor_data(url):
 
   name = contact_node.xpath('string(./span[1])')
   email = contact_node.xpath('string(.//a)')
-  photo_url= page.xpath('string(//img[@class="innerimage"]/@src)')
+  photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
 
   p = Legislator(name=name, post_id='Kingston', role='Mayor')
   p.add_source(COUNCIL_PAGE)

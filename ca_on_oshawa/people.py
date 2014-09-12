@@ -31,4 +31,3 @@ class OshawaPersonScraper(Scraper):
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p
-

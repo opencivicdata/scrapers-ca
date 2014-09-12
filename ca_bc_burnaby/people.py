@@ -16,6 +16,7 @@ class BurnabyPersonScraper(Scraper):
     for person_url in page.xpath('//h4/a/@href'):
       yield scrape_person(person_url)
 
+
 def scrape_person(url):
   page = lxmlize(url)
 
@@ -31,4 +32,3 @@ def scrape_person(url):
   if phone:
     p.add_contact('voice', phone, 'legislature')
   return p
-

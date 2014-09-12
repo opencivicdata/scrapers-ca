@@ -23,6 +23,7 @@ class BellevillePersonScraper(Scraper):
       for name_elem in councillor_name_elems:
         yield person_from_elem(name_elem, ward, 'Councillor')
 
+
 def person_from_elem(name_elem, post_id, role):
   name = name_elem.text_content()
   phone = name_elem.xpath(
@@ -38,4 +39,3 @@ def person_from_elem(name_elem, post_id, role):
   p.add_contact('voice', corrected_phone, 'legislature')
   p.add_contact('email', email, None)
   return p
-

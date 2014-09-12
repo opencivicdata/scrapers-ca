@@ -12,4 +12,3 @@ class PrinceEdwardIsland(CanadianJurisdiction):
       {'name': u'Liberal Party of Prince Edward Island'},
       {'name': u'Progressive Conservative Party of Prince Edward Island'},
   ]
-

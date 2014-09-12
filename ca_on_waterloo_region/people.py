@@ -18,10 +18,10 @@ class WaterlooPersonScraper(Scraper):
 
     regions = page.xpath('//*[@id="contentIntleft"]//h3')[1:]
     for region in regions:
-      #the links in all <p> tags immediately following each <h3>
-      councillors = [elem[0] for elem in 
-        takewhile(lambda elem: elem.tag == 'p', 
-          region.xpath('./following-sibling::*'))]
+      # the links in all <p> tags immediately following each <h3>
+      councillors = [elem[0] for elem in
+                     takewhile(lambda elem: elem.tag == 'p',
+                               region.xpath('./following-sibling::*'))]
       for councillor in councillors:
         post = re.search('of (.*)', region.text).group(1)
         p = Legislator(name=councillor.text, post_id=post, role='Councillor')
@@ -36,8 +36,8 @@ class WaterlooPersonScraper(Scraper):
         yield p
 
     chairpage = lxmlize(CHAIR_URL)
-    name = re.search('Chair (.*) -', 
-        chairpage.xpath('string(//title)')).group(1)
+    name = re.search('Chair (.*) -',
+                     chairpage.xpath('string(//title)')).group(1)
     email = chairpage.xpath('string(//a[contains(text(), "E-mail")]/@href)')
     phone = chairpage.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
     address = '\n'.join(
@@ -53,6 +53,7 @@ class WaterlooPersonScraper(Scraper):
     p.image = photo_url
     yield p
 
+
 def councillor_data(url):
   page = lxmlize(url)
   email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
@@ -61,4 +62,3 @@ def councillor_data(url):
   photo_url_src = page.xpath('string(//div[@id="contentIntleft"]//img[1]/@src)')
   photo_url = urljoin(url, photo_url_src)
   return email, phone, address, photo_url
-

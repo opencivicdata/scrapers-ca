@@ -16,9 +16,11 @@ PARTIES = {
     'IND': 'Independent'
 }
 
+
 def get_party(abbr):
   """Return full party name based on abbreviation"""
   return PARTIES[abbr]
+
 
 class NewBrunswickPersonScraper(Scraper):
 
@@ -27,7 +29,7 @@ class NewBrunswickPersonScraper(Scraper):
     councillor_table = page.xpath('//body/div[2]/table[2]')[0]
     for row in councillor_table.xpath('.//tr'):
       riding, table_name, email = (' '.join(td.xpath('string(.)').split())
-          for td in row[1:])
+                                   for td in row[1:])
       riding_fixed = riding.replace(u'\x97', '-')
       if riding_fixed == u'Miramichi Bay-Neguac':
         riding_fixed = u'Miramichi-Bay-Neguac'
@@ -37,12 +39,13 @@ class NewBrunswickPersonScraper(Scraper):
       photo_page_url = row[2][0].attrib['href']
       photo_url = get_photo_url(photo_page_url)
 
-      p = Legislator(name=name, post_id=riding_fixed, role='MLA', 
-          party=get_party(party_abbr), image=photo_url)
+      p = Legislator(name=name, post_id=riding_fixed, role='MLA',
+                     party=get_party(party_abbr), image=photo_url)
       p.add_contact('email', email, None)
       p.add_source(photo_page_url)
       p.add_source(COUNCIL_PAGE)
       yield p
+
 
 def get_photo_url(url):
   page = lxmlize(url)

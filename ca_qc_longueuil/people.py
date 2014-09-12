@@ -13,7 +13,7 @@ class LongueuilPersonScraper(Scraper):
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE, 'latin-1')
     person_rows = [tr for tr in page.xpath('//tr') if
-                       tr.xpath('./td[2][@class="TABL1"]')]
+                   tr.xpath('./td[2][@class="TABL1"]')]
     leader_row = person_rows[0]
     councillor_rows = person_rows[1:]
     for row in councillor_rows:
@@ -33,8 +33,8 @@ class LongueuilPersonScraper(Scraper):
         yield p
 
     mayor_td = leader_row[1]
-    name, position = [string.title() for string in 
-                     mayor_td.text_content().split(', ')]
+    name, position = [string.title() for string in
+                      mayor_td.text_content().split(', ')]
     mayor_url = mayor_td.xpath('string(.//a/@href)')
     mayor_page = lxmlize(mayor_url)
     photo_url = mayor_page.xpath('string(//b/img/@src)')
@@ -47,5 +47,3 @@ class LongueuilPersonScraper(Scraper):
     p.image = photo_url
     p.add_contact('email', email, None)
     yield p
-
-

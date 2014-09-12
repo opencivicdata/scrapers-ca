@@ -24,4 +24,3 @@ class CoquitlamPersonScraper(Scraper):
         p.add_source(url)
         p.add_contact('email', email, None)
         yield p
-

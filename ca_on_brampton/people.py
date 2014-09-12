@@ -13,7 +13,7 @@ class BramptonPersonScraper(Scraper):
 
   def get_people(self):
     page = lxmlize(COUNCIL_PAGE)
-    councillor_divs = page.xpath('//div[@class="councillorCard"]');
+    councillor_divs = page.xpath('//div[@class="councillorCard"]')
     for councillor_div in councillor_divs:
       yield councillor_data(councillor_div)
 
@@ -35,6 +35,7 @@ def councillor_data(html):
 
   return p
 
+
 def mayor_data(page):
   # Strip the word "mayor" from the beginning of the photo lavel
   photo_node = page.xpath('//img[@class="mayorsPic"]')[0]
@@ -53,4 +54,3 @@ def mayor_data(page):
   p.add_contact('email', email, None)
   p.image = photo_url
   return p
-

@@ -29,7 +29,7 @@ class LaSallePersonScraper(Scraper):
 
       p = Legislator(name=name, post_id="LaSalle", role=role)
       p.add_source(COUNCIL_PAGE)
-      
+
       photo_url = councillor.xpath('./parent::td//img/@src')[0]
       p.image = photo_url
 

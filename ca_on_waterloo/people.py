@@ -14,7 +14,7 @@ class WaterlooPersonScraper(Scraper):
     page = lxmlize(COUNCIL_PAGE)
 
     councillor_pages = page.xpath('//div[@id="subNavContainer"]//li/'
-        'a[contains(@title, "Coun.")]/@href')
+                                  'a[contains(@title, "Coun.")]/@href')
 
     for councillor_page in councillor_pages:
       yield councillor_data(councillor_page)
@@ -26,6 +26,7 @@ class WaterlooPersonScraper(Scraper):
 
 def photo_url(page):
   return page.xpath('string(//div[@id="printAreaContent"]/p/img/@src)')
+
 
 def councillor_data(url):
   page = lxmlize(url)
@@ -42,6 +43,7 @@ def councillor_data(url):
 
   return p
 
+
 def mayor_data(url):
   page = lxmlize(url)
 
@@ -53,4 +55,3 @@ def mayor_data(url):
   p.image = photo_url(page)
 
   return p
-

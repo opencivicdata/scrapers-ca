@@ -25,6 +25,7 @@ class KitchenerPersonScraper(Scraper):
 
     yield mayor_data(MAYOR_PAGE)
 
+
 def councillor_data(url, ward):
   page = lxmlize(url)
 
@@ -37,7 +38,7 @@ def councillor_data(url, ward):
   # TODO: contact details are tricky
   #address = '\n'.join(contact_node.xpath('./text()')[:4])
   #phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
-  
+
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
@@ -50,11 +51,12 @@ def councillor_data(url, ward):
 
   return p
 
+
 def mayor_data(url):
   page = lxmlize(url)
 
   infobox_node = page.xpath('//div[@id="printArea"]')[0]
-  name = infobox_node.xpath('string(.//h1)')[6:] # strip 'Mayor' prefix
+  name = infobox_node.xpath('string(.//h1)')[6:]  # strip 'Mayor' prefix
 
   contact_node = page.xpath('//div[@id="contentIntContact"]')[0]
 
@@ -70,4 +72,3 @@ def mayor_data(url):
   p.image = photo_url
 
   return p
-

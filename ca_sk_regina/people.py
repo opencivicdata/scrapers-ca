@@ -29,6 +29,7 @@ class ReginaPersonScraper(Scraper):
     mayor_url = mayor_link.xpath('string(./@href)')
     yield mayor_data(mayor_url, mayor_name)
 
+
 def councillor_data(url, name, ward):
   page = lxmlize(url)
   # sadly, email is a form on a separate page
@@ -45,8 +46,8 @@ def councillor_data(url, name, ward):
 
 def mayor_data(url, name):
   page = lxmlize(url)
-  photo_url = urljoin(url, 
-      page.xpath('string((//div[@id="contentcontainer"]//img)[1]/@src)'))
+  photo_url = urljoin(url,
+                      page.xpath('string((//div[@id="contentcontainer"]//img)[1]/@src)'))
   contact_page = lxmlize(MAYOR_CONTACT_URL)
   email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
@@ -58,4 +59,3 @@ def mayor_data(url, name):
   m.image = photo_url
 
   return m
-
