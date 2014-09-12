@@ -10,10 +10,11 @@ import re
 import requests
 
 COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members?view=ListAll'
-BAD_PHOTO_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d'] # hashes of no-good photos
+BAD_PHOTO_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']  # hashes of no-good photos
 
 
 class CanadaPersonScraper(Scraper):
+
   """
   The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
   accessible from http://www.parl.gc.ca/Parliamentarians/en/members has no
@@ -59,7 +60,7 @@ class CanadaPersonScraper(Scraper):
         # Determine whether the photo is actually a generic silhouette
         photo_response = requests.get(photo)
         if (photo_response.status_code == 200 and
-            hashlib.sha1(photo_response.content).hexdigest() not in BAD_PHOTO_SHA1):
+                hashlib.sha1(photo_response.content).hexdigest() not in BAD_PHOTO_SHA1):
           m.image = photo
 
       personal_url = mp_page.xpath('//a[contains(@title, "Personal Web Site")]/@href')
@@ -83,10 +84,10 @@ class CanadaPersonScraper(Scraper):
         if i:
           note += ' ({})'.format(i + 1)
         m.add_contact('address', '\n'.join([
-          spans[0].text_content(), # address line 1
-          spans[1].text_content(), # address line 2
-          spans[2].text_content(), # city, region
-          spans[3].text_content(), # postal code
+          spans[0].text_content(),  # address line 1
+          spans[1].text_content(),  # address line 2
+          spans[2].text_content(),  # city, region
+          spans[3].text_content(),  # postal code
         ]), note)
         voice = li.xpath('string(./span[contains(text(), "Telephone:")])').replace('Telephone: ', '')
         if voice:

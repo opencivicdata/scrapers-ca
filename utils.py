@@ -247,7 +247,6 @@ def clean_name(s):
 
 
 def clean_telephone_number(s):
-
   """
   @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
   """
@@ -269,7 +268,6 @@ def clean_telephone_number(s):
 
 
 def clean_address(s):
-
   """
   Corrects the postal code, abbreviates the province or territory name, and
   formats the last line of the address.

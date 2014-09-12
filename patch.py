@@ -21,9 +21,9 @@ _contact_details['items']['properties']['type']['enum'] = [
 _contact_details['items']['properties']['value']['blank'] = False
 _contact_details['items']['properties']['value']['conditionalPattern'] = [
   (re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
-    lambda x: x['type'] == 'email'),
+   lambda x: x['type'] == 'email'),
   (re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
-    lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
+   lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
   # Ends with a locality, a province or territory code, and an optional postal code.
   # @note We realistically will never uncomment this, as addresses are not important.
   # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
@@ -57,17 +57,17 @@ youtube_re = re.compile(r'youtube\.com')
 
 matchers = [
   (0, lambda x: x['type'] == 'email' and x['note'] is not None,
-    'Membership has email with non-empty note'),
+   'Membership has email with non-empty note'),
   (0, lambda x: x['type'] != 'email' and x['note'] is None,
-    'Membership has non-email with empty note'),
+   'Membership has non-email with empty note'),
   (1, lambda x: x['type'] == 'email',
-    'Membership has many emails'),
+   'Membership has many emails'),
 ]
 
 for type in ('address', 'cell', 'fax', 'voice'):
   for note in ('constituency', 'legislature', 'office', 'residence'):
     matchers.append((1, lambda x, type=type, note=note: x['type'] == type and x['note'] == note,
-      'Membership has contact_details with same type and note'))
+                     'Membership has contact_details with same type and note'))
 
 # A membership should not have notes on emails, should have notes on non-emails,
 # should have at most one email, and should, in most cases, have at most one of
@@ -87,13 +87,13 @@ person_links['items']['properties']['note']['type'] = 'null'
 # should have at most one link per social media website.
 person_links['maxMatchingItems'] = [
   (1, lambda x: not social_re.search(x['url']),
-    'Person has many non-social media links'),
+   'Person has many non-social media links'),
   (1, lambda x: facebook_re.search(x['url']),
-    'Person has many facebook.com links'),
+   'Person has many facebook.com links'),
   (1, lambda x: twitter_re.search(x['url']),
-    'Person has many twitter.com links'),
+   'Person has many twitter.com links'),
   (1, lambda x: youtube_re.search(x['url']),
-    'Person has many youtube.com links'),
+   'Person has many youtube.com links'),
 ]
 
 membership_schema['properties']['role']['blank'] = False
@@ -107,29 +107,29 @@ membership_schema['matches'] = [(
     x['organization_id'].startswith('party:') or
     x['organization_id'] in (
       # Javascript-encoded email
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council', # Cape Breton
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council',  # Cape Breton
       # Webform email
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council', # Fredericton
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2423027/council', # Québec
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2464008/council', # Terrebonne
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council', # Pointe-Claire
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530016/council', # Waterloo
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council', # Woolwich
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4706027/council', # Regina
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4806016/council', # Calgary
-    ) or x['organization_id'] in ( # Leader has no email
-      'jurisdiction:ocd-jurisdiction/country:ca/cd:3521/council', # Peel
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2437067/council', # Trois-Rivières
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2456083/council', # Saint-Jean-sur-Richelieu
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council', # Saguenay
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council', # Toronto
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council', # Caledon
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530013/council', # Kitchener
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4711066/council', # Saskatoon
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4811061/council', # Edmonton
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4816037/council', # Wood Buffalo
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:5909052/council', # Abbotsford
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:5915004/council', # Surrey
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council',  # Fredericton
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2423027/council',  # Québec
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2464008/council',  # Terrebonne
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council',  # Pointe-Claire
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530016/council',  # Waterloo
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council',  # Woolwich
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4706027/council',  # Regina
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4806016/council',  # Calgary
+    ) or x['organization_id'] in (  # Leader has no email
+      'jurisdiction:ocd-jurisdiction/country:ca/cd:3521/council',  # Peel
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2437067/council',  # Trois-Rivières
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2456083/council',  # Saint-Jean-sur-Richelieu
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council',  # Saguenay
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council',  # Toronto
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council',  # Caledon
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530013/council',  # Kitchener
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4711066/council',  # Saskatoon
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4811061/council',  # Edmonton
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:4816037/council',  # Wood Buffalo
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:5909052/council',  # Abbotsford
+      'jurisdiction:ocd-jurisdiction/country:ca/csd:5915004/council',  # Surrey
     ) and x['role'] in ('Chair', 'Maire', 'Mayor', 'Regional Chair')
   ),
   'Membership has no emails {organization_id} {post_id!r}',
@@ -171,6 +171,7 @@ uniqueRoles = [
   'Reeve', 'Deputy Reeve',
   'Warden', 'Deputy Warden',
 ]
+
 
 def validate_post(self, x, fieldname, schema, path, post):
   if post and not x['organization_id'].startswith('party:'):
