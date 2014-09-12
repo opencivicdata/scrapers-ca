@@ -31,6 +31,7 @@ class LangleyPersonScraper(Scraper):
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
     p = Legislator(name=name, post_id='Langley', role='Councillor', image=photo_url)
+    p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_contact('email', email, None)
 
@@ -54,6 +55,7 @@ class LangleyPersonScraper(Scraper):
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
     p = Legislator(name=name, post_id='Langley', role='Mayor', image=photo_url)
+    p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_contact('email', email, None)
 

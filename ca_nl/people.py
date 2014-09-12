@@ -39,6 +39,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role='MHA', 
           party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
+      p.add_source(PARTY_PAGE)
       p.add_source(photo_page_url)
       p.add_contact('email', email, None)
       # TODO: either fix phone regex or tweak phone value

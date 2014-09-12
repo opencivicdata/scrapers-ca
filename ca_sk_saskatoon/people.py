@@ -29,6 +29,7 @@ class SaskatoonPersonScraper(Scraper):
 
       p = Legislator(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
+      p.add_source(EMAIL_URL)
       p.add_source(url)
 
       page = lxmlize(url)
@@ -71,6 +72,7 @@ def scrape_mayor(url):
   fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
 
   p = Legislator(name=name, post_id='Saskatoon', role='Mayor')
+  p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = image
   p.add_contact('address', address, 'legislature')

@@ -25,6 +25,7 @@ class AbbotsfordPersonScraper(Scraper):
       photo_url = page.xpath('string(//div[@class="pageContent"]//img[@align="right"]/@src)')
       p = Legislator(name=name, post_id='Abbotsford', role='Councillor',
                      image=photo_url)
+      p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('email', email, None)
       yield p
