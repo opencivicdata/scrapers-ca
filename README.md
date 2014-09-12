@@ -49,7 +49,7 @@ If the `pupa.cli` command raises the error below, ensure that MongoDB is running
 
 ## Maintenance
 
-The `tidy.py` script will correct module names, class names, and `jurisdiction_id`, `division_name`, `name` and `url` in `__init.py__` files. It will report any module without an OCD division or with a `name` or `url` that requires manual verification.
+The `tidy` task will correct module names, class names, and `jurisdiction_id`, `division_name`, `name` and `url` in `__init.py__` files. It will report any module without an OCD division or with a `name` or `url` that requires manual verification.
 
     invoke tidy
 

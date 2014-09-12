@@ -27,6 +27,7 @@ def province_and_territory_codes():
       province_and_territory_codes_memo[row[4]] = row[0]
   return province_and_territory_codes_memo
 
+
 def csv_reader(url):
   """
   Reads a remote CSV file.
@@ -334,11 +335,11 @@ def tidy():
             if not leader_styles.get(division_id):
               print '%-60s No leader style of address: %s' % (module_name, division_id)
             if url and not expected['url']:
-              print '%-60s %s' % (module_name, url)
+              print '%-60s Check: %s' % (module_name, url)
 
             # Warn if the name may be incorrect.
             if name != expected['name']:
-              print '%-60s %s' % (name, expected['name'])
+              print '%-60s Expected %s' % (name, expected['name'])
 
             # Name the classes correctly.
             if class_name != expected['class_name']:
