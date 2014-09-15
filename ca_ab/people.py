@@ -34,13 +34,16 @@ class AlbertaPersonScraper(Scraper):
     for mla in cr:
       name = '%s %s %s' % (mla['MLA First Name'], mla['MLA Middle Names'],
                            mla['MLA Last Name'])
+      if name.strip() == '':
+          continue
       party = get_party(mla['Caucus'])
       name_without_status = name.split(',')[0]
       p = Legislator(name=name_without_status, post_id=mla['Riding Name'],
                      role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', mla['Email'], None)
-      p.add_contact('voice', mla['Phone Number'], 'legislature')
+      if mla['Phone Number']:
+          p.add_contact('voice', mla['Phone Number'], 'legislature')
       yield p
 
 
