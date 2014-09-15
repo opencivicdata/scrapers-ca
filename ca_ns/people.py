@@ -10,7 +10,8 @@ COUNCIL_PAGE = 'http://nslegislature.ca/index.php/people/members/'
 PARTIES = {
     'Liberal': 'Nova Scotia Liberal Party',
     'PC': 'Progressive Conservative Association of Nova Scotia',
-    'NDP': 'Nova Scotia New Democratic Party'
+    'NDP': 'Nova Scotia New Democratic Party',
+    'I': 'Independent'
 }
 
 
@@ -32,7 +33,8 @@ class NovaScotiaPersonScraper(Scraper):
                      party=get_party(party_abbr), image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
-      p.add_contact('voice', phone, 'legislature')
+      if phone:
+        p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)
       yield p
 
@@ -40,7 +42,10 @@ class NovaScotiaPersonScraper(Scraper):
 def get_details(url):
   page = lxmlize(url)
   image = page.xpath('string(//img[@class="portrait"]/@src)')
-  phone = page.xpath('string(//dd[@class="numbers"]/text())').split(': ')[1]
+  try:
+    phone = page.xpath('string(//dd[@class="numbers"]/text())').split(': ')[1]
+  except IndexError:
+    phone = None
   email_js = page.xpath('string(//dd/script)')
   email_addr = process_email(email_js)
   return image, phone, email_addr
