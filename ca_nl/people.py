@@ -27,8 +27,11 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
 
     page = lxmlize(COUNCIL_PAGE)
     for row in page.xpath('//table[not(@id="footer")]/tr')[1:]:
-      name, district, _, email = [
-          cell.xpath('string(.)').replace(u'\xa0', u' ') for cell in row]
+      try:
+        name, district, _, email = [
+            cell.xpath('string(.)').replace(u'\xa0', u' ') for cell in row]
+      except ValueError:
+        continue
       phone = row[2].xpath('string(text()[1])')
       try:
         photo_page_url = row[0].xpath('./a/@href')[0]

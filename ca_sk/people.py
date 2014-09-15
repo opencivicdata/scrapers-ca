@@ -23,27 +23,19 @@ class SaskatchewanPersonScraper(Scraper):
       p = Legislator(name=name, post_id=district, role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
+      p.image = page.xpath('string(//div[contains(@class, "mla-image-cell")]/img/@src)')
 
-      contact = page.xpath('//table[@id="mla-contact"]//tr[2]')[0]
-      website = contact.xpath('./td[3]//div[3]//a')
+      contact = page.xpath('//div[@id="mla-contact"]/div[2]')[0]
+      website = contact.xpath('./div[3]/div[3]/div[2]/a')
       if website:
         p.add_link(website[0].text_content(), None)
 
-      p.add_contact('address', contact.xpath('./td[1]/div[2]')[0].text_content(), 'legislature')
-      p.add_contact('address', ''.join(contact.xpath('./td[2]/div//text()')[1:7]), 'constituency')
-      numbers = [
-        contact.xpath('./td[1]/div[3]')[0].text_content().split(':')[1].strip(),
-        contact.xpath('./td[2]/div[4]//span/text()')[0],
-        contact.xpath('./td[1]/div[4]')[0].text_content().split(':')[1].strip(),
-        contact.xpath('./td[2]/div[5]//span/text()')[0],
-      ]
-      for index, number in enumerate(numbers):
-        if len(number) < 10:
-          numbers[index] = '306-%s' % number
-      p.add_contact('voice', numbers[0], 'legislature')
-      p.add_contact('voice', numbers[1], 'constituency')
-      p.add_contact('fax', numbers[2], 'legislature')
-      p.add_contact('fax', numbers[3], 'constituency')
-      p.add_contact('email', contact.xpath('./td[3]//a[contains(@href, "mailto:")]/text()')[0], None)
+      p.add_contact('address', ' '.join(contact.xpath('.//div[@class="col-md-4"][2]/div//text()')[1:9]), 'constituency')
+      phone_leg = contact.xpath('string(.//span[@id="MainContent_ContentBottom_Property6"]//text())')
+      phone_const = contact.xpath('string(.//div[@class="col-md-4"]/div[4]/span/span/text())')
+      p.add_contact('voice', phone_leg, 'legislature')
+      p.add_contact('voice', phone_const, 'constituency')
+      email = contact.xpath('string(.//a[contains(@href, "mailto:")]/text())')
+      p.add_contact('email', email, None)
 
       yield p
