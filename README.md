@@ -65,7 +65,7 @@ To tidy all whitespace, run:
 
     autopep8 -i -a -r --ignore=E111,E121,E501,W6 .
 
-To print all jurisdiction URLs:
+To check and print jurisdiction URLs:
 
     invoke urls
 
