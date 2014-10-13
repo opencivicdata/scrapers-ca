@@ -8,8 +8,7 @@ import csv
 import os
 import re
 import string
-import six.StringIO
-from six import next
+from six import next, StringIO
 
 from invoke import run, task
 import lxml.html

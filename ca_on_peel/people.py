@@ -46,10 +46,8 @@ def chair_info(url):
   name = page.xpath('string(//title)').split('-')[1]
   photo_url = page.xpath('string(//div[@class="co-menu"]/img/@src)')
   # sadly, email is script-based
-  address = page.xpath('string(//div[@id="co-content"]/p[1])').translate(
-      None, '\r\t')
-  phone = page.xpath(
-      'string(//div[@id="co-content"]/p[2]/text())').split(':')[1]
+  address = page.xpath('string(//div[@id="co-content"]/p[1])')
+  phone = page.xpath('string(//div[@id="co-content"]/p[2]/text())').split(':')[1]
 
   p = Legislator(name=name, post_id='Peel', role='Regional Chair',
                  image=photo_url)

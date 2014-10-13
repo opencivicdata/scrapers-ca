@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import csv
 from ftplib import FTP
 import re
-import six.StringIO
+from six import StringIO
 from six.moves.urllib.parse import urlparse
 
 import lxml.html
@@ -84,7 +84,7 @@ class CanadianJurisdiction(Jurisdiction):
       try:
         __import__(self.__module__ + '.' + scraper_type)
       except ImportError as e:
-        if "No module named '%s.%s'" % (self.__module__, scraper_type) in e.args:
+        if "No module named '%s.%s'" % (self.__module__, scraper_type) in e.args or "No module named %s" % scraper_type in e.args:  # Python 3, Python 2
           pass
         else:
           raise
@@ -247,7 +247,7 @@ def clean_address(s):
 
 
 def lxmlize(url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
-  scraper = Scrapelib(follow_robots=False, requests_per_minute=0)
+  scraper = Scrapelib(requests_per_minute=0)
   scraper.user_agent = user_agent
   entry = scraper.urlopen(url)
   if encoding != 'utf-8' or not isinstance(entry, text_type):

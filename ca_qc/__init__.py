@@ -14,4 +14,5 @@ class Quebec(CanadianJurisdiction):
     {'name': 'Parti libéral du Québec'},
     {'name': 'Parti québécois'},
     {'name': 'Coalition avenir Québec'},
+    {'name': 'Québec solidaire'},
   ]

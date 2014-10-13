@@ -1,9 +1,9 @@
 requests==2.3.0
 lxml==3.3.5
-cssselect==0.10.0
+cssselect==0.9.1
 -e git+git://github.com/opencivicdata/pupa.git@ad2d919268a3fa8857a28b94a6490d57728bc78b#egg=pupa
 scrapelib==0.10.0
-six=1.8.0
+six==1.8.0
 validictory==1.0.0a2
 
 # Validation
