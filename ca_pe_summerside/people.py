@@ -5,7 +5,7 @@ from pupa.scrape import Scraper
 from utils import lxmlize, CanadianLegislator as Legislator, CONTACT_DETAIL_TYPE_MAP
 
 import re
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/councillors/'
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'

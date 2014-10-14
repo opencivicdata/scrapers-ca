@@ -5,7 +5,7 @@ from pupa.scrape import Scraper
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
-from urlparse import urljoin
+from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/City-Councillors/Pages/City-Councillors.aspx'
 MAYOR_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/Pages/Biography-of-the-Mayor.aspx'
