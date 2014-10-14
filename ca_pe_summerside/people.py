@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator, CONTACT_DETAIL_TYPE_MAP
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/councillors/'
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'
@@ -13,7 +13,7 @@ MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/
 
 class SummersidePersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     yield self.scrape_mayor()
@@ -26,7 +26,7 @@ class SummersidePersonScraper(Scraper):
       name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Councillor', '').replace('Deputy Mayor', '')
       district = 'Ward %s' % re.sub('\D+', '', page.xpath('//div[@class="articlebody-inside"]/p')[0].text_content())
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -49,7 +49,7 @@ class SummersidePersonScraper(Scraper):
 
     name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Mayor', '')
 
-    p = Legislator(name=name, post_id='Summerside', role='Mayor')
+    p = Person(name=name, post_id='Summerside', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.image = page.xpath('//div[@class="articlebody-inside"]/p/img/@src')[0].replace('..', '')
 

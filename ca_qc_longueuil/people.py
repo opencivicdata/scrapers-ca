@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.longueuil.ca/fr/conseil-ville'
 
 
 class LongueuilPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE, 'latin-1')
     person_rows = [tr for tr in page.xpath('//tr') if
                    tr.xpath('./td[2][@class="TABL1"]')]
@@ -27,7 +26,7 @@ class LongueuilPersonScraper(Scraper):
             'string(//a[contains(@href, "sendto")]/@href)')
         email = re.search(r'sendto=(.+)&', email_url).group(1)
         photo_url = detail_page.xpath('string(//img[@height="200"]/@src)')
-        p = Legislator(name=name, post_id=district, role='Conseiller')
+        p = Person(name=name, post_id=district, role='Conseiller')
         p.add_source(COUNCIL_PAGE)
         p.add_source(detail_url)
         p.image = photo_url
@@ -43,7 +42,7 @@ class LongueuilPersonScraper(Scraper):
     email_url = detail_page.xpath(
         'string(//a[contains(@href, "sendto")]/@href)')
     email = re.search(r'sendto=(.+)&', email_url).group(1)
-    p = Legislator(name=name, post_id='Longueuil', role='Maire')
+    p = Person(name=name, post_id='Longueuil', role='Maire')
     p.add_source(COUNCIL_PAGE)
     p.add_source(mayor_url)
     p.image = photo_url

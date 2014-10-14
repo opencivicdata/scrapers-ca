@@ -1,14 +1,13 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
-
-from utils import lxmlize, CanadianLegislator as Legislator
-from lxml import etree
 
 import re
 
+from lxml import etree
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
 
@@ -26,7 +25,7 @@ def get_party(abbr):
 
 class NewBrunswickPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     councillor_table = page.xpath('//body/div[2]/table[2]')[0]
     for row in councillor_table.xpath('.//tr'):
@@ -40,7 +39,7 @@ class NewBrunswickPersonScraper(Scraper):
       photo_page_url = row[2][0].attrib['href']
       photo_url = get_photo_url(photo_page_url)
 
-      p = Legislator(name=name, post_id=riding_fixed, role='MLA',
+      p = Person(name=name, post_id=riding_fixed, role='MLA',
                      party=get_party(party_abbr), image=photo_url)
       p.add_contact('email', email, None)
       p.add_source(photo_page_url)

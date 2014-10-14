@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.london.ca/city-hall/city-council/Pages/default.aspx'
 MAYOR_PAGE = 'http://www.london.ca/city-hall/mayors-office/Pages/default.aspx'
@@ -13,7 +12,7 @@ MAYOR_PAGE = 'http://www.london.ca/city-hall/mayors-office/Pages/default.aspx'
 
 class LondonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     councillor_pages = page.xpath('//div[@class="imageLinkContent"]/'
                                   'a[starts-with(text(), "Ward")]/@href')
@@ -43,7 +42,7 @@ def councillor_data(url):
   js = page.xpath('string(//span/script)')
   email = email_js(js)
 
-  p = Legislator(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, post_id=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
@@ -67,7 +66,7 @@ def mayor_data(url):
   phone_str = page.xpath('string(//span[contains(@class, "iconPhone")])')
   phone = phone_str.split(':')[1]
 
-  p = Legislator(name=name, post_id='London', role='Mayor')
+  p = Person(name=name, post_id='London', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_source(url)
   p.image = photo_url

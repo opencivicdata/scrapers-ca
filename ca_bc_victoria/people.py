@@ -1,19 +1,19 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin, unquote
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.victoria.ca/EN/main/city/mayor-council-committees/councillors.html'
 
 
 class VictoriaPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     nodes = page.xpath('//div[@id="content"]/ul/li')
     for node in nodes:
@@ -38,7 +38,7 @@ def councillor_data(url, name, role):
                       page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
   # TODO: should post_id be "Nieghborhood Liaison"?
-  m = Legislator(name=name, post_id='Victoria', role=role)
+  m = Person(name=name, post_id='Victoria', role=role)
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
   m.add_contact('email', email, None)
@@ -58,7 +58,7 @@ def mayor_data(url, name, role):
                       page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
   # TODO: should post_id be "Nieghborhood Liaison"?
-  m = Legislator(name=name, post_id='Victoria', role=role)
+  m = Person(name=name, post_id='Victoria', role=role)
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
   m.add_contact('email', email, None)

@@ -1,13 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
+import re
 
 from six.moves.urllib.parse import urljoin
 
-import re
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.city.sault-ste-marie.on.ca/Open_Page.aspx?ID=174&deptid=1'
 
@@ -25,7 +24,7 @@ def district_name_using_number(name):
 
 class SaultSteMariePersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     table_data = page.xpath('//div[@id="litcontentDiv"]//tr')
     council_data = table_data[2:-1]
@@ -39,7 +38,7 @@ class SaultSteMariePersonScraper(Scraper):
     raw_email = contact_node.xpath('string(.//a[contains(., "@")]/@href)')
     email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
 
-    p = Legislator(name=name, post_id='Sault Ste. Marie', role='Mayor')
+    p = Person(name=name, post_id='Sault Ste. Marie', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_contact('email', email, None)
     p.image = photo_url
@@ -60,7 +59,7 @@ class SaultSteMariePersonScraper(Scraper):
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
         # address and phone are brittle, inconsistent
 
-        p = Legislator(name=name, post_id=district_num, role='Councillor')
+        p = Person(name=name, post_id=district_num, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         if email:
           p.add_contact('email', email, None)

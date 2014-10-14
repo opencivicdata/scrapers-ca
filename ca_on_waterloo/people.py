@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.waterloo.ca/en/government/aboutmayorandcouncil.asp'
 
 
 class WaterlooPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillor_pages = page.xpath('//div[@id="subNavContainer"]//li/'
@@ -38,7 +37,7 @@ def councillor_data(url):
 
   # Email is handled as a form and no contact information is listed
 
-  p = Legislator(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, post_id=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = photo_url(page)
@@ -51,7 +50,7 @@ def mayor_data(url):
 
   # Eliminate the word "Mayor" preceding the Mayor's name
   name = page.xpath('string(//h1)')[6:]
-  p = Legislator(name=name, post_id='Waterloo', role='Mayor')
+  p = Person(name=name, post_id='Waterloo', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = photo_url(page)

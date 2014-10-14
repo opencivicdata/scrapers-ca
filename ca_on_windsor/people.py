@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/City-Councillors/Pages/City-Councillors.aspx'
 MAYOR_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/Pages/Biography-of-the-Mayor.aspx'
@@ -13,7 +13,7 @@ MAYOR_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/Pages/Biography-of-the-M
 
 class WindsorPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillor_links = page.xpath(
@@ -22,7 +22,7 @@ class WindsorPersonScraper(Scraper):
       name, district = councillor_link.text.split(' - ')
       cpage_url = councillor_link.attrib['href']
       cpage = lxmlize(cpage_url)
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(cpage_url)
 
@@ -48,7 +48,7 @@ class WindsorPersonScraper(Scraper):
     fax = fax.strip().replace('(', '').replace(') ', '-').split(':')[1]
     email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
 
-    p = Legislator(name=name, post_id='Windsor', role='Mayor')
+    p = Person(name=name, post_id='Windsor', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')

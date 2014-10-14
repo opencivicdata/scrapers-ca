@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.peterborough.ca/City_Hall/City_Council_2833/City_Council_Contact_Information.htm'
 
 
 class PeterboroughPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor_info = page.xpath('//h2[contains(text(), "MAYOR")]//following-sibling::p')[0]
@@ -24,7 +23,7 @@ class PeterboroughPersonScraper(Scraper):
       for councillor in councillors:
         name = councillor.xpath('./strong')[0].text_content()
 
-        p = Legislator(name=name, post_id=district, role='Councillor')
+        p = Person(name=name, post_id=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
 
         info = councillor.xpath('./text()')
@@ -53,7 +52,7 @@ class PeterboroughPersonScraper(Scraper):
     phone = re.findall(r'[0-9].*', info[1])[0].replace('\xa0', ' ')
     fax = re.findall(r'[0-9].*', info[2])[0]
 
-    p = Legislator(name=name, post_id='Peterborough', role='Mayor')
+    p = Person(name=name, post_id='Peterborough', role='Mayor')
     p.add_source(COUNCIL_PAGE)
 
     p.add_contact('email', email, None)

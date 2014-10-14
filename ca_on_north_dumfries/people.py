@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.northdumfries.ca/en/ourtownship/MeetYourCouncil.asp'
 
 
 class NorthDumfriesPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table/tbody/tr')[1:]
@@ -26,7 +25,7 @@ class NorthDumfriesPersonScraper(Scraper):
       else:
         district = 'Ward %s' % info.pop(0).strip()
         role = 'Councillor'
-      p = Legislator(name=name, post_id=district, role=role)
+      p = Person(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', info[0], 'legislature')
       p.add_contact('email', info[1], None)

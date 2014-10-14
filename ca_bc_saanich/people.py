@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.saanich.ca/living/mayor/council/index.html'
 
 
 class SaanichPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     for link in page.xpath('//div[@class="section"]//a'):
       url = link.attrib['href']
@@ -24,7 +23,7 @@ class SaanichPersonScraper(Scraper):
       photo_url = page.xpath('string(//img[@class="float-right"]/@src)')
       email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
-      p = Legislator(name=name, post_id='Saanich', role=role, image=photo_url)
+      p = Person(name=name, post_id='Saanich', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('email', email, None)

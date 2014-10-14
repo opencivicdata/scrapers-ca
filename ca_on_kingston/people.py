@@ -1,20 +1,19 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
+import re
 
 from six.moves.urllib.parse import urljoin
 
-import re
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cityofkingston.ca/city-hall/city-council/mayor-and-council'
 
 
 class KingstonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     mayor_and_council_urls = page.xpath('//ul[@class="no-list no-margin"]//'
                                         'ul[@class="no-list no-margin"]//'
@@ -42,7 +41,7 @@ def councillor_data(url):
   photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
   photo_url = urljoin(url, photo_url_rel)
 
-  p = Legislator(name=name, post_id=district_id, role='Councillor')
+  p = Person(name=name, post_id=district_id, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
@@ -63,7 +62,7 @@ def mayor_data(url):
   email = contact_node.xpath('string(.//a)')
   photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
 
-  p = Legislator(name=name, post_id='Kingston', role='Mayor')
+  p = Person(name=name, post_id='Kingston', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)

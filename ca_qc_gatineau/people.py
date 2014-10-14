@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
 MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/conseil_municipal/maire'
@@ -12,7 +11,7 @@ MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/con
 
 class GatineauPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     # it's all javascript rendered on the client... wow.
@@ -21,7 +20,7 @@ class GatineauPersonScraper(Scraper):
     members = re.findall(r'arrayMembres\[a.+"(.+)"', js)
     urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)
     # first item in list is mayor
-    p = Legislator(name=members[0], post_id='Gatineau', role='Maire')
+    p = Person(name=members[0], post_id='Gatineau', role='Maire')
     p.add_source(COUNCIL_PAGE)
     mayor_page = lxmlize(MAYOR_CONTACT_PAGE)
     p.add_source(MAYOR_CONTACT_PAGE)
@@ -36,7 +35,7 @@ class GatineauPersonScraper(Scraper):
       post_id = 'District ' + re.search('\d+', district).group(0)
       email = profile_page.xpath(
           'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
-      p = Legislator(name=member, post_id=post_id, role='Conseiller')
+      p = Person(name=member, post_id=post_id, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(profile_url)
       p.image = photo_url

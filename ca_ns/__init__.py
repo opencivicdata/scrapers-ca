@@ -1,12 +1,11 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from utils import CanadianJurisdiction
 
 
 class NovaScotia(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:ns/legislature'
-  geographic_code = 12
+  classification = 'legislature'
+  division_id = 'ocd-division/country:ca/province:ns'
   division_name = 'Nova Scotia'
   name = 'Nova Scotia House of Assembly'
   url = 'http://nslegislature.ca/'

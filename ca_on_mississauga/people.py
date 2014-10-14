@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.mississauga.ca/portal/cityhall/mayorandcouncil'
 MAYOR_PAGE = 'http://www.mississauga.ca/portal/cityhall/contactthemayor'
@@ -13,7 +12,7 @@ MAYOR_PAGE = 'http://www.mississauga.ca/portal/cityhall/contactthemayor'
 
 class MississaugaPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillor_urls = page.xpath('//area/@href')[1:]
@@ -33,7 +32,7 @@ def councillor_data(url):
                      '@href[contains(., "@")][1])')
   photo = page.xpath('string(//div[@class="blockcontentclear"]//img[1]/@src)')
 
-  p = Legislator(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, post_id=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
@@ -50,7 +49,7 @@ def mayor_data(url):
   name = ' '.join(name_text.split()[3:])  # TODO: probably too brittle
   email = page.xpath('//a[contains(@href, "mailto")]/text()')[0]
 
-  p = Legislator(name=name, post_id='Mississauga', role='Mayor')
+  p = Person(name=name, post_id='Mississauga', role='Mayor')
   p.add_source(url)
   p.add_contact('email', email, None)
 

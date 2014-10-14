@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
-
 from utils import CanadianJurisdiction
 
 
 class ManitobaMunicipalities(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:mb/municipalities'
-  geographic_code = 46
+  classification = 'legislature'
+  division_id = 'ocd-division/country:ca/province:mb'
   division_name = 'Manitoba'
   name = 'Manitoba Municipalities'
   url = 'http://web5.gov.mb.ca/Public/municipalities.aspx'

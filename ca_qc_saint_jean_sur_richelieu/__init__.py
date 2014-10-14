@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
-
 from utils import CanadianJurisdiction
 
 
 class SaintJeanSurRichelieu(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/csd:2456083/council'
-  geographic_code = 2456083
+  classification = 'legislature'
+  division_id = 'ocd-division/country:ca/csd:2456083'
   division_name = 'Saint-Jean-sur-Richelieu'
   name = 'Conseil municipal de Saint-Jean-sur-Richelieu'
   url = 'http://www.ville.saint-jean-sur-richelieu.qc.ca'

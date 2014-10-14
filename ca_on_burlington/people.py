@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://cms.burlington.ca/Page110.aspx'
 
 
 class BurlingtonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="subnav"]//a')
@@ -33,7 +32,7 @@ class BurlingtonPersonScraper(Scraper):
       fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
       email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -60,7 +59,7 @@ class BurlingtonPersonScraper(Scraper):
     mayor_page = lxmlize(contact_url)
     address = mayor_page.xpath('//div[@class="entry-content"]//p[contains(text(),"City Hall")]')[0].text_content()
 
-    p = Legislator(name=name, post_id="Burlington", role='Mayor')
+    p = Person(name=name, post_id="Burlington", role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_source('http://www.burlingtonmayor.com')

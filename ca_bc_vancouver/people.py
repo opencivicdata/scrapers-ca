@@ -1,20 +1,19 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import csv_reader, CanadianLegislator as Legislator
-
 import re
+
+from utils import csv_reader, CanadianPerson as Person
 
 COUNCIL_PAGE = 'ftp://webftp.vancouver.ca/OpenData/csv/CouncilContactInformation.csv'
 
 
 class VancouverPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     for row in csv_reader(COUNCIL_PAGE, header=True):
-      p = Legislator(
+      p = Person(
         name='%(First Name)s %(Last Name)s' % row,
         post_id='Vancouver',
         role=row['Elected Office'],

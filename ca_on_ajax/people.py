@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator, CONTACT_DETAIL_TYPE_MAP
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 COUNCIL_PAGE = 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp'
 
 
 class AjaxPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//ul[@class="subNav top"]/li/ul//li/a')
@@ -29,7 +28,7 @@ class AjaxPersonScraper(Scraper):
         role = page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content()
         role = re.findall('((Regional)? ?(Councillor))', role)[0][0]
 
-      p = Legislator(name=name, post_id=district, role=role)
+      p = Person(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 

@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = "http://www.saskatoon.ca/CITY%20COUNCIL/YOUR%20WARD%20COUNCILLORS/Pages/default.aspx"
 EMAIL_URL = "http://apps2.saskatoon.ca/app/aForms/councillor.aspx"
@@ -12,7 +11,7 @@ EMAIL_URL = "http://apps2.saskatoon.ca/app/aForms/councillor.aspx"
 
 class SaskatoonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//td[@class="sask_LeftNavLinkContainer"]/a/@href')[0]
@@ -29,7 +28,7 @@ class SaskatoonPersonScraper(Scraper):
       district, name = councillor.text_content().split(' - Councillor ')
       url = councillor.attrib['href']
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(EMAIL_URL)
       p.add_source(url)
@@ -73,7 +72,7 @@ def scrape_mayor(url):
   phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(', '').replace(') ', '-')
   fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
 
-  p = Legislator(name=name, post_id='Saskatoon', role='Mayor')
+  p = Person(name=name, post_id='Saskatoon', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = image

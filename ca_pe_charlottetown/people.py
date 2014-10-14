@@ -1,19 +1,19 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.city.charlottetown.pe.ca/mayorandcouncil.php'
 
 
 class CharlottetownPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     root = lxmlize(COUNCIL_PAGE)
     everyone = root.xpath('//span[@class="Title"]')
     mayornode = everyone[0]
@@ -23,7 +23,7 @@ class CharlottetownPersonScraper(Scraper):
     mayor['photo_url'] = urljoin(COUNCIL_PAGE, mayornode.xpath('img/@src')[0])
     mayor['email'] = mayornode.xpath('following::a[1]/text()')[0]
 
-    m = Legislator(name=mayor['name'], post_id='Charlottetown', role='Mayor')
+    m = Person(name=mayor['name'], post_id='Charlottetown', role='Mayor')
     m.add_source(COUNCIL_PAGE)
     m.add_contact('email', mayor['email'], None)
     m.image = mayor['photo_url']
@@ -50,7 +50,7 @@ class CharlottetownPersonScraper(Scraper):
 
       email = span.xpath('string(following::a[1]/text())')
 
-      p = Legislator(name=name, post_id=district_id, role='Councillor')
+      p = Person(name=name, post_id=district_id, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       if email:
         p.add_contact('email', email, None)

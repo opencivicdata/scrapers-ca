@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.halifax.ca/councillors/index.html'
 MAYOR_PAGE = 'http://www.halifax.ca/mayor/'
@@ -14,7 +13,7 @@ MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
 
 class HalifaxPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
     nodes = page.xpath('//table[@width="484"]//tr')
     try:
@@ -25,7 +24,7 @@ class HalifaxPersonScraper(Scraper):
         #phone = contact_row.xpath('string(td[2]/text())')
         email = contact_row.xpath('string(td[4]/a)').replace('[at]', '@')
 
-        p = Legislator(name=name, post_id=post_id, role='Councillor')
+        p = Person(name=name, post_id=post_id, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         #p.add_contact('voice', phone, 'legislature')
         p.add_contact('email', email, None)
@@ -39,7 +38,7 @@ class HalifaxPersonScraper(Scraper):
     contact_page = lxmlize(MAYOR_CONTACT_URL, 'iso-8859-1')
     email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
-    p = Legislator(name=name, post_id='Halifax', role='Councillor')
+    p = Person(name=name, post_id='Halifax', role='Councillor')
     p.add_source(MAYOR_PAGE)
     p.add_source(MAYOR_CONTACT_URL)
     p.add_contact('email', email, None)

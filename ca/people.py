@@ -1,15 +1,14 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
-
-from utils import lxmlize, CanadianLegislator as Legislator
 
 import hashlib
 import json
 import re
 
 import requests
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members?view=ListAll'
 BAD_PHOTO_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']  # hashes of no-good photos
@@ -23,7 +22,7 @@ class CanadaPersonScraper(Scraper):
   contact information or photo URLs.
   """
 
-  def get_people(self):
+  def scrape(self):
     screen_names = json.loads(requests.get('http://scrapers-ruby.herokuapp.com/twitter_users').text)
 
     page = lxmlize(COUNCIL_PAGE)
@@ -46,7 +45,7 @@ class CanadaPersonScraper(Scraper):
       photo = mp_page.xpath('string(//div[@class="profile overview header"]//'
                             'img/@src)')
 
-      m = Legislator(name=name, post_id=constituency, role='MP', chamber='lower', party=party)
+      m = Person(name=name, post_id=constituency, role='MP', chamber='lower', party=party) # @todo 0.4: chamber
       m.add_source(COUNCIL_PAGE)
       m.add_source(url)
       screen_name = screen_names.get(name)

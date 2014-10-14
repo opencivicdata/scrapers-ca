@@ -1,17 +1,18 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-from six.moves import html_parser
 import re
+
+from six.moves import html_parser
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.beaconsfield.ca/en/your-council.html'
 
 
 class BeaconsfieldPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//h1[@class="title"]')
@@ -21,7 +22,7 @@ class BeaconsfieldPersonScraper(Scraper):
       name, district = councillor.text_content().split(',')
       name = name.strip()
       if 'Mayor' in district:
-        p = Legislator(name=name, post_id='Beaconsfield', role='Maire')
+        p = Person(name=name, post_id='Beaconsfield', role='Maire')
         p.add_source(COUNCIL_PAGE)
         p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
         phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
@@ -33,7 +34,7 @@ class BeaconsfieldPersonScraper(Scraper):
         continue
 
       district = district.split('-')[1].strip()
-      p = Legislator(name=name, post_id=district, role='Conseiller')
+      p = Person(name=name, post_id=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
 
       p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]

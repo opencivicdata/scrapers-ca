@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.brossard.qc.ca/Ma-ville/conseil-municipal.aspx?lang=en-CA'
 
 
 class BrossardPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillor_elems = page.xpath('//a[contains(@class, "slide item-")]')
@@ -30,7 +29,7 @@ class BrossardPersonScraper(Scraper):
 
       photo = re.search(r'url\((.+)\)', elem.attrib['style']).group(1)
 
-      p = Legislator(name=name, post_id=district, role=role, image=photo)
+      p = Person(name=name, post_id=district, role=role, image=photo)
       p.add_source(COUNCIL_PAGE)
 
       try:

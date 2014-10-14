@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.hamilton.ca/YourElectedOfficials/WardCouncillors/'
 
 
 class HamiltonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     council_node = page.xpath('//span[@id="RadEditorPlaceHolderControl0"]')[0]
     councillor_urls = council_node.xpath('./table[2]//p/a[not(img)]/@href')
@@ -34,7 +33,7 @@ def councillor_data(url):
   email = info_node.xpath('string(.//a)')
   photo_url = info_node.xpath('string(.//img/@src)')
 
-  p = Legislator(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, post_id=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
@@ -53,7 +52,7 @@ def mayor_data(node):
   email = node.xpath('string((.//a)[1])')
   photo_url = node.xpath('string(.//img/@src)')
 
-  p = Legislator(name=name, post_id='Hamilton', role='Mayor')
+  p = Person(name=name, post_id='Hamilton', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_contact('email', email, None)
   p.add_contact('voice', phone, 'legislature')

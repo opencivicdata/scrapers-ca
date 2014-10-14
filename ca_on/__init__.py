@@ -1,12 +1,11 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from utils import CanadianJurisdiction
 
 
 class Ontario(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:on/legislature'
-  geographic_code = 35
+  classification = 'legislature'
+  division_id = 'ocd-division/country:ca/province:on'
   division_name = 'Ontario'
   name = 'Legislative Assembly of Ontario'
   url = 'http://www.ontla.on.ca'

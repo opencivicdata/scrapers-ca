@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
 
 
 class TorontoPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     a = page.xpath('//a[contains(@href,"mayor")]')[0]
@@ -29,7 +28,7 @@ class TorontoPersonScraper(Scraper):
     ward_full = page.xpath('string(//strong[not(@class)])').replace('\xa0', ' ')
     ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
 
-    p = Legislator(name=name, post_id=ward_num, role='Councillor')
+    p = Person(name=name, post_id=ward_num, role='Councillor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
@@ -53,7 +52,7 @@ class TorontoPersonScraper(Scraper):
     page = lxmlize(url)
     name = page.xpath("//h1/text()")[0].replace("Toronto Mayor", "").strip()
 
-    p = Legislator(name, post_id="Toronto", role='Mayor')
+    p = Person(name=name, post_id="Toronto", role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 

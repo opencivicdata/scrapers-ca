@@ -1,18 +1,16 @@
 from __future__ import unicode_literals
-
-from pupa.scrape import Scraper
-from pupa.models import Organization
-
-from utils import lxmlize, clean_telephone_number, clean_address, AggregationLegislator as Legislator
+from pupa.scrape import Scraper, Organization
 
 import re
+
+from utils import lxmlize, clean_telephone_number, clean_address, AggregationPerson as Person
 
 COUNCIL_PAGE = 'http://www.gov.pe.ca/mapp/municipalitites.php'
 
 
 class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     districts = page.xpath('//div[@id="left-content" or @id="right-content"]//a')
@@ -47,7 +45,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         role = re.sub(r'\(|\)', '', councillor.replace(name, '').strip())
         if not role:
           role = 'Councillor'
-        p = Legislator(name=name, post_id=district.text_content())
+        p = Person(name=name, post_id=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         membership = p.add_membership(org, role=role, post_id=district.text_content())

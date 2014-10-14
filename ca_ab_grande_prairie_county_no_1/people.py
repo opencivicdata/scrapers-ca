@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'
 REEVE_URL = 'http://www.countygp.ab.ca/EN/main/government/council/reeve-message.html'
@@ -11,7 +11,7 @@ REEVE_URL = 'http://www.countygp.ab.ca/EN/main/government/council/reeve-message.
 
 class GrandePrairieCountyNo1PersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     reeve_page = lxmlize(REEVE_URL)
     reeve_name = reeve_page.xpath('string(//b)').split(',')[0]
 
@@ -23,7 +23,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
           'Division')[0].strip()
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]

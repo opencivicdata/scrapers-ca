@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
-
 from utils import CanadianJurisdiction
 
 
 class Saskatchewan(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:sk/legislature'
-  geographic_code = 47
+  classification = 'legislature'
+  division_id = 'ocd-division/country:ca/province:sk'
   division_name = 'Saskatchewan'
   name = 'Legislative Assembly of Saskatchewan'
   url = 'http://www.legassembly.sk.ca'

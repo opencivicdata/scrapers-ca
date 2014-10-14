@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.woolwich.ca/en/council/council.asp'
 
 
 class WoolwichPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="printArea"]//strong')
@@ -28,7 +27,7 @@ class WoolwichPersonScraper(Scraper):
         district = district.replace('Councillor', '').strip()
         role = 'Councillor'
 
-      p = Legislator(name=councillor.text_content(), post_id=district, role=role)
+      p = Person(name=councillor.text_content(), post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = councillor.xpath('./img/@src')[0]
 

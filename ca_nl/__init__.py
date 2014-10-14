@@ -1,12 +1,11 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from utils import CanadianJurisdiction
 
 
 class NewfoundlandAndLabrador(CanadianJurisdiction):
-  jurisdiction_id = 'ocd-jurisdiction/country:ca/province:nl/legislature'
-  geographic_code = 10
+  classification = 'legislature'
+  division_id = 'ocd-division/country:ca/province:nl'
   division_name = 'Newfoundland and Labrador'
   name = 'Newfoundland and Labrador House of Assembly'
   url = 'http://www.assembly.nl.ca'

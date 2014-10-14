@@ -1,21 +1,20 @@
 from __future__ import unicode_literals
-
-from pupa.scrape import Scraper
-from pupa.models import Organization
-
-from utils import lxmlize, AggregationLegislator as Legislator
+from pupa.scrape import Scraper, Organization
 
 import re
 import os
 import subprocess
+
 from six.moves.urllib.request import urlopen
+
+from utils import lxmlize, AggregationPerson as Person
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
 
 class NovaScotiaMunicipalitiesPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     response = urlopen(COUNCIL_PAGE).read()
     pdf = open('/tmp/ns.pdf', 'w')
     pdf.write(response)
@@ -37,7 +36,7 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Legislator(name=name, post_id=district)
+      p = Person(name=name, post_id=district)
       p.add_source(COUNCIL_PAGE)
       membership = p.add_membership(org, role='Mayor', post_id=district)
 

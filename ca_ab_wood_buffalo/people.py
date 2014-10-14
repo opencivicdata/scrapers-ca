@@ -1,18 +1,18 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
 
 class WoodBuffaloPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//li[@id="pageid1075"]/div/a/@href')[0]
@@ -24,7 +24,7 @@ class WoodBuffaloPersonScraper(Scraper):
       councillor_links = ward.xpath('./parent::p/a')
       for councillor_link in councillor_links:
         name = councillor_link.text
-        p = Legislator(name=name, post_id=ward_name, role='Councillor')
+        p = Person(name=name, post_id=ward_name, role='Councillor')
         url = councillor_link.attrib['href']
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
@@ -70,7 +70,7 @@ def scrape_mayor(url):
   phone = info[4]
   fax = info[5]
 
-  p = Legislator(name=name, post_id='Wood Buffalo', role='Mayor')
+  p = Person(name=name, post_id='Wood Buffalo', role='Mayor')
   p.add_source(url)
   p.add_source(contact_url)
   p.add_contact('address', address, 'legislature')

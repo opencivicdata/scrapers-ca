@@ -1,8 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-from pupa.scrape import Scraper
-from pupa.models import Vote
+from pupa.scrape import Scraper, Vote
 
 from utils import lxmlize
 import requests

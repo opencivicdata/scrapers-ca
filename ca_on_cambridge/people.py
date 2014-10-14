@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&sid=57'
 MAYOR_PAGE = 'http://www.cambridge.ca/article.php?ssid=167'
@@ -12,7 +11,7 @@ MAYOR_PAGE = 'http://www.cambridge.ca/article.php?ssid=167'
 
 class CambridgePersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     yield mayor_info(MAYOR_PAGE)
 
     page = lxmlize(COUNCIL_PAGE)
@@ -38,7 +37,7 @@ class CambridgePersonScraper(Scraper):
         fax = fax.replace('(', '').replace(') ', '-')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].text_content()
 
-      p = Legislator(name=name, post_id=district, role=role)
+      p = Person(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('address', address, 'legislature')
@@ -61,7 +60,7 @@ def mayor_info(url):
 
   photo_url = page.xpath('string(//center/img/@src)')
 
-  p = Legislator(name=name, post_id="Cambridge", role='Mayor', image=photo_url)
+  p = Person(name=name, post_id="Cambridge", role='Mayor', image=photo_url)
   p.add_source(url)
   p.add_contact('email', email, None)
   p.add_contact('voice', phone, 'legislature')

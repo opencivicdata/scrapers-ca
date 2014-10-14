@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assembly.nl.ca/members/cms/membersdirectlines.htm'
 PARTY_PAGE = 'http://www.assembly.nl.ca/members/cms/membersparty.htm'
@@ -24,7 +23,7 @@ def get_party(abbr):
 
 class NewfoundlandAndLabradorPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     member_parties = dict(process_parties(lxmlize(PARTY_PAGE)))
 
     page = lxmlize(COUNCIL_PAGE)
@@ -43,7 +42,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
       photo_url = photo_page.xpath('string(//table//img/@src)')
       district = district.replace(' - ', '—')  # m-dash
       party = get_party(member_parties[name.strip()])
-      p = Legislator(name=name, post_id=district, role='MHA',
+      p = Person(name=name, post_id=district, role='MHA',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(PARTY_PAGE)

@@ -1,19 +1,19 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
+import re
+
 from six.moves.urllib.parse import urljoin
 
-import re
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
 
 
 class CoteSaintLucPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//a[contains(text(), "Mayor")]/@href')[0]
@@ -36,7 +36,7 @@ class CoteSaintLucPersonScraper(Scraper):
       img_url_rel = img_cell.xpath('string(//img/@href)')
       img_url = urljoin(councillors_url, img_url_rel)
 
-      p = Legislator(name=name, post_id=district, role='Conseiller')
+      p = Person(name=name, post_id=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillors_url)
       p.add_contact('email', email, None)
@@ -52,7 +52,7 @@ class CoteSaintLucPersonScraper(Scraper):
     email = page.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
     phone = page.xpath('//table[1]/tbody/tr/td[1]/p[last()]/text()')[2].replace('Telephone: ', '')
 
-    p = Legislator(name=name, post_id='Côte-Saint-Luc', role='Maire')
+    p = Person(name=name, post_id='Côte-Saint-Luc', role='Maire')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.image = page.xpath('.//img/@src')[0]

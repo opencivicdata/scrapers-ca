@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.abbotsford.ca/mayorcouncil/city_council/email_mayor_and_council.htm'
 
@@ -14,7 +13,7 @@ MAYOR_URL = 'http://www.abbotsford.ca/mayorcouncil/city_council/mayor_banman.htm
 
 class AbbotsfordPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     councillor_links = page.xpath('//li[@id="pageid2117"]/ul/li/a')[2:10]
     for link in councillor_links:
@@ -26,7 +25,7 @@ class AbbotsfordPersonScraper(Scraper):
       name = mail_link.attrib['title']
       email = mail_link.attrib['href'][len('mailto:'):]
       photo_url = page.xpath('string(//div[@class="pageContent"]//img[@align="right"]/@src)')
-      p = Legislator(name=name, post_id='Abbotsford', role='Councillor',
+      p = Person(name=name, post_id='Abbotsford', role='Councillor',
                      image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
@@ -37,6 +36,6 @@ class AbbotsfordPersonScraper(Scraper):
     name = page.xpath('string(//h1)').split(' ', 1)[1]
     photo_url = page.xpath('string(//img[@hspace=10]/@src)')
     # email is hidden behind a form
-    p = Legislator(name=name, post_id='Abbotsford', role='Mayor', image=photo_url)
+    p = Person(name=name, post_id='Abbotsford', role='Mayor', image=photo_url)
     p.add_source(MAYOR_URL)
     yield p

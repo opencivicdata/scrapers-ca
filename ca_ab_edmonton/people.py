@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
 MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor.aspx'
@@ -12,7 +11,7 @@ MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor
 
 class EdmontonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     yield scrape_mayor()
 
     page = lxmlize(COUNCIL_PAGE)
@@ -23,7 +22,7 @@ class EdmontonPersonScraper(Scraper):
       page_url = cell[1].attrib['href']
       page = lxmlize(page_url)
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(page_url)
 
@@ -58,7 +57,7 @@ def scrape_mayor():
   page = lxmlize(MAYOR_PAGE)
   name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
 
-  p = Legislator(name=name, post_id='Edmonton', role='Mayor')
+  p = Person(name=name, post_id='Edmonton', role='Mayor')
   p.add_source(MAYOR_PAGE)
 
   image = page.xpath('//div[@id="contentArea"]//img/@src')[0]

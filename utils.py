@@ -2,17 +2,15 @@
 from __future__ import unicode_literals
 
 import csv
-from ftplib import FTP
 import re
-from six import StringIO
-from six.moves.urllib.parse import urlparse
+from ftplib import FTP
 
 import lxml.html
 import requests
+from pupa.scrape import Scraper, Jurisdiction, Membership, Organization, Person
 from scrapelib import Scraper as Scrapelib
-from six import string_types, text_type
-from pupa.scrape import Scraper, Jurisdiction, Legislator
-from pupa.models import Membership, Person
+from six import StringIO, string_types, text_type
+from six.moves.urllib.parse import urlparse
 
 import patch
 
@@ -74,42 +72,20 @@ CONTACT_DETAIL_NOTE_MAP = {
 
 
 class CanadianJurisdiction(Jurisdiction):
-  sessions = [{
-    'name': 'N/A',
-    '_scraped_name': 'N/A',
-  }]
-
   def __init__(self):
-    for scraper_type in ('bills', 'events', 'people', 'speeches', 'votes'):
-      try:
-        __import__(self.__module__ + '.' + scraper_type)
-      except ImportError as e:
-        if "No module named '%s.%s'" % (self.__module__, scraper_type) in e.args or "No module named %s" % scraper_type in e.args:  # Python 3, Python 2
-          pass
-        else:
-          raise
-      else:
-        self.provides.append(scraper_type)
+      super(CanadianJurisdiction, self).__init__()
+      for module, name in (('people', 'Person')):
+        class_name = self.__class__.__name__ + name + 'Scraper'
+        self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
 
-  def get_scraper(self, session, scraper_type):
-    if scraper_type in self.provides:
-      class_name = self.__class__.__name__ + {
-        'bills': 'Bill',
-        'events': 'Event',
-        'people': 'Person',
-        'speeches': 'Speech',
-        'votes': 'Vote',
-      }[scraper_type] + 'Scraper'
-      return getattr(__import__(self.__module__ + '.' + scraper_type, fromlist=[class_name]), class_name)
-
-  def scrape_session_list(self):
-    return ['N/A']
+  def get_organizations(self):
+    yield Organization(self.name, classification=self.classification)
 
 
-class CanadianLegislator(Legislator):
+class CanadianPerson(Person):
 
   def __init__(self, name, post_id, **kwargs):
-    super(CanadianLegislator, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
+    super(CanadianPerson, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
     for k, v in kwargs.items():
       if isinstance(v, string_types):
         setattr(self, k, clean_string(v))
@@ -120,17 +96,17 @@ class CanadianLegislator(Legislator):
         value = 'male'
       elif value == 'F':
         value = 'female'
-    super(CanadianLegislator, self).__setattr__(name, value)
+    super(CanadianPerson, self).__setattr__(name, value)
 
-  def add_link(self, url, note=None):
+  def add_link(self, url, *, note=''):
       if url.startswith('www.'):
         url = 'http://%s' % url
       if re.match(r'\A@[A-Za-z]+\Z', url):
         url = 'https://twitter.com/%s' % url[1:]
 
-      self.links.append({"note": note, "url": url})
+      self.links.append({'note': note, 'url': url})
 
-  def add_contact(self, type, value, note):
+  def add_contact_detail(self, *, type, value, note=''):
     if type:
       type = clean_string(type)
     if note:
@@ -149,16 +125,16 @@ class CanadianLegislator(Legislator):
     else:
       value = clean_string(value)
 
-    self._contact_details.append({'type': type, 'value': value, 'note': note})
+    self.contact_details.append({'type': type, 'value': value, 'note': note})
 
 
 # Removes _is_legislator flag and _contact_details. Used by aggregations.
 # @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
-class AggregationLegislator(Person):
+class AggregationPerson(Person):
   __slots__ = ('post_id')
 
   def __init__(self, name, post_id, **kwargs):
-    super(AggregationLegislator, self).__init__(clean_name(name), **kwargs)
+    super(AggregationPerson, self).__init__(clean_name(name), **kwargs)
     self.post_id = clean_string(post_id)
     for k, v in kwargs.items():
       if isinstance(v, string_types):
@@ -170,7 +146,7 @@ class AggregationLegislator(Person):
         value = 'male'
       elif value == 'F':
         value = 'female'
-    super(AggregationLegislator, self).__setattr__(name, value)
+    super(AggregationPerson, self).__setattr__(name, value)
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)

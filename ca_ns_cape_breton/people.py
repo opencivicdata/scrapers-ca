@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cbrm.ns.ca/councillors.html'
 MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor.html'
@@ -13,7 +13,7 @@ MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor.html'
 
 class CapeBretonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@class="table_style"]/tbody/tr')[1:]
@@ -25,7 +25,7 @@ class CapeBretonPersonScraper(Scraper):
       phone = councillor.xpath('.//td[5]/p/text()')[0].split(':')[1].replace("(", '').replace(") ", '-')
       fax = councillor.xpath('.//td[5]/p/text()')[1].split(':')[1].replace("(", '').replace(") ", '-')
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
@@ -47,7 +47,7 @@ class CapeBretonPersonScraper(Scraper):
     address = address_and_tel_elem[0].text_content()
     phone = address_and_tel_elem[2].text.split(':')[1]
 
-    p = Legislator(name=name, post_id='Cape Breton', role='Mayor')
+    p = Person(name=name, post_id='Cape Breton', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')

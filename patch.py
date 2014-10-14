@@ -4,11 +4,11 @@ from __future__ import unicode_literals
 from copy import deepcopy
 
 import regex as re
-from pupa.models.utils import DatetimeValidator
-from pupa.models.schemas.common import contact_details as _contact_details, links as _links, sources as _sources
-from pupa.models.schemas.person import schema as person_schema
-from pupa.models.schemas.membership import schema as membership_schema
-from pupa.models.schemas.organization import schema as organization_schema
+from pupa.utils import DatetimeValidator
+from pupa.scrape.schemas.common import contact_details as _contact_details, links as _links, sources as _sources
+from pupa.scrape.schemas.person import schema as person_schema
+from pupa.scrape.schemas.membership import schema as membership_schema
+from pupa.scrape.schemas.organization import schema as organization_schema
 from six import string_types
 
 from constants import names, subdivisions, styles

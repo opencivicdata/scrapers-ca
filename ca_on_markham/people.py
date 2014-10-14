@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/MayorAndCouncil/RegionalAndWardCouncillors/!ut/p/a1/04_Sj9CPykssy0xPLMnMz0vMAfGjzOJN_N2dnX3CLAKNgkwMDDw9XcJM_VwCDUMDDfULsh0VAfz7Fis!/'
 
 
 class MarkhamPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//a[contains(text(), "Office of the Mayor")]/@href')[0]
@@ -37,7 +36,7 @@ class MarkhamPersonScraper(Scraper):
 
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district, role=role)
+      p = Person(name=name, post_id=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -66,7 +65,7 @@ class MarkhamPersonScraper(Scraper):
 def scrape_4(name, url, image):
   page = lxmlize(url)
 
-  p = Legislator(name=name, post_id='Ward 4', role='Councillor')
+  p = Person(name=name, post_id='Ward 4', role='Councillor')
   p.add_source(url)
   p.add_source(COUNCIL_PAGE)
 
@@ -89,7 +88,7 @@ def scrape_mayor(url):
   phone = contact_elem.text.split(':')[1].strip()
   email = contact_elem.xpath('string(./a)')
 
-  p = Legislator(name=name, post_id='Markham', role='Mayor')
+  p = Person(name=name, post_id='Markham', role='Mayor')
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')

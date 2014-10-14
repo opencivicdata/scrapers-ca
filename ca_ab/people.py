@@ -1,16 +1,15 @@
 # coding: utf-8
 from __future__ import unicode_literals
+from pupa.scrape import Scraper
+
+import re
+import csv
 
 import requests
 import lxml.html
 from lxml import etree
 
-from pupa.scrape import Scraper
-
-from utils import lxmlize, CanadianLegislator as Legislator
-
-import re
-import csv
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 
@@ -30,7 +29,7 @@ def get_party(abbr):
 
 class AlbertaPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     csv_text = requests.get(get_csv_url()).text
     cr = csv.DictReader(csv_text.split('\n'))
     for mla in cr:
@@ -40,7 +39,7 @@ class AlbertaPersonScraper(Scraper):
           continue
       party = get_party(mla['Caucus'])
       name_without_status = name.split(',')[0]
-      p = Legislator(name=name_without_status, post_id=mla['Riding Name'],
+      p = Person(name=name_without_status, post_id=mla['Riding Name'],
                      role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', mla['Email'], None)

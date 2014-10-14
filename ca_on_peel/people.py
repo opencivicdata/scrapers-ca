@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, csv_reader, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, csv_reader, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://opendata.peelregion.ca/media/25713/ward20102014_csv_12.2013.csv'
 CHAIR_URL = 'https://www.peelregion.ca/council/councill/kolb.htm'
@@ -13,11 +12,11 @@ CHAIR_URL = 'https://www.peelregion.ca/council/councill/kolb.htm'
 
 class PeelPersonScraper(Scraper):  # @todo creates two people if that person represents two wards; instead, create two memberships as in ca_ab_grande_prairie_county_no_1
 
-  def get_people(self):
+  def scrape(self):
     yield chair_info(CHAIR_URL)
     for row in csv_reader(COUNCIL_PAGE, header=True, headers={'Cookie': 'incap_ses_168_68279=7jCHCh608QQSFVti3dtUAviu/1IAAAAAIRf6OsZL0NttnlzANkVb6w=='}):
 
-      p = Legislator(
+      p = Person(
         name='%(FirstName0)s %(LastName0)s' % row,
         post_id='%(MUNIC)s Ward %(WARDNUM)s' % row,
         role='Councillor',
@@ -29,7 +28,7 @@ class PeelPersonScraper(Scraper):  # @todo creates two people if that person rep
       yield p
 
       if row['FirstName1'].strip():
-        p = Legislator(
+        p = Person(
           name='%s %s' % (row['FirstName1'], row['LastName1']),
           post_id='%(MUNIC)s Ward %(WARDNUM)s' % row,
           role='Councillor',
@@ -49,7 +48,7 @@ def chair_info(url):
   address = page.xpath('string(//div[@id="co-content"]/p[1])')
   phone = page.xpath('string(//div[@id="co-content"]/p[2]/text())').split(':')[1]
 
-  p = Legislator(name=name, post_id='Peel', role='Regional Chair',
+  p = Person(name=name, post_id='Peel', role='Regional Chair',
                  image=photo_url)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')

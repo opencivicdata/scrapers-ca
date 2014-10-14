@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 
 
 class MonctonPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
@@ -32,7 +31,7 @@ class MonctonPersonScraper(Scraper):
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = councillor.xpath('.//img/@src')[0]
@@ -56,7 +55,7 @@ def scrape_mayor(url):
   page = lxmlize(url)
   name = page.xpath('//meta[@name="description"]/@content')[0].split(',')[1]
 
-  p = Legislator(name=name, post_id='Moncton', role='Mayor')
+  p = Person(name=name, post_id='Moncton', role='Mayor')
   p.add_source(url)
 
   p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]

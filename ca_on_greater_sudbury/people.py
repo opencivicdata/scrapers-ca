@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/city-council/'
 
 
 class GreaterSudburyPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="navMultilevel"]//a')
@@ -36,7 +35,7 @@ class GreaterSudburyPersonScraper(Scraper):
       fax = re.findall(r'([0-9].*)', fax)[0].replace(') ', '-')
       email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Legislator(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, post_id=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
       p.add_contact('address', address, 'legislature')
@@ -64,7 +63,7 @@ class GreaterSudburyPersonScraper(Scraper):
     fax = fax.split(' ')[-1]
     email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p = Legislator(name=name, post_id='Greater Sudbury', role='Mayor')
+    p = Person(name=name, post_id='Greater Sudbury', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
     p.add_contact('address', address, 'legislature')

@@ -1,13 +1,13 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
+import re
+import requests
+
 from six.moves.urllib.parse import urljoin
 
-import requests
-import re
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=150&CPage=1'
 
@@ -16,12 +16,12 @@ MAYOR_URL = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1
 
 class TroisRivieresPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     # mayor first, can't find email
     page = lxmlize(MAYOR_URL)
     photo_url = page.xpath('string(//img/@src[contains(., "Maire")])')
     name = page.xpath('string(//td[@class="contenu"]/text()[last()])')
-    p = Legislator(name=name, post_id="Trois-Rivières", role="Maire",
+    p = Person(name=name, post_id="Trois-Rivières", role="Maire",
                    image=photo_url)
     p.add_source(MAYOR_URL)
     yield p
@@ -39,7 +39,7 @@ class TroisRivieresPersonScraper(Scraper):
         email = page.xpath(
             'string(//a/@href[contains(., "mailto:")])')[len('mailto:'):]
         photo_url = page.xpath('string(//img/@src[contains(., "Conseiller")])')
-        p = Legislator(name=name, post_id=district, role='Conseiller',
+        p = Person(name=name, post_id=district, role='Conseiller',
                        image=photo_url)
         p.add_source(url)
         p.add_contact('email', email, None)

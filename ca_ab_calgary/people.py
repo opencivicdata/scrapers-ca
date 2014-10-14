@@ -1,12 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.calgary.ca/General/Pages/Calgary-City-Council.aspx'
 MAYOR_PAGE = 'http://calgarymayor.ca/forms_all.php'
@@ -14,7 +14,7 @@ MAYOR_PAGE = 'http://calgarymayor.ca/forms_all.php'
 
 class CalgaryPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     nodes = page.xpath('//div[contains(@class,"cocis-has-caption")]')[1:]
     for node in nodes:
@@ -30,7 +30,7 @@ class CalgaryPersonScraper(Scraper):
     email = mayor_page.xpath('string(//a[contains(., "@")])')
     phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
                              'following-sibling::text())')
-    m = Legislator(name=name, post_id='Calgary', role='Mayor')
+    m = Person(name=name, post_id='Calgary', role='Mayor')
     m.add_source(COUNCIL_PAGE)
     m.add_source(MAYOR_PAGE)
     m.add_contact('email', email, None)
@@ -46,7 +46,7 @@ def councillor_data(url, name, ward):
   # no email, there's a contact form!
   phone = page.xpath('string(//p[contains(./strong, "Phone")]/text())').strip()
 
-  p = Legislator(name=name, post_id=ward, role='Councillor')
+  p = Person(name=name, post_id=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   if phone:
     p.add_contact('voice', phone, 'legislature')

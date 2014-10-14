@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.surrey.ca/city-government/2999.aspx'
 
 
 class SurreyPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     councillor_links = page.xpath(
       '//div[@class="inner-wrapper"]//a[contains(text(), "Councillor")]')
@@ -27,7 +26,7 @@ class SurreyPersonScraper(Scraper):
       email = councillor_page.xpath(
           'string(//a[contains(@href, "mailto:")])')
 
-      p = Legislator(name=name, post_id='Surrey', role=role, image=photo_url)
+      p = Person(name=name, post_id='Surrey', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       if phone:
@@ -44,7 +43,7 @@ class SurreyPersonScraper(Scraper):
     phone = mayor_page.xpath('string(//text()[contains(., "Office:")])')
     # no email
 
-    p = Legislator(name=name, post_id='Surrey', role='Mayor', image=photo_url)
+    p = Person(name=name, post_id='Surrey', role='Mayor', image=photo_url)
     p.add_source(COUNCIL_PAGE)
     p.add_source(mayor_url)
     p.add_contact('voice', phone, 'legislature')

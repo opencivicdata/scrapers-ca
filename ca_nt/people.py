@@ -1,18 +1,17 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assembly.gov.nt.ca/meet-members'
 
 
 class NorthwestTerritoriesPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
 
     member_cells = page.xpath(
@@ -33,7 +32,7 @@ class NorthwestTerritoriesPersonScraper(Scraper):
           'string(//div[@property="content:encoded"]/p[1])')
       phone = re.search(r'P(hone)?: ([-0-9]+)', contact_text).group(2)
 
-      p = Legislator(name=name, post_id=riding, role='MLA', image=photo_url)
+      p = Person(name=name, post_id=riding, role='MLA', image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       p.add_contact('email', email, None)

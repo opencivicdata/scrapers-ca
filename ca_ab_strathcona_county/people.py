@@ -1,12 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals
-
 from pupa.scrape import Scraper
 
-from utils import lxmlize, CanadianLegislator as Legislator
-
 import re
+
 from six.moves.urllib.parse import urljoin
+
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.strathcona.ca/local-government/mayor-councillors/councillors/'
 
@@ -15,7 +15,7 @@ MAYOR_PAGE = 'http://www.strathcona.ca/local-government/mayor-councillors/mayor/
 
 class StrathconaCountyPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     councillor_urls = page.xpath('//div[@class="usercontent"]//td/a/@href')
     for url in councillor_urls:
@@ -34,7 +34,7 @@ def councillor_data(url):
   phone = content_node.xpath('string(.//strong[contains(., "Phone")]/'
                              'following-sibling::text()[1])').strip()
 
-  p = Legislator(name=name, post_id=ward, role='Councillor')
+  p = Person(name=name, post_id=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   if phone:
@@ -53,7 +53,7 @@ def mayor_data(url):
   phone = content_node.xpath('string(.//strong[contains(., "Phone")]/'
                              'following-sibling::text()[1])').strip()
 
-  p = Legislator(name=name, post_id='Strathcona County', role='Mayor')
+  p = Person(name=name, post_id='Strathcona County', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('voice', phone, 'legislature')

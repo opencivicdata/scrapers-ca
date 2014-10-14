@@ -1,11 +1,9 @@
 from __future__ import unicode_literals
-
-from pupa.scrape import Scraper
-from pupa.models import Organization
-
-from utils import lxmlize, AggregationLegislator as Legislator
+from pupa.scrape import Scraper, Organization
 
 import re
+
+from utils import lxmlize, AggregationPerson as Person
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']
@@ -13,7 +11,7 @@ org_types = [' City Council', ' Town Council', ' Village Council', ' Community C
 
 class NewBrunswickMunicipalitiesPersonScraper(Scraper):
 
-  def get_people(self):
+  def scrape(self):
     page = lxmlize(COUNCIL_PAGE)
     types = page.xpath('//div[@class="bluearrow shaded bottomborder "][1]/ul/li/a/@href')[:4]
     for org_type, link in enumerate(types):
@@ -43,7 +41,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         for i, councillor in enumerate(councillors):
           if 'Vacant' in councillor:
             continue
-          p = Legislator(name=councillor, post_id=district)
+          p = Person(name=councillor, post_id=district)
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)
