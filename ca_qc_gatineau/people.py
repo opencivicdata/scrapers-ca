@@ -29,7 +29,7 @@ class GatineauPersonScraper(Scraper):
     p.add_contact('email', email, None)
     yield p
 
-    for district, member, url in zip(districts, members, urls)[1:]:
+    for district, member, url in list(zip(districts, members, urls))[1:]:
       profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
       profile_page = lxmlize(profile_url)
       photo_url = profile_page.xpath('string(//img/@src)')

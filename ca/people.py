@@ -24,7 +24,7 @@ class CanadaPersonScraper(Scraper):
   """
 
   def get_people(self):
-    screen_names = json.loads(requests.get('http://scrapers-ruby.herokuapp.com/twitter_users').content)
+    screen_names = json.loads(requests.get('http://scrapers-ruby.herokuapp.com/twitter_users').text)
 
     page = lxmlize(COUNCIL_PAGE)
     rows = page.xpath('//div[@class="main-content"]//tr')[1:]

@@ -5,6 +5,7 @@ from pupa.scrape import Scraper
 from utils import lxmlize, CanadianLegislator as Legislator
 
 import re
+from six import text_type
 
 COUNCIL_PAGE = 'http://www.oakville.ca/townhall/council.html'
 
@@ -62,7 +63,7 @@ class OakvillePersonScraper(Scraper):
     # extract contact information
     address = re.findall(r'([0-9].*([A-Z][0-9][A-Z] [0-9][A-Z][0-9]))', info, flags=re.DOTALL)
     if address:
-      address = re.sub(r'\W{2,}', ' ', str(address[0])).decode()
+      address = re.sub(r'\W{2,}', ' ', text_type(address[0]))
       address = address.replace("u'", '').replace(' n ', ', ').replace("(", '')
     phone = re.findall(r'(?:tel|phone): ([\d\s-]*)', info)
     if not phone:
