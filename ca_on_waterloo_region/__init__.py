@@ -8,4 +8,4 @@ class Waterloo(CanadianJurisdiction):
   division_id = 'ocd-division/country:ca/cd:3530'
   division_name = 'Waterloo'
   name = 'Waterloo Regional Council'
-  url = 'http://www.regionofwaterloo.ca/'
+  url = 'http://www.regionofwaterloo.ca'

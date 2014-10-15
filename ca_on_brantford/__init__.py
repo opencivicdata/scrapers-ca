@@ -7,4 +7,4 @@ class Brantford(CanadianJurisdiction):
   division_id = 'ocd-division/country:ca/csd:3529006'
   division_name = 'Brantford'
   name = 'Brantford City Council'
-  url = 'http://www.city.brantford.on.ca'
+  url = 'http://www.brantford.ca'

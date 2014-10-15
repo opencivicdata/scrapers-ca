@@ -7,4 +7,4 @@ class Clarington(CanadianJurisdiction):
   division_id = 'ocd-division/country:ca/csd:3518017'
   division_name = 'Clarington'
   name = 'Clarington Municipal Council'
-  url = 'http://www.clarington.net'
+  url = 'http://www.municipality.clarington.on.ca'
