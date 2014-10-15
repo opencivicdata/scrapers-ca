@@ -12,6 +12,7 @@ import lxml.html
 import requests
 from invoke import run, task
 from six import next, StringIO, text_type
+from six.moves.urllib.parse import urlsplit
 from unidecode import unidecode
 
 
@@ -57,11 +58,11 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions-url.csv')
     next(reader)
     for row in reader:
-      urls_memo[row[0].decode('utf8')] = row[1]
+      urls_memo[row[0]] = row[1]
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs-url.csv')
     next(reader)
     for row in reader:
-      urls_memo[row[0].decode('utf8')] = row[1]
+      urls_memo[row[0]] = row[1]
 
   if not ocdid_to_type_name_map:
     # Map census division type codes to names.
@@ -74,8 +75,8 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv')
     next(reader)
     for row in reader:
-      ocdid_to_type_map[row[0]] = row[3].decode('utf8')
-      ocdid_to_type_name_map[row[0]] = census_division_type_names[row[3].decode('utf8')]
+      ocdid_to_type_map[row[0]] = row[3]
+      ocdid_to_type_name_map[row[0]] = census_division_type_names[row[3]]
 
     # Map census subdivision type codes to names.
     census_subdivision_type_names = {}
@@ -87,8 +88,8 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')
     next(reader)
     for row in reader:
-      ocdid_to_type_map[row[0]] = row[3].decode('utf8')
-      ocdid_to_type_name_map[row[0]] = census_subdivision_type_names[row[3].decode('utf8')]
+      ocdid_to_type_map[row[0]] = row[3]
+      ocdid_to_type_name_map[row[0]] = census_subdivision_type_names[row[3]]
 
   # Map OCD identifiers and Standard Geographical Classification codes to names.
   if not ocdid_to_name_map:
@@ -96,19 +97,20 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv')
     next(reader)
     for row in reader:
-      ocdid_to_name_map[row[0].decode('utf8')] = row[1].decode('utf8')
+      ocdid_to_name_map[row[0]] = row[1]
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
     next(reader)
     for row in reader:
-      ocdid_to_name_map[row[0].decode('utf8')] = row[1].decode('utf8')
+      ocdid_to_name_map[row[0]] = row[1]
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv')
     next(reader)
     for row in reader:
-      ocdid_to_name_map[row[0].decode('utf8')] = row[1].decode('utf8')
+      ocdid_to_name_map[row[0]] = row[1]
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')
     next(reader)
     for row in reader:
-      ocdid_to_name_map[row[0].decode('utf8')] = row[1].decode('utf8')
+      ocdid_to_name_map[row[0]] = row[1]
+    ocdid_to_name_map['ocd-division/country:ca/province:qc'] = 'Québec'
 
   codes = province_and_territory_codes()
   ocd_id_to_code_map = {v: k for k, v in codes.items()}
@@ -118,12 +120,11 @@ def get_definition(division_id, aggregation=False):
   sections = division_id.split('/')
   ocd_type, ocd_type_id = sections[-1].split(':')
 
-  # Determine the module name, name and jurisdiction_id.
+  # Determine the module name, name and classification.
   if ocd_type == 'country':
     expected['module_name'] = 'ca'
-    expected['name'] = 'House of Commons'
+    expected['name'] = 'Parliament of Canada'
     expected['geographic_code'] = '1'
-    jurisdiction_id_suffix = 'legislature'
   elif ocd_type in ('province', 'territory'):
     pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
     expected['module_name'] = pattern % ocd_type_id
@@ -136,7 +137,6 @@ def get_definition(division_id, aggregation=False):
     else:
       expected['name'] = 'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
     expected['geographic_code'] = ocd_id_to_code_map[division_id]
-    jurisdiction_id_suffix = 'municipalities' if aggregation else 'legislature'
   elif ocd_type == 'cd':
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
     expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
@@ -146,7 +146,6 @@ def get_definition(division_id, aggregation=False):
     expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
     expected['geographic_code'] = ocd_type_id
     expected['type'] = ocdid_to_type_map[division_id]
-    jurisdiction_id_suffix = 'council'
   elif ocd_type == 'csd':
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
     expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
@@ -166,7 +165,6 @@ def get_definition(division_id, aggregation=False):
       expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
     expected['geographic_code'] = ocd_type_id
     expected['type'] = ocdid_to_type_map[division_id]
-    jurisdiction_id_suffix = 'council'
   elif ocd_type == 'arrondissement':
     census_subdivision_type_id = sections[-2].split(':')[-1]
     province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
@@ -177,10 +175,8 @@ def get_definition(division_id, aggregation=False):
       expected['name'] = "Conseil d'arrondissement du %s" % ocdid_to_name_map[division_id][3:]
     else:
       expected['name'] = "Conseil d'arrondissement de %s" % ocdid_to_name_map[division_id]
-    jurisdiction_id_suffix = 'council'
   else:
     raise Exception('%s: Unrecognized OCD type %s' % (division_id, ocd_type))
-  expected['jurisdiction_id'] = division_id.replace('ocd-division', 'ocd-jurisdiction') + '/' + jurisdiction_id_suffix
 
   # Determine the class name.
   class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', ocdid_to_name_map[division_id])))
@@ -218,54 +214,49 @@ def tidy():
   reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=0&output=csv')
   next(reader)
   for row in reader:
-    key = row[0].decode('utf-8')
-    leader_styles[key] = row[2].decode('utf8')
-    member_styles[key] = row[3].decode('utf8')
+    key = row[0]
+    leader_styles[key] = row[2]
+    member_styles[key] = row[3]
   reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=1&output=csv')
   next(reader)
   for row in reader:
-    key = row[0].decode('utf-8')
-    leader_styles[key] = row[2].decode('utf8')
-    member_styles[key] = row[3].decode('utf8')
+    key = row[0]
+    leader_styles[key] = row[2]
+    member_styles[key] = row[3]
 
   codes = province_and_territory_codes()
 
   for module_name in os.listdir('.'):
-    aggregation_division_ids = set()
     division_ids = set()
+    jurisdiction_ids = set()
 
     if os.path.isdir(module_name) and module_name not in ('.git', 'scrape_cache', 'scraped_data', '__pycache__') and not module_name.endswith('_candidates'):
       module = importlib.import_module(module_name)
       for obj in module.__dict__.values():
         division_id = getattr(obj, 'division_id', None)
         if division_id:  # We've found the module.
+          # Ensure division_id is unique.
+          if division_id in division_ids:
+            raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
+          else:
+            division_ids.add(division_id)
+
           # Ensure jurisdiction_id is unique.
           jurisdiction_id = obj.jurisdiction_id
           if jurisdiction_id in jurisdiction_ids:
-            raise Exception('Duplicate jurisdiction_id %s' % jurisdiction_id)
-          else:
+            raise Exception('%s: Duplicate jurisdiction_id %s' % (module_name, jurisdiction_id))
+          elif jurisdiction_id:
             jurisdiction_ids.add(jurisdiction_id)
-
-          aggregation = bool(module_name.endswith('_municipalities'))
-
-          # Ensure division_id is unique.
-          if aggregation:
-            if division_id in aggregation_division_ids:
-              raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
-            else:
-              aggregation_division_ids.add(division_id)
           else:
-            if division_id in division_ids:
-              raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
-            else:
-              division_ids.add(division_id)
+            raise Exception('%s: No jurisdiction_id' % module_name)
 
-          expected = get_definition(division_id, aggregation)
+          expected = get_definition(division_id, bool(module_name.endswith('_municipalities')))
 
           class_name = obj.__name__
           division_name = getattr(obj, 'division_name', None)
           name = getattr(obj, 'name', None)
           url = getattr(obj, 'url', None)
+          classification = getattr(obj, 'classification', None)
 
           # Ensure presence of url and styles of address.
           if not member_styles.get(division_id):
@@ -273,11 +264,15 @@ def tidy():
           if not leader_styles.get(division_id):
             print('%-60s No leader style of address: %s' % (module_name, division_id))
           if url and not expected['url']:
-            print('%-60s Check: %s' % (module_name, url))
+            parsed = urlsplit(url)
+            if parsed.scheme not in ('http', 'https') or parsed.path or parsed.query or parsed.fragment:
+              print('%-60s Check: %s' % (module_name, url))
 
-          # Warn if the name may be incorrect.
+          # Warn if the name or classification may be incorrect.
           if name != expected['name']:
             print('%-60s Expected %s' % (name, expected['name']))
+          if classification != 'legislature':
+            print('%-60s Expected legislature' % classification)
 
           # Name the classes correctly.
           if class_name != expected['class_name']:
@@ -287,25 +282,23 @@ def tidy():
                 with codecs.open(os.path.join(module_name, basename), 'r', 'utf8') as f:
                   content = f.read()
                 with codecs.open(os.path.join(module_name, basename), 'w', 'utf8') as f:
-                  content = content.replace(class_name, expected['class_name'])
+                  content = content.replace(class_name + '(', expected['class_name'] + '(')
                   f.write(content)
 
-          # Set the jurisdiction_id, division_name and url appropriately.
-          if jurisdiction_id != expected['jurisdiction_id'] or division_name != expected['division_name'] or (expected['url'] and url != expected['url']):
+          # Set the division_name and url appropriately.
+          if division_name != expected['division_name'] or (expected['url'] and url != expected['url']):
            with codecs.open(os.path.join(module_name, '__init__.py'), 'r', 'utf8') as f:
               content = f.read()
            with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
-              if jurisdiction_id != expected['jurisdiction_id']:
-                content = content.replace(jurisdiction_id, expected['jurisdiction_id'])
               if division_name != expected['division_name']:
-                content = content.replace(division_name, expected['division_name'])
+                content = content.replace('= ' + division_name, '= ' + expected['division_name'])
               if expected['url'] and url != expected['url']:
                 content = content.replace(url, expected['url'])
               f.write(content)
 
           # Name the module correctly.
           if module_name != expected['module_name']:
-            os.rename(module_name, expected['module_name'])
+            print('%-60s Expected %s' % (module_name, expected['module_name']))
 
 
 @task
