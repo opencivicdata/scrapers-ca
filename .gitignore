@@ -1,3 +1,3 @@
-/scrape_cache
-/scraped_data
+/_cache
+/_data
 *.pyc
