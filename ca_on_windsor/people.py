@@ -22,7 +22,7 @@ class WindsorPersonScraper(Scraper):
       name, district = councillor_link.text.split(' - ')
       cpage_url = councillor_link.attrib['href']
       cpage = lxmlize(cpage_url)
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(cpage_url)
 
@@ -48,7 +48,7 @@ class WindsorPersonScraper(Scraper):
     fax = fax.strip().replace('(', '').replace(') ', '-').split(':')[1]
     email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
 
-    p = Person(name=name, post_id='Windsor', role='Mayor')
+    p = Person(name=name, district='Windsor', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')

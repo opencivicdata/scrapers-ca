@@ -27,7 +27,7 @@ class OshawaPersonScraper(Scraper):
       elif role == 'Regional and City Councillor':
         role = 'Regional Councillor'
 
-      p = Person(name=name, post_id='Oshawa', role=role, image=photo_url)
+      p = Person(name=name, district='Oshawa', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

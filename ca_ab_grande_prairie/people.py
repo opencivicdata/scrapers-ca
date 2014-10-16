@@ -17,9 +17,8 @@ class GrandePrairiePersonScraper(Scraper):
       celltext = row.xpath('./td//text()')
       last, first = celltext[0].split(', ')
       name = ' '.join((first, last))
-      p = Person(name=name, post_id=None, role=celltext[1])
+      p = Person(name=name, district='Grande Prairie', role=celltext[1])
       p.add_source(COUNCIL_PAGE)
-      p.post_id = 'Grande Prairie'
       p.add_contact('voice', celltext[3], 'legislature')
       p.add_contact('email',
                     row.xpath('string(./td[last()]//a/@href)').split(':')[1],

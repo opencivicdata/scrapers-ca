@@ -19,17 +19,17 @@ class StJohnsPersonScraper(Scraper):
       role = fields[0].xpath('string(./div)')
       name = fields[2].xpath('string(.//a)').title().split(role)[-1]
       if 'Ward' in role:
-        post_id = role
+        district = role
         role = 'Councillor'
       else:
         if 'At Large' in role:
           role = 'Councillor'
-        post_id = "St. John's"
+        district = "St. John's"
       phone = fields[3].xpath('string(./div)')
       email = fields[5].xpath('string(.//a)')
       photo_url = node.xpath('string(.//img/@src)')
 
-      p = Person(name=name, post_id=post_id, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

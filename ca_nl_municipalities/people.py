@@ -7,7 +7,7 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
@@ -60,10 +60,10 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         org.add_source(url)
         yield org
 
-        p = Person(name=name, post_id=district)
+        p = Person(name=name, district=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        membership = p.add_membership(org, role='Mayor', post_id=district)
+        membership = p.add_membership(org, role='Mayor', district=district)
         if phone:
           membership.add_contact_detail('voice', phone, 'legislature')
         # Im excluding fax because that column isn't properly aligned

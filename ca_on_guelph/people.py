@@ -24,7 +24,7 @@ class GuelphPersonScraper(Scraper):
       district = info[2]
       url = councillor.xpath('.//a')[0].attrib['href']
 
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -62,7 +62,7 @@ class GuelphPersonScraper(Scraper):
     name = div.xpath('.//a')[0].text_content().replace('Mayor', '')
     url = div.xpath('.//a')[0].attrib['href']
 
-    p = Person(name=name, post_id='Guelph', role='Mayor')
+    p = Person(name=name, district='Guelph', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 

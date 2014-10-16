@@ -23,7 +23,7 @@ class KelownaPersonScraper(Scraper):
       phone = page.xpath('//strong')[-1].text_content()
       email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
-      p = Person(name=name, post_id='Kelowna', role=role, image=photo_url)
+      p = Person(name=name, district='Kelowna', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('voice', phone, 'legislature')

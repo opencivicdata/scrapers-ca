@@ -25,7 +25,7 @@ class WinnipegPersonScraper(Scraper):
     mayor_node = page.xpath('//td[@width="315"]')[0]
     mayor_name = mayor_node.xpath('string(./a)')[len('Mayor '):]
     mayor_photo_url = mayor_node.xpath('string(./img/@src)')
-    m = Person(name=mayor_name, post_id='Winnipeg', role='Mayor')
+    m = Person(name=mayor_name, district='Winnipeg', role='Mayor')
     m.add_source(COUNCIL_PAGE)
     # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail
     m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca', None)
@@ -41,7 +41,7 @@ def councillor_data(url, name, ward):
   email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
            split('=')[1] + '@winnipeg.ca')
 
-  p = Person(name=name, post_id=ward, role='Councillor')
+  p = Person(name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)

@@ -30,7 +30,7 @@ class HaldimandCountyPersonScraper(Scraper):
       url = councillor.xpath('.//a')[0].attrib['href']
       page = lxmlize(url)
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 

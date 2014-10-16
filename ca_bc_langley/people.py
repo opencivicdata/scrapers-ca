@@ -31,7 +31,7 @@ class LangleyPersonScraper(Scraper):
     email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
-    p = Person(name=name, post_id='Langley', role='Councillor', image=photo_url)
+    p = Person(name=name, district='Langley', role='Councillor', image=photo_url)
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_contact('email', email, None)
@@ -55,7 +55,7 @@ class LangleyPersonScraper(Scraper):
     email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
-    p = Person(name=name, post_id='Langley', role='Mayor', image=photo_url)
+    p = Person(name=name, district='Langley', role='Mayor', image=photo_url)
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_contact('email', email, None)

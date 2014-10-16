@@ -25,7 +25,7 @@ class ClaringtonPersonScraper(Scraper):
           'string(./following-sibling::a[1]/@href)')[len('mailto:'):]
       photo_url = person_header_elem.xpath(
           'string(./following-sibling::img[1]/@src)')
-      p = Person(name=name, post_id=post, role=role, image=photo_url)
+      p = Person(name=name, district=post, role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       yield p

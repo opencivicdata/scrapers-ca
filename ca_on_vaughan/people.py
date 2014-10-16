@@ -39,7 +39,7 @@ class VaughanPersonScraper(Scraper):
       fax = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact_info.text_content())[1]
       email = contact_info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Person(name=name, post_id=district.strip(), role=role)
+      p = Person(name=name, district=district.strip(), role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('voice', phone, 'legislature')

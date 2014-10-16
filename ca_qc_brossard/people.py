@@ -29,7 +29,7 @@ class BrossardPersonScraper(Scraper):
 
       photo = re.search(r'url\((.+)\)', elem.attrib['style']).group(1)
 
-      p = Person(name=name, post_id=district, role=role, image=photo)
+      p = Person(name=name, district=district, role=role, image=photo)
       p.add_source(COUNCIL_PAGE)
 
       try:

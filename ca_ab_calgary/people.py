@@ -30,7 +30,7 @@ class CalgaryPersonScraper(Scraper):
     email = mayor_page.xpath('string(//a[contains(., "@")])')
     phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
                              'following-sibling::text())')
-    m = Person(name=name, post_id='Calgary', role='Mayor')
+    m = Person(name=name, district='Calgary', role='Mayor')
     m.add_source(COUNCIL_PAGE)
     m.add_source(MAYOR_PAGE)
     m.add_contact('email', email, None)
@@ -46,7 +46,7 @@ def councillor_data(url, name, ward):
   # no email, there's a contact form!
   phone = page.xpath('string(//p[contains(./strong, "Phone")]/text())').strip()
 
-  p = Person(name=name, post_id=ward, role='Councillor')
+  p = Person(name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   if phone:
     p.add_contact('voice', phone, 'legislature')

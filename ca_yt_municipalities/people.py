@@ -7,7 +7,7 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 
@@ -68,9 +68,9 @@ class YukonMunicipalitiesPersonScraper(Scraper):
           councillor = line[col1end - 1:col2end - 1].strip()
           if not councillor:
             continue
-          p = Person(name=councillor, post_id=district)
+          p = Person(name=councillor, district=district)
           p.add_source(COUNCIL_PAGE)
-          membership = p.add_membership(organization, role=role, post_id=district)
+          membership = p.add_membership(organization, role=role, district=district)
           membership.add_contact_detail('address', address, 'legislature')
           membership.add_contact_detail('voice', phone, 'legislature')
           membership.add_contact_detail('email', email, None)

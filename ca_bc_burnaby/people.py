@@ -26,7 +26,7 @@ def scrape_person(url):
   email = page.xpath('string(//a[contains(@href, "mailto:")])')
   phone = page.xpath('string(//li[contains(text(), "Phone:")])')
 
-  p = Person(name=name, post_id='Burnaby', role=role, image=photo_url)
+  p = Person(name=name, district='Burnaby', role=role, image=photo_url)
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)

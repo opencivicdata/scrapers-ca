@@ -45,7 +45,7 @@ class CanadaPersonScraper(Scraper):
       photo = mp_page.xpath('string(//div[@class="profile overview header"]//'
                             'img/@src)')
 
-      m = Person(name=name, post_id=constituency, role='MP', chamber='lower', party=party) # @todo 0.4: chamber
+      m = Person(name=name, district=constituency, role='MP', primary_org='lower', party=party)
       m.add_source(COUNCIL_PAGE)
       m.add_source(url)
       screen_name = screen_names.get(name)

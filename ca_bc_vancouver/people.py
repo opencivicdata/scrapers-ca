@@ -15,7 +15,7 @@ class VancouverPersonScraper(Scraper):
     for row in csv_reader(COUNCIL_PAGE, header=True):
       p = Person(
         name='%(First Name)s %(Last Name)s' % row,
-        post_id='Vancouver',
+        district='Vancouver',
         role=row['Elected Office'],
         gender=row['Gender'],
         image=row['Photo URL'],

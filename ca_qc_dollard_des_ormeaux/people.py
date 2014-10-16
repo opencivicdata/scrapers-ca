@@ -30,7 +30,7 @@ class DollardDesOrmeauxPersonScraper(Scraper):
         district = 'District ' + re.findall(r'[0-9]', councillor.text_content())[0]
         role = 'Conseiller'
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = councillor.xpath('./parent::p/parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
 

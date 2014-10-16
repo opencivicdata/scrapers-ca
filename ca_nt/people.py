@@ -32,7 +32,7 @@ class NorthwestTerritoriesPersonScraper(Scraper):
           'string(//div[@property="content:encoded"]/p[1])')
       phone = re.search(r'P(hone)?: ([-0-9]+)', contact_text).group(2)
 
-      p = Person(name=name, post_id=riding, role='MLA', image=photo_url)
+      p = Person(name=name, district=riding, role='MLA', image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       p.add_contact('email', email, None)

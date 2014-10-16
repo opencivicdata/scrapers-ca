@@ -29,7 +29,7 @@ class LavalPersonScraper(Scraper):
       email = councillor_row.xpath(
           'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
       photo_url = councillor_row[0][0].attrib['src']
-      p = Person(name=name, post_id=district, role=role, image=photo_url)
+      p = Person(name=name, district=district, role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('email', email, None)

@@ -21,7 +21,7 @@ class TroisRivieresPersonScraper(Scraper):
     page = lxmlize(MAYOR_URL)
     photo_url = page.xpath('string(//img/@src[contains(., "Maire")])')
     name = page.xpath('string(//td[@class="contenu"]/text()[last()])')
-    p = Person(name=name, post_id="Trois-Rivières", role="Maire",
+    p = Person(name=name, district="Trois-Rivières", role="Maire",
                    image=photo_url)
     p.add_source(MAYOR_URL)
     yield p
@@ -39,7 +39,7 @@ class TroisRivieresPersonScraper(Scraper):
         email = page.xpath(
             'string(//a/@href[contains(., "mailto:")])')[len('mailto:'):]
         photo_url = page.xpath('string(//img/@src[contains(., "Conseiller")])')
-        p = Person(name=name, post_id=district, role='Conseiller',
+        p = Person(name=name, district=district, role='Conseiller',
                        image=photo_url)
         p.add_source(url)
         p.add_contact('email', email, None)

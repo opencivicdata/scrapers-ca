@@ -26,7 +26,7 @@ class PrinceEdwardIslandPersonScraper(Scraper):
               .replace(' (LIB)', '').replace(' (PC)', '').strip())
       url = membercell.cssselect('a')[0].get('href')
       email, phone, photo_url = scrape_extended_info(url)
-      p = Person(name=name, post_id=district, role='MLA', image=photo_url)
+      p = Person(name=name, district=district, role='MLA', image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('email', email, None)

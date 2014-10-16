@@ -18,7 +18,7 @@ class PeelPersonScraper(Scraper):  # @todo creates two people if that person rep
 
       p = Person(
         name='%(FirstName0)s %(LastName0)s' % row,
-        post_id='%(MUNIC)s Ward %(WARDNUM)s' % row,
+        district='%(MUNIC)s Ward %(WARDNUM)s' % row,
         role='Councillor',
       )
       p.add_contact('email', row['email0'], None)
@@ -30,7 +30,7 @@ class PeelPersonScraper(Scraper):  # @todo creates two people if that person rep
       if row['FirstName1'].strip():
         p = Person(
           name='%s %s' % (row['FirstName1'], row['LastName1']),
-          post_id='%(MUNIC)s Ward %(WARDNUM)s' % row,
+          district='%(MUNIC)s Ward %(WARDNUM)s' % row,
           role='Councillor',
         )
         p.add_contact('email', row['email1'], None)
@@ -48,7 +48,7 @@ def chair_info(url):
   address = page.xpath('string(//div[@id="co-content"]/p[1])')
   phone = page.xpath('string(//div[@id="co-content"]/p[2]/text())').split(':')[1]
 
-  p = Person(name=name, post_id='Peel', role='Regional Chair',
+  p = Person(name=name, district='Peel', role='Regional Chair',
                  image=photo_url)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')

@@ -19,13 +19,13 @@ class WhitbyPersonScraper(Scraper):
       try:  # Mayor and regional councillors
         name, role = info[0].text_content().split(',')
         role = role.strip()
-        post_id = 'Whitby'
+        district = 'Whitby'
       except ValueError:
-        post_id = ' '.join(info[0].text_content().split()[:2])
+        district = ' '.join(info[0].text_content().split()[:2])
         name, role = info[1].text_content().split(', ')
       email = info.xpath('string(.//a/@href)')[len('mailto:'):].split(';')[0]
       image = person.xpath('string(.//img/@src)')
-      p = Person(name=name, post_id=post_id, role=role, image=image)
+      p = Person(name=name, district=district, role=role, image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       yield p

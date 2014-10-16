@@ -32,7 +32,7 @@ def councillor_data(url):
                      '@href[contains(., "@")][1])')
   photo = page.xpath('string(//div[@class="blockcontentclear"]//img[1]/@src)')
 
-  p = Person(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, district=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
@@ -49,7 +49,7 @@ def mayor_data(url):
   name = ' '.join(name_text.split()[3:])  # TODO: probably too brittle
   email = page.xpath('//a[contains(@href, "mailto")]/text()')[0]
 
-  p = Person(name=name, post_id='Mississauga', role='Mayor')
+  p = Person(name=name, district='Mississauga', role='Mayor')
   p.add_source(url)
   p.add_contact('email', email, None)
 

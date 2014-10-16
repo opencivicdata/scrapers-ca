@@ -37,7 +37,7 @@ class QuebecPersonScraper(Scraper):
         district = re.sub('–', '—', district)  # n-dash, m-dash
         district = re.sub('\Ala ', 'La ', district)
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = councillor.xpath('./p/img/@src')[0]
 

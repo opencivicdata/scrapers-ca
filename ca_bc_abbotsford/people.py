@@ -25,7 +25,7 @@ class AbbotsfordPersonScraper(Scraper):
       name = mail_link.attrib['title']
       email = mail_link.attrib['href'][len('mailto:'):]
       photo_url = page.xpath('string(//div[@class="pageContent"]//img[@align="right"]/@src)')
-      p = Person(name=name, post_id='Abbotsford', role='Councillor',
+      p = Person(name=name, district='Abbotsford', role='Councillor',
                      image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
@@ -36,6 +36,6 @@ class AbbotsfordPersonScraper(Scraper):
     name = page.xpath('string(//h1)').split(' ', 1)[1]
     photo_url = page.xpath('string(//img[@hspace=10]/@src)')
     # email is hidden behind a form
-    p = Person(name=name, post_id='Abbotsford', role='Mayor', image=photo_url)
+    p = Person(name=name, district='Abbotsford', role='Mayor', image=photo_url)
     p.add_source(MAYOR_URL)
     yield p

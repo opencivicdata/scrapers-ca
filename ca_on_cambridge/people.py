@@ -37,7 +37,7 @@ class CambridgePersonScraper(Scraper):
         fax = fax.replace('(', '').replace(') ', '-')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].text_content()
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('address', address, 'legislature')
@@ -60,7 +60,7 @@ def mayor_info(url):
 
   photo_url = page.xpath('string(//center/img/@src)')
 
-  p = Person(name=name, post_id="Cambridge", role='Mayor', image=photo_url)
+  p = Person(name=name, district="Cambridge", role='Mayor', image=photo_url)
   p.add_source(url)
   p.add_contact('email', email, None)
   p.add_contact('voice', phone, 'legislature')

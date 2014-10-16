@@ -22,7 +22,7 @@ class QuebecPersonScraper(Scraper):
       detail_page = lxmlize(detail_url)
       photo_url = detail_page.xpath('string(//img[@class="photoDepute"]/@src)')
       division = division.replace('–', '—')  # n-dash, m-dash
-      p = Person(name=name, post_id=division, role='MNA',
+      p = Person(name=name, district=division, role='MNA',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)

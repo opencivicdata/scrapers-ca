@@ -39,7 +39,7 @@ class AlbertaPersonScraper(Scraper):
           continue
       party = get_party(mla['Caucus'])
       name_without_status = name.split(',')[0]
-      p = Person(name=name_without_status, post_id=mla['Riding Name'],
+      p = Person(name=name_without_status, district=mla['Riding Name'],
                      role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', mla['Email'], None)

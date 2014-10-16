@@ -23,7 +23,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
           'Division')[0].strip()
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
@@ -55,7 +55,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
       #   membership = Membership(
       #       p._id,
       #       'jurisdiction::ocd-jurisdiction/country:ca/csd:4819006/council',
-      #       post_id='district::Grande Prairie County No. 1',
+      #       district='district::Grande Prairie County No. 1',
       #       contact_details=p._contact_details,
       #       role='Reeve')
       #   p._related.append(membership)

@@ -7,7 +7,7 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
 # See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx
@@ -83,9 +83,9 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         continue
       yield org
       for councillor in councillors:
-        p = Person(name=councillor[0], post_id=district_name)
+        p = Person(name=councillor[0], district=district_name)
         p.add_source(COUNCIL_PAGE)
-        membership = p.add_membership(org, role=councillor[1], post_id=district_name)
+        membership = p.add_membership(org, role=councillor[1], district=district_name)
 
         for key, value in contacts.items():
           membership.add_contact_detail(key, value, None if key == 'email' else 'legislature')

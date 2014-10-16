@@ -39,7 +39,7 @@ class OttawaPersonScraper(Scraper):
         phone = councillor['Phone']
         photo_url = councillor['Photo URL']
 
-        p = Person(name=name, post_id=district, role=role)
+        p = Person(name=name, district=district, role=role)
         p.add_source(COUNCIL_CSV_URL)
         p.add_contact('email', email, None)
         p.add_contact('address', address, 'legislature')

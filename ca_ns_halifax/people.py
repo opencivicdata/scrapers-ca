@@ -18,13 +18,13 @@ class HalifaxPersonScraper(Scraper):
     nodes = page.xpath('//table[@width="484"]//tr')
     try:
       for district_row, councillor_row, contact_row, _ in chunks(nodes, 4):
-        post_id = district_row.xpath('string(.//strong)')
+        district = district_row.xpath('string(.//strong)')
         name = councillor_row.xpath('string(.)')[len('Councillor '):]
         # TODO: phone numbers on site don't include area code. Add manually?
         #phone = contact_row.xpath('string(td[2]/text())')
         email = contact_row.xpath('string(td[4]/a)').replace('[at]', '@')
 
-        p = Person(name=name, post_id=post_id, role='Councillor')
+        p = Person(name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         #p.add_contact('voice', phone, 'legislature')
         p.add_contact('email', email, None)
@@ -38,7 +38,7 @@ class HalifaxPersonScraper(Scraper):
     contact_page = lxmlize(MAYOR_CONTACT_URL, 'iso-8859-1')
     email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
-    p = Person(name=name, post_id='Halifax', role='Councillor')
+    p = Person(name=name, district='Halifax', role='Councillor')
     p.add_source(MAYOR_PAGE)
     p.add_source(MAYOR_CONTACT_URL)
     p.add_contact('email', email, None)

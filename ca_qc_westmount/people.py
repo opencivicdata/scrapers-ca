@@ -17,7 +17,7 @@ class WestmountPersonScraper(Scraper):
     name = mayor.text_content().replace('Mayor', '').strip()
     url = mayor.attrib['href']
     mayor_page = lxmlize(url)
-    p = Person(name=name, post_id='Westmount', role='Maire')
+    p = Person(name=name, district='Westmount', role='Maire')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     mayor_info = mayor_page.xpath('//div[@style="padding-right:10px;"]/table')[0]
@@ -43,7 +43,7 @@ class WestmountPersonScraper(Scraper):
       info = page.xpath('.//div[@style="padding-right:10px;"]/table')[0]
       phone = info.xpath('.//tr[2]/td[2]')[0].text_content().replace(' ', '-')
       email = info.xpath('.//tr[3]/td[2]')[0].text_content().strip()
-      p = Person(name=name, post_id=district, role='Conseiller')
+      p = Person(name=name, district=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = info.xpath('./ancestor::td//div[not(@id="insert")]/img/@src')[0]

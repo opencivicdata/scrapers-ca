@@ -33,7 +33,7 @@ def councillor_data(url):
   email = info_node.xpath('string(.//a)')
   photo_url = info_node.xpath('string(.//img/@src)')
 
-  p = Person(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, district=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
@@ -52,7 +52,7 @@ def mayor_data(node):
   email = node.xpath('string((.//a)[1])')
   photo_url = node.xpath('string(.//img/@src)')
 
-  p = Person(name=name, post_id='Hamilton', role='Mayor')
+  p = Person(name=name, district='Hamilton', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_contact('email', email, None)
   p.add_contact('voice', phone, 'legislature')

@@ -28,7 +28,7 @@ class AjaxPersonScraper(Scraper):
         role = page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content()
         role = re.findall('((Regional)? ?(Councillor))', role)[0][0]
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 

@@ -32,7 +32,7 @@ class BurlingtonPersonScraper(Scraper):
       fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
       email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -59,7 +59,7 @@ class BurlingtonPersonScraper(Scraper):
     mayor_page = lxmlize(contact_url)
     address = mayor_page.xpath('//div[@class="entry-content"]//p[contains(text(),"City Hall")]')[0].text_content()
 
-    p = Person(name=name, post_id="Burlington", role='Mayor')
+    p = Person(name=name, district="Burlington", role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.add_source('http://www.burlingtonmayor.com')

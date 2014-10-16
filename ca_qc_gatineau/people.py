@@ -20,7 +20,7 @@ class GatineauPersonScraper(Scraper):
     members = re.findall(r'arrayMembres\[a.+"(.+)"', js)
     urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)
     # first item in list is mayor
-    p = Person(name=members[0], post_id='Gatineau', role='Maire')
+    p = Person(name=members[0], district='Gatineau', role='Maire')
     p.add_source(COUNCIL_PAGE)
     mayor_page = lxmlize(MAYOR_CONTACT_PAGE)
     p.add_source(MAYOR_CONTACT_PAGE)
@@ -28,14 +28,14 @@ class GatineauPersonScraper(Scraper):
     p.add_contact('email', email, None)
     yield p
 
-    for district, member, url in list(zip(districts, members, urls))[1:]:
+    for raw_district, member, url in list(zip(districts, members, urls))[1:]:
       profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
       profile_page = lxmlize(profile_url)
       photo_url = profile_page.xpath('string(//img/@src)')
-      post_id = 'District ' + re.search('\d+', district).group(0)
+      district = 'District ' + re.search('\d+', raw_district).group(0)
       email = profile_page.xpath(
           'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
-      p = Person(name=member, post_id=post_id, role='Conseiller')
+      p = Person(name=member, district=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(profile_url)
       p.image = photo_url

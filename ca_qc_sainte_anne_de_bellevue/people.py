@@ -25,7 +25,7 @@ class SainteAnneDeBellevuePersonScraper(Scraper):
         district = 'District ' + re.findall(r'\d', councillor.xpath('./td')[0].text_content())[0]
         role = 'Conseiller'
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
       email = councillor.xpath('.//a')

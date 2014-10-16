@@ -3,7 +3,7 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']
@@ -41,7 +41,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         for i, councillor in enumerate(councillors):
           if 'Vacant' in councillor:
             continue
-          p = Person(name=councillor, post_id=district)
+          p = Person(name=councillor, district=district)
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)

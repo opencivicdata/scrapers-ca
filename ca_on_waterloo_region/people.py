@@ -26,7 +26,7 @@ class WaterlooPersonScraper(Scraper):
                                region.xpath('./following-sibling::*'))]
       for councillor in councillors:
         post = re.search('of (.*)', region.text).group(1)
-        p = Person(name=councillor.text, post_id=post, role='Councillor')
+        p = Person(name=councillor.text, district=post, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         councillor_url = councillor.attrib['href']
         p.add_source(councillor_url)
@@ -47,7 +47,7 @@ class WaterlooPersonScraper(Scraper):
     photo_url_src = chairpage.xpath(
         'string(//div[@id="contentIntleft"]//img[1]/@src)')
     photo_url = urljoin(CHAIR_URL, photo_url_src)
-    p = Person(name=name, post_id='Waterloo', role='Regional Chair')
+    p = Person(name=name, district='Waterloo', role='Regional Chair')
     p.add_source(CHAIR_URL)
     p.add_contact('email', email, None)
     p.add_contact('voice', phone, 'legislature')

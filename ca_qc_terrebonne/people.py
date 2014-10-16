@@ -17,14 +17,14 @@ class TerrebonnePersonScraper(Scraper):
       district, name, phone = councillor_elem.xpath('./span/text()')[:3]
       photo_url = councillor_elem[0].attrib['src']
       # email is form-based
-      p = Person(name=name, post_id=district, role='Conseiller',
+      p = Person(name=name, district=district, role='Conseiller',
                      image=photo_url)
       p.add_source(COUNCIL_PAGE)
       yield p
     mayor_elem = page.xpath('//div[@class="protraits maire"]')[0][0]
     name = mayor_elem.xpath('./span/text()')[1]
     photo_url = mayor_elem[0].attrib['src']
-    p = Person(name=name, post_id='Terrebonne', role='Maire',
+    p = Person(name=name, district='Terrebonne', role='Maire',
                    image=photo_url)
     p.add_source(COUNCIL_PAGE)
     yield p

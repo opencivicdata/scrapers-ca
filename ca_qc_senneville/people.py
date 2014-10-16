@@ -22,7 +22,7 @@ class SennevillePersonScraper(Scraper):
         role = 'Maire'
       name = councillor.xpath('./td[2]//p//text()')[0].title()
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0]
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       try:
           p.image = councillor.xpath('.//img/@src')[0]

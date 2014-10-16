@@ -31,7 +31,7 @@ class MonctonPersonScraper(Scraper):
       url = councillor.xpath('.//a')[-1].attrib['href']
       page = lxmlize(url)
 
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = councillor.xpath('.//img/@src')[0]
@@ -55,7 +55,7 @@ def scrape_mayor(url):
   page = lxmlize(url)
   name = page.xpath('//meta[@name="description"]/@content')[0].split(',')[1]
 
-  p = Person(name=name, post_id='Moncton', role='Mayor')
+  p = Person(name=name, district='Moncton', role='Mayor')
   p.add_source(url)
 
   p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]

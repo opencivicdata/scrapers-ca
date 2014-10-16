@@ -7,7 +7,7 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
@@ -36,9 +36,9 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Person(name=name, post_id=district)
+      p = Person(name=name, district=district)
       p.add_source(COUNCIL_PAGE)
-      membership = p.add_membership(org, role='Mayor', post_id=district)
+      membership = p.add_membership(org, role='Mayor', district=district)
 
       address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
       if not 'Phone' in lines[0]:

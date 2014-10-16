@@ -42,7 +42,7 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
       photo_url = photo_page.xpath('string(//table//img/@src)')
       district = district.replace(' - ', '—')  # m-dash
       party = get_party(member_parties[name.strip()])
-      p = Person(name=name, post_id=district, role='MHA',
+      p = Person(name=name, district=district, role='MHA',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(PARTY_PAGE)

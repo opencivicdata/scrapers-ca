@@ -25,7 +25,7 @@ class FrederictonPersonScraper(Scraper):
         district = re.search('\((.+?)(?: Area)?\)', district).group(1)
         role = 'Councillor'
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
       p.image = councillor.xpath('.//img/@src')[0]

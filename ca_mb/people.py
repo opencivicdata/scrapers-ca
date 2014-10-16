@@ -44,7 +44,7 @@ class ManitobaPersonScraper(Scraper):
       url = namecell.cssselect('a')[0].get('href')
       photo, email = get_details(url)
 
-      p = Person(name=name, post_id=district, role='MLA',
+      p = Person(name=name, district=district, role='MLA',
                      party=party, image=photo)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)

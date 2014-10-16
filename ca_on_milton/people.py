@@ -28,7 +28,7 @@ class MiltonPersonScraper(Scraper):
       else:
         district = councillor.xpath('./td[2]/p/text()')[2]
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
       p.image = councillor.xpath('./td[1]/p//img/@src')[0]

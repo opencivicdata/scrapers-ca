@@ -22,7 +22,7 @@ class EdmontonPersonScraper(Scraper):
       page_url = cell[1].attrib['href']
       page = lxmlize(page_url)
 
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(page_url)
 
@@ -57,7 +57,7 @@ def scrape_mayor():
   page = lxmlize(MAYOR_PAGE)
   name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
 
-  p = Person(name=name, post_id='Edmonton', role='Mayor')
+  p = Person(name=name, district='Edmonton', role='Mayor')
   p.add_source(MAYOR_PAGE)
 
   image = page.xpath('//div[@id="contentArea"]//img/@src')[0]

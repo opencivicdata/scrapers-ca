@@ -37,8 +37,8 @@ def councillor_data(url, name, role):
   photo_url = urljoin(url,
                       page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
-  # TODO: should post_id be "Nieghborhood Liaison"?
-  m = Person(name=name, post_id='Victoria', role=role)
+  # TODO: should district be "Nieghborhood Liaison"?
+  m = Person(name=name, district='Victoria', role=role)
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
   m.add_contact('email', email, None)
@@ -57,8 +57,8 @@ def mayor_data(url, name, role):
   photo_url = urljoin(url,
                       page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
-  # TODO: should post_id be "Nieghborhood Liaison"?
-  m = Person(name=name, post_id='Victoria', role=role)
+  # TODO: should district be "Nieghborhood Liaison"?
+  m = Person(name=name, district='Victoria', role=role)
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
   m.add_contact('email', email, None)

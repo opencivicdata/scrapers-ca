@@ -28,7 +28,7 @@ class LevisPersonScraper(Scraper):
       role = 'Conseiller'
       email = info_div.xpath('string(.//a/@href)')[len('mailto:'):]
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = photo_url
       p.add_contact('email', email, None)

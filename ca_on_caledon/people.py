@@ -27,7 +27,7 @@ class CaledonPersonScraper(Scraper):
       else:
         role = 'Area Councillor'
 
-      p = Person(name=name, post_id=district.strip(), role=role)
+      p = Person(name=name, district=district.strip(), role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -57,7 +57,7 @@ def scrape_mayor(url):
   address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':', '').strip()
   phone = page.xpath('//strong[contains(text(), "phone")]/parent::p/text()')[1].split()[1]
 
-  p = Person(name=name, post_id='Caledon', role='Mayor')
+  p = Person(name=name, district='Caledon', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = page.xpath('//h2[contains(text(), "About me")]/img/@src')[0]

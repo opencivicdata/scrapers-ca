@@ -31,7 +31,7 @@ class SaintJeromePersonScraper(Scraper):
 
       image = councillor_tr.xpath('string(.//img/@src)')[0]
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = image
       p.add_contact('voice', phone, 'legislature')

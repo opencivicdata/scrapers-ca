@@ -4,7 +4,7 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.nwtac.com/about/communities/'
 
@@ -26,9 +26,9 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Person(name=name, post_id=district)
+      p = Person(name=name, district=district)
       p.add_source(COUNCIL_PAGE)
-      membership = p.add_membership(org, role=role, post_id=district)
+      membership = p.add_membership(org, role=role, district=district)
 
       info = councillor.xpath('./ancestor::p/text()')
       for contact in info:

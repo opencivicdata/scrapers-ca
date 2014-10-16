@@ -28,17 +28,17 @@ class WellesleyPersonScraper(Scraper):
       name, position = councillor_elem.xpath('string(./p/strong)').split(',')
       position = position.strip()
       if ' ' in position:
-        position, post_id = position.split(' ', 1)
-        post_id = post_number(post_id)
+        position, district = position.split(' ', 1)
+        district = post_number(district)
       else:
-        post_id = 'Wellesley'
+        district = 'Wellesley'
       addr = '\n'.join(addr_str.strip() for addr_str in
                        councillor_elem.xpath('./p/text()')).strip()
       phone = councillor_elem.xpath('string(.//a[starts-with(@href, "tel:")])')
       email = councillor_elem.xpath(
           'string(.//a[starts-with(@href, "mailto:")])')
       image = councillor_elem.xpath('string(.//img[1]/@src)')
-      p = Person(name=name, post_id=post_id, role=position, image=image)
+      p = Person(name=name, district=district, role=position, image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('address', addr, 'legislature')
       p.add_contact('voice', phone, 'legislature')

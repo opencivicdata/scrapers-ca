@@ -35,7 +35,7 @@ class ThunderBayPersonScraper(Scraper):
         role = 'Mayor'
       name = name.replace('Councillor', '').replace('At Large', '').replace('Mayor', '').strip()
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
 

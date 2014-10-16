@@ -34,7 +34,7 @@ def councillor_data(url):
   phone = content_node.xpath('string(.//strong[contains(., "Phone")]/'
                              'following-sibling::text()[1])').strip()
 
-  p = Person(name=name, post_id=ward, role='Councillor')
+  p = Person(name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   if phone:
@@ -53,7 +53,7 @@ def mayor_data(url):
   phone = content_node.xpath('string(.//strong[contains(., "Phone")]/'
                              'following-sibling::text()[1])').strip()
 
-  p = Person(name=name, post_id='Strathcona County', role='Mayor')
+  p = Person(name=name, district='Strathcona County', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('voice', phone, 'legislature')

@@ -3,7 +3,7 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, AggregationPerson as Person
+from utils import lxmlize, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://web5.gov.mb.ca/Public/municipalities.aspx'
 
@@ -39,7 +39,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       councillors = district.xpath('.//td[3]/text()')
       positions = district.xpath('.//td[2]/b/text()')
       for i, councillor in enumerate(councillors):
-        p = Person(name=councillor, post_id=title)
+        p = Person(name=councillor, district=title)
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:

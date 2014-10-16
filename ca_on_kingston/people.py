@@ -41,7 +41,7 @@ def councillor_data(url):
   photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
   photo_url = urljoin(url, photo_url_rel)
 
-  p = Person(name=name, post_id=district_id, role='Councillor')
+  p = Person(name=name, district=district_id, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)
@@ -62,7 +62,7 @@ def mayor_data(url):
   email = contact_node.xpath('string(.//a)')
   photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
 
-  p = Person(name=name, post_id='Kingston', role='Mayor')
+  p = Person(name=name, district='Kingston', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('email', email, None)

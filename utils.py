@@ -72,9 +72,13 @@ CONTACT_DETAIL_NOTE_MAP = {
 
 
 class CanadianJurisdiction(Jurisdiction):
+  # @see https://github.com/opencivicdata/pupa/issues/140
+  division_id = 'wat'
+  classification = 'wat'
+
   def __init__(self):
       super(CanadianJurisdiction, self).__init__()
-      for module, name in (('people', 'Person')):
+      for module, name in (('people', 'Person'),):
         class_name = self.__class__.__name__ + name + 'Scraper'
         self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
 
@@ -84,11 +88,11 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianPerson(Person):
 
-  def __init__(self, name, post_id, **kwargs):
-    super(CanadianPerson, self).__init__(clean_name(name), clean_string(post_id), **kwargs)
+  def __init__(self, name, district, **kwargs):
     for k, v in kwargs.items():
       if isinstance(v, string_types):
-        setattr(self, k, clean_string(v))
+        kwargs[k] = clean_string(v)
+    super(CanadianPerson, self).__init__(name=clean_name(name), district=clean_string(district), **kwargs)
 
   def __setattr__(self, name, value):
     if name == 'gender':
@@ -126,27 +130,6 @@ class CanadianPerson(Person):
       value = clean_string(value)
 
     self.contact_details.append({'type': type, 'value': value, 'note': note})
-
-
-# Removes _is_legislator flag and _contact_details. Used by aggregations.
-# @see https://github.com/opencivicdata/pupa/blob/master/pupa/scrape/helpers.py
-class AggregationPerson(Person):
-  __slots__ = ('post_id')
-
-  def __init__(self, name, post_id, **kwargs):
-    super(AggregationPerson, self).__init__(clean_name(name), **kwargs)
-    self.post_id = clean_string(post_id)
-    for k, v in kwargs.items():
-      if isinstance(v, string_types):
-        setattr(self, k, clean_string(v))
-
-  def __setattr__(self, name, value):
-    if name == 'gender':
-      if value == 'M':
-        value = 'male'
-      elif value == 'F':
-        value = 'female'
-    super(AggregationPerson, self).__setattr__(name, value)
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)

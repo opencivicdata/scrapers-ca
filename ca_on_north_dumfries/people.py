@@ -25,7 +25,7 @@ class NorthDumfriesPersonScraper(Scraper):
       else:
         district = 'Ward %s' % info.pop(0).strip()
         role = 'Councillor'
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', info[0], 'legislature')
       p.add_contact('email', info[1], None)

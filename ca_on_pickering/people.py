@@ -32,7 +32,7 @@ class PickeringPersonScraper(Scraper):
         role = 'Mayor'
         ward = 'Pickering'
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
-      p = Person(name=name, post_id=ward, role=role)
+      p = Person(name=name, district=ward, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('email', email, None)
       p.image = councillor.xpath('.//img/@src')[0]

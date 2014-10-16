@@ -36,7 +36,7 @@ class MarkhamPersonScraper(Scraper):
 
       page = lxmlize(url)
 
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -65,7 +65,7 @@ class MarkhamPersonScraper(Scraper):
 def scrape_4(name, url, image):
   page = lxmlize(url)
 
-  p = Person(name=name, post_id='Ward 4', role='Councillor')
+  p = Person(name=name, district='Ward 4', role='Councillor')
   p.add_source(url)
   p.add_source(COUNCIL_PAGE)
 
@@ -88,7 +88,7 @@ def scrape_mayor(url):
   phone = contact_elem.text.split(':')[1].strip()
   email = contact_elem.xpath('string(./a)')
 
-  p = Person(name=name, post_id='Markham', role='Mayor')
+  p = Person(name=name, district='Markham', role='Mayor')
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')

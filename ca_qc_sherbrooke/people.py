@@ -26,7 +26,7 @@ class SherbrookePersonScraper(Scraper):
         role = 'Conseiller'
       if district in ('de Brompton', 'de Lennoxville'):
         district = district.replace('de ', '')
-      p = Person(name=name, post_id=district, role=role)
+      p = Person(name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = page.xpath('//div[@class="csc-textpic-image csc-textpic-last"]//img/@src')[0]

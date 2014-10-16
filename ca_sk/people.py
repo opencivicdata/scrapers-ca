@@ -21,7 +21,7 @@ class SaskatchewanPersonScraper(Scraper):
       url = councillor.xpath('./td[1]/a/@href')[0]
       page = lxmlize(url)
 
-      p = Person(name=name, post_id=district, role='MLA', party=party)
+      p = Person(name=name, district=district, role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = page.xpath('string(//div[contains(@class, "mla-image-cell")]/img/@src)')

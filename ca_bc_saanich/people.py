@@ -23,7 +23,7 @@ class SaanichPersonScraper(Scraper):
       photo_url = page.xpath('string(//img[@class="float-right"]/@src)')
       email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
-      p = Person(name=name, post_id='Saanich', role=role, image=photo_url)
+      p = Person(name=name, district='Saanich', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('email', email, None)

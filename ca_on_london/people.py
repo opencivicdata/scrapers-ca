@@ -42,7 +42,7 @@ def councillor_data(url):
   js = page.xpath('string(//span/script)')
   email = email_js(js)
 
-  p = Person(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, district=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
@@ -66,7 +66,7 @@ def mayor_data(url):
   phone_str = page.xpath('string(//span[contains(@class, "iconPhone")])')
   phone = phone_str.split(':')[1]
 
-  p = Person(name=name, post_id='London', role='Mayor')
+  p = Person(name=name, district='London', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_source(url)
   p.image = photo_url

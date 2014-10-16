@@ -36,7 +36,7 @@ class CoteSaintLucPersonScraper(Scraper):
       img_url_rel = img_cell.xpath('string(//img/@href)')
       img_url = urljoin(councillors_url, img_url_rel)
 
-      p = Person(name=name, post_id=district, role='Conseiller')
+      p = Person(name=name, district=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillors_url)
       p.add_contact('email', email, None)
@@ -52,7 +52,7 @@ class CoteSaintLucPersonScraper(Scraper):
     email = page.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
     phone = page.xpath('//table[1]/tbody/tr/td[1]/p[last()]/text()')[2].replace('Telephone: ', '')
 
-    p = Person(name=name, post_id='Côte-Saint-Luc', role='Maire')
+    p = Person(name=name, district='Côte-Saint-Luc', role='Maire')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
     p.image = page.xpath('.//img/@src')[0]

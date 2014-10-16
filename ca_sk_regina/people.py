@@ -38,7 +38,7 @@ def councillor_data(url, name, ward):
   phone = page.xpath('string(//strong[contains(., "Phone")])').split(':')[1]
   photo_url_rel = page.xpath('string(//div[@id="contentcontainer"]//img/@src)')
   photo_url = urljoin(url, photo_url_rel)
-  m = Person(name=name, post_id=ward, role='Councillor')
+  m = Person(name=name, district=ward, role='Councillor')
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
   m.add_contact('voice', phone, 'legislature')
@@ -53,7 +53,7 @@ def mayor_data(url, name):
   contact_page = lxmlize(MAYOR_CONTACT_URL)
   email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
-  m = Person(name=name, post_id='Regina', role='Mayor')
+  m = Person(name=name, district='Regina', role='Mayor')
   m.add_source(COUNCIL_PAGE)
   m.add_source(url)
   m.add_source(MAYOR_CONTACT_URL)

@@ -37,7 +37,7 @@ def councillor_data(url):
 
   # Email is handled as a form and no contact information is listed
 
-  p = Person(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, district=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = photo_url(page)
@@ -50,7 +50,7 @@ def mayor_data(url):
 
   # Eliminate the word "Mayor" preceding the Mayor's name
   name = page.xpath('string(//h1)')[6:]
-  p = Person(name=name, post_id='Waterloo', role='Mayor')
+  p = Person(name=name, district='Waterloo', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = photo_url(page)

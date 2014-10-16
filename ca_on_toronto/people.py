@@ -28,7 +28,7 @@ class TorontoPersonScraper(Scraper):
     ward_full = page.xpath('string(//strong[not(@class)])').replace('\xa0', ' ')
     ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
 
-    p = Person(name=name, post_id=ward_num, role='Councillor')
+    p = Person(name=name, district=ward_num, role='Councillor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
@@ -52,7 +52,7 @@ class TorontoPersonScraper(Scraper):
     page = lxmlize(url)
     name = page.xpath("//h1/text()")[0].replace("Toronto Mayor", "").strip()
 
-    p = Person(name=name, post_id="Toronto", role='Mayor')
+    p = Person(name=name, district="Toronto", role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 

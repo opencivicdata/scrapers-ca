@@ -24,7 +24,7 @@ class OntarioPersonScraper(Scraper):
       mpp_page = lxmlize(mpp_url)
       photo_url = mpp_page.xpath('string(//img[@class="mppimg"]/@src)')
       party = mpp_page.xpath('string(//div[@class="partyaffil"]/h3)')
-      p = Person(name=name, post_id=riding, role='MPP',
+      p = Person(name=name, district=riding, role='MPP',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(mpp_url)

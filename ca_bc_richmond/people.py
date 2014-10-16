@@ -22,7 +22,7 @@ class RichmondPersonScraper(Scraper):
       # image element is inserted by a script somewhere
       #photo_url = page.xpath('string(//span[@class="imageShadow"]/img/@src)')
 
-      p = Person(name=name, post_id='Richmond', role=role)
+      p = Person(name=name, district='Richmond', role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(CONTACT_URL)
       p.add_source(url)

@@ -26,7 +26,7 @@ class LongueuilPersonScraper(Scraper):
             'string(//a[contains(@href, "sendto")]/@href)')
         email = re.search(r'sendto=(.+)&', email_url).group(1)
         photo_url = detail_page.xpath('string(//img[@height="200"]/@src)')
-        p = Person(name=name, post_id=district, role='Conseiller')
+        p = Person(name=name, district=district, role='Conseiller')
         p.add_source(COUNCIL_PAGE)
         p.add_source(detail_url)
         p.image = photo_url
@@ -42,7 +42,7 @@ class LongueuilPersonScraper(Scraper):
     email_url = detail_page.xpath(
         'string(//a[contains(@href, "sendto")]/@href)')
     email = re.search(r'sendto=(.+)&', email_url).group(1)
-    p = Person(name=name, post_id='Longueuil', role='Maire')
+    p = Person(name=name, district='Longueuil', role='Maire')
     p.add_source(COUNCIL_PAGE)
     p.add_source(mayor_url)
     p.image = photo_url

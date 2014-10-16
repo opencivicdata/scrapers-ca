@@ -39,7 +39,7 @@ class NewBrunswickPersonScraper(Scraper):
       photo_page_url = row[2][0].attrib['href']
       photo_url = get_photo_url(photo_page_url)
 
-      p = Person(name=name, post_id=riding_fixed, role='MLA',
+      p = Person(name=name, district=riding_fixed, role='MLA',
                      party=get_party(party_abbr), image=photo_url)
       p.add_contact('email', email, None)
       p.add_source(photo_page_url)

@@ -28,7 +28,7 @@ class LaSallePersonScraper(Scraper):
         name = name.replace('Mayor', '')
         role = 'Mayor'
 
-      p = Person(name=name, post_id="LaSalle", role=role)
+      p = Person(name=name, district="LaSalle", role=role)
       p.add_source(COUNCIL_PAGE)
 
       photo_url = councillor.xpath('./parent::td//img/@src')[0]

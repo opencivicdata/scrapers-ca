@@ -21,7 +21,7 @@ class StratfordPersonScraper(Scraper):
       name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '').strip()
       district = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
-      p = Person(name=name, post_id=district, role='Councillor')
+      p = Person(name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
 
       p.image = councillor.xpath('.//img/@src')[0]
@@ -51,7 +51,7 @@ class StratfordPersonScraper(Scraper):
     email = info[2].xpath('./a')[0].text_content()
     phone = info[3].text_content().replace('Phone ', '')
 
-    p = Person(name=name, post_id='Stratford', role='Mayor')
+    p = Person(name=name, district='Stratford', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.image = page.xpath('//div[@class="entry-content"]/p/a/img/@src')[0]
     p.add_contact('email', email, None)

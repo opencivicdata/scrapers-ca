@@ -27,7 +27,7 @@ class WoolwichPersonScraper(Scraper):
         district = district.replace('Councillor', '').strip()
         role = 'Councillor'
 
-      p = Person(name=councillor.text_content(), post_id=district, role=role)
+      p = Person(name=councillor.text_content(), district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = councillor.xpath('./img/@src')[0]
 

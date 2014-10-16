@@ -43,7 +43,7 @@ def councillor_data(url, ward):
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-  p = Person(name=name, post_id=ward, role='Councillor')
+  p = Person(name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   if email:
@@ -68,7 +68,7 @@ def mayor_data(url):
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-  p = Person(name=name, post_id='Kitchener', role='Mayor')
+  p = Person(name=name, district='Kitchener', role='Mayor')
   p.add_source(url)
   p.image = photo_url
 

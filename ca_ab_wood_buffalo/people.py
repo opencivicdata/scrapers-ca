@@ -24,7 +24,7 @@ class WoodBuffaloPersonScraper(Scraper):
       councillor_links = ward.xpath('./parent::p/a')
       for councillor_link in councillor_links:
         name = councillor_link.text
-        p = Person(name=name, post_id=ward_name, role='Councillor')
+        p = Person(name=name, district=ward_name, role='Councillor')
         url = councillor_link.attrib['href']
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
@@ -70,7 +70,7 @@ def scrape_mayor(url):
   phone = info[4]
   fax = info[5]
 
-  p = Person(name=name, post_id='Wood Buffalo', role='Mayor')
+  p = Person(name=name, district='Wood Buffalo', role='Mayor')
   p.add_source(url)
   p.add_source(contact_url)
   p.add_contact('address', address, 'legislature')

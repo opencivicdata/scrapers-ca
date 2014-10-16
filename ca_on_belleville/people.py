@@ -25,7 +25,7 @@ class BellevillePersonScraper(Scraper):
         yield person_from_elem(name_elem, ward, 'Councillor')
 
 
-def person_from_elem(name_elem, post_id, role):
+def person_from_elem(name_elem, district, role):
   name = name_elem.text_content()
   phone = name_elem.xpath(
       'string(./following-sibling::text()[2])').split(': ')[1]
@@ -35,7 +35,7 @@ def person_from_elem(name_elem, post_id, role):
     corrected_phone = phone
   email = name_elem.xpath('string(./following-sibling::a)')
   photo_url = name_elem.xpath('string(./parent::p/preceding::img[1]/@src)')
-  p = Person(name=name, post_id=post_id, role=role, image=photo_url)
+  p = Person(name=name, district=district, role=role, image=photo_url)
   p.add_source(COUNCIL_PAGE)
   p.add_contact('voice', corrected_phone, 'legislature')
   p.add_contact('email', email, None)

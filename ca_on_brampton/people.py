@@ -28,7 +28,7 @@ def councillor_data(html):
   district, phone = html.xpath('./div[@class="wardInfo"]/text()')
   photo = html.xpath('string((.//@src)[1])')
 
-  p = Person(name=name, post_id=district, role='Councillor')
+  p = Person(name=name, district=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('email', email, None)
@@ -48,7 +48,7 @@ def mayor_data(page):
   address = ''.join(address_node.xpath('./p/text()')[:3])
   phone = address_node.xpath('string(./p/text()[4])')
 
-  p = Person(name=name, post_id='Brampton', role='Mayor')
+  p = Person(name=name, district='Brampton', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('address', address, 'legislature')

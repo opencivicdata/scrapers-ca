@@ -38,7 +38,7 @@ class SaultSteMariePersonScraper(Scraper):
     raw_email = contact_node.xpath('string(.//a[contains(., "@")]/@href)')
     email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
 
-    p = Person(name=name, post_id='Sault Ste. Marie', role='Mayor')
+    p = Person(name=name, district='Sault Ste. Marie', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_contact('email', email, None)
     p.image = photo_url
@@ -59,7 +59,7 @@ class SaultSteMariePersonScraper(Scraper):
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
         # address and phone are brittle, inconsistent
 
-        p = Person(name=name, post_id=district_num, role='Councillor')
+        p = Person(name=name, district=district_num, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         if email:
           p.add_contact('email', email, None)
