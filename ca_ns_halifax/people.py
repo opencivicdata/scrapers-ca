@@ -21,12 +21,12 @@ class HalifaxPersonScraper(CanadianScraper):
                 district = district_row.xpath('string(.//strong)')
                 name = councillor_row.xpath('string(.)')[len('Councillor '):]
                 # TODO: phone numbers on site don't include area code. Add manually?
-                #phone = contact_row.xpath('string(td[2]/text())')
+                # phone = contact_row.xpath('string(td[2]/text())')
                 email = contact_row.xpath('string(td[4]/a)').replace('[at]', '@')
 
                 p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
-                #p.add_contact('voice', phone, 'legislature')
+                # p.add_contact('voice', phone, 'legislature')
                 p.add_contact('email', email)
                 yield p
         except ValueError:

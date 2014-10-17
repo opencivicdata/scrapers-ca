@@ -20,7 +20,7 @@ class RichmondPersonScraper(CanadianScraper):
             page = self.lxmlize(url)
             role, name = page.xpath('string(//h1)').split(' ', 1)
             # image element is inserted by a script somewhere
-            #photo_url = page.xpath('string(//span[@class="imageShadow"]/img/@src)')
+            # photo_url = page.xpath('string(//span[@class="imageShadow"]/img/@src)')
 
             p = Person(primary_org='legislature', name=name, district='Richmond', role=role)
             p.add_source(COUNCIL_PAGE)

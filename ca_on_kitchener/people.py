@@ -36,8 +36,8 @@ class KitchenerPersonScraper(CanadianScraper):
         email = contact_node.xpath('string(.//text()[contains(., "@")])').split()[-1]
 
         # TODO: contact details are tricky
-        #address = '\n'.join(contact_node.xpath('./text()')[:4])
-        #phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
+        # address = '\n'.join(contact_node.xpath('./text()')[:4])
+        # phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
 
         photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
