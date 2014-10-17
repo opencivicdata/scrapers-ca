@@ -6,15 +6,15 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.city.charlottetown.pe.ca/mayorandcouncil.php'
 
 
-class CharlottetownPersonScraper(Scraper):
+class CharlottetownPersonScraper(CanadianScraper):
 
   def scrape(self):
-    root = lxmlize(COUNCIL_PAGE)
+    root = self.lxmlize(COUNCIL_PAGE)
     everyone = root.xpath('//span[@class="Title"]')
     mayornode = everyone[0]
     mayor = {}
@@ -23,9 +23,9 @@ class CharlottetownPersonScraper(Scraper):
     mayor['photo_url'] = urljoin(COUNCIL_PAGE, mayornode.xpath('img/@src')[0])
     mayor['email'] = mayornode.xpath('following::a[1]/text()')[0]
 
-    m = Person(name=mayor['name'], district='Charlottetown', role='Mayor')
+    m = Person(primary_org='legislature', name=mayor['name'], district='Charlottetown', role='Mayor')
     m.add_source(COUNCIL_PAGE)
-    m.add_contact('email', mayor['email'], None)
+    m.add_contact('email', mayor['email'])
     m.image = mayor['photo_url']
 
     yield m
@@ -50,10 +50,10 @@ class CharlottetownPersonScraper(Scraper):
 
       email = span.xpath('string(following::a[1]/text())')
 
-      p = Person(name=name, district=district_id, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       if email:
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
       p.image = photo_url
 
       yield p

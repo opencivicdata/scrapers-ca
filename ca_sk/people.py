@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 
 
-class SaskatchewanPersonScraper(Scraper):
+class SaskatchewanPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@id="MLAs"]//tr')[1:]
     for councillor in councillors:
@@ -19,9 +19,9 @@ class SaskatchewanPersonScraper(Scraper):
       party = councillor.xpath('./td')[1].text
       district = councillor.xpath('./td')[2].text_content()
       url = councillor.xpath('./td[1]/a/@href')[0]
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
-      p = Person(name=name, district=district, role='MLA', party=party)
+      p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = page.xpath('string(//div[contains(@class, "mla-image-cell")]/img/@src)')
@@ -29,7 +29,7 @@ class SaskatchewanPersonScraper(Scraper):
       contact = page.xpath('//div[@id="mla-contact"]/div[2]')[0]
       website = contact.xpath('./div[3]/div[3]/div[2]/a')
       if website:
-        p.add_link(website[0].text_content(), None)
+        p.add_link(website[0].text_content())
 
       p.add_contact('address', ' '.join(contact.xpath('.//div[@class="col-md-4"][2]/div//text()')[1:9]), 'constituency')
       phone_leg = contact.xpath('string(.//span[@id="MainContent_ContentBottom_Property6"]//text())')
@@ -37,6 +37,6 @@ class SaskatchewanPersonScraper(Scraper):
       p.add_contact('voice', phone_leg, 'legislature')
       p.add_contact('voice', phone_const, 'constituency')
       email = contact.xpath('string(.//a[contains(@href, "mailto:")]/text())')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       yield p

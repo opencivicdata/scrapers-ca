@@ -4,7 +4,7 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://nslegislature.ca/index.php/people/members/'
 
@@ -21,27 +21,27 @@ def get_party(abbreviation):
   return PARTIES[abbreviation]
 
 
-class NovaScotiaPersonScraper(Scraper):
+class NovaScotiaPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     for row in page.xpath('//div[@id="content"]/table/tbody/tr'):
       full_name, party_abbr, post = row.xpath('./td//text()')[:3]
       name = ' '.join(reversed(full_name.split(',')))
       detail_url = row[0][0].attrib['href']
       image, phone, email = get_details(detail_url)
-      p = Person(name=name, district=post, role='MLA',
+      p = Person(primary_org='legislature', name=name, district=post, role='MLA',
                      party=get_party(party_abbr), image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       if phone:
         p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p
 
 
 def get_details(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   image = page.xpath('string(//img[@class="portrait"]/@src)')
   try:
     phone = page.xpath('string(//dd[@class="numbers"]/text())').split(': ')[1]

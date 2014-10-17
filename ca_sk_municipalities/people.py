@@ -7,13 +7,13 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
 # See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx
 
 
-class SaskatchewanMunicipalitiesPersonScraper(Scraper):
+class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
     response = urlopen(COUNCIL_PAGE).read()
@@ -83,7 +83,7 @@ class SaskatchewanMunicipalitiesPersonScraper(Scraper):
         continue
       yield org
       for councillor in councillors:
-        p = Person(name=councillor[0], district=district_name)
+        p = Person(primary_org='legislature', name=councillor[0], district=district_name)
         p.add_source(COUNCIL_PAGE)
         membership = p.add_membership(org, role=councillor[1], district=district_name)
 

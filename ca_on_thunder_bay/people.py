@@ -3,19 +3,19 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.thunderbay.ca/City_Government/Your_Council.htm'
 
 
-class ThunderBayPersonScraper(Scraper):
+class ThunderBayPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')
     for councillor in councillors:
-      page = lxmlize(councillor)
+      page = self.lxmlize(councillor)
       info = page.xpath('//table/tbody/tr/td[2]')[0]
 
       for br in info.xpath('*//br'):
@@ -35,7 +35,7 @@ class ThunderBayPersonScraper(Scraper):
         role = 'Mayor'
       name = name.replace('Councillor', '').replace('At Large', '').replace('Mayor', '').strip()
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
 
@@ -58,6 +58,6 @@ class ThunderBayPersonScraper(Scraper):
           p.add_contact('voice', contact, contact_type)
 
       email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       yield p

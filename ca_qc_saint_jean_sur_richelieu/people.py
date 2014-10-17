@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.saint-jean-sur-richelieu.qc.ca/conseil-municipal/membres-conseil/Pages/membres-conseil.aspx'
 
 
-class SaintJeanSurRichelieuPersonScraper(Scraper):
+class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="article-content"]//td[@class="ms-rteTableOddCol-0"]')
     yield scrape_mayor(councillors[0])
@@ -22,9 +22,9 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
       name = councillor.xpath('.//a')[0].text_content().strip()
       district = councillor.xpath('.//a')[1].text_content()
       url = councillor.xpath('.//a/@href')[0]
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
-      p = Person(name=name, district=district, role='Conseiller')
+      p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -39,18 +39,18 @@ class SaintJeanSurRichelieuPersonScraper(Scraper):
 
       email = page.xpath(
         'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p
 
 
 def scrape_mayor(div):
   name = div.xpath('.//a')[0].text_content()
   url = div.xpath('.//a/@href')[0]
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
-  contact_page = lxmlize(contact_url)
+  contact_page = self.lxmlize(contact_url)
 
-  p = Person(name=name, district='Saint-Jean-sur-Richelieu', role='Maire')
+  p = Person(primary_org='legislature', name=name, district='Saint-Jean-sur-Richelieu', role='Maire')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_source(contact_url)
@@ -73,4 +73,4 @@ def get_links(councillor, div):
     if 'mailto:' in link:
       continue
     else:
-      councillor.add_link(link, None)
+      councillor.add_link(link)

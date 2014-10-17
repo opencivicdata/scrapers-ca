@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-municipal/elus-municipaux'
 
 
-class KirklandPersonScraper(Scraper):
+class KirklandPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
+    page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
     for councillor in councillors:
@@ -31,9 +31,9 @@ class KirklandPersonScraper(Scraper):
       phone = councillor.xpath('.//div[contains(text(), "#")]/text()')[0].replace('T ', '').replace(' ', '-').replace(',-#-', ' x')
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.image = councillor.xpath('.//img/@src')[0]
       yield p

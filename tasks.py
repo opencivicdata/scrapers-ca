@@ -47,7 +47,6 @@ def slug(name):
   }))
 
 urls_memo = {}
-ocdid_to_type_map = {}
 ocdid_to_type_name_map = {}
 ocdid_to_name_map = {}
 
@@ -75,7 +74,6 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv')
     next(reader)
     for row in reader:
-      ocdid_to_type_map[row[0]] = row[3]
       ocdid_to_type_name_map[row[0]] = census_division_type_names[row[3]]
 
     # Map census subdivision type codes to names.
@@ -88,7 +86,6 @@ def get_definition(division_id, aggregation=False):
     reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')
     next(reader)
     for row in reader:
-      ocdid_to_type_map[row[0]] = row[3]
       ocdid_to_type_name_map[row[0]] = census_subdivision_type_names[row[3]]
 
   # Map OCD identifiers and Standard Geographical Classification codes to names.
@@ -124,7 +121,6 @@ def get_definition(division_id, aggregation=False):
   if ocd_type == 'country':
     expected['module_name'] = 'ca'
     expected['name'] = 'Parliament of Canada'
-    expected['geographic_code'] = '1'
   elif ocd_type in ('province', 'territory'):
     pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
     expected['module_name'] = pattern % ocd_type_id
@@ -136,7 +132,6 @@ def get_definition(division_id, aggregation=False):
       expected['name'] = 'Assemblée nationale du Québec'
     else:
       expected['name'] = 'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
-    expected['geographic_code'] = ocd_id_to_code_map[division_id]
   elif ocd_type == 'cd':
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
     expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
@@ -144,8 +139,6 @@ def get_definition(division_id, aggregation=False):
     if name_infix == 'Regional municipality':
       name_infix = 'Regional'
     expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
-    expected['geographic_code'] = ocd_type_id
-    expected['type'] = ocdid_to_type_map[division_id]
   elif ocd_type == 'csd':
     province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
     expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
@@ -163,8 +156,6 @@ def get_definition(division_id, aggregation=False):
       elif name_infix == 'Regional municipality':
         name_infix = 'Regional'
       expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
-    expected['geographic_code'] = ocd_type_id
-    expected['type'] = ocdid_to_type_map[division_id]
   elif ocd_type == 'arrondissement':
     census_subdivision_type_id = sections[-2].split(':')[-1]
     province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
@@ -235,6 +226,8 @@ def tidy():
       for obj in module.__dict__.values():
         division_id = getattr(obj, 'division_id', None)
         if division_id:  # We've found the module.
+          jurisdiction_id = obj.jurisdiction_id
+
           # Ensure division_id is unique.
           if division_id in division_ids:
             raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
@@ -242,13 +235,10 @@ def tidy():
             division_ids.add(division_id)
 
           # Ensure jurisdiction_id is unique.
-          jurisdiction_id = obj.jurisdiction_id
           if jurisdiction_id in jurisdiction_ids:
             raise Exception('%s: Duplicate jurisdiction_id %s' % (module_name, jurisdiction_id))
-          elif jurisdiction_id:
-            jurisdiction_ids.add(jurisdiction_id)
           else:
-            raise Exception('%s: No jurisdiction_id' % module_name)
+            jurisdiction_ids.add(jurisdiction_id)
 
           expected = get_definition(division_id, bool(module_name.endswith('_municipalities')))
 

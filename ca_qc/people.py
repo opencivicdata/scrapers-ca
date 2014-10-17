@@ -4,28 +4,28 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assnat.qc.ca/fr/deputes/index.html'
 
 
-class QuebecPersonScraper(Scraper):
+class QuebecPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     for row in page.xpath('//*[@id="ListeDeputes"]/tbody/tr'):
       name_comma, division = [cell.xpath('string(.)') for cell in row[:2]]
       name = ' '.join(reversed(name_comma.strip().split(',')))
       party = row[2].text_content()
       email = row[3].xpath('string(.//a/@href)').replace('mailto:', '')
       detail_url = row[0][0].attrib['href']
-      detail_page = lxmlize(detail_url)
+      detail_page = self.lxmlize(detail_url)
       photo_url = detail_page.xpath('string(//img[@class="photoDepute"]/@src)')
       division = division.replace('–', '—')  # n-dash, m-dash
-      p = Person(name=name, district=division, role='MNA',
+      p = Person(primary_org='legislature', name=name, district=division, role='MNA',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(detail_url)
       if email:  # Premier may not have email.
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
       yield p

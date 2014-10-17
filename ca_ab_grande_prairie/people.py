@@ -4,20 +4,20 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cityofgp.com/index.aspx?page=718'
 
 
-class GrandePrairiePersonScraper(Scraper):
+class GrandePrairiePersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     for row in page.xpath(r'//table[@class="listtable"]//tr')[1:]:
       celltext = row.xpath('./td//text()')
       last, first = celltext[0].split(', ')
       name = ' '.join((first, last))
-      p = Person(name=name, district='Grande Prairie', role=celltext[1])
+      p = Person(primary_org='legislature', name=name, district='Grande Prairie', role=celltext[1])
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', celltext[3], 'legislature')
       p.add_contact('email',

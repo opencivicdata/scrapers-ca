@@ -4,7 +4,7 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assembly.nl.ca/members/cms/membersdirectlines.htm'
 PARTY_PAGE = 'http://www.assembly.nl.ca/members/cms/membersparty.htm'
@@ -21,12 +21,12 @@ def get_party(abbr):
   return next((party for party in PARTIES if party[0] == abbr[0]), None)
 
 
-class NewfoundlandAndLabradorPersonScraper(Scraper):
+class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
 
   def scrape(self):
-    member_parties = dict(process_parties(lxmlize(PARTY_PAGE)))
+    member_parties = dict(process_parties(self.lxmlize(PARTY_PAGE)))
 
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     for row in page.xpath('//table[not(@id="footer")]/tr')[1:]:
       try:
         name, district, _, email = [
@@ -38,16 +38,16 @@ class NewfoundlandAndLabradorPersonScraper(Scraper):
         photo_page_url = row[0].xpath('./a/@href')[0]
       except IndexError:
         continue  # there is a vacant district
-      photo_page = lxmlize(photo_page_url)
+      photo_page = self.lxmlize(photo_page_url)
       photo_url = photo_page.xpath('string(//table//img/@src)')
       district = district.replace(' - ', '—')  # m-dash
       party = get_party(member_parties[name.strip()])
-      p = Person(name=name, district=district, role='MHA',
+      p = Person(primary_org='legislature', name=name, district=district, role='MHA',
                      party=party, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(PARTY_PAGE)
       p.add_source(photo_page_url)
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       # TODO: either fix phone regex or tweak phone value
       p.add_contact('voice', phone, 'legislature')
       yield p

@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/city-council/'
 
 
-class GreaterSudburyPersonScraper(Scraper):
+class GreaterSudburyPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="navMultilevel"]//a')
     for councillor in councillors:
@@ -26,7 +26,7 @@ class GreaterSudburyPersonScraper(Scraper):
       if name == 'Vacant':
         continue
 
-      page = lxmlize(councillor.attrib['href'])
+      page = self.lxmlize(councillor.attrib['href'])
 
       address = page.xpath('//div[@class="column last"]//p')[0].text_content()
       phone = page.xpath('//article[@id="primary"]//*[contains(text(),"Tel")]')[0].text_content()
@@ -35,23 +35,23 @@ class GreaterSudburyPersonScraper(Scraper):
       fax = re.findall(r'([0-9].*)', fax)[0].replace(') ', '-')
       email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.image = page.xpath('//article[@id="primary"]//img/@src')[1]
       yield p
 
   def scrape_mayor(self, div):
     url = div.attrib['href']
-    page = lxmlize(url)
+    page = self.lxmlize(url)
 
     name = div.text_content().replace('Mayor ', '')
     contact_url = page.xpath('//ul[@class="navSecondary"]//a[contains(text(),"Contact")]')[0].attrib['href']
-    page = lxmlize(contact_url)
+    page = self.lxmlize(contact_url)
 
     contact_div = page.xpath('//div[@class="col"][2]')[0]
 
@@ -63,11 +63,11 @@ class GreaterSudburyPersonScraper(Scraper):
     fax = fax.split(' ')[-1]
     email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
 
-    p = Person(name=name, district='Greater Sudbury', role='Mayor')
+    p = Person(primary_org='legislature', name=name, district='Greater Sudbury', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(contact_url)
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('fax', fax, 'legislature')
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
     return p

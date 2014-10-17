@@ -1,17 +1,15 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import re
 from copy import deepcopy
 
-import regex as re
 from pupa.utils import DatetimeValidator
 from pupa.scrape.schemas.common import contact_details as _contact_details, links as _links, sources as _sources
 from pupa.scrape.schemas.person import schema as person_schema
 from pupa.scrape.schemas.membership import schema as membership_schema
 from pupa.scrape.schemas.organization import schema as organization_schema
 from six import string_types
-
-from constants import names, subdivisions, styles
 
 _contact_details['items']['properties']['type']['blank'] = False
 _contact_details['items']['properties']['type']['enum'] = [
@@ -23,26 +21,25 @@ _contact_details['items']['properties']['type']['enum'] = [
 ]
 _contact_details['items']['properties']['value']['blank'] = False
 _contact_details['items']['properties']['value']['conditionalPattern'] = [
-  (re.compile(r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z', flags=re.U),
+  (r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
    lambda x: x['type'] == 'email'),
-  (re.compile(r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z', flags=re.U),
+  (r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z',
    lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
   # Ends with a locality, a province or territory code, and an optional postal code.
   # @note We realistically will never uncomment this, as addresses are not important.
   # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
   #  lambda x: x['type'] == 'address'),
 ]
-_contact_details['items']['properties']['note']['compiledPattern'] = re.compile(
-  r'^(?:constituency|legislature|office|residence|Twitter|Personal site)(?: \(\d\))?$')
+_contact_details['items']['properties']['note']['pattern'] = r'\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z'
 
 _contact_details['items']['additionalProperties'] = False
 
 _links['items']['properties']['url']['blank'] = False
-_links['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|https?)://', flags=re.U)
+_links['items']['properties']['url']['pattern'] = r'\A(?:ftp|https?)://'
 _links['items']['additionalProperties'] = False
 
 _sources['items']['properties']['url']['blank'] = False
-_sources['items']['properties']['url']['compiledPattern'] = re.compile(r'\A(?:ftp|https?)://', flags=re.U)
+_sources['items']['properties']['url']['pattern'] = r'\A(?:ftp|https?)://'
 _sources['items']['additionalProperties'] = False
 
 # We must copy the subschema for each model.
@@ -59,9 +56,9 @@ twitter_re = re.compile(r'twitter\.com')
 youtube_re = re.compile(r'youtube\.com')
 
 matchers = [
-  (0, lambda x: x['type'] == 'email' and x['note'] is not None,
+  (0, lambda x: x['type'] == 'email' and x['note'] != '',
    'Membership has email with non-empty note'),
-  (0, lambda x: x['type'] != 'email' and x['note'] is None,
+  (0, lambda x: x['type'] != 'email' and x['note'] == '',
    'Membership has non-email with empty note'),
   (1, lambda x: x['type'] == 'email',
    'Membership has many emails'),
@@ -85,7 +82,7 @@ organization_links['maxItems'] = 0
 # A person should not have contact details.
 person_contact_details['maxItems'] = 0
 # A person should not have notes on links.
-person_links['items']['properties']['note']['type'] = 'null'
+person_links['items']['properties']['note']['enum'] = ['']
 # A person should have, in most cases, at most one non-social media link, and
 # should have at most one link per social media website.
 person_links['maxMatchingItems'] = [
@@ -100,43 +97,8 @@ person_links['maxMatchingItems'] = [
 ]
 
 membership_schema['properties']['role']['blank'] = False
-membership_schema['properties']['post_id']['post'] = True
-membership_schema['properties']['role']['enum'] = lambda x: ['candidate'] + styles.get(re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division')), ['member'])
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links
-membership_schema['matches'] = [(
-  lambda x: next((True for y in x['contact_details'] if y['type'] == 'email'), False),
-  lambda x: (
-    x['organization_id'].startswith('party:') or
-    x['organization_id'] in (
-      # Javascript-encoded email
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:1217030/council',  # Cape Breton
-      # Webform email
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:1310032/council',  # Fredericton
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2423027/council',  # Québec
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2464008/council',  # Terrebonne
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2466097/council',  # Pointe-Claire
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530016/council',  # Waterloo
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530035/council',  # Woolwich
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4706027/council',  # Regina
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4806016/council',  # Calgary
-    ) or x['organization_id'] in (  # Leader has no email
-      'jurisdiction:ocd-jurisdiction/country:ca/cd:3521/council',  # Peel
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2437067/council',  # Trois-Rivières
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2456083/council',  # Saint-Jean-sur-Richelieu
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:2494068/council',  # Saguenay
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3520005/council',  # Toronto
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3521024/council',  # Caledon
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:3530013/council',  # Kitchener
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4711066/council',  # Saskatoon
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4811061/council',  # Edmonton
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:4816037/council',  # Wood Buffalo
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:5909052/council',  # Abbotsford
-      'jurisdiction:ocd-jurisdiction/country:ca/csd:5915004/council',  # Surrey
-    ) and x['role'] in ('Chair', 'Maire', 'Mayor', 'Regional Chair')
-  ),
-  'Membership has no emails {organization_id} {post_id!r}',
-)]
 
 organization_schema['properties']['contact_details'] = organization_contact_details
 organization_schema['properties']['links'] = organization_links
@@ -144,18 +106,16 @@ organization_schema['properties']['links'] = organization_links
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
 name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|la|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
 
-person_schema['properties']['name']['blank'] = False
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['compiledPattern'] = re.compile(r"\A(?:" + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r"\Z", flags=re.U)
-person_schema['properties']['name']['negativePattern'] = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b\.?", flags=re.U)
-person_schema['properties']['gender']['enum'] = ['male', 'female']
-person_schema['properties']['image']['blank'] = False
+person_schema['properties']['name']['pattern'] = r'\A(?:' + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r'\Z'
+person_schema['properties']['name']['pattern'] = r'\A(?!(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b)'
+person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
 # image resolves. Testing URLs here would slow down scraping.
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
-# post_id is used to disambiguate people within a jurisdiction.
-person_schema['properties']['post_id'] = {'type': 'string', 'blank': False}
+# district is used to disambiguate people within a jurisdiction.
+person_schema['properties']['district'] = {'type': 'string', 'blank': False}
 
 uniqueRoles = [
   # Provincial
@@ -176,63 +136,11 @@ uniqueRoles = [
 ]
 
 
-def validate_post(self, x, fieldname, schema, path, post):
-  if post and not x['organization_id'].startswith('party:'):
-    division_id = re.sub(r'\/(?:council|legislature)\Z', '', x['organization_id'].replace('jurisdiction:ocd-jurisdiction', 'ocd-division'))
-    value = x.get(fieldname)
-    if subdivisions.get(division_id):
-      # Not among the known subdivisions for the division.
-      if value not in subdivisions[division_id] and not re.search(r'\AWards \d(?:(?:,| & | and )\d+)+\Z', value):
-        self._error("Post: Value {value!r} for field '{fieldname}' is not "
-                    "in the enumeration: {options!r}",
-                    value, fieldname, options=subdivisions[division_id])
-    else:
-      # Not a unique role.
-      if x['role'] not in uniqueRoles:
-        self._error("Post: No known subdivisions for this division for non-unique role {value!r}",
-                    x['role'], 'role', options=uniqueRoles)
-      # A unique role that's not among the known roles for the division.
-      if styles.get(division_id) and x['role'] not in styles[division_id]:
-        self._error("Post: Unique role {value!r} is not in the enumeration: {options!r}",
-                    x['role'], 'role', options=styles[division_id])
-      # A unique role that's among the known roles for the division, but where the post doesn't match the name of the division.
-      if names.get(division_id) and value != names[division_id]:
-        self._error("Post: Unique role's post {value!r} is not in the enumeration: {options!r}",
-                    value, fieldname, options=[names[division_id]])
-      else:
-        self._error("Post: Cannot validate unique role's post {value!r} in division {division_id!r}",
-                    value, fieldname, division_id=division_id)
-
-DatetimeValidator.validate_post = validate_post
-
-
-def validate_compiledPattern(self, x, fieldname, schema, path, pattern=None):
-  value = x.get(fieldname)
-  if isinstance(value, string_types):
-    if not pattern.search(value):
-      self._error("Value {value!r} for field '{fieldname}' does "
-                  "not match regular expression '{pattern}'",
-                  value, fieldname, pattern=pattern)
-
-DatetimeValidator.validate_compiledPattern = validate_compiledPattern
-
-
-def validate_negativePattern(self, x, fieldname, schema, path, pattern=None):
-  value = x.get(fieldname)
-  if isinstance(value, string_types):
-    if pattern.search(value):
-      self._error("Value {value!r} for field '{fieldname}' "
-                  "matches regular expression '{pattern}'",
-                  value, fieldname, pattern=pattern)
-
-DatetimeValidator.validate_negativePattern = validate_negativePattern
-
-
 def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
   value = x.get(fieldname)
   if isinstance(value, string_types):
     for pattern, method in arguments:
-      if method(x) and not pattern.search(value):
+      if method(x) and not re.search(pattern, value):
         self._error("Value {value!r} for field '{fieldname}' does "
                     "not match regular expression '{pattern}'",
                     value, fieldname, pattern=pattern)
@@ -252,12 +160,3 @@ def validate_maxMatchingItems(self, x, fieldname, schema, path, arguments=None):
           self._error(message, value, fieldname)
 
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
-
-
-def validate_matches(self, x, fieldname, schema, path, arguments=None):
-  value = x['data']
-  for method, condition, message in arguments:
-    if not condition(value) and not method(value):
-      self._error(message, None, fieldname, **value)
-
-DatetimeValidator.validate_matches = validate_matches

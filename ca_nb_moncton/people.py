@@ -4,15 +4,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 
 
-class MonctonPersonScraper(Scraper):
+class MonctonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE, 'iso-8859-1')
+    page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
     yield scrape_mayor(mayor_url)
@@ -29,16 +29,16 @@ class MonctonPersonScraper(Scraper):
         district = parts[3]
 
       url = councillor.xpath('.//a')[-1].attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = councillor.xpath('.//img/@src')[0]
 
       email = page.xpath(
           'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
       phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
@@ -52,10 +52,10 @@ class MonctonPersonScraper(Scraper):
 
 
 def scrape_mayor(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   name = page.xpath('//meta[@name="description"]/@content')[0].split(',')[1]
 
-  p = Person(name=name, district='Moncton', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Moncton', role='Mayor')
   p.add_source(url)
 
   p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
@@ -72,6 +72,6 @@ def scrape_mayor(url):
     phone = '506-%s' % phone
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('fax', fax, 'legislature')
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
 
   return p

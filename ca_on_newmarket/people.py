@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.newmarket.ca/en/townhall/contactinformationmayorandtowncouncil.asp'
 
 
-class NewmarketPersonScraper(Scraper):
+class NewmarketPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="printArea"]//table//tr//td')[4:-1]
     yield self.scrape_mayor(councillors[0])
@@ -26,13 +26,13 @@ class NewmarketPersonScraper(Scraper):
         role = 'Regional Councillor'
       url = councillor.xpath('.//a/@href')[0]
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
       p.image = councillor.xpath('.//img/@src')[0]
 
-      page = lxmlize(url)
+      page = self.lxmlize(url)
       info = page.xpath('//div[@id="printArea"]')[0]
       info = info.xpath('.//p[@class="heading"][2]/following-sibling::p')
       address = info.pop(0).text_content().strip()
@@ -44,7 +44,7 @@ class NewmarketPersonScraper(Scraper):
 
       numbers = info.pop(0).text_content().split(':')
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       for i, contact in enumerate(numbers):
         if i == 0:
           continue
@@ -64,12 +64,12 @@ class NewmarketPersonScraper(Scraper):
           p.add_contact(contact_type, number, contact_type)
       site = page.xpath('.//a[contains(text(), "http://")]')
       if site:
-        p.add_link(site[0].text_content(), None)
+        p.add_link(site[0].text_content())
       yield p
 
   def scrape_mayor(self, div):
     name = ' '.join(div.xpath('.//strong/text()')[0].replace(',', '').split())
-    p = Person(name=name, district='Newmarket', role='Mayor')
+    p = Person(primary_org='legislature', name=name, district='Newmarket', role='Mayor')
     p.add_source(COUNCIL_PAGE)
 
     numbers = div.xpath('./p/text()')
@@ -83,5 +83,5 @@ class NewmarketPersonScraper(Scraper):
       except ValueError:
         pass
     email = div.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
     return p

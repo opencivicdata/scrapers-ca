@@ -4,30 +4,30 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.london.ca/city-hall/city-council/Pages/default.aspx'
 MAYOR_PAGE = 'http://www.london.ca/city-hall/mayors-office/Pages/default.aspx'
 
 
-class LondonPersonScraper(Scraper):
+class LondonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     councillor_pages = page.xpath('//div[@class="imageLinkContent"]/'
                                   'a[starts-with(text(), "Ward")]/@href')
 
     for councillor_page in councillor_pages:
       yield councillor_data(councillor_page)
 
-    mayor_page = lxmlize(MAYOR_PAGE)
+    mayor_page = self.lxmlize(MAYOR_PAGE)
     mayor_connecting_url = mayor_page.xpath('string(//a[@class="headingLink"]'
                                             '[contains(text(), "Connecting")]/@href)')
     yield mayor_data(mayor_connecting_url)
 
 
 def councillor_data(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   name = page.xpath('string(//h1[@id="TitleOfPage"])')
   district = page.xpath('string(//h2)')
@@ -42,19 +42,19 @@ def councillor_data(url):
   js = page.xpath('string(//span/script)')
   email = email_js(js)
 
-  p = Person(name=name, district=district, role='Councillor')
+  p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   p.image = photo
 
   return p
 
 
 def mayor_data(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   name = page.xpath('string(//h1[@id="TitleOfPage"])').split('Mayor')[-1]
   photo_url = page.xpath('string(//div[@class="imageLeftDiv"]/img/@src)')
@@ -66,11 +66,11 @@ def mayor_data(url):
   phone_str = page.xpath('string(//span[contains(@class, "iconPhone")])')
   phone = phone_str.split(':')[1]
 
-  p = Person(name=name, district='London', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='London', role='Mayor')
   p.add_source(MAYOR_PAGE)
   p.add_source(url)
   p.image = photo_url
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   p.add_contact('voice', phone, 'legislature')
   return p
 

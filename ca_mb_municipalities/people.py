@@ -3,15 +3,15 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://web5.gov.mb.ca/Public/municipalities.aspx'
 
 
-class ManitobaMunicipalitiesPersonScraper(Scraper):
+class ManitobaMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     districts = page.xpath('//div[@id="ctl00_PublicContent_divSearchContent"]//tr')[5::3]
     for district in districts:
@@ -39,7 +39,7 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
       councillors = district.xpath('.//td[3]/text()')
       positions = district.xpath('.//td[2]/b/text()')
       for i, councillor in enumerate(councillors):
-        p = Person(name=councillor, district=title)
+        p = Person(primary_org='legislature', name=councillor, district=title)
         p.add_source(COUNCIL_PAGE)
 
         if i >= 2:
@@ -51,5 +51,5 @@ class ManitobaMunicipalitiesPersonScraper(Scraper):
         membership.add_contact_detail('address', address, 'legislature')
         membership.add_contact_detail('fax', fax, 'legislature')
         membership.add_contact_detail('voice', phone, 'legislature')
-        membership.add_contact_detail('email', email, None)
+        membership.add_contact_detail('email', email)
         yield p

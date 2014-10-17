@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://guelph.ca/city-hall/mayor-and-council/city-council/'
 
 
-class GuelphPersonScraper(Scraper):
+class GuelphPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//*[@class="two_third last"]')
     for councillor in councillors:
@@ -24,7 +24,7 @@ class GuelphPersonScraper(Scraper):
       district = info[2]
       url = councillor.xpath('.//a')[0].attrib['href']
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -32,13 +32,13 @@ class GuelphPersonScraper(Scraper):
       email = councillor.xpath('.//a[contains(@href,"mailto:")]')
       if email:
         email = email[0].text_content()
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
 
       site = councillor.xpath('.//a[contains(text(),"Website")]')
       if site:
-        p.add_link(site[0].attrib['href'], None)
+        p.add_link(site[0].attrib['href'])
 
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
       p.image = page.xpath('//header/img/@src')[0]
 
@@ -48,33 +48,33 @@ class GuelphPersonScraper(Scraper):
 
       blog = page.xpath('//a[contains(text(),"Blog")]')
       if blog:
-        p.add_link(blog[0].attrib['href'], None)
+        p.add_link(blog[0].attrib['href'])
 
       facebook = page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')
       if facebook:
-        p.add_link(facebook[0].attrib['href'], None)
+        p.add_link(facebook[0].attrib['href'])
       twitter = page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')
       if twitter:
-        p.add_link(twitter[0].attrib['href'], None)
+        p.add_link(twitter[0].attrib['href'])
       yield p
 
   def scrape_mayor(self, div):
     name = div.xpath('.//a')[0].text_content().replace('Mayor', '')
     url = div.xpath('.//a')[0].attrib['href']
 
-    p = Person(name=name, district='Guelph', role='Mayor')
+    p = Person(primary_org='legislature', name=name, district='Guelph', role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
     phone = div.xpath('.//text()[normalize-space()]')[2]
     email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
 
-    page = lxmlize(url)
+    page = self.lxmlize(url)
 
     p.add_contact('voice', phone, 'legislature')
-    p.add_contact('email', email, None)
-    p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href'], None)
-    p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href'], None)
+    p.add_contact('email', email)
+    p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "facebook")]')[0].attrib['href'])
+    p.add_link(page.xpath('//div[@class="entry-content"]//a[contains(@href, "twitter")]')[0].attrib['href'])
     p.image = page.xpath('//header/img/@src')[0]
 
     return p

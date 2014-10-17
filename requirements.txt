@@ -1,4 +1,5 @@
--e git+git://github.com/opencivicdata/pupa.git#egg=pupa
+-e git+git://github.com/jpmckinney/pupa.git@get_jurisdiction#egg=pupa
+-e git+git://github.com/opencivicdata/python-opencivicdata-divisions#egg=opencivicdata-divisions
 boto==2.33.0 # pupa unpinned
 cssselect==0.9.1
 Django==1.7

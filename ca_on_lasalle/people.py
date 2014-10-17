@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.town.lasalle.on.ca/Council/council-council.htm'
 
 
-class LaSallePersonScraper(Scraper):
+class LaSallePersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@align="center" and not(@class="background")]//td/p')
     for councillor in councillors:
@@ -28,14 +28,14 @@ class LaSallePersonScraper(Scraper):
         name = name.replace('Mayor', '')
         role = 'Mayor'
 
-      p = Person(name=name, district="LaSalle", role=role)
+      p = Person(primary_org='legislature', name=name, district="LaSalle", role=role)
       p.add_source(COUNCIL_PAGE)
 
       photo_url = councillor.xpath('./parent::td//img/@src')[0]
       p.image = photo_url
 
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       phone = re.findall(r'(?<=phone:)(.*)(?=home)', councillor.text_content(), flags=re.DOTALL)
       if phone:

@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.peterborough.ca/City_Hall/City_Council_2833/City_Council_Contact_Information.htm'
 
 
-class PeterboroughPersonScraper(Scraper):
+class PeterboroughPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     mayor_info = page.xpath('//h2[contains(text(), "MAYOR")]//following-sibling::p')[0]
     yield self.scrape_mayor(mayor_info)
@@ -23,7 +23,7 @@ class PeterboroughPersonScraper(Scraper):
       for councillor in councillors:
         name = councillor.xpath('./strong')[0].text_content()
 
-        p = Person(name=name, district=district, role='Councillor')
+        p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
 
         info = councillor.xpath('./text()')
@@ -37,7 +37,7 @@ class PeterboroughPersonScraper(Scraper):
           self.get_tel_numbers(tmp, p)
 
         email = councillor.xpath('string(./a)')
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
 
         yield p
         if councillor == councillors[1]:
@@ -52,10 +52,10 @@ class PeterboroughPersonScraper(Scraper):
     phone = re.findall(r'[0-9].*', info[1])[0].replace('\xa0', ' ')
     fax = re.findall(r'[0-9].*', info[2])[0]
 
-    p = Person(name=name, district='Peterborough', role='Mayor')
+    p = Person(primary_org='legislature', name=name, district='Peterborough', role='Mayor')
     p.add_source(COUNCIL_PAGE)
 
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('fax', fax, 'legislature')

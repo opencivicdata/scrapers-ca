@@ -7,12 +7,12 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
 
-class NovaScotiaMunicipalitiesPersonScraper(Scraper):
+class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
     response = urlopen(COUNCIL_PAGE).read()
@@ -36,7 +36,7 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Person(name=name, district=district)
+      p = Person(primary_org='legislature', name=name, district=district)
       p.add_source(COUNCIL_PAGE)
       membership = p.add_membership(org, role='Mayor', district=district)
 
@@ -61,7 +61,7 @@ class NovaScotiaMunicipalitiesPersonScraper(Scraper):
         regex = regex.replace('||', '|')
         matches = re.findall(r'%s' % regex, email)
         if matches:
-          membership.add_contact_detail('email', emails.pop(i), None)
+          membership.add_contact_detail('email', emails.pop(i))
       yield p
 
     os.system('rm /tmp/ns.pdf')

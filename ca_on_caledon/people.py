@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.town.caledon.on.ca/en/townhall/council.asp'
 
 
-class CaledonPersonScraper(Scraper):
+class CaledonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//div[@id="printAreaContent"]/ul/li/strong/a/@href')[0]
     yield scrape_mayor(mayor_url)
@@ -21,13 +21,13 @@ class CaledonPersonScraper(Scraper):
       district, name = councillor.text_content().split('-')
       url = councillor.xpath('.//a')[0].attrib['href']
 
-      page = lxmlize(url)
+      page = self.lxmlize(url)
       if 'Regional' in page.xpath('string(//h1)'):
         role = 'Regional Councillor'
       else:
         role = 'Area Councillor'
 
-      p = Person(name=name, district=district.strip(), role=role)
+      p = Person(primary_org='legislature', name=name, district=district.strip(), role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -43,7 +43,7 @@ class CaledonPersonScraper(Scraper):
       p.image = page.xpath('//table[@summary="Councillor"]//img/@src')[0]
 
       p.add_contact('address', address, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
 
@@ -51,13 +51,13 @@ class CaledonPersonScraper(Scraper):
 
 
 def scrape_mayor(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   name = page.xpath('//div[@id="printAreaContent"]/h1/strong/text()')[0].replace('Mayor', '').strip()
   address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':', '').strip()
   phone = page.xpath('//strong[contains(text(), "phone")]/parent::p/text()')[1].split()[1]
 
-  p = Person(name=name, district='Caledon', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Caledon', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = page.xpath('//h2[contains(text(), "About me")]/img/@src')[0]

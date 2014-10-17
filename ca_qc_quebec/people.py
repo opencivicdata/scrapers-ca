@@ -4,15 +4,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.quebec.qc.ca/apropos/vie_democratique/elus/conseil_municipal/membres.aspx'
 
 
-class QuebecPersonScraper(Scraper):
+class QuebecPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[contains(@class, "ligne")]')
     for councillor in councillors:
@@ -37,7 +37,7 @@ class QuebecPersonScraper(Scraper):
         district = re.sub('–', '—', district)  # n-dash, m-dash
         district = re.sub('\Ala ', 'La ', district)
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = councillor.xpath('./p/img/@src')[0]
 

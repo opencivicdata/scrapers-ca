@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.haldimandcounty.on.ca/OurCounty.aspx?id=338'
 
 
-class HaldimandCountyPersonScraper(Scraper):
+class HaldimandCountyPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//a/parent::p')
     for councillor in councillors:
@@ -28,9 +28,9 @@ class HaldimandCountyPersonScraper(Scraper):
         role = 'Councillor'
 
       url = councillor.xpath('.//a')[0].attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -49,5 +49,5 @@ class HaldimandCountyPersonScraper(Scraper):
             num = field.replace('Telephone: ', '').strip().replace(' ', '-')
             p.add_contact('voice', num, 'legislature')
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

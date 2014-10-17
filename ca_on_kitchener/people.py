@@ -6,16 +6,16 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.kitchener.ca/en/insidecityhall/WhoIsMyCouncillor.asp'
 MAYOR_PAGE = 'http://www.kitchener.ca/en/insidecityhall/MayorSLandingPage.asp'
 
 
-class KitchenerPersonScraper(Scraper):
+class KitchenerPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillor_nodes = page.xpath('//div[@id="printArea"]//li')
 
@@ -28,7 +28,7 @@ class KitchenerPersonScraper(Scraper):
 
 
 def councillor_data(url, ward):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   infobox_node = page.xpath('//div[@id="printArea"]')[0]
   name = infobox_node.xpath('string(.//h1[1])')[len('Councillor'):]
@@ -43,18 +43,18 @@ def councillor_data(url, ward):
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-  p = Person(name=name, district=ward, role='Councillor')
+  p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   if email:
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
   p.image = photo_url
 
   return p
 
 
 def mayor_data(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   infobox_node = page.xpath('//div[@id="printArea"]')[0]
   name = infobox_node.xpath('string(.//h1)')[6:]  # strip 'Mayor' prefix
@@ -68,7 +68,7 @@ def mayor_data(url):
   photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
   photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-  p = Person(name=name, district='Kitchener', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Kitchener', role='Mayor')
   p.add_source(url)
   p.image = photo_url
 

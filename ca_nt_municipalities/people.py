@@ -4,15 +4,15 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.nwtac.com/about/communities/'
 
 
-class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
+class NorthwestTerritoriesMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="entry-content"]//p/strong')
     for councillor in councillors:
@@ -26,7 +26,7 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
       org.add_source(COUNCIL_PAGE)
       yield org
 
-      p = Person(name=name, district=district)
+      p = Person(primary_org='legislature', name=name, district=district)
       p.add_source(COUNCIL_PAGE)
       membership = p.add_membership(org, role=role, district=district)
 
@@ -41,8 +41,8 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(Scraper):
           contact = contact.replace('Fax ', '').replace('(', '').replace(') ', '-').strip()
           membership.add_contact_detail('fax', contact, 'legislature')
       email = councillor.xpath('./parent::p//a[contains(@href, "mailto:")]/text()')[0]
-      membership.add_contact_detail('email', email, None)
+      membership.add_contact_detail('email', email)
 
       if 'Website' in councillor.xpath('./parent::p')[0].text_content():
-        p.add_link(councillor.xpath('./parent::p//a')[1].attrib['href'], None)
+        p.add_link(councillor.xpath('./parent::p//a')[1].attrib['href'])
       yield p

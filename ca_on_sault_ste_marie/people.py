@@ -6,7 +6,7 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.city.sault-ste-marie.on.ca/Open_Page.aspx?ID=174&deptid=1'
 
@@ -22,10 +22,10 @@ def district_name_using_number(name):
   return ' '.join([district_split[0], str(word_to_number(district_split[1]))])
 
 
-class SaultSteMariePersonScraper(Scraper):
+class SaultSteMariePersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     table_data = page.xpath('//div[@id="litcontentDiv"]//tr')
     council_data = table_data[2:-1]
 
@@ -38,9 +38,9 @@ class SaultSteMariePersonScraper(Scraper):
     raw_email = contact_node.xpath('string(.//a[contains(., "@")]/@href)')
     email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
 
-    p = Person(name=name, district='Sault Ste. Marie', role='Mayor')
+    p = Person(primary_org='legislature', name=name, district='Sault Ste. Marie', role='Mayor')
     p.add_source(COUNCIL_PAGE)
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
     p.image = photo_url
     yield p
 
@@ -59,10 +59,10 @@ class SaultSteMariePersonScraper(Scraper):
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
         # address and phone are brittle, inconsistent
 
-        p = Person(name=name, district=district_num, role='Councillor')
+        p = Person(primary_org='legislature', name=name, district=district_num, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         if email:
-          p.add_contact('email', email, None)
+          p.add_contact('email', email)
         p.image = photo_url
 
         yield p

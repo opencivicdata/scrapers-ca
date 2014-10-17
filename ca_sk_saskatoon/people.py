@@ -3,21 +3,21 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = "http://www.saskatoon.ca/CITY%20COUNCIL/YOUR%20WARD%20COUNCILLORS/Pages/default.aspx"
 EMAIL_URL = "http://apps2.saskatoon.ca/app/aForms/councillor.aspx"
 
 
-class SaskatoonPersonScraper(Scraper):
+class SaskatoonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//td[@class="sask_LeftNavLinkContainer"]/a/@href')[0]
     yield scrape_mayor(mayor_url)
 
-    email_page = lxmlize(EMAIL_URL)
+    email_page = self.lxmlize(EMAIL_URL)
     c_options = email_page.xpath(
         '//select[@id="councillorList"]/option[contains(text(), "Ward")]')
     email_dict = dict((opt.text.split(' - ')[0], opt.attrib['value']) for
@@ -28,17 +28,17 @@ class SaskatoonPersonScraper(Scraper):
       district, name = councillor.text_content().split(' - Councillor ')
       url = councillor.attrib['href']
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(EMAIL_URL)
       p.add_source(url)
 
-      page = lxmlize(url)
+      page = self.lxmlize(url)
       try:
-        p.add_contact('email', email_dict[district], None)
+        p.add_contact('email', email_dict[district])
       except KeyError:
         email = page.xpath('string(//a[contains(@href, "mailto:")]/@href)')
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
 
       contacts = page.xpath('//p[@class="para12"]')[0]
       if not contacts.text_content().strip():
@@ -60,19 +60,19 @@ class SaskatoonPersonScraper(Scraper):
 
 
 def scrape_mayor(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   name = page.xpath('//tr/td/p')[-1]
   name = name.text_content().replace('Mayor', '')
   image = page.xpath('//div[@class="sask_ArticleBody"]//img/@src')[0]
 
   contact_url = page.xpath('//a[contains(text(), "Contact the Mayor")]/@href')[0]
-  page = lxmlize(contact_url)
+  page = self.lxmlize(contact_url)
 
   address = ' '.join(page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[4]/text()')[1:])
   phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(', '').replace(') ', '-')
   fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
 
-  p = Person(name=name, district='Saskatoon', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Saskatoon', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
   p.image = image

@@ -4,15 +4,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.oshawa.ca/cit_hall/council4.asp'
 
 
-class OshawaPersonScraper(Scraper):
+class OshawaPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     mayor_table, council_table = page.xpath('//table')[:2]
     rep_cells = mayor_table.xpath('.//td[1]') + council_table.xpath('.//td[h4]')
     for rep_cell in rep_cells:
@@ -27,8 +27,8 @@ class OshawaPersonScraper(Scraper):
       elif role == 'Regional and City Councillor':
         role = 'Regional Councillor'
 
-      p = Person(name=name, district='Oshawa', role=role, image=photo_url)
+      p = Person(primary_org='legislature', name=name, district='Oshawa', role=role, image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

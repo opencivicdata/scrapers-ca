@@ -6,15 +6,13 @@ import hashlib
 import json
 import re
 
-import requests
-
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members?view=ListAll'
-BAD_PHOTO_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']  # hashes of no-good photos
+IMAGE_PLACEHOLDER_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']
 
 
-class CanadaPersonScraper(Scraper):
+class CanadaPersonScraper(CanadianScraper):
 
   """
   The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
@@ -23,9 +21,9 @@ class CanadaPersonScraper(Scraper):
   """
 
   def scrape(self):
-    screen_names = json.loads(requests.get('http://scrapers-ruby.herokuapp.com/twitter_users').text)
+    screen_names = json.loads(self.get('http://scrapers-ruby.herokuapp.com/twitter_users').text)
 
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     rows = page.xpath('//div[@class="main-content"]//tr')[1:]
     for row in rows:
       name_cell = row.xpath('./td[1]')[0]
@@ -39,34 +37,33 @@ class CanadaPersonScraper(Scraper):
       if province == 'Québec':
         url = url.replace('/en/', '/fr/')
 
-      mp_page = lxmlize(url)
+      mp_page = self.lxmlize(url)
       email = mp_page.xpath('string(//span[@class="caucus"]/'
                             'a[contains(., "@")])')
       photo = mp_page.xpath('string(//div[@class="profile overview header"]//'
                             'img/@src)')
 
-      m = Person(name=name, district=constituency, role='MP', primary_org='lower', party=party)
+      m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
       m.add_source(COUNCIL_PAGE)
       m.add_source(url)
       screen_name = screen_names.get(name)
       if screen_name:
-        m.add_link('https://twitter.com/%s' % screen_name, note='Twitter')
+        m.add_link('https://twitter.com/%s' % screen_name)
       # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
       if email:
-        m.add_contact('email', email, None)
+        m.add_contact('email', email)
       elif name == 'Adam Vaughan':
-        m.add_contact('email', 'Adam.Vaughan@parl.gc.ca', None)
+        m.add_contact('email', 'Adam.Vaughan@parl.gc.ca')
 
       if photo:
         # Determine whether the photo is actually a generic silhouette
-        photo_response = requests.get(photo)
-        if (photo_response.status_code == 200 and
-                hashlib.sha1(photo_response.content).hexdigest() not in BAD_PHOTO_SHA1):
+        photo_response = self.get(photo)
+        if (photo_response.status_code == 200 and hashlib.sha1(photo_response.content).hexdigest() not in IMAGE_PLACEHOLDER_SHA1):
           m.image = photo
 
       personal_url = mp_page.xpath('//a[contains(@title, "Personal Web Site")]/@href')
       if personal_url:
-        m.add_link(personal_url[0], note='Personal site')
+        m.add_link(personal_url[0])
 
       if province == 'Québec':
         m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')

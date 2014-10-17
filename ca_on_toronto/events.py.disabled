@@ -3,9 +3,6 @@ from __future__ import unicode_literals
 
 from pupa.scrape import Scraper, Event
 
-from utils import lxmlize
-
-import requests
 import re
 import datetime as dt
 import csv
@@ -14,17 +11,17 @@ import shutil
 import os
 
 
-class TorontoEventScraper(Scraper):
+class TorontoEventScraper(CanadianScraper):
 
   def get_events(self):
     "http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMeetingScheduleReport"
     "http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberAttendanceReport"
 
- # scrape attendance
+    # scrape attendance
 
     tmpdir = tempfile.mkdtemp()
 
-    page = lxmlize("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberAttendanceReport")
+    page = self.lxmlize("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberAttendanceReport")
     members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
     for member in members:
       post = {
@@ -35,7 +32,7 @@ class TorontoEventScraper(Scraper):
         'memberId': member.attrib['value'],
         'decisionBodyId': 0,
       }
-      r = requests.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
+      r = self.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
       if r.headers['content-type'] != 'application/vnd.ms-excel':
         continue
 
@@ -43,7 +40,7 @@ class TorontoEventScraper(Scraper):
       attendance_file.write(r.text)
       attendance_file.close()
 
-# scrape events
+    # scrape events
     post = {
       'function': 'getMeetingScheduleReport',
       'download': 'csv',
@@ -52,7 +49,7 @@ class TorontoEventScraper(Scraper):
       'decisionBodyId': 0,
     }
 
-    r = requests.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
+    r = self.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
     empty = []
 
     meeting_file = open('meetings.csv', 'w')
@@ -128,14 +125,14 @@ def find_items(committee):
 
   agenda_items = []
 
-  page = lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
+  page = self.lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
   link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href' % committee)
   if link:
     link = link[0]
   else:
     return None
 
-  page = lxmlize(link)
+  page = self.lxmlize(link)
   meetings = page.xpath('//a[contains(@name, "header")]')
   for meeting in meetings:
     if not 'Complete' in meeting.xpath('./parent::h3')[0].text_content():
@@ -148,18 +145,18 @@ def find_items(committee):
       request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&meetingId=%s' % meeting_id
     else:
       request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&meetingId=%s' % meeting_id
-    page = lxmlize(request_string)
+    page = self.lxmlize(request_string)
 
     items = page.xpath('//tr[@class="nonUrgent" or @class="urgent"]')
     for item in items:
-      page = lxmlize(item.xpath('.//a/@href')[0])
+      page = self.lxmlize(item.xpath('.//a/@href')[0])
       item_content_script = page.xpath('//script[contains(text(), "loadContent")]/text()')[0]
       item_id = re.findall(r'(?<=agendaItemId:")(.*)(?=")', item_content_script)[0]
       if committee == 'City Council':
         item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getCouncilMinutesItemPreview&r=1376598367685&agendaItemId=%s' % item_id
       else:
         item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getMinutesItemPreview&r=1376593612354&agendaItemId=%s' % item_id
-      page = lxmlize(item_info_url)
+      page = self.lxmlize(item_info_url)
 
       root_description = page.xpath('//font[@size="4"]')[0].text_content()
       root_order = page.xpath('//table[@class="border"]//td[1]//text()')[0]

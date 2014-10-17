@@ -1,8 +1,8 @@
 # Canadian Legislative Scrapers
 
-## Installation
+## Usage
 
-Follow the instructions in the [Python Quick Start Guide](https://github.com/opennorth/opennorth.ca/wiki/Python-Quick-Start%3A-OS-X) to install Homebrew, Git, PostgreSQL, Python and virtualenv. You must use Python 2.7. You may need to force virtualenv to use your Python 2.7 executable by running, for example, `export VIRTUALENV_PYTHON=/usr/bin/python`.
+Follow the instructions in the [Python Quick Start Guide](https://github.com/opennorth/opennorth.ca/wiki/Python-Quick-Start%3A-OS-X) to install Homebrew, Git, PostGIS, Python 3.3+ and virtualenv.
 
 ```
 mkvirtualenv scrapers-ca
@@ -11,13 +11,21 @@ cd scrapers-ca
 pip install -r requirements.txt
 ```
 
+Initialize the database:
+
+```
+createdb pupa
+psql pupa -c "CREATE EXTENSION postgis;"
+pupa dbinit
+```
+
 ## Run a scraper
 
-    pupa update --nonstrict ca_ab_edmonton
+    pupa update ca_ab_edmonton
 
 To run only the scraping step and skip the import step add the `--scrape` switch:
 
-    pupa update --nonstrict --scrape ca_ab_edmonton
+    pupa update --scrape ca_ab_edmonton
 
 For documentation on the `pupa` command:
 
@@ -33,15 +41,13 @@ Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID
 
     pupa init ca_on_toronto
 
-Most jurisdictions have a `geographic_code` that corresponds to a [Standard Geographical Classification (SGC) 2011](http://www.statcan.gc.ca/subjects-sujets/standard-norme/sgc-cgt/2011/sgc-cgt-intro-eng.htm) code. Other jurisdictions have a `division_id` that corresponds to an [OCD-ID](https://github.com/opencivicdata/ocd-division-ids).
-
 ## Develop a scraper
 
-Read the [Pupa documentation](http://docs.opencivicdata.org/en/latest/scrape/new.html) or an existing scraper's code.
+Read the [Pupa documentation](http://docs.opencivicdata.org/en/latest/scrape/basics.html) or an existing scraper's code.
 
 ## Maintenance
 
-The `tidy` task will correct module names, class names, and `classification`, `division_name`, `name` and `url` in `__init.py__` files. It will report any module without an OCD division or with a `name` or `url` that requires manual verification.
+The `tidy` task verifies module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files.
 
     invoke tidy
 
@@ -61,9 +67,9 @@ To check and print jurisdiction URLs:
 
     invoke urls
 
-Periodically, update the metadata about OCD-IDs:
+Periodically, update the OCD-IDs:
 
-    ruby constants.rb
+    curl -O https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca.csv
 
 Scraper code rarely undergoes code review. The focus is on the quality of the data.
 

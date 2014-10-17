@@ -7,15 +7,15 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
 
-class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
+class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]
 
     response = urlopen(url).read()
@@ -60,7 +60,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
         org.add_source(url)
         yield org
 
-        p = Person(name=name, district=district)
+        p = Person(primary_org='legislature', name=name, district=district)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         membership = p.add_membership(org, role='Mayor', district=district)
@@ -68,9 +68,9 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(Scraper):
           membership.add_contact_detail('voice', phone, 'legislature')
         # Im excluding fax because that column isn't properly aligned
         # if fax:
-        #   membership.add_contact_detail('fax', fax, None)
+        #   membership.add_contact_detail('fax', fax)
         if email:
-          membership.add_contact_detail('email', email, None)
+          membership.add_contact_detail('email', email)
         if address:
           membership.add_contact_detail('address', address, 'legislature')
         yield p

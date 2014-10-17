@@ -7,8 +7,8 @@ from ftplib import FTP
 
 import lxml.html
 import requests
+from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Membership, Organization, Person
-from scrapelib import Scraper as Scrapelib
 from six import StringIO, string_types, text_type
 from six.moves.urllib.parse import urlparse
 
@@ -16,7 +16,7 @@ import patch
 
 CONTACT_DETAIL_TYPE_MAP = {
   'Address': 'address',
-  'bb': 'cell',
+  'bb': 'cell',  # BlackBerry
   'bus': 'voice',
   'Bus': 'voice',
   'Bus.': 'voice',
@@ -71,11 +71,56 @@ CONTACT_DETAIL_NOTE_MAP = {
 }
 
 
-class CanadianJurisdiction(Jurisdiction):
-  # @see https://github.com/opencivicdata/pupa/issues/140
-  division_id = 'wat'
-  classification = 'wat'
+styles_of_address = {}
+for gid in range(3):
+  response = requests.get('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=%d&output=csv' % gid)
+  response.encoding = 'utf-8'
+  for row in csv.DictReader(StringIO(response.text)):
+    identifier = row.pop('Identifier')
+    for key, value in row.items():
+      if not value or key == 'Name':
+        row.pop(key)
+    if row:
+      styles_of_address[identifier] = row
 
+
+class CanadianScraper(Scraper):
+  def lxmlize(self, url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
+    self.user_agent = user_agent
+
+    entry = self.urlopen(url)
+    if encoding != 'utf-8' or not isinstance(entry, text_type):
+      entry = entry.encode(encoding)
+
+    page = lxml.html.fromstring(entry)
+    meta = page.xpath('//meta[@http-equiv="refresh"]')
+    if meta:
+      _, url = meta[0].attrib['content'].split('=', 1)
+      return self.lxmlize(url, encoding)
+    else:
+      page.make_links_absolute(url)
+      return page
+
+  def csv_reader(url, header=False, encoding='utf-8', **kwargs):
+    result = urlparse(url)
+    if result.scheme == 'ftp':
+      data = StringIO()
+      ftp = FTP(result.hostname)
+      ftp.login(result.username, result.password)
+      ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(text_type(block, encoding=encoding)))
+      ftp.quit()
+      data.seek(0)
+    else:
+      response = self.get(url, **kwargs)
+      response.encoding = encoding
+      data = StringIO(response.text)
+    if header:
+      return csv.DictReader(data)
+    else:
+      return csv.reader(data)
+
+
+class CanadianJurisdiction(Jurisdiction):
   def __init__(self):
       super(CanadianJurisdiction, self).__init__()
       for module, name in (('people', 'Person'),):
@@ -83,7 +128,15 @@ class CanadianJurisdiction(Jurisdiction):
         self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
 
   def get_organizations(self):
-    yield Organization(self.name, classification=self.classification)
+    organization = Organization(self.name, classification=self.classification)
+
+    parent = Division.get(self.division_id)
+    if parent._type not in ('province', 'territory'):
+      organization.add_post(label=parent.name, role=styles_of_address[self.division_id]['Leader'])
+    for division in parent.children():
+      organization.add_post(label=division.name, role=styles_of_address[self.division_id]['Member'])
+
+    yield organization
 
 
 class CanadianPerson(Person):
@@ -110,7 +163,10 @@ class CanadianPerson(Person):
 
       self.links.append({'note': note, 'url': url})
 
-  def add_contact_detail(self, *, type, value, note=''):
+  # @todo Over time, we should replace all calls to `add_contact` with calls to
+  # `add_contact_detail` on a Membership. We will have to override Membership's
+  # `add_contact_detail` method to tidy the values.
+  def add_contact(self, type, value, note=''):
     if type:
       type = clean_string(type)
     if note:
@@ -129,7 +185,7 @@ class CanadianPerson(Person):
     else:
       value = clean_string(value)
 
-    self.contact_details.append({'type': type, 'value': value, 'note': note})
+    self._related[0].add_contact_detail(type=type, value=value, note=note)
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
@@ -203,38 +259,3 @@ def clean_address(s):
   for k, v in abbreviations.items():
       s = re.sub(r'[,\n ]+\(?' + k + r'\)?(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
   return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
-
-
-def lxmlize(url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
-  scraper = Scrapelib(requests_per_minute=0)
-  scraper.user_agent = user_agent
-  entry = scraper.urlopen(url)
-  if encoding != 'utf-8' or not isinstance(entry, text_type):
-    entry = entry.encode(encoding)
-  page = lxml.html.fromstring(entry)
-  meta = page.xpath('//meta[@http-equiv="refresh"]')
-  if meta:
-    _, url = meta[0].attrib['content'].split('=', 1)
-    return lxmlize(url, encoding)
-  else:
-    page.make_links_absolute(url)
-    return page
-
-
-def csv_reader(url, header=False, encoding='utf-8', **kwargs):
-  result = urlparse(url)
-  if result.scheme == 'ftp':
-    data = StringIO()
-    ftp = FTP(result.hostname)
-    ftp.login(result.username, result.password)
-    ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(text_type(block, encoding=encoding)))
-    ftp.quit()
-    data.seek(0)
-  else:
-    response = requests.get(url, **kwargs)
-    response.encoding = encoding
-    data = StringIO(response.text)
-  if header:
-    return csv.DictReader(data)
-  else:
-    return csv.reader(data)

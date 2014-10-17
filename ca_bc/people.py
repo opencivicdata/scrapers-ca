@@ -3,23 +3,23 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.leg.bc.ca/mla/3-2.htm'
 
 
-class BritishColumbiaPersonScraper(Scraper):
+class BritishColumbiaPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@cellpadding="3"]//td//a/@href')
     for councillor in councillors:
-      page = lxmlize(councillor)
+      page = self.lxmlize(councillor)
       name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').replace(', Q.C.', '').strip()
       district = page.xpath('//em/strong/text()')[0].strip()
 
-      p = Person(name=name, district=district, role='MLA')
+      p = Person(primary_org='legislature', name=name, district=district, role='MLA')
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor)
 
@@ -28,7 +28,7 @@ class BritishColumbiaPersonScraper(Scraper):
       p.party = party_caps.strip().title().replace('Of', 'of')
 
       email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       office = ', '.join(page.xpath('//i/b[contains(text(), "Office:")]/ancestor::p/text()'))
       office = re.sub(r'\s{2,}', ' ', office)

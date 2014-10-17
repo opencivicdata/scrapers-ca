@@ -3,22 +3,22 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']
 
 
-class NewBrunswickMunicipalitiesPersonScraper(Scraper):
+class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     types = page.xpath('//div[@class="bluearrow shaded bottomborder "][1]/ul/li/a/@href')[:4]
     for org_type, link in enumerate(types):
-      page = lxmlize(link)
+      page = self.lxmlize(link)
       district_urls = page.xpath('//div[@class="parbase list section cplist"]/table/tr/td[1]/b/a/@href')
       for district_url in district_urls:
-        page = lxmlize(district_url)
+        page = self.lxmlize(district_url)
         district = page.xpath('//div[@class="pageHeader"]/h1/text()')[0].split(' - ')[1].strip()
 
         org = Organization(name=district + org_types[org_type], classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
@@ -41,7 +41,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
         for i, councillor in enumerate(councillors):
           if 'Vacant' in councillor:
             continue
-          p = Person(name=councillor, district=district)
+          p = Person(primary_org='legislature', name=councillor, district=district)
           p.add_source(COUNCIL_PAGE)
           p.add_source(link)
           p.add_source(district_url)
@@ -58,7 +58,7 @@ class NewBrunswickMunicipalitiesPersonScraper(Scraper):
           if fax:
             membership.add_contact_detail('fax', fax, 'legislature')
           if email:
-            membership.add_contact_detail('email', email, None)
+            membership.add_contact_detail('email', email)
           if site:
-            p.add_link(site, None)
+            p.add_link(site)
           yield p

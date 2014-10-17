@@ -6,15 +6,15 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://winnipeg.ca/council/'
 
 
-class WinnipegPersonScraper(Scraper):
+class WinnipegPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     nodes = page.xpath('//td[@width="105"]')
     for node in nodes:
       url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a/@href)'))
@@ -25,26 +25,26 @@ class WinnipegPersonScraper(Scraper):
     mayor_node = page.xpath('//td[@width="315"]')[0]
     mayor_name = mayor_node.xpath('string(./a)')[len('Mayor '):]
     mayor_photo_url = mayor_node.xpath('string(./img/@src)')
-    m = Person(name=mayor_name, district='Winnipeg', role='Mayor')
+    m = Person(primary_org='legislature', name=mayor_name, district='Winnipeg', role='Mayor')
     m.add_source(COUNCIL_PAGE)
     # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail
-    m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca', None)
+    m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca')
     m.image = mayor_photo_url
     yield m
 
 
 def councillor_data(url, name, ward):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   # email is, sadly, a form
   photo_url = urljoin(url, page.xpath('string(//img[@class="bio_pic"]/@src)'))
   phone = page.xpath('string(//td[contains(., "Phone")]/following-sibling::td)')
   email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
            split('=')[1] + '@winnipeg.ca')
 
-  p = Person(name=name, district=ward, role='Councillor')
+  p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   p.add_contact('voice', phone, 'legislature')
   p.image = photo_url
 

@@ -4,15 +4,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx'
 
 
-class SaintJeromePersonScraper(Scraper):
+class SaintJeromePersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillor_trs = [tr for tr in page.xpath('//table//tr[1]') if len(tr) == 2][:-1]
     for councillor_tr in councillor_trs:
@@ -31,9 +31,9 @@ class SaintJeromePersonScraper(Scraper):
 
       image = councillor_tr.xpath('string(.//img/@src)')[0]
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.image = image
       p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

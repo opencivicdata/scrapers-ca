@@ -3,18 +3,18 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cambridge.ca/cs_mayor/wards_councillors.php?cpid=51&sid=57'
 MAYOR_PAGE = 'http://www.cambridge.ca/article.php?ssid=167'
 
 
-class CambridgePersonScraper(Scraper):
+class CambridgePersonScraper(CanadianScraper):
 
   def scrape(self):
     yield mayor_info(MAYOR_PAGE)
 
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     councillors = page.xpath('//div[@id="news"]//p')
     for councillor in councillors:
       district = councillor.xpath('./b')[0].text_content()
@@ -26,7 +26,7 @@ class CambridgePersonScraper(Scraper):
       name = councillor.xpath('.//a')[0].text_content()
 
       url = councillor.xpath('.//a')[0].attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
       image = page.xpath('//img[contains(@src, "councilImages")]/@src')[0]
       address = page.xpath('//*[contains(text(),"Address")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t", '')
@@ -37,19 +37,19 @@ class CambridgePersonScraper(Scraper):
         fax = fax.replace('(', '').replace(') ', '-')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].text_content()
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.image = image
       yield p
 
 
 def mayor_info(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   name = page.xpath('string(//h3)').split(',')[1]
   email = page.xpath('string(//a[contains(@href, "@")])')
   phone = page.xpath('string(//td[contains(text(), "Tel:")])').split(':')[1]
@@ -60,9 +60,9 @@ def mayor_info(url):
 
   photo_url = page.xpath('string(//center/img/@src)')
 
-  p = Person(name=name, district="Cambridge", role='Mayor', image=photo_url)
+  p = Person(primary_org='legislature', name=name, district="Cambridge", role='Mayor', image=photo_url)
   p.add_source(url)
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('address', addr, 'legislature')
   return p

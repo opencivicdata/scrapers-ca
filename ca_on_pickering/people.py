@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.pickering.ca/en/cityhall/citycouncil.asp'
 
 
-class PickeringPersonScraper(Scraper):
+class PickeringPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     mayor_contacts = page.xpath('//table[@class="nicEdit-visualClass"]//tr/td[1]/text()')
     council_contacts = page.xpath('//table[@class="nicEdit-visualClass"]//tr/td[2]/text()')
@@ -32,9 +32,9 @@ class PickeringPersonScraper(Scraper):
         role = 'Mayor'
         ward = 'Pickering'
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
-      p = Person(name=name, district=ward, role=role)
+      p = Person(primary_org='legislature', name=name, district=ward, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.image = councillor.xpath('.//img/@src')[0]
 
       links = councillor.xpath('.//a')
@@ -44,7 +44,7 @@ class PickeringPersonScraper(Scraper):
         if 'Profile' in link.text_content():
           p.add_source(link.attrib['href'])
         else:
-          p.add_link(link.attrib['href'], None)
+          p.add_link(link.attrib['href'])
 
       if role == 'Mayor':
         add_contacts(p, mayor_contacts)

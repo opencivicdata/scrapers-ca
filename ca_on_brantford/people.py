@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.brantford.ca/govt/council/members/Pages/default.aspx'
 
 
-class BrantfordPersonScraper(Scraper):
+class BrantfordPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     yield scrape_mayor()
 
@@ -24,16 +24,16 @@ class BrantfordPersonScraper(Scraper):
       name = councillor.xpath('./td')[1].text_content()
       url = councillor.xpath('./td/a')[0].attrib['href']
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
       address = page.xpath('//div[@id="centre_content"]//p')[0].text_content().replace("\r\n", ', ')
       email = page.xpath('//a[contains(@href,"mailto:")]')[0].attrib['href'].replace('mailto:', '')
       p.add_contact('address', address, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       p.image = page.xpath('//div[@id="centre_content"]//img/@src')[0]
 
@@ -49,20 +49,20 @@ class BrantfordPersonScraper(Scraper):
         p.add_contact('fax', fax, 'legislature')
 
       if len(page.xpath('//div[@id="centre_content"]//a')) > 2:
-        p.add_link(page.xpath('//div[@id="centre_content"]//a')[-1].attrib['href'], None)
+        p.add_link(page.xpath('//div[@id="centre_content"]//a')[-1].attrib['href'])
       yield p
 
 
 def scrape_mayor():
   mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
-  page = lxmlize(mayor_url)
+  page = self.lxmlize(mayor_url)
   name = re.findall(r'(?<=Mayor )(.*)(?=\r)', page.xpath('//div[@id="main_content"]/h1/text()')[0])[0]
 
-  p = Person(name=name, district='Brantford', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Brantford', role='Mayor')
   p.add_source(mayor_url)
 
   contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]
-  page = lxmlize(contact_url)
+  page = self.lxmlize(contact_url)
   p.add_source(contact_url)
 
   address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
@@ -70,6 +70,6 @@ def scrape_mayor():
   email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
 
   p.add_contact('address', address, 'legislature')
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
 
   return p

@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
+from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx'
 
 
-class ChathamKentPersonScraper(Scraper):
+class ChathamKentPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     wards = page.xpath('//table[@class="ms-rteTable-4"]')
     for ward in wards:
@@ -27,9 +27,9 @@ class ChathamKentPersonScraper(Scraper):
       for councillor in councillors:
         name = councillor.text_content()
         url = councillor.attrib['href']
-        page = lxmlize(url)
+        page = self.lxmlize(url)
 
-        p = Person(name=name, district=district, role=role)
+        p = Person(primary_org='legislature', name=name, district=district, role=role)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
 

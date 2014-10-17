@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 
 from pupa.scrape import Scraper, Vote
 
-from utils import lxmlize
-import requests
 import re
 import csv
 import tempfile
@@ -14,13 +12,13 @@ import os
 VOTES = {'Yes': 'yes', 'No': 'no', 'Absent': 'not-voting'}
 
 
-class TorontoVoteScraper(Scraper):
+class TorontoVoteScraper(CanadianScraper):
 
   def get_votes(self):
     # org.add_source("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
 
     tmpdir = tempfile.mkdtemp()
-    download_files(tmpdir)
+    self.download_files(tmpdir)
 
     # read through each csv file
     files = [f for f in os.listdir(tmpdir)]
@@ -51,39 +49,39 @@ class TorontoVoteScraper(Scraper):
     shutil.rmtree(tmpdir)
 
 
-def download_files(dest_directory):
-  "http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport"
-  page = lxmlize("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
+  def download_files(self, dest_directory):
+    "http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport"
+    page = self.lxmlize("http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport")
 
-  # download csv files
-  members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
-  for member in members[1:3]:
+    # download csv files
+    members = page.xpath('//td[@class="inputText"]/select[@name="memberId"]/option')
+    for member in members[1:3]:
 
-    post = {
-        'function': 'getMemberVoteReport',
-        'download': 'csv',
-        'exportPublishReportId': 2,
-        'termId': 4,
-        'memberId': member.attrib['value'],
-        'decisionBodyId': 0,
+      post = {
+          'function': 'getMemberVoteReport',
+          'download': 'csv',
+          'exportPublishReportId': 2,
+          'termId': 4,
+          'memberId': member.attrib['value'],
+          'decisionBodyId': 0,
 
-    }
+      }
 
-    r = requests.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
-    if r.headers['content-type'] != 'application/vnd.ms-excel':
-      continue
+      r = self.post("http://app.toronto.ca/tmmis/getAdminReport.do", data=post)
+      if r.headers['content-type'] != 'application/vnd.ms-excel':
+        continue
 
-    name = member.text
-    if name == "Norman Kelly":
-      name = "Norm Kelly"
-    if "Ana Bail" in name:
-      name = "Ana Bailao"
+      name = member.text
+      if name == "Norman Kelly":
+        name = "Norm Kelly"
+      if "Ana Bail" in name:
+        name = "Ana Bailao"
 
-    print('downloading ' + name)
+      print('downloading ' + name)
 
-    vote_file = open(dest_directory + '/' + name + '.csv', 'w')
-    vote_file.write(r.text.encode('utf-8').strip())
-    vote_file.close()
+      vote_file = open(dest_directory + '/' + name + '.csv', 'w')
+      vote_file.write(r.text.encode('utf-8').strip())
+      vote_file.close()
 
 
 # scan csv files of other representatives for matching votes

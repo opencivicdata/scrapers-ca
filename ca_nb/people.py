@@ -7,7 +7,7 @@ import re
 from lxml import etree
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
 
@@ -23,10 +23,10 @@ def get_party(abbr):
   return PARTIES[abbr]
 
 
-class NewBrunswickPersonScraper(Scraper):
+class NewBrunswickPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     councillor_table = page.xpath('//body/div[2]/table[2]')[0]
     for row in councillor_table.xpath('.//tr'):
       riding, table_name, email = (' '.join(td.xpath('string(.)').split()) for td in row[1:])
@@ -39,15 +39,15 @@ class NewBrunswickPersonScraper(Scraper):
       photo_page_url = row[2][0].attrib['href']
       photo_url = get_photo_url(photo_page_url)
 
-      p = Person(name=name, district=riding_fixed, role='MLA',
+      p = Person(primary_org='legislature', name=name, district=riding_fixed, role='MLA',
                      party=get_party(party_abbr), image=photo_url)
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.add_source(photo_page_url)
       p.add_source(COUNCIL_PAGE)
       yield p
 
 
 def get_photo_url(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   rel = page.xpath('string(//td/img/@src)')
   return urljoin(url, rel)

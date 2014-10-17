@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972'
 
 
-class MiltonPersonScraper(Scraper):
+class MiltonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@id="Table1table"]/tbody/tr')
     for councillor in councillors:
@@ -28,7 +28,7 @@ class MiltonPersonScraper(Scraper):
       else:
         district = councillor.xpath('./td[2]/p/text()')[2]
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
       p.image = councillor.xpath('./td[1]/p//img/@src')[0]
@@ -47,5 +47,5 @@ class MiltonPersonScraper(Scraper):
         'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
       # only works for some, others use forms
       if email:
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
       yield p

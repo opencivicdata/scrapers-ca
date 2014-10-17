@@ -3,20 +3,20 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.vaughan.ca/council/Pages/default.aspx'
 
 
-class VaughanPersonScraper(Scraper):
+class VaughanPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="PL_Column1"]//ul[@class="dfwp-list"][1]/li/div/div/a')
     for councillor in councillors:
       url = councillor.attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
       title = page.xpath('//div[@class="PL_Title"]')[0].text_content()
       if "Councillor" in title:
@@ -39,12 +39,12 @@ class VaughanPersonScraper(Scraper):
       fax = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact_info.text_content())[1]
       email = contact_info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
-      p = Person(name=name, district=district.strip(), role=role)
+      p = Person(primary_org='legislature', name=name, district=district.strip(), role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       image = page.xpath('//img[contains(@alt, "Councillor")]/@src')
       if image:
@@ -53,9 +53,9 @@ class VaughanPersonScraper(Scraper):
       sites = page.xpath('//div[@id="WebPartWPQ5"]')[0]
 
       if page.xpath('.//a[contains(@href,"facebook")]'):
-        p.add_link(page.xpath('.//a[contains(@href,"facebook")]')[0].attrib['href'], None)
+        p.add_link(page.xpath('.//a[contains(@href,"facebook")]')[0].attrib['href'])
       if page.xpath('.//a[contains(@href,"twitter")]'):
-        p.add_link(page.xpath('.//a[contains(@href,"twitter")]')[0].attrib['href'], None)
+        p.add_link(page.xpath('.//a[contains(@href,"twitter")]')[0].attrib['href'])
       if page.xpath('.//a[contains(@href,"youtube")]'):
-        p.add_link(page.xpath('.//a[contains(@href, "youtube")]')[0].attrib['href'], None)
+        p.add_link(page.xpath('.//a[contains(@href, "youtube")]')[0].attrib['href'])
       yield p

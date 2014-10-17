@@ -3,21 +3,21 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/conseil-municipal/elus-municipaux/'
 
 
-class SherbrookePersonScraper(Scraper):
+class SherbrookePersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="c2087"]//a')
     for councillor in councillors:
       name = councillor.text_content()
       url = councillor.attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
       if 'Maire' in page.xpath('//h2/text()')[0]:
         district = 'Sherbrooke'
         role = 'Maire'
@@ -26,7 +26,7 @@ class SherbrookePersonScraper(Scraper):
         role = 'Conseiller'
       if district in ('de Brompton', 'de Lennoxville'):
         district = district.replace('de ', '')
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.image = page.xpath('//div[@class="csc-textpic-image csc-textpic-last"]//img/@src')[0]
@@ -37,9 +37,9 @@ class SherbrookePersonScraper(Scraper):
       email = page.xpath('//a[contains(@href, "mailto:")]/@href')
       if email:
         email = email[0].split(':')[1]
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
       if district == 'Brompton':
-        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/brompton/')
+        p._related[0].extras['boundary_url'] = '/boundaries/sherbrooke-boroughs/brompton/'
       elif district == 'Lennoxville':
-        p.add_extra('boundary_url', '/boundaries/sherbrooke-boroughs/lennoxville/')
+        p._related[0].extras['boundary_url'] = '/boundaries/sherbrooke-boroughs/lennoxville/'
       yield p

@@ -7,16 +7,16 @@ from itertools import takewhile
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.regionofwaterloo.ca/en/regionalgovernment/regionalcouncil.asp'
 CHAIR_URL = 'http://www.regionofwaterloo.ca/en/regionalGovernment/regionalchairandsupportstaff.asp'
 
 
-class WaterlooPersonScraper(Scraper):
+class WaterlooPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     regions = page.xpath('//*[@id="contentIntleft"]//h3')[1:]
     for region in regions:
@@ -26,18 +26,18 @@ class WaterlooPersonScraper(Scraper):
                                region.xpath('./following-sibling::*'))]
       for councillor in councillors:
         post = re.search('of (.*)', region.text).group(1)
-        p = Person(name=councillor.text, district=post, role='Councillor')
+        p = Person(primary_org='legislature', name=councillor.text, district=post, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         councillor_url = councillor.attrib['href']
         p.add_source(councillor_url)
         email, phone, address, photo_url = councillor_data(councillor_url)
-        p.add_contact('email', email, None)
+        p.add_contact('email', email)
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('address', address, 'legislature')
         p.image = photo_url
         yield p
 
-    chairpage = lxmlize(CHAIR_URL)
+    chairpage = self.lxmlize(CHAIR_URL)
     name = re.search('Chair (.*) -',
                      chairpage.xpath('string(//title)')).group(1)
     email = chairpage.xpath('string(//a[contains(text(), "E-mail")]/@href)')
@@ -47,9 +47,9 @@ class WaterlooPersonScraper(Scraper):
     photo_url_src = chairpage.xpath(
         'string(//div[@id="contentIntleft"]//img[1]/@src)')
     photo_url = urljoin(CHAIR_URL, photo_url_src)
-    p = Person(name=name, district='Waterloo', role='Regional Chair')
+    p = Person(primary_org='legislature', name=name, district='Waterloo', role='Regional Chair')
     p.add_source(CHAIR_URL)
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
     p.add_contact('voice', phone, 'legislature')
     p.add_contact('address', address, 'legislature')
     p.image = photo_url
@@ -57,7 +57,7 @@ class WaterlooPersonScraper(Scraper):
 
 
 def councillor_data(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
   phone = page.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
   address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))

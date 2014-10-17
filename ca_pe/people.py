@@ -4,15 +4,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assembly.pe.ca/index.php3?number=1024584&lang=E'
 
 
-class PrinceEdwardIslandPersonScraper(Scraper):
+class PrinceEdwardIslandPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     table = page.cssselect('table')[0]
     rows = table.cssselect('tr')[1:]
     assert len(rows) == 27  # There should be 27 districts
@@ -26,16 +26,16 @@ class PrinceEdwardIslandPersonScraper(Scraper):
               .replace(' (LIB)', '').replace(' (PC)', '').strip())
       url = membercell.cssselect('a')[0].get('href')
       email, phone, photo_url = scrape_extended_info(url)
-      p = Person(name=name, district=district, role='MLA', image=photo_url)
+      p = Person(primary_org='legislature', name=name, district=district, role='MLA', image=photo_url)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.add_contact('voice', phone, 'legislature')
       yield p
 
 
 def scrape_extended_info(url):
-    root = lxmlize(url)
+    root = self.lxmlize(url)
     main = root.cssselect('#content table')[0]
     photo_url = main.cssselect('img')[0].get('src')
     contact_cell = main.cssselect('td:contains("Contact information")')[0]

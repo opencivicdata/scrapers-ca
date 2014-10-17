@@ -3,7 +3,7 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.wellesley.ca/council/councillors/?q=council/councillors'
 
@@ -17,10 +17,10 @@ def post_number(name):
     }[name]
 
 
-class WellesleyPersonScraper(Scraper):
+class WellesleyPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="img_four"][1]/div[1]')
     councillors = councillors + page.xpath('//div[@class="img_four"][2]/div')
@@ -38,9 +38,9 @@ class WellesleyPersonScraper(Scraper):
       email = councillor_elem.xpath(
           'string(.//a[starts-with(@href, "mailto:")])')
       image = councillor_elem.xpath('string(.//img[1]/@src)')
-      p = Person(name=name, district=district, role=position, image=image)
+      p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
       p.add_source(COUNCIL_PAGE)
       p.add_contact('address', addr, 'legislature')
       p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

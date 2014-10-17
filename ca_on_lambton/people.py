@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
 
 
-class LambtonPersonScraper(Scraper):
+class LambtonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@id="WebPartWPQ1"]/table/tbody/tr[1]')
     for councillor in councillors:
@@ -26,7 +26,7 @@ class LambtonPersonScraper(Scraper):
       district = councillor.xpath('.//td[1]//p[contains(text(),",")]/text()')[0].split(',')[1].strip()
       district = re.sub(r'\A(?:City|Municipality|Town|Township|Village) of\b| Township\Z', '', district)
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
 
       p.image = councillor.xpath('.//td[1]//img/@src')[0]
@@ -56,6 +56,6 @@ class LambtonPersonScraper(Scraper):
       elif 'Tel' in contact_type:
         councillor.add_contact('voice', contact, note)
       elif 'email' in contact_type:
-        councillor.add_contact('email', contact, None)
+        councillor.add_contact('email', contact)
       else:
         councillor.add_contact(contact_type, contact, note)

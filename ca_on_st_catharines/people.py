@@ -3,19 +3,19 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/MayorCouncil.asp'
 
 
-class StCatharinesPersonScraper(Scraper):
+class StCatharinesPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//li[@class="withChildren"]/ul/li/a')[1:]
     for councillor in councillors:
-      page = lxmlize(councillor.attrib['href'])
+      page = self.lxmlize(councillor.attrib['href'])
 
       name = councillor.text_content().split(',')[0]
 
@@ -27,7 +27,7 @@ class StCatharinesPersonScraper(Scraper):
         district = 'St. Catharines'
         role = 'Mayor'
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(councillor.attrib['href'])
 
@@ -52,5 +52,5 @@ class StCatharinesPersonScraper(Scraper):
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

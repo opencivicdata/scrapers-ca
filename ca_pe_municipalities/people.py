@@ -3,20 +3,20 @@ from pupa.scrape import Scraper, Organization
 
 import re
 
-from utils import lxmlize, clean_telephone_number, clean_address, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, clean_telephone_number, clean_address
 
 COUNCIL_PAGE = 'http://www.gov.pe.ca/mapp/municipalitites.php'
 
 
-class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
+class PrinceEdwardIslandMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     districts = page.xpath('//div[@id="left-content" or @id="right-content"]//a')
     for district in districts:
       url = district.attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
       org = Organization(name=district.text_content() + ' Council', classification='legislature', jurisdiction_id=self.jurisdiction.jurisdiction_id)
       org.add_source(url)
@@ -45,14 +45,14 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(Scraper):
         role = re.sub(r'\(|\)', '', councillor.replace(name, '').strip())
         if not role:
           role = 'Councillor'
-        p = Person(name=name, district=district.text_content())
+        p = Person(primary_org='legislature', name=name, district=district.text_content())
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         membership = p.add_membership(org, role=role, district=district.text_content())
         membership.add_contact_detail('voice', clean_telephone_number(phone), 'legislature')
         membership.add_contact_detail('fax', clean_telephone_number(fax), 'legislature')
         membership.add_contact_detail('address', clean_address(address), 'legislature')
-        membership.add_contact_detail('email', email, None)
+        membership.add_contact_detail('email', email)
         if site:
-          p.add_link(site, None)
+          p.add_link(site)
         yield p

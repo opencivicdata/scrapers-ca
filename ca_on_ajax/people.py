@@ -3,22 +3,22 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
+from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 COUNCIL_PAGE = 'http://www.ajax.ca/en/insidetownhall/mayorcouncillors.asp'
 
 
-class AjaxPersonScraper(Scraper):
+class AjaxPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//ul[@class="subNav top"]/li/ul//li/a')
     for councillor in councillors:
       name = councillor.text_content()
 
       url = councillor.attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
 
       if councillor == councillors[0]:
         district = 'Ajax'
@@ -28,7 +28,7 @@ class AjaxPersonScraper(Scraper):
         role = page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content()
         role = re.findall('((Regional)? ?(Councillor))', role)[0][0]
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
 
@@ -42,5 +42,5 @@ class AjaxPersonScraper(Scraper):
           contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type]
           p.add_contact(contact_type, contact, None if contact_type == 'email' else 'legislature')
         else:
-          p.add_link(contact, None)
+          p.add_link(contact)
       yield p

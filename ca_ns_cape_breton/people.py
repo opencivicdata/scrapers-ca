@@ -5,16 +5,16 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cbrm.ns.ca/councillors.html'
 MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor.html'
 
 
-class CapeBretonPersonScraper(Scraper):
+class CapeBretonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@class="table_style"]/tbody/tr')[1:]
     for councillor in councillors:
@@ -25,7 +25,7 @@ class CapeBretonPersonScraper(Scraper):
       phone = councillor.xpath('.//td[5]/p/text()')[0].split(':')[1].replace("(", '').replace(") ", '-')
       fax = councillor.xpath('.//td[5]/p/text()')[1].split(':')[1].replace("(", '').replace(") ", '-')
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
@@ -33,11 +33,11 @@ class CapeBretonPersonScraper(Scraper):
 
       councillor_url = councillor.xpath('.//a/@href')[0]
       p.add_source(councillor_url)
-      page = lxmlize(councillor_url)
+      page = self.lxmlize(councillor_url)
       p.image = page.xpath('//img[@class="image_left"]/@src')[0]
       yield p
 
-    mayorpage = lxmlize(MAYOR_PAGE)
+    mayorpage = self.lxmlize(MAYOR_PAGE)
     name_elem = mayorpage.xpath('//strong[contains(text(), "About")]')[0]
     name = re.search('About Mayor (.+):', name_elem.text).group(1)
     photo_url = mayorpage.xpath('string(//span/img/@src)')
@@ -47,7 +47,7 @@ class CapeBretonPersonScraper(Scraper):
     address = address_and_tel_elem[0].text_content()
     phone = address_and_tel_elem[2].text.split(':')[1]
 
-    p = Person(name=name, district='Cape Breton', role='Mayor')
+    p = Person(primary_org='legislature', name=name, district='Cape Breton', role='Mayor')
     p.add_source(MAYOR_PAGE)
     p.add_contact('address', address, 'legislature')
     p.add_contact('voice', phone, 'legislature')

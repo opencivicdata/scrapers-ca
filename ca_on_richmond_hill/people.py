@@ -3,21 +3,21 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_of_the_council'
 
 
-class RichmondHillPersonScraper(Scraper):
+class RichmondHillPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//center/center//a')
     for councillor in councillors:
       name = councillor.text_content().strip()
       url = councillor.attrib['href']
-      page = lxmlize(url)
+      page = self.lxmlize(url)
       header = page.xpath('//div[@class="sectionheading"]')[0].text_content()
       if header == 'Mayor of Richmond Hill':
         district = 'Richmond Hill'
@@ -40,14 +40,14 @@ class RichmondHillPersonScraper(Scraper):
       fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)', info)[0].replace(' ', '').replace('(', '').replace(')', '-')
       email = page.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
       p.add_source(url)
       p.add_contact('address', address, 'legislature')
       p.add_contact('voice', phone, 'legislature')
       p.add_contact('fax', fax, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       p.image = page.xpath('//img[contains(@alt, "%s")]/@src' % name)[0]
       if 'Website' in info:
-        p.add_link(re.findall(r'www\..*\.[a-z]+', info)[0], None)
+        p.add_link(re.findall(r'www\..*\.[a-z]+', info)[0])
       yield p

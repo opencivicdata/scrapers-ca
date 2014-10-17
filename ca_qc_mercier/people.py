@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp'
 
 
-class MercierPersonScraper(Scraper):
+class MercierPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
+    page = self.lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
 
     councillors = page.xpath('//table[@width="800"]/tr')
     for councillor in councillors:
@@ -26,7 +26,7 @@ class MercierPersonScraper(Scraper):
       district = 'Mercier'
       email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
 
-      p = Person(name=name, district=district, role=role)
+      p = Person(primary_org='legislature', name=name, district=district, role=role)
       p.add_source(COUNCIL_PAGE)
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

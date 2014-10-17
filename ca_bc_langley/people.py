@@ -4,15 +4,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.city.langley.bc.ca/index.php/city-hall/city-council'
 
 
-class LangleyPersonScraper(Scraper):
+class LangleyPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Councillor")]/@href')
     mayor = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Mayor")]/@href')[0]
@@ -23,7 +23,7 @@ class LangleyPersonScraper(Scraper):
     yield self.scrape_mayor(mayor)
 
   def scrape_councillor(self, url):
-    infos_page = lxmlize(url)
+    infos_page = self.lxmlize(url)
     infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
     name = ' '.join(infos.xpath('p[2]/text()')[0].split(' ')[1:3])
@@ -31,10 +31,10 @@ class LangleyPersonScraper(Scraper):
     email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
-    p = Person(name=name, district='Langley', role='Councillor', image=photo_url)
+    p = Person(primary_org='legislature', name=name, district='Langley', role='Councillor', image=photo_url)
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
 
     personal_infos = infos.xpath('p[last()]/text()')
 
@@ -47,7 +47,7 @@ class LangleyPersonScraper(Scraper):
     return p
 
   def scrape_mayor(self, url):
-    infos_page = lxmlize(url)
+    infos_page = self.lxmlize(url)
     infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
     name = ' '.join(infos.xpath('p[2]/text()')[0].split(' ')[2:4])
@@ -55,10 +55,10 @@ class LangleyPersonScraper(Scraper):
     email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
     photo_url = infos.xpath('p[1]/img/@src')[0]
 
-    p = Person(name=name, district='Langley', role='Mayor', image=photo_url)
+    p = Person(primary_org='legislature', name=name, district='Langley', role='Mayor', image=photo_url)
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
 
     personal_infos = infos.xpath('p[last()]/text()')
 

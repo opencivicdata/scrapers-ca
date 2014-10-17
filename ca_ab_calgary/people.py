@@ -6,16 +6,16 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.calgary.ca/General/Pages/Calgary-City-Council.aspx'
 MAYOR_PAGE = 'http://calgarymayor.ca/forms_all.php'
 
 
-class CalgaryPersonScraper(Scraper):
+class CalgaryPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     nodes = page.xpath('//div[contains(@class,"cocis-has-caption")]')[1:]
     for node in nodes:
       url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a[1]/@href)'))
@@ -26,27 +26,27 @@ class CalgaryPersonScraper(Scraper):
     mayor_node = page.xpath('//div[contains(@class, "cocis-image-panel")]')[0]
     photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('string(.//img/@src)'))
     name = mayor_node.xpath('string(.//a//text())')
-    mayor_page = lxmlize(MAYOR_PAGE)
+    mayor_page = self.lxmlize(MAYOR_PAGE)
     email = mayor_page.xpath('string(//a[contains(., "@")])')
     phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
                              'following-sibling::text())')
-    m = Person(name=name, district='Calgary', role='Mayor')
+    m = Person(primary_org='legislature', name=name, district='Calgary', role='Mayor')
     m.add_source(COUNCIL_PAGE)
     m.add_source(MAYOR_PAGE)
-    m.add_contact('email', email, None)
+    m.add_contact('email', email)
     m.add_contact('voice', phone, 'legislature')
     m.image = photo_url
     yield m
 
 
 def councillor_data(url, name, ward):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
   photo_url_rel = page.xpath('string(//div[@id="contactInfo"]//img[1]/@src)')
   photo_url = urljoin(url, photo_url_rel) if photo_url_rel else None
   # no email, there's a contact form!
   phone = page.xpath('string(//p[contains(./strong, "Phone")]/text())').strip()
 
-  p = Person(name=name, district=ward, role='Councillor')
+  p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   if phone:
     p.add_contact('voice', phone, 'legislature')

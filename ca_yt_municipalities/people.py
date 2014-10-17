@@ -7,12 +7,12 @@ import subprocess
 
 from six.moves.urllib.request import urlopen
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 
 
-class YukonMunicipalitiesPersonScraper(Scraper):
+class YukonMunicipalitiesPersonScraper(CanadianScraper):
 
   def scrape(self):
     response = urlopen(COUNCIL_PAGE).read()
@@ -68,16 +68,16 @@ class YukonMunicipalitiesPersonScraper(Scraper):
           councillor = line[col1end - 1:col2end - 1].strip()
           if not councillor:
             continue
-          p = Person(name=councillor, district=district)
+          p = Person(primary_org='legislature', name=councillor, district=district)
           p.add_source(COUNCIL_PAGE)
           membership = p.add_membership(organization, role=role, district=district)
           membership.add_contact_detail('address', address, 'legislature')
           membership.add_contact_detail('voice', phone, 'legislature')
-          membership.add_contact_detail('email', email, None)
+          membership.add_contact_detail('email', email)
           if fax:
             membership.add_contact_detail('fax', fax, 'legislature')
           if website:
-            p.add_link(website, None)
+            p.add_link(website)
           yield p
 
     os.system('rm /tmp/yt.pdf')

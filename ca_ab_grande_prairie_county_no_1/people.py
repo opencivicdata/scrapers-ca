@@ -3,19 +3,19 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.countygp.ab.ca/EN/main/government/council.html'
 REEVE_URL = 'http://www.countygp.ab.ca/EN/main/government/council/reeve-message.html'
 
 
-class GrandePrairieCountyNo1PersonScraper(Scraper):
+class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
 
   def scrape(self):
-    reeve_page = lxmlize(REEVE_URL)
+    reeve_page = self.lxmlize(REEVE_URL)
     reeve_name = reeve_page.xpath('string(//b)').split(',')[0]
 
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@class="table-plain"]/tbody/tr/td[2]')
     for councillor in councillors:
@@ -23,7 +23,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
           'Division')[0].strip()
       district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
 
       image = councillor.xpath('./preceding-sibling::td//img/@src')[0]
@@ -33,7 +33,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
       email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
 
       p.add_contact('address', address, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
 
       numbers = councillor.xpath('./p[2]')[0].text_content().replace('Email: ', '').replace(email, '').split(':')
       for index, number in enumerate(numbers):
@@ -54,7 +54,7 @@ class GrandePrairieCountyNo1PersonScraper(Scraper):
       # if name == reeve_name:
       #   membership = Membership(
       #       p._id,
-      #       'jurisdiction::ocd-jurisdiction/country:ca/csd:4819006/council',
+      #       'jurisdiction:ocd-jurisdiction/country:ca/csd:4819006/council',
       #       district='district::Grande Prairie County No. 1',
       #       contact_details=p._contact_details,
       #       role='Reeve')

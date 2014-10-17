@@ -3,15 +3,15 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.wilmot.ca/current-council.php'
 
 
-class WilmotPersonScraper(Scraper):
+class WilmotPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//table[@id="Main Content"]//td[@colspan="3"]//td/p/b')
     for councillor in councillors:
@@ -20,7 +20,7 @@ class WilmotPersonScraper(Scraper):
         yield scrape_mayor(councillor, name)
         continue
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
 
       base_info = councillor.xpath('./parent::p/text()')
@@ -47,13 +47,13 @@ class WilmotPersonScraper(Scraper):
         else:
           p.add_contact(contact, base_info[i + 1], contact)
       email = councillor.xpath('./parent::p/following-sibling::p/a[contains(@href, "mailto")]/text()')[0]
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p
 
 
 def scrape_mayor(div, name):
 
-  p = Person(name=name, district='Wilmot', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Wilmot', role='Mayor')
   p.add_source(COUNCIL_PAGE)
 
   info = div.xpath('./parent::p//text()')
@@ -65,5 +65,5 @@ def scrape_mayor(div, name):
   p.add_contact('address', address, 'legislature')
   p.add_contact('voice', phone, 'legislature')
   p.add_contact('fax', fax, 'legislature')
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   return p

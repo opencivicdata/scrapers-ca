@@ -4,21 +4,21 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
 
 
-class TorontoPersonScraper(Scraper):
+class TorontoPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     a = page.xpath('//a[contains(@href,"mayor")]')[0]
     yield self.scrape_mayor(a.attrib['href'])
 
     for a in page.xpath('//a[contains(@href,"councillors/")]'):
-      page = lxmlize(a.attrib['href'])
+      page = self.lxmlize(a.attrib['href'])
       h1 = page.xpath('string(//h1)')
       if 'Council seat is vacant' not in h1:
         yield self.scrape_councilor(page, h1, a.attrib['href'])
@@ -28,13 +28,13 @@ class TorontoPersonScraper(Scraper):
     ward_full = page.xpath('string(//strong[not(@class)])').replace('\xa0', ' ')
     ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
 
-    p = Person(name=name, district=ward_num, role='Councillor')
+    p = Person(primary_org='legislature', name=name, district=ward_num, role='Councillor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
     p.image = page.xpath('string(//main//img/@src)').replace('www.', 'www1.')  # @todo fix lxmlize to use the redirected URL to make links absolute
     email = page.xpath('string((//a[contains(@href, "@")])[1])')
-    p.add_contact('email', email, None)
+    p.add_contact('email', email)
 
     addr_cell = page.xpath('//*[contains(text(), "Toronto City Hall")]/'
                            'ancestor::td')[0]
@@ -49,10 +49,10 @@ class TorontoPersonScraper(Scraper):
     return p
 
   def scrape_mayor(self, url):
-    page = lxmlize(url)
+    page = self.lxmlize(url)
     name = page.xpath("//h1/text()")[0].replace("Toronto Mayor", "").strip()
 
-    p = Person(name=name, district="Toronto", role='Mayor')
+    p = Person(primary_org='legislature', name=name, district="Toronto", role='Mayor')
     p.add_source(COUNCIL_PAGE)
     p.add_source(url)
 
@@ -60,7 +60,7 @@ class TorontoPersonScraper(Scraper):
 
     url = page.xpath('//a[contains(text(), "Contact the Mayor")]')[0].attrib['href'].replace('www.', 'www1.')
     p.add_source(url)
-    page = lxmlize(url)
+    page = self.lxmlize(url)
 
     mail_elem, phone_elem = page.xpath('//h3')[:2]
     address = ''.join(mail_elem.xpath('./following-sibling::p//text()'))

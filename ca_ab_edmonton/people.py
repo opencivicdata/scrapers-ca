@@ -3,26 +3,26 @@ from pupa.scrape import Scraper
 
 import re
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
 MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor.aspx'
 
 
-class EdmontonPersonScraper(Scraper):
+class EdmontonPersonScraper(CanadianScraper):
 
   def scrape(self):
     yield scrape_mayor()
 
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     councillor_cells = page.xpath('//th[contains(text(), "Ward")]')
     for cell in councillor_cells:
       district = cell.text
       name = cell[1].text
       page_url = cell[1].attrib['href']
-      page = lxmlize(page_url)
+      page = self.lxmlize(page_url)
 
-      p = Person(name=name, district=district, role='Councillor')
+      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
       p.add_source(COUNCIL_PAGE)
       p.add_source(page_url)
 
@@ -43,21 +43,21 @@ class EdmontonPersonScraper(Scraper):
           continue
         elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
           value = contact.xpath('./td/a/text()')[0]
-          p.add_link(value, None)
+          p.add_link(value)
         elif 'Telephone' in contact_type:
           p.add_contact('voice', value, 'legislature')
         elif 'Fax' in contact_type:
           p.add_contact('fax', value, 'legislature')
         elif 'Email' in contact_type:
-          p.add_contact('email', value, None)
+          p.add_contact('email', value)
       yield p
 
 
 def scrape_mayor():
-  page = lxmlize(MAYOR_PAGE)
+  page = self.lxmlize(MAYOR_PAGE)
   name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
 
-  p = Person(name=name, district='Edmonton', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Edmonton', role='Mayor')
   p.add_source(MAYOR_PAGE)
 
   image = page.xpath('//div[@id="contentArea"]//img/@src')[0]

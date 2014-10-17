@@ -3,27 +3,26 @@ from pupa.scrape import Scraper
 
 import os
 import re
-import requests
 import shutil
 import tempfile
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://ville.saguenay.ca/fr/administration-municipale/conseils-municipaux-et-darrondissement/membres-des-conseils'
 
 
-class SaguenayPersonScraper(Scraper):
+class SaguenayPersonScraper(CanadianScraper):
 
   def scrape(self):
 
     tmpdir = tempfile.mkdtemp()
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
 
     mayor = page.xpath('//div[@class="box"]/p/text()')
     m_name = mayor[0].strip().split('.')[1].strip()
     m_phone = mayor[1].strip().split(':')[1].strip()
 
-    m = Person(name=m_name, district='Saguenay', role='Maire')
+    m = Person(primary_org='legislature', name=m_name, district='Saguenay', role='Maire')
     m.add_source(COUNCIL_PAGE)
     m.add_contact('voice', m_phone, 'legislature')
 
@@ -39,9 +38,9 @@ class SaguenayPersonScraper(Scraper):
 
       url = councillor.xpath('./p/a')[0].attrib['href']
 
-      p = Person(name=name, district=district, role='Conseiller')
+      p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
       p.add_source(COUNCIL_PAGE)
 
       p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email, None)
+      p.add_contact('email', email)
       yield p

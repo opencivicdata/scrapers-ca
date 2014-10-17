@@ -6,15 +6,15 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-from utils import lxmlize, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.cityofkingston.ca/city-hall/city-council/mayor-and-council'
 
 
-class KingstonPersonScraper(Scraper):
+class KingstonPersonScraper(CanadianScraper):
 
   def scrape(self):
-    page = lxmlize(COUNCIL_PAGE)
+    page = self.lxmlize(COUNCIL_PAGE)
     mayor_and_council_urls = page.xpath('//ul[@class="no-list no-margin"]//'
                                         'ul[@class="no-list no-margin"]//'
                                         'li/a/@href')
@@ -28,7 +28,7 @@ class KingstonPersonScraper(Scraper):
 
 
 def councillor_data(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   # largely based on old scraper
   contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
@@ -41,10 +41,10 @@ def councillor_data(url):
   photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
   photo_url = urljoin(url, photo_url_rel)
 
-  p = Person(name=name, district=district_id, role='Councillor')
+  p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   if phone:
     p.add_contact('voice', phone, 'legislature')
   p.image = photo_url
@@ -53,7 +53,7 @@ def councillor_data(url):
 
 
 def mayor_data(url):
-  page = lxmlize(url)
+  page = self.lxmlize(url)
 
   # largely based on old scraper
   contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
@@ -62,10 +62,10 @@ def mayor_data(url):
   email = contact_node.xpath('string(.//a)')
   photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
 
-  p = Person(name=name, district='Kingston', role='Mayor')
+  p = Person(primary_org='legislature', name=name, district='Kingston', role='Mayor')
   p.add_source(COUNCIL_PAGE)
   p.add_source(url)
-  p.add_contact('email', email, None)
+  p.add_contact('email', email)
   p.image = photo_url
 
   return p
