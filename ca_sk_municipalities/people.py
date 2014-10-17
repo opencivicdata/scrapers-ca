@@ -88,6 +88,6 @@ class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
         membership = p.add_membership(org, role=councillor[1], district=district_name)
 
         for key, value in contacts.items():
-          membership.add_contact_detail(key, value, None if key == 'email' else 'legislature')
+          membership.add_contact_detail(key, value, '' if key == 'email' else 'legislature')
         yield p
     os.system('rm /tmp/sk.pdf')

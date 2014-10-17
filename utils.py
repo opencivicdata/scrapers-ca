@@ -77,9 +77,9 @@ for gid in range(3):
   response.encoding = 'utf-8'
   for row in csv.DictReader(StringIO(response.text)):
     identifier = row.pop('Identifier')
-    for key, value in row.items():
-      if not value or key == 'Name':
-        row.pop(key)
+    for field in list(row.keys()):
+      if not row[field] or field == 'Name':
+        row.pop(field)
     if row:
       styles_of_address[identifier] = row
 
@@ -101,7 +101,7 @@ class CanadianScraper(Scraper):
       page.make_links_absolute(url)
       return page
 
-  def csv_reader(url, header=False, encoding='utf-8', **kwargs):
+  def csv_reader(self, url, header=False, encoding='utf-8', **kwargs):
     result = urlparse(url)
     if result.scheme == 'ftp':
       data = StringIO()
@@ -122,6 +122,7 @@ class CanadianScraper(Scraper):
 
 class CanadianJurisdiction(Jurisdiction):
   def __init__(self):
+    if not self.__class__.__name__.endswith('Municipalities'):
       super(CanadianJurisdiction, self).__init__()
       for module, name in (('people', 'Person'),):
         class_name = self.__class__.__name__ + name + 'Scraper'
@@ -141,7 +142,7 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianPerson(Person):
 
-  def __init__(self, name, district, **kwargs):
+  def __init__(self, *, name, district, **kwargs):
     for k, v in kwargs.items():
       if isinstance(v, string_types):
         kwargs[k] = clean_string(v)

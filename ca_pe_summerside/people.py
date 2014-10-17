@@ -41,7 +41,7 @@ class SummersidePersonScraper(CanadianScraper):
         if contact_type != 'Address':
           contact = re.split(r'[A-Z]', contact)[0]
         contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type]
-        p.add_contact(contact_type, contact, None if contact_type == 'email' else 'legislature')
+        p.add_contact(contact_type, contact, '' if contact_type == 'email' else 'legislature')
       yield p
 
   def scrape_mayor(self):

@@ -20,7 +20,5 @@ class GrandePrairiePersonScraper(CanadianScraper):
       p = Person(primary_org='legislature', name=name, district='Grande Prairie', role=celltext[1])
       p.add_source(COUNCIL_PAGE)
       p.add_contact('voice', celltext[3], 'legislature')
-      p.add_contact('email',
-                    row.xpath('string(./td[last()]//a/@href)').split(':')[1],
-                    None)
+      p.add_contact('email', row.xpath('string(./td[last()]//a/@href)').split(':')[1])
       yield p

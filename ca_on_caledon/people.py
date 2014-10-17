@@ -14,7 +14,7 @@ class CaledonPersonScraper(CanadianScraper):
     page = self.lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//div[@id="printAreaContent"]/ul/li/strong/a/@href')[0]
-    yield scrape_mayor(mayor_url)
+    yield self.scrape_mayor(mayor_url)
 
     councillors = page.xpath('//div[@id="printAreaContent"]//table//td')[2:]
     for councillor in councillors:
@@ -50,17 +50,17 @@ class CaledonPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(url):
-  page = self.lxmlize(url)
+  def scrape_mayor(self, url):
+    page = self.lxmlize(url)
 
-  name = page.xpath('//div[@id="printAreaContent"]/h1/strong/text()')[0].replace('Mayor', '').strip()
-  address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':', '').strip()
-  phone = page.xpath('//strong[contains(text(), "phone")]/parent::p/text()')[1].split()[1]
+    name = page.xpath('//div[@id="printAreaContent"]/h1/strong/text()')[0].replace('Mayor', '').strip()
+    address = page.xpath('//strong[contains(text(), "mail")]/parent::p/text()')[1].replace(':', '').strip()
+    phone = page.xpath('//strong[contains(text(), "phone")]/parent::p/text()')[1].split()[1]
 
-  p = Person(primary_org='legislature', name=name, district='Caledon', role='Mayor')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  p.image = page.xpath('//h2[contains(text(), "About me")]/img/@src')[0]
-  p.add_contact('address', address, 'legislature')
-  p.add_contact('voice', phone, 'legislature')
-  return p
+    p = Person(primary_org='legislature', name=name, district='Caledon', role='Mayor')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    p.image = page.xpath('//h2[contains(text(), "About me")]/img/@src')[0]
+    p.add_contact('address', address, 'legislature')
+    p.add_contact('voice', phone, 'legislature')
+    return p

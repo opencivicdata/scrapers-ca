@@ -20,7 +20,7 @@ class WinnipegPersonScraper(CanadianScraper):
       url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a/@href)'))
       ward = re.search('([A-Z].+) Ward', node.xpath('string(.//a)')).group(1)
       name = ' '.join(node.xpath('string(.//span[@class="k80B"])').split())
-      yield councillor_data(url, name, ward)
+      yield self.councillor_data(url, name, ward)
 
     mayor_node = page.xpath('//td[@width="315"]')[0]
     mayor_name = mayor_node.xpath('string(./a)')[len('Mayor '):]
@@ -33,19 +33,19 @@ class WinnipegPersonScraper(CanadianScraper):
     yield m
 
 
-def councillor_data(url, name, ward):
-  page = self.lxmlize(url)
-  # email is, sadly, a form
-  photo_url = urljoin(url, page.xpath('string(//img[@class="bio_pic"]/@src)'))
-  phone = page.xpath('string(//td[contains(., "Phone")]/following-sibling::td)')
-  email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
-           split('=')[1] + '@winnipeg.ca')
+  def councillor_data(self, url, name, ward):
+    page = self.lxmlize(url)
+    # email is, sadly, a form
+    photo_url = urljoin(url, page.xpath('string(//img[@class="bio_pic"]/@src)'))
+    phone = page.xpath('string(//td[contains(., "Phone")]/following-sibling::td)')
+    email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
+             split('=')[1] + '@winnipeg.ca')
 
-  p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  p.add_contact('email', email)
-  p.add_contact('voice', phone, 'legislature')
-  p.image = photo_url
+    p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    p.add_contact('email', email)
+    p.add_contact('voice', phone, 'legislature')
+    p.image = photo_url
 
-  return p
+    return p

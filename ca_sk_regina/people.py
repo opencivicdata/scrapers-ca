@@ -23,41 +23,41 @@ class ReginaPersonScraper(CanadianScraper):
       text = link.xpath('string(.)')
       ward, name = text.split(' - Councillor ')
       url = link.xpath('string(./@href)')
-      yield councillor_data(url, name, ward)
+      yield self.councillor_data(url, name, ward)
 
     mayor_link = root.xpath('//div[@id="right_col"]//'
                             'li[contains(., "Mayor")]/a')[0]
     mayor_name = mayor_link.xpath('string(.)')[len('Mayor '):]
     mayor_url = mayor_link.xpath('string(./@href)')
-    yield mayor_data(mayor_url, mayor_name)
+    yield self.mayor_data(mayor_url, mayor_name)
 
 
-def councillor_data(url, name, ward):
-  page = self.lxmlize(url)
-  # sadly, email is a form on a separate page
-  phone = page.xpath('string(//strong[contains(., "Phone")])').split(':')[1]
-  photo_url_rel = page.xpath('string(//div[@id="contentcontainer"]//img/@src)')
-  photo_url = urljoin(url, photo_url_rel)
-  m = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
-  m.add_source(COUNCIL_PAGE)
-  m.add_source(url)
-  m.add_contact('voice', phone, 'legislature')
-  m.image = photo_url
-  yield m
+  def councillor_data(self, url, name, ward):
+    page = self.lxmlize(url)
+    # sadly, email is a form on a separate page
+    phone = page.xpath('string(//strong[contains(., "Phone")])').split(':')[1]
+    photo_url_rel = page.xpath('string(//div[@id="contentcontainer"]//img/@src)')
+    photo_url = urljoin(url, photo_url_rel)
+    m = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
+    m.add_source(COUNCIL_PAGE)
+    m.add_source(url)
+    m.add_contact('voice', phone, 'legislature')
+    m.image = photo_url
+    yield m
 
 
-def mayor_data(url, name):
-  page = self.lxmlize(url)
-  photo_url = urljoin(url,
-                      page.xpath('string((//div[@id="contentcontainer"]//img)[1]/@src)'))
-  contact_page = self.lxmlize(MAYOR_CONTACT_URL)
-  email = contact_page.xpath('string(//a[contains(., "@")][1])')
+  def mayor_data(self, url, name):
+    page = self.lxmlize(url)
+    photo_url = urljoin(url,
+                        page.xpath('string((//div[@id="contentcontainer"]//img)[1]/@src)'))
+    contact_page = self.lxmlize(MAYOR_CONTACT_URL)
+    email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
-  m = Person(primary_org='legislature', name=name, district='Regina', role='Mayor')
-  m.add_source(COUNCIL_PAGE)
-  m.add_source(url)
-  m.add_source(MAYOR_CONTACT_URL)
-  m.add_contact('email', email)
-  m.image = photo_url
+    m = Person(primary_org='legislature', name=name, district='Regina', role='Mayor')
+    m.add_source(COUNCIL_PAGE)
+    m.add_source(url)
+    m.add_source(MAYOR_CONTACT_URL)
+    m.add_contact('email', email)
+    m.image = photo_url
 
-  return m
+    return m

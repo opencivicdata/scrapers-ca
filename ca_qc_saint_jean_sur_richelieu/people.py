@@ -14,7 +14,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
     page = self.lxmlize(COUNCIL_PAGE)
 
     councillors = page.xpath('//div[@class="article-content"]//td[@class="ms-rteTableOddCol-0"]')
-    yield scrape_mayor(councillors[0])
+    yield self.scrape_mayor(councillors[0])
     for councillor in councillors[1:]:
       if not councillor.xpath('.//a'):
         continue
@@ -43,26 +43,26 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(div):
-  name = div.xpath('.//a')[0].text_content()
-  url = div.xpath('.//a/@href')[0]
-  page = self.lxmlize(url)
-  contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
-  contact_page = self.lxmlize(contact_url)
+  def scrape_mayor(self, div):
+    name = div.xpath('.//a')[0].text_content()
+    url = div.xpath('.//a/@href')[0]
+    page = self.lxmlize(url)
+    contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
+    contact_page = self.lxmlize(contact_url)
 
-  p = Person(primary_org='legislature', name=name, district='Saint-Jean-sur-Richelieu', role='Maire')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  p.add_source(contact_url)
+    p = Person(primary_org='legislature', name=name, district='Saint-Jean-sur-Richelieu', role='Maire')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    p.add_source(contact_url)
 
-  p.image = div.xpath('./preceding-sibling::td//img/@src')[-1]
+    p.image = div.xpath('./preceding-sibling::td//img/@src')[-1]
 
-  contacts = contact_page.xpath('//div[@id="ctl00_PlaceHolderMain_ctl01_ctl01__ControlWrapper_RichHtmlField"]//font/text()')
-  address = ' '.join(contacts[:4])
-  phone = contacts[-3].split(':')[1].strip().replace(' ', '-')
-  fax = contacts[-2].split(':')[1].strip().replace(' ', '-')
-  # mayor's email is a form
-  return p
+    contacts = contact_page.xpath('//div[@id="ctl00_PlaceHolderMain_ctl01_ctl01__ControlWrapper_RichHtmlField"]//font/text()')
+    address = ' '.join(contacts[:4])
+    phone = contacts[-3].split(':')[1].strip().replace(' ', '-')
+    fax = contacts[-2].split(':')[1].strip().replace(' ', '-')
+    # mayor's email is a form
+    return p
 
 
 def get_links(councillor, div):

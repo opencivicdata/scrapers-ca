@@ -15,7 +15,7 @@ class SaskatoonPersonScraper(CanadianScraper):
     page = self.lxmlize(COUNCIL_PAGE)
 
     mayor_url = page.xpath('//td[@class="sask_LeftNavLinkContainer"]/a/@href')[0]
-    yield scrape_mayor(mayor_url)
+    yield self.scrape_mayor(mayor_url)
 
     email_page = self.lxmlize(EMAIL_URL)
     c_options = email_page.xpath(
@@ -59,24 +59,24 @@ class SaskatoonPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(url):
-  page = self.lxmlize(url)
-  name = page.xpath('//tr/td/p')[-1]
-  name = name.text_content().replace('Mayor', '')
-  image = page.xpath('//div[@class="sask_ArticleBody"]//img/@src')[0]
+  def scrape_mayor(self, url):
+    page = self.lxmlize(url)
+    name = page.xpath('//tr/td/p')[-1]
+    name = name.text_content().replace('Mayor', '')
+    image = page.xpath('//div[@class="sask_ArticleBody"]//img/@src')[0]
 
-  contact_url = page.xpath('//a[contains(text(), "Contact the Mayor")]/@href')[0]
-  page = self.lxmlize(contact_url)
+    contact_url = page.xpath('//a[contains(text(), "Contact the Mayor")]/@href')[0]
+    page = self.lxmlize(contact_url)
 
-  address = ' '.join(page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[4]/text()')[1:])
-  phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(', '').replace(') ', '-')
-  fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
+    address = ' '.join(page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[4]/text()')[1:])
+    phone = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[5]/span/text()')[0].replace('(', '').replace(') ', '-')
+    fax = page.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]/p[6]/span/text()')[0].replace('(', '').replace(') ', '-')
 
-  p = Person(primary_org='legislature', name=name, district='Saskatoon', role='Mayor')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  p.image = image
-  p.add_contact('address', address, 'legislature')
-  p.add_contact('voice', phone, 'legislature')
-  p.add_contact('fax', fax, 'legislature')
-  return p
+    p = Person(primary_org='legislature', name=name, district='Saskatoon', role='Mayor')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    p.image = image
+    p.add_contact('address', address, 'legislature')
+    p.add_contact('voice', phone, 'legislature')
+    p.add_contact('fax', fax, 'legislature')
+    return p

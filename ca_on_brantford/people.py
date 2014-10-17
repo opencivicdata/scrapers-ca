@@ -13,7 +13,7 @@ class BrantfordPersonScraper(CanadianScraper):
   def scrape(self):
     page = self.lxmlize(COUNCIL_PAGE)
 
-    yield scrape_mayor()
+    yield self.scrape_mayor()
 
     councillors = page.xpath('//div[@id="centre_content"]//tr')
     for councillor in councillors:
@@ -53,23 +53,23 @@ class BrantfordPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor():
-  mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
-  page = self.lxmlize(mayor_url)
-  name = re.findall(r'(?<=Mayor )(.*)(?=\r)', page.xpath('//div[@id="main_content"]/h1/text()')[0])[0]
+  def scrape_mayor(self):
+    mayor_url = 'http://mayor.brantford.ca/Pages/default.aspx'
+    page = self.lxmlize(mayor_url)
+    name = re.findall(r'(?<=Mayor )(.*)(?=\r)', page.xpath('//div[@id="main_content"]/h1/text()')[0])[0]
 
-  p = Person(primary_org='legislature', name=name, district='Brantford', role='Mayor')
-  p.add_source(mayor_url)
+    p = Person(primary_org='legislature', name=name, district='Brantford', role='Mayor')
+    p.add_source(mayor_url)
 
-  contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]
-  page = self.lxmlize(contact_url)
-  p.add_source(contact_url)
+    contact_url = page.xpath('.//a[contains(text(),"Contact")]/@href')[0]
+    page = self.lxmlize(contact_url)
+    p.add_source(contact_url)
 
-  address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
-  address = re.sub(r'\s{2,}', ' ', address).strip()
-  email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
+    address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
+    address = re.sub(r'\s{2,}', ' ', address).strip()
+    email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
 
-  p.add_contact('address', address, 'legislature')
-  p.add_contact('email', email)
+    p.add_contact('address', address, 'legislature')
+    p.add_contact('email', email)
 
-  return p
+    return p

@@ -29,7 +29,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
       full_name, party_abbr, post = row.xpath('./td//text()')[:3]
       name = ' '.join(reversed(full_name.split(',')))
       detail_url = row[0][0].attrib['href']
-      image, phone, email = get_details(detail_url)
+      image, phone, email = self.get_details(detail_url)
       p = Person(primary_org='legislature', name=name, district=post, role='MLA',
                      party=get_party(party_abbr), image=image)
       p.add_source(COUNCIL_PAGE)
@@ -40,16 +40,16 @@ class NovaScotiaPersonScraper(CanadianScraper):
       yield p
 
 
-def get_details(url):
-  page = self.lxmlize(url)
-  image = page.xpath('string(//img[@class="portrait"]/@src)')
-  try:
-    phone = page.xpath('string(//dd[@class="numbers"]/text())').split(': ')[1]
-  except IndexError:
-    phone = None
-  email_js = page.xpath('string(//dd/script)')
-  email_addr = process_email(email_js)
-  return image, phone, email_addr
+  def get_details(self, url):
+    page = self.lxmlize(url)
+    image = page.xpath('string(//img[@class="portrait"]/@src)')
+    try:
+      phone = page.xpath('string(//dd[@class="numbers"]/text())').split(': ')[1]
+    except IndexError:
+      phone = None
+    email_js = page.xpath('string(//dd/script)')
+    email_addr = process_email(email_js)
+    return image, phone, email_addr
 
 
 def process_email(js):

@@ -37,7 +37,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
           r'(.+) \((.+)\)', table_name).groups()
       name = name_with_status.split(',')[0]
       photo_page_url = row[2][0].attrib['href']
-      photo_url = get_photo_url(photo_page_url)
+      photo_url = self.get_photo_url(photo_page_url)
 
       p = Person(primary_org='legislature', name=name, district=riding_fixed, role='MLA',
                      party=get_party(party_abbr), image=photo_url)
@@ -47,7 +47,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
       yield p
 
 
-def get_photo_url(url):
-  page = self.lxmlize(url)
-  rel = page.xpath('string(//td/img/@src)')
-  return urljoin(url, rel)
+  def get_photo_url(self, url):
+    page = self.lxmlize(url)
+    rel = page.xpath('string(//td/img/@src)')
+    return urljoin(url, rel)

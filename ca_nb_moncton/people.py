@@ -15,7 +15,7 @@ class MonctonPersonScraper(CanadianScraper):
     page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
     mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
-    yield scrape_mayor(mayor_url)
+    yield self.scrape_mayor(mayor_url)
 
     councillors = page.xpath('//td[@class="cityfonts"]')
     for councillor in councillors:
@@ -51,27 +51,27 @@ class MonctonPersonScraper(CanadianScraper):
       yield p
 
 
-def scrape_mayor(url):
-  page = self.lxmlize(url)
-  name = page.xpath('//meta[@name="description"]/@content')[0].split(',')[1]
+  def scrape_mayor(self, url):
+    page = self.lxmlize(url)
+    name = page.xpath('//meta[@name="description"]/@content')[0].split(',')[1]
 
-  p = Person(primary_org='legislature', name=name, district='Moncton', role='Mayor')
-  p.add_source(url)
+    p = Person(primary_org='legislature', name=name, district='Moncton', role='Mayor')
+    p.add_source(url)
 
-  p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
+    p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
 
-  info = page.xpath('//table[@class="whiteroundedbox"]//tr[2]/td[1]')[1]
-  address = ', '.join(info.xpath('./p[1]/text()')[1:4])
-  address = re.sub(r'\s{2,}', ' ', address).strip()
-  phone = info.xpath('.//p[2]/text()')[0].split(':')[1].strip()
-  fax = info.xpath('.//p[2]/text()')[1].split(':')[1].strip()
-  email = info.xpath('.//a/@href')[0].split(':')[1].strip()
+    info = page.xpath('//table[@class="whiteroundedbox"]//tr[2]/td[1]')[1]
+    address = ', '.join(info.xpath('./p[1]/text()')[1:4])
+    address = re.sub(r'\s{2,}', ' ', address).strip()
+    phone = info.xpath('.//p[2]/text()')[0].split(':')[1].strip()
+    fax = info.xpath('.//p[2]/text()')[1].split(':')[1].strip()
+    email = info.xpath('.//a/@href')[0].split(':')[1].strip()
 
-  p.add_contact('address', address, 'legislature')
-  if len(re.sub(r'\D', '', phone)) == 7:
-    phone = '506-%s' % phone
-  p.add_contact('voice', phone, 'legislature')
-  p.add_contact('fax', fax, 'legislature')
-  p.add_contact('email', email)
+    p.add_contact('address', address, 'legislature')
+    if len(re.sub(r'\D', '', phone)) == 7:
+      phone = '506-%s' % phone
+    p.add_contact('voice', phone, 'legislature')
+    p.add_contact('fax', fax, 'legislature')
+    p.add_contact('email', email)
 
-  return p
+    return p

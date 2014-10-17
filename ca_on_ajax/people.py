@@ -40,7 +40,7 @@ class AjaxPersonScraper(CanadianScraper):
         contact = line.xpath('./td')[1].text_content().strip()
         if re.match(r'(Phone)|(Fax)|(Email)', contact_type):
           contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type]
-          p.add_contact(contact_type, contact, None if contact_type == 'email' else 'legislature')
+          p.add_contact(contact_type, contact, '' if contact_type == 'email' else 'legislature')
         else:
           p.add_link(contact)
       yield p

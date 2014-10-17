@@ -22,50 +22,50 @@ class KingstonPersonScraper(CanadianScraper):
     council_urls = mayor_and_council_urls[1:]
 
     for councillor_url in council_urls:
-      yield councillor_data(councillor_url)
+      yield self.councillor_data(councillor_url)
 
-    yield mayor_data(mayor_url)
-
-
-def councillor_data(url):
-  page = self.lxmlize(url)
-
-  # largely based on old scraper
-  contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
-
-  name = contact_node.xpath('string(./span[1])')
-  district = contact_node.xpath('string(./text()[2])')
-  district_id = district.split(':')[0]  # TODO: don't reject name?
-  email = contact_node.xpath('string(.//a)')
-  phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]  # TODO: this mostly doesn't work
-  photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
-  photo_url = urljoin(url, photo_url_rel)
-
-  p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  p.add_contact('email', email)
-  if phone:
-    p.add_contact('voice', phone, 'legislature')
-  p.image = photo_url
-
-  return p
+    yield self.mayor_data(mayor_url)
 
 
-def mayor_data(url):
-  page = self.lxmlize(url)
+  def councillor_data(self, url):
+    page = self.lxmlize(url)
 
-  # largely based on old scraper
-  contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
+    # largely based on old scraper
+    contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
 
-  name = contact_node.xpath('string(./span[1])')
-  email = contact_node.xpath('string(.//a)')
-  photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
+    name = contact_node.xpath('string(./span[1])')
+    district = contact_node.xpath('string(./text()[2])')
+    district_id = district.split(':')[0]  # TODO: don't reject name?
+    email = contact_node.xpath('string(.//a)')
+    phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]  # TODO: this mostly doesn't work
+    photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
+    photo_url = urljoin(url, photo_url_rel)
 
-  p = Person(primary_org='legislature', name=name, district='Kingston', role='Mayor')
-  p.add_source(COUNCIL_PAGE)
-  p.add_source(url)
-  p.add_contact('email', email)
-  p.image = photo_url
+    p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    p.add_contact('email', email)
+    if phone:
+      p.add_contact('voice', phone, 'legislature')
+    p.image = photo_url
 
-  return p
+    return p
+
+
+  def mayor_data(self, url):
+    page = self.lxmlize(url)
+
+    # largely based on old scraper
+    contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
+
+    name = contact_node.xpath('string(./span[1])')
+    email = contact_node.xpath('string(.//a)')
+    photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
+
+    p = Person(primary_org='legislature', name=name, district='Kingston', role='Mayor')
+    p.add_source(COUNCIL_PAGE)
+    p.add_source(url)
+    p.add_contact('email', email)
+    p.image = photo_url
+
+    return p

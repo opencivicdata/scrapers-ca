@@ -42,5 +42,5 @@ class ChathamKentPersonScraper(CanadianScraper):
         for contact in contacts:
           contact_type, contact = contact.text_content().split(':')
           contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type.strip()]
-          p.add_contact(contact_type, contact.strip(), None if contact_type == 'email' else 'legislature')
+          p.add_contact(contact_type, contact.strip(), '' if contact_type == 'email' else 'legislature')
         yield p

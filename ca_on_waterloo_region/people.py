@@ -30,7 +30,7 @@ class WaterlooPersonScraper(CanadianScraper):
         p.add_source(COUNCIL_PAGE)
         councillor_url = councillor.attrib['href']
         p.add_source(councillor_url)
-        email, phone, address, photo_url = councillor_data(councillor_url)
+        email, phone, address, photo_url = self.councillor_data(councillor_url)
         p.add_contact('email', email)
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('address', address, 'legislature')
@@ -56,11 +56,11 @@ class WaterlooPersonScraper(CanadianScraper):
     yield p
 
 
-def councillor_data(url):
-  page = self.lxmlize(url)
-  email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
-  phone = page.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
-  address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))
-  photo_url_src = page.xpath('string(//div[@id="contentIntleft"]//img[1]/@src)')
-  photo_url = urljoin(url, photo_url_src)
-  return email, phone, address, photo_url
+  def councillor_data(self, url):
+    page = self.lxmlize(url)
+    email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
+    phone = page.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
+    address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))
+    photo_url_src = page.xpath('string(//div[@id="contentIntleft"]//img[1]/@src)')
+    photo_url = urljoin(url, photo_url_src)
+    return email, phone, address, photo_url
