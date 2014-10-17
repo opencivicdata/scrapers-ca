@@ -122,11 +122,10 @@ class CanadianScraper(Scraper):
 
 class CanadianJurisdiction(Jurisdiction):
   def __init__(self):
-    if not self.__class__.__name__.endswith('Municipalities'):
-      super(CanadianJurisdiction, self).__init__()
-      for module, name in (('people', 'Person'),):
-        class_name = self.__class__.__name__ + name + 'Scraper'
-        self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
+    super(CanadianJurisdiction, self).__init__()
+    for module, name in (('people', 'Person'),):
+      class_name = self.__class__.__name__ + name + 'Scraper'
+      self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
 
   def get_organizations(self):
     organization = Organization(self.name, classification=self.classification)
