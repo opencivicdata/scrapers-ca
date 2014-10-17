@@ -19,35 +19,34 @@ PARTIES = {
 
 
 def get_party(abbr):
-  """Return full party name based on abbreviation"""
-  return PARTIES[abbr]
+    """Return full party name based on abbreviation"""
+    return PARTIES[abbr]
 
 
 class NewBrunswickPersonScraper(CanadianScraper):
 
-  def scrape(self):
-    page = self.lxmlize(COUNCIL_PAGE)
-    councillor_table = page.xpath('//body/div[2]/table[2]')[0]
-    for row in councillor_table.xpath('.//tr'):
-      riding, table_name, email = (' '.join(td.xpath('string(.)').split()) for td in row[1:])
-      riding_fixed = riding.replace('\x97', '-')
-      if riding_fixed == 'Miramichi Bay-Neguac':
-        riding_fixed = 'Miramichi-Bay-Neguac'
-      name_with_status, party_abbr = re.match(
-          r'(.+) \((.+)\)', table_name).groups()
-      name = name_with_status.split(',')[0]
-      photo_page_url = row[2][0].attrib['href']
-      photo_url = self.get_photo_url(photo_page_url)
+    def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE)
+        councillor_table = page.xpath('//body/div[2]/table[2]')[0]
+        for row in councillor_table.xpath('.//tr'):
+            riding, table_name, email = (' '.join(td.xpath('string(.)').split()) for td in row[1:])
+            riding_fixed = riding.replace('\x97', '-')
+            if riding_fixed == 'Miramichi Bay-Neguac':
+                riding_fixed = 'Miramichi-Bay-Neguac'
+            name_with_status, party_abbr = re.match(
+                r'(.+) \((.+)\)', table_name).groups()
+            name = name_with_status.split(',')[0]
+            photo_page_url = row[2][0].attrib['href']
+            photo_url = self.get_photo_url(photo_page_url)
 
-      p = Person(primary_org='legislature', name=name, district=riding_fixed, role='MLA',
-                     party=get_party(party_abbr), image=photo_url)
-      p.add_contact('email', email)
-      p.add_source(photo_page_url)
-      p.add_source(COUNCIL_PAGE)
-      yield p
+            p = Person(primary_org='legislature', name=name, district=riding_fixed, role='MLA',
+                       party=get_party(party_abbr), image=photo_url)
+            p.add_contact('email', email)
+            p.add_source(photo_page_url)
+            p.add_source(COUNCIL_PAGE)
+            yield p
 
-
-  def get_photo_url(self, url):
-    page = self.lxmlize(url)
-    rel = page.xpath('string(//td/img/@src)')
-    return urljoin(url, rel)
+    def get_photo_url(self, url):
+        page = self.lxmlize(url)
+        rel = page.xpath('string(//td/img/@src)')
+        return urljoin(url, rel)

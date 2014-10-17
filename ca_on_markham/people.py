@@ -10,98 +10,96 @@ COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/May
 
 class MarkhamPersonScraper(CanadianScraper):
 
-  def scrape(self):
-    page = self.lxmlize(COUNCIL_PAGE)
+    def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE)
 
-    mayor_url = page.xpath('//a[contains(text(), "Office of the Mayor")]/@href')[0]
-    yield self.scrape_mayor(mayor_url)
+        mayor_url = page.xpath('//a[contains(text(), "Office of the Mayor")]/@href')[0]
+        yield self.scrape_mayor(mayor_url)
 
-    councillors = page.xpath('//div[@class="interiorContentWrapper"]//td[./a]')
-    for councillor in councillors:
-      name = councillor.xpath('.//strong')[1].text_content().strip()
-      district = councillor.xpath('.//a//text()[normalize-space()]')[0]
-      if 'Ward' in district:
-        district = district.replace('Councillor', '')
-        role = 'Councillor'
-      else:
-        role = district
-        district = 'Markham'
+        councillors = page.xpath('//div[@class="interiorContentWrapper"]//td[./a]')
+        for councillor in councillors:
+            name = councillor.xpath('.//strong')[1].text_content().strip()
+            district = councillor.xpath('.//a//text()[normalize-space()]')[0]
+            if 'Ward' in district:
+                district = district.replace('Councillor', '')
+                role = 'Councillor'
+            else:
+                role = district
+                district = 'Markham'
 
-      image = councillor.xpath('.//img/@src')[0]
-      url = councillor.xpath('.//a/@href')[0]
+            image = councillor.xpath('.//img/@src')[0]
+            url = councillor.xpath('.//a/@href')[0]
 
-      if 'Ward 4' in district:
-        yield self.scrape_4(name, url, image)
-        continue
+            if 'Ward 4' in district:
+                yield self.scrape_4(name, url, image)
+                continue
 
-      page = self.lxmlize(url)
+            page = self.lxmlize(url)
 
-      p = Person(primary_org='legislature', name=name, district=district, role=role)
-      p.add_source(COUNCIL_PAGE)
-      p.add_source(url)
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
 
-      p.image = image
-      contact = page.xpath('//div[@class="microSiteLinksWrapper"]')[1]
+            p.image = image
+            contact = page.xpath('//div[@class="microSiteLinksWrapper"]')[1]
 
-      if contact.xpath('.//p/text()'):
-        infos = contact.xpath('.//p/text()')
-      else:
-        infos = contact.xpath('.//div/text()')
+            if contact.xpath('.//p/text()'):
+                infos = contact.xpath('.//p/text()')
+            else:
+                infos = contact.xpath('.//div/text()')
 
-      address = re.sub(r'\s{2,}', ' ', ' '.join(infos[:2])).strip()
-      phone = infos[2].split(':')[1].strip()
-      email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
-      website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
-      if website:
-        p.add_link(website[0])
-      p.add_contact('address', address, 'legislature')
-      p.add_contact('voice', phone, 'legislature')
-      p.add_contact('email', email)
+            address = re.sub(r'\s{2,}', ' ', ' '.join(infos[:2])).strip()
+            phone = infos[2].split(':')[1].strip()
+            email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
+            website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
+            if website:
+                p.add_link(website[0])
+            p.add_contact('address', address, 'legislature')
+            p.add_contact('voice', phone, 'legislature')
+            p.add_contact('email', email)
 
-      get_links(p, contact)
-      yield p
+            get_links(p, contact)
+            yield p
 
+    def scrape_4(self, name, url, image):
+        page = self.lxmlize(url)
 
-  def scrape_4(self, name, url, image):
-    page = self.lxmlize(url)
+        p = Person(primary_org='legislature', name=name, district='Ward 4', role='Councillor')
+        p.add_source(url)
+        p.add_source(COUNCIL_PAGE)
 
-    p = Person(primary_org='legislature', name=name, district='Ward 4', role='Councillor')
-    p.add_source(url)
-    p.add_source(COUNCIL_PAGE)
+        address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
+        phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
+        email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+        p.add_contact('address', address, 'legislature')
+        p.add_contact('voice', phone, 'legislature')
+        p.add_contact('email', email)
+        p.image = image
+        return p
 
-    address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
-    phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
-    email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
-    p.add_contact('address', address, 'legislature')
-    p.add_contact('voice', phone, 'legislature')
-    p.add_contact('email', email)
-    p.image = image
-    return p
+    def scrape_mayor(self, url):
+        page = self.lxmlize(url)
+        name = page.xpath('//div[@class="interiorContentWrapper"]/p/strong/text()')[0]
+        address = ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p/text()')[1:3])
+        address = re.sub(r'\s{2,}', ' ', address)
+        contact_elem = page.xpath('//div[@class="interiorContentWrapper"]/p[3]')[0]
+        phone = contact_elem.text.split(':')[1].strip()
+        email = contact_elem.xpath('string(./a)')
 
-
-  def scrape_mayor(self, url):
-    page = self.lxmlize(url)
-    name = page.xpath('//div[@class="interiorContentWrapper"]/p/strong/text()')[0]
-    address = ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p/text()')[1:3])
-    address = re.sub(r'\s{2,}', ' ', address)
-    contact_elem = page.xpath('//div[@class="interiorContentWrapper"]/p[3]')[0]
-    phone = contact_elem.text.split(':')[1].strip()
-    email = contact_elem.xpath('string(./a)')
-
-    p = Person(primary_org='legislature', name=name, district='Markham', role='Mayor')
-    p.add_source(url)
-    p.add_contact('address', address, 'legislature')
-    p.add_contact('voice', phone, 'legislature')
-    p.add_contact('email', email)
-    yield p
+        p = Person(primary_org='legislature', name=name, district='Markham', role='Mayor')
+        p.add_source(url)
+        p.add_contact('address', address, 'legislature')
+        p.add_contact('voice', phone, 'legislature')
+        p.add_contact('email', email)
+        yield p
 
 
 def get_links(councillor, div):
-  links = div.xpath('.//a')
-  for link in links:
-    link = link.attrib['href']
+    links = div.xpath('.//a')
+    for link in links:
+        link = link.attrib['href']
 
-    if 'mailto:' in link:
-      continue
-    else:
-      councillor.add_link(link)
+        if 'mailto:' in link:
+            continue
+        else:
+            councillor.add_link(link)

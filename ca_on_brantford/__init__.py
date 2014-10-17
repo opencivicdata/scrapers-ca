@@ -3,8 +3,8 @@ from utils import CanadianJurisdiction
 
 
 class Brantford(CanadianJurisdiction):
-  classification = 'legislature'
-  division_id = 'ocd-division/country:ca/csd:3529006'
-  division_name = 'Brantford'
-  name = 'Brantford City Council'
-  url = 'http://www.brantford.ca'
+    classification = 'legislature'
+    division_id = 'ocd-division/country:ca/csd:3529006'
+    division_name = 'Brantford'
+    name = 'Brantford City Council'
+    url = 'http://www.brantford.ca'

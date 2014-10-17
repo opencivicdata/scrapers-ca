@@ -11,59 +11,58 @@ MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor
 
 class EdmontonPersonScraper(CanadianScraper):
 
-  def scrape(self):
-    yield self.scrape_mayor()
+    def scrape(self):
+        yield self.scrape_mayor()
 
-    page = self.lxmlize(COUNCIL_PAGE)
-    councillor_cells = page.xpath('//th[contains(text(), "Ward")]')
-    for cell in councillor_cells:
-      district = cell.text
-      name = cell[1].text
-      page_url = cell[1].attrib['href']
-      page = self.lxmlize(page_url)
+        page = self.lxmlize(COUNCIL_PAGE)
+        councillor_cells = page.xpath('//th[contains(text(), "Ward")]')
+        for cell in councillor_cells:
+            district = cell.text
+            name = cell[1].text
+            page_url = cell[1].attrib['href']
+            page = self.lxmlize(page_url)
 
-      p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-      p.add_source(COUNCIL_PAGE)
-      p.add_source(page_url)
+            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(page_url)
 
-      image = page.xpath('//div[@id="contentArea"]//img/@src')
-      if image:
-        p.image = image[0]
+            image = page.xpath('//div[@id="contentArea"]//img/@src')
+            if image:
+                p.image = image[0]
 
-      address = page.xpath('//address//p')
-      if address:
-        address = address[0].text_content()
+            address = page.xpath('//address//p')
+            if address:
+                address = address[0].text_content()
+                p.add_contact('address', address, 'legislature')
+
+            contacts = page.xpath('//table[@class="contactListing"]//tr')
+            for contact in contacts:
+                contact_type = contact.xpath('./th/text()')[0]
+                value = contact.xpath('./td//text()')[0]
+                if 'Title' in contact_type:
+                    continue
+                elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
+                    value = contact.xpath('./td/a/text()')[0]
+                    p.add_link(value)
+                elif 'Telephone' in contact_type:
+                    p.add_contact('voice', value, 'legislature')
+                elif 'Fax' in contact_type:
+                    p.add_contact('fax', value, 'legislature')
+                elif 'Email' in contact_type:
+                    p.add_contact('email', value)
+            yield p
+
+    def scrape_mayor(self):
+        page = self.lxmlize(MAYOR_PAGE)
+        name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
+
+        p = Person(primary_org='legislature', name=name, district='Edmonton', role='Mayor')
+        p.add_source(MAYOR_PAGE)
+
+        image = page.xpath('//div[@id="contentArea"]//img/@src')[0]
+        p.image = image
+
+        address = ' '.join(page.xpath('//address/p/text()'))
         p.add_contact('address', address, 'legislature')
 
-      contacts = page.xpath('//table[@class="contactListing"]//tr')
-      for contact in contacts:
-        contact_type = contact.xpath('./th/text()')[0]
-        value = contact.xpath('./td//text()')[0]
-        if 'Title' in contact_type:
-          continue
-        elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
-          value = contact.xpath('./td/a/text()')[0]
-          p.add_link(value)
-        elif 'Telephone' in contact_type:
-          p.add_contact('voice', value, 'legislature')
-        elif 'Fax' in contact_type:
-          p.add_contact('fax', value, 'legislature')
-        elif 'Email' in contact_type:
-          p.add_contact('email', value)
-      yield p
-
-
-  def scrape_mayor(self):
-    page = self.lxmlize(MAYOR_PAGE)
-    name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
-
-    p = Person(primary_org='legislature', name=name, district='Edmonton', role='Mayor')
-    p.add_source(MAYOR_PAGE)
-
-    image = page.xpath('//div[@id="contentArea"]//img/@src')[0]
-    p.image = image
-
-    address = ' '.join(page.xpath('//address/p/text()'))
-    p.add_contact('address', address, 'legislature')
-
-    return p
+        return p

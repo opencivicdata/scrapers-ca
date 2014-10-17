@@ -11,14 +11,14 @@ COUNCIL_PAGE = 'http://www.cityofgp.com/index.aspx?page=718'
 
 class GrandePrairiePersonScraper(CanadianScraper):
 
-  def scrape(self):
-    page = self.lxmlize(COUNCIL_PAGE)
-    for row in page.xpath(r'//table[@class="listtable"]//tr')[1:]:
-      celltext = row.xpath('./td//text()')
-      last, first = celltext[0].split(', ')
-      name = ' '.join((first, last))
-      p = Person(primary_org='legislature', name=name, district='Grande Prairie', role=celltext[1])
-      p.add_source(COUNCIL_PAGE)
-      p.add_contact('voice', celltext[3], 'legislature')
-      p.add_contact('email', row.xpath('string(./td[last()]//a/@href)').split(':')[1])
-      yield p
+    def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE)
+        for row in page.xpath(r'//table[@class="listtable"]//tr')[1:]:
+            celltext = row.xpath('./td//text()')
+            last, first = celltext[0].split(', ')
+            name = ' '.join((first, last))
+            p = Person(primary_org='legislature', name=name, district='Grande Prairie', role=celltext[1])
+            p.add_source(COUNCIL_PAGE)
+            p.add_contact('voice', celltext[3], 'legislature')
+            p.add_contact('email', row.xpath('string(./td[last()]//a/@href)').split(':')[1])
+            yield p

@@ -14,62 +14,60 @@ MAYOR_PAGE = 'http://www.kitchener.ca/en/insidecityhall/MayorSLandingPage.asp'
 
 class KitchenerPersonScraper(CanadianScraper):
 
-  def scrape(self):
-    page = self.lxmlize(COUNCIL_PAGE)
+    def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE)
 
-    councillor_nodes = page.xpath('//div[@id="printArea"]//li')
+        councillor_nodes = page.xpath('//div[@id="printArea"]//li')
 
-    for node in councillor_nodes:
-      councillor_url = node.xpath('string(./a/@href)')
-      ward = node.xpath('string(./strong)').split('-')[0]
-      yield self.councillor_data(councillor_url, ward)
+        for node in councillor_nodes:
+            councillor_url = node.xpath('string(./a/@href)')
+            ward = node.xpath('string(./strong)').split('-')[0]
+            yield self.councillor_data(councillor_url, ward)
 
-    yield self.mayor_data(MAYOR_PAGE)
+        yield self.mayor_data(MAYOR_PAGE)
 
+    def councillor_data(self, url, ward):
+        page = self.lxmlize(url)
 
-  def councillor_data(self, url, ward):
-    page = self.lxmlize(url)
+        infobox_node = page.xpath('//div[@id="printArea"]')[0]
+        name = infobox_node.xpath('string(.//h1[1])')[len('Councillor'):]
 
-    infobox_node = page.xpath('//div[@id="printArea"]')[0]
-    name = infobox_node.xpath('string(.//h1[1])')[len('Councillor'):]
+        contact_node = infobox_node.xpath('.//p[contains(text(), "Coun.")]')[0]
+        email = contact_node.xpath('string(.//text()[contains(., "@")])').split()[-1]
 
-    contact_node = infobox_node.xpath('.//p[contains(text(), "Coun.")]')[0]
-    email = contact_node.xpath('string(.//text()[contains(., "@")])').split()[-1]
+        # TODO: contact details are tricky
+        #address = '\n'.join(contact_node.xpath('./text()')[:4])
+        #phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
 
-    # TODO: contact details are tricky
-    #address = '\n'.join(contact_node.xpath('./text()')[:4])
-    #phone = contact_node.xpath('string(./text()[5])').strip('City hall:')
+        photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
+        photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-    photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
-    photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
+        p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
+        p.add_source(COUNCIL_PAGE)
+        p.add_source(url)
+        if email:
+            p.add_contact('email', email)
+        p.image = photo_url
 
-    p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
-    p.add_source(COUNCIL_PAGE)
-    p.add_source(url)
-    if email:
-      p.add_contact('email', email)
-    p.image = photo_url
+        return p
 
-    return p
+    def mayor_data(self, url):
+        page = self.lxmlize(url)
 
+        infobox_node = page.xpath('//div[@id="printArea"]')[0]
+        name = infobox_node.xpath('string(.//h1)')[6:]  # strip 'Mayor' prefix
 
-  def mayor_data(self, url):
-    page = self.lxmlize(url)
+        contact_node = page.xpath('//div[@id="contentIntContact"]')[0]
 
-    infobox_node = page.xpath('//div[@id="printArea"]')[0]
-    name = infobox_node.xpath('string(.//h1)')[6:]  # strip 'Mayor' prefix
+        # TODO: fruitlessly wasted way too much time below
+        address = '\n'.join(contact_node.xpath('./p[2]/text()')[:3])
+        phone = contact_node.xpath('string(./p[2]/text()[contains(., "T.")])')[3:]
 
-    contact_node = page.xpath('//div[@id="contentIntContact"]')[0]
+        photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
+        photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
-    # TODO: fruitlessly wasted way too much time below
-    address = '\n'.join(contact_node.xpath('./p[2]/text()')[:3])
-    phone = contact_node.xpath('string(./p[2]/text()[contains(., "T.")])')[3:]
+        p = Person(primary_org='legislature', name=name, district='Kitchener', role='Mayor')
+        p.add_source(url)
+        p.image = photo_url
 
-    photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
-    photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
-
-    p = Person(primary_org='legislature', name=name, district='Kitchener', role='Mayor')
-    p.add_source(url)
-    p.image = photo_url
-
-    return p
+        return p

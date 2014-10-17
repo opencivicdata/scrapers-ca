@@ -3,8 +3,8 @@ from utils import CanadianJurisdiction
 
 
 class Cambridge(CanadianJurisdiction):
-  classification = 'legislature'
-  division_id = 'ocd-division/country:ca/csd:3530010'
-  division_name = 'Cambridge'
-  name = 'Cambridge City Council'
-  url = 'http://www.cambridge.ca'
+    classification = 'legislature'
+    division_id = 'ocd-division/country:ca/csd:3530010'
+    division_name = 'Cambridge'
+    name = 'Cambridge City Council'
+    url = 'http://www.cambridge.ca'
