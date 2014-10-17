@@ -1,11 +1,5 @@
 # coding: utf-8
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
-
-import re
-
-from six.moves.urllib.parse import urljoin
-
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.gov.mb.ca/legislature/members/mla_list_alphabetical.html'
@@ -36,10 +30,6 @@ class ManitobaPersonScraper(CanadianScraper):
             name = first.replace('Hon.', '').strip() + ' ' + last.title().strip()
             district = ' '.join(constitcell.text_content().split())
             party = get_party(partycell.text)
-            data = {
-                'elected_office': 'MLA',
-                'source_url': COUNCIL_PAGE
-            }
 
             url = namecell.cssselect('a')[0].get('href')
             photo, email = self.get_details(url)

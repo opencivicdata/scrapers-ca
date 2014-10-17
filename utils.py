@@ -8,11 +8,11 @@ from ftplib import FTP
 import lxml.html
 import requests
 from opencivicdata.divisions import Division
-from pupa.scrape import Scraper, Jurisdiction, Membership, Organization, Person
+from pupa.scrape import Scraper, Jurisdiction, Organization, Person
 from six import StringIO, string_types, text_type
 from six.moves.urllib.parse import urlparse
 
-from . import patch
+from . import patch  # patch patches validictory # noqa
 
 CONTACT_DETAIL_TYPE_MAP = {
     'Address': 'address',

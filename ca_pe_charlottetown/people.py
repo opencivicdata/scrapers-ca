@@ -1,6 +1,5 @@
 # coding: utf-8
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
 
@@ -41,7 +40,6 @@ class CharlottetownPersonScraper(CanadianScraper):
             name = re.sub(r'\(.+?\)', '', name)
             name = ' '.join(name.split())
 
-            district_name = header[1].strip()
             district_id = ' '.join(header[1].split()[:2])
 
             # needed a wacky xpath to deal with ward 8

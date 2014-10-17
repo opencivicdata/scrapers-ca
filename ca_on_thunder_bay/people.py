@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
 
@@ -21,7 +20,6 @@ class ThunderBayPersonScraper(CanadianScraper):
             for br in info.xpath('*//br'):
                 br.tail = '\n' + br.tail if br.tail else '\n'
             lines = [line.strip() for line in info.text_content().split('\n') if line.strip()]
-            text = '\n'.join(lines)
             name = lines[0].replace('Councillor ', '').replace('Mayor ', '')
 
             if lines[1].endswith(' Ward'):

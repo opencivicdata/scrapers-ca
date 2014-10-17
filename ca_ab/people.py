@@ -1,12 +1,9 @@
 # coding: utf-8
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
-import re
 import csv
 
 import lxml.html
-from lxml import etree
 
 from utils import CanadianScraper, CanadianPerson as Person
 

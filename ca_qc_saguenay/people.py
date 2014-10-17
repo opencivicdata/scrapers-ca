@@ -1,11 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
-
-import os
-import re
-import shutil
-import tempfile
-
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://ville.saguenay.ca/fr/administration-municipale/conseils-municipaux-et-darrondissement/membres-des-conseils'
@@ -14,8 +7,6 @@ COUNCIL_PAGE = 'http://ville.saguenay.ca/fr/administration-municipale/conseils-m
 class SaguenayPersonScraper(CanadianScraper):
 
     def scrape(self):
-
-        tmpdir = tempfile.mkdtemp()
         page = self.lxmlize(COUNCIL_PAGE)
 
         mayor = page.xpath('//div[@class="box"]/p/text()')
@@ -35,8 +26,6 @@ class SaguenayPersonScraper(CanadianScraper):
             name = name.replace('M. ', '').replace('Mme ', '').strip()
             phone = councillor.xpath('.//p/text()')[1].split(':')[1].strip().replace(' ', '-')
             email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
-
-            url = councillor.xpath('./p/a')[0].attrib['href']
 
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
             p.add_source(COUNCIL_PAGE)

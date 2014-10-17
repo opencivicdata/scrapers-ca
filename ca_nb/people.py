@@ -1,10 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
 
-from lxml import etree
 from six.moves.urllib.parse import urljoin
 
 from utils import CanadianScraper, CanadianPerson as Person

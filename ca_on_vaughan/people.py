@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
 
@@ -49,8 +48,6 @@ class VaughanPersonScraper(CanadianScraper):
             image = page.xpath('//img[contains(@alt, "Councillor")]/@src')
             if image:
                 p.image = image[0]
-
-            sites = page.xpath('//div[@id="WebPartWPQ5"]')[0]
 
             if page.xpath('.//a[contains(@href,"facebook")]'):
                 p.add_link(page.xpath('.//a[contains(@href,"facebook")]')[0].attrib['href'])

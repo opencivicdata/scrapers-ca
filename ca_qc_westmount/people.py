@@ -1,8 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
-
-import re
-
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.westmount.org/page.cfm?Section_ID=1&Menu_Item_ID=61'

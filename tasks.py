@@ -6,11 +6,10 @@ import csv
 import importlib
 import os
 import re
-import string
 
 import lxml.html
 import requests
-from invoke import run, task
+from invoke import task
 from six import next, StringIO, text_type
 from six.moves.urllib.parse import urlsplit
 from unidecode import unidecode
@@ -110,7 +109,6 @@ def get_definition(division_id, aggregation=False):
         ocdid_to_name_map['ocd-division/country:ca/province:qc'] = 'Québec'
 
     codes = province_and_territory_codes()
-    ocd_id_to_code_map = {v: k for k, v in codes.items()}
 
     expected = {}
 
@@ -214,8 +212,6 @@ def tidy():
         key = row[0]
         leader_styles[key] = row[2]
         member_styles[key] = row[3]
-
-    codes = province_and_territory_codes()
 
     for module_name in os.listdir('.'):
         division_ids = set()

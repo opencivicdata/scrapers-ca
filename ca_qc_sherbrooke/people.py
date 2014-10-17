@@ -1,8 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
-
-import re
-
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/conseil-municipal/elus-municipaux/'

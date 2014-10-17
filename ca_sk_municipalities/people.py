@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper, Organization
-
+from pupa.scrape import Organization
 import re
 import os
 import subprocess

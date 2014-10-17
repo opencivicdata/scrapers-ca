@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
 
@@ -60,6 +59,9 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
         address = ' '.join(contacts[:4])
         phone = contacts[-3].split(':')[1].strip().replace(' ', '-')
         fax = contacts[-2].split(':')[1].strip().replace(' ', '-')
+        p.add_contact('address', address, 'legislature')
+        p.add_contact('voice', phone, 'legislature')
+        p.add_contact('fax', fax, 'legislature')
         # mayor's email is a form
         return p
 

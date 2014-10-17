@@ -1,9 +1,6 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
-
-from six.moves.urllib.parse import urljoin
 
 from utils import CanadianScraper, CanadianPerson as Person
 

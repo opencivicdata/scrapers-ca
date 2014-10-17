@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
 
 import re
 
@@ -22,9 +21,8 @@ class GatineauPersonScraper(CanadianScraper):
         # first item in list is mayor
         p = Person(primary_org='legislature', name=members[0], district='Gatineau', role='Maire')
         p.add_source(COUNCIL_PAGE)
-        mayor_page = self.lxmlize(MAYOR_CONTACT_PAGE)
         p.add_source(MAYOR_CONTACT_PAGE)
-        email = 'maire@gatineau.ca'  # hardcoded
+        email = 'maire@gatineau.ca'  # @todo hardcoded
         p.add_contact('email', email)
         yield p
 

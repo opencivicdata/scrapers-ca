@@ -57,11 +57,11 @@ To check that all sources are credited, run:
 
 To test [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance, run:
 
-    pep8 .
+    flake8 .
 
 To tidy all whitespace, run:
 
-    autopep8 -i -a -r --ignore=E111,E501 .
+    autopep8 -i -a -r --ignore=E501 .
 
 To check and print jurisdiction URLs:
 

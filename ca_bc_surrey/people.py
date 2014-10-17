@@ -1,9 +1,5 @@
 # coding: utf-8
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
-
-import re
-
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.surrey.ca/city-government/2999.aspx'

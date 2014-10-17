@@ -1,8 +1,4 @@
 from __future__ import unicode_literals
-from pupa.scrape import Scraper
-
-import re
-
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972'

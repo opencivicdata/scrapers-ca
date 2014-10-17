@@ -1,8 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
-from pupa.scrape import Scraper, Organization
-
-import re
+from pupa.scrape import Organization
 
 from utils import CanadianScraper, CanadianPerson as Person
 
