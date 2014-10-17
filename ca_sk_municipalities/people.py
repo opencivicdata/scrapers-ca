@@ -27,7 +27,7 @@ class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
         pages = []
         page = []
         for line in data:
-            if line.strip() and not 'Page' in line and not 'CITIES' in line and not 'NORTHERN TOWNS, VILLAGES' in line:
+            if line.strip() and 'Page' not in line and 'CITIES' not in line and 'NORTHERN TOWNS, VILLAGES' not in line:
                 page.append(line)
             elif page:
                 pages.append(page)

@@ -38,7 +38,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                 for contact in contacts:
                     if not re.search(r'[0-9]', contact):
                         continue
-                    if not '(' in contact:
+                    if '(' not in contact:
                         contact_type = 'T'
                     else:
                         contact_type, contact = contact.split('(')

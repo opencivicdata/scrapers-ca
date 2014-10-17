@@ -24,7 +24,7 @@ class YukonMunicipalitiesPersonScraper(CanadianScraper):
         data = re.split(r'\n\s*\n', data)
         for municipality in data:
 
-            if not 'Councillors' in municipality:
+            if 'Councillors' not in municipality:
                 continue
             lines = municipality.split('\n')
             if 'Page' in lines[0]:

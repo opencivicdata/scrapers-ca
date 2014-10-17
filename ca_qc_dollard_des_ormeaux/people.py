@@ -18,7 +18,7 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
         general_fax = general_contacts[1]
 
         councillors = page.xpath('//tr/td/p/strong')
-        councillors = [councillor for councillor in councillors if not "@" in councillor.text_content()]
+        councillors = [councillor for councillor in councillors if "@" not in councillor.text_content()]
         for councillor in councillors:
 
             if 'Mayor' in councillor.text_content():

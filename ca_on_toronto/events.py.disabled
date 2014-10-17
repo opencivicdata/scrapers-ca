@@ -135,7 +135,7 @@ def find_items(committee):
   page = self.lxmlize(link)
   meetings = page.xpath('//a[contains(@name, "header")]')
   for meeting in meetings:
-    if not 'Complete' in meeting.xpath('./parent::h3')[0].text_content():
+    if 'Complete' not in meeting.xpath('./parent::h3')[0].text_content():
       continue
     date = meeting.xpath('./parent::h3')[0].text_content().strip().split('-')
     date = dt.datetime.strptime('-'.join(date[0:2]).strip(), "%B %d, %Y - %I:%M %p")
@@ -165,7 +165,7 @@ def find_items(committee):
       item_links = []
       links = page.xpath('//a[not(contains(@href, "mailto:"))]')
       for link in links:
-        if not 'href' in list(link.attrib.keys()):
+        if 'href' not in list(link.attrib.keys()):
           continue
         description = link.xpath('.//parent::font/preceding-sibling::font/text()')
         if description:

@@ -41,10 +41,10 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
             membership = p.add_membership(org, role='Mayor', district=district)
 
             address = lines.pop(0).strip() + ', ' + lines.pop(0).strip()
-            if not 'Phone' in lines[0]:
+            if 'Phone' not in lines[0]:
                 address = address + ', ' + lines.pop(0).strip()
 
-            if not 'Phone' in lines[0]:
+            if 'Phone' not in lines[0]:
                 address = address + ', ' + lines.pop(0).strip()
 
             phone = lines.pop(0).split(':')[1].strip()

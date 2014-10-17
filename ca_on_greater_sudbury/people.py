@@ -19,7 +19,7 @@ class GreaterSudburyPersonScraper(CanadianScraper):
                 yield self.scrape_mayor(councillor)
                 continue
 
-            if not '-' in councillor.text_content():
+            if '-' not in councillor.text_content():
                 break
 
             district, name = councillor.text_content().split(' - ')

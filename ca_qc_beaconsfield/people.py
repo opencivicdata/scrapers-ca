@@ -17,7 +17,7 @@ class BeaconsfieldPersonScraper(CanadianScraper):
 
         councillors = page.xpath('//h1[@class="title"]')
         for councillor in councillors:
-            if not ',' in councillor.text_content():
+            if ',' not in councillor.text_content():
                 continue
             name, district = councillor.text_content().split(',')
             name = name.strip()

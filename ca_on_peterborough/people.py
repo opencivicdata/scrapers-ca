@@ -63,7 +63,7 @@ class PeterboroughPersonScraper(CanadianScraper):
 
     def get_tel_numbers(self, line, councillor):
         for i, x in enumerate(line):
-            if '\xbb' in x and not 'E-Mail' in line[i - 1]:
+            if '\xbb' in x and 'E-Mail' not in line[i - 1]:
                 if "Fax" in line[i - 1]:
                     contact_type = 'fax'
                 elif 'Cell Phone' in line[i - 1]:
