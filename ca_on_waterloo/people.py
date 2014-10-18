@@ -1,4 +1,3 @@
-# coding: utf-8
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
@@ -21,8 +20,8 @@ class WaterlooPersonScraper(CanadianScraper):
         yield self.mayor_data(mayor_url)
 
 
-def photo_url(page):
-    return page.xpath('string(//div[@id="printAreaContent"]/p/img/@src)')
+    def photo_url(self, page):
+        return page.xpath('string(//div[@id="printAreaContent"]/p/img/@src)')
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
@@ -35,7 +34,7 @@ def photo_url(page):
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.image = photo_url(page)
+        p.image = self.photo_url(page)
 
         return p
 
@@ -47,6 +46,6 @@ def photo_url(page):
         p = Person(primary_org='legislature', name=name, district='Waterloo', role='Mayor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.image = photo_url(page)
+        p.image = self.photo_url(page)
 
         return p

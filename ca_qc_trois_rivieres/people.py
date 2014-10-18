@@ -1,11 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
 from six.moves.urllib.parse import urljoin
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=150&CPage=1'
 

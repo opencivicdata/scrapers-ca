@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
 from six import text_type
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.oakville.ca/townhall/council.html'
 
@@ -72,15 +71,15 @@ class OakvillePersonScraper(CanadianScraper):
         else:
             phone = phone[0]
         fax = re.findall(r'fax: ([\d\s-]*)', info)
-        emails = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "mailto:")]')
+        email = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "mailto:")]')[0].text_content()
+        # The second email is for contacting both councillors.
         # save contact info to councillor object
         if address:
             councillor.add_contact('address', address, 'legislature')
         councillor.add_contact('voice', str(phone), 'legislature')
         if fax:
             councillor.add_contact('fax', str(fax[0]), 'legislature')
-        councillor.add_contact('email', emails[0].text_content())
-        councillor.add_contact('email', emails[1].text_content())
+        councillor.add_contact('email', email)
 
         # extra links
         if "Twitter" in info:

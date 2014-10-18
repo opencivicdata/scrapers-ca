@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
-from pupa.scrape import Organization
+from utils import CanadianScraper, CanadianPerson as Person
+
 import re
 import os
 import subprocess
 
+from pupa.scrape import Organization
 from six.moves.urllib.request import urlopen
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Directory-pdf'
 # See also HTML format http://www.mds.gov.sk.ca/apps/Pub/MDS/welcome.aspx

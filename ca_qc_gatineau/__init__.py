@@ -8,3 +8,4 @@ class Gatineau(CanadianJurisdiction):
     division_name = 'Gatineau'
     name = 'Conseil municipal de Gatineau'
     url = 'http://www.gatineau.ca'
+    use_type_id = True

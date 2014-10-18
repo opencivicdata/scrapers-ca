@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ville.saint-jean-sur-richelieu.qc.ca/conseil-municipal/membres-conseil/Pages/membres-conseil.aspx'
 

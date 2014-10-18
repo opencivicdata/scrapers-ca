@@ -30,8 +30,8 @@ class SaskatchewanPersonScraper(CanadianScraper):
             p.add_contact('address', ' '.join(contact.xpath('.//div[@class="col-md-4"][2]/div//text()')[1:9]), 'constituency')
             phone_leg = contact.xpath('string(.//span[@id="MainContent_ContentBottom_Property6"]//text())')
             phone_const = contact.xpath('string(.//div[@class="col-md-4"]/div[4]/span/span/text())')
-            p.add_contact('voice', phone_leg, 'legislature')
-            p.add_contact('voice', phone_const, 'constituency')
+            p.add_contact('voice', phone_leg, 'legislature', area_code=306)
+            p.add_contact('voice', phone_const, 'constituency', area_code=306)
             email = contact.xpath('string(.//a[contains(@href, "mailto:")]/text())')
             p.add_contact('email', email)
 

@@ -8,3 +8,4 @@ class Vaughan(CanadianJurisdiction):
     division_name = 'Vaughan'
     name = 'Vaughan City Council'
     url = 'https://www.vaughan.ca'
+    use_type_id = True

@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
 MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/conseil_municipal/maire'

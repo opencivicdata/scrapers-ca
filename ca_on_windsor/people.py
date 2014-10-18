@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 from six.moves.urllib.parse import urljoin
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/City-Councillors/Pages/City-Councillors.aspx'
 MAYOR_PAGE = 'http://www.citywindsor.ca/mayorandcouncil/Pages/Biography-of-the-Mayor.aspx'

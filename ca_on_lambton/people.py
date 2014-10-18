@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
 
 
 class LambtonPersonScraper(CanadianScraper):
+    councillor_seat_number = 1
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
@@ -16,14 +16,19 @@ class LambtonPersonScraper(CanadianScraper):
         for councillor in councillors:
             node = councillor.xpath('.//td[1]//strong//strong//strong//strong') or councillor.xpath('.//td[1]//strong')
             text = node[0].text_content()
-            name = text.strip().replace('Deputy ', '').replace('Warden ', '').replace('Mayor', '')
-            role = text.replace(name, '').strip()
-            if not role:
+            if 'Deputy Warden' in text:
+                role = 'Deputy Warden'
+                name = text.replace('Deputy Warden', '')
+                district = 'Lambton'
+            elif 'Warden' in text:
+                role = 'Warden'
+                name = text.replace('Warden', '')
+                district = 'Lambton'
+            else:
                 role = 'Councillor'
-            if ',' in name:
-                name = name.split(',')[0].strip()
-            district = councillor.xpath('.//td[1]//p[contains(text(),",")]/text()')[0].split(',')[1].strip()
-            district = re.sub(r'\A(?:City|Municipality|Town|Township|Village) of\b| Township\Z', '', district)
+                name = text
+                district = 'Lambton (seat %d)' % self.councillor_seat_number
+                self.councillor_seat_number += 1
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

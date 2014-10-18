@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 import re
 
 from six.moves.urllib.parse import urljoin
-
-from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 COUNCIL_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/councillors/'
 MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/'

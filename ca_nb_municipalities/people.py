@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
-from pupa.scrape import Organization
-
 from utils import CanadianScraper, CanadianPerson as Person
+
+from pupa.scrape import Organization
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'
 org_types = [' City Council', ' Town Council', ' Village Council', ' Community Council']

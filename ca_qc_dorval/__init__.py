@@ -8,3 +8,4 @@ class Dorval(CanadianJurisdiction):
     division_name = 'Dorval'
     name = 'Conseil municipal de Dorval'
     url = 'http://www.ville.dorval.qc.ca'
+    use_type_id = True

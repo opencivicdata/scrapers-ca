@@ -1,18 +1,18 @@
-# coding: utf-8
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
+from collections import defaultdict
 from itertools import takewhile
 
 from six.moves.urllib.parse import urljoin
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.regionofwaterloo.ca/en/regionalgovernment/regionalcouncil.asp'
 CHAIR_URL = 'http://www.regionofwaterloo.ca/en/regionalGovernment/regionalchairandsupportstaff.asp'
 
 
 class WaterlooPersonScraper(CanadianScraper):
+    seat_numbers = defaultdict(int)
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
@@ -25,7 +25,12 @@ class WaterlooPersonScraper(CanadianScraper):
                                      region.xpath('./following-sibling::*'))]
             for councillor in councillors:
                 post = re.search('of (.*)', region.text).group(1)
-                p = Person(primary_org='legislature', name=councillor.text, district=post, role='Councillor')
+                if 'Mayor' in councillor.xpath('../text()')[0]:
+                    district = '%s (mayor)' % post
+                else:
+                    self.seat_numbers[post] += 1
+                    district = '%s (seat %d)' % (post, self.seat_numbers[post])
+                p = Person(primary_org='legislature', name=councillor.text, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
                 councillor_url = councillor.attrib['href']
                 p.add_source(councillor_url)
@@ -46,7 +51,7 @@ class WaterlooPersonScraper(CanadianScraper):
         photo_url_src = chairpage.xpath(
             'string(//div[@id="contentIntleft"]//img[1]/@src)')
         photo_url = urljoin(CHAIR_URL, photo_url_src)
-        p = Person(primary_org='legislature', name=name, district='Waterloo', role='Regional Chair')
+        p = Person(primary_org='legislature', name=name, district='Waterloo', role='Chair')
         p.add_source(CHAIR_URL)
         p.add_contact('email', email)
         p.add_contact('voice', phone, 'legislature')

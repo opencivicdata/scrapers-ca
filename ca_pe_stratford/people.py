@@ -1,26 +1,30 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-
-from utils import CanadianScraper, CanadianPerson as Person
+from collections import defaultdict
 
 COUNCIL_PAGE = 'http://www.townofstratford.ca/town-hall/government/town-council/'
 
 
 class StratfordPersonScraper(CanadianScraper):
+    seat_numbers = defaultdict(int)
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
 
         yield self.scrape_mayor(page)
 
-        councillors = page.xpath('//strong[contains(text(), "Councillor")]/parent::p|//b[contains(text(), "Councillor")]/parent::p')
+        councillors = page.xpath('//div[@id="street-container"]//strong[contains(text(), "Councillor")]/parent::p|//div[@id="street-container"]//b[contains(text(), "Councillor")]/parent::p')
         for councillor in councillors:
 
             name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '').strip()
-            district = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
+            post = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+            self.seat_numbers[post] += 1
+            post = '%s (seat %d)' % (post, self.seat_numbers[post])
+
+            p = Person(primary_org='legislature', name=name, district=post, role='Councillor')
             p.add_source(COUNCIL_PAGE)
 
             p.image = councillor.xpath('.//img/@src')[0]

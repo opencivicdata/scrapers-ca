@@ -1,9 +1,7 @@
-# coding: utf-8
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 from six.moves.urllib.parse import urljoin, unquote
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.victoria.ca/EN/main/city/mayor-council-committees/councillors.html'
 

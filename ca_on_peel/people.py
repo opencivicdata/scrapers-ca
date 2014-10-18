@@ -1,4 +1,3 @@
-# coding: utf-8
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
@@ -11,7 +10,6 @@ class PeelPersonScraper(CanadianScraper):
     def scrape(self):
         yield self.chair_info(CHAIR_URL)
         for row in self.csv_reader(COUNCIL_PAGE, header=True, headers={'Cookie': 'incap_ses_168_68279=7jCHCh608QQSFVti3dtUAviu/1IAAAAAIRf6OsZL0NttnlzANkVb6w=='}):
-
             p = Person(
                 primary_org='legislature',
                 name='%(FirstName0)s %(LastName0)s' % row,

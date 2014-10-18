@@ -1,4 +1,3 @@
-# coding: utf-8
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
 
@@ -9,3 +8,4 @@ class Charlottetown(CanadianJurisdiction):
     division_name = 'Charlottetown'
     name = 'Charlottetown City Council'
     url = 'http://www.city.charlottetown.pe.ca'
+    use_type_id = True

@@ -10,6 +10,7 @@ import re
 import lxml.html
 import requests
 from invoke import task
+from opencivicdata.divisions import Division
 from six import next, StringIO, text_type
 from six.moves.urllib.parse import urlsplit
 from unidecode import unidecode
@@ -21,10 +22,9 @@ province_and_territory_codes_memo = {}
 
 def province_and_territory_codes():
     if not province_and_territory_codes_memo:
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
-        next(reader)
-        for row in reader:
-            province_and_territory_codes_memo[row[4]] = row[0]
+        for division in Division.get('ocd-division/country:ca').children():
+            if division._type in ('province', 'territory'):
+                province_and_territory_codes_memo[division.attrs['sgc']] = division.id
     return province_and_territory_codes_memo
 
 
@@ -45,23 +45,10 @@ def slug(name):
         ord('.'): None,
     }))
 
-urls_memo = {}
 ocdid_to_type_name_map = {}
-ocdid_to_name_map = {}
 
 
 def get_definition(division_id, aggregation=False):
-    if not urls_memo:
-        # Map OCD identifiers to URLs.
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions-url.csv')
-        next(reader)
-        for row in reader:
-            urls_memo[row[0]] = row[1]
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs-url.csv')
-        next(reader)
-        for row in reader:
-            urls_memo[row[0]] = row[1]
-
     if not ocdid_to_type_name_map:
         # Map census division type codes to names.
         census_division_type_names = {}
@@ -69,48 +56,23 @@ def get_definition(division_id, aggregation=False):
         for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
             census_division_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
 
-        # Map OCD identifiers to census division types.
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv')
-        next(reader)
-        for row in reader:
-            ocdid_to_type_name_map[row[0]] = census_division_type_names[row[3]]
-
         # Map census subdivision type codes to names.
         census_subdivision_type_names = {}
         document = lxml.html.fromstring(requests.get('http://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-5-eng.cfm').content)
         for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
             census_subdivision_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
 
-        # Map OCD identifiers to census subdivision types.
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')
-        next(reader)
-        for row in reader:
-            ocdid_to_type_name_map[row[0]] = census_subdivision_type_names[row[3]]
-
-    # Map OCD identifiers and Standard Geographical Classification codes to names.
-    if not ocdid_to_name_map:
-        ocdid_to_name_map['ocd-division/country:ca'] = 'Canada'
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv')
-        next(reader)
-        for row in reader:
-            ocdid_to_name_map[row[0]] = row[1]
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_provinces_and_territories.csv')
-        next(reader)
-        for row in reader:
-            ocdid_to_name_map[row[0]] = row[1]
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_divisions.csv')
-        next(reader)
-        for row in reader:
-            ocdid_to_name_map[row[0]] = row[1]
-        reader = csv_reader('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/ca_census_subdivisions.csv')
-        next(reader)
-        for row in reader:
-            ocdid_to_name_map[row[0]] = row[1]
-        ocdid_to_name_map['ocd-division/country:ca/province:qc'] = 'Québec'
+        # Map OCD identifiers to census types.
+        for division in Division.get('ocd-division/country:ca').children():
+            if division._type == 'cd':
+                ocdid_to_type_name_map[division.id] = census_division_type_names[division.attrs['classification']]
+            elif division._type == 'csd':
+                ocdid_to_type_name_map[division.id] = census_subdivision_type_names[division.attrs['classification']]
 
     codes = province_and_territory_codes()
 
     expected = {}
+    vowels = ('A', 'À', 'E', 'É', 'I', 'Î', 'O', 'Ô', 'U')
 
     sections = division_id.split('/')
     ocd_type, ocd_type_id = sections[-1].split(':')
@@ -123,28 +85,28 @@ def get_definition(division_id, aggregation=False):
         pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
         expected['module_name'] = pattern % ocd_type_id
         if aggregation:
-            expected['name'] = '%s Municipalities' % ocdid_to_name_map[division_id]
+            expected['name'] = '%s Municipalities' % Division.get(division_id).name
         elif ocd_type_id in ('nl', 'ns'):
-            expected['name'] = '%s House of Assembly' % ocdid_to_name_map[division_id]
+            expected['name'] = '%s House of Assembly' % Division.get(division_id).name
         elif ocd_type_id == 'qc':
             expected['name'] = 'Assemblée nationale du Québec'
         else:
-            expected['name'] = 'Legislative Assembly of %s' % ocdid_to_name_map[division_id]
+            expected['name'] = 'Legislative Assembly of %s' % Division.get(division_id).name
     elif ocd_type == 'cd':
         province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
+        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(Division.get(division_id).name))
         name_infix = ocdid_to_type_name_map[division_id]
         if name_infix == 'Regional municipality':
             name_infix = 'Regional'
-        expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
+        expected['name'] = '%s %s Council' % (Division.get(division_id).name, name_infix)
     elif ocd_type == 'csd':
         province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map[division_id]))
+        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(Division.get(division_id).name))
         if ocd_type_id[:2] == '24':
-            if ocdid_to_name_map[division_id][0] in ('A', 'E', 'I', 'O', 'U'):
-                expected['name'] = "Conseil municipal d'%s" % ocdid_to_name_map[division_id]
+            if Division.get(division_id).name[0] in vowels:
+                expected['name'] = "Conseil municipal d'%s" % Division.get(division_id).name
             else:
-                expected['name'] = "Conseil municipal de %s" % ocdid_to_name_map[division_id]
+                expected['name'] = "Conseil municipal de %s" % Division.get(division_id).name
         else:
             name_infix = ocdid_to_type_name_map[division_id]
             if name_infix in ('Municipality', 'Specialized municipality'):
@@ -153,33 +115,31 @@ def get_definition(division_id, aggregation=False):
                 name_infix = 'District'
             elif name_infix == 'Regional municipality':
                 name_infix = 'Regional'
-            expected['name'] = '%s %s Council' % (ocdid_to_name_map[division_id], name_infix)
+            expected['name'] = '%s %s Council' % (Division.get(division_id).name, name_infix)
     elif ocd_type == 'arrondissement':
         census_subdivision_type_id = sections[-2].split(':')[-1]
-        province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug(ocdid_to_name_map['/'.join(sections[:-1])]), slug(ocdid_to_name_map[division_id]))
-        if ocdid_to_name_map[division_id][0] in ('A', 'E', 'I', 'O', 'U'):
-            expected['name'] = "Conseil d'arrondissement d'%s" % ocdid_to_name_map[division_id]
-        elif ocdid_to_name_map[division_id][:3] == 'Le ':
-            expected['name'] = "Conseil d'arrondissement du %s" % ocdid_to_name_map[division_id][3:]
+        province_or_territory_type_id = codes[census_subdivision_type_id[:2]].split(':')[-1]
+        expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug(Division.get('/'.join(sections[:-1])).name), slug(Division.get(division_id).name))
+        if Division.get(division_id).name[0] in vowels:
+            expected['name'] = "Conseil d'arrondissement d'%s" % Division.get(division_id).name
+        elif Division.get(division_id).name[:3] == 'Le ':
+            expected['name'] = "Conseil d'arrondissement du %s" % Division.get(division_id).name[3:]
         else:
-            expected['name'] = "Conseil d'arrondissement de %s" % ocdid_to_name_map[division_id]
+            expected['name'] = "Conseil d'arrondissement de %s" % Division.get(division_id).name
     else:
         raise Exception('%s: Unrecognized OCD type %s' % (division_id, ocd_type))
 
     # Determine the class name.
-    class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', ocdid_to_name_map[division_id])))
+    class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', Division.get(division_id).name)))
     expected['class_name'] = unidecode(text_type(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
     if aggregation:
         expected['class_name'] += 'Municipalities'
 
     # Determine the url.
-    expected['url'] = ''
-    if urls_memo.get(division_id):
-        expected['url'] = urls_memo[division_id]
+    expected['url'] = Division.get(division_id).attrs['url']
 
     # Determine the division name.
-    expected['division_name'] = ocdid_to_name_map[division_id]
+    expected['division_name'] = Division.get(division_id).name
 
     return expected
 
@@ -200,18 +160,13 @@ def tidy():
     # Map OCD identifiers to styles of address.
     leader_styles = {}
     member_styles = {}
-    reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=0&output=csv')
-    next(reader)
-    for row in reader:
-        key = row[0]
-        leader_styles[key] = row[2]
-        member_styles[key] = row[3]
-    reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=1&output=csv')
-    next(reader)
-    for row in reader:
-        key = row[0]
-        leader_styles[key] = row[2]
-        member_styles[key] = row[3]
+    for gid in range(3):
+        reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=%d&output=csv' % gid)
+        next(reader)
+        for row in reader:
+            key = row[0]
+            leader_styles[key] = row[2]
+            member_styles[key] = row[3]
 
     for module_name in os.listdir('.'):
         division_ids = set()
@@ -222,7 +177,7 @@ def tidy():
             for obj in module.__dict__.values():
                 division_id = getattr(obj, 'division_id', None)
                 if division_id:  # We've found the module.
-                    jurisdiction_id = obj.jurisdiction_id
+                    jurisdiction_id = '{}/{}'.format(division_id.replace('ocd-division', 'ocd-jurisdiction'), getattr(obj, 'classification', 'legislature'))
 
                     # Ensure division_id is unique.
                     if division_id in division_ids:

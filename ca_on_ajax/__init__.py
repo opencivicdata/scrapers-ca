@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
+from pupa.scrape import Organization
 
 
 class Ajax(CanadianJurisdiction):
@@ -8,3 +9,14 @@ class Ajax(CanadianJurisdiction):
     division_name = 'Ajax'
     name = 'Ajax Town Council'
     url = 'http://www.ajax.ca'
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        organization.add_post(role='Mayor', label='Ajax')
+        organization.add_post(role='Regional Councillor', label='Wards 1 and 2')
+        organization.add_post(role='Regional Councillor', label='Wards 3 and 4')
+        for i in range(4):
+            organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
+
+        yield organization

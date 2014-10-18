@@ -1,11 +1,9 @@
-# coding: utf-8
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import csv
 
 import lxml.html
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 

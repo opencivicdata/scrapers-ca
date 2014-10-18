@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 import re
-
-from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx'
 

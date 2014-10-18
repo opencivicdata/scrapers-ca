@@ -7,4 +7,4 @@ class NorthDumfries(CanadianJurisdiction):
     division_id = 'ocd-division/country:ca/csd:3530004'
     division_name = 'North Dumfries'
     name = 'North Dumfries Township Council'
-    url = 'http://www.northdumfries.ca'
+    url = 'http://www.township.northdumfries.on.ca'

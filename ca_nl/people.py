@@ -27,6 +27,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             try:
                 name, district, _, email = [
                     cell.xpath('string(.)').replace('\xa0', ' ') for cell in row]
+                email = email.split()[0]
             except ValueError:
                 continue
             phone = row[2].xpath('string(text()[1])')

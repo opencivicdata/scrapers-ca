@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/MayorAndCouncil/RegionalAndWardCouncillors/!ut/p/a1/04_Sj9CPykssy0xPLMnMz0vMAfGjzOJN_N2dnX3CLAKNgkwMDDw9XcJM_VwCDUMDDfULsh0VAfz7Fis!/'
 
 
 class MarkhamPersonScraper(CanadianScraper):
+    regional_councillor_seat_number = 1
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
@@ -22,6 +22,10 @@ class MarkhamPersonScraper(CanadianScraper):
             if 'Ward' in district:
                 district = district.replace('Councillor', '')
                 role = 'Councillor'
+            elif 'Regional' in district:
+                role = 'Regional Councillor'
+                district = 'Markham (seat %d)' % self.regional_councillor_seat_number
+                self.regional_councillor_seat_number += 1
             else:
                 role = district
                 district = 'Markham'
@@ -50,9 +54,6 @@ class MarkhamPersonScraper(CanadianScraper):
             address = re.sub(r'\s{2,}', ' ', ' '.join(infos[:2])).strip()
             phone = infos[2].split(':')[1].strip()
             email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
-            website = contact.xpath('.//a[not( contains(@href, "mailto:"))]/text()')
-            if website:
-                p.add_link(website[0])
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('email', email)
@@ -97,8 +98,5 @@ def get_links(councillor, div):
     links = div.xpath('.//a')
     for link in links:
         link = link.attrib['href']
-
-        if 'mailto:' in link:
-            continue
-        else:
+        if 'mailto:' not in link and 'http://www.markham.ca' not in link:
             councillor.add_link(link)

@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
-from pupa.scrape import Organization
+from utils import CanadianScraper, CanadianPerson as Person
+
 import re
 
-from utils import CanadianScraper, CanadianPerson as Person, clean_telephone_number, clean_address
+from pupa.scrape import Organization
 
 COUNCIL_PAGE = 'http://www.gov.pe.ca/mapp/municipalitites.php'
 
@@ -48,9 +49,9 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
                 membership = p.add_membership(org, role=role, district=district.text_content())
-                membership.add_contact_detail('voice', clean_telephone_number(phone), 'legislature')
-                membership.add_contact_detail('fax', clean_telephone_number(fax), 'legislature')
-                membership.add_contact_detail('address', clean_address(address), 'legislature')
+                membership.add_contact_detail('voice', self.clean_telephone_number(phone), 'legislature')
+                membership.add_contact_detail('fax', self.clean_telephone_number(fax), 'legislature')
+                membership.add_contact_detail('address', self.clean_address(address), 'legislature')
                 membership.add_contact_detail('email', email)
                 if site:
                     p.add_link(site)

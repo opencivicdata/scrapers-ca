@@ -50,8 +50,9 @@ organization_links = deepcopy(_links)
 person_contact_details = deepcopy(_contact_details)
 person_links = deepcopy(_links)
 
-social_re = re.compile(r'(?:facebook|twitter|youtube)\.com')
+social_re = re.compile(r'(?:facebook|linkedin|twitter|youtube)\.com')
 facebook_re = re.compile(r'facebook\.com')
+linkedin_re = re.compile(r'linkedin\.com')
 twitter_re = re.compile(r'twitter\.com')
 youtube_re = re.compile(r'youtube\.com')
 
@@ -90,6 +91,8 @@ person_links['maxMatchingItems'] = [
      'Person has many non-social media links'),
     (1, lambda x: facebook_re.search(x['url']),
         'Person has many facebook.com links'),
+    (1, lambda x: linkedin_re.search(x['url']),
+        'Person has many linkedin.com links'),
     (1, lambda x: twitter_re.search(x['url']),
         'Person has many twitter.com links'),
     (1, lambda x: youtube_re.search(x['url']),
@@ -108,7 +111,7 @@ name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|la|van|von|\(\
 
 # Name components can be joined by apostrophes, hyphens or spaces.
 person_schema['properties']['name']['pattern'] = r'\A(?:' + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r'\Z'
-person_schema['properties']['name']['pattern'] = r'\A(?!(?:Councillor|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms)\b)'
+person_schema['properties']['name']['pattern'] = r'\A(?!(?:Chair|Councillor|Deputy|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)'
 person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
 # image resolves. Testing URLs here would slow down scraping.

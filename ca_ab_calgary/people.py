@@ -1,9 +1,7 @@
-# coding: utf-8
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 from six.moves.urllib.parse import urljoin
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.calgary.ca/General/Pages/Calgary-City-Council.aspx'
 MAYOR_PAGE = 'http://calgarymayor.ca/forms_all.php'

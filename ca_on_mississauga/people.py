@@ -1,4 +1,3 @@
-# coding: utf-8
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
@@ -21,7 +20,7 @@ class MississaugaPersonScraper(CanadianScraper):
     def councillor_data(self, url):
         page = self.lxmlize(url)
 
-        name = page.xpath('string(//strong[1]/text())')
+        name = page.xpath('string(//strong[2]/text())')
         district = page.xpath('string(//span[@class="pageHeader"])')
         email = page.xpath('string(//div[@class="blockcontentclear"]//a/'
                            '@href[contains(., "@")][1])')

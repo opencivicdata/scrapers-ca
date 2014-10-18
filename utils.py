@@ -12,7 +12,7 @@ from pupa.scrape import Scraper, Jurisdiction, Organization, Person
 from six import StringIO, string_types, text_type
 from six.moves.urllib.parse import urlparse
 
-from . import patch  # patch patches validictory # noqa
+import patch  # patch patches validictory # noqa
 
 CONTACT_DETAIL_TYPE_MAP = {
     'Address': 'address',
@@ -102,19 +102,17 @@ class CanadianScraper(Scraper):
             page.make_links_absolute(url)
             return page
 
-    def csv_reader(self, url, header=False, encoding='utf-8', **kwargs):
+    def csv_reader(self, url, header=False, **kwargs):
         result = urlparse(url)
         if result.scheme == 'ftp':
             data = StringIO()
             ftp = FTP(result.hostname)
             ftp.login(result.username, result.password)
-            ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(text_type(block, encoding=encoding)))
+            ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(text_type(block)))
             ftp.quit()
             data.seek(0)
         else:
-            response = self.get(url, **kwargs)
-            response.encoding = encoding
-            data = StringIO(response.text)
+            data = StringIO(self.urlopen(url, **kwargs).strip())
         if header:
             return csv.DictReader(data)
         else:
@@ -135,19 +133,30 @@ class CanadianJurisdiction(Jurisdiction):
         parent = Division.get(self.division_id)
         if parent._type not in ('province', 'territory'):
             organization.add_post(label=parent.name, role=styles_of_address[self.division_id]['Leader'])
+
         for division in parent.children():
-            organization.add_post(label=division.name, role=styles_of_address[self.division_id]['Member'])
+            if division._type != 'place':
+                if getattr(self, 'use_type_id', False):
+                    label = division.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
+                else:
+                    label = division.name
+                organization.add_post(label=label, role=styles_of_address[self.division_id]['Member'])
 
         yield organization
 
 
 class CanadianPerson(Person):
 
-    def __init__(self, *, name, district, **kwargs):
+    def __init__(self, *, name, district, role, **kwargs):
+        name = clean_name(name)
+        district = clean_string(district).replace('&', 'and')
+        role = clean_string(role)
+        if role == 'City Councillor':
+            role = 'Councillor'
         for k, v in kwargs.items():
             if isinstance(v, string_types):
                 kwargs[k] = clean_string(v)
-        super(CanadianPerson, self).__init__(name=clean_name(name), district=clean_string(district), **kwargs)
+        super(CanadianPerson, self).__init__(name=name, district=district, role=role, **kwargs)
 
     def __setattr__(self, name, value):
         if name == 'gender':
@@ -168,7 +177,7 @@ class CanadianPerson(Person):
     # @todo Over time, we should replace all calls to `add_contact` with calls to
     # `add_contact_detail` on a Membership. We will have to override Membership's
     # `add_contact_detail` method to tidy the values.
-    def add_contact(self, type, value, note=''):
+    def add_contact(self, type, value, note='', area_code=None):
         if type:
             type = clean_string(type)
         if note:
@@ -181,13 +190,47 @@ class CanadianPerson(Person):
         type = type.lower()
 
         if type in ('text', 'voice', 'fax', 'cell', 'video', 'pager'):
-            value = clean_telephone_number(clean_string(value))
+            value = self.clean_telephone_number(clean_string(value), area_code=area_code)
         elif type == 'address':
-            value = clean_address(value)
+            value = self.clean_address(value)
         else:
             value = clean_string(value)
 
         self._related[0].add_contact_detail(type=type, value=value, note=note)
+
+    def clean_telephone_number(self, s, area_code=None):
+        """
+        @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
+        """
+
+        splits = re.split(r'(?:/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
+        digits = re.sub(r'\D', '', splits[0])
+
+        if len(digits) == 7 and area_code:
+            digits = '1' + str(area_code) + digits
+        elif len(digits) == 10:
+            digits = '1' + digits
+
+        if len(digits) == 11 and digits[0] == '1' and len(splits) <= 2:
+            digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1-\2-\3-\4', digits)
+            if len(splits) == 2:
+                return '%s x%s' % (digits, splits[1])
+            else:
+                return digits
+        else:
+            return s
+
+    def clean_address(self, s):
+        """
+        Corrects the postal code, abbreviates the province or territory name, and
+        formats the last line of the address.
+        """
+
+        # The letter "O" instead of the numeral "0" is a common mistake.
+        s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), clean_string(s))
+        for k, v in abbreviations.items():
+            s = re.sub(r'[,\n ]+\(?' + k + r'\)?(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
+        return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
 
 
 whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
@@ -227,37 +270,3 @@ def clean_string(s):
 
 def clean_name(s):
     return honorific_suffix_re.sub('', honorific_prefix_re.sub('', clean_string(s)))
-
-
-def clean_telephone_number(s):
-    """
-    @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
-    """
-
-    splits = re.split(r'(?:/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
-    digits = re.sub(r'\D', '', splits[0])
-
-    if len(digits) == 10:
-        digits = '1' + digits
-
-    if len(digits) == 11 and digits[0] == '1' and len(splits) <= 2:
-        digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1-\2-\3-\4', digits)
-        if len(splits) == 2:
-            return '%s x%s' % (digits, splits[1])
-        else:
-            return digits
-    else:
-        return s
-
-
-def clean_address(s):
-    """
-    Corrects the postal code, abbreviates the province or territory name, and
-    formats the last line of the address.
-    """
-
-    # The letter "O" instead of the numeral "0" is a common mistake.
-    s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), clean_string(s))
-    for k, v in abbreviations.items():
-        s = re.sub(r'[,\n ]+\(?' + k + r'\)?(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
-    return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)

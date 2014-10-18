@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
-from pupa.scrape import Organization
+from utils import CanadianScraper, CanadianPerson as Person
+
 import re
 
-from utils import CanadianScraper, CanadianPerson as Person
+from pupa.scrape import Organization
 
 COUNCIL_PAGE = 'http://web5.gov.mb.ca/Public/municipalities.aspx'
 

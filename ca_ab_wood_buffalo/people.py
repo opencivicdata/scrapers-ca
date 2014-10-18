@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
 from six.moves.urllib.parse import urljoin
-
-from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
@@ -61,18 +60,9 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         name = page.xpath('//h1[@id="pagetitle"]/text()')[0].replace('Mayor', '').strip()
         image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
         contact_url = page.xpath('//li[@id="pageid1954"]/a/@href')[0]
-        page = self.lxmlize(contact_url)
-
-        info = page.xpath('//div[@id="content"]/div[@class="block"][2]/p/text()')
-        address = ' '.join(info[1:4])
-        phone = info[4]
-        fax = info[5]
 
         p = Person(primary_org='legislature', name=name, district='Wood Buffalo', role='Mayor')
         p.add_source(url)
         p.add_source(contact_url)
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('fax', fax, 'legislature')
         p.image = image
         return p

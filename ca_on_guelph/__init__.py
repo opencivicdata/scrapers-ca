@@ -8,3 +8,4 @@ class Guelph(CanadianJurisdiction):
     division_name = 'Guelph'
     name = 'Guelph City Council'
     url = 'http://guelph.ca'
+    use_type_id = True
