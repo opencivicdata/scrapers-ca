@@ -28,7 +28,7 @@ class TorontoPersonScraper(Scraper):
 
   def scrape_councilor(self, page, h1, url):
     name = h1.split('Councillor')[1]
-    ward_full = page.xpath('string(//strong[not(@class)])').replace('\xa0', ' ')
+    ward_full = page.xpath('string(//a/descendant-or-self::*[contains(text(), "Profile:")])').replace('\xa0', ' ')
     ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
 
     p = Legislator(name=name, post_id=ward_num, role='Councillor')
