@@ -8,6 +8,8 @@ from utils import lxmlize, CanadianLegislator as Legislator
 import re
 
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
+BROKEN_LINKS = ['http://www.toronto.ca/councillors/vaughan1.htm',
+                'http://www.toronto.ca/councillors/milczyn1.htm']
 
 
 class TorontoPersonScraper(Scraper):
@@ -21,7 +23,7 @@ class TorontoPersonScraper(Scraper):
     for a in page.xpath('//a[contains(@href,"councillors/")]'):
       page = lxmlize(a.attrib['href'])
       h1 = page.xpath('string(//h1)')
-      if 'Council seat is vacant' not in h1:
+      if 'Council seat is vacant' not in h1 and a.attrib['href'] not in BROKEN_LINKS:
         yield self.scrape_councilor(page, h1, a.attrib['href'])
 
   def scrape_councilor(self, page, h1, url):
