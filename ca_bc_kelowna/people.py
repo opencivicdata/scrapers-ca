@@ -7,6 +7,8 @@ COUNCIL_PAGE = 'http://www.kelowna.ca/CM/Page159.aspx'
 class KelownaPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
         links = page.xpath('//td[@width=720]//a[contains(text(), "Councillor") or '
                            'contains(text(), "Mayor")]')
@@ -18,7 +20,13 @@ class KelownaPersonScraper(CanadianScraper):
             phone = page.xpath('//strong')[-1].text_content()
             email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
-            p = Person(primary_org='legislature', name=name, district='Kelowna', role=role, image=photo_url)
+            if role == 'Mayor':
+                district = 'Kelowna'
+            else:
+                district = 'Kelowna (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.add_contact('voice', phone, 'legislature')

@@ -9,20 +9,24 @@ COUNCIL_PAGE = 'http://www.victoria.ca/EN/main/city/mayor-council-committees/cou
 class VictoriaPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
         nodes = page.xpath('//div[@id="content"]/ul/li')
         for node in nodes:
             url = urljoin(COUNCIL_PAGE, node.xpath('string(./a/@href)'))
             name = node.xpath('string(./a)')
-            yield self.councillor_data(url, name, 'Councillor')
+            district = 'Victoria (seat %d)' % councillor_seat_number
+            councillor_seat_number += 1
+            yield self.councillor_data(url, name, district)
 
         mayor_node = page.xpath('(//div[@id="section-navigation-middle"]/ul/li/'
                                 'ul/li/a)[1]')[0]
         mayor_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('string(./@href)'))
         mayor_name = mayor_node.xpath('string(.)')
-        yield self.mayor_data(mayor_url, mayor_name, 'Mayor')
+        yield self.mayor_data(mayor_url, mayor_name)
 
-    def councillor_data(self, url, name, role):
+    def councillor_data(self, url, name, district):
         page = self.lxmlize(url)
         email = page.xpath('string(//a[contains(@href, "mailto")])')
         phone_str = page.xpath('string(//div[@id="content"]//strong[1]/'
@@ -32,7 +36,7 @@ class VictoriaPersonScraper(CanadianScraper):
                             page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
         # TODO: should district be "Nieghborhood Liaison"?
-        m = Person(primary_org='legislature', name=name, district='Victoria', role=role)
+        m = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         m.add_source(COUNCIL_PAGE)
         m.add_source(url)
         m.add_contact('email', email)
@@ -40,7 +44,7 @@ class VictoriaPersonScraper(CanadianScraper):
         m.image = photo_url
         return m
 
-    def mayor_data(self, url, name, role):
+    def mayor_data(self, url, name):
         page = self.lxmlize(url)
         email = unquote((page.xpath('string(//a[contains(@href, "mailto")]/@href)')).
                         split(':')[1])
@@ -51,7 +55,7 @@ class VictoriaPersonScraper(CanadianScraper):
                             page.xpath('string(//div[@id="content"]//img[1]/@src)'))
 
         # TODO: should district be "Nieghborhood Liaison"?
-        m = Person(primary_org='legislature', name=name, district='Victoria', role=role)
+        m = Person(primary_org='legislature', name=name, district='Victoria', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         m.add_source(url)
         m.add_contact('email', email)

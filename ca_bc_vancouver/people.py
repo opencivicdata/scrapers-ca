@@ -7,11 +7,19 @@ COUNCIL_PAGE = 'ftp://webftp.vancouver.ca/OpenData/csv/CouncilContactInformation
 class VancouverPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         for row in self.csv_reader(COUNCIL_PAGE, header=True):
+            if role == 'Mayor':
+                district = 'Vancouver'
+            else:
+                district = 'Vancouver (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
+
             p = Person(
                 primary_org='legislature',
                 name='%(First Name)s %(Last Name)s' % row,
-                district='Vancouver',
+                district=district,
                 role=row['Elected Office'],
                 gender=row['Gender'],
                 image=row['Photo URL'],

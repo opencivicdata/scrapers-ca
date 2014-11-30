@@ -132,15 +132,21 @@ class CanadianJurisdiction(Jurisdiction):
 
         parent = Division.get(self.division_id)
         if parent._type not in ('province', 'territory'):
-            organization.add_post(label=parent.name, role=styles_of_address[self.division_id]['Leader'])
+            organization.add_post(role=styles_of_address[self.division_id]['Leader'], label=parent.name)
 
-        for division in parent.children():
-            if division._type != 'place':
+        children = [child for child in parent.children() if child._type != 'place']
+
+        for child in children:
+            if child:
                 if getattr(self, 'use_type_id', False):
-                    label = division.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
+                    label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
-                    label = division.name
-                organization.add_post(label=label, role=styles_of_address[self.division_id]['Member'])
+                    label = child.name
+                organization.add_post(role=styles_of_address[self.division_id]['Member'], label=label)
+
+        if not children and parent.attrs['posts_count']:
+            for i in range(1, int(parent.attrs['posts_count'])):  # exclude Mayor
+                organization.add_post(role=styles_of_address[self.division_id]['Member'], label='%s (seat %d)' % (parent.name, i))
 
         yield organization
 

@@ -9,17 +9,21 @@ COUNCIL_PAGE = 'http://www.city.langley.bc.ca/index.php/city-hall/city-council'
 class LangleyPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Councillor")]/@href')
         mayor = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Mayor")]/@href')[0]
 
         for url in councillors:
-            yield self.scrape_councillor(url)
+            district = 'Langley (seat %d)' % councillor_seat_number
+            councillor_seat_number += 1
+            yield self.scrape_councillor(url, district)
 
         yield self.scrape_mayor(mayor)
 
-    def scrape_councillor(self, url):
+    def scrape_councillor(self, url, district):
         infos_page = self.lxmlize(url)
         infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
@@ -28,7 +32,7 @@ class LangleyPersonScraper(CanadianScraper):
         email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
         photo_url = infos.xpath('p[1]/img/@src')[0]
 
-        p = Person(primary_org='legislature', name=name, district='Langley', role='Councillor', image=photo_url)
+        p = Person(primary_org='legislature', name=name, district=district, role='Councillor', image=photo_url)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
         p.add_contact('email', email)

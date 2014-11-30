@@ -7,6 +7,8 @@ COUNCIL_PAGE = 'http://www.coquitlam.ca/city-hall/mayor-and-council/mayor-and-co
 class CoquitlamPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
         for person_link in page.xpath('//a[@class="L4"]'):
             role, name = person_link.text_content().split(' ', 1)
@@ -15,7 +17,13 @@ class CoquitlamPersonScraper(CanadianScraper):
             photo_url = page.xpath('string(//img[@class="img-right"]/@src)')
             email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
-            p = Person(primary_org='legislature', name=name, district='Coquitlam', role=role, image=photo_url)
+            if role == 'Mayor':
+                district = 'Coquitlam'
+            else:
+                district = 'Coquitlam (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.add_contact('email', email)

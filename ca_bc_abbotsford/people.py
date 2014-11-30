@@ -9,6 +9,8 @@ MAYOR_URL = 'http://www.abbotsford.ca/mayorcouncil/city_council/mayor_banman.htm
 class AbbotsfordPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
         councillor_links = page.xpath('//li[@id="pageid2117"]/ul/li/a')[2:10]
         for link in councillor_links:
@@ -20,8 +22,11 @@ class AbbotsfordPersonScraper(CanadianScraper):
             name = mail_link.attrib['title']
             email = mail_link.attrib['href'][len('mailto:'):]
             photo_url = page.xpath('string(//div[@class="pageContent"]//img[@align="right"]/@src)')
-            p = Person(primary_org='legislature', name=name, district='Abbotsford', role='Councillor',
-                       image=photo_url)
+
+            district = 'Abbotsford (seat %d)' % councillor_seat_number
+            councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role='Councillor', image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.add_contact('email', email)

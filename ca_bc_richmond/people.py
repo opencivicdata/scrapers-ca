@@ -8,6 +8,8 @@ CONTACT_URL = 'http://www.richmond.ca/contact/departments/council.htm'
 class RichmondPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         contact_page = self.lxmlize(CONTACT_URL)
         email = contact_page.xpath('string(//a[starts-with(@href, "mailto:")])')
         page = self.lxmlize(COUNCIL_PAGE)
@@ -17,7 +19,13 @@ class RichmondPersonScraper(CanadianScraper):
             # image element is inserted by a script somewhere
             # photo_url = page.xpath('string(//span[@class="imageShadow"]/img/@src)')
 
-            p = Person(primary_org='legislature', name=name, district='Richmond', role=role)
+            if role == 'Mayor':
+                district = 'Richmond'
+            else:
+                district = 'Richmond (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(CONTACT_URL)
             p.add_source(url)

@@ -7,6 +7,8 @@ COUNCIL_PAGE = 'http://www.burnaby.ca/Our-City-Hall/Mayor---Council/Council-Prof
 class BurnabyPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         for person_url in page.xpath('//h4/a/@href'):
@@ -17,7 +19,13 @@ class BurnabyPersonScraper(CanadianScraper):
             email = page.xpath('string(//a[contains(@href, "mailto:")])')
             phone = page.xpath('string(//li[contains(text(), "Phone:")])')
 
-            p = Person(primary_org='legislature', name=name, district='Burnaby', role=role, image=photo_url)
+            if role == 'Mayor':
+                district = 'Burnaby'
+            else:
+                district = 'Burnaby (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(person_url)
             p.add_contact('email', email)

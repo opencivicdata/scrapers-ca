@@ -7,6 +7,8 @@ COUNCIL_PAGE = 'http://www.surrey.ca/city-government/2999.aspx'
 class SurreyPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
         councillor_links = page.xpath(
             '//div[@class="inner-wrapper"]//a[contains(text(), "Councillor")]')
@@ -21,7 +23,13 @@ class SurreyPersonScraper(CanadianScraper):
             email = councillor_page.xpath(
                 'string(//a[contains(@href, "mailto:")])')
 
-            p = Person(primary_org='legislature', name=name, district='Surrey', role=role, image=photo_url)
+            if role == 'Mayor':
+                district = 'Surrey'
+            else:
+                district = 'Surrey (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             if phone:
