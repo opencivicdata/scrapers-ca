@@ -12,9 +12,10 @@ CHAIR_URL = 'http://www.regionofwaterloo.ca/en/regionalGovernment/regionalchaira
 
 
 class WaterlooPersonScraper(CanadianScraper):
-    seat_numbers = defaultdict(int)
 
     def scrape(self):
+        seat_numbers = defaultdict(int)
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         regions = page.xpath('//*[@id="contentIntleft"]//h3')[1:]
@@ -28,8 +29,8 @@ class WaterlooPersonScraper(CanadianScraper):
                 if 'Mayor' in councillor.xpath('../text()')[0]:
                     district = '%s (mayor)' % post
                 else:
-                    self.seat_numbers[post] += 1
-                    district = '%s (seat %d)' % (post, self.seat_numbers[post])
+                    seat_numbers[post] += 1
+                    district = '%s (seat %d)' % (post, seat_numbers[post])
                 p = Person(primary_org='legislature', name=councillor.text, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
                 councillor_url = councillor.attrib['href']

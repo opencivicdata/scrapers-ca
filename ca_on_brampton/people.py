@@ -26,8 +26,8 @@ class BramptonPersonScraper(CanadianScraper):
         photo = html.xpath('string((.//@src)[1])')
 
         if role == 'Wards 7 and 8':
-            role = 'Wards 7 and 8 (seat %d)' % ward_7_8_seat_number
-            ward_7_8_seat_number += 1
+            role = 'Wards 7 and 8 (seat %d)' % self.ward_7_8_seat_number
+            self.ward_7_8_seat_number += 1
 
         p = Person(primary_org='legislature', name=name, district=district, role=role)
         p.add_source(COUNCIL_PAGE)

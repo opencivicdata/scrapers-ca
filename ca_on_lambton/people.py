@@ -7,9 +7,10 @@ COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycounc
 
 
 class LambtonPersonScraper(CanadianScraper):
-    councillor_seat_number = 1
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="WebPartWPQ1"]/table/tbody/tr[1]')
@@ -27,8 +28,8 @@ class LambtonPersonScraper(CanadianScraper):
             else:
                 role = 'Councillor'
                 name = text
-                district = 'Lambton (seat %d)' % self.councillor_seat_number
-                self.councillor_seat_number += 1
+                district = 'Lambton (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

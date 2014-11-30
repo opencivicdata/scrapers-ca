@@ -8,9 +8,9 @@ COUNCIL_PAGE = 'http://www.townofstratford.ca/town-hall/government/town-council/
 
 
 class StratfordPersonScraper(CanadianScraper):
-    seat_numbers = defaultdict(int)
-
     def scrape(self):
+        seat_numbers = defaultdict(int)
+
         page = self.lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
 
         yield self.scrape_mayor(page)
@@ -21,8 +21,8 @@ class StratfordPersonScraper(CanadianScraper):
             name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '').strip()
             post = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
-            self.seat_numbers[post] += 1
-            post = '%s (seat %d)' % (post, self.seat_numbers[post])
+            seat_numbers[post] += 1
+            post = '%s (seat %d)' % (post, seat_numbers[post])
 
             p = Person(primary_org='legislature', name=name, district=post, role='Councillor')
             p.add_source(COUNCIL_PAGE)
