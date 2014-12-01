@@ -15,7 +15,7 @@ class RichmondHill(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Richmond Hill')
         for i in range(2):
-            organization.add_post(role='Regional Councillor', label='York (seat %d)' % (i + 1))
+            organization.add_post(role='Regional Councillor', label='Richmond Hill (seat %d)' % (i + 1))
         for i in range(6):
             organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
 

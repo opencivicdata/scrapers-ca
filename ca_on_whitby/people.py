@@ -21,7 +21,7 @@ class WhitbyPersonScraper(CanadianScraper):
                     if role == 'Deputy Mayor':
                         role = 'Regional Councillor'
                     if role == 'Regional Councillor':
-                        district = 'Durham (seat %d)' % regional_councillor_seat_number
+                        district = 'Whitby (seat %d)' % regional_councillor_seat_number
                         regional_councillor_seat_number += 1
                     else:
                         district = 'Whitby'

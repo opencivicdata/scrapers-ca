@@ -27,7 +27,7 @@ class RichmondHillPersonScraper(CanadianScraper):
                 if district:
                     district = district[0].strip()
                 else:
-                    district = 'York (seat %d)' % regional_councillor_seat_number
+                    district = 'Richmond Hill (seat %d)' % regional_councillor_seat_number
                     regional_councillor_seat_number += 1
 
                 role = 'Regional Councillor' if 'Regional' in header else 'Councillor'

@@ -24,7 +24,7 @@ class VaughanPersonScraper(CanadianScraper):
                 role = 'Councillor'
                 if "Regional" in district:
                     role = 'Regional Councillor'
-                    district = "York (seat %d)" % regional_councillor_seat_number
+                    district = "Vaughan (seat %d)" % regional_councillor_seat_number
                     regional_councillor_seat_number += 1
             else:
                 name = re.split(r'Mayor', title)[-1]

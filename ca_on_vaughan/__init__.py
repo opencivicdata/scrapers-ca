@@ -16,7 +16,7 @@ class Vaughan(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Vaughan')
         for i in range(3):
-            organization.add_post(role='Regional Councillor', label='York (seat %d)' % (i + 1))
+            organization.add_post(role='Regional Councillor', label='Vaughan (seat %d)' % (i + 1))
         for i in range(5):
             organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
 

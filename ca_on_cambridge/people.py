@@ -22,7 +22,7 @@ class CambridgePersonScraper(CanadianScraper):
             role = 'Councillor'
             if 'Regional' in district:
                 role = 'Regional Councillor'
-                district = 'Waterloo (seat %d)' % regional_councillor_seat_number
+                district = 'Cambridge (seat %d)' % regional_councillor_seat_number
                 regional_councillor_seat_number += 1
             name = councillor.xpath('.//a')[0].text_content()
 

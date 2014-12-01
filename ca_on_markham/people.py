@@ -25,7 +25,7 @@ class MarkhamPersonScraper(CanadianScraper):
                 role = 'Councillor'
             elif 'Regional' in district:
                 role = 'Regional Councillor'
-                district = 'York (seat %d)' % regional_councillor_seat_number
+                district = 'Markham (seat %d)' % regional_councillor_seat_number
                 regional_councillor_seat_number += 1
             else:
                 role = district
