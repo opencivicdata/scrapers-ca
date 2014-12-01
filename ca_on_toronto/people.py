@@ -4,6 +4,8 @@ from utils import CanadianScraper, CanadianPerson as Person
 import re
 
 COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
+BROKEN_LINKS = ['http://www.toronto.ca/councillors/vaughan1.htm',
+                'http://www.toronto.ca/councillors/milczyn1.htm']
 
 
 class TorontoPersonScraper(CanadianScraper):
@@ -15,14 +17,14 @@ class TorontoPersonScraper(CanadianScraper):
         yield self.scrape_mayor(a.attrib['href'])
 
         for a in page.xpath('//a[contains(@href,"councillors/")]'):
-            page = self.lxmlize(a.attrib['href'])
+            page = lxmlize(a.attrib['href'])
             h1 = page.xpath('string(//h1)')
-            if 'Council seat is vacant' not in h1:
+            if 'Council seat is vacant' not in h1 and a.attrib['href'] not in BROKEN_LINKS:
                 yield self.scrape_councilor(page, h1, a.attrib['href'])
 
     def scrape_councilor(self, page, h1, url):
         name = h1.split('Councillor')[1]
-        ward_full = page.xpath('string(//strong[not(@class)])').replace('\xa0', ' ')
+        ward_full = page.xpath('string(//a/descendant-or-self::*[contains(text(), "Profile:")])').replace('\xa0', ' ')
         ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
 
         p = Person(primary_org='legislature', name=name, district=ward_num, role='Councillor')
