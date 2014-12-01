@@ -32,7 +32,7 @@ class LondonPersonScraper(CanadianScraper):
 
         address = page.xpath('string(//div[@class="asideContent"])')
 
-        photo = page.xpath('string(//div[@id="contentright"]//img[1]/@src)')
+        photo = page.xpath('//div[@id="contentright"]//img[1]/@src')[0]
         phone = get_phone_data(page)
 
         js = page.xpath('string(//span/script)')
@@ -52,7 +52,7 @@ class LondonPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         name = page.xpath('string(//h1[@id="TitleOfPage"])').split('Mayor')[-1]
-        photo_url = page.xpath('string(//div[@class="imageLeftDiv"]/img/@src)')
+        photo_url = page.xpath('//div[@class="imageLeftDiv"]/img/@src')[0]
         phone = get_phone_data(page)
 
         js = page.xpath('string(//span/script)')

@@ -14,7 +14,7 @@ class CoquitlamPersonScraper(CanadianScraper):
             role, name = person_link.text_content().split(' ', 1)
             url = person_link.attrib['href']
             page = self.lxmlize(url)
-            photo_url = page.xpath('string(//img[@class="img-right"]/@src)')
+            photo_url = page.xpath('//img[@class="img-right"]/@src')[0]
             email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
             if role == 'Mayor':

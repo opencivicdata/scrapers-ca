@@ -14,13 +14,13 @@ class CalgaryPersonScraper(CanadianScraper):
         nodes = page.xpath('//div[contains(@class,"cocis-has-caption")]')[1:]
         for node in nodes:
             url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a[1]/@href)'))
-            name = node.xpath('string(.//a//text())')
+            name = node.xpath('.//a//text()')[0]
             ward = ' '.join(node.xpath('string(.//strong)').split()[:-1])
             yield self.councillor_data(url, name, ward)
 
         mayor_node = page.xpath('//div[contains(@class, "cocis-image-panel")]')[0]
         photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('string(.//img/@src)'))
-        name = mayor_node.xpath('string(.//a//text())')
+        name = mayor_node.xpath('.//a//text()')[0]
         mayor_page = self.lxmlize(MAYOR_PAGE)
         email = mayor_page.xpath('string(//a[contains(., "@")])')
         phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
@@ -35,7 +35,7 @@ class CalgaryPersonScraper(CanadianScraper):
 
     def councillor_data(self, url, name, ward):
         page = self.lxmlize(url)
-        photo_url_rel = page.xpath('string(//div[@id="contactInfo"]//img[1]/@src)')
+        photo_url_rel = page.xpath('string(//div[@id="contactInfo"]//img[1]/@src)')  # can be empty
         photo_url = urljoin(url, photo_url_rel) if photo_url_rel else None
         # no email, there's a contact form!
         phone = page.xpath('string(//p[contains(./strong, "Phone")]/text())').strip()

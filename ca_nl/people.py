@@ -36,7 +36,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             except IndexError:
                 continue  # there is a vacant district
             photo_page = self.lxmlize(photo_page_url)
-            photo_url = photo_page.xpath('string(//table//img/@src)')
+            photo_url = photo_page.xpath('//table//img/@src')[0]
             district = district.replace(' - ', '—')  # m-dash
             party = get_party(member_parties[name.strip()])
             p = Person(primary_org='legislature', name=name, district=district, role='MHA',

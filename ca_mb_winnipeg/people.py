@@ -21,7 +21,7 @@ class WinnipegPersonScraper(CanadianScraper):
 
         mayor_node = page.xpath('//td[@width="315"]')[0]
         mayor_name = mayor_node.xpath('string(./a)')[len('Mayor '):]
-        mayor_photo_url = mayor_node.xpath('string(./img/@src)')
+        mayor_photo_url = mayor_node.xpath('./img/@src')[0]
         m = Person(primary_org='legislature', name=mayor_name, district='Winnipeg', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail

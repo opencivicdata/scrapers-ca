@@ -11,7 +11,7 @@ class LavalPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         for councillor_row in page.xpath('//tr'):
-            post = councillor_row.xpath('string(./td[2]/p/text())')
+            post = councillor_row.xpath('./td[2]/p/text()')[0]
             if post == 'Maire de Laval':
                 district = 'Laval'
                 role = 'Maire'
@@ -22,7 +22,7 @@ class LavalPersonScraper(CanadianScraper):
             name = ' '.join(full_name.split()[1:])
 
             phone = councillor_row.xpath(
-                'string(.//span[@class="icon-phone"]/following::text())')
+                './/span[@class="icon-phone"]/following::text()')[0]
             email = councillor_row.xpath(
                 'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
             photo_url = councillor_row[0][0].attrib['src']

@@ -15,7 +15,7 @@ class KitchenerPersonScraper(CanadianScraper):
         councillor_nodes = page.xpath('//div[@id="printArea"]//li')
 
         for node in councillor_nodes:
-            councillor_url = node.xpath('string(./a/@href)')
+            councillor_url = node.xpath('./a/@href')[0]
             ward = node.xpath('string(./strong)').split('-')[0]
             yield self.councillor_data(councillor_url, ward)
 
@@ -30,7 +30,7 @@ class KitchenerPersonScraper(CanadianScraper):
         contact_node = infobox_node.xpath('.//p[contains(text(), "Coun.")]')[0]
         email = contact_node.xpath('string(.//text()[contains(., "@")])').split()[-1]
 
-        photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
+        photo_url_rel = page.xpath('//div[@id="sideBar"]//img/@src')[0]
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
         p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
@@ -48,7 +48,7 @@ class KitchenerPersonScraper(CanadianScraper):
         infobox_node = page.xpath('//div[@id="printArea"]')[0]
         name = infobox_node.xpath('string(.//h1)')[6:]  # strip 'Mayor' prefix
 
-        photo_url_rel = page.xpath('string(//div[@id="sideBar"]//img/@src)')
+        photo_url_rel = page.xpath('//div[@id="sideBar"]//img/@src')[0]
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
 
         p = Person(primary_org='legislature', name=name, district='Kitchener', role='Mayor')

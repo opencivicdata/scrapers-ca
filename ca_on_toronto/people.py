@@ -17,7 +17,7 @@ class TorontoPersonScraper(CanadianScraper):
         yield self.scrape_mayor(a.attrib['href'])
 
         for a in page.xpath('//a[contains(@href,"councillors/")]'):
-            page = lxmlize(a.attrib['href'])
+            page = self.lxmlize(a.attrib['href'])
             h1 = page.xpath('string(//h1)')
             if 'Council seat is vacant' not in h1 and a.attrib['href'] not in BROKEN_LINKS:
                 yield self.scrape_councilor(page, h1, a.attrib['href'])

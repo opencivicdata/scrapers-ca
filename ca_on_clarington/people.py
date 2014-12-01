@@ -22,7 +22,7 @@ class ClaringtonPersonScraper(CanadianScraper):
             email = person_header_elem.xpath(
                 'string(./following-sibling::a[1]/@href)')[len('mailto:'):]
             photo_url = person_header_elem.xpath(
-                'string(./following-sibling::img[1]/@src)')
+                './following-sibling::img[1]/@src')[0]
             p = Person(primary_org='legislature', name=name, district=post, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_contact('email', email)

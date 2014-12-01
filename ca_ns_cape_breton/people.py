@@ -36,7 +36,7 @@ class CapeBretonPersonScraper(CanadianScraper):
         mayorpage = self.lxmlize(MAYOR_PAGE)
         name_elem = mayorpage.xpath('//strong[contains(text(), "About")]')[0]
         name = re.search('About Mayor (.+):', name_elem.text).group(1)
-        photo_url = mayorpage.xpath('string(//span/img/@src)')
+        photo_url = mayorpage.xpath('//span/img/@src')[0]
         address_and_tel_elem = mayorpage.xpath(
             '//strong[contains(text(), "Contact")]/ancestor::p/'
             'following-sibling::p[1]')[0]

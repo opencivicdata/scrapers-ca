@@ -16,7 +16,7 @@ class BrossardPersonScraper(CanadianScraper):
         for elem in councillor_elems:
             name_elem = elem.xpath('.//strong')[0]
             name = re.search('(Mr\. )?(.+)', name_elem.text).group(2)
-            position = name_elem.xpath('string(following-sibling::text())')
+            position = name_elem.xpath('following-sibling::text()')[0]
             role = 'Conseiller'
             if 'Mayor' in position:
                 district = 'Brossard'

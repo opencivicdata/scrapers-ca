@@ -21,7 +21,7 @@ class WaterlooPersonScraper(CanadianScraper):
 
 
     def photo_url(self, page):
-        return page.xpath('string(//div[@id="printAreaContent"]/p/img/@src)')
+        return page.xpath('//div[@id="printAreaContent"]/p/img/@src')[0]
 
     def councillor_data(self, url):
         page = self.lxmlize(url)

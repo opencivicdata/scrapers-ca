@@ -32,7 +32,7 @@ class KingstonPersonScraper(CanadianScraper):
         district_id = district.split(':')[0]  # TODO: don't reject name?
         email = contact_node.xpath('string(.//a)')
         phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]  # TODO: this mostly doesn't work
-        photo_url_rel = page.xpath('string(.//img[@class="innerimage"]/@src)')
+        photo_url_rel = page.xpath('.//img[@class="innerimage"]/@src')[0]
         photo_url = urljoin(url, photo_url_rel)
 
         p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
@@ -53,7 +53,7 @@ class KingstonPersonScraper(CanadianScraper):
 
         name = contact_node.xpath('string(./span[1])')
         email = contact_node.xpath('string(.//a)')
-        photo_url = page.xpath('string(//img[@class="innerimage"]/@src)')
+        photo_url = page.xpath('//img[@class="innerimage"]/@src')[0]
 
         p = Person(primary_org='legislature', name=name, district='Kingston', role='Mayor')
         p.add_source(COUNCIL_PAGE)

@@ -17,7 +17,7 @@ class SaanichPersonScraper(CanadianScraper):
             page = self.lxmlize(url)
             role, name = page.xpath('string(//div[@id="content"]/h1)').split(' ', 1)
             name = ' '.join(name.split()[:-1])
-            photo_url = page.xpath('string(//img[@class="float-right"]/@src)')
+            photo_url = page.xpath('//div[@id="content"]//@src')[0]
             email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 
             if role == 'Mayor':

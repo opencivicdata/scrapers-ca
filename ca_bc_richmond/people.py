@@ -17,7 +17,7 @@ class RichmondPersonScraper(CanadianScraper):
             page = self.lxmlize(url)
             role, name = page.xpath('string(//h1)').split(' ', 1)
             # image element is inserted by a script somewhere
-            # photo_url = page.xpath('string(//span[@class="imageShadow"]/img/@src)')
+            # photo_url = page.xpath('//span[@class="imageShadow"]/img/@src')[0]
 
             if role == 'Mayor':
                 district = 'Richmond'

@@ -42,7 +42,7 @@ class BramptonPersonScraper(CanadianScraper):
         # Strip the word "mayor" from the beginning of the photo lavel
         photo_node = page.xpath('//img[@class="mayorsPic"]')[0]
         name = photo_node.xpath('string(./@alt)').replace('Mayor ', '')
-        photo_url = photo_node.xpath('string(./@src)')
+        photo_url = photo_node.xpath('./@src')[0]
 
         address_node = page.xpath('//div[@class="address"]')[0]
         email = address_node.xpath('string(.//a)')

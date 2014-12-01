@@ -16,7 +16,7 @@ class QuebecPersonScraper(CanadianScraper):
             email = row[3].xpath('string(.//a/@href)').replace('mailto:', '')
             detail_url = row[0][0].attrib['href']
             detail_page = self.lxmlize(detail_url)
-            photo_url = detail_page.xpath('string(//img[@class="photoDepute"]/@src)')
+            photo_url = detail_page.xpath('//img[@class="photoDepute"]/@src')[0]
             division = division.replace('–', '—')  # n-dash, m-dash
             p = Person(primary_org='legislature', name=name, district=division, role='MNA',
                        party=party, image=photo_url)

@@ -20,11 +20,11 @@ class MississaugaPersonScraper(CanadianScraper):
     def councillor_data(self, url):
         page = self.lxmlize(url)
 
-        name = page.xpath('string(//strong[2]/text())')
+        name = page.xpath('//strong[2]/text()')[0]
         district = page.xpath('string(//span[@class="pageHeader"])')
         email = page.xpath('string(//div[@class="blockcontentclear"]//a/'
                            '@href[contains(., "@")][1])')
-        photo = page.xpath('string(//div[@class="blockcontentclear"]//img[1]/@src)')
+        photo = page.xpath('//div[@class="blockcontentclear"]//img[1]/@src')[0]
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)

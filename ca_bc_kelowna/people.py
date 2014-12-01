@@ -16,7 +16,7 @@ class KelownaPersonScraper(CanadianScraper):
             role, name = link.text_content().replace('\xa0', ' ').split(' ', 1)
             url = link.attrib['href']
             page = self.lxmlize(url)
-            photo_url = page.xpath('string(//li/img/@src)')
+            photo_url = page.xpath('//li/img/@src')[0]
             phone = page.xpath('//strong')[-1].text_content()
             email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
 

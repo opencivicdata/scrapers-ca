@@ -44,7 +44,7 @@ class CharlottetownPersonScraper(CanadianScraper):
             photo = span.xpath('preceding::hr[1]/following::img[1]/@src')
             photo_url = urljoin(COUNCIL_PAGE, photo[0])
 
-            email = span.xpath('string(following::a[1]/text())')
+            email = span.xpath('string(following::a[1]/text())')  # can be empty
 
             p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
             p.add_source(COUNCIL_PAGE)

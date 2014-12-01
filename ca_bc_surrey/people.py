@@ -17,7 +17,7 @@ class SurreyPersonScraper(CanadianScraper):
             url = link.attrib['href']
             councillor_page = self.lxmlize(url)
             photo_url = councillor_page.xpath(
-                'string(.//div[@class="inner-wrapper"]//img/@src)')
+                './/div[@class="inner-wrapper"]//img/@src')[0]
             phone = councillor_page.xpath(
                 'string(//text()[contains(., "hone:")][1])')
             email = councillor_page.xpath(
@@ -42,7 +42,7 @@ class SurreyPersonScraper(CanadianScraper):
         mayor_url = mayor_link.attrib['href']
         name = mayor_link.text.split(' ', 2)[1]
         mayor_page = self.lxmlize(mayor_url)
-        photo_url = mayor_page.xpath('string(//img[contains(@src, "Mayor")]/@src)')
+        photo_url = mayor_page.xpath('//img[contains(@src, "Mayor")]/@src')[0]
         phone = mayor_page.xpath('string(//text()[contains(., "Office:")])')
         # no email
 

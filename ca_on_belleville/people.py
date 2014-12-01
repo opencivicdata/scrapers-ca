@@ -36,7 +36,7 @@ class BellevillePersonScraper(CanadianScraper):
         else:
             corrected_phone = phone
         email = name_elem.xpath('string(./following-sibling::a)')
-        photo_url = name_elem.xpath('string(./parent::p/preceding::img[1]/@src)')
+        photo_url = name_elem.xpath('./parent::p/preceding::img[1]/@src')[0]
         p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
         p.add_source(COUNCIL_PAGE)
         p.add_contact('voice', corrected_phone, 'legislature')

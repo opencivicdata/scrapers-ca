@@ -58,7 +58,7 @@ class CambridgePersonScraper(CanadianScraper):
         addr_rows = addr_row + addr_row[0].xpath('./following-sibling::tr')[:3]
         addr = '\n'.join(row[2].text for row in addr_rows)
 
-        photo_url = page.xpath('string(//center/img/@src)')
+        photo_url = page.xpath('//center/img/@src')[0]
 
         p = Person(primary_org='legislature', name=name, district="Cambridge", role='Mayor', image=photo_url)
         p.add_source(url)

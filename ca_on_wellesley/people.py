@@ -33,7 +33,7 @@ class WellesleyPersonScraper(CanadianScraper):
             phone = councillor_elem.xpath('string(.//a[starts-with(@href, "tel:")])')
             email = councillor_elem.xpath(
                 'string(.//a[starts-with(@href, "mailto:")])')
-            image = councillor_elem.xpath('string(.//img[1]/@src)')
+            image = councillor_elem.xpath('.//img[1]/@src')[0]
             p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
             p.add_source(COUNCIL_PAGE)
             p.add_contact('address', addr, 'legislature')

@@ -28,7 +28,7 @@ class GatineauPersonScraper(CanadianScraper):
         for raw_district, member, url in list(zip(districts, members, urls))[1:]:
             profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
             profile_page = self.lxmlize(profile_url)
-            photo_url = profile_page.xpath('string(//img/@src)')
+            photo_url = profile_page.xpath('//img/@src')[0]
             district = 'District ' + re.search('\d+', raw_district).group(0)
             email = profile_page.xpath(
                 'string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]

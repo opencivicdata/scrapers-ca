@@ -21,7 +21,7 @@ class AbbotsfordPersonScraper(CanadianScraper):
             mail_link = page.xpath('//a[@title]')[0]
             name = mail_link.attrib['title']
             email = mail_link.attrib['href'][len('mailto:'):]
-            photo_url = page.xpath('string(//div[@class="pageContent"]//img[@align="right"]/@src)')
+            photo_url = page.xpath('//div[@class="pageContent"]//img[@align="right"]/@src')[0]
 
             district = 'Abbotsford (seat %d)' % councillor_seat_number
             councillor_seat_number += 1
@@ -34,7 +34,7 @@ class AbbotsfordPersonScraper(CanadianScraper):
 
         page = self.lxmlize(MAYOR_URL)
         name = page.xpath('string(//h1)').split(' ', 1)[1]
-        photo_url = page.xpath('string(//img[@hspace=10]/@src)')
+        photo_url = page.xpath('//img[@hspace=10]/@src')[0]
         # email is hidden behind a form
         p = Person(primary_org='legislature', name=name, district='Abbotsford', role='Mayor', image=photo_url)
         p.add_source(MAYOR_URL)

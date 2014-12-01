@@ -19,10 +19,10 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
             riding = cell[2].text_content()
             if 'Mackenzie Delta' in riding:
                 riding = 'Mackenzie-Delta'
-            detail_url = cell[0].xpath('string(.//a/@href)')
+            detail_url = cell[0].xpath('.//a/@href')[0]
             detail_page = self.lxmlize(detail_url)
             photo_url = detail_page.xpath(
-                'string(//div[@class="field-item even"]/img/@src)')
+                '//div[@class="field-item even"]/img/@src')[0]
             email = detail_page.xpath('string(//a[contains(@href, "mailto:")])')
 
             contact_text = detail_page.xpath(

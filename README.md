@@ -45,6 +45,8 @@ Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID
 
 Read the [Pupa documentation](http://docs.opencivicdata.org/en/latest/scrape/basics.html) or an existing scraper's code.
 
+Avoid using the XPath `string()` function unless the expression is known to not have matches on some pages. Otherwise, scrapers may continue to run without error despite failing to find a match.
+
 ## Maintenance
 
 The `tidy` task verifies module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files.

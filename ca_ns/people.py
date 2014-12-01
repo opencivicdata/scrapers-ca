@@ -38,9 +38,9 @@ class NovaScotiaPersonScraper(CanadianScraper):
 
     def get_details(self, url):
         page = self.lxmlize(url)
-        image = page.xpath('string(//img[@class="portrait"]/@src)')
+        image = page.xpath('//img[@class="portrait"]/@src')[0]
         try:
-            phone = page.xpath('string(//dd[@class="numbers"]/text())').split(': ')[1]
+            phone = page.xpath('//dd[@class="numbers"]/text()')[0].split(': ')[1]
         except IndexError:
             phone = None
         email_js = page.xpath('string(//dd/script)')

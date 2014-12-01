@@ -45,12 +45,12 @@ class WaterlooPersonScraper(CanadianScraper):
         chairpage = self.lxmlize(CHAIR_URL)
         name = re.search('Chair (.*) -',
                          chairpage.xpath('string(//title)')).group(1)
-        email = chairpage.xpath('string(//a[contains(text(), "E-mail")]/@href)')
+        email = chairpage.xpath('//a[contains(text(), "E-mail")]/@href')[0]
         phone = chairpage.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
         address = '\n'.join(
             chairpage.xpath('//div[@class="contactBody"]//p[1]/text()'))
         photo_url_src = chairpage.xpath(
-            'string(//div[@id="contentIntleft"]//img[1]/@src)')
+            '//div[@id="contentIntleft"]//img[1]/@src')[0]
         photo_url = urljoin(CHAIR_URL, photo_url_src)
         p = Person(primary_org='legislature', name=name, district='Waterloo', role='Chair')
         p.add_source(CHAIR_URL)
@@ -62,9 +62,9 @@ class WaterlooPersonScraper(CanadianScraper):
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
-        email = page.xpath('string(//a[contains(text(), "Email Councillor")]/@href)')
+        email = page.xpath('//a[contains(text(), "Email Councillor")]/@href')[0]
         phone = page.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
         address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))
-        photo_url_src = page.xpath('string(//div[@id="contentIntleft"]//img[1]/@src)')
+        photo_url_src = page.xpath('//div[@id="contentIntleft"]//img[1]/@src')[0]
         photo_url = urljoin(url, photo_url_src)
         return email, phone, address, photo_url

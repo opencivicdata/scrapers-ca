@@ -27,7 +27,7 @@ class StJohnsPersonScraper(CanadianScraper):
                     district = "St. John's"
             phone = fields[3].xpath('string(./div)')
             email = fields[5].xpath('string(.//a)')
-            photo_url = node.xpath('string(.//img/@src)')
+            photo_url = node.xpath('.//img/@src')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

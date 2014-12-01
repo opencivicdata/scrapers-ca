@@ -30,7 +30,7 @@ class WindsorPersonScraper(CanadianScraper):
             p.add_contact('voice', phone, 'legislature')
 
             img_url_rel = cpage.xpath(
-                'string((//span/img)[1]/@src)')
+                '(//span/img)[1]/@src')[0]
             img_url = urljoin(cpage_url, img_url_rel)
             p.image = img_url
 

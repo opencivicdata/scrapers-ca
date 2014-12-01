@@ -38,10 +38,10 @@ class PeelPersonScraper(CanadianScraper):
     def chair_info(self, url):
         page = self.lxmlize(url)
         name = page.xpath('string(//title)').split('-')[1]
-        photo_url = page.xpath('string(//div[@class="co-menu"]/img/@src)')
+        photo_url = page.xpath('//div[@class="co-menu"]/img/@src')[0]
         # sadly, email is script-based
         address = page.xpath('string(//div[@id="co-content"]/p[1])')
-        phone = page.xpath('string(//div[@id="co-content"]/p[2]/text())').split(':')[1]
+        phone = page.xpath('//div[@id="co-content"]/p[2]/text()')[0].split(':')[1]
 
         p = Person(primary_org='legislature', name=name, district='Peel', role='Regional Chair',
                    image=photo_url)
