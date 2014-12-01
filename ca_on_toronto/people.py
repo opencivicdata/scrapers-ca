@@ -18,7 +18,7 @@ class TorontoPersonScraper(CanadianScraper):
 
         for a in page.xpath('//a[contains(@href,"councillors/")]'):
             page = self.lxmlize(a.attrib['href'])
-            h1 = page.xpath('string(//h1)')
+            h1 = page.xpath('//h1//text()')[0]
             if 'Council seat is vacant' not in h1 and a.attrib['href'] not in BROKEN_LINKS:
                 yield self.scrape_councilor(page, h1, a.attrib['href'])
 
@@ -32,12 +32,12 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_source(url)
 
         p.image = page.xpath('string(//main//img/@src)').replace('www.', 'www1.')  # @todo fix lxmlize to use the redirected URL to make links absolute
-        email = page.xpath('string((//a[contains(@href, "@")])[1])')
+        email = page.xpath('(//a[contains(@href, "@")])[1]//text()')[0]
         p.add_contact('email', email)
 
         addr_cell = page.xpath('//*[contains(text(), "Toronto City Hall")]/'
                                'ancestor::td')[0]
-        phone = (addr_cell.xpath('string((.//text()[contains(., "Phone:")])[1])')
+        phone = (addr_cell.xpath('(.//text()[contains(., "Phone:")])[1]')[0]
                           .split(':')[1])
         p.add_contact('voice', phone, 'legislature')
 
@@ -63,7 +63,7 @@ class TorontoPersonScraper(CanadianScraper):
 
         mail_elem, phone_elem = page.xpath('//h3')[:2]
         address = ''.join(mail_elem.xpath('./following-sibling::p//text()'))
-        phone = phone_elem.xpath('string(./following-sibling::p[1])')
+        phone = phone_elem.xpath('./following-sibling::p[1]//text()')[0]
 
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')

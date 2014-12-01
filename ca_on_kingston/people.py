@@ -27,10 +27,10 @@ class KingstonPersonScraper(CanadianScraper):
         # largely based on old scraper
         contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
 
-        name = contact_node.xpath('string(./span[1])')
-        district = contact_node.xpath('string(./text()[2])')
+        name = contact_node.xpath('./span[1]//text()')[0]
+        district = contact_node.xpath('./text()[2]')[0]
         district_id = district.split(':')[0]  # TODO: don't reject name?
-        email = contact_node.xpath('string(.//a)')
+        email = contact_node.xpath('.//a//text()')[0]
         phone = contact_node.xpath('string(./text()[5])').split(': ')[-1]  # TODO: this mostly doesn't work
         photo_url_rel = page.xpath('.//img[@class="innerimage"]/@src')[0]
         photo_url = urljoin(url, photo_url_rel)
@@ -51,8 +51,8 @@ class KingstonPersonScraper(CanadianScraper):
         # largely based on old scraper
         contact_node = page.xpath('//div[text()[contains(.,"Phone:")]]')[0]
 
-        name = contact_node.xpath('string(./span[1])')
-        email = contact_node.xpath('string(.//a)')
+        name = contact_node.xpath('./span[1]//text()')[0]
+        email = contact_node.xpath('.//a//text()')[0]
         photo_url = page.xpath('//img[@class="innerimage"]/@src')[0]
 
         p = Person(primary_org='legislature', name=name, district='Kingston', role='Mayor')

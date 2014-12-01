@@ -34,7 +34,7 @@ class PeterboroughPersonScraper(CanadianScraper):
                     tmp = [y for y in stuff if y and not re.match(r'\xa0', y)]
                     self.get_tel_numbers(tmp, p)
 
-                email = councillor.xpath('string(./a)')
+                email = councillor.xpath('./a//text()')[0]
                 p.add_contact('email', email)
 
                 yield p

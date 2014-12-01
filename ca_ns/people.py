@@ -43,7 +43,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
             phone = page.xpath('//dd[@class="numbers"]/text()')[0].split(': ')[1]
         except IndexError:
             phone = None
-        email_js = page.xpath('string(//dd/script)')
+        email_js = page.xpath('string(//dd/script)')  # allow string()
         email_addr = process_email(email_js)
         return image, phone, email_addr
 

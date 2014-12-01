@@ -13,7 +13,7 @@ class StJohnsPersonScraper(CanadianScraper):
         nodes = page.xpath('//div[@class="view-content"]/div')
         for node in nodes:
             fields = node.xpath('./div')
-            role = fields[0].xpath('string(./div)')
+            role = fields[0].xpath('./div//text()')[0]
             name = fields[2].xpath('string(.//a)').title().split(role)[-1]
             if 'Ward' in role:
                 district = role
@@ -25,8 +25,8 @@ class StJohnsPersonScraper(CanadianScraper):
                     councillor_seat_number += 1
                 else:
                     district = "St. John's"
-            phone = fields[3].xpath('string(./div)')
-            email = fields[5].xpath('string(.//a)')
+            phone = fields[3].xpath('./div//text()')[0]
+            email = fields[5].xpath('.//a//text()')[0]
             photo_url = node.xpath('.//img/@src')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

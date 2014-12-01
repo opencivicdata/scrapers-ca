@@ -6,7 +6,6 @@ MAYOR_PAGE = 'http://www.brampton.ca/EN/City-Hall/Office-Mayor/Pages/Welcome.asp
 
 
 class BramptonPersonScraper(CanadianScraper):
-    ward_7_8_seat_number = 1
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
@@ -19,15 +18,11 @@ class BramptonPersonScraper(CanadianScraper):
 
 
     def councillor_data(self, html):
-        role = html.xpath('string(./div[@class="councillorInfo"]/a/text()[1])')
-        name = html.xpath('string(./div[@class="councillorInfo"]/a/text()[2])')
-        email = html.xpath('string(./div[@class="emailInfo"])')
+        role = html.xpath('./div[@class="councillorInfo"]/a/text()[1]')[0]
+        name = html.xpath('./div[@class="councillorInfo"]/a/text()[2]')[0]
+        email = html.xpath('./div[@class="emailInfo"]//text()')[0]
         district, phone = html.xpath('./div[@class="wardInfo"]/text()')
-        photo = html.xpath('string((.//@src)[1])')
-
-        if district == 'Wards 7 and 8':
-            district = 'Wards 7 and 8 (seat %d)' % self.ward_7_8_seat_number
-            self.ward_7_8_seat_number += 1
+        photo = html.xpath('.//@src[1]')[0]
 
         p = Person(primary_org='legislature', name=name, district=district, role=role)
         p.add_source(COUNCIL_PAGE)
@@ -40,19 +35,18 @@ class BramptonPersonScraper(CanadianScraper):
 
     def mayor_data(self, page):
         # Strip the word "mayor" from the beginning of the photo lavel
-        photo_node = page.xpath('//img[@class="mayorsPic"]')[0]
-        name = photo_node.xpath('string(./@alt)').replace('Mayor ', '')
-        photo_url = photo_node.xpath('./@src')[0]
+        name = page.xpath('string(//img[@class="mayorsPic"]/@alt)').replace('Mayor ', '')  # can be empty
+        photo_url = page.xpath('string(//img[@class="mayorsPic"]/@src)')  # can be empty
 
-        address_node = page.xpath('//div[@class="address"]')[0]
-        email = address_node.xpath('string(.//a)')
-        address = ''.join(address_node.xpath('./p/text()')[:3])
-        phone = address_node.xpath('string(./p/text()[4])')
+        if 'Linda Jeffrey' in page.xpath('string(//div[@class="rich-text-Content"])'):
+            name = 'Linda Jeffrey'
+
+        email = page.xpath('//div[@class="rich-text-Content"]//a/text()[contains(.,"@")]')[0]
+        phone = page.xpath('//div[@class="rich-text-Content"]//text()[contains(.,"905.")]')[0]
 
         p = Person(primary_org='legislature', name=name, district='Brampton', role='Mayor')
         p.add_source(MAYOR_PAGE)
         p.add_contact('voice', phone, 'legislature')
-        p.add_contact('address', address, 'legislature')
         p.add_contact('email', email)
         p.image = photo_url
         return p

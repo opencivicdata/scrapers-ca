@@ -21,9 +21,9 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
             detail_url = cell[0].xpath('.//a/@href')[0]
             detail_page = self.lxmlize(detail_url)
             photo_url = detail_page.xpath('//div[@class="field-item even"]/img/@src')[0]
-            email = detail_page.xpath('string(//a[contains(@href, "mailto:")])')
+            email = detail_page.xpath('//a[contains(@href, "mailto:")]//text()')[0]
 
-            contact_text = detail_page.xpath('string(//div[@property="content:encoded"]/p[1])')
+            contact_text = ''.join(detail_page.xpath('//div[@property="content:encoded"]/p[1]//text()'))
             phone = re.search(r'P(hone)?: ([-0-9]+)', contact_text).group(2)
 
             p = Person(primary_org='legislature', name=name, district=riding, role='MLA', image=photo_url)

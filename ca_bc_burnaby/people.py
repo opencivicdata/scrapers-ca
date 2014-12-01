@@ -16,8 +16,8 @@ class BurnabyPersonScraper(CanadianScraper):
 
             role, name = page.xpath('string(//title)').split(' ', 1)
             photo_url = page.xpath('//div[@id="content"]//img[@style]/@src')[0]
-            email = page.xpath('string(//a[contains(@href, "mailto:")])')
-            phone = page.xpath('string(//li[contains(text(), "Phone:")])')
+            email = page.xpath('//a[contains(@href, "mailto:")]//text()')[0]
+            phone = page.xpath('string(//li//text()[contains(., "Phone:")]|//li//text()[contains(., "Cell:")])')  # can be empty
 
             if role == 'Mayor':
                 district = 'Burnaby'

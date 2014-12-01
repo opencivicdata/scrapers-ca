@@ -18,24 +18,23 @@ class LondonPersonScraper(CanadianScraper):
             yield self.councillor_data(councillor_page)
 
         mayor_page = self.lxmlize(MAYOR_PAGE)
-        mayor_connecting_url = mayor_page.xpath('string(//a[@class="headingLink"]'
-                                                '[contains(text(), "Connecting")]/@href)')
+        mayor_connecting_url = mayor_page.xpath('string(//a[@class="headingLink"][contains(text(), "Connecting")]/@href)')
         yield self.mayor_data(mayor_connecting_url)
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
 
-        name = page.xpath('string(//h1[@id="TitleOfPage"])')
-        district = page.xpath('string(//h2)')
+        name = page.xpath('//h1[@id="TitleOfPage"]//text()')[0]
+        district = page.xpath('//h2//text()')[0]
 
         # TODO: Councillor emails are built with JS to prevent scraping, but the JS can be scraped.
 
-        address = page.xpath('string(//div[@class="asideContent"])')
+        address = page.xpath('//div[@class="asideContent"]//text()')[0]
 
         photo = page.xpath('//div[@id="contentright"]//img[1]/@src')[0]
         phone = get_phone_data(page)
 
-        js = page.xpath('string(//span/script)')
+        js = page.xpath('string(//span/script)')  # allow string()
         email = email_js(js)
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
@@ -55,10 +54,10 @@ class LondonPersonScraper(CanadianScraper):
         photo_url = page.xpath('//div[@class="imageLeftDiv"]/img/@src')[0]
         phone = get_phone_data(page)
 
-        js = page.xpath('string(//span/script)')
+        js = page.xpath('string(//span/script)')  # allow string()
         email = email_js(js)
 
-        phone_str = page.xpath('string(//span[contains(@class, "iconPhone")])')
+        phone_str = page.xpath('//span[contains(@class, "iconPhone")]//text()')[0]
         phone = phone_str.split(':')[1]
 
         p = Person(primary_org='legislature', name=name, district='London', role='Mayor')
@@ -73,8 +72,7 @@ class LondonPersonScraper(CanadianScraper):
 def get_phone_data(page):
     # We search for "hone" because the first "p" can change case... oh, xpath.
     # We also only return the first phone number we get. There's no consistency.
-    phone_text = page.xpath('string((//span[contains(@class, "contactValue")]'
-                            '[contains(text(), "hone")])[1])')
+    phone_text = page.xpath('string((//span[contains(@class, "contactValue")][contains(text(), "hone")])[1])')
     return re.search(r'[0-9].*$', phone_text).group()
 
 

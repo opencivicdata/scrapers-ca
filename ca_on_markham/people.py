@@ -85,7 +85,7 @@ class MarkhamPersonScraper(CanadianScraper):
         address = re.sub(r'\s{2,}', ' ', address)
         contact_elem = page.xpath('//div[@class="interiorContentWrapper"]/p[3]')[0]
         phone = contact_elem.text.split(':')[1].strip()
-        email = contact_elem.xpath('string(./a)')
+        email = contact_elem.xpath('./a//text()')[0]
 
         p = Person(primary_org='legislature', name=name, district='Markham', role='Mayor')
         p.add_source(url)

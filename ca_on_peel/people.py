@@ -40,7 +40,7 @@ class PeelPersonScraper(CanadianScraper):
         name = page.xpath('string(//title)').split('-')[1]
         photo_url = page.xpath('//div[@class="co-menu"]/img/@src')[0]
         # sadly, email is script-based
-        address = page.xpath('string(//div[@id="co-content"]/p[1])')
+        address = page.xpath('//div[@id="co-content"]/p[1]//text()')[0]
         phone = page.xpath('//div[@id="co-content"]/p[2]/text()')[0].split(':')[1]
 
         p = Person(primary_org='legislature', name=name, district='Peel', role='Regional Chair',

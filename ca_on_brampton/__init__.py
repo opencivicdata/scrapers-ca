@@ -20,8 +20,8 @@ class Brampton(CanadianJurisdiction):
         organization.add_post(label='Wards 2 and 6', role='Councillor')
         organization.add_post(label='Wards 3 and 4', role='Regional Councillor')
         organization.add_post(label='Wards 3 and 4', role='Councillor')
-        organization.add_post(label='Wards 7 and 8 (seat 1)', role='Regional Councillor')
-        organization.add_post(label='Wards 7 and 8 (seat 2)', role='Regional Councillor')
+        organization.add_post(label='Wards 7 and 8', role='Regional Councillor')
+        organization.add_post(label='Wards 7 and 8', role='Councillor')
         organization.add_post(label='Wards 9 and 10', role='Regional Councillor')
         organization.add_post(label='Wards 9 and 10', role='Councillor')
 

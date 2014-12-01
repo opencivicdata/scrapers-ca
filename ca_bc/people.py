@@ -17,7 +17,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
             name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').replace(', Q.C.', '').strip()
             district = page.xpath('//em/strong/text()')[0].strip()
 
-            party_caps = page.xpath('string((//table[@width=440]//b)[last()])')
+            party_caps = page.xpath('(//table[@width=440]//b)[last()]//text()')[0]
             party = party_caps.strip().title().replace('Of', 'of')
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)

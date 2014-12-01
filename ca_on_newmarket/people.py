@@ -15,7 +15,7 @@ class NewmarketPersonScraper(CanadianScraper):
         yield self.scrape_mayor(councillors[0])
         for councillor in councillors[1:]:
             name = ' '.join(councillor.xpath('string(.//strong/a[last()])').split())
-            infostr = councillor.xpath('string(.//strong)')
+            infostr = councillor.xpath('.//strong//text()')[0]
             try:
                 district = infostr.split('-')[1]
                 role = 'Councillor'

@@ -13,7 +13,7 @@ class GatineauPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         # it's all javascript rendered on the client... wow.
-        js = page.xpath('string(//div[@class="inner_container"]/div/script[2])')
+        js = page.xpath('string(//div[@class="inner_container"]/div/script[2])')  # allow string()
         districts = re.findall(r'arrayDistricts\[a.+"(.+)"', js)
         members = re.findall(r'arrayMembres\[a.+"(.+)"', js)
         urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)

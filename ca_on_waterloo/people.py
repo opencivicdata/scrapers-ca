@@ -15,8 +15,7 @@ class WaterlooPersonScraper(CanadianScraper):
         for councillor_page in councillor_pages:
             yield self.councillor_data(councillor_page)
 
-        mayor_url = page.xpath('string((//div[@id="subNavContainer"]//'
-                               'li//li//li/a)[1]/@href)')
+        mayor_url = page.xpath('string((//div[@id="subNavContainer"]//li//li//li/a)[1]/@href)')
         yield self.mayor_data(mayor_url)
 
 

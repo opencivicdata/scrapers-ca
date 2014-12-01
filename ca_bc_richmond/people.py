@@ -11,7 +11,7 @@ class RichmondPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         contact_page = self.lxmlize(CONTACT_URL)
-        email = contact_page.xpath('string(//a[starts-with(@href, "mailto:")])')
+        email = contact_page.xpath('//a[starts-with(@href, "mailto:")]//text()')[0]
         page = self.lxmlize(COUNCIL_PAGE)
         for url in page.xpath('//a/@href[contains(., "members/")]'):
             page = self.lxmlize(url)

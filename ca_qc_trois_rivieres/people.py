@@ -16,8 +16,8 @@ class TroisRivieresPersonScraper(CanadianScraper):
     def scrape(self):
         # mayor first, can't find email
         page = self.lxmlize(MAYOR_URL)
-        photo_url = page.xpath('string(//img/@src[contains(., "Maire")])')
-        name = page.xpath('string(//td[@class="contenu"]/text()[last()])')
+        photo_url = page.xpath('//img/@src[contains(., "maire")]')[0]
+        name = page.xpath('//td[@class="contenu"]/text()[last()]')[0]
         p = Person(primary_org='legislature', name=name, district="Trois-Rivières", role="Maire",
                    image=photo_url)
         p.add_source(MAYOR_URL)
@@ -32,9 +32,9 @@ class TroisRivieresPersonScraper(CanadianScraper):
 
             url = urljoin(COUNCIL_PAGE, url_rel)
             page = self.lxmlize(url)
-            name = page.xpath('string(//h2)')
+            name = page.xpath('//h2//text()')[0]
             email = page.xpath('string(//a/@href[contains(., "mailto:")])')[len('mailto:'):]
-            photo_url = page.xpath('string(//img/@src[contains(., "Conseiller")])')
+            photo_url = page.xpath('//img/@src[contains(., "Conseiller")]')[0]
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
                        image=photo_url)
             p.add_source(url)

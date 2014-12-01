@@ -24,7 +24,7 @@ class HamiltonPersonScraper(CanadianScraper):
         info_node = page.xpath('//span[@id="RadEditorPlaceHolderControl0"]')[0]
         # strip the word 'Phone:' from the beginning of the number
         phone = info_node.xpath('string(.//b[1])')[7:]
-        email = info_node.xpath('string(.//a)')
+        email = info_node.xpath('.//a//text()')[0]
         photo_url = info_node.xpath('string(.//img/@src)')  # can be empty
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
@@ -41,8 +41,8 @@ class HamiltonPersonScraper(CanadianScraper):
 
     def mayor_data(self, node):
         name = node.xpath('string(.//strong)')[6:]
-        phone = node.xpath('string(.//p[2]/text()[1])')
-        email = node.xpath('string((.//a)[1])')
+        phone = node.xpath('.//p[2]/text()[1]')[0]
+        email = node.xpath('(.//a)[1]//text()')[0]
         photo_url = node.xpath('.//img/@src')[0]
 
         p = Person(primary_org='legislature', name=name, district='Hamilton', role='Mayor')

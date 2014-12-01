@@ -22,9 +22,8 @@ class CalgaryPersonScraper(CanadianScraper):
         photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('.//img/@src')[0])
         name = mayor_node.xpath('.//a//text()')[0]
         mayor_page = self.lxmlize(MAYOR_PAGE)
-        email = mayor_page.xpath('string(//a[contains(., "@")])')
-        phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/'
-                                 'following-sibling::text())')
+        email = mayor_page.xpath('//a[contains(., "@")]//text()')[0]
+        phone = mayor_page.xpath('string(//strong[contains(., "Phone")]/following-sibling::text())')
         m = Person(primary_org='legislature', name=name, district='Calgary', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         m.add_source(MAYOR_PAGE)

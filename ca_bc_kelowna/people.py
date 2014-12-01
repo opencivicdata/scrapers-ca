@@ -18,7 +18,7 @@ class KelownaPersonScraper(CanadianScraper):
             page = self.lxmlize(url)
             photo_url = page.xpath('//li/img/@src')[0]
             phone = page.xpath('//strong')[-1].text_content()
-            email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
+            email = page.xpath('//a[starts-with(@href, "mailto:")]//text()')[0]
 
             if role == 'Mayor':
                 district = 'Kelowna'

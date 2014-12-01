@@ -30,7 +30,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
                 email = email.split()[0]
             except ValueError:
                 continue
-            phone = row[2].xpath('string(text()[1])')
+            phone = row[2].xpath('text()[1]')[0]
             try:
                 photo_page_url = row[0].xpath('./a/@href')[0]
             except IndexError:

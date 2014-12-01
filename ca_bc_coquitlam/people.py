@@ -15,7 +15,7 @@ class CoquitlamPersonScraper(CanadianScraper):
             url = person_link.attrib['href']
             page = self.lxmlize(url)
             photo_url = page.xpath('//img[@class="img-right"]/@src')[0]
-            email = page.xpath('string(//a[starts-with(@href, "mailto:")])')
+            email = page.xpath('//a[starts-with(@href, "mailto:")]//text()')[0]
 
             if role == 'Mayor':
                 district = 'Coquitlam'

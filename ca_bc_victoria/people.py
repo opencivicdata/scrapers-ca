@@ -15,7 +15,7 @@ class VictoriaPersonScraper(CanadianScraper):
         nodes = page.xpath('//div[@id="content"]/ul/li')
         for node in nodes:
             url = urljoin(COUNCIL_PAGE, node.xpath('./a/@href')[0])
-            name = node.xpath('string(./a)')
+            name = node.xpath('./a//text()')[0]
             district = 'Victoria (seat %d)' % councillor_seat_number
             councillor_seat_number += 1
             yield self.councillor_data(url, name, district)
@@ -23,14 +23,13 @@ class VictoriaPersonScraper(CanadianScraper):
         mayor_node = page.xpath('(//div[@id="section-navigation-middle"]/ul/li/'
                                 'ul/li/a)[1]')[0]
         mayor_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('./@href')[0])
-        mayor_name = mayor_node.xpath('string(.)')
+        mayor_name = mayor_node.xpath('.//text()')[0]
         yield self.mayor_data(mayor_url, mayor_name)
 
     def councillor_data(self, url, name, district):
         page = self.lxmlize(url)
-        email = page.xpath('string(//a[contains(@href, "mailto")])')
-        phone_str = page.xpath('string(//div[@id="content"]//strong[1]/'
-                               'following-sibling::text()[contains(., "Phone")])')
+        email = page.xpath('//a[contains(@href, "mailto")]//text()')[0]
+        phone_str = page.xpath('string(//div[@id="content"]//strong[1]/following-sibling::text()[contains(., "Phone")])')
         phone = phone_str.split(':')[1]
         photo_url = urljoin(url,
                             page.xpath('//div[@id="content"]//img[1]/@src')[0])
@@ -48,8 +47,7 @@ class VictoriaPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
         email = unquote((page.xpath('string(//a[contains(@href, "mailto")]/@href)')).
                         split(':')[1])
-        phone_str = page.xpath('string(//div[@id="content"]//strong[1]/'
-                               'following-sibling::text()[contains(., "phone")])')
+        phone_str = page.xpath('string(//div[@id="content"]//strong[1]/following-sibling::text()[contains(., "phone")])')
         phone = phone_str.split(':')[1]
         photo_url = urljoin(url,
                             page.xpath('//div[@id="content"]//img[1]/@src')[0])

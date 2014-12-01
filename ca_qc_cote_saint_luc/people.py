@@ -22,10 +22,8 @@ class CoteSaintLucPersonScraper(CanadianScraper):
         for councillor_row in councillor_rows:
             img_cell, info_cell = tuple(councillor_row)
             name = info_cell.xpath('string(.//span[contains(text(), "Councillor")])')[len('Councillor '):]
-            district = info_cell.xpath('string(.//p[contains(text(), "District")])')
-            email = info_cell.xpath('string(.//a[contains(@href, "mailto:")])')
-            if not email:
-                email = info_cell.xpath('.//strong[contains(text(), "E-mail")]/following-sibling::text()')[0]
+            district = info_cell.xpath('.//p[contains(text(), "District")]//text()')[0]
+            email = info_cell.xpath('.//text()[contains(., "@")]')[0]
             phone = info_cell.xpath('string(.//p[contains(.//text(), "Telephone:")])').split(':')[1]
             img_url_rel = img_cell.xpath('.//img/@src')[0]
             img_url = urljoin(councillors_url, img_url_rel)

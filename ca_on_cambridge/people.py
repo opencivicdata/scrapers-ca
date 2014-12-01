@@ -51,7 +51,7 @@ class CambridgePersonScraper(CanadianScraper):
     def mayor_info(self, url):
         page = self.lxmlize(url)
         name = page.xpath('string(//h3)').split(',')[1]
-        email = page.xpath('string(//a[contains(@href, "@")])')
+        email = page.xpath('//a[contains(@href, "@")]//text()')[0]
         phone = page.xpath('string(//td[contains(text(), "Tel:")])').split(':')[1]
 
         addr_row = page.xpath('//td[text()="3): "]/parent::tr')

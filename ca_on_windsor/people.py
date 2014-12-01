@@ -21,7 +21,7 @@ class WindsorPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(cpage_url)
 
-            email = cpage.xpath('string(//a[contains(@href, "@")])')
+            email = cpage.xpath('//a[contains(@href, "@")]//text()')[0]
             p.add_contact('email', email)
 
             phone = cpage.xpath('string(//text()[contains(., "Phone")])').split(':')[1]

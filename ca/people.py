@@ -24,21 +24,19 @@ class CanadaPersonScraper(CanadianScraper):
         rows = page.xpath('//div[@class="main-content"]//tr')[1:]
         for row in rows:
             name_cell = row.xpath('./td[1]')[0]
-            last_name = name_cell.xpath('string(.//span[1])')
-            first_name = name_cell.xpath('string(.//span[2])')
+            last_name = name_cell.xpath('.//span[1]//text()')[0]
+            first_name = name_cell.xpath('.//span[2]//text()')[0]
             name = '%s %s' % (first_name, last_name)
-            constituency = row.xpath('string(./td[2])')
-            province = row.xpath('string(./td[3])')
-            party = row.xpath('string(./td[4])')
+            constituency = row.xpath('./td[2]//text()')[0]
+            province = row.xpath('./td[3]//text()')[0]
+            party = row.xpath('./td[4]//text()')[0]
             url = name_cell.xpath('.//a/@href')[0]
             if province == 'Québec':
                 url = url.replace('/en/', '/fr/')
 
             mp_page = self.lxmlize(url)
-            email = mp_page.xpath('string(//span[@class="caucus"]/'
-                                  'a[contains(., "@")])')
-            photo = mp_page.xpath('string(//div[@class="profile overview header"]//'
-                                  'img/@src)')
+            email = mp_page.xpath('string(//span[@class="caucus"]/a[contains(., "@")])')
+            photo = mp_page.xpath('string(//div[@class="profile overview header"]//img/@src)')
 
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
             m.add_source(COUNCIL_PAGE)
@@ -66,9 +64,9 @@ class CanadaPersonScraper(CanadianScraper):
                 m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
             else:
                 m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
-            voice = mp_page.xpath('string(//div[@class="hilloffice"]//span[contains(text(), "Telephone:")])')
+            voice = mp_page.xpath('//div[@class="hilloffice"]//span//text()[contains(., "Telephone:")]|//div[@class="hilloffice"]//span//text()[contains(., "Téléphone :")]')[0]
             if voice:
-                m.add_contact('voice', voice.replace('Telephone: ', ''), 'legislature')
+                m.add_contact('voice', voice.replace('Telephone: ', '').replace('Téléphone : ', ''), 'legislature')
             fax = mp_page.xpath('string(//div[@class="hilloffice"]//span[contains(text(), "Fax:")])').replace('Fax: ', '')
             if fax:
                 m.add_contact('fax', fax, 'legislature')
@@ -84,7 +82,7 @@ class CanadaPersonScraper(CanadianScraper):
                     spans[2].text_content(),  # city, region
                     spans[3].text_content(),  # postal code
                 ]), note)
-                voice = li.xpath('string(./span[contains(text(), "Telephone:")])').replace('Telephone: ', '')
+                voice = li.xpath('./span//text()[contains(., "Telephone:")]|./span//text()[contains(., "Téléphone :")]')[0].replace('Telephone: ', '').replace('Téléphone : ', '')
                 if voice:
                     m.add_contact('voice', voice, note)
                 fax = li.xpath('string(./span[contains(text(), "Fax:")])').replace('Fax: ', '')

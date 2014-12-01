@@ -33,7 +33,7 @@ class WinnipegPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
         # email is, sadly, a form
         photo_url = urljoin(url, page.xpath('//img[@class="bio_pic"]/@src')[0])
-        phone = page.xpath('string(//td[contains(., "Phone")]/following-sibling::td)')
+        phone = page.xpath('//td[contains(., "Phone")]/following-sibling::td//text()')[0]
         email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
                  split('=')[1] + '@winnipeg.ca')
 
