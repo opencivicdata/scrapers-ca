@@ -16,8 +16,7 @@ class SaskatoonPersonScraper(CanadianScraper):
         yield self.scrape_mayor(mayor_url)
 
         email_page = self.lxmlize(EMAIL_URL)
-        c_options = email_page.xpath(
-            '//select[@id="councillorList"]/option[contains(text(), "Ward")]')
+        c_options = email_page.xpath('//select[@id="councillorList"]/option[contains(text(), "Ward")]')
         email_dict = dict((opt.text.split(' - ')[0], opt.attrib['value']) for
                           opt in c_options)
 

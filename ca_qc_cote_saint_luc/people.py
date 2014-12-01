@@ -21,14 +21,12 @@ class CoteSaintLucPersonScraper(CanadianScraper):
         councillor_rows = cpage.xpath('//tr[td//img]')[:-1]
         for councillor_row in councillor_rows:
             img_cell, info_cell = tuple(councillor_row)
-            name = info_cell.xpath(
-                'string(.//span[contains(text(), "Councillor")])')[len('Councillor '):]
+            name = info_cell.xpath('string(.//span[contains(text(), "Councillor")])')[len('Councillor '):]
             district = info_cell.xpath('string(.//p[contains(text(), "District")])')
             email = info_cell.xpath('string(.//a[contains(@href, "mailto:")])')
             if not email:
                 email = info_cell.xpath('.//strong[contains(text(), "E-mail")]/following-sibling::text()')[0]
-            phone = info_cell.xpath(
-                'string(.//p[contains(.//text(), "Telephone:")])').split(':')[1]
+            phone = info_cell.xpath('string(.//p[contains(.//text(), "Telephone:")])').split(':')[1]
             img_url_rel = img_cell.xpath('.//img/@src')[0]
             img_url = urljoin(councillors_url, img_url_rel)
 
@@ -42,8 +40,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
-        name = page.xpath(
-            'string(//span[contains(text(), "Mayor")])')[len('Mayor '):]
+        name = page.xpath('string(//span[contains(text(), "Mayor")])')[len('Mayor '):]
 
         email = page.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
         phone = page.xpath('//table[1]/tbody/tr/td[1]/p[last()]/text()')[2].replace('Telephone: ', '')

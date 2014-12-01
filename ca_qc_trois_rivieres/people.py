@@ -33,8 +33,7 @@ class TroisRivieresPersonScraper(CanadianScraper):
             url = urljoin(COUNCIL_PAGE, url_rel)
             page = self.lxmlize(url)
             name = page.xpath('string(//h2)')
-            email = page.xpath(
-                'string(//a/@href[contains(., "mailto:")])')[len('mailto:'):]
+            email = page.xpath('string(//a/@href[contains(., "mailto:")])')[len('mailto:'):]
             photo_url = page.xpath('string(//img/@src[contains(., "Conseiller")])')
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
                        image=photo_url)

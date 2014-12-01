@@ -10,18 +10,14 @@ class SurreyPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        councillor_links = page.xpath(
-            '//div[@class="inner-wrapper"]//a[contains(text(), "Councillor")]')
+        councillor_links = page.xpath('//div[@class="inner-wrapper"]//a[contains(text(), "Councillor")]')
         for link in councillor_links:
             role, name = link.text.split(' ', 1)
             url = link.attrib['href']
             councillor_page = self.lxmlize(url)
-            photo_url = councillor_page.xpath(
-                './/div[@class="inner-wrapper"]//img/@src')[0]
-            phone = councillor_page.xpath(
-                'string(//text()[contains(., "hone:")][1])')
-            email = councillor_page.xpath(
-                'string(//a[contains(@href, "mailto:")])')
+            photo_url = councillor_page.xpath('.//div[@class="inner-wrapper"]//img/@src')[0]
+            phone = councillor_page.xpath('string(//text()[contains(., "hone:")][1])')
+            email = councillor_page.xpath('string(//a[contains(@href, "mailto:")])')
 
             if role == 'Mayor':
                 district = 'Surrey'
@@ -37,8 +33,7 @@ class SurreyPersonScraper(CanadianScraper):
             p.add_contact('email', email)
             yield p
 
-        mayor_link = page.xpath(
-            '//div[@class="inner-wrapper"]//a[contains(text(), "Mayor")]')[0]
+        mayor_link = page.xpath('//div[@class="inner-wrapper"]//a[contains(text(), "Mayor")]')[0]
         mayor_url = mayor_link.attrib['href']
         name = mayor_link.text.split(' ', 2)[1]
         mayor_page = self.lxmlize(mayor_url)

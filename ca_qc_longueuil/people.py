@@ -19,8 +19,7 @@ class LongueuilPersonScraper(CanadianScraper):
             name = row[2].xpath('string(./a)').title()
             detail_url = row[2].xpath('./a/@href')[0]
             detail_page = self.lxmlize(detail_url)
-            email_url = detail_page.xpath(
-                '//a[contains(@href, "sendto")]/@href')[0]
+            email_url = detail_page.xpath('//a[contains(@href, "sendto")]/@href')[0]
             email = re.search(r'sendto=(.+)&', email_url).group(1)
             photo_url = detail_page.xpath('//img[@height="200"]/@src')[0]
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
@@ -36,8 +35,7 @@ class LongueuilPersonScraper(CanadianScraper):
         mayor_url = mayor_td.xpath('.//a/@href')[0]
         mayor_page = self.lxmlize(mayor_url)
         photo_url = mayor_page.xpath('//b/img/@src')[0]
-        email_url = detail_page.xpath(
-            '//a[contains(@href, "sendto")]/@href')[0]
+        email_url = detail_page.xpath('//a[contains(@href, "sendto")]/@href')[0]
         email = re.search(r'sendto=(.+)&', email_url).group(1)
         p = Person(primary_org='legislature', name=name, district='Longueuil', role='Maire')
         p.add_source(COUNCIL_PAGE)

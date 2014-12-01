@@ -12,8 +12,7 @@ class WindsorPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillor_links = page.xpath(
-            '//span[@class="textimagetype"]//a[contains(text(), "- Ward")]')
+        councillor_links = page.xpath('//span[@class="textimagetype"]//a[contains(text(), "- Ward")]')
         for councillor_link in councillor_links:
             name, district = councillor_link.text.split(' - ')
             cpage_url = councillor_link.attrib['href']
@@ -25,12 +24,10 @@ class WindsorPersonScraper(CanadianScraper):
             email = cpage.xpath('string(//a[contains(@href, "@")])')
             p.add_contact('email', email)
 
-            phone = cpage.xpath(
-                'string(//text()[contains(., "Phone")])').split(':')[1]
+            phone = cpage.xpath('string(//text()[contains(., "Phone")])').split(':')[1]
             p.add_contact('voice', phone, 'legislature')
 
-            img_url_rel = cpage.xpath(
-                '(//span/img)[1]/@src')[0]
+            img_url_rel = cpage.xpath('(//span/img)[1]/@src')[0]
             img_url = urljoin(cpage_url, img_url_rel)
             p.image = img_url
 

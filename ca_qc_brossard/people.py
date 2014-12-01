@@ -34,8 +34,7 @@ class BrossardPersonScraper(CanadianScraper):
                               if name in link.text_content().replace('\u2019', "'")][0]
                 email = re.match('mailto:(.+@brossard.ca)', email_elem.attrib['href']).group(1)
                 p.add_contact('email', email)
-                phone = email_elem.xpath(
-                    './following-sibling::text()[contains(., "450")]')[0]
+                phone = email_elem.xpath('./following-sibling::text()[contains(., "450")]')[0]
                 p.add_contact('voice', phone, 'legislature')
             except IndexError:  # oh Francyne/Francine Raymond, who are you, really?
                 pass

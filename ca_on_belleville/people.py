@@ -19,8 +19,7 @@ class BellevillePersonScraper(CanadianScraper):
         ward_elems = page.xpath('//h3[contains(text(), "Councillors")]')
         for ward_elem in ward_elems:
             ward = re.search(r'(Ward.+) Councillors', ward_elem.text).group(1)
-            councillor_name_elems = ward_elem.xpath(
-                './following-sibling::div[1]//strong')
+            councillor_name_elems = ward_elem.xpath('./following-sibling::div[1]//strong')
             for name_elem in councillor_name_elems:
                 self.seat_numbers[ward] += 1
                 district = '%s (seat %d)' % (ward, self.seat_numbers[ward])
@@ -29,8 +28,7 @@ class BellevillePersonScraper(CanadianScraper):
 
     def person_from_elem(self, name_elem, district, role):
         name = name_elem.text_content()
-        phone = name_elem.xpath(
-            'string(./following-sibling::text()[2])').split(': ')[1]
+        phone = name_elem.xpath('string(./following-sibling::text()[2])').split(': ')[1]
         if not phone.startswith('613-'):
             corrected_phone = '613-' + phone
         else:

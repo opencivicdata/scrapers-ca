@@ -21,10 +21,8 @@ class LavalPersonScraper(CanadianScraper):
             full_name = councillor_row.xpath('string(./td[2]/p/text()[2])').strip()
             name = ' '.join(full_name.split()[1:])
 
-            phone = councillor_row.xpath(
-                './/span[@class="icon-phone"]/following::text()')[0]
-            email = councillor_row.xpath(
-                'string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+            phone = councillor_row.xpath('.//span[@class="icon-phone"]/following::text()')[0]
+            email = councillor_row.xpath('string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
             photo_url = councillor_row[0][0].attrib['src']
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)

@@ -49,8 +49,7 @@ class WaterlooPersonScraper(CanadianScraper):
         phone = chairpage.xpath('string((//span[@class="labelTag"][contains(text(), "Phone")]/parent::*/text())[1])').strip(':')
         address = '\n'.join(
             chairpage.xpath('//div[@class="contactBody"]//p[1]/text()'))
-        photo_url_src = chairpage.xpath(
-            '//div[@id="contentIntleft"]//img[1]/@src')[0]
+        photo_url_src = chairpage.xpath('//div[@id="contentIntleft"]//img[1]/@src')[0]
         photo_url = urljoin(CHAIR_URL, photo_url_src)
         p = Person(primary_org='legislature', name=name, district='Waterloo', role='Chair')
         p.add_source(CHAIR_URL)

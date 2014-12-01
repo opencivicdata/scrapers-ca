@@ -41,8 +41,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                 image_url = urljoin(url, image_url_rel)
                 p.image = image_url
 
-                contacts = page.xpath(
-                    '//div[@id="content"]//div[@class="block"]/text()')
+                contacts = page.xpath('//div[@id="content"]//div[@class="block"]/text()')
                 for contact in contacts:
                     if not re.search(r'[0-9]', contact):
                         continue
@@ -59,8 +58,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                         p.add_contact('cell', contact, 'legislature')
                     if 'F' in contact_type:
                         p.add_contact('fax', contact, 'legislature')
-                email = cpage.xpath(
-                    '//div[@id="content"]//div[@class="block"]//'
+                email = cpage.xpath('//div[@id="content"]//div[@class="block"]//'
                     'a[contains(@href, "mailto:")]')[0].text_content()
                 p.add_contact('email', email)
                 yield p
