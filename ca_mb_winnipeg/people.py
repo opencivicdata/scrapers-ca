@@ -14,7 +14,7 @@ class WinnipegPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         nodes = page.xpath('//td[@width="105"]')
         for node in nodes:
-            url = urljoin(COUNCIL_PAGE, node.xpath('string(.//a/@href)'))
+            url = urljoin(COUNCIL_PAGE, node.xpath('.//a/@href')[0])
             ward = re.search('([A-Z].+) Ward', node.xpath('string(.//a)')).group(1)
             name = ' '.join(node.xpath('string(.//span[@class="k80B"])').split())
             yield self.councillor_data(url, name, ward)
@@ -32,7 +32,7 @@ class WinnipegPersonScraper(CanadianScraper):
     def councillor_data(self, url, name, ward):
         page = self.lxmlize(url)
         # email is, sadly, a form
-        photo_url = urljoin(url, page.xpath('string(//img[@class="bio_pic"]/@src)'))
+        photo_url = urljoin(url, page.xpath('//img[@class="bio_pic"]/@src')[0])
         phone = page.xpath('string(//td[contains(., "Phone")]/following-sibling::td)')
         email = (page.xpath('string(//tr[contains(., "Email")]//a/@href)').
                  split('=')[1] + '@winnipeg.ca')

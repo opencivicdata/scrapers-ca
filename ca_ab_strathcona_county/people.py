@@ -43,7 +43,7 @@ class StrathconaCountyPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
         name = page.xpath('string(//h1)').split('-')[1]
         content_node = page.xpath('//div[@class="usercontent"]')[0]
-        photo_url = urljoin(url, content_node.xpath('string(.//img[1]/@src)'))
+        photo_url = urljoin(url, content_node.xpath('.//img[1]/@src')[0])
         email = content_node.xpath('string(.//a/text()[contains(., "@")])')
         phone = content_node.xpath('string(.//strong[contains(., "Phone")]/'
                                    'following-sibling::text()[1])').strip()

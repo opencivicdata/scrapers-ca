@@ -14,7 +14,7 @@ class VictoriaPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         nodes = page.xpath('//div[@id="content"]/ul/li')
         for node in nodes:
-            url = urljoin(COUNCIL_PAGE, node.xpath('string(./a/@href)'))
+            url = urljoin(COUNCIL_PAGE, node.xpath('./a/@href')[0])
             name = node.xpath('string(./a)')
             district = 'Victoria (seat %d)' % councillor_seat_number
             councillor_seat_number += 1
@@ -22,7 +22,7 @@ class VictoriaPersonScraper(CanadianScraper):
 
         mayor_node = page.xpath('(//div[@id="section-navigation-middle"]/ul/li/'
                                 'ul/li/a)[1]')[0]
-        mayor_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('string(./@href)'))
+        mayor_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('./@href')[0])
         mayor_name = mayor_node.xpath('string(.)')
         yield self.mayor_data(mayor_url, mayor_name)
 
@@ -33,7 +33,7 @@ class VictoriaPersonScraper(CanadianScraper):
                                'following-sibling::text()[contains(., "Phone")])')
         phone = phone_str.split(':')[1]
         photo_url = urljoin(url,
-                            page.xpath('string(//div[@id="content"]//img[1]/@src)'))
+                            page.xpath('//div[@id="content"]//img[1]/@src')[0])
 
         # TODO: should district be "Nieghborhood Liaison"?
         m = Person(primary_org='legislature', name=name, district=district, role='Councillor')
@@ -52,7 +52,7 @@ class VictoriaPersonScraper(CanadianScraper):
                                'following-sibling::text()[contains(., "phone")])')
         phone = phone_str.split(':')[1]
         photo_url = urljoin(url,
-                            page.xpath('string(//div[@id="content"]//img[1]/@src)'))
+                            page.xpath('//div[@id="content"]//img[1]/@src')[0])
 
         # TODO: should district be "Nieghborhood Liaison"?
         m = Person(primary_org='legislature', name=name, district='Victoria', role='Mayor')

@@ -42,7 +42,7 @@ class ReginaPersonScraper(CanadianScraper):
     def mayor_data(self, url, name):
         page = self.lxmlize(url)
         photo_url = urljoin(url,
-                            page.xpath('string((//div[@id="contentcontainer"]//img)[1]/@src)'))
+                            page.xpath('(//div[@id="contentcontainer"]//img)[1]/@src')[0])
         contact_page = self.lxmlize(MAYOR_CONTACT_URL)
         email = contact_page.xpath('string(//a[contains(., "@")][1])')
 
