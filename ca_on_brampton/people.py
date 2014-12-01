@@ -25,8 +25,8 @@ class BramptonPersonScraper(CanadianScraper):
         district, phone = html.xpath('./div[@class="wardInfo"]/text()')
         photo = html.xpath('string((.//@src)[1])')
 
-        if role == 'Wards 7 and 8':
-            role = 'Wards 7 and 8 (seat %d)' % self.ward_7_8_seat_number
+        if district == 'Wards 7 and 8':
+            district = 'Wards 7 and 8 (seat %d)' % self.ward_7_8_seat_number
             self.ward_7_8_seat_number += 1
 
         p = Person(primary_org='legislature', name=name, district=district, role=role)

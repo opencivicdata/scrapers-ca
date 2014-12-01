@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
+import re
+
 COUNCIL_PAGE = 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp'
 
 
@@ -14,12 +16,12 @@ class MercierPersonScraper(CanadianScraper):
             if councillor == councillors[0]:
                 name = councillor.xpath('.//strong/text()')[0].replace('Monsieur', '').replace('Madame', '').strip()
                 role = 'Maire'
+                district = 'Mercier'
             else:
-                name = councillor.xpath('.//strong/text()')[0]
-                name = name.replace('Monsieur', '').replace('Madame', '').strip()
+                name = councillor.xpath('.//strong/text()')[0].replace('Monsieur', '').replace('Madame', '').strip()
                 role = 'Conseiller'
+                district = 'District %s' % re.search('(\d)', councillor.xpath('.//text()')[3]).group(1)
 
-            district = 'Mercier'
             email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

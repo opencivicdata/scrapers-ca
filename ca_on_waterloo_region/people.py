@@ -27,7 +27,7 @@ class WaterlooPersonScraper(CanadianScraper):
             for councillor in councillors:
                 post = re.search('of (.*)', region.text).group(1)
                 if 'Mayor' in councillor.xpath('../text()')[0]:
-                    district = '%s (mayor)' % post
+                    district = post
                 else:
                     seat_numbers[post] += 1
                     district = '%s (seat %d)' % (post, seat_numbers[post])

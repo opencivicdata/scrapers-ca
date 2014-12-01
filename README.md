@@ -16,7 +16,7 @@ Initialize the database:
 ```
 createdb pupa
 psql pupa -c "CREATE EXTENSION postgis;"
-pupa dbinit
+pupa dbinit ca
 ```
 
 ## Run a scraper

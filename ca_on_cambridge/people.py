@@ -10,6 +10,8 @@ MAYOR_PAGE = 'http://www.cambridge.ca/article.php?ssid=167'
 class CambridgePersonScraper(CanadianScraper):
 
     def scrape(self):
+        regional_councillor_seat_number = 1
+
         yield self.mayor_info(MAYOR_PAGE)
 
         page = self.lxmlize(COUNCIL_PAGE)
@@ -19,8 +21,9 @@ class CambridgePersonScraper(CanadianScraper):
             district = re.findall('(?:W|R).*', district)[0]
             role = 'Councillor'
             if 'Regional' in district:
-                district = 'Cambridge'
                 role = 'Regional Councillor'
+                district = 'Waterloo (seat %d)' % regional_councillor_seat_number
+                regional_councillor_seat_number += 1
             name = councillor.xpath('.//a')[0].text_content()
 
             url = councillor.xpath('.//a')[0].attrib['href']

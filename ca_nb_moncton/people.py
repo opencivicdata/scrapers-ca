@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
+from collections import defaultdict
 
 COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 
@@ -9,6 +10,8 @@ COUNCIL_PAGE = 'http://www.moncton.ca/Government/City_Council.htm'
 class MonctonPersonScraper(CanadianScraper):
 
     def scrape(self):
+        seat_numbers = defaultdict(int)
+
         page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
         mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
@@ -21,14 +24,23 @@ class MonctonPersonScraper(CanadianScraper):
 
             district = parts[2]
             if district == 'At Large':
-                district = 'Moncton'
+                role = 'Councillor at Large'
+                seat_numbers[district] += 1
+                district = 'Moncton (seat %d)' % seat_numbers[district]
             elif district == 'Deputy Mayor':
                 district = parts[3]
+                role = 'Councillor'
+                seat_numbers[district] += 1
+                district = '%s (seat %d)' % (district, seat_numbers[district])
+            else:
+                role = 'Councillor'
+                seat_numbers[district] += 1
+                district = '%s (seat %d)' % (district, seat_numbers[district])
 
             url = councillor.xpath('.//a')[-1].attrib['href']
             page = self.lxmlize(url)
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.image = councillor.xpath('.//img/@src')[0]

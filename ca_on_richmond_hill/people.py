@@ -9,6 +9,8 @@ COUNCIL_PAGE = 'http://www.richmondhill.ca/subpage.asp?pageid=townhall_members_o
 class RichmondHillPersonScraper(CanadianScraper):
 
     def scrape(self):
+        regional_councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//center/center//a')
@@ -25,7 +27,8 @@ class RichmondHillPersonScraper(CanadianScraper):
                 if district:
                     district = district[0].strip()
                 else:
-                    district = 'Richmond Hill'
+                    district = 'York (seat %d)' % regional_councillor_seat_number
+                    regional_councillor_seat_number += 1
 
                 role = 'Regional Councillor' if 'Regional' in header else 'Councillor'
 

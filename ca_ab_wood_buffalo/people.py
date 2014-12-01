@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
+from collections import defaultdict
 
 from six.moves.urllib.parse import urljoin
 
@@ -11,6 +12,8 @@ COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Coun
 class WoodBuffaloPersonScraper(CanadianScraper):
 
     def scrape(self):
+        seat_numbers = defaultdict(int)
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         mayor_url = page.xpath('//li[@id="pageid1075"]/div/a/@href')[0]
@@ -22,7 +25,14 @@ class WoodBuffaloPersonScraper(CanadianScraper):
             councillor_links = ward.xpath('./parent::p/a')
             for councillor_link in councillor_links:
                 name = councillor_link.text
-                p = Person(primary_org='legislature', name=name, district=ward_name, role='Councillor')
+
+                if ward_name in ('Ward 1', 'Ward 2'):
+                    seat_numbers[ward_name] += 1
+                    district = '%s (seat %d)' % (ward_name, seat_numbers[ward_name])
+                else:
+                    district = ward_name
+
+                p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
                 url = councillor_link.attrib['href']
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)

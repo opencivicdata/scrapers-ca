@@ -11,4 +11,5 @@ class BritishColumbia(CanadianJurisdiction):
     parties = [
         {'name': 'New Democratic Party of British Columbia'},
         {'name': 'British Columbia Liberal Party'},
+        {'name': 'Independent'},
     ]

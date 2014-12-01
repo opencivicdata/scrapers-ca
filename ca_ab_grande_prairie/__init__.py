@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
+from pupa.scrape import Organization
 
 
 class GrandePrairie(CanadianJurisdiction):
@@ -8,3 +9,12 @@ class GrandePrairie(CanadianJurisdiction):
     division_name = 'Grande Prairie'
     name = 'Grande Prairie City Council'
     url = 'http://www.cityofgp.com'
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        organization.add_post(role='Mayor', label='Grande Prairie')
+        for i in range(8):
+            organization.add_post(role='Councillor', label='Grande Prairie (seat %d)' % (i + 1))
+
+        yield organization

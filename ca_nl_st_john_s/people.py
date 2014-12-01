@@ -7,6 +7,8 @@ COUNCIL_PAGE = 'http://www.stjohns.ca/city-hall/about-city-hall/council'
 class StJohnsPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
         nodes = page.xpath('//div[@class="view-content"]/div')
         for node in nodes:
@@ -18,8 +20,11 @@ class StJohnsPersonScraper(CanadianScraper):
                 role = 'Councillor'
             else:
                 if 'At Large' in role:
-                    role = 'Councillor'
-                district = "St. John's"
+                    role = 'Councillor at Large'
+                    district = "St. John's (seat %d)" % councillor_seat_number
+                    councillor_seat_number += 1
+                else:
+                    district = "St. John's"
             phone = fields[3].xpath('string(./div)')
             email = fields[5].xpath('string(.//a)')
             photo_url = node.xpath('string(.//img/@src)')

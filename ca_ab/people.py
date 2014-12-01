@@ -36,7 +36,8 @@ class AlbertaPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name_without_status, district=mla['Riding Name'],
                        role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)
-            p.add_contact('email', mla['Email'])
+            if mla['Email']:
+                p.add_contact('email', mla['Email'])
             if mla['Phone Number']:
                 p.add_contact('voice', mla['Phone Number'], 'legislature')
             yield p
@@ -60,4 +61,4 @@ class AlbertaPersonScraper(CanadianScraper):
 
         resp = self.post(COUNCIL_PAGE, data=post_data)
         result_page = lxml.html.fromstring(resp.text)
-        return result_page.xpath('string(//a[@id="_ctl0_HL_file"]/@href)')
+        return result_page.xpath('//a[@id="_ctl0_HL_file"]/@href')[0]

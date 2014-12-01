@@ -24,13 +24,15 @@ class AjaxPersonScraper(CanadianScraper):
             else:
                 district = re.findall(r'Ward.*', page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content())[0].strip()
                 role = page.xpath('//div[@id="printAreaContent"]//h1')[0].text_content()
-                role = re.findall('((Regional)? ?(Councillor))', role)[0][0]
+                role = re.search('((?:Regional )?Councillor)', role).group(1)
+
+            name = name.replace(role, '').strip()
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
-            p.image = page.xpath('//div[@class="intQuicklinksPhoto"]/img/@src')[0]
+            p.image = page.xpath('//div[@class="intQuicklinksPhoto"]//img/@src')[0]
 
             contact_info = page.xpath('//table[@class="datatable"][1]//tr')[1:]
             for line in contact_info:

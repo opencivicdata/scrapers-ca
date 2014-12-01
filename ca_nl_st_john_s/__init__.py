@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
+from pupa.scrape import Organization
 
 
 class StJohns(CanadianJurisdiction):
@@ -8,3 +9,15 @@ class StJohns(CanadianJurisdiction):
     division_name = "St. John's"
     name = "St. John's City Council"
     url = 'http://www.stjohns.ca'
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        organization.add_post(role='Mayor', label="St. John's")
+        organization.add_post(role='Deputy Mayor', label="St. John's")
+        for i in range(4):
+            organization.add_post(role='Councillor at Large', label="St. John's (seat %d)" % (i + 1))
+        for i in range(5):
+            organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
+
+        yield organization

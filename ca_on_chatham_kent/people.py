@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person, CONTACT_DETAIL_TYPE_MAP
 
 import re
+from collections import defaultdict
 
 COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilMembers.aspx'
 
@@ -9,16 +10,18 @@ COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilM
 class ChathamKentPersonScraper(CanadianScraper):
 
     def scrape(self):
+        seat_numbers = defaultdict(int)
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         wards = page.xpath('//table[@class="ms-rteTable-4"]')
         for ward in wards:
             district_info = ward.xpath('.//p')[0].text_content()
             if 'Mayor' in district_info:
-                district = 'Chatham-Kent'
+                area = 'Chatham-Kent'
                 role = 'Mayor'
             else:
-                district = re.search(r'Ward \d+', district_info).group(0)
+                area = re.search(r'Ward \d+', district_info).group(0)
                 role = 'Councillor'
 
             councillors = ward.xpath('.//a')
@@ -26,6 +29,12 @@ class ChathamKentPersonScraper(CanadianScraper):
                 name = councillor.text_content()
                 url = councillor.attrib['href']
                 page = self.lxmlize(url)
+
+                if role == 'Councillor':
+                    seat_numbers[area] += 1
+                    district = '%s (seat %d)' % (area, seat_numbers[area])
+                else:
+                    district = area
 
                 p = Person(primary_org='legislature', name=name, district=district, role=role)
                 p.add_source(COUNCIL_PAGE)

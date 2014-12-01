@@ -15,6 +15,7 @@ class Canada(CanadianJurisdiction):
         {'name': 'Bloc Québécois'},
         {'name': 'Conservative'},
         {'name': 'Conservative Independent'},
+        {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},
         {'name': 'Independent'},
         {'name': 'Liberal'},

@@ -14,13 +14,13 @@ class Waterloo(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Chair', label='Waterloo')
-        organization.add_post(role='Councillor', label='Cambridge (mayor)')
-        organization.add_post(role='Councillor', label='Kitchener (mayor)')
-        organization.add_post(role='Councillor', label='Waterloo (mayor)')
-        organization.add_post(role='Councillor', label='North Dumfries (mayor)')
-        organization.add_post(role='Councillor', label='Wellesley (mayor)')
-        organization.add_post(role='Councillor', label='Wilmot (mayor)')
-        organization.add_post(role='Councillor', label='Woolwich (mayor)')
+        organization.add_post(role='Councillor', label='Cambridge')
+        organization.add_post(role='Councillor', label='Kitchener')
+        organization.add_post(role='Councillor', label='Waterloo')
+        organization.add_post(role='Councillor', label='North Dumfries')
+        organization.add_post(role='Councillor', label='Wellesley')
+        organization.add_post(role='Councillor', label='Wilmot')
+        organization.add_post(role='Councillor', label='Woolwich')
         for i in range(2):
             organization.add_post(role='Councillor', label='Cambridge (seat %d)' % (i + 1))
         for i in range(4):

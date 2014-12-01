@@ -7,9 +7,10 @@ COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/May
 
 
 class MarkhamPersonScraper(CanadianScraper):
-    regional_councillor_seat_number = 1
 
     def scrape(self):
+        regional_councillor_seat_number = 1
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         mayor_url = page.xpath('//a[contains(text(), "Office of the Mayor")]/@href')[0]
@@ -24,8 +25,8 @@ class MarkhamPersonScraper(CanadianScraper):
                 role = 'Councillor'
             elif 'Regional' in district:
                 role = 'Regional Councillor'
-                district = 'Markham (seat %d)' % self.regional_councillor_seat_number
-                self.regional_councillor_seat_number += 1
+                district = 'York (seat %d)' % regional_councillor_seat_number
+                regional_councillor_seat_number += 1
             else:
                 role = district
                 district = 'Markham'

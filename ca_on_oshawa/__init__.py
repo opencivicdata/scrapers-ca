@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
+from pupa.scrape import Organization
 
 
 class Oshawa(CanadianJurisdiction):
@@ -8,3 +9,14 @@ class Oshawa(CanadianJurisdiction):
     division_name = 'Oshawa'
     name = 'Oshawa City Council'
     url = 'http://www.oshawa.ca'
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        organization.add_post(role='Mayor', label='Oshawa')
+        for i in range(7):
+            organization.add_post(role='Regional Councillor', label='Durham (seat %d)' % (i + 1))
+        for i in range(3):
+            organization.add_post(role='Councillor', label='Oshawa (seat %d)' % (i + 1))
+
+        yield organization

@@ -3,7 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.laval.ca/Pages/Fr/Administration/conseillers-municipaux.aspx'
+COUNCIL_PAGE = 'http://www.laval.ca/Pages/Fr/A-propos/conseillers-municipaux.aspx'
 
 
 class LavalPersonScraper(CanadianScraper):
