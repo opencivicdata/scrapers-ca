@@ -249,6 +249,7 @@ class CanadianPerson(Person):
         else:
             value = clean_string(value)
 
+        # The post membership is added before the party membership.
         self._related[0].add_contact_detail(type=type, value=value, note=note)
 
     def clean_telephone_number(self, s, area_code=None):
