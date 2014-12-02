@@ -33,8 +33,7 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
             p.image = councillor.xpath('./parent::p/parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
 
             email = self.get_email(councillor, './parent::p/following-sibling::p')
-            if email:
-                p.add_contact('email', email[0].text_content())
+            p.add_contact('email', email)
 
             p.add_contact('voice', general_phone, 'legislature')
             p.add_contact('fax', general_fax, 'legislature')

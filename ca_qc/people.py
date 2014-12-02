@@ -13,7 +13,7 @@ class QuebecPersonScraper(CanadianScraper):
             name_comma, division = [cell.text_content() for cell in row[:2]]
             name = ' '.join(reversed(name_comma.strip().split(',')))
             party = row[2].text_content()
-            email = self.get_email(row[3])
+            email = self.get_email(row[3], error=False)
             detail_url = row[0][0].attrib['href']
             detail_page = self.lxmlize(detail_url)
             photo_url = detail_page.xpath('//img[@class="photoDepute"]/@src')[0]
@@ -22,6 +22,6 @@ class QuebecPersonScraper(CanadianScraper):
                        party=party, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
-            if email:  # Premier may not have email.
+            if email:
                 p.add_contact('email', email)
             yield p

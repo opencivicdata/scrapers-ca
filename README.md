@@ -47,6 +47,8 @@ Read the [Pupa documentation](http://docs.opencivicdata.org/en/latest/scrape/bas
 
 Avoid using the XPath `string()` function unless the expression is known to not have matches on some pages. Otherwise, scrapers may continue to run without error despite failing to find a match. A comment like `# can be empty` or `# allow string()` should accompany the use of `string()`.
 
+Use the `get_email` and `get_phone` helpers as much as possible.
+
 ## Maintenance
 
 The `tidy` task verifies module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files.

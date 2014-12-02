@@ -88,18 +88,50 @@ for gid in range(3):
 
 class CanadianScraper(Scraper):
 
-    def get_email(self, node, expression = '.', *, error = True):
+    def get_email(self, node, expression='.', *, error=True):
+
+        """
+        Make sure that the node/expression is narrow enough to not capture a
+        generic email address in the footer of the page, for example.
+        """
+
         matches = []
-        # The text version is more likely to be correct, as it is more visible,
-        # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
+        # If the text would be split across multiple sub-tags.
         for match in node.xpath('{}//*[contains(text(), "@")]'.format(expression)):
             matches.append(match.text_content())
+        # The text version is more likely to be correct, as it is more visible,
+        # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
         for match in node.xpath('{}//a[contains(@href,"mailto:")]'.format(expression)):
             matches.append(unquote(match.attrib['href']))
-        if matches or error:
-            match = next((email_re.search(match) for match in matches), None)
-            if match or error:
+        # If the node has no sub-tags.
+        if not matches:
+            for match in node.xpath('{}//text()[contains(., "@")]'.format(expression)):
+                matches.append(match)
+        if matches:
+            for match in matches:
+                match = email_re.search(match)
+                if match:
+                    return match.group(1)
+            if error:
+                raise Exception('No email pattern in %s' % matches)
+        elif error:
+            raise Exception('No email nodes')
+
+    def get_phone(self, node, area_codes, *, error=True):
+
+        """
+        Don't use if multiple telephone numbers are present, e.g. voice and fax.
+        If writing a new scraper, check that extensions are captured.
+        """
+        match = node.xpath('.//a[contains(@href,"tel:")]')
+        if match:
+            return match[0].attrib['href'].replace('tel:', '')
+        for area_code in area_codes:
+            match = re.search(r'(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)' % area_code, node.text_content())
+            if match:
                 return match.group(1)
+        if error:
+            raise Exception('No phone pattern')
 
     def lxmlize(self, url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
         self.user_agent = user_agent

@@ -35,34 +35,42 @@ class WaterlooPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 councillor_url = councillor.attrib['href']
                 p.add_source(councillor_url)
-                email, phone, address, photo_url = self.councillor_data(councillor_url)
-                p.add_contact('email', email)
-                p.add_contact('voice', phone, 'legislature')
-                p.add_contact('address', address, 'legislature')
+                email, phone, photo_url = self.councillor_data(councillor_url)
+                if email:
+                    p.add_contact('email', email)
+                if phone:
+                    p.add_contact('voice', phone, 'legislature')
                 p.image = photo_url
                 yield p
 
         chairpage = self.lxmlize(CHAIR_URL)
-        name = re.search('Chair (.*) -', chairpage.xpath('//title')[0]).group(1)
-        email = chairpage.xpath('//a[contains(text(), "E-mail")]/@href')[0]
-        phone = chairpage.xpath('(//span[@class="labelTag"]//text()[contains(., "Phone")]/parent::*/text())[1]')[0].strip(':')
-        address = '\n'.join(
-            chairpage.xpath('//div[@class="contactBody"]//p[1]/text()'))
+        name = chairpage.xpath('//h1')[0].text_content().replace('Meet ', '')
+        param = chairpage.xpath('//div[@class="contactBodyContactInfoContactModuleV2"]/@id')[0].replace('contactEntry_', '')
+        contact = self.lxmlize('http://www.regionofwaterloo.ca/en/ContactModule/services/GetContactHTML.ashx?param=%s' % param)
+        email = self.get_email(contact, error=False)
+        phone = self.get_phone(contact, area_codes=[226, 519])
         photo_url_src = chairpage.xpath('//div[@id="contentIntleft"]//img[1]/@src')[0]
         photo_url = urljoin(CHAIR_URL, photo_url_src)
         p = Person(primary_org='legislature', name=name, district='Waterloo', role='Chair')
         p.add_source(CHAIR_URL)
-        p.add_contact('email', email)
+        if email:
+            p.add_contact('email', email)
         p.add_contact('voice', phone, 'legislature')
-        p.add_contact('address', address, 'legislature')
         p.image = photo_url
         yield p
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
-        email = page.xpath('//a[contains(text(), "Email Councillor")]/@href')[0]
-        phone = page.xpath('(//span[@class="labelTag"]//text()[contains(., "Phone")]/parent::*/text())[1]')[0].strip(':')
-        address = '\n'.join(page.xpath('//div[@class="contactBody"]//p[1]/text()'))
+        contact = page.xpath('//div[@class="contactBodyContactInfoContactModuleV2"]')
+        email = None
+        phone = None
+        if contact:
+            contact = contact[0]
+            if not contact.text_content().strip():
+                param = contact.xpath('./@id')[0].replace('contactEntry_', '')
+                contact = self.lxmlize('http://www.regionofwaterloo.ca/en/ContactModule/services/GetContactHTML.ashx?param=%s' % param)
+            email = self.get_email(contact, error=False)
+            phone = self.get_phone(contact, area_codes=[226, 519])
         photo_url_src = page.xpath('//div[@id="contentIntleft"]//img[1]/@src')[0]
         photo_url = urljoin(url, photo_url_src)
-        return email, phone, address, photo_url
+        return email, phone, photo_url

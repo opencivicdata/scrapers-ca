@@ -21,7 +21,7 @@ class WellesleyPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[@class="img_four"][1]/div[1]')
         councillors = councillors + page.xpath('//div[@class="img_four"][2]/div')
         for councillor_elem in councillors:
-            name, position = councillor_elem.xpath('./p/strong//text()')[0].split(',')
+            name, position = councillor_elem.xpath('string(./p/strong)').split(',')  # allow string()
             position = position.strip()
             if ' ' in position:
                 position, district = position.split(' ', 1)

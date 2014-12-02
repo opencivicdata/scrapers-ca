@@ -25,7 +25,7 @@ class KitchenerPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         infobox_node = page.xpath('//div[@id="printArea"]')[0]
-        name = infobox_node.xpath('.//h1[1]')[0][len('Councillor'):]
+        name = infobox_node.xpath('.//h1[1]')[0].text_content()[len('Councillor'):]
 
         contact_node = infobox_node.xpath('.//p[contains(text(), "Coun.")]')[0]
         email = self.get_email(contact_node)

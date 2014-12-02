@@ -38,7 +38,7 @@ class BramptonPersonScraper(CanadianScraper):
         name = page.xpath('string(//img[@class="mayorsPic"]/@alt)').replace('Mayor ', '')  # can be empty
         photo_url = page.xpath('string(//img[@class="mayorsPic"]/@src)')  # can be empty
 
-        if 'Linda Jeffrey' in page.xpath('//div[@class="rich-text-Content"]')[0]:
+        if 'Linda Jeffrey' in page.xpath('string(//div[@class="rich-text-Content"])'):  # allow string()
             name = 'Linda Jeffrey'
 
         email = self.get_email(page, '//div[@class="rich-text-Content"]')
