@@ -46,17 +46,16 @@ class AlbertaPersonScraper(CanadianScraper):
         csv_gen_page = self.lxmlize(COUNCIL_PAGE)
 
         # ASP forms store session state. Looks like we can't just play back a POST.
-        get_hidden_val = lambda p, v: p.xpath('//input[@id="%s"]/@value' % v)[0]
-        asp_viewstate = get_hidden_val(csv_gen_page, '__VIEWSTATE')
-        asp_event_validation = get_hidden_val(csv_gen_page, '__EVENTVALIDATION')
+        get_hidden_val = lambda v: csv_gen_page.xpath('//input[@id="%s"]/@value' % v)[0]
         post_data = {
+            '__VIEWSTATE': get_hidden_val('__VIEWSTATE'),
+            '__VIEWSTATEGENERATOR': get_hidden_val('__VIEWSTATEGENERATOR'),
+            '__EVENTVALIDATION': get_hidden_val('__EVENTVALIDATION'),
             '_ctl0:radlstGroup': 'Information for All MLAs',
             '_ctl0:chklstFields:0': 'on',
             '_ctl0:chklstFields:1': 'on',
             '_ctl0:chklstFields:2': 'on',
             '_ctl0:btnCreateCSV': "Create '.csv' file",
-            '__VIEWSTATE': asp_viewstate,
-            '__EVENTVALIDATION': asp_event_validation
         }
 
         resp = self.post(COUNCIL_PAGE, data=post_data)
