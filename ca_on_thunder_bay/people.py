@@ -9,9 +9,10 @@ COUNCIL_PAGE = 'http://www.thunderbay.ca/City_Government/Your_Council.htm'
 class ThunderBayPersonScraper(CanadianScraper):
 
     def scrape(self):
+        councillor_seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//a[contains(@title, "Profile")][1]/@href')
+        councillors = page.xpath('//td//a[contains(@title, "Profile")][1]/@href')
         for councillor in councillors:
             page = self.lxmlize(councillor)
             info = page.xpath('//table/tbody/tr/td[2]')[0]
@@ -25,8 +26,9 @@ class ThunderBayPersonScraper(CanadianScraper):
                 district = lines[1].replace(' Ward', '')
                 role = 'Councillor'
             elif lines[1] == 'At Large':
-                district = 'Thunder Bay'
-                role = 'Councillor'
+                role = 'Councillor at Large'
+                district = 'Thunder Bay (seat %d)' % councillor_seat_number
+                councillor_seat_number += 1
             else:
                 district = 'Thunder Bay'
                 role = 'Mayor'

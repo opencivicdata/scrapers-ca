@@ -38,7 +38,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('//span//text()[contains(., "Mayor")]')[0][len('Mayor '):]
+        name = page.xpath('//table//text()[contains(., "Mayor")]')[0][len('Mayor '):]
 
         email = self.get_email(page)
         phone = page.xpath('//table[1]/tbody/tr/td[1]/p[last()]/text()')[2].replace('Telephone: ', '')
@@ -46,7 +46,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
         p = Person(primary_org='legislature', name=name, district='Côte-Saint-Luc', role='Maire')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.image = page.xpath('.//img/@src')[0]
+        p.image = page.xpath('.//div[@class="content"]//img/@src')[0]
         p.add_source(url)
         p.add_contact('email', email)
         p.add_contact('voice', phone, 'legislature')

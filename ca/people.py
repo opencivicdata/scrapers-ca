@@ -29,7 +29,7 @@ class CanadaPersonScraper(CanadianScraper):
             name = '%s %s' % (first_name, last_name)
             constituency = row.xpath('./td[2]//text()')[0]
             province = row.xpath('./td[3]//text()')[0]
-            party = row.xpath('./td[4]//text()')[0]
+            party = row.xpath('string(./td[4])')  # allow string()
             url = name_cell.xpath('.//a/@href')[0]
             if province == 'Québec':
                 url = url.replace('/en/', '/fr/')

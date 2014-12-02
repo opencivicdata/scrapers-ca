@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
+from collections import defaultdict
 
 COUNCIL_PAGE = 'http://www.brantford.ca/govt/council/members/Pages/default.aspx'
 
@@ -9,6 +10,8 @@ COUNCIL_PAGE = 'http://www.brantford.ca/govt/council/members/Pages/default.aspx'
 class BrantfordPersonScraper(CanadianScraper):
 
     def scrape(self):
+        seat_numbers = defaultdict(int)
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         yield self.scrape_mayor()
@@ -18,7 +21,9 @@ class BrantfordPersonScraper(CanadianScraper):
             if 'Position' in councillor.text_content():
                 continue
 
-            district = councillor.xpath('./td')[0].text_content().replace('Councillor', '')
+            ward = councillor.xpath('./td')[0].text_content().replace('Councillor', '')
+            seat_numbers[ward] += 1
+            district = '%s (seat %d)' % (ward, seat_numbers[ward])
             name = councillor.xpath('./td')[1].text_content()
             url = councillor.xpath('./td/a')[0].attrib['href']
 
@@ -28,23 +33,12 @@ class BrantfordPersonScraper(CanadianScraper):
 
             page = self.lxmlize(url)
 
-            address = page.xpath('//div[@id="centre_content"]//p')[0].text_content().replace("\r\n", ', ')
-            email = self.get_email(page)
-            p.add_contact('address', address, 'legislature')
+            content = page.xpath('//div[@id="centre_content"]')[0]
+            email = self.get_email(content)
             p.add_contact('email', email)
+            p.add_contact('voice', self.get_phone(content, [226, 519]), 'legislature')
 
-            p.image = page.xpath('//div[@id="centre_content"]//img/@src')[0]
-
-            numbers = page.xpath('//div[@id="centre_content"]//p[contains(text(),"-")]')[0].text_content()
-            if 'tel' in numbers:
-                phone = re.findall(r'(.*)tel', numbers)[0].strip().replace(' ', '-').replace("\\xc2", '').replace("\\xa0", '-')
-                p.add_contact('voice', phone, 'legislature')
-            if 'cell' in numbers:
-                cell = re.findall(r'(.*)cell', numbers)[0].strip().replace(' ', '-')
-                p.add_contact('cell', cell, 'legislature')
-            if 'fax' in numbers:
-                fax = re.findall(r'(.*)fax', numbers)[0].strip().replace(' ', '-')
-                p.add_contact('fax', fax, 'legislature')
+            p.image = page.xpath('string(//div[@id="centre_content"]//img/@src)')  # can be empty
 
             if len(page.xpath('//div[@id="centre_content"]//a')) > 2:
                 p.add_link(page.xpath('//div[@id="centre_content"]//a')[-1].attrib['href'])

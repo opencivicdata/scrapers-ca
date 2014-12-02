@@ -44,7 +44,6 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             p.add_source(PARTY_PAGE)
             p.add_source(photo_page_url)
             p.add_contact('email', email)
-            # TODO: either fix phone regex or tweak phone value
             p.add_contact('voice', phone, 'legislature')
             yield p
 

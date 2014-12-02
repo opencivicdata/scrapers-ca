@@ -25,7 +25,7 @@ class WinnipegPersonScraper(CanadianScraper):
         m = Person(primary_org='legislature', name=mayor_name, district='Winnipeg', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail
-        m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca')
+        m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca')  # @todo hardcoded
         m.image = mayor_photo_url
         yield m
 
