@@ -21,7 +21,7 @@ _contact_details['items']['properties']['type']['enum'] = [
 ]
 _contact_details['items']['properties']['value']['blank'] = False
 _contact_details['items']['properties']['value']['conditionalPattern'] = [
-    (r'\A([^@\s]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
+    (r'\A([A-Za-z0-9._-]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
      lambda x: x['type'] == 'email'),
     (r'\A1-\d{3}-\d{3}-\d{4}(?: x\d+)?\Z',
         lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
@@ -110,7 +110,7 @@ organization_schema['properties']['links'] = organization_links
 name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|la|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
 
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['pattern'] = r'\A(?:' + name_fragment + r"(?:'|-| - | ))*" + name_fragment + r'\Z'
+person_schema['properties']['name']['pattern'] = r'\A(?:' + name_fragment + r"(?:'|-| - | ))+" + name_fragment + r'\Z'
 person_schema['properties']['name']['pattern'] = r'\A(?!(?:Chair|Councillor|Deputy|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)'
 person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
