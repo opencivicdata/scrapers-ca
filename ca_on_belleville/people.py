@@ -25,7 +25,6 @@ class BellevillePersonScraper(CanadianScraper):
                 district = '%s (seat %d)' % (ward, self.seat_numbers[ward])
                 yield self.person_from_elem(name_elem, district, 'Councillor')
 
-
     def person_from_elem(self, name_elem, district, role):
         name = name_elem.text_content()
         phone = name_elem.xpath('./following-sibling::text()[2]')[0].split(': ')[1]

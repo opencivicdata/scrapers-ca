@@ -17,7 +17,6 @@ class WaterlooPersonScraper(CanadianScraper):
         mayor_url = page.xpath('(//div[@id="subNavContainer"]//li//li//li/a)[1]/@href')[0]
         yield self.mayor_data(mayor_url)
 
-
     def photo_url(self, page):
         return page.xpath('//div[@id="printAreaContent"]/p/img/@src')[0]
 

@@ -16,7 +16,6 @@ class BramptonPersonScraper(CanadianScraper):
         mayor_page = self.lxmlize(MAYOR_PAGE)
         yield self.mayor_data(mayor_page)
 
-
     def councillor_data(self, html):
         role = html.xpath('./div[@class="councillorInfo"]/a/text()[1]')[0]
         name = html.xpath('./div[@class="councillorInfo"]/a/text()[2]')[0]
@@ -31,7 +30,6 @@ class BramptonPersonScraper(CanadianScraper):
         p.image = photo
 
         return p
-
 
     def mayor_data(self, page):
         # Strip the word "mayor" from the beginning of the photo lavel

@@ -17,7 +17,7 @@ class Moncton(CanadianJurisdiction):
         for i in range(2):
             organization.add_post(role='Councillor at Large', label='Moncton (seat %d)' % (i + 1))
         for i in range(4):
-          for j in range(2):
-              organization.add_post(role='Councillor', label='Ward %d (seat %d)' % (i + 1, j + 1))
+            for j in range(2):
+                organization.add_post(role='Councillor', label='Ward %d (seat %d)' % (i + 1, j + 1))
 
         yield organization

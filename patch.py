@@ -114,7 +114,7 @@ person_schema['properties']['name']['pattern'] = re.compile(r'\A(?!(?:Chair|Coun
 person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
 # image resolves. Testing URLs here would slow down scraping.
-person_schema['properties']['image']['pattern'] =  r'\A(?:(?:ftp|https?)://|\Z)'
+person_schema['properties']['image']['pattern'] = r'\A(?:(?:ftp|https?)://|\Z)'
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
 # district is used to disambiguate people within a jurisdiction.

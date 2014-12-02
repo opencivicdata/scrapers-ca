@@ -10,7 +10,7 @@ class VancouverPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         for row in self.csv_reader(COUNCIL_PAGE, header=True):
-            if role == 'Mayor':
+            if row['Elected Office'] == 'Mayor':
                 district = 'Vancouver'
             else:
                 district = 'Vancouver (seat %d)' % councillor_seat_number
