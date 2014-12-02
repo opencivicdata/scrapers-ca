@@ -29,7 +29,7 @@ class BrantfordPersonScraper(CanadianScraper):
             page = self.lxmlize(url)
 
             address = page.xpath('//div[@id="centre_content"]//p')[0].text_content().replace("\r\n", ', ')
-            email = page.xpath('//a[contains(@href,"mailto:")]')[0].attrib['href'].replace('mailto:', '')
+            email = self.get_email(page)
             p.add_contact('address', address, 'legislature')
             p.add_contact('email', email)
 
@@ -64,7 +64,7 @@ class BrantfordPersonScraper(CanadianScraper):
 
         address = ' '.join(page.xpath('//div[@id="main_content"]/p/text()'))
         address = re.sub(r'\s{2,}', ' ', address).strip()
-        email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].split(':')[1]
+        email = self.get_email(page)
 
         p.add_contact('address', address, 'legislature')
         p.add_contact('email', email)

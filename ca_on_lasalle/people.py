@@ -38,7 +38,7 @@ class LaSallePersonScraper(CanadianScraper):
             photo_url = councillor.xpath('./parent::td//img/@src')[0]
             p.image = photo_url
 
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(councillor)
             p.add_contact('email', email)
 
             phone = re.findall(r'(?<=phone:)(.*)(?=home)', councillor.text_content(), flags=re.DOTALL)

@@ -17,7 +17,7 @@ class OshawaPersonScraper(CanadianScraper):
             name, role, phone = [elem.text for elem in rep_cell]
             if name.startswith('Mayor '):
                 name = name[len('Mayor '):]
-            email = rep_cell.xpath('.//a//text()')[0]
+            email = self.get_email(rep_cell)
             photo_url = rep_cell.xpath('./following-sibling::td[1]/img/@src')[0]
 
             if role == 'City Councillor':

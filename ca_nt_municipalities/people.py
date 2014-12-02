@@ -38,7 +38,7 @@ class NorthwestTerritoriesMunicipalitiesPersonScraper(CanadianScraper):
                 if 'Fax' in contact:
                     contact = contact.replace('Fax ', '').replace('(', '').replace(') ', '-').strip()
                     membership.add_contact_detail('fax', contact, 'legislature')
-            email = councillor.xpath('./parent::p//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(councillor, './parent::p')
             membership.add_contact_detail('email', email)
 
             if 'Website' in councillor.xpath('./parent::p')[0].text_content():

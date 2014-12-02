@@ -22,7 +22,7 @@ class MercierPersonScraper(CanadianScraper):
                 role = 'Conseiller'
                 district = 'District %s' % re.search('(\d)', councillor.xpath('.//text()')[3]).group(1)
 
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
+            email = self.get_email(councillor)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

@@ -14,7 +14,7 @@ class StJohnsPersonScraper(CanadianScraper):
         for node in nodes:
             fields = node.xpath('./div')
             role = fields[0].xpath('./div//text()')[0]
-            name = fields[2].xpath('string(.//a)').title().split(role)[-1]
+            name = fields[2].xpath('.//a//text()')[0].title().split(role)[-1]
             if 'Ward' in role:
                 district = role
                 role = 'Councillor'
@@ -26,7 +26,7 @@ class StJohnsPersonScraper(CanadianScraper):
                 else:
                     district = "St. John's"
             phone = fields[3].xpath('./div//text()')[0]
-            email = fields[5].xpath('.//a//text()')[0]
+            email = self.get_email(fields[5])
             photo_url = node.xpath('.//img/@src')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

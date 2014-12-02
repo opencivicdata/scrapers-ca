@@ -14,10 +14,10 @@ class HalifaxPersonScraper(CanadianScraper):
         try:
             for district_row, councillor_row, contact_row, _ in chunks(nodes, 4):
                 district = district_row.xpath('.//strong//text()')[0]
-                name = councillor_row.xpath('string(.)')[len('Councillor '):]
+                name = councillor_row.xpath('.')[0][len('Councillor '):]
                 # TODO: phone numbers on site don't include area code. Add manually?
                 # phone = contact_row.xpath('td[2]/text()')[0]
-                email = contact_row.xpath('string(td[4]/a)').replace('[at]', '@')
+                email = contact_row.xpath('td[4]/a')[0].replace('[at]', '@')
 
                 p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
@@ -29,9 +29,9 @@ class HalifaxPersonScraper(CanadianScraper):
             pass
 
         mayor_page = self.lxmlize(MAYOR_PAGE, 'iso-8859-1')
-        name = mayor_page.xpath('string(//h1[contains(., "Bio")])')[:-len(' Bio')]
+        name = mayor_page.xpath('//h1[contains(., "Bio")]')[0][:-len(' Bio')]
         contact_page = self.lxmlize(MAYOR_CONTACT_URL, 'iso-8859-1')
-        email = contact_page.xpath('//a[contains(., "@")][1]//text()')[0]
+        email = self.get_email(contact_page)
 
         p = Person(primary_org='legislature', name=name, district='Halifax', role='Councillor')
         p.add_source(MAYOR_PAGE)

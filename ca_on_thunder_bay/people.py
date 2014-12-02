@@ -54,7 +54,7 @@ class ThunderBayPersonScraper(CanadianScraper):
                 else:
                     p.add_contact('voice', contact, contact_type)
 
-            email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(info)
             p.add_contact('email', email)
 
             yield p

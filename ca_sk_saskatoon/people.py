@@ -34,7 +34,7 @@ class SaskatoonPersonScraper(CanadianScraper):
             try:
                 p.add_contact('email', email_dict[district])
             except KeyError:
-                email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0]
+                email = self.get_email(page)
                 p.add_contact('email', email)
 
             contacts = page.xpath('//p[@class="para12"]')[0]

@@ -27,9 +27,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 contacts = page.xpath('//div[@class="left_contents"]/p[b[text() = "Contact"]]/text()')
                 phone = contacts[0].split(':')[1].strip().replace(' ', '-')
                 fax = contacts[1].split(':')[1].strip().replace(' ', '-')
-                email = page.xpath('//div[@class="left_contents"]//a[contains(@href, "mailto:")]')
-                if email:
-                    email = email[0].text_content()
+                email = self.get_email(page, '//div[@class="left_contents"]')
 
                 site = page.xpath('//div[@class="left_contents"]//a[not(contains(@href,"mailto:"))]')
                 if site:

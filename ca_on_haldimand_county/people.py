@@ -46,6 +46,6 @@ class HaldimandCountyPersonScraper(CanadianScraper):
                     else:
                         num = field.replace('Telephone: ', '').strip().replace(' ', '-')
                         p.add_contact('voice', num, 'legislature')
-            email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(page)
             p.add_contact('email', email)
             yield p

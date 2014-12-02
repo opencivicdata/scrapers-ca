@@ -25,8 +25,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         for row in page.xpath('//table[not(@id="footer")]/tr')[1:]:
             try:
-                name, district, _, email = [
-                    cell.xpath('string(.)').replace('\xa0', ' ') for cell in row]
+                name, district, _, email = [cell.text_content().replace('\xa0', ' ') for cell in row]
                 email = email.split()[0]
             except ValueError:
                 continue

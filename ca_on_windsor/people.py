@@ -21,10 +21,10 @@ class WindsorPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(cpage_url)
 
-            email = cpage.xpath('//a[contains(@href, "@")]//text()')[0]
+            email = self.get_email(cpage)
             p.add_contact('email', email)
 
-            phone = cpage.xpath('string(//text()[contains(., "Phone")])').split(':')[1]
+            phone = cpage.xpath('//text()[contains(., "Phone")]')[0].split(':')[1]
             p.add_contact('voice', phone, 'legislature')
 
             img_url_rel = cpage.xpath('(//span/img)[1]/@src')[0]
@@ -39,7 +39,7 @@ class WindsorPersonScraper(CanadianScraper):
         phone, fax = page.xpath('//p[contains(text(), "Phone:")]/text()')[:-1]
         phone = phone.strip().replace('(', '').replace(') ', '-')
         fax = fax.strip().replace('(', '').replace(') ', '-').split(':')[1]
-        email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+        email = self.get_email(page)
 
         p = Person(primary_org='legislature', name=name, district='Windsor', role='Mayor')
         p.add_source(MAYOR_PAGE)

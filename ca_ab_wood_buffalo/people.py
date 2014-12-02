@@ -58,8 +58,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                         p.add_contact('cell', contact, 'legislature')
                     if 'F' in contact_type:
                         p.add_contact('fax', contact, 'legislature')
-                email = cpage.xpath('//div[@id="content"]//div[@class="block"]//'
-                    'a[contains(@href, "mailto:")]')[0].text_content()
+                email = self.get_email(cpage, '//div[@id="content"]//div[@class="block"]')
                 p.add_contact('email', email)
                 yield p
 

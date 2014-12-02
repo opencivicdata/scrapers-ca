@@ -21,13 +21,12 @@ class StrathconaCountyPersonScraper(CanadianScraper):
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
-        name, ward = re.match('Councillor (.+) - (.+)',
-                              page.xpath('string(//h1)')).groups()
+        name, ward = re.match('Councillor (.+) - (.+)', page.xpath('//h1//text()')[0]).groups()
         content_node = page.xpath('//div[@class="usercontent"]')[0]
         photo_url_rel = content_node.xpath('.//img[1]/@src')[0]
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
-        email = content_node.xpath('.//a/text()[contains(., "@")]')[0]
-        phone = content_node.xpath('string(.//strong[contains(., "Phone")]/following-sibling::text()[1])').strip()
+        email = self.get_email(content_node)
+        phone = content_node.xpath('.//strong[contains(., "Phone")]/following-sibling::text()[1]')[0].strip()
 
         p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
         p.add_source(COUNCIL_PAGE)
@@ -40,11 +39,11 @@ class StrathconaCountyPersonScraper(CanadianScraper):
 
     def mayor_data(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('string(//h1)').split('-')[1]
+        name = page.xpath('//h1//text()')[0].split('-')[1]
         content_node = page.xpath('//div[@class="usercontent"]')[0]
         photo_url = urljoin(url, content_node.xpath('.//img[1]/@src')[0])
-        email = content_node.xpath('.//a/text()[contains(., "@")]')[0]
-        phone = content_node.xpath('string(.//strong[contains(., "Phone")]/following-sibling::text()[1])').strip()
+        email = self.get_email(content_node)
+        phone = content_node.xpath('.//strong[contains(., "Phone")]/following-sibling::text()[1]')[0].strip()
 
         p = Person(primary_org='legislature', name=name, district='Strathcona County', role='Mayor')
         p.add_source(COUNCIL_PAGE)

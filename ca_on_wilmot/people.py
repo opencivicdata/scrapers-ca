@@ -44,7 +44,7 @@ class WilmotPersonScraper(CanadianScraper):
                     p.add_contact('fax', base_info[i + 1], 'legislature')
                 else:
                     p.add_contact(contact, base_info[i + 1], contact)
-            email = councillor.xpath('./parent::p/following-sibling::p/a[contains(@href, "mailto")]/text()')[0]
+            email = self.get_email(councillor, './parent::p/following-sibling::p')
             p.add_contact('email', email)
             yield p
 

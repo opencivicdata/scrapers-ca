@@ -15,10 +15,10 @@ class SaanichPersonScraper(CanadianScraper):
             if url.endswith('address.html'):
                 continue
             page = self.lxmlize(url)
-            role, name = page.xpath('string(//div[@id="content"]/h1)').split(' ', 1)
+            role, name = page.xpath('//div[@id="content"]/h1//text()')[0].split(' ', 1)
             name = ' '.join(name.split()[:-1])
             photo_url = page.xpath('//div[@id="content"]//@src')[0]
-            email = page.xpath('//a[starts-with(@href, "mailto:")]//text()')[0]
+            email = self.get_email(page)
 
             if role == 'Mayor':
                 district = 'Saanich'

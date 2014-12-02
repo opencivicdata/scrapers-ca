@@ -29,7 +29,7 @@ class PickeringPersonScraper(CanadianScraper):
                 name = councillor.xpath('.//strong/text()')[1]
                 role = 'Mayor'
                 ward = 'Pickering'
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(councillor)
             p = Person(primary_org='legislature', name=name, district=ward, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_contact('email', email)

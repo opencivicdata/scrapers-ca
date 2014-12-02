@@ -9,13 +9,12 @@ class WaterlooPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillor_pages = page.xpath('//div[@id="subNavContainer"]//li/'
-                                      'a[contains(@title, "Coun.")]/@href')
+        councillor_pages = page.xpath('//div[@id="subNavContainer"]//li/a[contains(@title, "Coun.")]/@href')
 
         for councillor_page in councillor_pages:
             yield self.councillor_data(councillor_page)
 
-        mayor_url = page.xpath('string((//div[@id="subNavContainer"]//li//li//li/a)[1]/@href)')
+        mayor_url = page.xpath('(//div[@id="subNavContainer"]//li//li//li/a)[1]/@href')[0]
         yield self.mayor_data(mayor_url)
 
 
@@ -26,7 +25,7 @@ class WaterlooPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         # Eliminate the "Coun." From the page title and get name and district
-        name, district = page.xpath('string(//h1)')[6:].split('-')
+        name, district = page.xpath('//h1//text()')[0][6:].split('-')
 
         # Email is handled as a form and no contact information is listed
 
@@ -41,7 +40,7 @@ class WaterlooPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         # Eliminate the word "Mayor" preceding the Mayor's name
-        name = page.xpath('string(//h1)')[6:]
+        name = page.xpath('//h1')[0][6:]
         p = Person(primary_org='legislature', name=name, district='Waterloo', role='Mayor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)

@@ -32,8 +32,7 @@ class SaultSteMariePersonScraper(CanadianScraper):
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
         contact_node = mayor_row.xpath('./td')[1]
         name = contact_node.xpath('.//font[1]/text()')[0]
-        raw_email = contact_node.xpath('.//a[contains(., "@")]/@href')[0]
-        email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
+        email = self.get_email(contact_node)
 
         p = Person(primary_org='legislature', name=name, district='Sault Ste. Marie', role='Mayor')
         p.add_source(COUNCIL_PAGE)
@@ -47,8 +46,7 @@ class SaultSteMariePersonScraper(CanadianScraper):
             district_num = district_name_using_number(district)
             for councillor_node in data_row.xpath('./td'):
                 name = councillor_node.xpath('.//strong/text()|.//font[1]/text()')[0]
-                raw_email = councillor_node.xpath('.//a[contains(., "@")]/@href')[0]
-                email = re.match('(?:mailto:)?(.*)', raw_email).group(1)
+                email = self.get_email(councillor_node)
                 photo_url_rel = councillor_node.xpath('string(.//img/@src)')  # can be empty
                 photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
                 # address and phone are brittle, inconsistent

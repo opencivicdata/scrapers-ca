@@ -34,7 +34,7 @@ class ManitobaMunicipalitiesPersonScraper(CanadianScraper):
             fax = contact[0].split(':')[1].strip()
 
             phone = district.xpath('.//b[contains(text(), "Phone")]/text()')[0].split(':')[1].strip()
-            email = district.xpath('.//a[contains(@href, "mailto:")]/text()')[0].strip()
+            email = self.get_email(district)
 
             councillors = district.xpath('.//td[3]/text()')
             positions = district.xpath('.//td[2]/b/text()')

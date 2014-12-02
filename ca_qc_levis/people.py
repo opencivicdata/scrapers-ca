@@ -21,7 +21,7 @@ class LevisPersonScraper(CanadianScraper):
 
             info_div = person.xpath('./following-sibling::div[1]')[0]
             photo_url = info_div[0].attrib['src']
-            email = info_div.xpath('string(.//a/@href)')[len('mailto:'):]
+            email = self.get_email(info_div)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

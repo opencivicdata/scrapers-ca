@@ -10,15 +10,14 @@ class KelownaPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        links = page.xpath('//td[@width=720]//a[contains(text(), "Councillor") or '
-                           'contains(text(), "Mayor")]')
+        links = page.xpath('//td[@width=720]//a[contains(text(), "Councillor") or contains(text(), "Mayor")]')
         for link in links:
             role, name = link.text_content().replace('\xa0', ' ').split(' ', 1)
             url = link.attrib['href']
             page = self.lxmlize(url)
             photo_url = page.xpath('//li/img/@src')[0]
             phone = page.xpath('//strong')[-1].text_content()
-            email = page.xpath('//a[starts-with(@href, "mailto:")]//text()')[0]
+            email = self.get_email(page)
 
             if role == 'Mayor':
                 district = 'Kelowna'

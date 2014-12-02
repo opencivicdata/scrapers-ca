@@ -27,10 +27,8 @@ class GuelphPersonScraper(CanadianScraper):
             p.add_source(url)
 
             p.add_contact('voice', info[3].replace('extension', 'x'), 'legislature')
-            email = councillor.xpath('.//a[contains(@href,"mailto:")]')
-            if email:
-                email = email[0].text_content()
-                p.add_contact('email', email)
+            email = self.get_email(councillor)
+            p.add_contact('email', email)
 
             site = councillor.xpath('.//a[contains(text(),"Website")]')
             if site:
@@ -65,7 +63,7 @@ class GuelphPersonScraper(CanadianScraper):
         p.add_source(url)
 
         phone = div.xpath('.//text()[normalize-space()]')[2]
-        email = div.xpath('.//a[contains(@href,"mailto:")]')[0].text_content()
+        email = self.get_email(div)
 
         page = self.lxmlize(url)
 

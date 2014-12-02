@@ -45,7 +45,7 @@ class StCatharinesPersonScraper(CanadianScraper):
             address = re.sub(r'([a-z\.])([A-Z])', r'\1, \2', address)
             phone = phone.replace('Tel: ', '').replace('.', '-')
             fax = fax.replace('Fax: ', '').replace('.', '-')
-            email = contacts.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
+            email = self.get_email(contacts)
 
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', phone, 'legislature')

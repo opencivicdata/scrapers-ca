@@ -17,7 +17,7 @@ class SurreyPersonScraper(CanadianScraper):
             councillor_page = self.lxmlize(url)
             photo_url = councillor_page.xpath('.//div[@class="inner-wrapper"]//img/@src')[0]
             phone = councillor_page.xpath('//text()[contains(., "hone:")][1]|//text()[contains(., "604-")]')[0]
-            email = councillor_page.xpath('//a[contains(@href, "mailto:")]//text()')[0]
+            email = self.get_email(councillor_page)
 
             if role == 'Mayor':
                 district = 'Surrey'

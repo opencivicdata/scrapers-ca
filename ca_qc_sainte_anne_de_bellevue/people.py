@@ -26,8 +26,6 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
-            email = councillor.xpath('.//a')
-            if email:
-                email = email[0].attrib['href'].replace('mailto:', '')
-                p.add_contact('email', email)
+            email = self.get_email(councillor)
+            p.add_contact('email', email)
             yield p

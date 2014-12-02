@@ -43,5 +43,5 @@ class ManitobaPersonScraper(CanadianScraper):
     def get_details(self, url):
         page = self.lxmlize(url)
         photo = page.xpath('//img[@class="page_graphic"]/@src')[0]
-        email = page.xpath('string(//a[contains(@href, "mailto:")][1]/@href)')[len('mailto:'):]
+        email = self.get_email(page)
         return photo, email

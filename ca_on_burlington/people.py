@@ -28,7 +28,7 @@ class BurlingtonPersonScraper(CanadianScraper):
             contact = page.xpath('//div[@id="subnav"]//p[contains(text(),"Phone")]')[0]
             phone = re.findall(r'Phone: (.*)', contact.text_content())[0].replace('Ext. ', 'x').replace('#', 'x')
             fax = re.findall(r'Fax: (.*)', contact.text_content())[0]
-            email = contact.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(contact)
 
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
             p.add_source(COUNCIL_PAGE)
@@ -50,7 +50,7 @@ class BurlingtonPersonScraper(CanadianScraper):
         contact = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/text()')
         phone = contact[0]
         fax = contact[1]
-        email = page.xpath('//div[@id="secondary align_RightSideBar"]/blockquote/p/a[contains(@href, "mailto:")]/text()')[0]
+        email = self.get_email(page, '//div[@id="secondary align_RightSideBar"]/blockquote/p')
 
         mayor_page = self.lxmlize('http://www.burlingtonmayor.com')
         contact_url = mayor_page.xpath('//div[@class="menu"]//a[contains(text(),"Contact")]')[0].attrib['href']

@@ -28,7 +28,7 @@ class BellevillePersonScraper(CanadianScraper):
 
     def person_from_elem(self, name_elem, district, role):
         name = name_elem.text_content()
-        phone = name_elem.xpath('string(./following-sibling::text()[2])').split(': ')[1]
+        phone = name_elem.xpath('./following-sibling::text()[2]')[0].split(': ')[1]
         if not phone.startswith('613-'):
             corrected_phone = '613-' + phone
         else:

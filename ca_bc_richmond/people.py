@@ -11,11 +11,12 @@ class RichmondPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         contact_page = self.lxmlize(CONTACT_URL)
-        email = contact_page.xpath('//a[starts-with(@href, "mailto:")]//text()')[0]
+        email = self.get_email(contact_page)
+
         page = self.lxmlize(COUNCIL_PAGE)
         for url in page.xpath('//a/@href[contains(., "members/")]'):
             page = self.lxmlize(url)
-            role, name = page.xpath('string(//h1)').split(' ', 1)
+            role, name = page.xpath('//h1//text()')[0].split(' ', 1)
             # image element is inserted by a script somewhere
             # photo_url = page.xpath('//span[@class="imageShadow"]/img/@src')[0]
 

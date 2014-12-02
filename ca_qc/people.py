@@ -10,10 +10,10 @@ class QuebecPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         for row in page.xpath('//*[@id="ListeDeputes"]/tbody/tr'):
-            name_comma, division = [cell.xpath('string(.)') for cell in row[:2]]
+            name_comma, division = [cell.text_content() for cell in row[:2]]
             name = ' '.join(reversed(name_comma.strip().split(',')))
             party = row[2].text_content()
-            email = row[3].xpath('string(.//a/@href)').replace('mailto:', '')
+            email = self.get_email(row[3])
             detail_url = row[0][0].attrib['href']
             detail_page = self.lxmlize(detail_url)
             photo_url = detail_page.xpath('//img[@class="photoDepute"]/@src')[0]

@@ -21,7 +21,7 @@ class WellesleyPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[@class="img_four"][1]/div[1]')
         councillors = councillors + page.xpath('//div[@class="img_four"][2]/div')
         for councillor_elem in councillors:
-            name, position = councillor_elem.xpath('string(./p/strong)').split(',')
+            name, position = councillor_elem.xpath('./p/strong//text()')[0].split(',')
             position = position.strip()
             if ' ' in position:
                 position, district = position.split(' ', 1)
@@ -31,7 +31,7 @@ class WellesleyPersonScraper(CanadianScraper):
             addr = '\n'.join(addr_str.strip() for addr_str in
                              councillor_elem.xpath('./p/text()')).strip()
             phone = councillor_elem.xpath('.//a[starts-with(@href, "tel:")]//text()')[0]
-            email = councillor_elem.xpath('.//a[starts-with(@href, "mailto:")]//text()')[0]
+            email = self.get_email(councillor_elem)
             image = councillor_elem.xpath('.//img[1]/@src')[0]
             p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
             p.add_source(COUNCIL_PAGE)

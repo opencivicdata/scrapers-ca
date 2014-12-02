@@ -38,7 +38,7 @@ class VaughanPersonScraper(CanadianScraper):
 
             phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4} ext. [0-9]{4}', contact_info.text_content())[0].replace('ext. ', 'x')
             fax = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact_info.text_content())[1]
-            email = contact_info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(contact_info)
 
             p = Person(primary_org='legislature', name=name, district=district.strip(), role=role)
             p.add_source(COUNCIL_PAGE)

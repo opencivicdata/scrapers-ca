@@ -35,8 +35,8 @@ class CanadaPersonScraper(CanadianScraper):
                 url = url.replace('/en/', '/fr/')
 
             mp_page = self.lxmlize(url)
-            email = mp_page.xpath('string(//span[@class="caucus"]/a[contains(., "@")])')
-            photo = mp_page.xpath('string(//div[@class="profile overview header"]//img/@src)')
+            email = self.get_email(mp_page, '//span[@class="caucus"]')
+            photo = mp_page.xpath('//div[@class="profile overview header"]//img/@src')[0]
 
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
             m.add_source(COUNCIL_PAGE)
@@ -64,10 +64,10 @@ class CanadaPersonScraper(CanadianScraper):
                 m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
             else:
                 m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
-            voice = mp_page.xpath('//div[@class="hilloffice"]//span//text()[contains(., "Telephone:")]|//div[@class="hilloffice"]//span//text()[contains(., "Téléphone :")]')[0]
+            voice = mp_page.xpath('//div[@class="hilloffice"]//span//text()[contains(., "Telephone:")]|//div[@class="hilloffice"]//span//text()[contains(., "Téléphone :")]')[0].replace('Telephone: ', '').replace('Téléphone : ', '')
             if voice:
-                m.add_contact('voice', voice.replace('Telephone: ', '').replace('Téléphone : ', ''), 'legislature')
-            fax = mp_page.xpath('string(//div[@class="hilloffice"]//span[contains(text(), "Fax:")])').replace('Fax: ', '')
+                m.add_contact('voice', voice, 'legislature')
+            fax = mp_page.xpath('//div[@class="hilloffice"]//span//text()[contains(., "Fax:")]|//div[@class="hilloffice"]//span//text()[contains(., "Télécopieur :")]')[0].replace('Fax: ', '').replace('Télécopieur : ', '')
             if fax:
                 m.add_contact('fax', fax, 'legislature')
 
@@ -85,7 +85,7 @@ class CanadaPersonScraper(CanadianScraper):
                 voice = li.xpath('./span//text()[contains(., "Telephone:")]|./span//text()[contains(., "Téléphone :")]')[0].replace('Telephone: ', '').replace('Téléphone : ', '')
                 if voice:
                     m.add_contact('voice', voice, note)
-                fax = li.xpath('string(./span[contains(text(), "Fax:")])').replace('Fax: ', '')
+                fax = li.xpath('./span//text()[contains(., "Fax:")]|./span//text()[contains(., "Télécopieur :")]')[0].replace('Fax: ', '').replace('Télécopieur : ', '')
                 if fax:
                     m.add_contact('fax', fax, note)
 

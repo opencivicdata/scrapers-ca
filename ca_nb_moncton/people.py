@@ -45,7 +45,7 @@ class MonctonPersonScraper(CanadianScraper):
             p.add_source(url)
             p.image = councillor.xpath('.//img/@src')[0]
 
-            email = page.xpath('string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+            email = self.get_email(page)
             p.add_contact('email', email)
 
             contact_info = page.xpath('.//table[@class="whiteroundedbox"]//td/p[contains(text()," ")]')[0].text_content()
@@ -72,7 +72,7 @@ class MonctonPersonScraper(CanadianScraper):
         address = re.sub(r'\s{2,}', ' ', address).strip()
         phone = info.xpath('.//p[2]/text()')[0].split(':')[1].strip()
         fax = info.xpath('.//p[2]/text()')[1].split(':')[1].strip()
-        email = info.xpath('.//a/@href')[0].split(':')[1].strip()
+        email = self.get_email(info)
 
         p.add_contact('address', address, 'legislature')
         if len(re.sub(r'\D', '', phone)) == 7:

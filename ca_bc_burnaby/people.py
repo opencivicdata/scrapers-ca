@@ -14,9 +14,9 @@ class BurnabyPersonScraper(CanadianScraper):
         for person_url in page.xpath('//h4/a/@href'):
             page = self.lxmlize(person_url)
 
-            role, name = page.xpath('string(//title)').split(' ', 1)
+            role, name = page.xpath('//title//text()')[0].split(' ', 1)
             photo_url = page.xpath('//div[@id="content"]//img[@style]/@src')[0]
-            email = page.xpath('//a[contains(@href, "mailto:")]//text()')[0]
+            email = self.get_email(page)
             phone = page.xpath('string(//li//text()[contains(., "Phone:")]|//li//text()[contains(., "Cell:")])')  # can be empty
 
             if role == 'Mayor':

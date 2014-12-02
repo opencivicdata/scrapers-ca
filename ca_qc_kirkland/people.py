@@ -27,7 +27,7 @@ class KirklandPersonScraper(CanadianScraper):
             name = councillor.xpath('.//strong/text()')[0]
 
             phone = councillor.xpath('.//div[contains(text(), "#")]/text()')[0].replace('T ', '').replace(' ', '-').replace(',-#-', ' x')
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(councillor)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

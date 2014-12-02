@@ -36,10 +36,9 @@ class StratfordPersonScraper(CanadianScraper):
                 phone = re.findall(r'Phone(.*)', node.text_content())
             phone = phone[0].strip()
 
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]')
+            email = self.get_email(councillor, error=False)
             if not email:
-                email = councillor.xpath('./following-sibling::p//a[contains(@href, "mailto")]')
-            email = email[0].text_content()
+                email = self.get_email(councillor, './following-sibling::p')
 
             if len(re.sub(r'\D', '', phone)) == 7:
                 phone = '902-%s' % phone
@@ -51,7 +50,7 @@ class StratfordPersonScraper(CanadianScraper):
     def scrape_mayor(self, page):
         info = page.xpath('//div[@class="entry-content"]/p')[:4]
         name = info[0].text_content().replace('Mayor', '')
-        email = info[2].xpath('./a')[0].text_content()
+        email = self.get_email(info[2])
         phone = info[3].text_content().replace('Phone ', '')
 
         p = Person(primary_org='legislature', name=name, district='Stratford', role='Mayor')

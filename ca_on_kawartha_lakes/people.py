@@ -26,7 +26,7 @@ class KawarthaLakesPersonScraper(CanadianScraper):
 
             url = councillor.attrib['href']
             page = self.lxmlize(url)
-            email = page.xpath('//a[contains(@href, "mailto:")]/@href')[0].rsplit(':', 1)[1].strip()
+            email = self.get_email(page)
             image = page.xpath('//img[@class="image-right"]/@src')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

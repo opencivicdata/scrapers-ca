@@ -17,7 +17,7 @@ class SennevillePersonScraper(CanadianScraper):
                 district = 'Senneville'
                 role = 'Maire'
             name = councillor.xpath('./td[2]//p//text()')[0].title()
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]/@href')[0]
+            email = self.get_email(councillor)
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             try:

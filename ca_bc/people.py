@@ -25,7 +25,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
 
             p.image = page.xpath('//a[contains(@href, "images/members")]/@href')[0]
 
-            email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(page)
             p.add_contact('email', email)
 
             office = ', '.join(page.xpath('//i/b[contains(text(), "Office:")]/ancestor::p/text()'))

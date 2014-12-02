@@ -22,7 +22,7 @@ class MississaugaPersonScraper(CanadianScraper):
 
         name = page.xpath('//strong[2]/text()')[0]
         district = page.xpath('//span[@class="pageHeader"]//text()')[0]
-        email = page.xpath('string(//div[@class="blockcontentclear"]//a/@href[contains(., "@")][1])')
+        email = self.get_email(page, '//div[@class="blockcontentclear"]')
         photo = page.xpath('//div[@class="blockcontentclear"]//img[1]/@src')[0]
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
@@ -39,7 +39,7 @@ class MississaugaPersonScraper(CanadianScraper):
         # TODO: Consider getting photo. It's on a separate page.
         name_text = page.xpath('//p[contains(text(), "Worship Mayor")]/text()')[0]
         name = ' '.join(name_text.split()[3:])  # TODO: probably too brittle
-        email = page.xpath('//a[contains(@href, "mailto")]/text()')[0]
+        email = self.get_email(page)
 
         p = Person(primary_org='legislature', name=name, district='Mississauga', role='Mayor')
         p.add_source(url)

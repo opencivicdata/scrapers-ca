@@ -33,7 +33,7 @@ class AbbotsfordPersonScraper(CanadianScraper):
             yield p
 
         page = self.lxmlize(MAYOR_URL)
-        name = page.xpath('string(//h1)').split(' ', 1)[1]
+        name = page.xpath('//h1//text()')[0].split(' ', 1)[1]
         photo_url = page.xpath('//img[@hspace=10]/@src')[0]
         # email is hidden behind a form
         p = Person(primary_org='legislature', name=name, district='Abbotsford', role='Mayor', image=photo_url)

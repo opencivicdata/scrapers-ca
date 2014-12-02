@@ -20,7 +20,7 @@ class BramptonPersonScraper(CanadianScraper):
     def councillor_data(self, html):
         role = html.xpath('./div[@class="councillorInfo"]/a/text()[1]')[0]
         name = html.xpath('./div[@class="councillorInfo"]/a/text()[2]')[0]
-        email = html.xpath('./div[@class="emailInfo"]//text()')[0]
+        email = self.get_email(html, './div[@class="emailInfo"]')
         district, phone = html.xpath('./div[@class="wardInfo"]/text()')
         photo = html.xpath('.//@src[1]')[0]
 
@@ -38,10 +38,10 @@ class BramptonPersonScraper(CanadianScraper):
         name = page.xpath('string(//img[@class="mayorsPic"]/@alt)').replace('Mayor ', '')  # can be empty
         photo_url = page.xpath('string(//img[@class="mayorsPic"]/@src)')  # can be empty
 
-        if 'Linda Jeffrey' in page.xpath('string(//div[@class="rich-text-Content"])'):
+        if 'Linda Jeffrey' in page.xpath('//div[@class="rich-text-Content"]')[0]:
             name = 'Linda Jeffrey'
 
-        email = page.xpath('//div[@class="rich-text-Content"]//a/text()[contains(.,"@")]')[0]
+        email = self.get_email(page, '//div[@class="rich-text-Content"]')
         phone = page.xpath('//div[@class="rich-text-Content"]//text()[contains(.,"905.")]')[0]
 
         p = Person(primary_org='legislature', name=name, district='Brampton', role='Mayor')

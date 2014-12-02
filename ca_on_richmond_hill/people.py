@@ -39,7 +39,7 @@ class RichmondHillPersonScraper(CanadianScraper):
             address = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
             phone = re.findall(r'(?<=Telephone:) (.*)(?=Fax)', info)[0].replace('(', '').replace(') ', '-').replace(', ext. ', ' x')
             fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)', info)[0].replace(' ', '').replace('(', '').replace(')', '-')
-            email = page.xpath('.//a[contains(@href, "mailto:")]/@href')[0].replace('mailto:', '')
+            email = self.get_email(page)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

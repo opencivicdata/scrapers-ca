@@ -42,7 +42,7 @@ class OakvillePersonScraper(CanadianScraper):
         info = page.xpath('//div[@class="fourcol multicol"]//p')[0]
         phone = re.findall(r'tel: ([\d\s-]*)', info.text_content())[0]
         fax = re.findall(r'fax: ([\d\s-]*)', info.text_content())[0]
-        email = info.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+        email = self.get_email(info)
 
         # save contact details to object
         mayor.add_contact('voice', phone, 'legislature')
@@ -71,7 +71,7 @@ class OakvillePersonScraper(CanadianScraper):
         else:
             phone = phone[0]
         fax = re.findall(r'fax: ([\d\s-]*)', info)
-        email = page.xpath('//div[@class = "fourcol multicollast"]//a[contains(@href, "mailto:")]')[0].text_content()
+        email = self.get_email(page, '//div[@class = "fourcol multicollast"]')
         # The second email is for contacting both councillors.
         # save contact info to councillor object
         if address:

@@ -31,7 +31,7 @@ class GreaterSudburyPersonScraper(CanadianScraper):
             phone = re.findall(r'([0-9].*)', phone)[0].replace(') ', '-')
             fax = page.xpath('//article[@id="primary"]//*[contains(text(),"Fax")]')[0].text_content()
             fax = re.findall(r'([0-9].*)', fax)[0].replace(') ', '-')
-            email = page.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(page)
 
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
             p.add_source(COUNCIL_PAGE)
@@ -59,7 +59,7 @@ class GreaterSudburyPersonScraper(CanadianScraper):
         phone = phone.replace('Phone: ', '')
         fax = contact_div.xpath('.//p[3]')[0].text_content()
         fax = fax.split(' ')[-1]
-        email = contact_div.xpath('//a[contains(@href, "mailto:")]')[0].text_content()
+        email = self.get_email(contact_div)
 
         p = Person(primary_org='legislature', name=name, district='Greater Sudbury', role='Mayor')
         p.add_source(COUNCIL_PAGE)

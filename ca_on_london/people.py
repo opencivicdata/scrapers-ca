@@ -11,14 +11,13 @@ class LondonPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillor_pages = page.xpath('//div[@class="imageLinkContent"]/'
-                                      'a[starts-with(text(), "Ward")]/@href')
+        councillor_pages = page.xpath('//div[@class="imageLinkContent"]/a[starts-with(text(), "Ward")]/@href')
 
         for councillor_page in councillor_pages:
             yield self.councillor_data(councillor_page)
 
         mayor_page = self.lxmlize(MAYOR_PAGE)
-        mayor_connecting_url = mayor_page.xpath('string(//a[@class="headingLink"][contains(text(), "Connecting")]/@href)')
+        mayor_connecting_url = mayor_page.xpath('//a[@class="headingLink"][contains(text(), "Connecting")]/@href')[0]
         yield self.mayor_data(mayor_connecting_url)
 
     def councillor_data(self, url):
@@ -50,7 +49,7 @@ class LondonPersonScraper(CanadianScraper):
     def mayor_data(self, url):
         page = self.lxmlize(url)
 
-        name = page.xpath('string(//h1[@id="TitleOfPage"])').split('Mayor')[-1]
+        name = page.xpath('//h1[@id="TitleOfPage"]//text()')[0].split('Mayor')[-1]
         photo_url = page.xpath('//div[@class="imageLeftDiv"]/img/@src')[0]
         phone = get_phone_data(page)
 
@@ -72,7 +71,7 @@ class LondonPersonScraper(CanadianScraper):
 def get_phone_data(page):
     # We search for "hone" because the first "p" can change case... oh, xpath.
     # We also only return the first phone number we get. There's no consistency.
-    phone_text = page.xpath('string((//span[contains(@class, "contactValue")][contains(text(), "hone")])[1])')
+    phone_text = page.xpath('(//span[contains(@class, "contactValue")]//text()[contains(., "hone")])[1]')[0]
     return re.search(r'[0-9].*$', phone_text).group()
 
 

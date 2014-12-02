@@ -43,7 +43,7 @@ class MiltonPersonScraper(CanadianScraper):
                 number = number.replace(', ext ', ' x').strip()
                 p.add_contact(num_type, number, num_type)
 
-            email = councillor.xpath('string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+            email = self.get_email(councillor)
             # only works for some, others use forms
             if email:
                 p.add_contact('email', email)

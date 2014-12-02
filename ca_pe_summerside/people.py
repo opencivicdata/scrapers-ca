@@ -54,7 +54,7 @@ class SummersidePersonScraper(CanadianScraper):
         info = page.xpath('//div[@class="articlebody-inside"]/p')
         phone = re.findall(r'to (.*)', info[1].text_content())[0]
         address = info[3].text_content().replace('by mail: ', '') + ' ' + info[4].text_content()
-        email = info[5].xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+        email = self.get_email(info[5])
 
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('address', address, 'legislature')

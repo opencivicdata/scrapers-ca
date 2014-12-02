@@ -36,5 +36,5 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
         photo_url = main.cssselect('img')[0].get('src')
         contact_cell = main.cssselect('td:contains("Contact information")')[0]
         phone = re.search(r'(?:Telephone|Tel|Phone):(.+?)\n', contact_cell.text_content()).group(1)
-        email = contact_cell.cssselect('a[href^=mailto]')[0].get('href').replace('mailto:', '')
+        email = self.get_email(contact_cell)
         return email, phone, photo_url

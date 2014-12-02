@@ -24,7 +24,7 @@ class DorvalPersonScraper(CanadianScraper):
 
             p.image = councillor.xpath('./preceding-sibling::p/img/@src')[0]
 
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(councillor)
             p.add_contact('email', email)
 
             yield p

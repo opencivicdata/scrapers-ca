@@ -25,7 +25,7 @@ class SaintJeromePersonScraper(CanadianScraper):
             phone = desc[-2]
             email = desc[-1]
 
-            image = councillor_tr.xpath('string(.//img/@src)')[0]
+            image = councillor_tr.xpath('.//img/@src')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

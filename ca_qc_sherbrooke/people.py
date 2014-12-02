@@ -30,9 +30,8 @@ class SherbrookePersonScraper(CanadianScraper):
             note = parts[0]
             phone = parts[1]
             p.add_contact(note, phone, note)
-            email = page.xpath('//a[contains(@href, "mailto:")]/@href')
+            email = self.get_email(page)
             if email:
-                email = email[0].split(':')[1]
                 p.add_contact('email', email)
             if district == 'Brompton':
                 p._related[0].extras['boundary_url'] = '/boundaries/sherbrooke-boroughs/brompton/'

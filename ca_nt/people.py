@@ -11,8 +11,7 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        member_cells = page.xpath('//div[@class="views-field views-field-field-picture"]/'
-            'parent::td')
+        member_cells = page.xpath('//div[@class="views-field views-field-field-picture"]/parent::td')
         for cell in member_cells:
             name = cell[1].text_content().replace(' .', '. ')  # typo on page
             riding = cell[2].text_content()
@@ -21,7 +20,7 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
             detail_url = cell[0].xpath('.//a/@href')[0]
             detail_page = self.lxmlize(detail_url)
             photo_url = detail_page.xpath('//div[@class="field-item even"]/img/@src')[0]
-            email = detail_page.xpath('//a[contains(@href, "mailto:")]//text()')[0]
+            email = self.get_email(detail_page)
 
             contact_text = ''.join(detail_page.xpath('//div[@property="content:encoded"]/p[1]//text()'))
             phone = re.search(r'P(hone)?: ([-0-9]+)', contact_text).group(2)

@@ -37,7 +37,7 @@ class PeelPersonScraper(CanadianScraper):
 
     def chair_info(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('string(//title)').split('-')[1]
+        name = page.xpath('//title//text()')[0].split('-')[1]
         photo_url = page.xpath('//div[@class="co-menu"]/img/@src')[0]
         # sadly, email is script-based
         address = page.xpath('//div[@id="co-content"]/p[1]//text()')[0]

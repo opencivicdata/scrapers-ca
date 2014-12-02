@@ -18,11 +18,11 @@ class LavalPersonScraper(CanadianScraper):
             else:
                 district = re.sub('^C.?irconscription (?:no )?\d+\D- ', '', post).replace("L'", '').replace(' ', '').replace('bois', 'Bois')
                 role = 'Conseiller'
-            full_name = councillor_row.xpath('string(./td[2]/p/text()[2])').strip()
+            full_name = councillor_row.xpath('./td[2]/p/text()[2]')[0].strip()
             name = ' '.join(full_name.split()[1:])
 
             phone = councillor_row.xpath('.//span[@class="icon-phone"]/following::text()')[0]
-            email = councillor_row.xpath('string(.//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+            email = self.get_email(councillor_row)
             photo_url = councillor_row[0][0].attrib['src']
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)

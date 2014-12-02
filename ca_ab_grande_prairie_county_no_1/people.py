@@ -11,14 +11,13 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
 
     def scrape(self):
         reeve_page = self.lxmlize(REEVE_URL)
-        reeve_name = reeve_page.xpath('string(//b)').split(',')[0]
+        reeve_name = reeve_page.xpath('//b//text()')[0].split(',')[0]
 
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//table[@class="table-plain"]/tbody/tr/td[2]')
         for councillor in councillors:
-            name = councillor.xpath('./h2')[0].text_content().split(
-                'Division')[0].strip()
+            name = councillor.xpath('./h2')[0].text_content().split('Division')[0].strip()
             district = re.findall(r'(Division [0-9])', councillor.xpath('./h2')[0].text_content())[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
@@ -28,7 +27,7 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
             p.image = image
 
             address = councillor.xpath('./p[1]')[0].text_content()
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(councillor)
 
             p.add_contact('address', address, 'legislature')
             p.add_contact('email', email)

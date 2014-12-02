@@ -36,7 +36,7 @@ class CambridgePersonScraper(CanadianScraper):
             if page.xpath('//*[contains(text(),"Fax")]'):
                 fax = page.xpath('//*[contains(text(),"Fax")]/ancestor::td')[-1].text_content().split(':')[-1].replace("\t", '')
                 fax = fax.replace('(', '').replace(') ', '-')
-            email = page.xpath('//a[contains(@href,"mailto:")]')[0].text_content()
+            email = self.get_email(page)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
@@ -50,9 +50,9 @@ class CambridgePersonScraper(CanadianScraper):
 
     def mayor_info(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('string(//h3)').split(',')[1]
-        email = page.xpath('//a[contains(@href, "@")]//text()')[0]
-        phone = page.xpath('string(//td[contains(text(), "Tel:")])').split(':')[1]
+        name = page.xpath('//h3//text()')[0].split(',')[1]
+        email = self.get_email(page)
+        phone = page.xpath('//td//text()[contains(., "Tel:")]')[0].split(':')[1]
 
         addr_row = page.xpath('//td[text()="3): "]/parent::tr')
         addr_rows = addr_row + addr_row[0].xpath('./following-sibling::tr')[:3]

@@ -14,7 +14,7 @@ class NewmarketPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[@id="printArea"]//table//tr//td')[4:-1]
         yield self.scrape_mayor(councillors[0])
         for councillor in councillors[1:]:
-            name = ' '.join(councillor.xpath('string(.//strong/a[last()])').split())
+            name = ' '.join(councillor.xpath('.//strong/a[last()]//text()')[0].split())
             infostr = councillor.xpath('.//strong//text()')[0]
             try:
                 district = infostr.split('-')[1]
@@ -41,7 +41,7 @@ class NewmarketPersonScraper(CanadianScraper):
                 info.pop(0)
 
             numbers = info.pop(0).text_content().split(':')
-            email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(page)
             p.add_contact('email', email)
             for i, contact in enumerate(numbers):
                 if i == 0:
@@ -80,6 +80,6 @@ class NewmarketPersonScraper(CanadianScraper):
                     p.add_contact(num_type, number, num_type)
             except ValueError:
                 pass
-        email = div.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+        email = self.get_email(div)
         p.add_contact('email', email)
         return p

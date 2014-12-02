@@ -35,7 +35,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
                     p.add_contact('voice', phone, 'legislature')
             get_links(p, page.xpath('.//td[@class="ms-rteTableOddCol-0"]')[0])
 
-            email = page.xpath('string(//a[contains(@href, "mailto:")]/@href)')[len('mailto:'):]
+            email = self.get_email(page)
             p.add_contact('email', email)
             yield p
 

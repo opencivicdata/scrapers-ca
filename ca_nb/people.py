@@ -25,7 +25,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         councillor_table = page.xpath('//body/div[2]/table[2]')[0]
         for row in councillor_table.xpath('.//tr'):
-            riding, table_name, email = (' '.join(td.xpath('string(.)').split()) for td in row[1:])
+            riding, table_name, email = (' '.join(td.text_content().split()) for td in row[1:])
             riding_fixed = riding.replace('\x97', '-')
             if riding_fixed == 'Miramichi Bay-Neguac':
                 riding_fixed = 'Miramichi-Bay-Neguac'

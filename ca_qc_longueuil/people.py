@@ -16,7 +16,7 @@ class LongueuilPersonScraper(CanadianScraper):
         councillor_rows = person_rows[1:]
         for row in councillor_rows:
             district = row[1].text if row[1].text.strip() else 'Greenfield Park'
-            name = row[2].xpath('string(./a)').title()
+            name = row[2].xpath('./a')[0].title()
             detail_url = row[2].xpath('./a/@href')[0]
             detail_page = self.lxmlize(detail_url)
             email_url = detail_page.xpath('//a[contains(@href, "sendto")]/@href')[0]

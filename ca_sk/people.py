@@ -32,7 +32,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
             phone_const = contact.xpath('.//div[@class="col-md-4"]/div[4]/span/span/text()')[0]
             p.add_contact('voice', phone_leg, 'legislature', area_code=306)
             p.add_contact('voice', phone_const, 'constituency', area_code=306)
-            email = contact.xpath('.//a[contains(@href, "mailto:")]/text()')[0]
+            email = self.get_email(contact)
             p.add_contact('email', email)
 
             yield p

@@ -12,9 +12,9 @@ class OntarioPersonScraper(CanadianScraper):
         for block in page.xpath('//div[@class="addressblock"]'):
             name_elem = block.xpath('.//a[@class="mpp"]')[0]
             name = ' '.join(name_elem.text.split())
-            riding = block.xpath('string(.//div[@class="riding"])').strip()
+            riding = block.xpath('.//div[@class="riding"]//text()')[0].strip()
             district = riding.replace('--', '\u2014').replace('Chatham—Kent', 'Chatham-Kent')  # m-dash to hyphen
-            email = block.xpath('.//a[contains(@href, "mailto:")]//text()')[0]
+            email = self.get_email(block)
             phone = block.xpath('.//div[@class="phone"]//text()')[0]
             mpp_url = name_elem.attrib['href']
 

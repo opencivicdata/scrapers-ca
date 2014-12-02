@@ -25,7 +25,7 @@ class SaguenayPersonScraper(CanadianScraper):
             name = councillor.xpath('.//p/text()')[0].encode('latin-1').decode('utf-8')
             name = name.replace('M. ', '').replace('Mme ', '').strip()
             phone = councillor.xpath('.//p/text()')[1].split(':')[1].strip().replace(' ', '-')
-            email = councillor.xpath('.//a[contains(@href, "mailto:")]')[0].text_content()
+            email = self.get_email(councillor)
 
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
             p.add_source(COUNCIL_PAGE)

@@ -54,7 +54,7 @@ class MarkhamPersonScraper(CanadianScraper):
 
             address = re.sub(r'\s{2,}', ' ', ' '.join(infos[:2])).strip()
             phone = infos[2].split(':')[1].strip()
-            email = contact.xpath('.//a[contains(@href,"mailto:")]/text()')[0]
+            email = self.get_email(contact)
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('email', email)
@@ -71,7 +71,7 @@ class MarkhamPersonScraper(CanadianScraper):
 
         address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
         phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
-        email = page.xpath('//a[contains(@href, "mailto:")]/text()')[0]
+        email = self.get_email(page)
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('email', email)
@@ -85,7 +85,7 @@ class MarkhamPersonScraper(CanadianScraper):
         address = re.sub(r'\s{2,}', ' ', address)
         contact_elem = page.xpath('//div[@class="interiorContentWrapper"]/p[3]')[0]
         phone = contact_elem.text.split(':')[1].strip()
-        email = contact_elem.xpath('./a//text()')[0]
+        email = self.get_email(contact_elem)
 
         p = Person(primary_org='legislature', name=name, district='Markham', role='Mayor')
         p.add_source(url)
