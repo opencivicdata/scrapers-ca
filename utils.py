@@ -10,7 +10,7 @@ import requests
 from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Organization, Person
 from six import StringIO, string_types, text_type
-from six.moves.urllib.parse import urlparse
+from six.moves.urllib.parse import urlparse, unquote
 
 import patch  # patch patches validictory # noqa
 
@@ -70,6 +70,8 @@ CONTACT_DETAIL_NOTE_MAP = {
     'Work': 'legislature',
 }
 
+email_re = re.compile(r'([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})')
+
 
 styles_of_address = {}
 for gid in range(3):
@@ -85,6 +87,19 @@ for gid in range(3):
 
 
 class CanadianScraper(Scraper):
+
+    def get_email(self, node, expression = '.', *, error = True):
+        matches = []
+        # The text version is more likely to be correct, as it is more visible,
+        # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
+        for match in node.xpath('{}//*[contains(text(), "@")]'.format(expression)):
+            matches.append(match.text_content())
+        for match in node.xpath('{}//a[contains(@href,"mailto:")]'.format(expression)):
+            matches.append(unquote(match.attrib['href']))
+        if matches or error:
+            match = next((email_re.search(match) for match in matches), None)
+            if match or error:
+                return match.group(1)
 
     def lxmlize(self, url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
         self.user_agent = user_agent
@@ -239,7 +254,8 @@ class CanadianPerson(Person):
         return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
 
 
-whitespace_re = re.compile(r'[^\S\n]+', flags=re.U)
+whitespace_re = re.compile(r'\s+', flags=re.U)
+whitespace_and_newline_re = re.compile(r'[^\S\n]+', flags=re.U)
 honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ')
 honorific_suffix_re = re.compile(r', Ph\.D\Z')
 
@@ -271,8 +287,8 @@ abbreviations = {
 
 
 def clean_string(s):
-    return re.sub(r' *\n *', '\n', whitespace_re.sub(' ', text_type(s).translate(table)).strip())
+    return re.sub(r' *\n *', '\n', whitespace_and_newline_re.sub(' ', text_type(s).translate(table)).strip())
 
 
 def clean_name(s):
-    return honorific_suffix_re.sub('', honorific_prefix_re.sub('', clean_string(s)))
+    return honorific_suffix_re.sub('', honorific_prefix_re.sub('', whitespace_re.sub(' ', text_type(s).translate(table)).strip()))
