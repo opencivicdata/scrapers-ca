@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import re
+import regex as re
 from copy import deepcopy
 
 from pupa.utils import DatetimeValidator
@@ -107,14 +107,14 @@ organization_schema['properties']['contact_details'] = organization_contact_deta
 organization_schema['properties']['links'] = organization_links
 
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
-name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|la|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
+name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Sr|St)\.|da|de|der|la|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander)?\p{Lu}\p{Ll}+|Prud'homme)"""
 
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['pattern'] = r'\A(?:' + name_fragment + r"(?:'|-| - | ))+" + name_fragment + r'\Z'
-person_schema['properties']['name']['pattern'] = r'\A(?!(?:Chair|Councillor|Deputy|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)'
+person_schema['properties']['name']['pattern'] = re.compile(r'\A(?!(?:Chair|Councillor|Deputy|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)(?:' + name_fragment + r"(?:'|-| - | ))+" + name_fragment + r'\Z')
 person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
 # image resolves. Testing URLs here would slow down scraping.
+person_schema['properties']['image']['pattern'] =  r'\A(?:(?:ftp|https?)://|\Z)'
 person_schema['properties']['contact_details'] = person_contact_details
 person_schema['properties']['links'] = person_links
 # district is used to disambiguate people within a jurisdiction.
