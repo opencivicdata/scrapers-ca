@@ -2,7 +2,7 @@
 -e git+git://github.com/opencivicdata/python-opencivicdata-divisions#egg=opencivicdata-divisions
 boto==2.33.0 # pupa unpinned
 cssselect==0.9.1
-Django==1.7
+Django==1.7.1
 lxml==3.3.5
 psycopg2==2.5.3 # pupa unpinned
 requests==2.3.0
@@ -13,7 +13,5 @@ six==1.8.0
 regex==2014.04.10
 
 # Maintenance
-autopep8==1.0.4
 invoke==0.7.0
-pep8==1.5.7
 Unidecode==0.04.14
