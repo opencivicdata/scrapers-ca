@@ -21,7 +21,7 @@ class GuelphPersonScraper(CanadianScraper):
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_CSV_URL)
-            p.add_link(row['Source URL'])
+            p.add_source(row['Source URL'])
             p.gender = row['Gender']
             p.image = row['Photo URL']
             p.add_contact('email', row['Email'])
