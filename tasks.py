@@ -19,6 +19,9 @@ from unidecode import unidecode
 # Map Standard Geographical Classification codes to the OCD identifiers of provinces and territories.
 province_and_territory_codes_memo = {}
 
+# Map OpenCivicData Division Identifier to Census type name.
+ocdid_to_type_name_map = {}
+
 
 def province_and_territory_codes():
     if not province_and_territory_codes_memo:
@@ -44,8 +47,6 @@ def slug(name):
         ord('–'): '_',  # n-dash
         ord('.'): None,
     }))
-
-ocdid_to_type_name_map = {}
 
 
 def get_definition(division_id, aggregation=False):
