@@ -120,24 +120,6 @@ person_schema['properties']['links'] = person_links
 # district is used to disambiguate people within a jurisdiction.
 person_schema['properties']['district'] = {'type': 'string', 'blank': False}
 
-uniqueRoles = [
-    # Provincial
-    'Premier',
-    # Municipal
-    'Acting Chief Administrative Officer',
-    'Administrator',
-    'Chairperson',
-    'Chief Administrative Officer',
-    'Chief Executive Officer',
-    'City Manager',
-    'Maire',
-    'Mayor', 'Acting Mayor', 'Deputy Mayor', 'Interim Mayor',
-    'Municipal Administrator',
-    'Regional Chair',
-    'Reeve', 'Deputy Reeve',
-    'Warden', 'Deputy Warden',
-]
-
 
 def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
     value = x.get(fieldname)
