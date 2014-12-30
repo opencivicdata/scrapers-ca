@@ -10,8 +10,9 @@ REEVE_URL = 'http://www.countygp.ab.ca/EN/main/government/council/reeve-message.
 class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
 
     def scrape(self):
-        reeve_page = self.lxmlize(REEVE_URL)
-        reeve_name = reeve_page.xpath('//b//text()')[0].split(',')[0]
+        # @todo Uncomment when upgrading from Pupa 0.0.3.
+        # reeve_page = self.lxmlize(REEVE_URL)
+        # reeve_name = reeve_page.xpath('//b//text()')[0].split(',')[0]
 
         page = self.lxmlize(COUNCIL_PAGE)
 
