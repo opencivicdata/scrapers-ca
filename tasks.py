@@ -148,7 +148,7 @@ def get_definition(division_id, aggregation=False):
 @task
 def urls():
     for module_name in os.listdir('.'):
-        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__'):
+        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'disabled'):
             module = importlib.import_module('%s.people' % module_name)
             if module.__dict__.get('COUNCIL_PAGE'):
                 print('%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE']))
@@ -173,7 +173,7 @@ def tidy():
         division_ids = set()
         jurisdiction_ids = set()
 
-        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__') and not module_name.endswith('_candidates'):
+        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'disabled') and not module_name.endswith('_candidates'):
             module = importlib.import_module(module_name)
             for obj in module.__dict__.values():
                 division_id = getattr(obj, 'division_id', None)
@@ -246,7 +246,7 @@ def tidy():
 @task
 def sources():
     for module_name in os.listdir('.'):
-        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__'):
+        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'disabled'):
             path = os.path.join(module_name, 'people.py')
             with codecs.open(path, 'r', 'utf-8') as f:
                 content = f.read()
