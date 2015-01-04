@@ -34,12 +34,22 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
                 photo_page_url = row[0].xpath('./a/@href')[0]
             except IndexError:
                 continue  # there is a vacant district
-            photo_page = self.lxmlize(photo_page_url)
-            photo_url = photo_page.xpath('//table//img/@src')[0]
             district = district.replace(' - ', '—')  # m-dash
+            district = district.replace('Bay De Verde', 'Bay de Verde')
             party = get_party(member_parties[name.strip()])
-            p = Person(primary_org='legislature', name=name, district=district, role='MHA',
-                       party=party, image=photo_url)
+
+            photo_page = self.lxmlize(photo_page_url)
+            photo_node = photo_page.xpath('//table//img/@src')
+
+            # handling case when no picture is available (Terry French isn't councillor anymore)
+            if photo_node:
+                photo_url = photo_node[0]
+                p = Person(primary_org='legislature', name=name, district=district, role='MHA',
+                           party=party, image=photo_url)
+            else:
+                p = Person(primary_org='legislature', name=name, district=district, role='MHA',
+                           party=party)
+
             p.add_source(COUNCIL_PAGE)
             p.add_source(PARTY_PAGE)
             p.add_source(photo_page_url)
