@@ -51,27 +51,23 @@ Use the `get_email` and `get_phone` helpers as much as possible.
 
 ## Maintenance
 
-The `tidy` task verifies module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files.
+Check module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files:
 
     invoke tidy
 
-To check that all sources are credited, run:
+Check sources are credited:
 
     invoke sources
 
-To test [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance, run:
-
-    flake8 .
-
-To tidy all whitespace, run:
-
-    autopep8 -i -a -r --ignore=E501 .
-
-To check and print jurisdiction URLs:
+Check jurisdiction URLs:
 
     invoke urls
 
-Periodically, update the OCD-IDs:
+Check [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance:
+
+    flake8 .
+
+Update the OCD-IDs:
 
     curl -O https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca.csv
 
