@@ -149,7 +149,7 @@ class CanadianScraper(Scraper):
             page.make_links_absolute(url)
             return page
 
-    def csv_reader(self, url, header=False, **kwargs):
+    def csv_reader(self, url, header=False, encoding=None, **kwargs):
         result = urlparse(url)
         if result.scheme == 'ftp':
             data = StringIO()
@@ -159,7 +159,10 @@ class CanadianScraper(Scraper):
             ftp.quit()
             data.seek(0)
         else:
-            data = StringIO(self.urlopen(url, **kwargs).strip())
+            response = self.get(url, **kwargs)
+            if encoding:
+                response.encoding = encoding
+            data = StringIO(response.text.strip())
         if header:
             return csv.DictReader(data)
         else:
