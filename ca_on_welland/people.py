@@ -14,7 +14,7 @@ class WellandPersonScraper(CanadianScraper):
 
         csv = self.csv_reader(COUNCIL_CSV_URL, header=True, encoding='windows-1252')
         for row in csv:
-            district = row['District name']
+            district = row['District name'] or 'Welland'
             role = row['Primary role']
             name = '%s %s' % (row['First name'], row['Last name'])
 
