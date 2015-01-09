@@ -1,18 +1,26 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://guelph.ca/city-hall/mayor-and-council/city-council/'
-COUNCIL_CSV_URL = 'http://open.guelph.ca/wp-content/uploads/2014/12/GuelphCityCouncil2014-2018ElectedOfficalsContactInformation.csv'
+from collections import defaultdict
+
+COUNCIL_PAGE = 'http://www.welland.ca/Council/index.asp'
+COUNCIL_CSV_URL = 'http://www.welland.ca/open/Datasheets/Welland_mayor_and_council_members.csv'
 
 
-class GuelphPersonScraper(CanadianScraper):
+class WellandPersonScraper(CanadianScraper):
 
     def scrape(self):
-        csv = self.csv_reader(COUNCIL_CSV_URL, header=True)
+        seat_numbers = defaultdict(int)
+
+        csv = self.csv_reader(COUNCIL_CSV_URL, header=True, encoding='windows-1252')
         for row in csv:
             district = row['District name']
             role = row['Primary role']
             name = '%s %s' % (row['First name'], row['Last name'])
+
+            if 'Ward' in district:
+                seat_numbers[district] += 1
+                district = '%s (seat %d)' % (district, seat_numbers[district])
 
             address = row['Address line 1']
             if row['Address line 2']:
@@ -32,6 +40,4 @@ class GuelphPersonScraper(CanadianScraper):
             p.add_contact('voice', row['Phone'], 'legislature')
             if row['Fax']:
                 p.add_contact('fax', row['Fax'], 'legislature')
-            if row['Phone (mobile)']:
-                p.add_contact('cell', row['Phone (mobile)'], 'legislature')
             yield p

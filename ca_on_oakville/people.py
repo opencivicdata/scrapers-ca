@@ -24,10 +24,12 @@ class OakvillePersonScraper(CanadianScraper):
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_CSV_URL)
-            p.add_source(row['Source URL'])
+            if row['Source URL']:
+                p.add_source(row['Source URL'])
             if row['Gender']:
                 p.gender = row['Gender']
-            p.image = row['Photo URL']
+            if row['Photo URL']:
+                p.image = row['Photo URL']
             p.add_contact('email', row['Email'])
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', row['Phone'], 'legislature')
