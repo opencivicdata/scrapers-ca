@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import re
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.surrey.ca/city-government/2999.aspx'
@@ -40,7 +41,7 @@ class SurreyPersonScraper(CanadianScraper):
         mayor_url = mayor_link.attrib['href']
         mayor_page = self.lxmlize(mayor_url)
         name_node = mayor_page.xpath('//div[@class="inner-wrapper"]//div[@class="inner-wrapper"]/p/text()')[0]
-        name = name_node.split(' ', 3)[-1]
+        name = re.search('([A-Z][a-z]+ [A-Z][a-z]+).', name_node).group(1)
         photo_url = mayor_page.xpath('//div[@class="inner-wrapper"]//img/@src')[0]
         phone = mayor_page.xpath('//text()[contains(., "Office:")]')[0]
         # no email
