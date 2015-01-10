@@ -39,7 +39,7 @@ class HamiltonPersonScraper(CanadianScraper):
         return p
 
     def mayor_data(self, node):
-        name = node.xpath('.//strong')[0][6:]
+        name = node.xpath('.//strong/text()')[0][6:]
         phone = node.xpath('.//p[2]/text()[1]')[0]
         email = self.get_email(node)
         photo_url = node.xpath('.//img/@src')[0]
