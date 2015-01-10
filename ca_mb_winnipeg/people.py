@@ -16,7 +16,7 @@ class WinnipegPersonScraper(CanadianScraper):
         for node in nodes:
             url = urljoin(COUNCIL_PAGE, node.xpath('.//a/@href')[0])
             ward = re.search('([A-Z].+) Ward', node.xpath('.//a//text()')[0]).group(1)
-            name = ' '.join(span.text_content() for span in node.xpath('.//span[@class="k80B"]'))
+            name = ' '.join(node.xpath('.//span[@class="k80B"][1]/text()'))
             yield self.councillor_data(url, name, ward)
 
         mayor_node = page.xpath('//td[@width="315"]')[0]
