@@ -46,7 +46,7 @@ class KitchenerPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         infobox_node = page.xpath('//div[@id="printArea"]')[0]
-        name = infobox_node.xpath('.//h1')[0][6:]  # strip 'Mayor' prefix
+        name = infobox_node.xpath('.//h1/text()')[0][6:]  # strip 'Mayor' prefix
 
         photo_url_rel = page.xpath('//div[@id="sideBar"]//img/@src')[0]
         photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
