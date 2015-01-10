@@ -14,7 +14,9 @@ class BritishColumbiaPersonScraper(CanadianScraper):
         councillors = page.xpath('//table[@cellpadding="3"]//td//a/@href')
         for councillor in councillors:
             page = self.lxmlize(councillor)
-            name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Hon.', '').replace(', Q.C.', '').strip()
+            # Hon. is followed by Dr. in one case but the clean_name function
+            # removes only one honorific title
+            name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Dr.', '').replace(', Q.C.', '').replace('Wm.', '').strip()
             district = page.xpath('//em/strong/text()')[0].strip()
 
             party_caps = page.xpath('(//table[@width=440]//b)[last()]//text()')[0]
