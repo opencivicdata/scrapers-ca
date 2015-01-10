@@ -5,12 +5,13 @@ import re
 
 from six.moves.urllib.parse import urljoin
 
-COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios1/index-e.asp'
+COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios/58/index-e.asp'
 
 PARTIES = {
     'PC': 'Progressive Conservative Party of New Brunswick',
     'L': 'New Brunswick Liberal Association',
-    'IND': 'Independent'
+    'IND': 'Independent',
+    'GP': 'Green Party'
 }
 
 
@@ -23,12 +24,10 @@ class NewBrunswickPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillor_table = page.xpath('//body/div[2]/table[2]')[0]
-        for row in councillor_table.xpath('.//tr'):
+        councillor_table = page.xpath('//table[@id="customers"]')[0]
+        for row in councillor_table.xpath('.//tr')[1:]:
             riding, table_name, email = (' '.join(td.text_content().split()) for td in row[1:])
             riding_fixed = riding.replace('\x97', '-')
-            if riding_fixed == 'Miramichi Bay-Neguac':
-                riding_fixed = 'Miramichi-Bay-Neguac'
             name_with_status, party_abbr = re.match(
                 r'(.+) \((.+)\)', table_name).groups()
             name = name_with_status.split(',')[0]
@@ -36,7 +35,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
             photo_url = self.get_photo_url(photo_page_url)
 
             p = Person(primary_org='legislature', name=name, district=riding_fixed, role='MLA',
-                       party=get_party(party_abbr), image=photo_url)
+                       party=get_party(party_abbr.strip()), image=photo_url)
             p.add_contact('email', email)
             p.add_source(photo_page_url)
             p.add_source(COUNCIL_PAGE)
