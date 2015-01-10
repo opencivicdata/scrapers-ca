@@ -39,7 +39,7 @@ class WaterlooPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         # Eliminate the word "Mayor" preceding the Mayor's name
-        name = page.xpath('//h1')[0][6:]
+        name = page.xpath('//h1/text()')[0][6:]
         p = Person(primary_org='legislature', name=name, district='Waterloo', role='Mayor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
