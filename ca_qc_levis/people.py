@@ -10,18 +10,20 @@ class LevisPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        people_links = page.xpath('//h3')
+        people_links = page.xpath('//div[@class="drawers"]//div[@class="dropdown"]')
         for person in people_links:
-            name, position = person.text.split(' - ')
+            position, name = person.xpath('./h2/text()')[0].replace('–', '-').split(' - ')
             if ',' in position:
-                role, district = position.title().split(', ')
+                role, district = position.title().split(', ')[0].split(' ', 1)
             else:
                 role = 'Maire'
                 district = 'Lévis'
 
-            info_div = person.xpath('./following-sibling::div[1]')[0]
-            photo_url = info_div[0].attrib['src']
-            email = self.get_email(info_div)
+            if role == "Conseillère":
+                role = "Conseiller"
+
+            photo_url = person.xpath('.//img/@src')[0]
+            email = self.get_email(person)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
