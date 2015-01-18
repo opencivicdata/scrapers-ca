@@ -37,10 +37,14 @@ class AjaxPersonScraper(CanadianScraper):
             contact_info = page.xpath('//table[@class="datatable"][1]//tr')[1:]
             for line in contact_info:
                 contact_type = line.xpath('./td')[0].text_content().strip()
-                contact = line.xpath('./td')[1].text_content().strip()
-                if re.match(r'(Phone)|(Fax)|(Email)', contact_type):
+                if re.match(r'(Home)|(Cell)|(Phone)|(Fax)|(Email)', contact_type):
+                    contact = line.xpath('./td')[1].text_content().strip()
                     contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type]
                     p.add_contact(contact_type, contact, '' if contact_type == 'email' else 'legislature')
+                elif contact_type == 'Address':
+                    contact = ''.join(line.xpath('./td[2]//text()')).strip()
+                    p.add_contact(contact_type, contact, 'legislature')
                 else:
+                    contact = line.xpath('./td[2]/a/@href')[0]
                     p.add_link(contact)
             yield p
