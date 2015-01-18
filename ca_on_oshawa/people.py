@@ -14,11 +14,14 @@ class OshawaPersonScraper(CanadianScraper):
         mayor_table, council_table = page.xpath('//table')[:2]
         rep_cells = mayor_table.xpath('.//td[1]') + council_table.xpath('.//td[h4]')
         for rep_cell in rep_cells:
-            name, role, phone = [elem.text for elem in rep_cell]
+            name, role, phone = [elem.text for elem in rep_cell if elem.text]
             if name.startswith('Mayor '):
                 name = name[len('Mayor '):]
             email = self.get_email(rep_cell)
-            photo_url = rep_cell.xpath('./following-sibling::td[1]/img/@src')[0]
+
+            photo_node = rep_cell.xpath('./following-sibling::td[1]/img/@src')
+            if photo_node:
+                photo_url = photo_node[0]
 
             if role == 'City Councillor':
                 role = 'Councillor'
