@@ -155,7 +155,7 @@ class CanadianScraper(Scraper):
             data = StringIO()
             ftp = FTP(result.hostname)
             ftp.login(result.username, result.password)
-            ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(text_type(block)))
+            ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(block.decode('utf-8')))
             ftp.quit()
             data.seek(0)
         else:
