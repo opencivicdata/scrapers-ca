@@ -182,9 +182,9 @@ class CSVScraper(CanadianScraper):
         reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
         for row in reader:
             district = row['District name'] or self.jurisdiction.division_name
-            role = row.get('Primary role', row.get('Elected office'))  # London
+            role = row['Primary role']
             name = '%s %s' % (row['First name'], row['Last name'])
-            province = row.get('Province')
+            province = row['Province']
 
             if role == 'Town Councillor':  # Oakville
                 role = 'Councillor'
@@ -195,32 +195,25 @@ class CSVScraper(CanadianScraper):
                 seat_numbers[district] += 1
                 district = '%s (seat %d)' % (district, seat_numbers[district])
 
-            if row.get('Address'):  # London
-                address = row['Address']
-            else:
-                address = row['Address line 1']
-                if row.get('Address line 2'):
-                    address += '\n%s' % row['Address line 2']
-                address += '\n%s %s  %s' % (row['Locality'], province, row['Postal code'])
+            address = row['Address line 1']
+            if row.get('Address line 2'):
+                address += '\n%s' % row['Address line 2']
+            address += '\n%s %s  %s' % (row['Locality'], province, row['Postal code'])
 
             p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(self.csv_url)
-            if row['Gender']:
+            if row.get('Gender'):
                 p.gender = row['Gender']
             if row['Photo URL']:
                 p.image = row['Photo URL']
-            if row.get('Source URL'):
+            if row['Source URL']:
                 p.add_source(row['Source URL'])
-            elif row.get('URL'):  # London
-                p.add_source(row['URL'])
             if row.get('Website'):
                 p.add_link(row['Website'])
-            elif row.get('Personal URL'):  # London
-                p.add_link(row['Personal URL'])
             p.add_contact('email', row['Email'])
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', row['Phone'], 'legislature')
-            if row['Fax']:
+            if row.get('Fax'):
                 p.add_contact('fax', row['Fax'], 'legislature')
             if row.get('Cell'):
                 p.add_contact('cell', row['Cell'], 'legislature')
