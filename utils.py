@@ -190,8 +190,6 @@ class CSVScraper(CanadianScraper):
                 role = 'Councillor'
             if province == 'Ontario':  # Guelph
                 province = 'ON'
-            if district == 'Township of Langley':  # Langley
-                district = 'Langley'
 
             if self.many_posts_per_area and role != 'Mayor':
                 seat_numbers[district] += 1
