@@ -178,9 +178,11 @@ class CSVScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(int)
 
-        for row in self.csv_reader(self.csv_url, header=True, encoding=self.encoding):
+        reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding)
+        reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
+        for row in reader:
             district = row['District name'] or self.jurisdiction.division_name
-            role = row.get('Primary role', row.get('Elected office'))  # London, Ottawa
+            role = row.get('Primary role', row.get('Elected office'))  # London
             name = '%s %s' % (row['First name'], row['Last name'])
             province = row.get('Province')
 
@@ -190,10 +192,6 @@ class CSVScraper(CanadianScraper):
                 province = 'ON'
             if district == 'Township of Langley':  # Langley
                 district = 'Langley'
-            if district == 'Knoxdale Merivale':  # Ottawa
-                district = 'Knoxdale-Merivale'
-            elif district == 'Orleans':
-                district = 'Orléans'
 
             if self.many_posts_per_area and role != 'Mayor':
                 seat_numbers[district] += 1
@@ -215,11 +213,11 @@ class CSVScraper(CanadianScraper):
                 p.image = row['Photo URL']
             if row.get('Source URL'):
                 p.add_source(row['Source URL'])
-            elif row.get('URL'):  # London, Ottawa
+            elif row.get('URL'):  # London
                 p.add_source(row['URL'])
             if row.get('Website'):
                 p.add_link(row['Website'])
-            elif row.get('Personal URL'):  # London, Ottawa
+            elif row.get('Personal URL'):  # London
                 p.add_link(row['Personal URL'])
             p.add_contact('email', row['Email'])
             p.add_contact('address', address, 'legislature')
@@ -364,6 +362,7 @@ whitespace_re = re.compile(r'\s+', flags=re.U)
 whitespace_and_newline_re = re.compile(r'[^\S\n]+', flags=re.U)
 honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ')
 honorific_suffix_re = re.compile(r', Ph\.D\Z')
+capitalize_re = re.compile(r' [A-Z](?=[a-z])')  # to not lowercase "URL"
 
 table = {
     ord('​'): ' ',  # zero-width space
@@ -398,3 +397,7 @@ def clean_string(s):
 
 def clean_name(s):
     return honorific_suffix_re.sub('', honorific_prefix_re.sub('', whitespace_re.sub(' ', text_type(s).translate(table)).strip()))
+
+
+def capitalize(s):
+    return capitalize_re.sub(lambda s: s.group(0).lower(), s)
