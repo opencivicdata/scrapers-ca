@@ -188,12 +188,14 @@ class CSVScraper(CanadianScraper):
                 role = 'Councillor'
             if province == 'Ontario':  # Guelph
                 province = 'ON'
+            if district == 'Township of Langley':  # Langley
+                district = 'Langley'
             if district == 'Knoxdale Merivale':  # Ottawa
                 district = 'Knoxdale-Merivale'
             elif district == 'Orleans':
                 district = 'Orléans'
 
-            if self.many_posts_per_area and 'Ward' in district:
+            if self.many_posts_per_area and role != 'Mayor':
                 seat_numbers[district] += 1
                 district = '%s (seat %d)' % (district, seat_numbers[district])
 
@@ -201,7 +203,7 @@ class CSVScraper(CanadianScraper):
                 address = row['Address']
             else:
                 address = row['Address line 1']
-                if row['Address line 2']:
+                if row.get('Address line 2'):
                     address += '\n%s' % row['Address line 2']
                 address += '\n%s %s  %s' % (row['Locality'], province, row['Postal code'])
 

@@ -8,14 +8,14 @@ class VancouverPersonScraper(CanadianScraper):
     csv_url = 'ftp://webftp.vancouver.ca/OpenData/csv/CouncilContactInformation.csv'
 
     def scrape(self):
-        councillor_seat_number = 1
+        seat_number = 0
 
         for row in self.csv_reader(self.csv_url, header=True):
             if row['Elected Office'] == 'Mayor':
                 district = 'Vancouver'
             else:
-                district = 'Vancouver (seat %d)' % councillor_seat_number
-                councillor_seat_number += 1
+                seat_number += 1
+                district = 'Vancouver (seat %d)' % seat_number
 
             p = Person(
                 primary_org='legislature',
