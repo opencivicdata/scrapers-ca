@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 import csv
 import re
+from collections import defaultdict
 from ftplib import FTP
 
 import lxml.html
 import requests
+from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Organization, Person
 from six import StringIO, string_types, text_type
@@ -115,7 +117,7 @@ class CanadianScraper(Scraper):
             if error:
                 raise Exception('No email pattern in %s' % matches)
         elif error:
-            raise Exception('No email nodes')
+            raise Exception('No email node in %s' % etree.tostring(node))
 
     def get_phone(self, node, area_codes, *, error=True):
 
@@ -167,6 +169,72 @@ class CanadianScraper(Scraper):
             return csv.DictReader(data)
         else:
             return csv.reader(data)
+
+
+class CSVScraper(CanadianScraper):
+    encoding = None
+    many_posts_per_area = False
+
+    def scrape(self):
+        seat_numbers = defaultdict(int)
+
+        for row in self.csv_reader(self.csv_url, header=True, encoding=self.encoding):
+            district = row['District name'] or self.jurisdiction.division_name
+            role = row.get('Primary role', row.get('Elected office'))  # London, Ottawa
+            name = '%s %s' % (row['First name'], row['Last name'])
+            province = row.get('Province')
+
+            if role == 'Town Councillor':  # Oakville
+                role = 'Councillor'
+            if province == 'Ontario':  # Guelph
+                province = 'ON'
+            if district == 'Knoxdale Merivale':  # Ottawa
+                district = 'Knoxdale-Merivale'
+            elif district == 'Orleans':
+                district = 'Orléans'
+
+            if self.many_posts_per_area and 'Ward' in district:
+                seat_numbers[district] += 1
+                district = '%s (seat %d)' % (district, seat_numbers[district])
+
+            if row.get('Address'):  # London
+                address = row['Address']
+            else:
+                address = row['Address line 1']
+                if row['Address line 2']:
+                    address += '\n%s' % row['Address line 2']
+                address += '\n%s %s  %s' % (row['Locality'], province, row['Postal code'])
+
+            p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
+            p.add_source(self.csv_url)
+            if row['Gender']:
+                p.gender = row['Gender']
+            if row['Photo URL']:
+                p.image = row['Photo URL']
+            if row.get('Source URL'):
+                p.add_source(row['Source URL'])
+            elif row.get('URL'):  # London, Ottawa
+                p.add_source(row['URL'])
+            if row.get('Website'):
+                p.add_link(row['Website'])
+            elif row.get('Personal URL'):  # London, Ottawa
+                p.add_link(row['Personal URL'])
+            p.add_contact('email', row['Email'])
+            p.add_contact('address', address, 'legislature')
+            p.add_contact('voice', row['Phone'], 'legislature')
+            if row['Fax']:
+                p.add_contact('fax', row['Fax'], 'legislature')
+            if row.get('Cell'):
+                p.add_contact('cell', row['Cell'], 'legislature')
+            elif row.get('Phone (cell)'):  # Oakville
+                p.add_contact('cell', row['Phone (cell)'], 'legislature')
+            elif row.get('Phone (mobile)'):  # Guelph
+                p.add_contact('cell', row['Phone (mobile)'], 'legislature')
+            if row.get('Facebook'):
+                p.add_link(re.sub(r'[#?].+', '', row['Facebook']))
+            if row.get('Twitter'):
+                p.add_link(row['Twitter'])
+            yield p
 
 
 class CanadianJurisdiction(Jurisdiction):
