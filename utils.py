@@ -391,4 +391,4 @@ def clean_name(s):
 
 
 def capitalize(s):
-    return capitalize_re.sub(lambda s: s.group(0).lower(), s)
+    return capitalize_re.sub(lambda s: s.group(0).lower(), s.strip())
