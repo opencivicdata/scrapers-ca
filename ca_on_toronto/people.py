@@ -3,9 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://app.toronto.ca/im/council/councillors.jsp'
-BROKEN_LINKS = ['http://www.toronto.ca/councillors/vaughan1.htm',
-                'http://www.toronto.ca/councillors/milczyn1.htm']
+COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
 
 
 class TorontoPersonScraper(CanadianScraper):
@@ -13,21 +11,25 @@ class TorontoPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        a = page.xpath('//a[contains(@href,"mayor")]')[0]
+        a = page.xpath('//a[contains(text(),"Mayor")]')[0]
         yield self.scrape_mayor(a.attrib['href'])
 
-        for a in page.xpath('//a[contains(@href,"councillors/")]'):
+        for a in page.xpath('//a[contains(text(),"Councillor")]'):
             page = self.lxmlize(a.attrib['href'])
             h1 = page.xpath('//h1//text()')[0]
-            if 'Council seat is vacant' not in h1 and a.attrib['href'] not in BROKEN_LINKS:
+            if 'Council seat is vacant' not in h1:
                 yield self.scrape_councilor(page, h1, a.attrib['href'])
 
     def scrape_councilor(self, page, h1, url):
         name = h1.split('Councillor')[1]
-        ward_full = page.xpath('//a/descendant-or-self::*[contains(text(), "Profile:")]')[0].replace('\xa0', ' ')
+        ward_full = page.xpath('//p/descendant-or-self::*[contains(text(), "Profile:")]/text()')[0].replace('\xa0', ' ')
         ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
+        if ward_name == 'Etobicoke Lakeshore':
+            ward_name = 'Etobicoke\u2014Lakeshore'
 
-        p = Person(primary_org='legislature', name=name, district=ward_num, role='Councillor')
+        district = '{0} ({1})'.format(ward_name.replace('-', '\u2014'), ward_num.split()[1])
+
+        p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
 
@@ -60,10 +62,12 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_source(url)
         page = self.lxmlize(url)
 
-        mail_elem, phone_elem = page.xpath('//h3')[:2]
+        mail_elem, email_elem, phone_elem = page.xpath('//header')[:3]
         address = ''.join(mail_elem.xpath('./following-sibling::p//text()'))
         phone = phone_elem.xpath('./following-sibling::p[1]//text()')[0]
+        email = email_elem.xpath('./following-sibling::p[1]//text()')[0]
 
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
+        p.add_contact('email', email)
         return p
