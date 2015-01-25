@@ -23,7 +23,7 @@ class QuebecPersonScraper(CanadianScraper):
                 district = 'Québec'
                 role = 'Maire'
             else:
-                text = councillor.xpath('./a[@target="_blank"]/text()')
+                text = councillor.xpath('.//a[@target="_blank"]/text()')
                 district = re.search('\ADistrict électoral (?:de|du|des) (.+) - ?\d+\Z', text[0].strip(), flags=re.U).group(1)
                 role = 'Conseiller'
 
@@ -37,7 +37,7 @@ class QuebecPersonScraper(CanadianScraper):
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.image = councillor.xpath('./p/img/@src')[0]
+            p.image = councillor.xpath('./p//img/@src')[0]
 
             phone = re.findall(r'T.l\. : ([0-9]{3} [0-9]{3}-[0-9]{4})(,.*([0-9]{4}))?', councillor.text_content())[0]
             if phone[-1]:
