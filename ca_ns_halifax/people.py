@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.halifax.ca/councillors/index.html'
+COUNCIL_PAGE = 'http://www.halifax.ca/councillors/index.php'
 MAYOR_PAGE = 'http://www.halifax.ca/mayor/'
 MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
 
@@ -9,39 +9,43 @@ MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
 class HalifaxPersonScraper(CanadianScraper):
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
-        nodes = page.xpath('//table[@width="484"]//tr')
-        try:
-            for district_row, councillor_row, contact_row, _ in chunks(nodes, 4):
-                district = district_row.xpath('.//strong//text()')[0]
-                name = councillor_row.xpath('.')[0][len('Councillor '):]
-                # TODO: phone numbers on site don't include area code. Add manually?
-                # phone = contact_row.xpath('td[2]/text()')[0]
-                email = contact_row.xpath('td[4]/a')[0].replace('[at]', '@')
+        page = self.lxmlize(COUNCIL_PAGE)
+        councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')
 
-                p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-                p.add_source(COUNCIL_PAGE)
-                # p.add_contact('voice', phone, 'legislature')
-                p.add_contact('email', email)
-                yield p
-        except ValueError:
-            # on the last run through, there will be less than 4 rows to unpack
-            pass
+        for councillor in councillors:
+            district = ' '.join(councillor.xpath('./p/text()')).strip().replace('-', ' - ').replace('–', ' - ').replace('\n', ' - ')
+
+            name_elem = councillor.xpath('./p/strong/text()')[0]
+            if 'Deputy' in name_elem:
+                name = name_elem.split(',')[0]
+            else:
+                name = name_elem.strip()[len('Councillor '):]
+
+            photo = councillor.xpath('./p/a/img/@src')[0]
+
+            councillor_page = self.lxmlize(councillor.xpath('./h2/a/@href')[0])
+            contact_page_url = councillor_page.xpath('//li/a[contains(@href, "contact")]/@href')[0]
+            contact_page = self.lxmlize(contact_page_url)
+            contact_node = contact_page.xpath('//div[./h1[contains(text(), "Contact")]]')[0]
+
+            phone = self.get_phone(contact_node, [902])
+            email = self.get_email(contact_node)
+
+            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(contact_page_url)
+            p.add_contact('voice', phone, 'legislature')
+            p.add_contact('email', email)
+            p.image = photo
+            yield p
 
         mayor_page = self.lxmlize(MAYOR_PAGE, 'iso-8859-1')
-        name = mayor_page.xpath('//h1[contains(., "Bio")]')[0][:-len(' Bio')]
+        name = ' '.join(mayor_page.xpath('//h2[contains(., "Bio")]/text()')).strip()[:-len(' Bio')]
         contact_page = self.lxmlize(MAYOR_CONTACT_URL, 'iso-8859-1')
         email = self.get_email(contact_page)
 
-        p = Person(primary_org='legislature', name=name, district='Halifax', role='Councillor')
+        p = Person(primary_org='legislature', name=name, district='Halifax', role='Mayor')
         p.add_source(MAYOR_PAGE)
         p.add_source(MAYOR_CONTACT_URL)
         p.add_contact('email', email)
         yield p
-
-
-def chunks(l, n):
-    """ Yield successive n-sized chunks from l.
-    """
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
