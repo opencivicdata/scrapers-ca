@@ -12,7 +12,8 @@ class ThunderBayPersonScraper(CanadianScraper):
         councillor_seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//td//a[contains(@title, "Profile")][1]/@href')
+        mayor = page.xpath('//div/a[contains(@title, "Profile")][1]/@href')
+        councillors = mayor + page.xpath('//td//a[contains(@title, "Profile")][1]/@href')
         for councillor in councillors:
             page = self.lxmlize(councillor)
             info = page.xpath('//table/tbody/tr/td[2]')[0]
@@ -47,7 +48,7 @@ class ThunderBayPersonScraper(CanadianScraper):
 
             contacts = info.xpath('./p[2]/text()')
             for contact in contacts:
-                contact_type, contact = contact.split(':')
+                contact_type, contact = contact.replace('Cel:', 'Cell:').split(':')
                 contact = contact.replace('(1st)', '').replace('(2nd)', '').strip()
                 if 'Fax' in contact_type:
                     p.add_contact('fax', contact, 'legislature')
