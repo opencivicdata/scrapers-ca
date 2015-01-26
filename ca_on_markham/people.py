@@ -18,7 +18,14 @@ class MarkhamPersonScraper(CanadianScraper):
 
         councillors = page.xpath('//div[@class="interiorContentWrapper"]//td[./a]')
         for councillor in councillors:
-            name = councillor.xpath('.//strong')[1].text_content().strip()
+            name_elem = ' '.join(councillor.xpath('.//strong/text()'))
+            if 'Mayor' in name_elem:
+                name = name_elem.split('Mayor')[1]
+            elif 'Councillor' in name_elem:
+                name = name_elem.split('Councillor')[1]
+            else:
+                name = name_elem
+
             district = councillor.xpath('.//a//text()[normalize-space()]')[0]
             if 'Ward' in district:
                 district = district.replace('Councillor', '')
@@ -34,7 +41,7 @@ class MarkhamPersonScraper(CanadianScraper):
             image = councillor.xpath('.//img/@src')[0]
             url = councillor.xpath('.//a/@href')[0]
 
-            if 'Ward 4' in district:
+            if 'Ward 4' in district or 'seat 3' in district or 'Ward 6' in district:
                 yield self.scrape_4(name, url, image)
                 continue
 
@@ -69,8 +76,8 @@ class MarkhamPersonScraper(CanadianScraper):
         p.add_source(url)
         p.add_source(COUNCIL_PAGE)
 
-        address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[3]/text()')))
-        phone = page.xpath('//div[@class="interiorContentWrapper"]/p[4]/text()')[0].split(':')[1].strip()
+        address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[1]/text()')))
+        phone = page.xpath('//div[@class="interiorContentWrapper"]/p[2]/text()')[0].split(':')[1].strip()
         email = self.get_email(page)
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
