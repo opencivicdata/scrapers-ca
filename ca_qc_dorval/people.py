@@ -9,22 +9,23 @@ class DorvalPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//td/p[./strong]')
+        councillors = page.xpath('//td/p[2]')
         for councillor in councillors:
             info = councillor.xpath('./strong/text()')
             name = info[0]
-            if len(info) < 3:
-                district = 'Dorval'
-                role = 'Maire'
-            else:
-                district = info[2]
-                role = 'Conseiller'
-            p = Person(primary_org='legislature', name=name, district=district, role=role)
-            p.add_source(COUNCIL_PAGE)
+            if 'Vacant' not in info:
+                if len(info) < 3:
+                    district = 'Dorval'
+                    role = 'Maire'
+                else:
+                    district = info[2]
+                    role = 'Conseiller'
+                p = Person(primary_org='legislature', name=name, district=district, role=role)
+                p.add_source(COUNCIL_PAGE)
 
-            p.image = councillor.xpath('./preceding-sibling::p/img/@src')[0]
+                p.image = councillor.xpath('./preceding-sibling::p/img/@src')[0]
 
-            email = self.get_email(councillor)
-            p.add_contact('email', email)
+                email = self.get_email(councillor)
+                p.add_contact('email', email)
 
-            yield p
+                yield p
