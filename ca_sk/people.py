@@ -13,7 +13,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
         for councillor in councillors:
             name = councillor.xpath('./td')[0].text_content().split('. ', 1)[1]
             party = councillor.xpath('./td')[1].text
-            district = councillor.xpath('./td')[2].text_content().replace('Northeast', 'North East')
+            district = councillor.xpath('./td')[2].text_content()
             url = councillor.xpath('./td[1]/a/@href')[0]
             page = self.lxmlize(url)
 
