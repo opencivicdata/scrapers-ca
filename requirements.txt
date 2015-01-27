@@ -9,7 +9,7 @@ requests==2.3.0
 six==1.8.0
 
 # Validation
--e git+git://github.com/jpmckinney/validictory.git@pattern#egg=validictory
+validictory==1.0.0
 regex==2014.04.10
 
 # Maintenance
