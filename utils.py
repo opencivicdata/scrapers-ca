@@ -181,10 +181,10 @@ class CSVScraper(CanadianScraper):
         reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding)
         reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
         for row in reader:
-            district = row['District name'] or self.jurisdiction.division_name
+            district = row.get('District name', self.jurisdiction.division_name)
             role = row['Primary role']
             name = '%s %s' % (row['First name'], row['Last name'])
-            province = row['Province']
+            province = row.get('Province')
 
             if role == 'Town Councillor':  # Oakville
                 role = 'Councillor'
@@ -195,10 +195,17 @@ class CSVScraper(CanadianScraper):
                 seat_numbers[district] += 1
                 district = '%s (seat %d)' % (district, seat_numbers[district])
 
-            address = row['Address line 1']
+            lines = []
+            if row.get('Address line 1'):
+                lines.append(row['Address line 1'])
             if row.get('Address line 2'):
-                address += '\n%s' % row['Address line 2']
-            address += '\n%s %s  %s' % (row['Locality'], province, row['Postal code'])
+                lines.append(row['Address line 2'])
+            parts = [row['Locality']]
+            if province:
+                parts.append(province)
+            if row.get('Postal code'):
+                parts.extend(['', row['Postal code']])
+            lines.append(' '.join(parts))
 
             p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(self.csv_url)
@@ -211,7 +218,7 @@ class CSVScraper(CanadianScraper):
             if row.get('Website'):
                 p.add_link(row['Website'])
             p.add_contact('email', row['Email'])
-            p.add_contact('address', address, 'legislature')
+            p.add_contact('address', '\n'.join(lines), 'legislature')
             p.add_contact('voice', row['Phone'], 'legislature')
             if row.get('Fax'):
                 p.add_contact('fax', row['Fax'], 'legislature')
