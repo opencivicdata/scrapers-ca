@@ -181,7 +181,7 @@ class CSVScraper(CanadianScraper):
         reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding)
         reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
         for row in reader:
-            district = row.get('District name', self.jurisdiction.division_name)
+            district = row.get('District name') or self.jurisdiction.division_name
             role = row['Primary role']
             name = '%s %s' % (row['First name'], row['Last name'])
             province = row.get('Province')
