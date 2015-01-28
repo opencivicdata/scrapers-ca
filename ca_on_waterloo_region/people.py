@@ -18,15 +18,15 @@ class WaterlooPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        regions = page.xpath('//*[@id="contentIntleft"]//h3')[1:]
+        regions = page.xpath('//*[@id="contentIntleft"]//h3')[2:]
         for region in regions:
             # the links in all <p> tags immediately following each <h3>
             councillors = [elem[0] for elem in
                            takewhile(lambda elem: elem.tag == 'p',
                                      region.xpath('./following-sibling::*'))]
-            for councillor in councillors:
+            for i, councillor in enumerate(councillors):
                 post = re.search('of (.*)', region.text).group(1)
-                if 'Mayor' in councillor.xpath('../text()')[0]:
+                if i == 0:
                     district = post
                 else:
                     seat_numbers[post] += 1
@@ -40,7 +40,8 @@ class WaterlooPersonScraper(CanadianScraper):
                     p.add_contact('email', email)
                 if phone:
                     p.add_contact('voice', phone, 'legislature')
-                p.image = photo_url
+                if photo_url:
+                    p.image = photo_url
                 yield p
 
         chairpage = self.lxmlize(CHAIR_URL)
@@ -64,6 +65,7 @@ class WaterlooPersonScraper(CanadianScraper):
         contact = page.xpath('//div[@class="contactBodyContactInfoContactModuleV2"]')
         email = None
         phone = None
+        photo_url = None
         if contact:
             contact = contact[0]
             if not contact.text_content().strip():
@@ -71,6 +73,9 @@ class WaterlooPersonScraper(CanadianScraper):
                 contact = self.lxmlize('http://www.regionofwaterloo.ca/en/ContactModule/services/GetContactHTML.ashx?param=%s' % param)
             email = self.get_email(contact, error=False)
             phone = self.get_phone(contact, area_codes=[226, 519])
-        photo_url_src = page.xpath('//div[@id="contentIntleft"]//img[1]/@src')[0]
-        photo_url = urljoin(url, photo_url_src)
+
+        photo_elem = page.xpath('//div[@id="contentIntleft"]//img[1]/@src')
+        if photo_elem:
+            photo_url_src = photo_elem[0]
+            photo_url = urljoin(url, photo_url_src)
         return email, phone, photo_url
