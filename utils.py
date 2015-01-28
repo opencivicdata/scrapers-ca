@@ -151,7 +151,7 @@ class CanadianScraper(Scraper):
             page.make_links_absolute(url)
             return page
 
-    def csv_reader(self, url, header=False, encoding=None, **kwargs):
+    def csv_reader(self, url, header=False, encoding=None, skip_rows=0, **kwargs):
         result = urlparse(url)
         if result.scheme == 'ftp':
             data = StringIO()
@@ -165,6 +165,9 @@ class CanadianScraper(Scraper):
             if encoding:
                 response.encoding = encoding
             data = StringIO(response.text.strip())
+        if skip_rows:
+            for _ in range(skip_rows):
+                data.readline()
         if header:
             return csv.DictReader(data)
         else:
@@ -174,65 +177,67 @@ class CanadianScraper(Scraper):
 class CSVScraper(CanadianScraper):
     encoding = None
     many_posts_per_area = False
+    skip_rows = 0
 
     def scrape(self):
-        seat_numbers = defaultdict(int)
+        seat_numbers = defaultdict(lambda: defaultdict(int))
 
-        reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding)
+        reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows)
         reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
         for row in reader:
-            district = row.get('District name') or self.jurisdiction.division_name
-            role = row['Primary role']
-            name = '%s %s' % (row['First name'], row['Last name'])
-            province = row.get('Province')
+            if any(row.values()):
+                district = row.get('District name') or self.jurisdiction.division_name
+                role = row['Primary role']
+                name = '%s %s' % (row['First name'], row['Last name'])
+                province = row.get('Province')
 
-            if role == 'Town Councillor':  # Oakville
-                role = 'Councillor'
-            if province == 'Ontario':  # Guelph
-                province = 'ON'
+                if role == 'Town Councillor':  # Oakville
+                    role = 'Councillor'
+                if province == 'Ontario':  # Guelph
+                    province = 'ON'
 
-            if self.many_posts_per_area and role != 'Mayor':
-                seat_numbers[district] += 1
-                district = '%s (seat %d)' % (district, seat_numbers[district])
+                if self.many_posts_per_area and role != 'Mayor':
+                    seat_numbers[role][district] += 1
+                    district = '%s (seat %d)' % (district, seat_numbers[role][district])
 
-            lines = []
-            if row.get('Address line 1'):
-                lines.append(row['Address line 1'])
-            if row.get('Address line 2'):
-                lines.append(row['Address line 2'])
-            parts = [row['Locality']]
-            if province:
-                parts.append(province)
-            if row.get('Postal code'):
-                parts.extend(['', row['Postal code']])
-            lines.append(' '.join(parts))
+                lines = []
+                if row.get('Address line 1'):
+                    lines.append(row['Address line 1'])
+                if row.get('Address line 2'):
+                    lines.append(row['Address line 2'])
+                parts = [row['Locality']]
+                if province:
+                    parts.append(province)
+                if row.get('Postal code'):
+                    parts.extend(['', row['Postal code']])
+                lines.append(' '.join(parts))
 
-            p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
-            p.add_source(self.csv_url)
-            if row.get('Gender'):
-                p.gender = row['Gender']
-            if row['Photo URL']:
-                p.image = row['Photo URL']
-            if row['Source URL']:
-                p.add_source(row['Source URL'])
-            if row.get('Website'):
-                p.add_link(row['Website'])
-            p.add_contact('email', row['Email'])
-            p.add_contact('address', '\n'.join(lines), 'legislature')
-            p.add_contact('voice', row['Phone'], 'legislature')
-            if row.get('Fax'):
-                p.add_contact('fax', row['Fax'], 'legislature')
-            if row.get('Cell'):
-                p.add_contact('cell', row['Cell'], 'legislature')
-            elif row.get('Phone (cell)'):  # Oakville
-                p.add_contact('cell', row['Phone (cell)'], 'legislature')
-            elif row.get('Phone (mobile)'):  # Guelph
-                p.add_contact('cell', row['Phone (mobile)'], 'legislature')
-            if row.get('Facebook'):
-                p.add_link(re.sub(r'[#?].+', '', row['Facebook']))
-            if row.get('Twitter'):
-                p.add_link(row['Twitter'])
-            yield p
+                p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
+                p.add_source(self.csv_url)
+                if row.get('Gender'):
+                    p.gender = row['Gender']
+                if row['Photo URL']:
+                    p.image = row['Photo URL']
+                if row.get('Source URL'):
+                    p.add_source(row['Source URL'])
+                if row.get('Website'):
+                    p.add_link(row['Website'])
+                p.add_contact('email', row['Email'])
+                p.add_contact('address', '\n'.join(lines), 'legislature')
+                p.add_contact('voice', row['Phone'], 'legislature')
+                if row.get('Fax'):
+                    p.add_contact('fax', row['Fax'], 'legislature')
+                if row.get('Cell'):
+                    p.add_contact('cell', row['Cell'], 'legislature')
+                elif row.get('Phone (cell)'):  # Oakville
+                    p.add_contact('cell', row['Phone (cell)'], 'legislature')
+                elif row.get('Phone (mobile)'):  # Guelph
+                    p.add_contact('cell', row['Phone (mobile)'], 'legislature')
+                if row.get('Facebook'):
+                    p.add_link(re.sub(r'[#?].+', '', row['Facebook']))
+                if row.get('Twitter'):
+                    p.add_link(row['Twitter'])
+                yield p
 
 
 class CanadianJurisdiction(Jurisdiction):

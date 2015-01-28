@@ -1,34 +1,10 @@
 from __future__ import unicode_literals
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CSVScraper
 
 COUNCIL_PAGE = 'http://vancouver.ca/your-government/vancouver-city-council.aspx'
 
 
-class VancouverPersonScraper(CanadianScraper):
-    csv_url = 'ftp://webftp.vancouver.ca/OpenData/csv/CouncilContactInformation.csv'
-
-    def scrape(self):
-        seat_number = 0
-
-        for row in self.csv_reader(self.csv_url, header=True):
-            if row['Elected Office'] == 'Mayor':
-                district = 'Vancouver'
-            else:
-                seat_number += 1
-                district = 'Vancouver (seat %d)' % seat_number
-
-            p = Person(
-                primary_org='legislature',
-                name='%(First Name)s %(Last Name)s' % row,
-                district=district,
-                role=row['Elected Office'],
-                gender=row['Gender'],
-                image=row['Photo URL'],
-            )
-            p.add_contact('email', row['Email'])
-            p.add_contact('voice', row['Phone'], 'legislature')
-            p.add_contact('fax', row['Fax'], 'legislature')
-            p.add_contact('address', '%(Address line 1)s\n%(Locality)s %(Province)s  %(Postal Code)s' % row, 'legislature')
-            p.add_source(self.csv_url)
-            p.add_source(row['URL'])
-            yield p
+class VancouverPersonScraper(CSVScraper):
+    csv_url = 'ftp://webftp.vancouver.ca/OpenData/csv/ElectedOfficialsContactInformation.csv'
+    many_posts_per_area = True
+    skip_rows = 1
