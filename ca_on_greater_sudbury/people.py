@@ -4,19 +4,18 @@ from utils import CanadianScraper, CanadianPerson as Person
 import re
 
 COUNCIL_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/city-council/'
+MAYOR_PAGE = 'http://www.greatersudbury.ca/inside-city-hall/mayor/'
 
 
 class GreaterSudburyPersonScraper(CanadianScraper):
 
     def scrape(self):
+        yield self.scrape_mayor()
+
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="navMultilevel"]//a')
         for councillor in councillors:
-            if councillor == councillors[0]:
-                yield self.scrape_mayor(councillor)
-                continue
-
             if '-' not in councillor.text_content():
                 break
 
@@ -43,15 +42,14 @@ class GreaterSudburyPersonScraper(CanadianScraper):
             p.image = page.xpath('//article[@id="primary"]//img/@src')[1]
             yield p
 
-    def scrape_mayor(self, div):
-        url = div.attrib['href']
-        page = self.lxmlize(url)
+    def scrape_mayor(self):
+        page = self.lxmlize(MAYOR_PAGE)
 
-        name = div.text_content().replace('Mayor ', '')
+        name = page.xpath('//h2[contains(text(), "Mayor")]/text()')[0].replace('Mayor ', '')
         contact_url = page.xpath('//ul[@class="navSecondary"]//a[contains(text(),"Contact")]')[0].attrib['href']
         page = self.lxmlize(contact_url)
 
-        contact_div = page.xpath('//div[@class="col"][2]')[0]
+        contact_div = page.xpath('//div[@class="col"][1]')[0]
 
         address = contact_div.xpath('.//p[1]')[0].text_content()
         address = re.findall(r'(City of Greater .*)', address, flags=re.DOTALL)[0]
