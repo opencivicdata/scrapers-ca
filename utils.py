@@ -193,8 +193,6 @@ class CSVScraper(CanadianScraper):
 
                 if role == 'Town Councillor':  # Oakville
                     role = 'Councillor'
-                if province == 'Ontario':  # Guelph
-                    province = 'ON'
 
                 if self.many_posts_per_area and role != 'Mayor':
                     seat_numbers[role][district] += 1
@@ -231,8 +229,6 @@ class CSVScraper(CanadianScraper):
                     p.add_contact('cell', row['Cell'], 'legislature')
                 elif row.get('Phone (cell)'):  # Oakville
                     p.add_contact('cell', row['Phone (cell)'], 'legislature')
-                elif row.get('Phone (mobile)'):  # Guelph
-                    p.add_contact('cell', row['Phone (mobile)'], 'legislature')
                 if row.get('Facebook'):
                     p.add_link(re.sub(r'[#?].+', '', row['Facebook']))
                 if row.get('Twitter'):
