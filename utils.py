@@ -218,7 +218,7 @@ class CSVScraper(CanadianScraper):
                     p.gender = row['Gender']
                 if row['Photo URL']:
                     p.image = row['Photo URL']
-                if row.get('Source URL'):
+                if row['Source URL']:
                     p.add_source(row['Source URL'])
                 if row.get('Website'):
                     p.add_link(row['Website'])
