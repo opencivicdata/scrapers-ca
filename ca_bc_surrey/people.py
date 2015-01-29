@@ -17,24 +17,24 @@ class SurreyPersonScraper(CanadianScraper):
             url = link.attrib['href']
             councillor_page = self.lxmlize(url)
 
+            district = 'Surrey (seat %d)' % councillor_seat_number
+            councillor_seat_number += 1
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
+
+            contact_node = councillor_page.xpath('//div[@class="content"]//*[contains(text(), "Contact")]')
+            if contact_node:
+                phone = self.get_phone(councillor_page, [604])
+                email = self.get_email(councillor_page)
+                p.add_contact('voice', phone, 'legislature')
+                p.add_contact('email', email)
+
             photo_node = councillor_page.xpath('.//div[@class="inner-wrapper"]//img/@src')
             if photo_node:
                 photo_url = photo_node[0]
-                phone = councillor_page.xpath('//text()[contains(., "hone:")][1]|//text()[contains(., "604-")]')[0]
-                email = self.get_email(councillor_page)
-                district = 'Surrey (seat %d)' % councillor_seat_number
-                councillor_seat_number += 1
-
-                p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
-                p.add_source(COUNCIL_PAGE)
-                p.add_source(url)
-                p.add_contact('voice', phone, 'legislature')
-                p.add_contact('email', email)
-            else:
-                p = Person(primary_org='legislature', name=name, district=district, role=role)
-                p.add_source(COUNCIL_PAGE)
-                p.add_source(url)
-
+                p.image = photo_url
             yield p
 
         mayor_link = page.xpath('//div[@class="inner-wrapper"]//a[contains(text(), "Mayor")]')[0]
