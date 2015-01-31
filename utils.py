@@ -327,7 +327,7 @@ class CanadianPerson(Person):
 
     def clean_telephone_number(self, s, area_code=None):
         """
-        @see http://www.noslangues-ourlanguages.gc.ca/bien-well/fra-eng/typographie-typography/telephone-eng.html
+        @see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html
         """
 
         splits = re.split(r'(?:/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
@@ -339,7 +339,7 @@ class CanadianPerson(Person):
             digits = '1' + digits
 
         if len(digits) == 11 and digits[0] == '1' and len(splits) <= 2:
-            digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1-\2-\3-\4', digits)
+            digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1 \2 \3-\4', digits)
             if len(splits) == 2:
                 return '%s x%s' % (digits, splits[1])
             else:

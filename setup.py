@@ -1,5 +1,5 @@
-# @see http://pythonhosted.org/an_example_pypi_project/setuptools.html
-# @see http://pythonhosted.org/setuptools/setuptools.html
+# @see https://pythonhosted.org/an_example_pypi_project/setuptools.html
+# @see https://pythonhosted.org/setuptools/setuptools.html
 import os
 from setuptools import setup, find_packages
 

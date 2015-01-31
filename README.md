@@ -37,7 +37,7 @@ For documentation on the `update` subcommand:
 
 ## Create a scraper
 
-Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID) Viewer](http://opennorth.github.io/ocd-id-viewer/) or by browsing the [list of identifiers](https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca.csv). In most cases, a municipality will have a division identifier with a type ID of `csd`. Then, create a scraper with:
+Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID) Viewer](https://opencivicdata.github.io/ocd-id-viewer/) or by browsing the [list of identifiers](https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca.csv). In most cases, a municipality will have a division identifier with a type ID of `csd`. Then, create a scraper with:
 
     pupa init ca_on_toronto
 
@@ -63,7 +63,7 @@ Check jurisdiction URLs:
 
     invoke urls
 
-Check [PEP 8](http://www.python.org/dev/peps/pep-0008/) conformance:
+Check [PEP 8](https://www.python.org/dev/peps/pep-0008/) conformance:
 
     flake8 .
 
@@ -75,6 +75,6 @@ Scraper code rarely undergoes code review. The focus is on the quality of the da
 
 ## Bugs? Questions?
 
-This repository is on GitHub: [http://github.com/opencivicdata/scrapers-ca](http://github.com/opencivicdata/scrapers-ca), where your contributions, forks, bug reports, feature requests, and feedback are greatly welcomed.
+This repository is on GitHub: [https://github.com/opencivicdata/scrapers-ca](https://github.com/opencivicdata/scrapers-ca), where your contributions, forks, bug reports, feature requests, and feedback are greatly welcomed.
 
 Copyright (c) 2013 Open North Inc., released under the MIT license

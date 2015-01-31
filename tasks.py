@@ -53,13 +53,13 @@ def get_definition(division_id, aggregation=False):
     if not ocdid_to_type_name_map:
         # Map census division type codes to names.
         census_division_type_names = {}
-        document = lxml.html.fromstring(requests.get('http://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-4-eng.cfm').content)
+        document = lxml.html.fromstring(requests.get('https://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-4-eng.cfm').content)
         for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
             census_division_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
 
         # Map census subdivision type codes to names.
         census_subdivision_type_names = {}
-        document = lxml.html.fromstring(requests.get('http://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-5-eng.cfm').content)
+        document = lxml.html.fromstring(requests.get('https://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-5-eng.cfm').content)
         for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
             census_subdivision_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
 
