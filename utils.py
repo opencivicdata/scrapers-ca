@@ -186,6 +186,9 @@ class CSVScraper(CanadianScraper):
         reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
         for row in reader:
             if any(row.values()):
+                if row['Last name'] == 'Vacant':
+                    continue
+
                 district = row.get('District name') or self.jurisdiction.division_name
                 role = row['Primary role']
                 name = '%s %s' % (row['First name'], row['Last name'])

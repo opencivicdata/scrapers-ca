@@ -14,11 +14,14 @@ class Peel(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Regional Chair', label='Peel')
-        for i in range(5):
+        organization.add_post(role='Mayor', label='Caledon')
+        organization.add_post(role='Mayor', label='Brampton')
+        organization.add_post(role='Mayor', label='Mississauga')
+        for i in range(4):
             organization.add_post(role='Councillor', label='Caledon Ward %d' % (i + 1))
-        for i in range(10):
+        for i in range(9):
             organization.add_post(role='Councillor', label='Brampton Ward %d' % (i + 1))
-        for i in range(11):
+        for i in range(10):
             organization.add_post(role='Councillor', label='Mississauga Ward %d' % (i + 1))
 
         yield organization
