@@ -10,36 +10,38 @@ class LongueuilPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'latin-1')
-        person_rows = [tr for tr in page.xpath('//tr') if
-                       tr.xpath('./td[2][@class="TABL1"]')]
-        leader_row = person_rows[0]
-        councillor_rows = person_rows[1:]
+
+        yield self.scrape_mayor(page)
+
+        councillor_rows = [tr for tr in page.xpath('//tr') if
+                           tr.xpath('./td[2]')]
         for row in councillor_rows:
-            district = row[1].text if row[1].text.strip() else 'Greenfield Park'
-            name = row[2].xpath('./a')[0].title()
-            detail_url = row[2].xpath('./a/@href')[0]
+            district = 'Greenfield Park' if ' n' in row[0].text else row[0].text
+            name = re.search('(.+) (\(.+\)$)', row[1].xpath('./a/text()')[0]).group(1)
+            detail_url = row[1].xpath('./a/@href')[0]
             detail_page = self.lxmlize(detail_url)
-            email_url = detail_page.xpath('//a[contains(@href, "sendto")]/@href')[0]
-            email = re.search(r'sendto=(.+)&', email_url).group(1)
-            photo_url = detail_page.xpath('//img[@height="200"]/@src')[0]
+
+            photo_node = detail_page.xpath('//img[contains(@alt, "{0}")]/@src'.format(name))
+            if photo_node:
+                photo_url = photo_node[0]
+            else:
+                photo_url = detail_page.xpath('//img[contains(@class, "droite")]/@src')[0]
+
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
             p.image = photo_url
-            p.add_contact('email', email)
             yield p
 
-        mayor_td = leader_row[1]
+    def scrape_mayor(self, page):
+        mayor_node = page.xpath('//a[contains(@href, "mairesse") or contains(@href, "maire")]/ancestor::strong')[0]
         name, position = [string.title() for string in
-                          mayor_td.text_content().split(', ')]
-        mayor_url = mayor_td.xpath('.//a/@href')[0]
+                          mayor_node.text_content().split(', ')]
+        mayor_url = mayor_node.xpath('.//a/@href')[0]
         mayor_page = self.lxmlize(mayor_url)
-        photo_url = mayor_page.xpath('//b/img/@src')[0]
-        email_url = detail_page.xpath('//a[contains(@href, "sendto")]/@href')[0]
-        email = re.search(r'sendto=(.+)&', email_url).group(1)
+        photo_url = mayor_page.xpath('//img[contains(@alt, "{0}")]/@src'.format(name))[0]
         p = Person(primary_org='legislature', name=name, district='Longueuil', role='Maire')
         p.add_source(COUNCIL_PAGE)
         p.add_source(mayor_url)
         p.image = photo_url
-        p.add_contact('email', email)
         yield p
