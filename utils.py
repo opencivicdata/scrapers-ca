@@ -125,6 +125,7 @@ class CanadianScraper(Scraper):
         Don't use if multiple telephone numbers are present, e.g. voice and fax.
         If writing a new scraper, check that extensions are captured.
         """
+
         match = node.xpath('.//a[contains(@href,"tel:")]')
         if match:
             return match[0].attrib['href'].replace('tel:', '')
@@ -243,9 +244,12 @@ class CanadianJurisdiction(Jurisdiction):
 
     def __init__(self):
         super(CanadianJurisdiction, self).__init__()
-        for module, name in (('people', 'Person'),):
-            class_name = self.__class__.__name__ + name + 'Scraper'
-            self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
+        for module, name in (('people', 'Person'), ('votes', 'Vote')):
+            try:
+                class_name = self.__class__.__name__ + name + 'Scraper'
+                self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
+            except ImportError:
+                pass
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
