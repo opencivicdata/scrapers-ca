@@ -244,7 +244,7 @@ class CanadianJurisdiction(Jurisdiction):
 
     def __init__(self):
         super(CanadianJurisdiction, self).__init__()
-        for module, name in (('people', 'Person'), ('votes', 'Vote')):
+        for module, name in (('people', 'Person'), ('bills', 'Bill')):
             try:
                 class_name = self.__class__.__name__ + name + 'Scraper'
                 self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)
