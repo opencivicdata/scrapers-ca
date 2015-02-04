@@ -25,7 +25,7 @@ ocdid_to_type_name_map = {}
 
 def province_and_territory_codes():
     if not province_and_territory_codes_memo:
-        for division in Division.get('ocd-division/country:ca').children():
+        for division in Division.all('ca'):
             if division._type in ('province', 'territory'):
                 province_and_territory_codes_memo[division.attrs['sgc']] = division.id
     return province_and_territory_codes_memo
@@ -64,13 +64,14 @@ def get_definition(division_id, aggregation=False):
             census_subdivision_type_names[abbr.text_content()] = re.sub(' /.+\Z', '', abbr.attrib['title'])
 
         # Map OCD identifiers to census types.
-        for division in Division.get('ocd-division/country:ca').children():
+        for division in Division.all('ca'):
             if division._type == 'cd':
                 ocdid_to_type_name_map[division.id] = census_division_type_names[division.attrs['classification']]
             elif division._type == 'csd':
                 ocdid_to_type_name_map[division.id] = census_subdivision_type_names[division.attrs['classification']]
 
     codes = province_and_territory_codes()
+    division = Division.get(division_id)
 
     expected = {}
     vowels = ('A', 'À', 'E', 'É', 'I', 'Î', 'O', 'Ô', 'U')
@@ -86,28 +87,28 @@ def get_definition(division_id, aggregation=False):
         pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
         expected['module_name'] = pattern % ocd_type_id
         if aggregation:
-            expected['name'] = '%s Municipalities' % Division.get(division_id).name
+            expected['name'] = '%s Municipalities' % division.name
         elif ocd_type_id in ('nl', 'ns'):
-            expected['name'] = '%s House of Assembly' % Division.get(division_id).name
+            expected['name'] = '%s House of Assembly' % division.name
         elif ocd_type_id == 'qc':
             expected['name'] = 'Assemblée nationale du Québec'
         else:
-            expected['name'] = 'Legislative Assembly of %s' % Division.get(division_id).name
+            expected['name'] = 'Legislative Assembly of %s' % division.name
     elif ocd_type == 'cd':
         province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(Division.get(division_id).name))
+        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(division.name))
         name_infix = ocdid_to_type_name_map[division_id]
         if name_infix == 'Regional municipality':
             name_infix = 'Regional'
-        expected['name'] = '%s %s Council' % (Division.get(division_id).name, name_infix)
+        expected['name'] = '%s %s Council' % (division.name, name_infix)
     elif ocd_type == 'csd':
         province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(Division.get(division_id).name))
+        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(division.name))
         if ocd_type_id[:2] == '24':
-            if Division.get(division_id).name[0] in vowels:
-                expected['name'] = "Conseil municipal d'%s" % Division.get(division_id).name
+            if division.name[0] in vowels:
+                expected['name'] = "Conseil municipal d'%s" % division.name
             else:
-                expected['name'] = "Conseil municipal de %s" % Division.get(division_id).name
+                expected['name'] = "Conseil municipal de %s" % division.name
         else:
             name_infix = ocdid_to_type_name_map[division_id]
             if name_infix in ('Municipality', 'Specialized municipality'):
@@ -116,31 +117,31 @@ def get_definition(division_id, aggregation=False):
                 name_infix = 'District'
             elif name_infix == 'Regional municipality':
                 name_infix = 'Regional'
-            expected['name'] = '%s %s Council' % (Division.get(division_id).name, name_infix)
+            expected['name'] = '%s %s Council' % (division.name, name_infix)
     elif ocd_type == 'arrondissement':
         census_subdivision_type_id = sections[-2].split(':')[-1]
         province_or_territory_type_id = codes[census_subdivision_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug(Division.get('/'.join(sections[:-1])).name), slug(Division.get(division_id).name))
-        if Division.get(division_id).name[0] in vowels:
-            expected['name'] = "Conseil d'arrondissement d'%s" % Division.get(division_id).name
-        elif Division.get(division_id).name[:3] == 'Le ':
-            expected['name'] = "Conseil d'arrondissement du %s" % Division.get(division_id).name[3:]
+        expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug(Division.get('/'.join(sections[:-1])).name), slug(division.name))
+        if division.name[0] in vowels:
+            expected['name'] = "Conseil d'arrondissement d'%s" % division.name
+        elif division.name[:3] == 'Le ':
+            expected['name'] = "Conseil d'arrondissement du %s" % division.name[3:]
         else:
-            expected['name'] = "Conseil d'arrondissement de %s" % Division.get(division_id).name
+            expected['name'] = "Conseil d'arrondissement de %s" % division.name
     else:
         raise Exception('%s: Unrecognized OCD type %s' % (division_id, ocd_type))
 
     # Determine the class name.
-    class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', Division.get(division_id).name)))
+    class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', division.name)))
     expected['class_name'] = unidecode(text_type(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
     if aggregation:
         expected['class_name'] += 'Municipalities'
 
     # Determine the url.
-    expected['url'] = Division.get(division_id).attrs['url']
+    expected['url'] = division.attrs['url']
 
     # Determine the division name.
-    expected['division_name'] = Division.get(division_id).name
+    expected['division_name'] = division.name
 
     return expected
 
