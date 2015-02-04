@@ -28,8 +28,8 @@ vote_map = {
 
 class TorontoBillScraper(CanadianScraper):
     def scrape(self):
-        # We store agenda items as bills, because Toronto has no bills and
-        # because Pupa can only have votes on bills.
+        # We store agenda items as bills, because Pupa can only have votes on
+        # bills. Toronto has no bills anyhow.
 
         # Toronto groups voting records by member, but Pupa expects them to be
         # grouped by vote event. In order to group voting records by vote event,
