@@ -132,6 +132,7 @@ class TorontoBillScraper(CanadianScraper):
             for key, properties in bills.items():
                 b = Bill(**properties)
                 b.add_source(SOURCE_URL)
+
                 yield b
 
             for key, properties in vote_events.items():
