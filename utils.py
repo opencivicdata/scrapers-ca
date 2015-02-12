@@ -197,6 +197,8 @@ class CSVScraper(CanadianScraper):
 
                 if role == 'Town Councillor':  # Oakville
                     role = 'Councillor'
+                if role == 'Councillor' and Division.get(self.jurisdiction.division_id)._type == 'cd':
+                    role = 'Regional Councillor'
 
                 if self.many_posts_per_area and role != 'Mayor':
                     seat_numbers[role][district] += 1
