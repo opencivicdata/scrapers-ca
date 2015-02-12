@@ -31,7 +31,7 @@ class WaterlooPersonScraper(CanadianScraper):
                 else:
                     seat_numbers[post] += 1
                     district = '%s (seat %d)' % (post, seat_numbers[post])
-                p = Person(primary_org='legislature', name=councillor.text, district=district, role='Councillor')
+                p = Person(primary_org='legislature', name=councillor.text, district=district, role='Regional Councillor')
                 p.add_source(COUNCIL_PAGE)
                 councillor_url = councillor.attrib['href']
                 p.add_source(councillor_url)
