@@ -9,7 +9,7 @@ class SaguenayPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        mayor = page.xpath('//div[@class="box"]/p/text()')
+        mayor = page.xpath('//div[./div/h3[contains(text(), "Maire")]]/p/text()')
         m_name = mayor[0].strip().split('.')[1].strip()
         m_phone = mayor[1].strip().split(':')[1].strip()
 
@@ -19,9 +19,9 @@ class SaguenayPersonScraper(CanadianScraper):
 
         yield m
 
-        councillors = page.xpath('//div[@class="box"]//div')
+        councillors = page.xpath('//div[./div/h3[contains(text(), "District")]]')
         for councillor in councillors:
-            district = councillor.xpath('./h3')[0].text_content().replace('#', '')
+            district = councillor.xpath('./div/h3')[0].text_content().replace('#', '')
             name = councillor.xpath('.//p/text()')[0].encode('latin-1').decode('utf-8')
             name = name.replace('M. ', '').replace('Mme ', '').strip()
             phone = councillor.xpath('.//p/text()')[1].split(':')[1].strip().replace(' ', '-')
