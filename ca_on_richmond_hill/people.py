@@ -35,9 +35,10 @@ class RichmondHillPersonScraper(CanadianScraper):
             info = page.xpath('//table[@cellpadding>0]/tbody/tr/td[last()]|//table[not(@cellpadding)]/tbody/tr/td[last()]')
             info = info[0].text_content().replace(' - office:', ':')
 
-            address = re.findall(r'(?<=Town of Richmond Hill).*(?=Telephone)', info)[0]
+            address = re.findall(r'(?<=Town of Richmond Hill)(.*(?=Telephone:)|(?=Telephone))', info)[0]
             address = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
-            phone = re.findall(r'(?<=Telephone:) (.*)(?=Fax)', info)[0].replace('(', '').replace(') ', '-').replace(', ext. ', ' x')
+            # I expected to be able to do '(.*)(?=\sTelephone|Telephone|Fax)', but nope.
+            phone = re.findall(r'(?<=Telephone:) ((.*) (?=Telephone)|(.*)(?=Telephone)|(.*)(?=Fax))', info)[0][0].replace('(', '').replace(') ', '-').replace(', ext. ', ' x')
             fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)', info)[0].replace(' ', '').replace('(', '').replace(')', '-')
             email = self.get_email(page)
 
