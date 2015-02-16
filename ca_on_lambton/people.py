@@ -13,9 +13,12 @@ class LambtonPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="WebPartWPQ1"]/table/tbody/tr[1]')
+        # Tableception here, first tr is left column, second the right column
+        councillors_left = page.xpath('//div[@id="content"]/table/tr/td[1]/table/tr')
+        councillors_right = page.xpath('//div[@id="content"]/table/tr/td[2]/table/tr')
+        councillors = councillors_left + councillors_right
         for councillor in councillors:
-            node = councillor.xpath('.//td[1]//strong//strong//strong//strong') or councillor.xpath('.//td[1]//strong')
+            node = councillor.xpath('.//tr[1]')
             text = node[0].text_content()
             if 'Deputy Warden' in text:
                 role = 'Deputy Warden'
@@ -34,18 +37,19 @@ class LambtonPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
-            p.image = councillor.xpath('.//td[1]//img/@src')[0]
+            p.image = councillor.xpath('.//img/@src')[0]
 
-            info = councillor.xpath('.//td[2]')[0].text_content()
-            residential_info = re.findall(r'(?<=Residence:)(.*)(?=Municipal Office:)', info, flags=re.DOTALL)[0]
+            info = councillor.xpath('./td/table/tr[2]/td')[0].text_content()
+            residential_info = re.search('(?<=Residence:)(.*(?=Business Phone)|.*(?=Municipal Office))', info, flags=re.DOTALL).group(0)
             self.get_contacts(residential_info, 'residence', p)
-            municipal_info = re.findall(r'(?<=Municipal Office:)(.*)', info, flags=re.DOTALL)[0]
+            municipal_info = re.findall(r'(?<=Municipal Office:)(.*(?=Bio)|.*)', info, flags=re.DOTALL)[0]
             self.get_contacts(municipal_info, 'legislature', p)
 
             yield p
 
     def get_contacts(self, text, note, councillor):
-        address = text.split('Telephone')[0]
+        address = text.split('Telephone')[0].split('Phone')[0]
+        councillor.add_contact('address', address, note)
         text = text.replace(address, '').split(':')
         for i, contact in enumerate(text):
             if i == 0:
@@ -62,5 +66,3 @@ class LambtonPersonScraper(CanadianScraper):
                 councillor.add_contact('voice', contact, note)
             elif 'email' in contact_type:
                 councillor.add_contact('email', contact)
-            else:
-                councillor.add_contact(contact_type, contact, note)
