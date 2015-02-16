@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 
-COUNCIL_PAGE = 'http://www.burlington.ca/en/services-for-you/Council-Members-and-Wards.asp?_mid_=754'
+COUNCIL_PAGE = 'http://www.burlington.ca/en/services-for-you/Council-Members-and-Wards.asp'
 
 
 class BurlingtonPersonScraper(CanadianScraper):
