@@ -22,7 +22,7 @@ _contact_details['items']['properties']['type']['enum'] = [
 _contact_details['items']['properties']['value']['blank'] = False
 _contact_details['items']['properties']['value']['conditionalPattern'] = [
     (r'\A([A-Za-z0-9._-]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
-     lambda x: x['type'] == 'email'),
+        lambda x: x['type'] == 'email'),
     (r'\A1 \d{3} \d{3}-\d{4}(?: x\d+)?\Z',
         lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
     # Ends with a locality, a province or territory code, and an optional postal code.
