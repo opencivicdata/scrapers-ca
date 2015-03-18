@@ -195,6 +195,8 @@ class CSVScraper(CanadianScraper):
                 name = '%s %s' % (row['First name'], row['Last name'])
                 province = row.get('Province')
 
+                if district == 'City':
+                    district = 'Burlington'
                 if role == 'Town Councillor':  # Oakville
                     role = 'Councillor'
                 elif role == 'Councillor' and Division.get(self.jurisdiction.division_id)._type == 'cd':
@@ -220,15 +222,16 @@ class CSVScraper(CanadianScraper):
                 p.add_source(self.csv_url)
                 if row.get('Gender'):
                     p.gender = row['Gender']
-                if row['Photo URL']:
+                if row.get('Photo URL'):
                     p.image = row['Photo URL']
-                if row['Source URL']:
+                if row.get('Source URL'):
                     p.add_source(row['Source URL'])
                 if row.get('Website'):
                     p.add_link(row['Website'])
                 p.add_contact('email', row['Email'])
                 p.add_contact('address', '\n'.join(lines), 'legislature')
-                p.add_contact('voice', row['Phone'], 'legislature')
+                if row.get('Phone'):
+                    p.add_contact('voice', row['Phone'], 'legislature')
                 if row.get('Fax'):
                     p.add_contact('fax', row['Fax'], 'legislature')
                 if row.get('Cell'):
