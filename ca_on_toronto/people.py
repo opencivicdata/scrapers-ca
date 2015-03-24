@@ -14,7 +14,7 @@ class TorontoPersonScraper(CanadianScraper):
         a = page.xpath('//a[contains(text(),"Mayor")]')[0]
         yield self.scrape_mayor(a.attrib['href'])
 
-        for a in page.xpath('//a[contains(text(),"Councillor")]'):
+        for a in page.xpath('//table//a[contains(text(),"Councillor")]'):
             page = self.lxmlize(a.attrib['href'])
             h1 = page.xpath('//h1//text()')[0]
             if 'Council seat is vacant' not in h1:
