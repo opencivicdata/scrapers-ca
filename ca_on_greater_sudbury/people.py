@@ -14,7 +14,7 @@ class GreaterSudburyPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="navMultilevel"]//a')
+        councillors = page.xpath('//div[@id="navMultilevel"]//a[contains(text(), "Ward")]')
         for councillor in councillors:
             if '-' not in councillor.text_content():
                 break
