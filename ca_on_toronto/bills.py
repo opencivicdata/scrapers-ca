@@ -99,7 +99,7 @@ class TorontoBillScraper(CanadianScraper):
                             'bill': row['Agenda Item #'],
                             'legislative_session': term.text,
                             'start_date': start_date,
-                            'motion_text': row['Vote Description'], # @todo not motion text
+                            'motion_text': row['Vote Description'],  # @todo not motion text
                             'classification': row['Motion Type'],
                             'result': result_map[result_match.group(1)],
                             'counts': (int(result_match.group(2)), int(result_match.group(3)))

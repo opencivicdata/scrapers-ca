@@ -15,8 +15,8 @@ class Vancouver(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Vancouver')
         for i in range(10):
-              organization.add_post(role='Councillor', label='Vancouver (seat %d)' % (i + 1))
+            organization.add_post(role='Councillor', label='Vancouver (seat %d)' % (i + 1))
         for i in range(7):
-              organization.add_post(role='Commissioner', label='Vancouver (seat %d)' % (i + 1))
+            organization.add_post(role='Commissioner', label='Vancouver (seat %d)' % (i + 1))
 
         yield organization
