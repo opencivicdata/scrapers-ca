@@ -195,8 +195,6 @@ class CSVScraper(CanadianScraper):
                 name = '%s %s' % (row['First name'], row['Last name'])
                 province = row.get('Province')
 
-                if district == 'City':
-                    district = 'Burlington'
                 if role == 'Town Councillor':  # Oakville
                     role = 'Councillor'
                 elif role == 'Councillor' and Division.get(self.jurisdiction.division_id)._type == 'cd':
