@@ -3,7 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.ville.pointe-claire.qc.ca/en/city-hall-administration/your-council/municipal-council.html'
+COUNCIL_PAGE = 'http://www.ville.pointe-claire.qc.ca/en/municipal-council.html'
 
 
 class PointeClairePersonScraper(CanadianScraper):
