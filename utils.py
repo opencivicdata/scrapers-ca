@@ -139,11 +139,11 @@ class CanadianScraper(Scraper):
     def lxmlize(self, url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
         self.user_agent = user_agent
 
-        entry = self.urlopen(url)
-        if encoding != 'utf-8' or not isinstance(entry, text_type):
-            entry = entry.encode(encoding)
+        response = self.get(url)
+        if encoding:
+            response.encoding = encoding
 
-        page = lxml.html.fromstring(entry)
+        page = lxml.html.fromstring(response.text)
         meta = page.xpath('//meta[@http-equiv="refresh"]')
         if meta:
             _, url = meta[0].attrib['content'].split('=', 1)
