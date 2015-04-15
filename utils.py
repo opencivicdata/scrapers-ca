@@ -140,7 +140,7 @@ class CanadianScraper(Scraper):
         self.user_agent = user_agent
 
         response = self.get(url)
-        if encoding:
+        if encoding != 'utf-8':
             response.encoding = encoding
 
         page = lxml.html.fromstring(response.text)
