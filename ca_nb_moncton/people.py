@@ -12,7 +12,7 @@ class MonctonPersonScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(int)
 
-        page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
+        page = self.lxmlize(COUNCIL_PAGE)
 
         mayor_url = page.xpath('//li[@id="pageid193"]//a/@href')[0]
         yield self.scrape_mayor(mayor_url)
