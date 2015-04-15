@@ -7,7 +7,7 @@ COUNCIL_PAGE = 'http://www.ville.terrebonne.qc.ca/ville_conseil-municipal_consei
 class TerrebonnePersonScraper(CanadianScraper):
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, encoding='latin-1')
+        page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
         for councillor_elem in page.xpath('//div[@class="protraits"]')[0]:
             district, name, phone = councillor_elem.xpath('./span/text()')[:3]
             photo_url = councillor_elem[0].attrib['src']

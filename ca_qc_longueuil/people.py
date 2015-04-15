@@ -9,7 +9,7 @@ COUNCIL_PAGE = 'http://www.longueuil.ca/fr/conseil-ville'
 class LongueuilPersonScraper(CanadianScraper):
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, 'latin-1')
+        page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
 
         yield self.scrape_mayor(page)
 

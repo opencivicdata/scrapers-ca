@@ -136,11 +136,11 @@ class CanadianScraper(Scraper):
         if error:
             raise Exception('No phone pattern')
 
-    def lxmlize(self, url, encoding='utf-8', user_agent=requests.utils.default_user_agent()):
+    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent()):
         self.user_agent = user_agent
 
         response = self.get(url)
-        if encoding != 'utf-8':
+        if encoding:
             response.encoding = encoding
 
         page = lxml.html.fromstring(response.text)
