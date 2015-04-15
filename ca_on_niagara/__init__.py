@@ -24,8 +24,8 @@ class Niagara(CanadianJurisdiction):
             'Pelham': 1,
             'Port Colborne': 1,
             'St. Catharines': 6,
-            'Thorold': 0,
-            'Wainfleet': 1,
+            'Thorold': 1,  # can be 0
+            'Wainfleet': 0,  # can be 1
             'Welland': 2,
             'West Lincoln': 0,
         }
