@@ -32,11 +32,14 @@ class TroisRivieresPersonScraper(CanadianScraper):
 
             url = urljoin(COUNCIL_PAGE, url_rel)
             page = self.lxmlize(url)
-            name = page.xpath('//h2//text()')[0]
-            email = self.get_email(page)
-            photo_url = page.xpath('//img/@src[contains(., "Conseiller")]')[0]
-            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
-                       image=photo_url)
-            p.add_source(url)
-            p.add_contact('email', email)
-            yield p
+
+            name_content = page.xpath('//h2//text()')
+            if name_content:
+                name = name_content[0]
+                email = self.get_email(page)
+                photo_url = page.xpath('//img/@src[contains(., "Conseiller")]')[0]
+                p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
+                           image=photo_url)
+                p.add_source(url)
+                p.add_contact('email', email)
+                yield p
