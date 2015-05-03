@@ -3,7 +3,6 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = "https://www.saskatoon.ca/city-hall/mayor-city-councillors/city-councillors"
 MAYOR_PAGE = "https://www.saskatoon.ca/city-hall/mayor-city-councillors/mayors-office"
-EMAIL_URL = "https://www.saskatoon.ca/city-hall/mayor-city-councillors/contact-your-city-councillor"
 
 
 class SaskatoonPersonScraper(CanadianScraper):
@@ -12,11 +11,6 @@ class SaskatoonPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         yield self.scrape_mayor()
-
-        email_page = self.lxmlize(EMAIL_URL)
-        c_options = email_page.xpath('//select[@id="edit-submitted-councillor"]/option[contains(text(), "Ward")]')
-        email_dict = dict((opt.text.split(' - ')[0], opt.attrib['value']) for
-                          opt in c_options)
 
         councillors = page.xpath('//h2[@class="landing-block-title"]/a')[:-1]
         for councillor in councillors:
@@ -28,11 +22,7 @@ class SaskatoonPersonScraper(CanadianScraper):
 
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
             p.add_source(COUNCIL_PAGE)
-            p.add_source(EMAIL_URL)
             p.add_source(url)
-
-            if district in email_dict:
-                p.add_contact('email', email_dict[district])
 
             contacts = page.xpath('//aside[@class="page-sidebar"]/div[1]/p')
             for contact in contacts[:-1]:
