@@ -23,6 +23,8 @@ class CapeBretonPersonScraper(CanadianScraper):
                 contact_nodes = councillor.xpath('.//td[4]/p/text()')
 
             phone = contact_nodes[0].split(':')[1].replace("(", '').replace(") ", '-')
+            if 'or' in phone: # phone and cell
+                phone = phone.split('or')[0]
 
             # email protected by js
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
@@ -37,7 +39,7 @@ class CapeBretonPersonScraper(CanadianScraper):
             councillor_url = councillor.xpath('.//a/@href')[0]
             p.add_source(councillor_url)
             page = self.lxmlize(councillor_url)
-            p.image = page.xpath('//img[contains(@alt, "{0}")]/@src'.format(name))[0]
+            p.image = page.xpath('//img[contains(@title, "{0}")]/@src'.format(name))[0]
             yield p
 
         mayorpage = self.lxmlize(MAYOR_PAGE)
