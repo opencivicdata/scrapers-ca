@@ -29,7 +29,7 @@ class CharlottetownPersonScraper(CanadianScraper):
 
         for span in root.xpath('//span[@class="Title"]')[1:]:
             spantext = ' '.join(span.xpath('.//text()'))
-            header = spantext.replace('\u2013', '-').split('-')
+            header = spantext.replace('\u2013', '-').replace('\x96', '-').split('-')
             if len(header) != 2:
                 continue
 
