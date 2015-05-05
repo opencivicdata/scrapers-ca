@@ -63,8 +63,10 @@ class StCatharinesPersonScraper(CanadianScraper):
 
         phone = phone.split('or')[0].replace('Phone:', '')
         address = address.replace('Mail:', '')
+        email = 'mayorsadministration@stcatharines.ca'
 
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
+        p.add_contact('email', email, 'legislature')
 
         return p
