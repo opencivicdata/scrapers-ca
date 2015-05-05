@@ -40,7 +40,9 @@ class ChathamKentPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
 
-                p.image = page.xpath('//div[@class="pageContent"]//img/@src')[0]
+                image = page.xpath('//div[@class="pageContent"]//img/@src')[0]
+                if 'council_logo' not in image:
+                    p.image = image
 
                 address = page.xpath('//div[@id="div_contact_us_top_container_S"]//div[@class="div_contact_us_content_address"]')[0].text_content()
                 p.add_contact('address', address, 'legislature')
