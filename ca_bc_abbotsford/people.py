@@ -2,8 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.abbotsford.ca/city_hall/mayor_and_council/city_council.htm'
-
-MAYOR_URL = 'http://www.abbotsford.ca/mayorcouncil/city_council/mayor_banman.htm'
+CONTACT_PAGE = 'http://www.abbotsford.ca/contact_us.htm'
 
 
 class AbbotsfordPersonScraper(CanadianScraper):
@@ -11,9 +10,13 @@ class AbbotsfordPersonScraper(CanadianScraper):
     def scrape(self):
         councillor_seat_number = 1
 
-        page = self.lxmlize(COUNCIL_PAGE)
-        for link in page.xpath('//div[@id="main-content"]//li/a'):
-            text = link.text_content()
+        coun_page = self.lxmlize(COUNCIL_PAGE)
+        contact_page = self.lxmlize(CONTACT_PAGE)
+        councillors = coun_page.xpath('//div[@id="main-content"]//h3')
+        contact_data = contact_page.xpath('//p[contains(./strong/text(), "Mayor & Council")]/following-sibling::table[1]//tr')[1:]
+
+        for councillor, contact in zip(councillors, contact_data):
+            text = councillor.text_content()
             if text.startswith('Councill'):
                 role = 'Councillor'
                 district = 'Abbotsford (seat %d)' % councillor_seat_number
@@ -22,7 +25,15 @@ class AbbotsfordPersonScraper(CanadianScraper):
                 role = 'Mayor'
                 district = 'Abbotsford'
             name = text.split(' ', 1)[1]
+            image = councillor.xpath('./img/@src')[0]
+            phone = contact.xpath('./td[2]/text()')[0]
+            fax = contact.xpath('./td[3]/text()')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
+            p.add_source(CONTACT_PAGE)
+            p.image = image
+            p.add_contact('voice', phone, 'legislature')
+            p.add_contact('fax', fax, 'legislature')
+
             yield p
