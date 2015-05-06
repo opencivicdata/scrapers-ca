@@ -43,7 +43,4 @@ class MiltonPersonScraper(CanadianScraper):
                 number = number.replace(', ext ', ' x').strip()
                 p.add_contact(num_type, number, num_type)
 
-            email = self.get_email(councillor, error=False)
-            if email:
-                p.add_contact('email', email)
             yield p
