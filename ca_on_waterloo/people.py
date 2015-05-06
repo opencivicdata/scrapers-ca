@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
-
+import re
 COUNCIL_PAGE = 'http://www.waterloo.ca/en/government/aboutmayorandcouncil.asp'
 
 
@@ -25,12 +25,20 @@ class WaterlooPersonScraper(CanadianScraper):
 
         # Eliminate the "Coun." From the page title and get name and district
         name, district = page.xpath('//h1//text()')[0][6:].split('-')
+        email = self.get_email(page.xpath('//div[@id="printAreaContent"]')[0])
 
-        # Email is handled as a form and no contact information is listed
+        contact_data = page.xpath('//div[@id="printAreaContent"]/p//text()')[2]
+        infos = re.split(':? ', contact_data, 3)
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
+        p.add_contact('email', email)
+
+        p.add_contact('voice', infos[-1], 'legislature')
+        if len(infos) > 3:
+            p.add_contact('cell', infos[1].split('\xa0')[1], 'legislature')
+
         p.image = self.photo_url(page)
 
         return p
