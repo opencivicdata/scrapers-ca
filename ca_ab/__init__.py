@@ -9,6 +9,7 @@ class Alberta(CanadianJurisdiction):
     name = 'Legislative Assembly of Alberta'
     url = 'https://www.assembly.ab.ca'
     parties = [
+        {'name': 'Alberta Party'},
         {'name': 'Alberta Liberal Party'},
         {'name': 'Alberta New Democratic Party'},
         {'name': 'Progressive Conservative Association of Alberta'},

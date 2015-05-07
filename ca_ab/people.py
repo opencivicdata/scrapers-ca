@@ -8,6 +8,7 @@ import lxml.html
 COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 
 PARTIES = {
+    'AB': 'Alberta Party',
     'AL': 'Alberta Liberal Party',
     'ND': 'Alberta New Democratic Party',
     'PC': 'Progressive Conservative Association of Alberta',
