@@ -23,7 +23,7 @@ class CapeBretonPersonScraper(CanadianScraper):
                 contact_nodes = councillor.xpath('.//td[4]/p/text()')
 
             phone = contact_nodes[0].split(':')[1].replace("(", '').replace(") ", '-')
-            if 'or' in phone: # phone and cell
+            if 'or' in phone:  # phone and cell
                 phone = phone.split('or')[0]
 
             # email protected by js
