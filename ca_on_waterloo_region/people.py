@@ -35,13 +35,15 @@ class WaterlooPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 councillor_url = councillor.attrib['href']
                 p.add_source(councillor_url)
-                email, phone, photo_url = self.councillor_data(councillor_url)
+                email, phone, photo_url, twitter = self.councillor_data(councillor_url)
                 if email:
                     p.add_contact('email', email)
                 if phone:
                     p.add_contact('voice', phone, 'legislature')
                 if photo_url:
                     p.image = photo_url
+                if twitter:
+                    p.add_link(twitter)
                 yield p
 
         chairpage = self.lxmlize(CHAIR_URL)
@@ -62,20 +64,17 @@ class WaterlooPersonScraper(CanadianScraper):
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
-        contact = page.xpath('//div[@class="contactBodyContactInfoContactModuleV2"]')
-        email = None
-        phone = None
-        photo_url = None
-        if contact:
-            contact = contact[0]
-            if not contact.text_content().strip():
-                param = contact.xpath('./@id')[0].replace('contactEntry_', '')
-                contact = self.lxmlize('http://www.regionofwaterloo.ca/en/ContactModule/services/GetContactHTML.ashx?param=%s' % param)
-            email = self.get_email(contact, error=False)
-            phone = self.get_phone(contact, area_codes=[226, 519])
+        contact_node = page.xpath('//div[@id="contentIntleft"]')[0]
+        email = contact_node.xpath('./p[contains(./text(), "Email")]/a/text()')[0]
+        phone = self.get_phone(contact_node, [519])
+        twitter_elem = contact_node.xpath('./p[contains(./text(), "Twitter")]/a/@href')
+        twitter = None
+
+        if twitter_elem:
+            twitter = twitter_elem[0]
 
         photo_elem = page.xpath('//div[@id="contentIntleft"]//img[1]/@src')
         if photo_elem:
             photo_url_src = photo_elem[0]
             photo_url = urljoin(url, photo_url_src)
-        return email, phone, photo_url
+        return email, phone, photo_url, twitter
