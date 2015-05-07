@@ -67,6 +67,6 @@ class StCatharinesPersonScraper(CanadianScraper):
 
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
-        p.add_contact('email', email, 'legislature')
+        p.add_contact('email', email)
 
         return p
