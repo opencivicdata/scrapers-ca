@@ -136,6 +136,13 @@ class CanadianScraper(Scraper):
         if error:
             raise Exception('No phone pattern')
 
+    def get_link(self, node, substring, *, error=True):
+        match = node.xpath('.//a[contains(@href,"{}")]/@href'.format(substring))
+        if match:
+            return match[0]
+        if error:
+            raise Exception('No link matching {}'.format(substring))
+
     def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent()):
         self.user_agent = user_agent
 
@@ -143,7 +150,7 @@ class CanadianScraper(Scraper):
         if encoding:
             response.encoding = encoding
 
-        page = lxml.html.fromstring(response.text)
+        page = lxml.html.fromstring(response.text.replace('"www.facebook.com/', '"https://www.facebook.com/')) # XXX ca_candidates
         meta = page.xpath('//meta[@http-equiv="refresh"]')
         if meta:
             _, url = meta[0].attrib['content'].split('=', 1)
