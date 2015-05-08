@@ -50,8 +50,9 @@ organization_links = deepcopy(_links)
 person_contact_details = deepcopy(_contact_details)
 person_links = deepcopy(_links)
 
-social_re = re.compile(r'(?:facebook|linkedin|twitter|youtube)\.com')
+social_re = re.compile(r'(?:facebook|instagram|linkedin|twitter|youtube)\.com')
 facebook_re = re.compile(r'facebook\.com')
+instagram_re = re.compile(r'instagram\.com')
 linkedin_re = re.compile(r'linkedin\.com')
 twitter_re = re.compile(r'twitter\.com')
 youtube_re = re.compile(r'youtube\.com')
@@ -91,6 +92,8 @@ person_links['maxMatchingItems'] = [
      'Person has many non-social media links'),
     (1, lambda x: facebook_re.search(x['url']),
         'Person has many facebook.com links'),
+    (1, lambda x: instagram_re.search(x['url']),
+        'Person has many instagram.com links'),
     (1, lambda x: linkedin_re.search(x['url']),
         'Person has many linkedin.com links'),
     (1, lambda x: twitter_re.search(x['url']),
