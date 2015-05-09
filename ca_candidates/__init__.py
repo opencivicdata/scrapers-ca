@@ -4,6 +4,8 @@ from utils import CanadianJurisdiction
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
+import re
+
 
 class CanadaCandidates(CanadianJurisdiction):
     classification = 'legislature'
@@ -28,6 +30,8 @@ class CanadaCandidates(CanadianJurisdiction):
 
         for division in Division.get(self.division_id).children('ed'):
             lower.add_post(role='candidate', label=division.name)
+            # Parties can't spell.
+            lower.add_post(role='candidate', label=re.search(r'\d+\Z', division.id).group(0))
 
         yield upper
         yield lower
