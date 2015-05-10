@@ -175,73 +175,70 @@ def tidy():
         jurisdiction_ids = set()
 
         if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'disabled') and not module_name.endswith('_candidates'):
-            module = importlib.import_module(module_name)
-            for obj in module.__dict__.values():
-                division_id = getattr(obj, 'division_id', None)
-                if division_id:  # We've found the module.
-                    jurisdiction_id = '{}/{}'.format(division_id.replace('ocd-division', 'ocd-jurisdiction'), getattr(obj, 'classification', 'legislature'))
+            metadata = module_name_to_metadata(module_name)
 
-                    # Ensure division_id is unique.
-                    if division_id in division_ids:
-                        raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
-                    else:
-                        division_ids.add(division_id)
+            # Ensure division_id is unique.
+            division_id = metadata['division_id']
+            if division_id in division_ids:
+                raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
+            else:
+                division_ids.add(division_id)
 
-                    # Ensure jurisdiction_id is unique.
-                    if jurisdiction_id in jurisdiction_ids:
-                        raise Exception('%s: Duplicate jurisdiction_id %s' % (module_name, jurisdiction_id))
-                    else:
-                        jurisdiction_ids.add(jurisdiction_id)
+            # Ensure jurisdiction_id is unique.
+            jurisdiction_id = metadata['jurisdiction_id']
+            if jurisdiction_id in jurisdiction_ids:
+                raise Exception('%s: Duplicate jurisdiction_id %s' % (module_name, jurisdiction_id))
+            else:
+                jurisdiction_ids.add(jurisdiction_id)
 
-                    expected = get_definition(division_id, bool(module_name.endswith('_municipalities')))
+            expected = get_definition(division_id, bool(module_name.endswith('_municipalities')))
 
-                    class_name = obj.__name__
-                    division_name = getattr(obj, 'division_name', None)
-                    name = getattr(obj, 'name', None)
-                    url = getattr(obj, 'url', None)
-                    classification = getattr(obj, 'classification', None)
+            # Ensure presence of url and styles of address.
+            if not member_styles.get(division_id):
+                print('%-60s No member style of address: %s' % (module_name, division_id))
+            if not leader_styles.get(division_id):
+                print('%-60s No leader style of address: %s' % (module_name, division_id))
+            url = metadata['url']
+            if url and not expected['url']:
+                parsed = urlsplit(url)
+                if parsed.scheme not in ('http', 'https') or parsed.path or parsed.query or parsed.fragment:
+                    print('%-60s Check: %s' % (module_name, url))
 
-                    # Ensure presence of url and styles of address.
-                    if not member_styles.get(division_id):
-                        print('%-60s No member style of address: %s' % (module_name, division_id))
-                    if not leader_styles.get(division_id):
-                        print('%-60s No leader style of address: %s' % (module_name, division_id))
-                    if url and not expected['url']:
-                        parsed = urlsplit(url)
-                        if parsed.scheme not in ('http', 'https') or parsed.path or parsed.query or parsed.fragment:
-                            print('%-60s Check: %s' % (module_name, url))
+            # Warn if the name or classification may be incorrect.
+            name = metadata['name']
+            if name != expected['name']:
+                print('%-60s Expected %s' % (name, expected['name']))
+            classification = metadata['classification']
+            if classification != 'legislature':
+                print('%-60s Expected legislature' % classification)
 
-                    # Warn if the name or classification may be incorrect.
-                    if name != expected['name']:
-                        print('%-60s Expected %s' % (name, expected['name']))
-                    if classification != 'legislature':
-                        print('%-60s Expected legislature' % classification)
-
-                    # Name the classes correctly.
-                    if class_name != expected['class_name']:
-                        # @note This for-loop will only run if the class name in __init__.py is incorrect.
-                        for basename in os.listdir(module_name):
-                            if basename.endswith('.py'):
-                                with codecs.open(os.path.join(module_name, basename), 'r', 'utf8') as f:
-                                    content = f.read()
-                                with codecs.open(os.path.join(module_name, basename), 'w', 'utf8') as f:
-                                    content = content.replace(class_name + '(', expected['class_name'] + '(')
-                                    f.write(content)
-
-                    # Set the division_name and url appropriately.
-                    if division_name != expected['division_name'] or (expected['url'] and url != expected['url']):
-                        with codecs.open(os.path.join(module_name, '__init__.py'), 'r', 'utf8') as f:
+            # Name the classes correctly.
+            class_name = metadata['class_name']
+            if class_name != expected['class_name']:
+                # @note This for-loop will only run if the class name in __init__.py is incorrect.
+                for basename in os.listdir(module_name):
+                    if basename.endswith('.py'):
+                        with codecs.open(os.path.join(module_name, basename), 'r', 'utf8') as f:
                             content = f.read()
-                        with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
-                            if division_name != expected['division_name']:
-                                content = content.replace('= ' + division_name, '= ' + expected['division_name'])
-                            if expected['url'] and url != expected['url']:
-                                content = content.replace(url, expected['url'])
+                        with codecs.open(os.path.join(module_name, basename), 'w', 'utf8') as f:
+                            content = content.replace(class_name + '(', expected['class_name'] + '(')
                             f.write(content)
 
-                    # Name the module correctly.
-                    if module_name != expected['module_name']:
-                        print('%-60s Expected %s' % (module_name, expected['module_name']))
+            # Set the division_name and url appropriately.
+            division_name = metadata['division_name']
+            if division_name != expected['division_name'] or (expected['url'] and url != expected['url']):
+                with codecs.open(os.path.join(module_name, '__init__.py'), 'r', 'utf8') as f:
+                    content = f.read()
+                with codecs.open(os.path.join(module_name, '__init__.py'), 'w', 'utf8') as f:
+                    if division_name != expected['division_name']:
+                        content = content.replace('= ' + division_name, '= ' + expected['division_name'])
+                    if expected['url'] and url != expected['url']:
+                        content = content.replace(url, expected['url'])
+                    f.write(content)
+
+            # Name the module correctly.
+            if module_name != expected['module_name']:
+                print('%-60s Expected %s' % (module_name, expected['module_name']))
 
 
 @task
@@ -253,3 +250,22 @@ def sources():
                 content = f.read()
                 if content.count('add_source') < content.count('lxmlize') - 1:  # exclude the import
                     print('Add source? %s' % path)
+
+
+def module_name_to_metadata(module_name):
+    """
+    Copied from `reports.utils`.
+    """
+    module = importlib.import_module(module_name)
+    for obj in module.__dict__.values():
+        division_id = getattr(obj, 'division_id', None)
+        if division_id:
+            return {
+                'class_name': obj.__name__,
+                'division_id': division_id,
+                'division_name': getattr(obj, 'division_name', None),
+                'name': getattr(obj, 'name', None),
+                'url': getattr(obj, 'url', None),
+                'classification': getattr(obj, 'classification', None),
+                'jurisdiction_id': '{}/{}'.format(division_id.replace('ocd-division', 'ocd-jurisdiction'), getattr(obj, 'classification', 'legislature')),
+            }

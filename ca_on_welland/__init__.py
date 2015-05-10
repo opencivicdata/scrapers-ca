@@ -8,7 +8,7 @@ class Welland(CanadianJurisdiction):
     division_id = 'ocd-division/country:ca/csd:3526032'
     division_name = 'Welland'
     name = 'Welland City Council'
-    url = 'http://www.welland.ca'
+    url = 'http://www.city.welland.on.ca'
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
