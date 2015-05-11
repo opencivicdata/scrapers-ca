@@ -4,6 +4,8 @@ from utils import CanadianJurisdiction
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
+from datetime import datetime
+
 
 class Canada(CanadianJurisdiction):
     classification = 'legislature'
@@ -30,7 +32,8 @@ class Canada(CanadianJurisdiction):
         lower = Organization('House of Commons', classification='lower', parent_id=parliament)
 
         for division in Division.get(self.division_id).children('ed'):
-            lower.add_post(role='MP', label=division.name)
+            if not division.attrs.get('validFrom') or division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
+                lower.add_post(role='MP', label=division.name)
 
         yield upper
         yield lower
