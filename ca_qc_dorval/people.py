@@ -12,7 +12,14 @@ class DorvalPersonScraper(CanadianScraper):
         councillors = page.xpath('//td/p[2]')
         for councillor in councillors:
             info = councillor.xpath('./strong/text()')
+
+            # In case the name spans on 2 lines
+            if len(info) > 2 and 'Councillor' not in info[1]:
+                role, district = info[2].split('-')
+                info = [info[0] + info[1], role, district]
+
             name = info[0]
+
             if 'Vacant' not in info:
                 if len(info) < 3:
                     district = 'Dorval'
