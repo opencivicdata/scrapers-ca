@@ -29,9 +29,9 @@ class CanadaCandidates(CanadianJurisdiction):
         lower = Organization('House of Commons', classification='lower', parent_id=parliament)
 
         for division in Division.get(self.division_id).children('ed'):
-            lower.add_post(role='candidate', label=division.name)
-            # Parties can't spell.
-            lower.add_post(role='candidate', label=re.search(r'\d+\Z', division.id).group(0))
+            if division.attrs['validFrom'] == '2015-10-19':
+                lower.add_post(role='candidate', label=division.name)
+                lower.add_post(role='candidate', label=re.search(r'(\d+)-2013\Z', division.id).group(1))  # parties can't spell
 
         yield upper
         yield lower
