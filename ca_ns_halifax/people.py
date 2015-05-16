@@ -28,7 +28,7 @@ class HalifaxPersonScraper(CanadianScraper):
             contact_page = self.lxmlize(contact_page_url)
             contact_node = contact_page.xpath('//div[./h1[contains(text(), "Contact")]]')[0]
 
-            phone = self.get_phone(contact_node, [902])
+            phone = self.get_phone(contact_node, area_codes=[902])
             email = self.get_email(contact_node)
 
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')

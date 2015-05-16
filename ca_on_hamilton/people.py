@@ -22,7 +22,7 @@ class HamiltonPersonScraper(CanadianScraper):
         name, district = page.xpath('//span[@id="_hpcPageTitle"]//text()')[0].split('-')
 
         info_node = page.xpath('//span[@id="RadEditorPlaceHolderControl0"]')[0]
-        phone = self.get_phone(info_node, [289, 365, 905])
+        phone = self.get_phone(info_node, area_codes=[289, 365, 905])
         email = self.get_email(info_node)
         photo_url = info_node.xpath('string(.//img/@src)')  # can be empty
 

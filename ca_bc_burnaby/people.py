@@ -20,7 +20,7 @@ class BurnabyPersonScraper(CanadianScraper):
             contact_node = page.xpath('//div[@id="column-right"]//div[contains(., "Contact")]')
             if contact_node:
                 email = self.get_email(contact_node[0])
-                phone = self.get_phone(contact_node[0], [604, 778])
+                phone = self.get_phone(contact_node[0], area_codes=[604, 778])
 
             if role == 'Mayor':
                 district = 'Burnaby'

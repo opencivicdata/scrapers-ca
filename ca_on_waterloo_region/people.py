@@ -66,7 +66,7 @@ class WaterlooPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
         contact_node = page.xpath('//div[@id="contentIntleft"]')[0]
         email = contact_node.xpath('./p[contains(./text(), "Email")]/a/text()')[0]
-        phone = self.get_phone(contact_node, [519])
+        phone = self.get_phone(contact_node, area_codes=[519])
         twitter_elem = contact_node.xpath('./p[contains(./text(), "Twitter")]/a/@href')
         twitter = None
 

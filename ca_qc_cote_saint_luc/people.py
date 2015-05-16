@@ -24,7 +24,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
             name = info_cell.xpath('.//span//text()[contains(., "Councillor")]')[0][len('Councillor '):]
             district = info_cell.xpath('.//p[contains(text(), "District")]//text()')[0]
             email = self.get_email(info_cell)
-            phone = self.get_phone(info_cell, [438, 514])
+            phone = self.get_phone(info_cell, area_codes=[438, 514])
             img_url_rel = img_cell.xpath('.//img/@src')[0]
             img_url = urljoin(councillors_url, img_url_rel)
 

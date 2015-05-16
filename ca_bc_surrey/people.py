@@ -26,7 +26,7 @@ class SurreyPersonScraper(CanadianScraper):
 
             contact_node = councillor_page.xpath('//div[@class="content"]//*[contains(text(), "Contact")]')
             if contact_node:
-                phone = self.get_phone(councillor_page, [604])
+                phone = self.get_phone(councillor_page, area_codes=[604])
                 email = self.get_email(councillor_page)
                 p.add_contact('voice', phone, 'legislature')
                 p.add_contact('email', email)

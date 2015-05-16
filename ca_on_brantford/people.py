@@ -36,7 +36,7 @@ class BrantfordPersonScraper(CanadianScraper):
             content = page.xpath('//div[@id="centre_content"]')[0]
             email = self.get_email(content)
             p.add_contact('email', email)
-            p.add_contact('voice', self.get_phone(content, [226, 519]), 'legislature')
+            p.add_contact('voice', self.get_phone(content, area_codes=[226, 519]), 'legislature')
 
             p.image = page.xpath('string(//div[@id="centre_content"]//img/@src)')  # can be empty
 

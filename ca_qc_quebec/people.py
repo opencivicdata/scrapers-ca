@@ -39,6 +39,6 @@ class QuebecPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.image = councillor.xpath('./p//img/@src')[0]
 
-            phone = self.get_phone(councillor, [418])
+            phone = self.get_phone(councillor, area_codes=[418])
             p.add_contact('voice', phone, 'legislature')
             yield p

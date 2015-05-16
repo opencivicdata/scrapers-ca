@@ -29,7 +29,7 @@ class KingstonPersonScraper(CanadianScraper):
         district = contact_node.xpath('./text()[2]')[0]
         district_id = district.split(':')[0].replace('District', 'Ward')  # TODO: don't reject name?
         email = self.get_email(contact_node)
-        phone = self.get_phone(contact_node, [343, 613])
+        phone = self.get_phone(contact_node, area_codes=[343, 613])
         photo_url_rel = page.xpath('.//img[@class="innerimage"]/@src')[0]
         photo_url = urljoin(url, photo_url_rel)
 
