@@ -11,5 +11,6 @@ class NewBrunswick(CanadianJurisdiction):
     parties = [
         {'name': 'Progressive Conservative Party of New Brunswick'},
         {'name': 'New Brunswick Liberal Association'},
-        {'name': 'Independent}'},
+        {'name': 'Independent'},
+        {'name': 'Green Party'},
     ]
