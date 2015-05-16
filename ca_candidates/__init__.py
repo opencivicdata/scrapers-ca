@@ -8,7 +8,7 @@ import re
 
 
 class CanadaCandidates(CanadianJurisdiction):
-    classification = 'government'
+    classification = 'executive'  # just to avoid clash
     division_id = 'ocd-division/country:ca'
     division_name = 'Canada'
     name = 'Parliament of Canada'
