@@ -119,7 +119,7 @@ class CanadianScraper(Scraper):
         elif error:
             raise Exception('No email node in %s' % etree.tostring(node))
 
-    def get_phone(self, node, area_codes, *, error=True):
+    def get_phone(self, node, *, area_codes=[], error=True):
 
         """
         Don't use if multiple telephone numbers are present, e.g. voice and fax.
@@ -129,8 +129,13 @@ class CanadianScraper(Scraper):
         match = node.xpath('.//a[contains(@href,"tel:")]')
         if match:
             return match[0].attrib['href'].replace('tel:', '')
-        for area_code in area_codes:
-            match = re.search(r'(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)' % area_code, node.text_content())
+        if area_codes:
+            for area_code in area_codes:
+                match = re.search(r'(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)' % area_code, node.text_content())
+                if match:
+                    return match.group(1)
+        else:
+            match = re.search(r'(?:\A|\D)(\(?\d{3}\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)', node.text_content())
             if match:
                 return match.group(1)
         if error:
