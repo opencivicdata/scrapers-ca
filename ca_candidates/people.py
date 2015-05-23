@@ -305,4 +305,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         for substring in ('facebook.com', 'instagram.com', 'twitter.com', 'youtube.com'):
             link = self.get_link(node, substring, error=False)
             if link:
+                if link[:3] == 'ttp':
+                    link = 'h' + link
                 p.add_link(link)
