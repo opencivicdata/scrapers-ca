@@ -231,16 +231,18 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 yield p
 
         url = 'http://www.greenparty.ca/en/candidates'
-        for node in self.lxmlize(url).xpath('//div[@class="candidate-card"]'):
-            name = node.xpath('./div[@class="candidate-name"]//text()')[0]
-            district = node.xpath('./@data-target')[0][5:]  # node.xpath('./div[@class="riding-name"]//text()')[0]
+        for node in self.lxmlize(url).xpath('//div[contains(@class,"candidate-card")]'):
+            name = node.xpath('.//div[@class="candidate-name"]//text()')[0]
+            district = node.xpath('.//@data-target')[0][5:]  # node.xpath('.//div[@class="riding-name"]//text()')[0]
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
-            p.image = node.xpath('./img[@typeof="foaf:Image"]/@src')[0]  # print quality also available
+            p.image = node.xpath('.//img[@typeof="foaf:Image"]/@src')[0]  # print quality also available
 
             p.add_contact('email', self.get_email(node))
 
-            p.add_link(node.xpath('.//div[@class="margin-bottom-gutter"]/a[contains(@href,"http")]/@href')[0])
+            link = node.xpath('.//div[@class="margin-bottom-gutter"]/a[contains(@href,"http")]/@href')
+            if link:
+                p.add_link(link[0])
             self.add_links(p, node)
 
             p.add_source(url)
