@@ -26,8 +26,10 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
             if ext_infos:  # councillor pages might return errors
                 email, phone, photo_url = ext_infos
                 p.image = photo_url
-                p.add_contact('email', email)
-                p.add_contact('voice', phone, 'legislature')
+                if email:
+                    p.add_contact('email', email)
+                if phone:
+                    p.add_contact('voice', phone, 'legislature')
             yield p
 
     def scrape_extended_info(self, url):
@@ -36,6 +38,9 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
             main = root.cssselect('#content table')[0]
             photo_url = main.cssselect('img')[0].get('src')
             contact_cell = main.cssselect('td:contains("Contact information")')[0]
-            phone = re.search(r'(?:Telephone|Tel|Phone):(.+?)\n', contact_cell.text_content()).group(1)
-            email = self.get_email(contact_cell)
+            phone = None
+            phone_s = re.search(r'(?:Telephone|Tel|Phone):(.+?)\n', contact_cell.text_content())
+            if phone_s:
+                phone = phone_s.group(1)
+            email = self.get_email(contact_cell, error=False)
             return email, phone, photo_url
