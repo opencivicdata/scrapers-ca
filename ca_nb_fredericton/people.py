@@ -13,6 +13,9 @@ class FrederictonPersonScraper(CanadianScraper):
 
         councillors = page.xpath('//table/tbody/tr/td')
         for councillor in councillors:
+            if 'Remembering' in councillor.text_content():
+                continue
+
             text = councillor.xpath('.//strong/text()')[0]
             name = text.split(',')[0].replace('Name:', '').strip()
             if 'Mayor' in text and 'Deputy Mayor' not in text:
@@ -28,10 +31,10 @@ class FrederictonPersonScraper(CanadianScraper):
 
             p.image = councillor.xpath('.//img/@src')[0]
 
-            address = re.findall(r'(?<=Address:).*(?=Home:)', councillor.text_content())[0].strip()
+            address = re.findall(r'(?<=Address:).*(?=Home:|Cell:)', councillor.text_content())[0].strip()
             p.add_contact('address', address, 'legislature')
 
-            phone = re.findall(r'(?<=Home: \().*(?=Fax:)', councillor.text_content())[0]
+            phone = re.findall(r'(?<=Home: \(|Cell: \().*(?=Fax:)', councillor.text_content())[0]
             phone = re.sub(r'(?<=[0-9])(\)\D{1,2})(?=[0-9])', '-', phone).split()[0]
             p.add_contact('voice', phone, 'residence')
 
