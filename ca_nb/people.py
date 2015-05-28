@@ -27,6 +27,10 @@ class NewBrunswickPersonScraper(CanadianScraper):
         councillor_table = page.xpath('//table[@id="customers"]')[0]
         for row in councillor_table.xpath('.//tr')[1:]:
             riding, table_name, email = (' '.join(td.text_content().split()) for td in row[1:])
+
+            if 'Vacant' in table_name:
+                continue
+
             riding_fixed = riding.replace('\x97', '-')
             name_with_status, party_abbr = re.match(
                 r'(.+) \((.+)\)', table_name).groups()
