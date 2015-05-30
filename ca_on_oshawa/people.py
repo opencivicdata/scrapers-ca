@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.oshawa.ca/cit_hall/council4.asp'
+COUNCIL_PAGE = 'http://www.oshawa.ca/city-hall/city-council-members.asp'
 
 
 class OshawaPersonScraper(CanadianScraper):
@@ -11,17 +11,20 @@ class OshawaPersonScraper(CanadianScraper):
         regional_councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        mayor_table, council_table = page.xpath('//table')[:2]
-        rep_cells = mayor_table.xpath('.//td[1]') + council_table.xpath('.//td[h4]')
-        for rep_cell in rep_cells:
-            name, role, phone = [elem.text for elem in rep_cell if elem.text]
-            if name.startswith('Mayor '):
-                name = name[len('Mayor '):]
-            email = self.get_email(rep_cell)
+        councillors = page.xpath('//table//td')
 
-            photo_node = rep_cell.xpath('./following-sibling::td[1]/img/@src')
-            if photo_node:
-                photo_url = photo_node[0]
+        for councillor in councillors:
+            if councillor.xpath('./p[1]/text()'):
+                name, role = councillor.xpath('./p[1]/text()')
+            else:
+                name, role = councillor.xpath('./span[1]/text()')
+
+            role = role.strip()
+
+            # Line break misplaced…
+            if name == 'Rick KerrCity':
+                name = 'Rick Kerr'
+                role = 'City Councillor'
 
             if role == 'City Councillor':
                 role = 'Councillor'
@@ -34,8 +37,10 @@ class OshawaPersonScraper(CanadianScraper):
             else:
                 district = 'Oshawa'
 
+            photo_url = councillor.xpath('./p/img/@src')[0]
+            phone = self.get_phone(councillor.xpath('./p[contains(.//text(), "Phone")]')[0], area_codes=[905])
+
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_contact('voice', phone, 'legislature')
-            p.add_contact('email', email)
             yield p
