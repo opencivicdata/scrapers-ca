@@ -3,6 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.brampton.ca/en/City-Hall/CouncilOffice/Pages/Welcome.aspx'
 MAYOR_PAGE = 'http://www.brampton.ca/EN/City-Hall/Office-Mayor/Pages/Welcome.aspx'
+MAYOR_CONTACT_PAGE = 'http://www.brampton.ca/EN/City-Hall/Mayor-Office/Pages/Contact-Us.aspx'
 
 
 class BramptonPersonScraper(CanadianScraper):
@@ -32,19 +33,27 @@ class BramptonPersonScraper(CanadianScraper):
         return p
 
     def mayor_data(self, page):
-        # Strip the word "mayor" from the beginning of the photo lavel
-        name = page.xpath('string(//img[@class="mayorsPic"]/@alt)').replace('Mayor ', '')  # can be empty
-        photo_url = page.xpath('string(//img[@class="mayorsPic"]/@src)')  # can be empty
+        name = page.xpath('//div[@id="MayorsName"]/h1')[0].text_content().split('Mayor')[1]
 
-        if 'Linda Jeffrey' in page.xpath('string(//div[@class="rich-text-Content"])'):  # allow string()
-            name = 'Linda Jeffrey'
+        contact_page = self.lxmlize(MAYOR_CONTACT_PAGE)
+        address = ' '.join(contact_page.xpath('//div[@class="col-sm-6"][1]/p/text()'))
+        contact_info = contact_page.xpath('//div[@class="col-sm-6"][2]/p')[0]
+        email = self.get_email(contact_info)
 
-        email = self.get_email(page, '//div[@class="rich-text-Content"]')
-        phone = page.xpath('//div[@class="rich-text-Content"]//text()[contains(.,"905.")]')[0]
+        phone = contact_info.xpath('./text()')[0]
+        fax = contact_info.xpath('./text()')[1]
+
+        twitter = contact_info.xpath('./a[contains(@href, "twitter")]/@href')[0]
+        facebook = contact_info.xpath('./a[contains(@href, "facebook")]/@href')[0]
 
         p = Person(primary_org='legislature', name=name, district='Brampton', role='Mayor')
         p.add_source(MAYOR_PAGE)
+        p.add_source(MAYOR_CONTACT_PAGE)
+        p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
+        p.add_contact('fax', fax, 'legislature')
         p.add_contact('email', email)
-        p.image = photo_url
+        p.add_link(twitter)
+        p.add_link(facebook)
+
         return p
