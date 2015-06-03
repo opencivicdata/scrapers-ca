@@ -208,6 +208,9 @@ DIVISIONS_M_DASH = (  # none of the districts use m-dashes
 class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape(self):
+        representatives = json.loads(self.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').text)['objects']
+        incumbents = [representative['name'] for representative in representatives]
+
         # http://www.blocquebecois.org/equipe-2015/circonscriptions/candidats/
 
         url = 'http://www.conservative.ca/wp-content/themes/conservative/scripts/candidates.json'
@@ -227,6 +230,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
                 p.image = 'http://www.conservative.ca/media/candidates/{}'.format(node['image'])
 
+                if name in incumbents:
+                    p.extras['incumbent'] = True
+
                 p.add_source(url)
                 yield p
 
@@ -244,6 +250,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if link:
                 p.add_link(link[0])
             self.add_links(p, node)
+
+            if name in incumbents:
+                p.extras['incumbent'] = True
 
             p.add_source(url)
             yield p
@@ -275,6 +284,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 p.add_link(link[0])
 
+            if name in incumbents:
+                p.extras['incumbent'] = True
+
             p.add_source(url)
             yield p
 
@@ -299,6 +311,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             facebook = node.xpath('.//a[@class="candidate-facebook"]/@href')
             if facebook:
                 p.add_link(facebook[0])
+
+            if name in incumbents:
+                p.extras['incumbent'] = True
 
             p.add_source(url)
             yield p
