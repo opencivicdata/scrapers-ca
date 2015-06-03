@@ -274,15 +274,17 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             self.add_links(p, node)
 
             if link:
-                sidebar = self.lxmlize(link[0]).xpath('//div[@id="sidebar"]')[0]
-                email = self.get_email(sidebar, error=False)
-                if email:
-                    p.add_contact('email', email)
-                voice = self.get_phone(sidebar, error=False)
-                if voice:
-                    p.add_contact('voice', voice, 'legislature')
+                # http://susanwatt.liberal.ca/ redirects to http://www.liberal.ca/
+                sidebar = self.lxmlize(link[0]).xpath('//div[@id="sidebar"]')
+                if sidebar:
+                    email = self.get_email(sidebar[0], error=False)
+                    if email:
+                        p.add_contact('email', email)
+                    voice = self.get_phone(sidebar[0], error=False)
+                    if voice:
+                        p.add_contact('voice', voice, 'legislature')
 
-                p.add_link(link[0])
+                    p.add_link(link[0])
 
             if name in incumbents:
                 p.extras['incumbent'] = True
