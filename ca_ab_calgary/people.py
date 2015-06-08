@@ -4,7 +4,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.calgary.ca/General/Pages/Calgary-City-Council.aspx'
-MAYOR_PAGE = 'http://calgarymayor.ca/forms_all.php'
+MAYOR_PAGE = 'http://calgarymayor.ca/contact'
 
 
 class CalgaryPersonScraper(CanadianScraper):
@@ -22,12 +22,12 @@ class CalgaryPersonScraper(CanadianScraper):
         photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('.//img/@src')[0])
         name = mayor_node.xpath('.//a//text()')[0]
         mayor_page = self.lxmlize(MAYOR_PAGE)
-        email = self.get_email(mayor_page)
-        phone = mayor_page.xpath('//strong[contains(., "Phone")]/following-sibling::text()')[0]
+        # Email behind mailhide
+        # email = self.get_email(mayor_page)
+        phone = self.get_phone(mayor_page, area_codes=[403])
         m = Person(primary_org='legislature', name=name, district='Calgary', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         m.add_source(MAYOR_PAGE)
-        m.add_contact('email', email)
         m.add_contact('voice', phone, 'legislature')
         m.image = photo_url
         yield m
