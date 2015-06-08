@@ -155,7 +155,7 @@ class CanadianScraper(Scraper):
         if encoding:
             response.encoding = encoding
 
-        page = lxml.html.fromstring(response.text.replace('"www.facebook.com/', '"https://www.facebook.com/')) # XXX ca_candidates
+        page = lxml.html.fromstring(response.text.replace('"www.facebook.com/', '"https://www.facebook.com/'))  # XXX ca_candidates
         meta = page.xpath('//meta[@http-equiv="refresh"]')
         if meta:
             _, url = meta[0].attrib['content'].split('=', 1)
@@ -199,7 +199,7 @@ class CSVScraper(CanadianScraper):
         reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
         for row in reader:
             if any(row.values()):
-                if row['Last name'] == 'Vacant':
+                if row['Last name'] == 'Vacant' or row['First name'] == 'Vacant':
                     continue
 
                 district = row.get('District name') or self.jurisdiction.division_name
@@ -207,8 +207,12 @@ class CSVScraper(CanadianScraper):
                 name = '%s %s' % (row['First name'], row['Last name'])
                 province = row.get('Province')
 
-                if role == 'Town Councillor':  # Oakville
+                # Oakville
+                role = role.replace('Councilor', 'Councillor')
+                if role == 'Town Councillor':
                     role = 'Councillor'
+                elif 'Regional' in role:
+                    role = 'Regional Councillor'
 
                 if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
                     seat_numbers[role][district] += 1
@@ -303,9 +307,10 @@ class CanadianPerson(Person):
 
     def __setattr__(self, name, value):
         if name == 'gender':
-            if value == 'M':
+            value = value.lower()
+            if value == 'm':
                 value = 'male'
-            elif value == 'F':
+            elif value == 'f':
                 value = 'female'
         super(CanadianPerson, self).__setattr__(name, value)
 
