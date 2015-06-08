@@ -29,13 +29,11 @@ class WellesleyPersonScraper(CanadianScraper):
             addr = '\n'.join(addr_str.strip() for addr_str in
                              councillor_elem.xpath('./p/text()')).strip()
             phone = councillor_elem.xpath('.//a[starts-with(@href, "tel:")]//text()')[0]
-            email = self.get_email(councillor_elem)
             image = councillor_elem.xpath('.//img[1]/@src')[0]
             p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
             p.add_source(COUNCIL_PAGE)
             p.add_contact('address', addr, 'legislature')
             p.add_contact('voice', phone, 'legislature')
-            p.add_contact('email', email)
             yield p
 
     def scrape_mayor(self, mayor_node):
