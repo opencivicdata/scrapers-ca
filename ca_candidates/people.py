@@ -212,6 +212,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         incumbents = [representative['name'] for representative in representatives]
 
         # http://www.blocquebecois.org/equipe-2015/circonscriptions/candidats/
+        # http://www.forcesetdemocratie.org/l-equipe/candidats.html
+        # https://www.libertarian.ca/candidates/
 
         url = 'http://www.conservative.ca/wp-content/themes/conservative/scripts/candidates.json'
         for nodes in json.loads(self.get(url).text).values():
