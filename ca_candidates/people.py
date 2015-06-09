@@ -314,7 +314,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p.add_link(twitter[0])
             facebook = node.xpath('.//a[@class="candidate-facebook"]/@href')
             if facebook:
+                if 'www.ndp.ca' in facebook[0]:
+                    facebook[0] = facebook[0].replace('www.ndp.ca', 'www.facebook.com')
                 p.add_link(facebook[0])
+            link = node.xpath('.//a[@class="candidate-website"]/@href')
+            if link:
+                p.add_link(link[0])
 
             if name in incumbents:
                 p.extras['incumbent'] = True
