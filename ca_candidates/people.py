@@ -272,7 +272,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             elif node.xpath('./@class[contains(.,"candidate-male")]'):
                 p.gender = 'male'
 
-            link = node.xpath('.//a[contains(@href,".liberal.ca")][not(contains(@href,"www.liberal.ca/candidates"))]/@href')
+            link = node.xpath('.//a[substring(@href, string-length(@href)-11)=".liberal.ca/"]/@href')
             self.add_links(p, node)
 
             if link:
