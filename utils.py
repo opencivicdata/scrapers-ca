@@ -211,7 +211,7 @@ class CSVScraper(CanadianScraper):
                 role = role.replace('Councilor', 'Councillor')
                 if role == 'Town Councillor':
                     role = 'Councillor'
-                elif 'Regional' in role:
+                elif 'Regional and Town' in role:
                     role = 'Regional Councillor'
 
                 if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
