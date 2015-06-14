@@ -240,7 +240,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         url = 'http://www.greenparty.ca/en/candidates'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"candidate-card")]'):
-            name = node.xpath('.//div[@class="candidate-name"]//text()')[0]
+            name = node.xpath('.//div[@class="candidate-name"]//text()')[0].replace('Mark & Jan', 'Mark')
             district = node.xpath('.//@data-target')[0][5:]  # node.xpath('.//div[@class="riding-name"]//text()')[0]
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
