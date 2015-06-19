@@ -41,49 +41,48 @@ class MarkhamPersonScraper(CanadianScraper):
             image = councillor.xpath('.//img/@src')[0]
             url = councillor.xpath('.//a/@href')[0]
 
-            if 'Ward 4' in district or 'seat 3' in district or 'Ward 6' in district:
-                yield self.scrape_4(name, url, image)
-                continue
-
-            page = self.lxmlize(url)
+            address, phone, email, links = self.get_contact(url)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
             p.image = image
-            contact = page.xpath('//div[@class="microSiteLinksWrapper"]')[1]
-
-            if contact.xpath('.//p/text()'):
-                infos = contact.xpath('.//p/text()')
-            else:
-                infos = contact.xpath('.//div/text()')
-
-            address = re.sub(r'\s{2,}', ' ', ' '.join(infos[:2])).strip()
-            phone = infos[2].split(':')[1].strip()
-            email = self.get_email(contact)
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('email', email)
 
-            get_links(p, contact)
+            for link in links:
+                p.add_link(link)
+
             yield p
 
-    def scrape_4(self, name, url, image):
+    def get_contact(self, url):
         page = self.lxmlize(url)
 
-        p = Person(primary_org='legislature', name=name, district='Ward 4', role='Councillor')
-        p.add_source(url)
-        p.add_source(COUNCIL_PAGE)
+        node = page.xpath('//div[@class="microSiteLinksWrapper"]')
+        links = []
 
-        address = re.sub(r'\s{2,}', ' ', ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p[1]/text()')))
-        phone = page.xpath('//div[@class="interiorContentWrapper"]/p[2]/text()')[0].split(':')[1].strip()
-        email = self.get_email(page)
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('email', email)
-        p.image = image
-        return p
+        if node:
+            contact_node = node[1]
+
+            if contact_node.xpath('.//p/text()'):
+                contact = contact_node.xpath('.//p/text()')
+                links = get_links(contact_node.xpath('.//p')[0])
+            else:
+                contact = contact_node.xpath('./div/text()')
+                links = get_links(contact_node.xpath('./div')[0])
+
+            address = ' '.join(contact[:2])
+            phone = contact[2].split(':')[1].strip()
+        else:
+            contact_node = page.xpath('//div[@class="interiorContentWrapper"]')[0]
+            address = ' '.join(contact_node.xpath('./p[1]/text()'))
+            phone = contact_node.xpath('./p[2]/text()')[0].split(':')[1].strip()
+
+        email = self.get_email(contact_node)
+
+        return address, phone, email, links
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
@@ -102,9 +101,11 @@ class MarkhamPersonScraper(CanadianScraper):
         yield p
 
 
-def get_links(councillor, div):
-    links = div.xpath('.//a')
+def get_links(elem):
+    links_r = []
+    links = elem.xpath('.//a')
     for link in links:
         link = link.attrib['href']
         if 'mailto:' not in link and 'http://www.markham.ca' not in link:
-            councillor.add_link(link)
+            links_r.append(link)
+    return links_r
