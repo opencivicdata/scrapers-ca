@@ -220,6 +220,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             for node in nodes:
                 if node['district'] == 'Whitby-Oshawa':  # @todo not sure what it became
                     continue
+                elif node['district'] == 'Vancouver-Granville':
+                    node['district'] = 'Vancouver Granville'
 
                 name = node['candidate']
                 district = node['district'].replace(' – ', '—').replace(' ', ' ').strip()  # n-dash, m-dash, non-breaking space
