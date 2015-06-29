@@ -6,10 +6,10 @@ import re
 COUNCIL_PAGE = 'http://nslegislature.ca/index.php/people/members/'
 
 PARTIES = {
-    'Liberal': 'Nova Scotia Liberal Party',
+    'LIB': 'Nova Scotia Liberal Party',
     'PC': 'Progressive Conservative Association of Nova Scotia',
     'NDP': 'Nova Scotia New Democratic Party',
-    'Ind': 'Independent'
+    'IND': 'Independent'
 }
 
 
