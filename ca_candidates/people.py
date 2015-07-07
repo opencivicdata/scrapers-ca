@@ -4,12 +4,16 @@ from utils import CanadianScraper, CanadianPerson as Person
 import json
 import re
 
+import requests
+import scrapelib
+
 DIVISIONS_MAP = {
     # Typo.
     "North Okangan-Shuswap": "North Okanagan—Shuswap",
     # Hyphens.
     "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen
     "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen
+    "Vancouver-Granville": "Vancouver Granville",
     # Spaces.
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
     "Perth Wellington": "Perth—Wellington",
@@ -266,6 +270,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             name = node.xpath('./h2/text()')[0]
             district = node.xpath('./@data-riding-riding_id')[0]  # node.xpath('./@data-riding-name')[0]
 
+            # @note Remove once corrected.
+            if name == 'Nicola Di lorio':
+                name = 'Nicola Di Iorio'
+
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Liberal')
             p.image = node.xpath('./@data-photo-url')[0][4:-1]
 
@@ -278,17 +286,20 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             self.add_links(p, node)
 
             if link:
-                # http://susanwatt.liberal.ca/ redirects to http://www.liberal.ca/
-                sidebar = self.lxmlize(link[0]).xpath('//div[@id="sidebar"]')
-                if sidebar:
-                    email = self.get_email(sidebar[0], error=False)
-                    if email:
-                        p.add_contact('email', email)
-                    voice = self.get_phone(sidebar[0], error=False)
-                    if voice:
-                        p.add_contact('voice', voice, 'legislature')
+                try:
+                    # http://susanwatt.liberal.ca/ redirects to http://www.liberal.ca/
+                    sidebar = self.lxmlize(link[0]).xpath('//div[@id="sidebar"]')
+                    if sidebar:
+                        email = self.get_email(sidebar[0], error=False)
+                        if email:
+                            p.add_contact('email', email)
+                        voice = self.get_phone(sidebar[0], error=False)
+                        if voice:
+                            p.add_contact('voice', voice, 'legislature')
 
-                    p.add_link(link[0])
+                        p.add_link(link[0])
+                except (requests.exceptions.ConnectionError, scrapelib.HTTPError):
+                    pass
 
             if name in incumbents:
                 p.extras['incumbent'] = True
