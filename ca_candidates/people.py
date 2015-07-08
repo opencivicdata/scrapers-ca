@@ -6,13 +6,18 @@ import re
 
 import requests
 import scrapelib
+from six.moves.urllib.parse import parse_qs, urlparse
 
 DIVISIONS_MAP = {
     # Typo.
+    "Courtney-Alberni": "Courtenay—Alberni",
     "North Okangan-Shuswap": "North Okanagan—Shuswap",
+    "Richmond": "Richmond Centre",
+    "North Burnaby—Seymour": "Burnaby North—Seymour",
     # Hyphens.
     "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen
     "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen
+    "Edmonton-Manning": "Edmonton Manning",
     "Vancouver-Granville": "Vancouver Granville",
     # Spaces.
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
@@ -216,8 +221,50 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         incumbents = [representative['name'] for representative in representatives]
 
         # http://www.blocquebecois.org/equipe-2015/circonscriptions/candidats/
-        # http://www.forcesetdemocratie.org/l-equipe/candidats.html
         # https://www.libertarian.ca/candidates/
+
+        url = 'https://www.libertarian.ca/candidates/'
+        for node in self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]'):
+            name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')[0]
+            district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip() # hyphen, n-dash, n-dash, RTL mark
+
+            if district in DIVISIONS_MAP:
+                district = DIVISIONS_MAP[district]
+            elif district in DIVISIONS_M_DASH:
+                district = district.replace('-', '—')  # hyphen, m-dash
+
+            if district != 'TBD':
+                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Libertarian')
+
+                image = node.xpath('.//div[contains(@class,"tshowcase-box-photo")]//img/@src')[0]
+                if 'default.png' not in image:
+                    p.image = image
+
+                sidebar = self.lxmlize(node.xpath('.//a/@href')[0]).xpath('//div[@class="tshowcase-single-email"]')
+                if sidebar:
+                    p.add_contact('email', self.get_email(sidebar[0]))
+
+                self.add_links(p, node)
+
+                p.add_source(url)
+                yield p
+
+        url = 'http://www.forcesetdemocratie.org/l-equipe/candidats.html'
+        for node in self.lxmlize(url, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)').xpath('//ul[@class="liste-candidats"]/li'):
+            name = node.xpath('./h4/text()')[0]
+            district = node.xpath('./text()')[0]
+
+            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Forces et Démocratie')
+
+            image = node.xpath('.//img/@src')[0]
+            if 'forceetdemocratie1_-_F_-_couleur_-_HR.jpg' not in image:
+                p.image = image
+
+            p.add_link(node.xpath('./a/@href')[0])
+            self.add_links(p, node)
+
+            p.add_source(url)
+            yield p
 
         url = 'http://www.conservative.ca/wp-content/themes/conservative/scripts/candidates.json'
         for nodes in json.loads(self.get(url).text).values():
@@ -340,10 +387,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p.add_source(url)
             yield p
 
+
     def add_links(self, p, node):
         for substring in ('facebook.com', 'fb.com', 'instagram.com', 'linkedin.com', 'twitter.com', 'youtube.com'):
             link = self.get_link(node, substring, error=False)
             if link:
                 if link[:3] == 'ttp':
                     link = 'h' + link
+                elif 'facebook.com' in link and 'twitter.com' in link:
+                    link = parse_qs(urlparse(link).query)['u'][0]
                 p.add_link(link)

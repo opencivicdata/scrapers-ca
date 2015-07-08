@@ -16,8 +16,10 @@ class CanadaCandidates(CanadianJurisdiction):
     parties = [
         {'name': 'Bloc Québécois'},
         {'name': 'Conservative'},
+        {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},
         {'name': 'Liberal'},
+        {'name': 'Libertarian'},
         {'name': 'NDP'},
     ]
 
