@@ -250,21 +250,25 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 yield p
 
         url = 'http://www.forcesetdemocratie.org/l-equipe/candidats.html'
-        for node in self.lxmlize(url, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)').xpath('//ul[@class="liste-candidats"]/li'):
+        user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
+        for node in self.lxmlize(url, user_agent=user_agent).xpath('//ul[@class="liste-candidats"]/li'):
+            link = node.xpath('./a/@href')[0]
+
             name = node.xpath('./h4/text()')[0]
-            district = node.xpath('./text()')[0]
+            district = self.lxmlize(link, user_agent=user_agent).xpath('//span[@class="txt-vert"]/text()')
 
-            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Forces et Démocratie')
+            if district:
+                p = Person(primary_org='lower', name=name, district=district[0], role='candidate', party='Forces et Démocratie')
 
-            image = node.xpath('.//img/@src')[0]
-            if 'forceetdemocratie1_-_F_-_couleur_-_HR.jpg' not in image:
-                p.image = image
+                image = node.xpath('.//img/@src')[0]
+                if 'forceetdemocratie1_-_F_-_couleur_-_HR.jpg' not in image:
+                    p.image = image
 
-            p.add_link(node.xpath('./a/@href')[0])
-            self.add_links(p, node)
+                p.add_link(link)
+                self.add_links(p, node)
 
-            p.add_source(url)
-            yield p
+                p.add_source(url)
+                yield p
 
         url = 'http://www.conservative.ca/wp-content/themes/conservative/scripts/candidates.json'
         for nodes in json.loads(self.get(url).text).values():
