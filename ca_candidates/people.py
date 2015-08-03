@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import json
+import math
 import re
 
 import lxml.html
@@ -222,6 +223,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         self.incumbents = [representative['name'] for representative in representatives]
 
         # http://www.blocquebecois.org/equipe-2015/circonscriptions/candidats/
+        for p in self.scrape_bloc_quebecois():
+            yield p
         for p in self.scrape_conservative():
             yield p
         for p in self.scrape_forces_et_democratie():
@@ -235,11 +238,41 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         for p in self.scrape_ndp():
             yield p
 
+    def scrape_bloc_quebecois(self):
+        url = 'http://www.blocquebecois.org/equipe-2015/candidats/'
+
+        pages = math.ceil(int(re.search(r'\d+', self.lxmlize(url).xpath('//option[1]/text()')[0]).group(0)) / 10)
+
+        pattern = 'http://www.blocquebecois.org/equipe-2015/candidats/page/{}/'
+
+        for page in range(1, pages + 1):
+            for node in self.lxmlize(pattern.format(page)).xpath('//article'):
+                name = ' '.join(node.xpath('.//h2/text()'))
+                district = node.xpath('.//h1/text()')[0].replace('–', '—')  # n-dash, m-dash
+
+                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Bloc Québécois')
+
+                image = node.xpath('./div[@class="image"]/img/@src')
+                if image:
+                    p.image = image[0]
+
+                email = self.get_email(node, error=False)
+                if email:
+                    p.add_contact('email', email)
+
+                self.add_links(p, node)
+
+                if name in self.incumbents:
+                    p.extras['incumbent'] = True
+
+                p.add_source(url)
+                yield p
+
     def scrape_libertarian(self):
         url = 'https://www.libertarian.ca/candidates/'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]'):
             name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')[0]
-            district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip() # hyphen, n-dash, n-dash, RTL mark
+            district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip()  # hyphen, n-dash, n-dash, RTL mark
 
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
