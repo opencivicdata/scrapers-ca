@@ -222,7 +222,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         representatives = json.loads(self.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').text)['objects']
         self.incumbents = [representative['name'] for representative in representatives]
 
-        # http://www.blocquebecois.org/equipe-2015/circonscriptions/candidats/
         for p in self.scrape_bloc_quebecois():
             yield p
         for p in self.scrape_conservative():
@@ -382,7 +381,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_liberal(self):
         url = 'https://www.liberal.ca/candidates/'
-        for node in self.lxmlize(url).xpath('//ul[@id="candidates"]/li'):
+        cookies = {'YPF8827340282Jdskjhfiw_928937459182JAX666': json.loads(self.get('http://ipinfo.io/json').text)['ip']}
+        for node in self.lxmlize(url, cookies=cookies).xpath('//ul[@id="candidates"]/li'):
             name = node.xpath('./h2/text()')[0]
             district = node.xpath('./@data-riding-riding_id')[0]  # node.xpath('./@data-riding-name')[0]
 
@@ -404,7 +404,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if link:
                 try:
                     # http://susanwatt.liberal.ca/ redirects to http://www.liberal.ca/
-                    sidebar = self.lxmlize(link[0]).xpath('//div[@id="sidebar"]')
+                    sidebar = self.lxmlize(link[0], cookies=cookies).xpath('//div[@id="sidebar"]')
                     if sidebar:
                         email = self.get_email(sidebar[0], error=False)
                         if email:

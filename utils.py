@@ -148,10 +148,10 @@ class CanadianScraper(Scraper):
         if error:
             raise Exception('No link matching {}'.format(substring))
 
-    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent()):
+    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None):
         self.user_agent = user_agent
 
-        response = self.get(url)
+        response = self.get(url, cookies=cookies)
         if encoding:
             response.encoding = encoding
 
