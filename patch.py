@@ -50,7 +50,7 @@ organization_links = deepcopy(_links)
 person_contact_details = deepcopy(_contact_details)
 person_links = deepcopy(_links)
 
-social_re = re.compile(r'(?:facebook|fb|instagram|linkedin|twitter|youtube)\.com')
+social_re = re.compile(r'(?:facebook|fb|instagram|linkedin|twitter|youtube)\.com|conservative\.ca')  # XXX ca_candidates
 facebook_re = re.compile(r'facebook\.com')
 instagram_re = re.compile(r'instagram\.com')
 linkedin_re = re.compile(r'linkedin\.com')

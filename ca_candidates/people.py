@@ -4,6 +4,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 import json
 import re
 
+import lxml.html
 import requests
 import scrapelib
 from six.moves.urllib.parse import parse_qs, urlparse
@@ -218,11 +219,23 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape(self):
         representatives = json.loads(self.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').text)['objects']
-        incumbents = [representative['name'] for representative in representatives]
+        self.incumbents = [representative['name'] for representative in representatives]
 
         # http://www.blocquebecois.org/equipe-2015/circonscriptions/candidats/
-        # https://www.libertarian.ca/candidates/
+        for p in self.scrape_conservative():
+            yield p
+        for p in self.scrape_forces_et_democratie():
+            yield p
+        for p in self.scrape_green():
+            yield p
+        for p in self.scrape_liberal():
+            yield p
+        for p in self.scrape_libertarian():
+            yield p
+        for p in self.scrape_ndp():
+            yield p
 
+    def scrape_libertarian(self):
         url = 'https://www.libertarian.ca/candidates/'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]'):
             name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')[0]
@@ -249,6 +262,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p.add_source(url)
                 yield p
 
+    def scrape_forces_et_democratie(self):
         url = 'http://www.forcesetdemocratie.org/l-equipe/candidats.html'
         user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
         for node in self.lxmlize(url, user_agent=user_agent).xpath('//ul[@class="liste-candidats"]/li'):
@@ -267,34 +281,51 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p.add_link(link)
                 self.add_links(p, node)
 
-                p.add_source(url)
-                yield p
-
-        url = 'http://www.conservative.ca/wp-content/themes/conservative/scripts/candidates.json'
-        for nodes in json.loads(self.get(url).text).values():
-            for node in nodes:
-                if node['district'] == 'Whitby-Oshawa':  # @todo not sure what it became
-                    continue
-                elif node['district'] == 'Vancouver-Granville':
-                    node['district'] = 'Vancouver Granville'
-
-                name = node['candidate']
-                district = node['district'].replace(' – ', '—').replace(' ', ' ').strip()  # n-dash, m-dash, non-breaking space
-
-                if district in DIVISIONS_MAP:
-                    district = DIVISIONS_MAP[district]
-                elif district in DIVISIONS_M_DASH:
-                    district = district.replace('-', '—')  # hyphen, m-dash
-
-                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
-                p.image = 'http://www.conservative.ca/media/candidates/{}'.format(node['image'])
-
-                if name in incumbents:
+                if name in self.incumbents:
                     p.extras['incumbent'] = True
 
                 p.add_source(url)
                 yield p
 
+    def scrape_conservative(self):
+        url = 'http://www.conservative.ca/?member=candidates'
+        doc = lxml.html.fromstring(json.loads(self.get(url).text))
+        for node in doc.xpath('//a[contains(@class,"team-list-person-block")]'):
+            name = node.attrib['data-name'].strip()
+            if node.attrib['data-title'] == 'Honor---Mercier':
+                district = 'Honoré-Mercier'
+            else:
+                district = node.attrib['data-title'].replace('--', '—').replace(' – ', '—').replace('–', '—').replace(' ', ' ').strip()  # m-dash, n-dash, m-dash, n-dash, m-dash, non-breaking space
+
+            if district in DIVISIONS_MAP:
+                district = DIVISIONS_MAP[district]
+            elif district in DIVISIONS_M_DASH:
+                district = district.replace('-', '—')  # hyphen, m-dash
+
+            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
+            if node.attrib['data-image'] != '/media/team/no-image.jpg':
+                p.image = 'http://www.conservative.ca{}'.format(node.attrib['data-image'])
+
+            if name in self.incumbents:
+                p.extras['incumbent'] = True
+
+            if node.attrib['data-facebook'] != 'cpcpcc':
+                p.add_link('https://www.facebook.com/{}'.format(node.attrib['data-facebook']))
+            if node.attrib['data-twitter'] != 'cpc_hq':
+                p.add_link('https://twitter.com/{}'.format(node.attrib['data-twitter']))
+            if node.attrib['data-website'] != 'www.conservative.ca':
+                p.add_link('http://{}'.format(node.attrib['data-website']))
+
+            p.add_link('http://www.conservative.ca/team/{}'.format(node.attrib['data-learn']))
+
+            email = node.attrib['data-email']
+            if email and email != 'info@conservative.ca':
+                p.add_contact('email', email)
+
+            p.add_source(url)
+            yield p
+
+    def scrape_green(self):
         url = 'http://www.greenparty.ca/en/candidates'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"candidate-card")]'):
             name = node.xpath('.//div[@class="candidate-name"]//text()')[0].replace('Mark & Jan', 'Mark')
@@ -310,12 +341,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p.add_link(link[0])
             self.add_links(p, node)
 
-            if name in incumbents:
+            if name in self.incumbents:
                 p.extras['incumbent'] = True
 
             p.add_source(url)
             yield p
 
+    def scrape_liberal(self):
         url = 'https://www.liberal.ca/candidates/'
         for node in self.lxmlize(url).xpath('//ul[@id="candidates"]/li'):
             name = node.xpath('./h2/text()')[0]
@@ -352,12 +384,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 except (requests.exceptions.ConnectionError, scrapelib.HTTPError):
                     pass
 
-            if name in incumbents:
+            if name in self.incumbents:
                 p.extras['incumbent'] = True
 
             p.add_source(url)
             yield p
 
+    def scrape_ndp(self):
         url = 'http://www.ndp.ca/candidates'
         for node in self.lxmlize(url, encoding='utf-8').xpath('//div[@class="candidate-holder"]'):
             image = node.xpath('.//div/@data-img')[0]
@@ -385,7 +418,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if link:
                 p.add_link(link[0])
 
-            if name in incumbents:
+            if name in self.incumbents:
                 p.extras['incumbent'] = True
 
             p.add_source(url)
