@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
+import csv
 import json
 import math
 import re
@@ -8,7 +9,9 @@ import re
 import lxml.html
 import requests
 import scrapelib
-from six.moves.urllib.parse import parse_qs, urlparse
+from pupa.utils import get_pseudo_id
+from six import StringIO
+from six.moves.urllib.parse import parse_qs, urlparse, urlsplit
 
 DIVISIONS_MAP = {
     # Typo.
@@ -219,23 +222,113 @@ DIVISIONS_M_DASH = (  # none of the districts use m-dashes
 class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape(self):
+        # Get the candidates' incumbency.
         representatives = json.loads(self.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').text)['objects']
         self.incumbents = [representative['name'] for representative in representatives]
 
-        for p in self.scrape_bloc_quebecois():
-            yield p
-        for p in self.scrape_conservative():
-            yield p
-        for p in self.scrape_forces_et_democratie():
-            yield p
-        for p in self.scrape_green():
-            yield p
-        for p in self.scrape_liberal():
-            yield p
-        for p in self.scrape_libertarian():
-            yield p
-        for p in self.scrape_ndp():
-            yield p
+        # Needed to map the crowdsourced data.
+        boundaries = json.loads(self.get('http://represent.opennorth.ca/boundaries/federal-electoral-districts-next-election/?limit=0').text)['objects']
+        boundary_name_to_boundary_id = {boundary['name'].lower(): boundary['external_id'] for boundary in boundaries}
+
+        # Get the crowdsourced data.
+        crowdsourcing = {}
+        response = self.get('https://docs.google.com/spreadsheets/d/1BNjqBeGDsjiGOtsAu2K5qR1a3Cq_1sfVoDH7mE1WFU0/export?gid=368528247&format=csv')
+        response.encoding = 'utf-8'
+        for row in csv.DictReader(StringIO(response.text)):
+            # Uniquely identify the candidate.
+            boundary_id = row['District Number']
+            if not re.search(r'\A\d{5}\Z', boundary_id):
+                boundary_id = boundary_name_to_boundary_id[boundary_id.lower()]
+            key = '{}/{}/{}'.format(row['Party name'], boundary_id, row['Name'])
+
+            if crowdsourcing.get(key):
+                self.warning('{} already exists'.format(key))
+            else:
+                if row['Gender'] == 'M':
+                    gender = 'male'
+                elif row['Gender'] == 'F':
+                    gender = 'female'
+                else:
+                    gender = None
+
+                crowdsourcing[key] = {
+                    'gender': gender,
+                    'email': row['Email'],
+                    'image': row['Photo URL'],
+                    'facebook': row['Facebook'],
+                    'instagram': row['Instagram'],
+                    'twitter': row['Twitter'],
+                    'linkedin': row['LinkedIn'],
+                    'youtube': row['YouTube'],
+                    # XXX Website, Office type, Address, Phone, Fax
+                }
+
+        # Steps to merge the crowdsource data.
+        steps = {
+            'gender': (
+                lambda p: p.gender,
+                lambda p, value: setattr(p, 'gender', value),
+            ),
+            'email': (
+                lambda p: next((contact_detail['value'] for contact_detail in p._related[0].contact_details), None),
+                lambda p, value: p.add_contact('email', value),
+            ),
+            'image': (
+                lambda p: p.image,
+                lambda p, value: setattr(p, 'image', value),
+            ),
+        }
+
+        # Scrape each party separately.
+        for method in ['bloc_quebecois', 'conservative', 'forces_et_democratie', 'green', 'liberal', 'libertarian', 'ndp']:
+            for p in getattr(self, 'scrape_{}'.format(method))():
+                # Uniquely identify the candidate.
+                boundary_id = get_pseudo_id(p._related[0].post_id)['label']
+                if not re.search(r'\A\d{5}\Z', boundary_id):
+                    boundary_id = boundary_name_to_boundary_id[boundary_id.lower()]
+                key = '{}/{}/{}'.format(get_pseudo_id(p._related[1].organization_id)['name'], boundary_id, p.name)
+
+                # Merge the crowdsourced data.
+                if crowdsourcing.get(key):
+                    o = crowdsourcing[key]
+
+                    links = {}
+                    for link in p.links:
+                        domain = '.'.join(urlsplit(link['url']).netloc.split('.')[-2:])
+                        if domain in ('facebook.com', 'fb.com'):
+                            links['facebook'] = link['url']
+                        elif domain == 'instagram.com':
+                            links['instagram'] = link['url']
+                        elif domain == 'linkedin.com':
+                            links['linkedin'] = link['url']
+                        elif domain == 'twitter.com':
+                            links['twitter'] = link['url']
+                        elif domain == 'youtube.com':
+                            links['youtube'] = link['url']
+
+                    for prop, (getter, setter) in steps.items():
+                        if o[prop]:
+                            if prop == 'email' and '.gc.ca' in o[prop]:
+                                self.info('{}: skipping email = {}'.format(key, o[prop]))
+                            else:
+                                scraped = getter(p)
+                                if not scraped:
+                                    setter(p, o[prop])
+                                    self.debug('{}: adding {} = {}'.format(key, prop, o[prop]))
+                                elif scraped != o[prop] and prop != 'image':
+                                    self.warning('{}: expected {} to be {}, not {}'.format(key, prop, scraped, o[prop]))
+
+                    for prop in ['facebook', 'instagram', 'linkedin', 'twitter', 'youtube']:
+                        if o[prop]:
+                            scraped = links.get(prop)
+                            entered = re.sub(r'\?f?ref=.+|\?_rdr\Z', '', o[prop].replace('@', '').replace('http://twitter.com/', 'https://twitter.com/'))  # Facebook, Twitter
+                            if not scraped:
+                                p.add_link(entered)
+                                self.debug('{}: adding {} = {}'.format(key, prop, entered))
+                            elif scraped.lower() != entered.lower():
+                                self.warning('{}: expected {} to be {}, not {}'.format(key, prop, scraped, entered))
+
+                yield p
 
     def scrape_bloc_quebecois(self):
         url = 'http://www.blocquebecois.org/equipe-2015/candidats/'
@@ -271,12 +364,19 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         url = 'https://www.libertarian.ca/candidates/'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]'):
             name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')[0]
-            district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip()  # hyphen, n-dash, n-dash, RTL mark
+            district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')
+            if district:
+                district = district[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip()  # hyphen, n-dash, n-dash, RTL mark
+            else:
+                district = 'TBD'  # will be skipped
 
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
             elif district in DIVISIONS_M_DASH:
                 district = district.replace('-', '—')  # hyphen, m-dash
+            # @note Remove once corrected.
+            elif district == 'Edmonton-Griesbach':
+                district = 'Edmonton Griesbach'
 
             if district != 'TBD':
                 p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Libertarian')
@@ -324,10 +424,18 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         doc = lxml.html.fromstring(json.loads(self.get(url).text))
         for node in doc.xpath('//a[contains(@class,"team-list-person-block")]'):
             name = node.attrib['data-name'].strip()
-            if node.attrib['data-title'] == 'Honor---Mercier':
+            # @note Remove once corrected.
+            district = node.attrib['data-title']
+            if district == 'Honor---Mercier':
                 district = 'Honoré-Mercier'
+            elif district == 'Rosement―La Petite-Patrie':
+                district = 'Rosemont—La Petite-Patrie'
+            elif district == 'Ville-Marie―Le Sud-Ouest―île-des-Sœurs':
+                district = 'Ville-Marie—Le Sud-Ouest—Île-des-Soeurs'
+            elif district == "Montmagny―L’Islet―Kamouraska―Rivière-du-loup":
+                district = "Montmagny—L'Islet—Kamouraska—Rivière-du-Loup"
             else:
-                district = node.attrib['data-title'].replace('--', '—').replace(' – ', '—').replace('–', '—').replace(' ', ' ').strip()  # m-dash, n-dash, m-dash, n-dash, m-dash, non-breaking space
+                district = re.sub(r'\bî', 'Î', district).replace('--', '—').replace(' – ', '—').replace('–', '—').replace('―', '—').replace(' ', ' ').strip()  # m-dash, n-dash -> m-dash, n-dash -> m-dash, horizontal bar -> m-dash, non-breaking space
 
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
@@ -341,17 +449,27 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if name in self.incumbents:
                 p.extras['incumbent'] = True
 
-            if node.attrib['data-facebook'] != 'cpcpcc':
-                p.add_link('https://www.facebook.com/{}'.format(node.attrib['data-facebook']))
-            if node.attrib['data-twitter'] != 'cpc_hq':
-                p.add_link('https://twitter.com/{}'.format(node.attrib['data-twitter']))
             if node.attrib['data-website'] != 'www.conservative.ca':
                 p.add_link('http://{}'.format(node.attrib['data-website']))
+
+            if node.attrib['data-facebook'] != 'cpcpcc':
+                p.add_link('https://www.facebook.com/{}'.format(re.sub(r'\?f?ref=.+', '', node.attrib['data-facebook'])))
+
+            twitter = node.attrib['data-twitter']
+            if twitter != 'cpc_hq':
+                # @note Remove once corrected.
+                if twitter == 'DavidAnderson89':
+                    twitter = 'DavidAndersonSK'
+                elif twitter == 'MPJoeDaniel':
+                    twitter = 'joedanielcpc'
+                elif twitter == 'MinRonaAmbrose':
+                    twitter = 'RonaAmbrose'
+                p.add_link('https://twitter.com/{}'.format(node.attrib['data-twitter']))
 
             p.add_link('http://www.conservative.ca/team/{}'.format(node.attrib['data-learn']))
 
             email = node.attrib['data-email']
-            if email and email != 'info@conservative.ca':
+            if email and email not in ('info@conservative.ca', 'info@conservateur.ca'):
                 p.add_contact('email', email)
 
             p.add_source(url)
@@ -364,7 +482,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             district = node.xpath('.//@data-target')[0][5:]  # node.xpath('.//div[@class="riding-name"]//text()')[0]
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
-            p.image = node.xpath('.//img[@typeof="foaf:Image"]/@src')[0]  # print quality also available
+            image = node.xpath('.//img[@typeof="foaf:Image"]/@src')  # print quality also available
+            if image:
+                p.image = image[0]
 
             p.add_contact('email', self.get_email(node))
 
@@ -393,7 +513,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Liberal')
             p.image = node.xpath('./@data-photo-url')[0][4:-1]
 
-            if node.xpath('./@class[contains(.,"candidate-female")]'):
+            # @note Remove once corrected.
+            if name in ('Carla Qualtrough', 'Cynthia Block', 'Ginette Petitpas Taylor', 'Karley Scott', 'Lisa Abbott', 'Liz Riley', 'Rebecca Chartrand'):
+                p.gender = 'female'
+            elif node.xpath('./@class[contains(.,"candidate-female")]'):
                 p.gender = 'female'
             elif node.xpath('./@class[contains(.,"candidate-male")]'):
                 p.gender = 'male'
@@ -466,4 +589,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     link = 'h' + link
                 elif 'facebook.com' in link and 'twitter.com' in link:
                     link = parse_qs(urlparse(link).query)['u'][0]
+                elif 'facebook.com' in link and '?' in link:
+                    link = re.sub(r'\?f?ref=.+', '', link)
+                elif 'twitter.com' in link:
+                    if '@' in link:
+                        link = link.replace('@', '')
+                    if link.startswith('http://'):
+                        link = link.replace('http://twitter.com/', 'https://twitter.com/')
                 p.add_link(link)
