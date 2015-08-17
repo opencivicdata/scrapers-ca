@@ -547,6 +547,19 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             yield p
 
     def scrape_ndp(self):
+        payload = {
+            # sheet, min row, max row, min col, max col
+            'ranges': '[null,[[null,"1264102253",1,338,0,26]]]',
+        }
+
+        emails = {}
+        response = self.post('https://docs.google.com/spreadsheets/d/11suA7-cjo1KH_WtCquQ3IMIzhvzyW3SVNa56iVGEGAY/fetchrows', data=payload)
+        cells = json.loads(response.text[5:])['perGridRangeSnapshots'][0]['snapshot'][0][-1][-1]
+        for i in range(0, len(cells), 26):
+            # If the email column is not None and has a value:
+            if cells[i + 3][3] and cells[i + 3][3][-1]:
+                emails[int(cells[i][3][-1])] = cells[i + 3][3][-1].replace(' ', '')
+
         url = 'http://www.ndp.ca/candidates'
         for node in self.lxmlize(url, encoding='utf-8').xpath('//div[@class="candidate-holder"]'):
             image = node.xpath('.//div/@data-img')[0]
@@ -573,6 +586,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             link = node.xpath('.//a[@class="candidate-website"]/@href')
             if link:
                 p.add_link(link[0])
+
+            if emails.get(int(district)):
+                p.add_contact('email', emails[int(district)])
 
             if name in self.incumbents:
                 p.extras['incumbent'] = True
