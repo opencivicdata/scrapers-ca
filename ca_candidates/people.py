@@ -430,7 +430,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = 'Honoré-Mercier'
             elif district == 'Rosement―La Petite-Patrie':
                 district = 'Rosemont—La Petite-Patrie'
-            elif district == 'Ville-Marie―Le Sud-Ouest―île-des-Sœurs':
+            elif district in ('Ville-Marie―Le Sud-Ouest―île-des-Sœurs', 'Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs'):
                 district = 'Ville-Marie—Le Sud-Ouest—Île-des-Soeurs'
             elif district == "Montmagny―L’Islet―Kamouraska―Rivière-du-loup":
                 district = "Montmagny—L'Islet—Kamouraska—Rivière-du-Loup"
@@ -547,6 +547,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             yield p
 
     def scrape_ndp(self):
+        # @note Switch to using https://docs.google.com/spreadsheets/d/11suA7-cjo1KH_WtCquQ3IMIzhvzyW3SVNa56iVGEGAY/pub?gid=1264102253&single=true&output=csv
+
         payload = {
             # sheet, min row, max row, min col, max col
             'ranges': '[null,[[null,"1264102253",1,338,0,26]]]',
