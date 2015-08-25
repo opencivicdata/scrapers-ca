@@ -16,18 +16,27 @@ from six.moves.urllib.parse import parse_qs, urlparse, urlsplit
 DIVISIONS_MAP = {
     # Typo.
     "Courtney-Alberni": "Courtenay—Alberni",
+    "Grand Prairie MacKenzie": "Grande Prairie—Mackenzie",
+    "Honor---Mercier": "Honoré-Mercier",
+    "North Burnaby—Seymour": "Burnaby North—Seymour",
     "North Okangan-Shuswap": "North Okanagan—Shuswap",
     "Richmond": "Richmond Centre",
-    "North Burnaby—Seymour": "Burnaby North—Seymour",
+    "Rosement―La Petite-Patrie": "Rosemont—La Petite-Patrie",
+    "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
+    "Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     # Hyphens.
     "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen
     "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen
+    "Edmonton-Griesbach": "Edmonton Griesbach",
     "Edmonton-Manning": "Edmonton Manning",
     "Vancouver-Granville": "Vancouver Granville",
     # Spaces.
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
+    "Edmonton Wetaskiwin": "Edmonton—Wetaskiwin",
     "Perth Wellington": "Perth—Wellington",
     "Rivière des Mille Îles": "Rivière-des-Mille-Îles",
+    # Capitalization.
+    "Montmagny―L’Islet―Kamouraska―Rivière-du-loup": "Montmagny—L'Islet—Kamouraska—Rivière-du-Loup",
 }
 
 DIVISIONS_M_DASH = (  # none of the districts use m-dashes
@@ -416,9 +425,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = DIVISIONS_MAP[district]
             elif district in DIVISIONS_M_DASH:
                 district = district.replace('-', '—')  # hyphen, m-dash
-            # @note Remove once corrected.
-            elif district == 'Edmonton-Griesbach':
-                district = 'Edmonton Griesbach'
 
             if district != 'TBD':
                 p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Libertarian')
@@ -466,16 +472,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         doc = lxml.html.fromstring(json.loads(self.get(url).text))
         for node in doc.xpath('//a[contains(@class,"team-list-person-block")]'):
             name = node.attrib['data-name'].strip()
-            # @note Remove once corrected.
             district = node.attrib['data-title']
-            if district == 'Honor---Mercier':
-                district = 'Honoré-Mercier'
-            elif district == 'Rosement―La Petite-Patrie':
-                district = 'Rosemont—La Petite-Patrie'
-            elif district in ('Ville-Marie―Le Sud-Ouest―île-des-Sœurs', 'Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs'):
-                district = 'Ville-Marie—Le Sud-Ouest—Île-des-Soeurs'
-            elif district == "Montmagny―L’Islet―Kamouraska―Rivière-du-loup":
-                district = "Montmagny—L'Islet—Kamouraska—Rivière-du-Loup"
+            if district in DIVISIONS_MAP:
+                district = DIVISIONS_MAP[district]
             else:
                 district = re.sub(r'\bî', 'Î', district).replace('--', '—').replace(' – ', '—').replace('–', '—').replace('―', '—').replace(' ', ' ').strip()  # m-dash, n-dash -> m-dash, n-dash -> m-dash, horizontal bar -> m-dash, non-breaking space
 
