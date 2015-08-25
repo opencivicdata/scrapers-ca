@@ -568,7 +568,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if link:
                 try:
                     # http://susanwatt.liberal.ca/ redirects to http://www.liberal.ca/
-                    sidebar = self.lxmlize(link[0], cookies=cookies).xpath('//div[@id="sidebar"]')
+                    sidebar = self.lxmlize(link[0].replace('www.', ''), cookies=cookies).xpath('//div[@id="sidebar"]')
                     if sidebar:
                         email = self.get_email(sidebar[0], error=False)
                         if email:
@@ -604,6 +604,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 emails[int(cells[i][3][-1])] = cells[i + 3][3][-1].replace(' ', '')
 
         url = 'http://www.ndp.ca/candidates'
+        birth_date = 1900
         for node in self.lxmlize(url, encoding='utf-8').xpath('//div[@class="candidate-holder"]'):
             image = node.xpath('.//div/@data-img')[0]
 
@@ -612,6 +613,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='NDP')
             p.image = image
+
+            # There are two Erin Weir.
+            if name == 'Erin Weir':
+                p.birth_date = str(birth_date)
+                birth_date += 1
 
             if node.xpath('.//div[contains(@class,"placeholder-f")]'):
                 p.gender = 'female'
