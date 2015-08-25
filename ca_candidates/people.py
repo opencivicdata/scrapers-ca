@@ -22,7 +22,8 @@ DIVISIONS_MAP = {
     "North Okangan-Shuswap": "North Okanagan—Shuswap",
     "Richmond": "Richmond Centre",
     "Rosement―La Petite-Patrie": "Rosemont—La Petite-Patrie",
-    "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
+    "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs", # hyphens
+    'Ville-Marie—Le Sud-Ouest—Île-des-Sœurs': "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs", # m-dashes
     "Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     # Hyphens.
     "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen
@@ -352,16 +353,19 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 yield p
 
     def scrape_bloc_quebecois(self):
-        url = 'http://www.blocquebecois.org/equipe-2015/candidats/'
+        url = 'http://www.blocquebecois.org/candidats/'
 
         pages = math.ceil(int(re.search(r'\d+', self.lxmlize(url).xpath('//option[1]/text()')[0]).group(0)) / 10)
 
-        pattern = 'http://www.blocquebecois.org/equipe-2015/candidats/page/{}/'
+        pattern = 'http://www.blocquebecois.org/candidats/page/{}/'
 
         for page in range(1, pages + 1):
             for node in self.lxmlize(pattern.format(page)).xpath('//article'):
                 name = ' '.join(node.xpath('.//h2/text()'))
                 district = node.xpath('.//h1/text()')[0].replace('–', '—')  # n-dash, m-dash
+
+                if district in DIVISIONS_MAP:
+                    district = DIVISIONS_MAP[district]
 
                 p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Bloc Québécois')
 
