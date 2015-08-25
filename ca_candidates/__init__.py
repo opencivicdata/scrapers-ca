@@ -15,6 +15,7 @@ class CanadaCandidates(CanadianJurisdiction):
     url = 'http://www.parl.gc.ca'
     parties = [
         {'name': 'Bloc Québécois'},
+        {'name': 'Christian Heritage'},
         {'name': 'Conservative'},
         {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},

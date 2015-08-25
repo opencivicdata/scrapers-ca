@@ -280,7 +280,19 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         }
 
         # Scrape each party separately.
-        for method in ['bloc_quebecois', 'conservative', 'forces_et_democratie', 'green', 'liberal', 'libertarian', 'ndp']:
+        # @todo https://my.pirateparty.ca/election2015.html
+        # @todo http://www.eatgoogle.com/en/candidates/
+        methods = (
+            'bloc_quebecois',
+            'christian_heritage',
+            'conservative',
+            'forces_et_democratie',
+            'green',
+            'liberal',
+            'libertarian',
+            'ndp',
+        )
+        for method in methods:
             for p in getattr(self, 'scrape_{}'.format(method))():
                 # Uniquely identify the candidate.
                 boundary_id = get_pseudo_id(p._related[0].post_id)['label']
@@ -359,6 +371,36 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 p.add_source(url)
                 yield p
+
+    def scrape_christian_heritage(self):
+        def char(code):
+            try:
+                return chr(int(code))
+            except ValueError:
+                return code
+
+        url = 'https://www.chp.ca/candidates'
+        for href in self.lxmlize(url).xpath('//ul[@id="nav_cat_archive"]//@href'):
+            page = self.lxmlize(href)
+
+            name = page.xpath('//meta[@property="og:title"]/@content')[0].split(' - ')[0]
+            district = page.xpath('//a[contains(@href,".pdf")]/@href')[0].rsplit('/', 1)[1][0:5]
+
+            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Christian Heritage')
+
+            p.image = page.xpath('//meta[@property="og:image"]/@content')[0]
+
+            voice = self.get_phone(page.xpath('//span[@class="phone"]')[0], error=False)
+            if voice:
+                p.add_contact('voice', voice, 'office')
+
+            script = page.xpath('//span[@class="email"]/script/text()')[0]
+            codes = reversed(re.findall(r"[\[,]'(.+?)'", script))
+            content = ''.join(char(code) for code in codes)
+            p.add_contact('email', re.search(r'>E: (.+)<', content).group(1))
+
+            p.add_source(href)
+            yield p
 
     def scrape_libertarian(self):
         url = 'https://www.libertarian.ca/candidates/'
@@ -469,7 +511,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p.add_link('http://www.conservative.ca/team/{}'.format(node.attrib['data-learn']))
 
             email = node.attrib['data-email']
-            if email and email not in ('info@conservative.ca', 'info@conservateur.ca'):
+            if email and email not in ('info@conservative.ca', 'info@conservateur.ca', 'www.reelectandrewscheer.ca'):
                 p.add_contact('email', email)
 
             p.add_source(url)
@@ -534,7 +576,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                             p.add_contact('email', email)
                         voice = self.get_phone(sidebar[0], error=False)
                         if voice:
-                            p.add_contact('voice', voice, 'legislature')
+                            p.add_contact('voice', voice, 'office')
 
                         p.add_link(link[0])
                 except (requests.exceptions.ConnectionError, scrapelib.HTTPError):
