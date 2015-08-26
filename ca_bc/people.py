@@ -11,7 +11,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@cellpadding="3"]//td//a/@href')
+        councillors = page.xpath('//table[@cellpadding="3"]//td//a[text()!=""]/@href')
         for councillor in councillors:
             page = self.lxmlize(councillor)
             # Hon. is followed by Dr. in one case but the clean_name function

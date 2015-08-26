@@ -40,6 +40,7 @@ DIVISIONS_MAP = {
     "Montmagny―L’Islet―Kamouraska―Rivière-du-loup": "Montmagny—L'Islet—Kamouraska—Rivière-du-Loup",
 }
 
+# @note Can cut down the line count of this file by doing this dynamically.
 DIVISIONS_M_DASH = (  # none of the districts use m-dashes
     "Abitibi-Baie-James-Nunavik-Eeyou",
     "Abitibi-Témiscamingue",
