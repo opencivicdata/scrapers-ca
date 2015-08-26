@@ -393,7 +393,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 return code
 
         url = 'https://www.chp.ca/candidates'
-        for href in self.lxmlize(url).xpath('//ul[@id="nav_cat_archive"]//li//@href[0]'):
+        for href in self.lxmlize(url).xpath('//ul[@id="nav_cat_archive"]//li/a/@href[1]'):
             page = self.lxmlize(href)
 
             name = page.xpath('//meta[@property="og:title"]/@content')[0].split(' - ')[0]
