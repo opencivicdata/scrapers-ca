@@ -281,7 +281,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 lambda p, value: setattr(p, 'gender', value),
             ),
             'email': (
-                lambda p: next((contact_detail['value'] for contact_detail in p._related[0].contact_details), None),
+                lambda p: next((contact_detail['value'] for contact_detail in p._related[0].contact_details if contact_detail['type'] == 'email'), None),
                 lambda p, value: p.add_contact('email', value),
             ),
             'image': (
@@ -492,9 +492,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if node.attrib['data-image'] != '/media/team/no-image.jpg':
                 p.image = 'http://www.conservative.ca{}'.format(node.attrib['data-image'])
 
-            if name in self.incumbents:
-                p.extras['incumbent'] = True
-
             if node.attrib['data-website'] != 'www.conservative.ca':
                 p.add_link('http://{}'.format(node.attrib['data-website']))
 
@@ -536,6 +533,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 #     p.add_contact('email', email)
             except scrapelib.HTTPError:
                 pass  # 404
+
+            if name in self.incumbents:
+                p.extras['incumbent'] = True
 
             p.add_link(detail_url)
             p.add_source(url)
@@ -658,11 +658,25 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if 'www.ndp.ca' in facebook[0]:
                     facebook[0] = facebook[0].replace('www.ndp.ca', 'www.facebook.com')
                 p.add_link(facebook[0])
+
+            email = None
             link = node.xpath('.//a[@class="candidate-website"]/@href')
             if link:
                 p.add_link(link[0])
 
-            if emails.get(int(district)):
+                node = self.lxmlize(link[0]).xpath('//div[@class="contact-phone"]')
+                if node:
+                    email = self.get_email(node[0], error=False)
+                    if email:
+                        p.add_contact('email', email)
+                        print(email)
+
+                    voice = self.get_phone(node[0], error=False)
+                    if voice:
+                        p.add_contact('voice', voice, 'office')
+                        print(voice)
+
+            if not email and emails.get(int(district)):
                 p.add_contact('email', emails[int(district)])
 
             if name in self.incumbents:
