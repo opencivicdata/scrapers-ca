@@ -442,6 +442,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     sidebar = self.lxmlize(node.xpath('.//a/@href')[0]).xpath('//div[@class="tshowcase-single-email"]')
                     if sidebar:
                         p.add_contact('email', self.get_email(sidebar[0]))
+                    else:
+                        email = node.xpath('.//a[./i[contains(@class,"fa-envelope-o")]]/@href')
+                        if email:
+                            p.add_contact('email', email[0].replace(url, ''))
 
                     self.add_links(p, node)
 
@@ -670,12 +674,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     email = self.get_email(node[0], error=False)
                     if email:
                         p.add_contact('email', email)
-                        print(email)
 
                     voice = self.get_phone(node[0], error=False)
                     if voice:
                         p.add_contact('voice', voice, 'office')
-                        print(voice)
 
             if not email and emails.get(int(district)):
                 p.add_contact('email', emails[int(district)])
