@@ -419,33 +419,34 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
     def scrape_libertarian(self):
         url = 'https://www.libertarian.ca/candidates/'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]'):
-            name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')[0]
-            district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')
-            if district:
-                district = district[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip()  # hyphen, n-dash, n-dash, RTL mark
-            else:
-                district = 'TBD'  # will be skipped
+            name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')
+            if name:
+                district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')
+                if district:
+                    district = district[0].replace('- ', '—').replace(' – ', '—').replace('–', '—').replace('\u200f', '').strip()  # hyphen, n-dash, n-dash, RTL mark
+                else:
+                    district = 'TBD'  # will be skipped
 
-            if district in DIVISIONS_MAP:
-                district = DIVISIONS_MAP[district]
-            elif district in DIVISIONS_M_DASH:
-                district = district.replace('-', '—')  # hyphen, m-dash
+                if district in DIVISIONS_MAP:
+                    district = DIVISIONS_MAP[district]
+                elif district in DIVISIONS_M_DASH:
+                    district = district.replace('-', '—')  # hyphen, m-dash
 
-            if district != 'TBD':
-                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Libertarian')
+                if district != 'TBD':
+                    p = Person(primary_org='lower', name=name[0], district=district, role='candidate', party='Libertarian')
 
-                image = node.xpath('.//div[contains(@class,"tshowcase-box-photo")]//img/@src')[0]
-                if 'default.png' not in image:
-                    p.image = image
+                    image = node.xpath('.//div[contains(@class,"tshowcase-box-photo")]//img/@src')[0]
+                    if 'default.png' not in image:
+                        p.image = image
 
-                sidebar = self.lxmlize(node.xpath('.//a/@href')[0]).xpath('//div[@class="tshowcase-single-email"]')
-                if sidebar:
-                    p.add_contact('email', self.get_email(sidebar[0]))
+                    sidebar = self.lxmlize(node.xpath('.//a/@href')[0]).xpath('//div[@class="tshowcase-single-email"]')
+                    if sidebar:
+                        p.add_contact('email', self.get_email(sidebar[0]))
 
-                self.add_links(p, node)
+                    self.add_links(p, node)
 
-                p.add_source(url)
-                yield p
+                    p.add_source(url)
+                    yield p
 
     def scrape_forces_et_democratie(self):
         url = 'http://www.forcesetdemocratie.org/l-equipe/candidats.html'
