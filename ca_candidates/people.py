@@ -512,12 +512,32 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     twitter = 'RonaAmbrose'
                 p.add_link('https://twitter.com/{}'.format(node.attrib['data-twitter']))
 
-            p.add_link('http://www.conservative.ca/team/{}'.format(node.attrib['data-learn']))
-
             email = node.attrib['data-email']
             if email and email not in ('info@conservative.ca', 'info@conservateur.ca', 'www.reelectandrewscheer.ca'):
                 p.add_contact('email', email)
 
+            detail_url = 'http://www.conservative.ca/team/{}'.format(node.attrib['data-learn'])
+
+            try:
+                page = self.lxmlize(detail_url)
+
+                span = page.xpath('//div[@class="aside-text-address"]')
+                if span:
+                    voice = self.get_phone(span[0], error=False)
+                    if voice:
+                        p.add_contact('voice', voice, 'office')
+
+                # @note If the above email disappears, use this.
+                # span = page.xpath('//span[@class="__cf_email__"]/@data-cfemail')
+                # if span:
+                #     code = span[0]
+                #     operand = int(code[:2], 16)
+                #     email = ''.join(chr(int(code[i:i + 2], 16) ^ operand) for i in range(2, len(code), 2))
+                #     p.add_contact('email', email)
+            except scrapelib.HTTPError:
+                pass  # 404
+
+            p.add_link(detail_url)
             p.add_source(url)
             yield p
 
@@ -634,6 +654,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p.add_link(twitter[0])
             facebook = node.xpath('.//a[@class="candidate-facebook"]/@href')
             if facebook:
+                # @note Remove once corrected.
                 if 'www.ndp.ca' in facebook[0]:
                     facebook[0] = facebook[0].replace('www.ndp.ca', 'www.facebook.com')
                 p.add_link(facebook[0])
