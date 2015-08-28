@@ -362,29 +362,32 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         for page in range(1, pages + 1):
             for node in self.lxmlize(pattern.format(page)).xpath('//article'):
-                name = ' '.join(node.xpath('.//h2/text()'))
-                district = node.xpath('.//h1/text()')[0].replace('–', '—')  # n-dash, m-dash
+                district = node.xpath('.//h1/text()')
 
-                if district in DIVISIONS_MAP:
-                    district = DIVISIONS_MAP[district]
+                if district:
+                    name = ' '.join(node.xpath('.//h2/text()'))
+                    district = district[0].replace('–', '—')  # n-dash, m-dash
 
-                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Bloc Québécois')
+                    if district in DIVISIONS_MAP:
+                        district = DIVISIONS_MAP[district]
 
-                image = node.xpath('./div[@class="image"]/img/@src')
-                if image:
-                    p.image = image[0]
+                    p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Bloc Québécois')
 
-                email = self.get_email(node, error=False)
-                if email:
-                    p.add_contact('email', email)
+                    image = node.xpath('./div[@class="image"]/img/@src')
+                    if image:
+                        p.image = image[0]
 
-                self.add_links(p, node)
+                    email = self.get_email(node, error=False)
+                    if email:
+                        p.add_contact('email', email)
 
-                if name in self.incumbents:
-                    p.extras['incumbent'] = True
+                    self.add_links(p, node)
 
-                p.add_source(url)
-                yield p
+                    if name in self.incumbents:
+                        p.extras['incumbent'] = True
+
+                    p.add_source(url)
+                    yield p
 
     def scrape_christian_heritage(self):
         def char(code):
