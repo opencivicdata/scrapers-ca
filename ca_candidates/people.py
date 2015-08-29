@@ -77,14 +77,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         # @todo https://my.pirateparty.ca/election2015.html
         # @todo http://www.eatgoogle.com/en/candidates/
         methods = (
-            # 'bloc_quebecois',
-            # 'christian_heritage',
-            # 'conservative',
-            # 'forces_et_democratie',
+            'bloc_quebecois',
+            'christian_heritage',
+            'conservative',
+            'forces_et_democratie',
             'green',
-            # 'liberal',
-            # 'libertarian',
-            # 'ndp',
+            'liberal',
+            'libertarian',
+            'ndp',
         )
         for method in methods:
             for p in getattr(self, 'scrape_{}'.format(method))():
