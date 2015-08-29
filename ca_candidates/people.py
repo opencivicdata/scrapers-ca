@@ -74,8 +74,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         }
 
         # Scrape each party separately.
-        # @todo https://my.pirateparty.ca/election2015.html
-        # @todo http://www.eatgoogle.com/en/candidates/
+        # @todo Pirate https://my.pirateparty.ca/election2015.html
+        # @todo Rhinoceros http://www.eatgoogle.com/en/candidates/
         methods = (
             'bloc_quebecois',
             'christian_heritage',
