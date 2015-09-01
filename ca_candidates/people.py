@@ -147,7 +147,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         pattern = 'http://www.blocquebecois.org/candidats/page/{}/'
 
         for page in range(1, pages + 1):
-            for node in self.lxmlize(pattern.format(page)).xpath('//article'):
+            if page == 1:
+                page_url = url
+            else:
+                page_url = pattern.format(page)
+            for node in self.lxmlize(page_url).xpath('//article'):
                 district = node.xpath('.//h1/text()')
 
                 if district:
