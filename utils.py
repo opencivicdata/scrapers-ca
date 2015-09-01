@@ -155,7 +155,11 @@ class CanadianScraper(Scraper):
         if encoding:
             response.encoding = encoding
 
-        page = lxml.html.fromstring(response.text.replace('"www.facebook.com/', '"https://www.facebook.com/'))  # XXX ca_candidates
+        try:
+            page = lxml.html.fromstring(response.text.replace('"www.facebook.com/', '"https://www.facebook.com/'))  # XXX ca_candidates
+        except etree.ParserError:
+            raise Exception('lxml.etree.ParserError: Document is empty {}'.format(url))
+
         meta = page.xpath('//meta[@http-equiv="refresh"]')
         if meta:
             _, url = meta[0].attrib['content'].split('=', 1)
