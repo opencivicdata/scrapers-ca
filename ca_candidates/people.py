@@ -91,7 +91,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 # Uniquely identify the candidate.
                 boundary_id = get_pseudo_id(p._related[0].post_id)['label']
                 if not re.search(r'\A\d{5}\Z', boundary_id):
-                    boundary_id = boundary_name_to_boundary_id[boundary_id.lower()]
+                    try:
+                        boundary_id = boundary_name_to_boundary_id[boundary_id.lower()]
+                    except KeyError:
+                        raise Exception("KeyError: '{}' on {}".format(boundary_id.lower(), method))
                 key = '{}/{}/{}'.format(get_pseudo_id(p._related[1].organization_id)['name'], boundary_id, p.name)
 
                 # Merge the crowdsourced data.
@@ -121,7 +124,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                                 if not scraped:
                                     setter(p, o[prop])
                                     self.debug('{}: adding {} = {}'.format(key, prop, o[prop]))
-                                elif scraped != o[prop] and prop != 'image':
+                                elif scraped.lower() != o[prop].lower() and prop != 'image':
                                     self.warning('{}: expected {} to be {}, not {}'.format(key, prop, scraped, o[prop]))
 
                     for prop in ['facebook', 'instagram', 'linkedin', 'twitter', 'youtube']:
@@ -513,6 +516,7 @@ DIVISIONS_MAP = {
     # Spaces.
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
     "Edmonton Wetaskiwin": "Edmonton—Wetaskiwin",
+    "London Fanshawe": "London—Fanshawe",
     "Perth Wellington": "Perth—Wellington",
     "Rivière des Mille Îles": "Rivière-des-Mille-Îles",
     # Capitalization.
