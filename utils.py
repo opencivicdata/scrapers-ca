@@ -227,12 +227,13 @@ class CSVScraper(CanadianScraper):
                     lines.append(row['Address line 1'])
                 if row.get('Address line 2'):
                     lines.append(row['Address line 2'])
-                parts = [row['Locality']]
-                if province:
-                    parts.append(province)
-                if row.get('Postal code'):
-                    parts.extend(['', row['Postal code']])
-                lines.append(' '.join(parts))
+                if row['Locality']:
+                    parts = [row['Locality']]
+                    if province:
+                        parts.append(province)
+                    if row.get('Postal code'):
+                        parts.extend(['', row['Postal code']])
+                    lines.append(' '.join(parts))
 
                 p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
                 p.add_source(self.csv_url)
@@ -245,7 +246,8 @@ class CSVScraper(CanadianScraper):
                 if row.get('Website'):
                     p.add_link(row['Website'])
                 p.add_contact('email', row['Email'])
-                p.add_contact('address', '\n'.join(lines), 'legislature')
+                if lines:
+                    p.add_contact('address', '\n'.join(lines), 'legislature')
                 if row.get('Phone'):
                     p.add_contact('voice', row['Phone'], 'legislature')
                 if row.get('Fax'):
