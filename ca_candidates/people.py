@@ -9,6 +9,7 @@ import re
 import lxml.html
 import requests
 import scrapelib
+from opencivicdata.divisions import Division
 from pupa.utils import get_pseudo_id
 from six import StringIO
 from six.moves.urllib.parse import parse_qs, urlparse, urlsplit
@@ -222,8 +223,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
-            elif district in DIVISIONS_M_DASH:
-                district = district.replace('-', '—')  # hyphen, m-dash
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
             if node.attrib['data-image'] != '/media/team/no-image.jpg':
@@ -387,8 +386,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 if district in DIVISIONS_MAP:
                     district = DIVISIONS_MAP[district]
-                elif district in DIVISIONS_M_DASH:
-                    district = district.replace('-', '—')  # hyphen, m-dash
 
                 if district != 'TBD':
                     p = Person(primary_org='lower', name=name[0], district=district, role='candidate', party='Libertarian')
@@ -508,211 +505,22 @@ DIVISIONS_MAP = {
     "North Okangan-Shuswap": "North Okanagan—Shuswap",
     "Richmond": "Richmond Centre",
     "Rosement―La Petite-Patrie": "Rosemont—La Petite-Patrie",
-    "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs", # hyphens
-    'Ville-Marie—Le Sud-Ouest—Île-des-Sœurs': "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs", # m-dashes
+    "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
+    'Ville-Marie—Le Sud-Ouest—Île-des-Sœurs': "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     "Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
-    # Hyphens.
+    # Mix of hyphens, m-dashes and/or spaces.
     "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen
     "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen
-    "Edmonton-Griesbach": "Edmonton Griesbach",
-    "Edmonton-Manning": "Edmonton Manning",
-    "Vancouver-Granville": "Vancouver Granville",
-    # Spaces.
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
-    "Edmonton Wetaskiwin": "Edmonton—Wetaskiwin",
-    "London Fanshawe": "London—Fanshawe",
-    "Perth Wellington": "Perth—Wellington",
-    "Rivière des Mille Îles": "Rivière-des-Mille-Îles",
-    # Capitalization.
-    "Montmagny―L’Islet―Kamouraska―Rivière-du-loup": "Montmagny—L'Islet—Kamouraska—Rivière-du-Loup",
 }
 
-# @note Can cut down the line count of this file by doing this dynamically.
-DIVISIONS_M_DASH = (  # none of the districts use m-dashes
-    "Abitibi-Baie-James-Nunavik-Eeyou",
-    "Abitibi-Témiscamingue",
-    "Acadie-Bathurst",
-    "Algoma-Manitoulin-Kapuskasing",
-    "Argenteuil-La Petite-Nation",
-    "Aurora-Oak Ridges-Richmond Hill",
-    "Avignon-La Mitis-Matane-Matapédia",
-    "Banff-Airdrie",
-    "Barrie-Innisfil",
-    "Barrie-Springwater-Oro-Medonte",
-    "Battle River-Crowfoot",
-    "Battlefords-Lloydminster",
-    "Beaches-East York",
-    "Beauport-Côte-de-Beaupré-Île d’Orléans-Charlevoix",
-    "Beauport-Limoilou",
-    "Bellechasse-Les Etchemins-Lévis",
-    "Beloeil-Chambly",
-    "Berthier-Maskinongé",
-    "Bonavista-Burin-Trinity",
-    "Brandon-Souris",
-    "Brantford-Brant",
-    "Brome-Missisquoi",
-    "Brossard-Saint-Lambert",
-    "Bruce-Grey-Owen Sound",
-    "Burnaby North-Seymour",
-    "Bécancour-Nicolet-Saurel",
-    "Cape Breton-Canso",
-    "Cariboo-Prince George",
-    "Carlton Trail-Eagle Creek",
-    "Central Okanagan-Similkameen-Nicola",
-    "Charlesbourg-Haute-Saint-Charles",
-    "Charleswood-St. James-Assiniboia-Headingley",
-    "Chatham-Kent-Leamington",
-    "Chicoutimi-Le Fjord",
-    "Chilliwack-Hope",
-    "Churchill-Keewatinook Aski",
-    "Châteauguay-Lacolle",
-    "Cloverdale-Langley City",
-    "Coast of Bays-Central-Notre Dame",
-    "Compton-Stanstead",
-    "Coquitlam-Port Coquitlam",
-    "Courtenay-Alberni",
-    "Cowichan-Malahat-Langford",
-    "Cumberland-Colchester",
-    "Cypress Hills-Grasslands",
-    "Dartmouth-Cole Harbour",
-    "Dauphin-Swan River-Neepawa",
-    "Desnethé-Missinippi-Churchill River",
-    "Dorval-Lachine-LaSalle",
-    "Dufferin-Caledon",
-    "Edmonton-Wetaskiwin",
-    "Eglinton-Lawrence",
-    "Elgin-Middlesex-London",
-    "Elmwood-Transcona",
-    "Esquimalt-Saanich-Sooke",
-    "Etobicoke-Lakeshore",
-    "Flamborough-Glanbrook",
-    "Fleetwood-Port Kells",
-    "Fort McMurray-Cold Lake",
-    "Gaspésie-Les Îles-de-la-Madeleine",
-    "Glengarry-Prescott-Russell",
-    "Grande Prairie-Mackenzie",
-    "Haldimand-Norfolk",
-    "Haliburton-Kawartha Lakes-Brock",
-    "Hamilton East-Stoney Creek",
-    "Hamilton West-Ancaster-Dundas",
-    "Hastings-Lennox and Addington",
-    "Hull-Aylmer",
-    "Humber River-Black Creek",
-    "Huron-Bruce",
-    "Kamloops-Thompson-Cariboo",
-    "Kanata-Carleton",
-    "Kelowna-Lake Country",
-    "Kildonan-St. Paul",
-    "Kings-Hants",
-    "King-Vaughan",
-    "Kitchener South-Hespeler",
-    "Kitchener-Conestoga",
-    "Kootenay-Columbia",
-    "Lambton-Kent-Middlesex",
-    "Lanark-Frontenac-Kingston",
-    "Langley-Aldergrove",
-    "LaSalle-Émard-Verdun",
-    "Laurentides-Labelle",
-    "Laurier-Sainte-Marie",
-    "Laval-Les Îles",
-    "Leeds-Grenville-Thousand Islands and Rideau Lakes",
-    "London-Fanshawe",
-    "Longueuil-Charles-LeMoyne",
-    "Longueuil-Saint-Hubert",
-    "Lévis-Lotbinière",
-    "Madawaska-Restigouche",
-    "Markham-Stouffville",
-    "Markham-Thornhill",
-    "Markham-Unionville",
-    "Medicine Hat-Cardston-Warner",
-    "Miramichi-Grand Lake",
-    "Mission-Matsqui-Fraser Canyon",
-    "Mississauga East-Cooksville",
-    "Mississauga-Erin Mills",
-    "Mississauga-Lakeshore",
-    "Mississauga-Malton",
-    "Mississauga-Streetsville",
-    "Moncton-Riverview-Dieppe",
-    "Montmagny-L'Islet-Kamouraska-Rivière-du-Loup",
-    "Moose Jaw-Lake Centre-Lanigan",
-    "Mégantic-L'Érable",
-    "Nanaimo-Ladysmith",
-    "New Westminster-Burnaby",
-    "Newmarket-Aurora",
-    "Nipissing-Timiskaming",
-    "North Island-Powell River",
-    "North Okanagan-Shuswap",
-    "Northumberland-Peterborough South",
-    "Notre-Dame-de-Grâce-Westmount",
-    "Oakville North-Burlington",
-    "Ottawa West-Nepean",
-    "Ottawa-Vanier",
-    "Parkdale-High Park",
-    "Parry Sound-Muskoka",
-    "Peace River-Westlock",
-    "Perth-Wellington",
-    "Peterborough-Kawartha",
-    "Pickering-Uxbridge",
-    "Pierre-Boucher-Les Patriotes-Verchères",
-    "Pierrefonds-Dollard",
-    "Pitt Meadows-Maple Ridge",
-    "Port Moody-Coquitlam",
-    "Portage-Lisgar",
-    "Portneuf-Jacques-Cartier",
-    "Prince George-Peace River-Northern Rockies",
-    "Red Deer-Lacombe",
-    "Red Deer-Mountain View",
-    "Regina-Lewvan",
-    "Regina-Qu'Appelle",
-    "Regina-Wascana",
-    "Renfrew-Nipissing-Pembroke",
-    "Richmond-Arthabaska",
-    "Rimouski-Neigette-Témiscouata-Les Basques",
-    "Rosemont-La Petite-Patrie",
-    "Saanich-Gulf Islands",
-    "Sackville-Preston-Chezzetcook",
-    "Saint Boniface-Saint Vital",
-    "Saint John-Rothesay",
-    "Saint-Hyacinthe-Bagot",
-    "Saint-Léonard-Saint-Michel",
-    "Saint-Maurice-Champlain",
-    "Salaberry-Suroît",
-    "Sarnia-Lambton",
-    "Saskatoon-Grasswood",
-    "Saskatoon-University",
-    "Scarborough-Agincourt",
-    "Scarborough-Guildwood",
-    "Scarborough-Rouge Park",
-    "Selkirk-Interlake-Eastman",
-    "Sherwood Park-Fort Saskatchewan",
-    "Simcoe-Grey",
-    "Skeena-Bulkley Valley",
-    "Souris-Moose Mountain",
-    "South Okanagan-West Kootenay",
-    "South Shore-St. Margarets",
-    "South Surrey-White Rock",
-    "Spadina-Fort York",
-    "St. Albert-Edmonton",
-    "St. John's South-Mount Pearl",
-    "Steveston-Richmond East",
-    "Stormont-Dundas-South Glengarry",
-    "Sturgeon River-Parkland",
-    "Surrey-Newton",
-    "Sydney-Victoria",
-    "Thunder Bay-Rainy River",
-    "Thunder Bay-Superior North",
-    "Timmins-James Bay",
-    "Tobique-Mactaquac",
-    "Toronto-Danforth",
-    "Toronto-St. Paul's",
-    "University-Rosedale",
-    "Vaudreuil-Soulanges",
-    "Vaughan-Woodbridge",
-    "Ville-Marie-Le Sud-Ouest-Île-des-Soeurs",
-    "Wellington-Halton Hills",
-    "West Vancouver-Sunshine Coast-Sea to Sky Country",
-    "Windsor-Tecumseh",
-    "York South-Weston",
-    "Yorkton-Melville",
-    "York-Simcoe",
-)
+for division in Division.get('ocd-division/country:ca').children('ed'):
+    if division.attrs['validFrom'] == '2015-10-19':
+        DIVISIONS_MAP[division.name.lower()] = division.name
+        if ' ' in division.name:
+            DIVISIONS_MAP[division.name.replace(' ', '-')] = division.name  # incorrect hyphen
+        if '-' in division.name:  # hyphen
+            DIVISIONS_MAP[division.name.replace('-', ' ')] = division.name  # incorrect space
+        if '—' in division.name:  # m-dash
+            DIVISIONS_MAP[division.name.replace('—', ' ')] = division.name  # incorrect space
+            DIVISIONS_MAP[division.name.replace('—', '-')] = division.name  # incorrect hyphen
