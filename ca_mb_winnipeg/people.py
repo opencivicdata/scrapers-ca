@@ -11,12 +11,15 @@ COUNCIL_PAGE = 'http://winnipeg.ca/council/'
 class WinnipegPersonScraper(CanadianScraper):
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
         nodes = page.xpath('//td[@width="105"]')
         for node in nodes:
             url = urljoin(COUNCIL_PAGE, node.xpath('.//a/@href')[0])
-            # only the first 2 names are kept for a ward name
-            ward = re.search('([A-Z].+) Ward', node.xpath('.//a//text()')[0]).group(1).replace(' - Weston', '').replace(' - Whyte Ridge', '')
+            ward = re.search('([A-Z].+) Ward', node.xpath('.//a//text()')[0]).group(1)
+            # St. James - Brooklands - Weston
+            # Charleswood - Tuxedo - Whyte Ridge
+            # South Winnipeg – St. Norbert
+            ward = ward.replace(' - Weston', '').replace(' - Whyte Ridge', '').replace('South Winnipeg – ', '')
             name = ' '.join(node.xpath('.//span[@class="k80B"][1]/text()'))
             yield self.councillor_data(url, name, ward)
 
