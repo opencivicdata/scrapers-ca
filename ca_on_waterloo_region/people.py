@@ -18,14 +18,12 @@ class WaterlooPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        regions = page.xpath('//*[@id="contentIntleft"]//h3')[2:]
+        regions = page.xpath('//*[@id="contentIntleft"]//h3|//*[@id="contentIntleft"]//p[./strong][1]')[2:]
         for region in regions:
             # the links in all <p> tags immediately following each <h3>
-            councillors = [elem[0] for elem in
-                           takewhile(lambda elem: elem.tag == 'p',
-                                     region.xpath('./following-sibling::*'))]
+            councillors = [elem[0] for elem in takewhile(lambda elem: elem.tag == 'p' and elem.xpath('./a') and not elem.xpath('./strong'), region.xpath('./following-sibling::*'))]
             for i, councillor in enumerate(councillors):
-                post = re.search('of (.*)', region.text).group(1)
+                post = re.search('of (.*)', region.text_content()).group(1)
                 if i == 0:
                     district = post
                 else:
