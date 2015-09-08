@@ -139,7 +139,7 @@ class CanadianScraper(Scraper):
             if match:
                 return match.group(1)
         if error:
-            raise Exception('No phone pattern')
+            raise Exception('No phone pattern in {}'.format(node.text_content()))
 
     def get_link(self, node, substring, *, error=True):
         match = node.xpath('.//a[contains(@href,"{}")]/@href'.format(substring))

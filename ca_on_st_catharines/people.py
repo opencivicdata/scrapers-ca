@@ -27,19 +27,17 @@ class StCatharinesPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
 
-                image = councillor.xpath('./following-sibling::p[1]/img/@src')
+                image = councillor.xpath('./following-sibling::p[1]//@src')
                 if image:
                     p.image = image[0]
 
-                phone = councillor.xpath('./following-sibling::p[2]/text()')[1]
-                email = councillor.xpath('./following-sibling::p[2]//a/text()')
-                if email:
-                    email = email[0]
+                if councillor.xpath('./following-sibling::p[1]//a'):
+                    position = 1
                 else:
-                    email = councillor.xpath('./following-sibling::p[2]/font/text()')[0]
-                address = ' '.join(councillor.xpath('./following-sibling::p[3]/text()'))
-
-                phone = phone.split('or')[0].replace('Phone:', '')
+                    position = 2
+                phone = self.get_phone(councillor.xpath('./following-sibling::p[{}]'.format(position))[0], area_codes=[289, 905])
+                email = self.get_email(councillor.xpath('./following-sibling::p[{}]'.format(position))[0])
+                address = ' '.join(councillor.xpath('./following-sibling::p[{}]/text()'.format(position + 1)))
                 address = address.replace('Mail:', '')
 
                 p.add_contact('address', address, 'legislature')
