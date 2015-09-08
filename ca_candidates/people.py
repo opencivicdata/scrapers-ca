@@ -517,6 +517,8 @@ DIVISIONS_MAP = {
 for division in Division.get('ocd-division/country:ca').children('ed'):
     if division.attrs['validFrom'] == '2015-10-19':
         DIVISIONS_MAP[division.name.lower()] = division.name
+        if division.name != division.attrs['name_fr']:
+            DIVISIONS_MAP[division.attrs['name_fr']] = division.name
         if ' ' in division.name:
             DIVISIONS_MAP[division.name.replace(' ', '-')] = division.name  # incorrect hyphen
         if '-' in division.name:  # hyphen
