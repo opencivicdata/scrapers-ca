@@ -21,7 +21,7 @@ class GatineauPersonScraper(CanadianScraper):
         p = Person(primary_org='legislature', name=members[0], district='Gatineau', role='Maire')
         p.add_source(COUNCIL_PAGE)
         p.add_source(MAYOR_CONTACT_PAGE)
-        email = 'maire@gatineau.ca'  # @todo hardcoded
+        email = 'maire@gatineau.ca'  # hardcoded
         p.add_contact('email', email)
         yield p
 
