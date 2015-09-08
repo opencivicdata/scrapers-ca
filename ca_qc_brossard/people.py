@@ -17,6 +17,8 @@ class BrossardPersonScraper(CanadianScraper):
         email_links = contact_page.xpath('//a[contains(@href, "mailto:")]')
         for elem in councillor_elems:
             name = elem.xpath('.//div[@class="titre"]/text()')[0]
+            if name == 'Poste vacant':
+                continue
             if name == 'Francyne Raymond':
                 name = 'Francine Raymond'  # her name is Francine, not Francyne
             position = elem.xpath('.//div[@class="poste"]/text()')[0]
