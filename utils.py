@@ -156,7 +156,10 @@ class CanadianScraper(Scraper):
             response.encoding = encoding
 
         try:
-            page = lxml.html.fromstring(response.text.replace('"www.facebook.com/', '"https://www.facebook.com/'))  # XXX ca_candidates
+            text = response.text
+            text = text.replace('"www.facebook.com/', '"https://www.facebook.com/')  # XXX ca_candidates
+            text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
+            page = lxml.html.fromstring(text)
         except etree.ParserError:
             raise Exception('lxml.etree.ParserError: Document is empty {}'.format(url))
 
