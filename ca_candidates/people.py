@@ -389,6 +389,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 if district in DIVISIONS_MAP:
                     district = DIVISIONS_MAP[district]
+                elif district == 'Selkirk-Interlake':
+                    district = 'Selkirk—Interlake—Eastman'
 
                 if district != 'TBD':
                     p = Person(primary_org='lower', name=name[0], district=district, role='candidate', party='Libertarian')
