@@ -305,8 +305,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
     def scrape_green(self):
         url = 'http://www.greenparty.ca/en/candidates'
         for node in self.lxmlize(url).xpath('//div[contains(@class,"candidate-card")]'):
-            name = node.xpath('.//div[@class="candidate-name"]//text()')[0].replace('Mark & Jan', 'Mark')
+            name = node.xpath('.//div[@class="candidate-name"]//text()')[0]
             district = node.xpath('.//@data-target')[0][5:]  # node.xpath('.//div[@class="riding-name"]//text()')[0]
+
+            if name == name.lower():
+                name = name.title()
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
             image = lxml.html.fromstring(node.xpath('.//div/@data-src')[0]).xpath('//@src')[0]  # print quality also available
@@ -348,7 +351,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             elif node.xpath('./@class[contains(.,"candidate-male")]'):
                 p.gender = 'male'
 
-            link = node.xpath('.//a[substring(@href, string-length(@href)-11)=".liberal.ca/"]/@href')
+            link = node.xpath('.//a[substring(@href, string-length(@href)-11)=".liberal.ca/"]/@href|.//a[substring(@href, string-length(@href)-10)=".liberal.ca"]/@href')
             self.add_links(p, node)
 
             if link:
