@@ -192,26 +192,29 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         url = 'https://www.chp.ca/candidates'
         for href in self.lxmlize(url).xpath('//ul[@id="nav_cat_archive"]//li/a/@href[1]'):
-            page = self.lxmlize(href)
+            try:
+                page = self.lxmlize(href)
 
-            name = page.xpath('//meta[@property="og:title"]/@content')[0].split(' - ')[0]
-            district = page.xpath('//a[contains(@href,".pdf")]/@href')[0].rsplit('/', 1)[1][0:5]
+                name = page.xpath('//meta[@property="og:title"]/@content')[0].split(' - ')[0]
+                district = page.xpath('//a[contains(@href,".pdf")]/@href')[0].rsplit('/', 1)[1][0:5]
 
-            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Christian Heritage')
+                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Christian Heritage')
 
-            p.image = page.xpath('//meta[@property="og:image"]/@content')[0]
+                p.image = page.xpath('//meta[@property="og:image"]/@content')[0]
 
-            voice = self.get_phone(page.xpath('//span[@class="phone"]')[0], error=False)
-            if voice:
-                p.add_contact('voice', voice, 'office')
+                voice = self.get_phone(page.xpath('//span[@class="phone"]')[0], error=False)
+                if voice:
+                    p.add_contact('voice', voice, 'office')
 
-            script = page.xpath('//span[@class="email"]/script/text()')[0]
-            codes = reversed(re.findall(r"[\[,]'(.+?)'", script))
-            content = ''.join(char(code) for code in codes)
-            p.add_contact('email', re.search(r'>E: (.+)<', content).group(1))
+                script = page.xpath('//span[@class="email"]/script/text()')[0]
+                codes = reversed(re.findall(r"[\[,]'(.+?)'", script))
+                content = ''.join(char(code) for code in codes)
+                p.add_contact('email', re.search(r'>E: (.+)<', content).group(1))
 
-            p.add_source(href)
-            yield p
+                p.add_source(href)
+                yield p
+            except requests.exceptions.ChunkedEncodingError:
+                pass  # too bad for that candidate
 
     def scrape_conservative(self):
         url = 'http://www.conservative.ca/?member=candidates'
