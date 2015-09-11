@@ -14,6 +14,7 @@ from pupa.utils import get_pseudo_id
 from six import StringIO
 from six.moves.urllib.parse import parse_qs, urlparse, urlsplit
 
+
 class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape(self):
@@ -483,7 +484,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p.add_source(url)
             yield p
 
-
     def add_links(self, p, node):
         for substring in ('facebook.com', 'fb.com', 'instagram.com', 'linkedin.com', 'twitter.com', 'youtube.com'):
             link = self.get_link(node, substring, error=False)
@@ -522,7 +522,7 @@ DIVISIONS_MAP = {
 for division in Division.get('ocd-division/country:ca').children('ed'):
     if division.attrs['validFrom'] == '2015-10-19':
         DIVISIONS_MAP[division.name.lower()] = division.name
-        if division.name != division.attrs['name_fr']:
+        if division.attrs['name_fr'] and division.attrs['name_fr'] != division.name:
             DIVISIONS_MAP[division.attrs['name_fr']] = division.name
         if ' ' in division.name:
             DIVISIONS_MAP[division.name.replace(' ', '-')] = division.name  # incorrect hyphen

@@ -37,7 +37,6 @@ class MississaugaPersonScraper(CanadianScraper):
 
     def mayor_data(self, url):
         page = self.lxmlize(url)
-        contact_page = self.lxmlize(CONTACT_PAGE)
 
         name_text = page.xpath('//p/*[contains(.//text(), "Mayor")]/text()')[0]
         name = name_text.split(',')[0]
