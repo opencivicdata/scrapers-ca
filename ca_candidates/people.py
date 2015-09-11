@@ -90,6 +90,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         )
         for method in methods:
             for p in getattr(self, 'scrape_{}'.format(method))():
+                if not p._related[0].post_id:
+                    raise Exception('No post_id for {} of {}'.format(p.name, p._related[1].organization_id))
+
                 # Uniquely identify the candidate.
                 boundary_id = get_pseudo_id(p._related[0].post_id)['label']
                 if not re.search(r'\A\d{5}\Z', boundary_id):
