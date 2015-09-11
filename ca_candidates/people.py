@@ -146,22 +146,21 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_bloc_quebecois(self):
         url = 'http://www.blocquebecois.org/candidats/'
+        page = self.lxmlize(url)
 
-        pages = math.ceil(int(re.search(r'\d+', self.lxmlize(url).xpath('//option[1]/text()')[0]).group(0)) / 10)
-
+        pages = math.ceil(int(re.search(r'\d+', page.xpath('//option[1]/text()')[0]).group(0)) / 10)
         pattern = 'http://www.blocquebecois.org/candidats/page/{}/'
 
-        for page in range(1, pages + 1):
-            if page == 1:
-                page_url = url
-            else:
-                page_url = pattern.format(page)
-            for node in self.lxmlize(page_url).xpath('//article'):
-                district = node.xpath('.//h1/text()')
+        for page_number in range(1, pages + 1):
+            if page_number > 1:
+                page = self.lxmlize(pattern.format(page_number))
+
+            for node in page.xpath('//article'):
+                district = node.xpath('.//h1/a/text()|.//div[@class="infos"]//a[1]/text()')
 
                 if district:
-                    name = ' '.join(node.xpath('.//h2/text()'))
-                    district = district[0].replace('–', '—')  # n-dash, m-dash
+                    name = ' '.join(node.xpath('.//h2/a/text()|.//div[@class="infos"]//a[2]/text()'))
+                    district = district[0].replace('–', '—').strip()  # n-dash, m-dash
 
                     if district in DIVISIONS_MAP:
                         district = DIVISIONS_MAP[district]
@@ -355,7 +354,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             elif node.xpath('./@class[contains(.,"candidate-male")]'):
                 p.gender = 'male'
 
-            link = node.xpath('.//a[substring(@href, string-length(@href)-11)=".liberal.ca/"]/@href|.//a[substring(@href, string-length(@href)-10)=".liberal.ca"]/@href')
+            link = node.xpath('.//a[substring(@href,string-length(@href)-11)=".liberal.ca/"]/@href|.//a[substring(@href,string-length(@href)-10)=".liberal.ca"]/@href')
             self.add_links(p, node)
 
             if link:
