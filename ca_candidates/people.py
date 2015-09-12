@@ -76,6 +76,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             ),
         }
 
+        self.birth_date = 1900
+
         # Scrape each party separately.
         # @todo Pirate https://my.pirateparty.ca/election2015.html
         # @todo Rhinoceros http://www.eatgoogle.com/en/candidates/
@@ -234,6 +236,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
             if node.attrib['data-image'] != '/media/team/no-image.jpg':
                 p.image = 'http://www.conservative.ca{}'.format(node.attrib['data-image'])
+
+            if name == 'Robert Kitchen':
+                p.birth_date = str(self.birth_date)
+                self.birth_date += 1
 
             if node.attrib['data-website'] != 'www.conservative.ca':
                 p.add_link('http://{}'.format(node.attrib['data-website']))
@@ -436,7 +442,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 emails[int(cells[i][3][-1])] = cells[i + 3][3][-1].replace(' ', '')
 
         url = 'http://www.ndp.ca/candidates'
-        birth_date = 1900
         for node in self.lxmlize(url, encoding='utf-8').xpath('//div[@class="candidate-holder"]'):
             image = node.xpath('.//div/@data-img')[0]
 
@@ -446,10 +451,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='NDP')
             p.image = image
 
-            # There are two Erin Weir.
-            if name == 'Erin Weir':
-                p.birth_date = str(birth_date)
-                birth_date += 1
+            if name in ('Erin Weir', 'Robert Kitchen'):
+                p.birth_date = str(self.birth_date)
+                self.birth_date += 1
 
             if node.xpath('.//div[contains(@class,"placeholder-f")]'):
                 p.gender = 'female'
