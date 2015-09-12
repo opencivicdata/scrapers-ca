@@ -9,6 +9,7 @@ import re
 import lxml.html
 import requests
 import scrapelib
+from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.utils import get_pseudo_id
 from six import StringIO
@@ -470,15 +471,18 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if link:
                 p.add_link(link[0])
 
-                node = self.lxmlize(link[0]).xpath('//div[@class="contact-phone"]')
-                if node:
-                    email = self.get_email(node[0], error=False)
-                    if email:
-                        p.add_contact('email', email)
+                try:
+                    node = self.lxmlize(link[0]).xpath('//div[@class="contact-phone"]')
+                    if node:
+                        email = self.get_email(node[0], error=False)
+                        if email:
+                            p.add_contact('email', email)
 
-                    voice = self.get_phone(node[0], error=False)
-                    if voice:
-                        p.add_contact('voice', voice, 'office')
+                        voice = self.get_phone(node[0], error=False)
+                        if voice:
+                            p.add_contact('voice', voice, 'office')
+                except etree.XMLSyntaxError:
+                    self.warning('lxml.etree.XMLSyntaxError on {}'.format(url))
 
             if not email and emails.get(int(district)):
                 p.add_contact('email', emails[int(district)])
