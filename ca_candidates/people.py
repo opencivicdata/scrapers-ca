@@ -78,6 +78,16 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         self.birth_date = 1900
 
+        # @todo Independent http://www.punditsguide.ca/parties.php?party=10&elec=43#tabCands
+        p = Person(primary_org='lower', name='Scott Andrews', district='10001', role='candidate', party='Independent')
+        p.image = 'http://www.scottandrews.ca/Images/photo_scott.jpg'
+        p.add_contact('voice', '709-631-2355', 'office')
+        p.extras['incumbent'] = True
+        p.add_source('http://www.scottandrews.ca/campaign/default.aspx')
+        p.birth_date = str(self.birth_date)
+        self.birth_date += 1
+        yield p
+
         # Scrape each party separately.
         # @todo Pirate https://my.pirateparty.ca/election2015.html
         # @todo Rhinoceros http://www.eatgoogle.com/en/candidates/
@@ -451,7 +461,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='NDP')
             p.image = image
 
-            if name in ('Erin Weir', 'Robert Kitchen'):
+            if name in ('Erin Weir', 'Robert Kitchen', 'Scott Andrews'):
                 p.birth_date = str(self.birth_date)
                 self.birth_date += 1
 
@@ -491,7 +501,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if not email and emails.get(int(district)):
                 p.add_contact('email', emails[int(district)])
 
-            if name in self.incumbents:
+            if name in self.incumbents and name != 'Scott Andrews':
                 p.extras['incumbent'] = True
 
             p.add_source(url)

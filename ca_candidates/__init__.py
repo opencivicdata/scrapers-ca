@@ -19,6 +19,7 @@ class CanadaCandidates(CanadianJurisdiction):
         {'name': 'Conservative'},
         {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},
+        {'name': 'Independent'},
         {'name': 'Liberal'},
         {'name': 'Libertarian'},
         {'name': 'NDP'},
