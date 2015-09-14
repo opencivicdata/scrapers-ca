@@ -238,7 +238,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_conservative(self):
         url = 'http://www.conservative.ca/?member=candidates'
-        doc = lxml.html.fromstring(json.loads(self.get(url).text))
+        user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
+        doc = lxml.html.fromstring(json.loads(self.get(url, headers={'User-Agent': user_agent}).text))
         for node in doc.xpath('//a[contains(@class,"team-list-person-block")]'):
             name = node.attrib['data-name'].strip()
             district = node.attrib['data-title']
