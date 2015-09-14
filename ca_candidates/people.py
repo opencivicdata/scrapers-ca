@@ -88,6 +88,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         self.birth_date += 1
         yield p
 
+        p = Person(primary_org='lower', name='James Ford', district='48032', role='candidate', party='Independent')
+        p.image = 'http://jamesfordindependent.ca/jamesfordindependent.ca/HOME_files/PastedGraphic-2.jpg'
+        p.add_contact('email', 'info@jamesfordindependent.ca')
+        p.add_contact('voice', '587-990-2061', 'office')
+        p.add_source('http://jamesfordindependent.ca/')
+        yield p
+
         # Scrape each party separately.
         # @todo Pirate https://my.pirateparty.ca/election2015.html
         # @todo Rhinoceros http://www.eatgoogle.com/en/candidates/
