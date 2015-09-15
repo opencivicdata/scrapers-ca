@@ -13,7 +13,7 @@ from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.utils import get_pseudo_id
 from six import StringIO
-from six.moves.urllib.parse import parse_qs, urlparse, urlsplit
+from six.moves.urllib.parse import parse_qs, quote_plus, urlparse, urlsplit
 
 
 class CanadaCandidatesPersonScraper(CanadianScraper):
@@ -93,6 +93,18 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         p.add_contact('email', 'info@jamesfordindependent.ca')
         p.add_contact('voice', '587-990-2061', 'office')
         p.add_source('http://jamesfordindependent.ca/')
+        yield p
+
+        p = Person(primary_org='lower', name='Brent Rathgeber', district='48031', role='candidate', party='Independent')
+        p.image = 'http://brentrathgeber.com/wordpress/wp-content/uploads/2015/08/CLA-photo.jpg'
+        p.add_contact('voice', '780-460-1018', 'office')
+        p.add_contact('fax', '780-460-7205', 'office')
+        p.add_contact('email', 'reelectbrent@gmail.com')
+        p.add_link('https://www.facebook.com/Re-Elect-Brent-Rathgeber-for-St-Albert-Edmonton-156806981046354')
+        p.add_link('https://www.youtube.com/user/BrentRathgberMP')
+        p.add_link('https://twitter.com/brentrathgeber')
+        p.extras['incumbent'] = True
+        p.add_source('http://brentrathgeber.com/')
         yield p
 
         # Scrape each party separately.
@@ -253,7 +265,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
             if node.attrib['data-image'] != '/media/team/no-image.jpg':
-                p.image = 'http://www.conservative.ca{}'.format(node.attrib['data-image'])
+                p.image = 'https://represent-image-proxy.herokuapp.com/{}/150/150'.format(quote_plus('http://www.conservative.ca{}'.format(node.attrib['data-image'])))
 
             if name == 'Robert Kitchen':
                 p.birth_date = str(self.birth_date)
