@@ -498,6 +498,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 # @note Remove once corrected.
                 if 'www.ndp.ca' in facebook[0]:
                     facebook[0] = facebook[0].replace('www.ndp.ca', 'www.facebook.com')
+                elif facebook[0] == 'https://fb.com/DraftJennyKwan2015':
+                    facebook[0] = 'https://www.facebook.com/JennyKwanVanEast'
                 p.add_link(facebook[0])
 
             email = None
