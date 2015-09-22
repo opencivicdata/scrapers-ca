@@ -355,9 +355,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 name = name.title()
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
-            image = lxml.html.fromstring(node.xpath('.//div/@data-src')[0]).xpath('//@src')[0]  # print quality also available
-            if '.png' not in image:
-                p.image = image
+            detail_url = node.xpath('.//div/@data-src')[0]
+            try:
+                image = lxml.html.fromstring(detail_url).xpath('//@src')[0]  # print quality also available
+                if '.png' not in image:
+                    p.image = image
+            except lxml.etree.XMLSyntaxError:
+                self.warning('lxml.etree.XMLSyntaxError on {}'.format(detail_url))
 
             p.add_contact('email', self.get_email(node))
 
