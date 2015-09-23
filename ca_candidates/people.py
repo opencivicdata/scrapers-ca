@@ -187,7 +187,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if page_number > 1:
                 page = self.lxmlize(pattern.format(page_number))
 
-            for node in page.xpath('//article'):
+            nodes = page.xpath('//article')
+            if not len(nodes):
+                raise Exception('{} returns no candidates'.format(url))
+            for node in nodes:
                 district = node.xpath('.//h1/a/text()|.//div[@class="infos"]//a[1]/text()')
 
                 if district:
@@ -223,7 +226,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 return code
 
         url = 'https://www.chp.ca/candidates'
-        for href in self.lxmlize(url).xpath('//ul[@id="nav_cat_archive"]//li/a/@href[1]'):
+
+        nodes = self.lxmlize(url).xpath('//ul[@id="nav_cat_archive"]//li/a/@href[1]')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for href in nodes:
             try:
                 page = self.lxmlize(href)
 
@@ -252,7 +259,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         url = 'http://www.conservative.ca/?member=candidates'
         user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
         doc = lxml.html.fromstring(json.loads(self.get(url, headers={'User-Agent': user_agent}).text))
-        for node in doc.xpath('//a[contains(@class,"team-list-person-block")]'):
+
+        nodes = doc.xpath('//a[contains(@class,"team-list-person-block")]')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
             name = node.attrib['data-name'].strip()
             district = node.attrib['data-title']
             if district in DIVISIONS_MAP:
@@ -323,7 +334,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
     def scrape_forces_et_democratie(self):
         url = 'http://www.forcesetdemocratie.org/l-equipe/candidats.html'
         user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
-        for node in self.lxmlize(url, user_agent=user_agent).xpath('//ul[@class="liste-candidats"]/li'):
+
+        nodes = self.lxmlize(url, user_agent=user_agent).xpath('//ul[@class="liste-candidats"]/li')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
             link = node.xpath('./a/@href')[0]
 
             name = node.xpath('./h4/text()')[0]
@@ -347,7 +362,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_green(self):
         url = 'http://www.greenparty.ca/en/candidates'
-        for node in self.lxmlize(url).xpath('//div[contains(@class,"candidate-card")]'):
+
+        nodes = self.lxmlize(url).xpath('//div[contains(@class,"candidate-card")]')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
             name = node.xpath('.//div[@class="candidate-name"]//text()')[0]
             district = node.xpath('.//@data-target')[0][5:]  # node.xpath('.//div[@class="riding-name"]//text()')[0]
 
@@ -379,7 +398,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
     def scrape_liberal(self):
         url = 'https://www.liberal.ca/candidates/'
         cookies = {'YPF8827340282Jdskjhfiw_928937459182JAX666': json.loads(self.get('http://ipinfo.io/json').text)['ip']}
-        for node in self.lxmlize(url, cookies=cookies).xpath('//ul[@id="candidates"]/li'):
+
+        nodes = self.lxmlize(url, cookies=cookies).xpath('//ul[@id="candidates"]/li')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
             name = node.xpath('./h2/text()')[0]
             district = node.xpath('./@data-riding-riding_id')[0]  # node.xpath('./@data-riding-name')[0]
 
@@ -425,7 +448,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_libertarian(self):
         url = 'https://www.libertarian.ca/candidates/'
-        for node in self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]'):
+
+        nodes = self.lxmlize(url).xpath('//div[contains(@class,"tshowcase-inner-box")]')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
             name = node.xpath('.//div[@class="tshowcase-box-title"]//text()')
             if name:
                 district = node.xpath('.//div[@class="tshowcase-single-position"]//text()')
@@ -475,9 +502,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if cells[i + 3][3] and cells[i + 3][3][-1]:
                 emails[int(cells[i][3][-1])] = cells[i + 3][3][-1].replace(' ', '')
 
-        url = 'http://www.ndp.ca/candidates'
-        for node in self.lxmlize(url, encoding='utf-8').xpath('//div[@class="candidate-holder"]'):
-            image = node.xpath('.//div/@data-img')[0]
+        url = 'http://www.ndp.ca/team'
+
+        nodes = self.lxmlize(url, encoding='utf-8').xpath('//div[contains(@class,"candidate-holder ")]')[1:]
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
+            image = node.xpath('.//@data-img')[0]
 
             name = node.xpath('.//div[@class="candidate-name"]//text()')[0]
             district = re.search(r'\d{5}', image).group(0)  # node.xpath('.//span[@class="candidate-riding-name"]/text()')[0]
