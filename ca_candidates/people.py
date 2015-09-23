@@ -29,7 +29,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         # Get the crowdsourced data.
         crowdsourcing = {}
-        response = self.get('https://docs.google.com/spreadsheets/d/1BNjqBeGDsjiGOtsAu2K5qR1a3Cq_1sfVoDH7mE1WFU0/export?gid=368528247&format=csv')
+        response = self.get('https://docs.google.com/spreadsheets/d/1BNjqBeGDsjiGOtsAu2K5qR1a3Cq_1sfVoDH7mE1WFU0/export?gid=1338986395&format=csv')
         response.encoding = 'utf-8'
         for row in csv.DictReader(StringIO(response.text)):
             # Uniquely identify the candidate.
