@@ -26,16 +26,16 @@ class MonctonPersonScraper(CanadianScraper):
             if district == 'At Large':
                 role = 'Councillor at Large'
                 seat_numbers[district] += 1
-                district = 'Moncton (seat %d)' % seat_numbers[district]
+                district = 'Moncton (seat {})'.format(seat_numbers[district])
             elif district == 'Deputy Mayor':
                 district = parts[3]
                 role = 'Councillor'
                 seat_numbers[district] += 1
-                district = '%s (seat %d)' % (district, seat_numbers[district])
+                district = '{} (seat {})'.format(district, seat_numbers[district])
             else:
                 role = 'Councillor'
                 seat_numbers[district] += 1
-                district = '%s (seat %d)' % (district, seat_numbers[district])
+                district = '{} (seat {})'.format(district, seat_numbers[district])
 
             url = councillor.xpath('.//a')[-1].attrib['href']
             page = self.lxmlize(url)
@@ -52,7 +52,7 @@ class MonctonPersonScraper(CanadianScraper):
             phone_nos = re.findall(r'(([0-9]{3}-)?([0-9]{3}-[0-9]{4}))', contact_info)
             for phone_no in phone_nos:
                 if len(re.sub(r'\D', '', phone_no[0])) == 7:
-                    phone = '506-%s' % phone_no[0]
+                    phone = '506-{}'.format(phone_no[0])
                 else:
                     phone = phone_no[0]
                 p.add_contact('voice', phone, 'legislature')
@@ -76,7 +76,7 @@ class MonctonPersonScraper(CanadianScraper):
 
         p.add_contact('address', address, 'legislature')
         if len(re.sub(r'\D', '', phone)) == 7:
-            phone = '506-%s' % phone
+            phone = '506-{}'.format(phone)
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('fax', fax, 'legislature')
         p.add_contact('email', email)

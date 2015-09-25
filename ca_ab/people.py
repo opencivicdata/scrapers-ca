@@ -28,8 +28,7 @@ class AlbertaPersonScraper(CanadianScraper):
         csv_text = self.get(self.get_csv_url()).text
         cr = csv.DictReader(csv_text.split('\n'))
         for mla in cr:
-            name = '%s %s %s' % (mla['MLA First Name'], mla['MLA Middle Names'],
-                                 mla['MLA Last Name'])
+            name = '{} {} {}'.format(mla['MLA First Name'], mla['MLA Middle Names'], mla['MLA Last Name'])
             if name.strip() == '':
                 continue
             party = get_party(mla['Caucus'])
@@ -47,7 +46,7 @@ class AlbertaPersonScraper(CanadianScraper):
         csv_gen_page = self.lxmlize(COUNCIL_PAGE)
 
         # ASP forms store session state. Looks like we can't just play back a POST.
-        get_hidden_val = lambda v: csv_gen_page.xpath('//input[@id="%s"]/@value' % v)[0]
+        get_hidden_val = lambda v: csv_gen_page.xpath('//input[@id="{}"]/@value'.format(v))[0]
         post_data = {
             '__VIEWSTATE': get_hidden_val('__VIEWSTATE'),
             '__VIEWSTATEGENERATOR': get_hidden_val('__VIEWSTATEGENERATOR'),

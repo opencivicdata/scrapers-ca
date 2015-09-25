@@ -15,7 +15,7 @@ class Whitby(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Whitby')
         for i in range(3):
-            organization.add_post(role='Regional Councillor', label='Whitby (seat %d)' % (i + 1))
+            organization.add_post(role='Regional Councillor', label='Whitby (seat {})'.format(i + 1))
         organization.add_post(role='Councillor', label='North Ward')
         organization.add_post(role='Councillor', label='West Ward')
         organization.add_post(role='Councillor', label='Centre Ward')

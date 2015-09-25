@@ -18,7 +18,7 @@ class WhitbyPersonScraper(CanadianScraper):
             name = name.replace(',', '')
             if 'Regional Councillor' in role_district:
                 role = role_district
-                district = 'Whitby (seat %d)' % regional_councillor_seat_number
+                district = 'Whitby (seat {})'.format(regional_councillor_seat_number)
                 regional_councillor_seat_number += 1
             else:
                 role, district = role_district.strip().split(', ')

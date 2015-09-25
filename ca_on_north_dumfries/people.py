@@ -19,7 +19,7 @@ class NorthDumfriesPersonScraper(CanadianScraper):
                 name = name.replace('Mayor', '').strip()
                 role = 'Mayor'
             else:
-                district = 'Ward %s' % info.pop(0).strip()
+                district = 'Ward {}'.format(info.pop(0).strip())
                 role = 'Councillor'
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

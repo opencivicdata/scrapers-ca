@@ -27,7 +27,7 @@ class RichmondHillPersonScraper(CanadianScraper):
                 if district:
                     district = district[0].strip()
                 else:
-                    district = 'Richmond Hill (seat %d)' % regional_councillor_seat_number
+                    district = 'Richmond Hill (seat {})'.format(regional_councillor_seat_number)
                     regional_councillor_seat_number += 1
 
                 role = 'Regional Councillor' if 'Regional' in header else 'Councillor'
@@ -49,7 +49,7 @@ class RichmondHillPersonScraper(CanadianScraper):
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('fax', fax, 'legislature')
             p.add_contact('email', email)
-            p.image = page.xpath('//img[contains(@alt, "%s")]/@src' % name)[0]
+            p.image = page.xpath('//img[contains(@alt, "{}")]/@src'.format(name))[0]
             if 'Website' in info:
                 p.add_link(re.findall(r'www\..*\.[a-z]+', info)[0])
             yield p

@@ -15,6 +15,6 @@ class Mercier(CanadianJurisdiction):
 
         organization.add_post(role='Maire', label='Mercier')
         for i in range(6):
-            organization.add_post(role='Conseiller', label='District %d' % (i + 1))
+            organization.add_post(role='Conseiller', label='District {}'.format(i + 1))
 
         yield organization

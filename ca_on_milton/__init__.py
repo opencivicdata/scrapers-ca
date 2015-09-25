@@ -17,6 +17,6 @@ class Milton(CanadianJurisdiction):
         organization.add_post(role='Regional Councillor', label='Wards 1, 6, 7 and 8')
         organization.add_post(role='Regional Councillor', label='Wards 2, 3, 4 and 5')
         for i in range(8):
-            organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
+            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
 
         yield organization

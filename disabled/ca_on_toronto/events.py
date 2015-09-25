@@ -125,7 +125,7 @@ def find_items(committee):
     agenda_items = []
 
     page = self.lxmlize('http://app.toronto.ca/tmmis/decisionBodyList.do?function=prepareDisplayDBList')
-    link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"%s")]/@href' % committee)
+    link = page.xpath('//table[@class="default zebra"]//a[contains(text(),"{}")]/@href'.format(committee))
     if link:
         link = link[0]
     else:
@@ -141,9 +141,9 @@ def find_items(committee):
         meeting_id = meeting.attrib['name'].replace('header', '').strip()
         # get = { 'function' : 'doPrepare', 'meetingId' : meeting_id }
         if committee == 'City Council':
-            request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&meetingId=%s' % meeting_id
+            request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&meetingId={}'.format(meeting_id)
         else:
-            request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&meetingId=%s' % meeting_id
+            request_string = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&meetingId={}'.format(meeting_id)
         page = self.lxmlize(request_string)
 
         items = page.xpath('//tr[@class="nonUrgent" or @class="urgent"]')
@@ -152,9 +152,9 @@ def find_items(committee):
             item_content_script = page.xpath('//script[contains(text(), "loadContent")]/text()')[0]
             item_id = re.findall(r'(?<=agendaItemId:")(.*)(?=")', item_content_script)[0]
             if committee == 'City Council':
-                item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getCouncilMinutesItemPreview&r=1376598367685&agendaItemId=%s' % item_id
+                item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getCouncilMinutesItemPreview&r=1376598367685&agendaItemId={}'.format(item_id)
             else:
-                item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getMinutesItemPreview&r=1376593612354&agendaItemId=%s' % item_id
+                item_info_url = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getMinutesItemPreview&r=1376593612354&agendaItemId={}'.format(item_id)
             page = self.lxmlize(item_info_url)
 
             root_description = page.xpath('//font[@size="4"]')[0].text_content()

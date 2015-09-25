@@ -15,8 +15,8 @@ class Oshawa(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Oshawa')
         for i in range(7):
-            organization.add_post(role='Regional Councillor', label='Oshawa (seat %d)' % (i + 1))
+            organization.add_post(role='Regional Councillor', label='Oshawa (seat {})'.format(i + 1))
         for i in range(3):
-            organization.add_post(role='Councillor', label='Oshawa (seat %d)' % (i + 1))
+            organization.add_post(role='Councillor', label='Oshawa (seat {})'.format(i + 1))
 
         yield organization

@@ -22,7 +22,7 @@ class SaanichPersonScraper(CanadianScraper):
             if role == 'Mayor':
                 district = 'Saanich'
             else:
-                district = 'Saanich (seat %d)' % councillor_seat_number
+                district = 'Saanich (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
 
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)

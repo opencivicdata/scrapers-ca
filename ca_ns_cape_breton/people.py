@@ -15,7 +15,7 @@ class CapeBretonPersonScraper(CanadianScraper):
         councillors = page.xpath('//table/tbody/tr')[1:]
         for councillor in councillors:
             name = councillor.xpath('.//a')[0].text_content()
-            district = 'District %s' % councillor.xpath('.//strong')[0].text_content()
+            district = 'District {}'.format(councillor.xpath('.//strong')[0].text_content())
 
             address = councillor.xpath('.//td')[2].text_content().replace("\r\n", ', ')
             contact_nodes = councillor.xpath('.//td[4]/text()')

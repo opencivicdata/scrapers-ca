@@ -32,6 +32,6 @@ class Niagara(CanadianJurisdiction):
         for label, count in counts.items():
             organization.add_post(role='Mayor', label=label)
             for i in range(count):
-                organization.add_post(role='Councillor', label='%s (seat %d)' % (label, i + 1))
+                organization.add_post(role='Councillor', label='{} (seat {})'.format(label, i + 1))
 
         yield organization

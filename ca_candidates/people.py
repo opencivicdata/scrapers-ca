@@ -107,9 +107,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         p.add_source('http://brentrathgeber.com/')
         yield p
 
-        # Scrape each party separately.
-        # @todo Pirate https://my.pirateparty.ca/election2015.html
-        # @todo Rhinoceros http://www.eatgoogle.com/en/candidates/
+        # Scrape each party separately. Unscraped parties with more than 10 candidates:
+        # http://mlpc.ca/2015/candidates-for-the-marxist-leninist-party-of-canada/
+        # http://communist-party.ca/
+        # http://www.eatgoogle.com/en/candidates/
         methods = (
             'bloc_quebecois',
             'christian_heritage',

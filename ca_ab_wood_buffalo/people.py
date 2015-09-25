@@ -28,7 +28,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
 
                 if ward_name in ('Ward 1', 'Ward 2'):
                     seat_numbers[ward_name] += 1
-                    district = '%s (seat %d)' % (ward_name, seat_numbers[ward_name])
+                    district = '{} (seat {})'.format(ward_name, seat_numbers[ward_name])
                 else:
                     district = ward_name
 

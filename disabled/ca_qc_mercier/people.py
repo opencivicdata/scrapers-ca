@@ -20,7 +20,7 @@ class MercierPersonScraper(CanadianScraper):
             else:
                 name = councillor.xpath('.//strong/text()')[0].replace('Monsieur', '').replace('Madame', '').strip()
                 role = 'Conseiller'
-                district = 'District %s' % re.search('(\d)', councillor.xpath('.//text()')[3]).group(1)
+                district = 'District {}'.format(re.search('(\d)', councillor.xpath('.//text()')[3]).group(1))
 
             email = self.get_email(councillor)
 

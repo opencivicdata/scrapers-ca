@@ -23,7 +23,7 @@ class BrantfordPersonScraper(CanadianScraper):
 
             ward = councillor.xpath('./td')[0].text_content().replace('Councillor', '')
             seat_numbers[ward] += 1
-            district = '%s (seat %d)' % (ward, seat_numbers[ward])
+            district = '{} (seat {})'.format(ward, seat_numbers[ward])
             name = councillor.xpath('./td')[1].text_content()
             url = councillor.xpath('./td/a')[0].attrib['href']
 

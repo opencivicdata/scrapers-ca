@@ -15,7 +15,7 @@ class Pickering(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Pickering')
         for i in range(3):
-            organization.add_post(role='Regional Councillor', label='Ward %d' % (i + 1))
-            organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
+            organization.add_post(role='Regional Councillor', label='Ward {}'.format(i + 1))
+            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
 
         yield organization

@@ -17,7 +17,7 @@ class SurreyPersonScraper(CanadianScraper):
             url = link.attrib['href']
             councillor_page = self.lxmlize(url)
 
-            district = 'Surrey (seat %d)' % councillor_seat_number
+            district = 'Surrey (seat {})'.format(councillor_seat_number)
             councillor_seat_number += 1
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

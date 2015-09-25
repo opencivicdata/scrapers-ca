@@ -28,11 +28,11 @@ class OshawaPersonScraper(CanadianScraper):
 
             if role == 'City Councillor':
                 role = 'Councillor'
-                district = 'Oshawa (seat %d)' % councillor_seat_number
+                district = 'Oshawa (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
             elif role == 'Regional and City Councillor':
                 role = 'Regional Councillor'
-                district = 'Oshawa (seat %d)' % regional_councillor_seat_number
+                district = 'Oshawa (seat {})'.format(regional_councillor_seat_number)
                 regional_councillor_seat_number += 1
             else:
                 district = 'Oshawa'

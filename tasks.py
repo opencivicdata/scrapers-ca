@@ -84,31 +84,31 @@ def get_definition(division_id, aggregation=False):
         expected['module_name'] = 'ca'
         expected['name'] = 'Parliament of Canada'
     elif ocd_type in ('province', 'territory'):
-        pattern = 'ca_%s_municipalities' if aggregation else 'ca_%s'
-        expected['module_name'] = pattern % ocd_type_id
+        pattern = 'ca_{}_municipalities' if aggregation else 'ca_{}'
+        expected['module_name'] = pattern.format(ocd_type_id)
         if aggregation:
-            expected['name'] = '%s Municipalities' % division.name
+            expected['name'] = '{} Municipalities'.format(division.name)
         elif ocd_type_id in ('nl', 'ns'):
-            expected['name'] = '%s House of Assembly' % division.name
+            expected['name'] = '{} House of Assembly'.format(division.name)
         elif ocd_type_id == 'qc':
             expected['name'] = 'Assemblée nationale du Québec'
         else:
-            expected['name'] = 'Legislative Assembly of %s' % division.name
+            expected['name'] = 'Legislative Assembly of {}'.format(division.name)
     elif ocd_type == 'cd':
         province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(division.name))
+        expected['module_name'] = 'ca_{}_{}'.format(province_or_territory_type_id, slug(division.name))
         name_infix = ocdid_to_type_name_map[division_id]
         if name_infix == 'Regional municipality':
             name_infix = 'Regional'
-        expected['name'] = '%s %s Council' % (division.name, name_infix)
+        expected['name'] = '{} {} Council'.format(division.name, name_infix)
     elif ocd_type == 'csd':
         province_or_territory_type_id = codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s' % (province_or_territory_type_id, slug(division.name))
+        expected['module_name'] = 'ca_{}_{}'.format(province_or_territory_type_id, slug(division.name))
         if ocd_type_id[:2] == '24':
             if division.name[0] in vowels:
-                expected['name'] = "Conseil municipal d'%s" % division.name
+                expected['name'] = "Conseil municipal d'{}".format(division.name)
             else:
-                expected['name'] = "Conseil municipal de %s" % division.name
+                expected['name'] = "Conseil municipal de {}".format(division.name)
         else:
             name_infix = ocdid_to_type_name_map[division_id]
             if name_infix in ('Municipality', 'Specialized municipality'):
@@ -117,19 +117,19 @@ def get_definition(division_id, aggregation=False):
                 name_infix = 'District'
             elif name_infix == 'Regional municipality':
                 name_infix = 'Regional'
-            expected['name'] = '%s %s Council' % (division.name, name_infix)
+            expected['name'] = '{} {} Council'.format(division.name, name_infix)
     elif ocd_type == 'arrondissement':
         census_subdivision_type_id = sections[-2].split(':')[-1]
         province_or_territory_type_id = codes[census_subdivision_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_%s_%s_%s' % (province_or_territory_type_id, slug(Division.get('/'.join(sections[:-1])).name), slug(division.name))
+        expected['module_name'] = 'ca_{}_{}_{}'.format(province_or_territory_type_id, slug(Division.get('/'.join(sections[:-1])).name), slug(division.name))
         if division.name[0] in vowels:
-            expected['name'] = "Conseil d'arrondissement d'%s" % division.name
+            expected['name'] = "Conseil d'arrondissement d'{}".format(division.name)
         elif division.name[:3] == 'Le ':
-            expected['name'] = "Conseil d'arrondissement du %s" % division.name[3:]
+            expected['name'] = "Conseil d'arrondissement du {}".format(division.name[3:])
         else:
-            expected['name'] = "Conseil d'arrondissement de %s" % division.name
+            expected['name'] = "Conseil d'arrondissement de {}".format(division.name)
     else:
-        raise Exception('%s: Unrecognized OCD type %s' % (division_id, ocd_type))
+        raise Exception('{}: Unrecognized OCD type {}'.format(division_id, ocd_type))
 
     # Determine the class name.
     class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', division.name)))
@@ -150,11 +150,11 @@ def get_definition(division_id, aggregation=False):
 def urls():
     for module_name in os.listdir('.'):
         if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'disabled'):
-            module = importlib.import_module('%s.people' % module_name)
+            module = importlib.import_module('{}.people'.format(module_name))
             if module.__dict__.get('COUNCIL_PAGE'):
-                print('%-60s %s' % (module_name, module.__dict__['COUNCIL_PAGE']))
+                print('{:<60} {}'.format($module_name, module.__dict__['COUNCIL_PAGE']))
             else:
-                print('%-60s COUNCIL_PAGE not defined' % module_name)
+                print('{:<60} COUNCIL_PAGE not defined'.format(module_name))
 
 
 @task
@@ -163,7 +163,7 @@ def tidy():
     leader_styles = {}
     member_styles = {}
     for gid in range(3):
-        reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=%d&output=csv' % gid)
+        reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid={}&output=csv'.format(gid))
         next(reader)
         for row in reader:
             key = row[0]
@@ -180,14 +180,14 @@ def tidy():
             # Ensure division_id is unique.
             division_id = metadata['division_id']
             if division_id in division_ids:
-                raise Exception('%s: Duplicate division_id %s' % (module_name, division_id))
+                raise Exception('{}: Duplicate division_id {}'.format(module_name, division_id))
             else:
                 division_ids.add(division_id)
 
             # Ensure jurisdiction_id is unique.
             jurisdiction_id = metadata['jurisdiction_id']
             if jurisdiction_id in jurisdiction_ids:
-                raise Exception('%s: Duplicate jurisdiction_id %s' % (module_name, jurisdiction_id))
+                raise Exception('{}: Duplicate jurisdiction_id {}'.format(module_name, jurisdiction_id))
             else:
                 jurisdiction_ids.add(jurisdiction_id)
 
@@ -195,22 +195,22 @@ def tidy():
 
             # Ensure presence of url and styles of address.
             if not member_styles.get(division_id):
-                print('%-60s No member style of address: %s' % (module_name, division_id))
+                print('{:<60} No member style of address: {}'.format(module_name, division_id))
             if not leader_styles.get(division_id):
-                print('%-60s No leader style of address: %s' % (module_name, division_id))
+                print('{:<60} No leader style of address: {}'.format($module_name, division_id))
             url = metadata['url']
             if url and not expected['url']:
                 parsed = urlsplit(url)
                 if parsed.scheme not in ('http', 'https') or parsed.path or parsed.query or parsed.fragment:
-                    print('%-60s Check: %s' % (module_name, url))
+                    print('{:<60} Check: {}'.format($module_name, url))
 
             # Warn if the name or classification may be incorrect.
             name = metadata['name']
             if name != expected['name']:
-                print('%-60s Expected %s' % (name, expected['name']))
+                print('{:<60} Expected {}'.format($name, expected['name']))
             classification = metadata['classification']
             if classification != 'legislature':
-                print('%-60s Expected legislature' % classification)
+                print('{:<60} Expected legislature'.format(classification))
 
             # Name the classes correctly.
             class_name = metadata['class_name']
@@ -238,7 +238,7 @@ def tidy():
 
             # Name the module correctly.
             if module_name != expected['module_name']:
-                print('%-60s Expected %s' % (module_name, expected['module_name']))
+                print('{:<60} Expected {}'.format($module_name, expected['module_name']))
 
 
 @task
@@ -249,7 +249,7 @@ def sources():
             with codecs.open(path, 'r', 'utf-8') as f:
                 content = f.read()
                 if content.count('add_source') < content.count('lxmlize') - 1:  # exclude the import
-                    print('Add source? %s' % path)
+                    print('Add source? {}'.format(path))
 
 
 def module_name_to_metadata(module_name):

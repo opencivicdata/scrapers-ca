@@ -22,7 +22,7 @@ class SummersidePersonScraper(CanadianScraper):
             page = self.lxmlize(url, 'iso-8859-1')
 
             name = page.xpath('//div[@class="articletitle"]/h1')[0].text_content().replace('Councillor', '').replace('Deputy Mayor', '')
-            district = 'Ward %s' % re.sub('\D+', '', page.xpath('//div[@class="articlebody-inside"]/p')[0].text_content())
+            district = 'Ward {}'.format(re.sub('\D+', '', page.xpath('//div[@class="articlebody-inside"]/p')[0].text_content()))
 
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
             p.add_source(COUNCIL_PAGE)

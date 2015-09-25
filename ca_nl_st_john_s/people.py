@@ -21,7 +21,7 @@ class StJohnsPersonScraper(CanadianScraper):
             else:
                 if 'At Large' in role:
                     role = 'Councillor at Large'
-                    district = "St. John's (seat %d)" % councillor_seat_number
+                    district = "St. John's (seat {})".format(councillor_seat_number)
                     councillor_seat_number += 1
                 else:
                     district = "St. John's"

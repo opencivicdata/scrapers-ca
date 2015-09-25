@@ -46,7 +46,7 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
                 elif contact_type == 'Hm':
                     p.add_contact('voice', number, 'residence')
                 else:
-                    raise Exception('Unrecognized contact type %s' % contact_type)
+                    raise Exception('Unrecognized contact type {}'.format(contact_type))
 
             # @todo Uncomment when upgrading from Pupa 0.0.3.
             # if name == reeve_name:

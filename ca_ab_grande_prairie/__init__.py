@@ -15,6 +15,6 @@ class GrandePrairie(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Grande Prairie')
         for i in range(8):
-            organization.add_post(role='Councillor', label='Grande Prairie (seat %d)' % (i + 1))
+            organization.add_post(role='Councillor', label='Grande Prairie (seat {})'.format(i + 1))
 
         yield organization

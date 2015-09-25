@@ -28,7 +28,7 @@ class WaterlooPersonScraper(CanadianScraper):
                     district = post
                 else:
                     seat_numbers[post] += 1
-                    district = '%s (seat %d)' % (post, seat_numbers[post])
+                    district = '{} (seat {})'.format(post, seat_numbers[post])
                 p = Person(primary_org='legislature', name=councillor.text, district=district, role='Regional Councillor')
                 p.add_source(COUNCIL_PAGE)
                 councillor_url = councillor.attrib['href']
@@ -47,7 +47,7 @@ class WaterlooPersonScraper(CanadianScraper):
         chairpage = self.lxmlize(CHAIR_URL)
         name = chairpage.xpath('//h1')[0].text_content().replace('Meet ', '')
         param = chairpage.xpath('//div[@class="contactBodyContactInfoContactModuleV2"]/@id')[0].replace('contactEntry_', '')
-        contact = self.lxmlize('http://www.regionofwaterloo.ca/en/ContactModule/services/GetContactHTML.ashx?param=%s' % param)
+        contact = self.lxmlize('http://www.regionofwaterloo.ca/en/ContactModule/services/GetContactHTML.ashx?param={}'.format(param))
         email = self.get_email(contact, error=False)
         phone = self.get_phone(contact, area_codes=[226, 519])
         photo_url_src = chairpage.xpath('//div[@id="contentIntleft"]//img[1]/@src')[0]

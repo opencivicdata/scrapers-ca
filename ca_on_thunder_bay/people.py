@@ -28,7 +28,7 @@ class ThunderBayPersonScraper(CanadianScraper):
                 role = 'Councillor'
             elif lines[1] == 'At Large':
                 role = 'Councillor at Large'
-                district = 'Thunder Bay (seat %d)' % councillor_seat_number
+                district = 'Thunder Bay (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
             else:
                 district = 'Thunder Bay'

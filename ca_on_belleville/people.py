@@ -22,7 +22,7 @@ class BellevillePersonScraper(CanadianScraper):
             councillor_name_elems = ward_elem.xpath('./following-sibling::div[1]//strong')
             for name_elem in councillor_name_elems:
                 self.seat_numbers[ward] += 1
-                district = '%s (seat %d)' % (ward, self.seat_numbers[ward])
+                district = '{} (seat {})'.format(ward, self.seat_numbers[ward])
                 yield self.person_from_elem(name_elem, district, 'Councillor')
 
     def person_from_elem(self, name_elem, district, role):

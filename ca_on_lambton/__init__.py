@@ -16,6 +16,6 @@ class Lambton(CanadianJurisdiction):
         organization.add_post(role='Warden', label='Lambton')
         organization.add_post(role='Deputy Warden', label='Lambton')
         for i in range(15):
-            organization.add_post(role='Councillor', label='Lambton (seat %d)' % (i + 1))
+            organization.add_post(role='Councillor', label='Lambton (seat {})'.format(i + 1))
 
         yield organization

@@ -77,7 +77,7 @@ email_re = re.compile(r'([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})')
 
 styles_of_address = {}
 for gid in range(3):
-    response = requests.get('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid=%d&output=csv' % gid)
+    response = requests.get('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid={}&output=csv'.format(gid))
     response.encoding = 'utf-8'
     for row in csv.DictReader(StringIO(response.text)):
         identifier = row.pop('Identifier')
@@ -115,9 +115,9 @@ class CanadianScraper(Scraper):
                 if match:
                     return match.group(1)
             if error:
-                raise Exception('No email pattern in %s' % matches)
+                raise Exception('No email pattern in {}'.format(matches))
         elif error:
-            raise Exception('No email node in %s' % etree.tostring(node))
+            raise Exception('No email node in {}'.format(etree.tostring(node)))
 
     def get_phone(self, node, *, area_codes=[], error=True):
 
@@ -131,7 +131,7 @@ class CanadianScraper(Scraper):
             return match[0].attrib['href'].replace('tel:', '')
         if area_codes:
             for area_code in area_codes:
-                match = re.search(r'(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)' % area_code, node.text_content())
+                match = re.search(r'(?:\A|\D)(\(?{}\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)'.format(area_code), node.text_content())
                 if match:
                     return match.group(1)
         else:
@@ -177,7 +177,7 @@ class CanadianScraper(Scraper):
             data = StringIO()
             ftp = FTP(result.hostname)
             ftp.login(result.username, result.password)
-            ftp.retrbinary('RETR %s' % result.path, lambda block: data.write(block.decode('utf-8')))
+            ftp.retrbinary('RETR {}'.format(result.path), lambda block: data.write(block.decode('utf-8')))
             ftp.quit()
             data.seek(0)
         else:
@@ -211,7 +211,7 @@ class CSVScraper(CanadianScraper):
 
                 district = row.get('District name') or self.jurisdiction.division_name
                 role = row['Primary role']
-                name = '%s %s' % (row['First name'], row['Last name'])
+                name = '{} {}'.format(row['First name'], row['Last name'])
                 province = row.get('Province')
 
                 # Oakville
@@ -223,7 +223,7 @@ class CSVScraper(CanadianScraper):
 
                 if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
                     seat_numbers[role][district] += 1
-                    district = '%s (seat %d)' % (district, seat_numbers[role][district])
+                    district = '{} (seat {})'.format(district, seat_numbers[role][district])
 
                 lines = []
                 if row.get('Address line 1'):
@@ -296,7 +296,7 @@ class CanadianJurisdiction(Jurisdiction):
 
         if not children and parent.attrs['posts_count']:
             for i in range(1, int(parent.attrs['posts_count'])):  # exclude Mayor
-                organization.add_post(role=styles_of_address[self.division_id]['Member'], label='%s (seat %d)' % (parent.name, i))
+                organization.add_post(role=styles_of_address[self.division_id]['Member'], label='{} (seat {})'.format(parent.name, i))
 
         yield organization
 
@@ -325,9 +325,9 @@ class CanadianPerson(Person):
 
     def add_link(self, url, *, note=''):
         if url.startswith('www.'):
-            url = 'http://%s' % url
+            url = 'http://{}'.format(url)
         if re.match(r'\A@[A-Za-z]+\Z', url):
-            url = 'https://twitter.com/%s' % url[1:]
+            url = 'https://twitter.com/{}'.format(url[1:])
 
         self.links.append({'note': note, 'url': url})
 
@@ -372,7 +372,7 @@ class CanadianPerson(Person):
         if len(digits) == 11 and digits[0] == '1' and len(splits) <= 2:
             digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1 \2 \3-\4', digits)
             if len(splits) == 2:
-                return '%s x%s' % (digits, splits[1])
+                return '{} x{}'.format(digits, splits[1])
             else:
                 return digits
         else:

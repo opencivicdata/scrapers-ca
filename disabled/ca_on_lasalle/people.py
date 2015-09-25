@@ -29,7 +29,7 @@ class LaSallePersonScraper(CanadianScraper):
                 role = 'Mayor'
                 district = "LaSalle"
             else:
-                district = 'LaSalle (seat %d)' % councillor_seat_number
+                district = 'LaSalle (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

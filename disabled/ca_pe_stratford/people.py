@@ -22,7 +22,7 @@ class StratfordPersonScraper(CanadianScraper):
             post = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
             seat_numbers[post] += 1
-            post = '%s (seat %d)' % (post, seat_numbers[post])
+            post = '{} (seat {})'.format(post, seat_numbers[post])
 
             p = Person(primary_org='legislature', name=name, district=post, role='Councillor')
             p.add_source(COUNCIL_PAGE)
@@ -41,7 +41,7 @@ class StratfordPersonScraper(CanadianScraper):
                 email = self.get_email(councillor, './following-sibling::p')
 
             if len(re.sub(r'\D', '', phone)) == 7:
-                phone = '902-%s' % phone
+                phone = '902-{}'.format(phone)
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('email', email)
 
@@ -58,6 +58,6 @@ class StratfordPersonScraper(CanadianScraper):
         p.image = page.xpath('//div[@class="entry-content"]/p/a/img/@src')[0]
         p.add_contact('email', email)
         if len(re.sub(r'\D', '', phone)) == 7:
-            phone = '902-%s' % phone
+            phone = '902-{}'.format(phone)
         p.add_contact('voice', phone, 'legislature')
         return p

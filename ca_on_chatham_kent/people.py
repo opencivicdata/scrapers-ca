@@ -32,7 +32,7 @@ class ChathamKentPersonScraper(CanadianScraper):
 
                 if role == 'Councillor':
                     seat_numbers[area] += 1
-                    district = '%s (seat %d)' % (area, seat_numbers[area])
+                    district = '{} (seat {})'.format(area, seat_numbers[area])
                 else:
                     district = area
 

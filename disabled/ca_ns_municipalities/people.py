@@ -58,7 +58,7 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
             for i, email in enumerate(emails):
                 regex = name.split()[-1].lower() + '|' + '|'.join(district.split()[-2:]).replace('of', '').lower()
                 regex = regex.replace('||', '|')
-                matches = re.findall(r'%s' % regex, email)
+                matches = re.findall(r'{}'.format(regex), email)
                 if matches:
                     membership.add_contact_detail('email', emails.pop(i))
             yield p

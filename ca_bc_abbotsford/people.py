@@ -19,7 +19,7 @@ class AbbotsfordPersonScraper(CanadianScraper):
             text = councillor.text_content()
             if text.startswith('Councill'):
                 role = 'Councillor'
-                district = 'Abbotsford (seat %d)' % councillor_seat_number
+                district = 'Abbotsford (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
             else:
                 role = 'Mayor'

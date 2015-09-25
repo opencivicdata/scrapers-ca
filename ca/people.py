@@ -26,7 +26,7 @@ class CanadaPersonScraper(CanadianScraper):
             name_cell = row.xpath('./td[1]')[0]
             last_name = name_cell.xpath('.//span[1]//text()')[0]
             first_name = name_cell.xpath('.//span[2]//text()')[0]
-            name = '%s %s' % (first_name, last_name)
+            name = '{} {}'.format(first_name, last_name)
             constituency = row.xpath('./td[2]//text()')[0]
             province = row.xpath('./td[3]//text()')[0]
             party = row.xpath('string(./td[4])')  # allow string()
@@ -43,7 +43,7 @@ class CanadaPersonScraper(CanadianScraper):
             m.add_source(url)
             screen_name = screen_names.get(name)
             if screen_name:
-                m.add_link('https://twitter.com/%s' % screen_name)
+                m.add_link('https://twitter.com/{}'.format(screen_name))
             # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
             if email:
                 m.add_contact('email', email)

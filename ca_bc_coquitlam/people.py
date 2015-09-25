@@ -20,7 +20,7 @@ class CoquitlamPersonScraper(CanadianScraper):
             if role == 'Mayor':
                 district = 'Coquitlam'
             else:
-                district = 'Coquitlam (seat %d)' % councillor_seat_number
+                district = 'Coquitlam (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
 
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)

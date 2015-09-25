@@ -16,8 +16,8 @@ class StJohns(CanadianJurisdiction):
         organization.add_post(role='Mayor', label="St. John's")
         organization.add_post(role='Deputy Mayor', label="St. John's")
         for i in range(4):
-            organization.add_post(role='Councillor at Large', label="St. John's (seat %d)" % (i + 1))
+            organization.add_post(role='Councillor at Large', label="St. John's (seat {})".format(i + 1))
         for i in range(5):
-            organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
+            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
 
         yield organization

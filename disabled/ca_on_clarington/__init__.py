@@ -17,6 +17,6 @@ class Clarington(CanadianJurisdiction):
         organization.add_post(role='Regional Councillor', label='Wards 1 and 2')
         organization.add_post(role='Regional Councillor', label='Wards 3 and 4')
         for i in range(4):
-            organization.add_post(role='Councillor', label='Ward %d' % (i + 1))
+            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
 
         yield organization

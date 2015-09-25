@@ -15,8 +15,8 @@ class Belleville(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='Belleville')
         for i in range(6):
-            organization.add_post(role='Councillor', label='Ward 1 (seat %d)' % (i + 1))
+            organization.add_post(role='Councillor', label='Ward 1 (seat {})'.format(i + 1))
         for i in range(2):
-            organization.add_post(role='Councillor', label='Ward 2 (seat %d)' % (i + 1))
+            organization.add_post(role='Councillor', label='Ward 2 (seat {})'.format(i + 1))
 
         yield organization

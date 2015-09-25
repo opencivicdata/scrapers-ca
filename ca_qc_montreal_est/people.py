@@ -22,7 +22,7 @@ class MontrealEstPersonScraper(CanadianScraper):
                 district = 'Montréal-Est'
             else:
                 district = councillor.xpath('./ancestor::td/following-sibling::td//strong')[-1].text_content()
-                district = 'District %s' % re.sub('\D+', '', district)
+                district = 'District {}'.format(re.sub('\D+', '', district))
             email = self.get_email(councillor, './ancestor::tr/following-sibling::tr')
             role = 'Maire' if i == 0 else 'Conseiller'
             p = Person(primary_org='legislature', name=name, district=district, role=role)

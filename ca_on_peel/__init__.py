@@ -18,10 +18,10 @@ class Peel(CanadianJurisdiction):
         organization.add_post(role='Mayor', label='Brampton')
         organization.add_post(role='Mayor', label='Mississauga')
         for i in range(5):
-            organization.add_post(role='Councillor', label='Caledon Ward %d' % (i + 1))
+            organization.add_post(role='Councillor', label='Caledon Ward {}'.format(i + 1))
         for i in range(10):
-            organization.add_post(role='Councillor', label='Brampton Ward %d' % (i + 1))
+            organization.add_post(role='Councillor', label='Brampton Ward {}'.format(i + 1))
         for i in range(11):
-            organization.add_post(role='Councillor', label='Mississauga Ward %d' % (i + 1))
+            organization.add_post(role='Councillor', label='Mississauga Ward {}'.format(i + 1))
 
         yield organization
