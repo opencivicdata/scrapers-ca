@@ -80,7 +80,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         self.birth_date = 1900
 
         # Scrape each party separately. Unscraped parties with more than 10 candidates:
-        # http://mlpc.ca/2015/candidates-for-the-marxist-leninist-party-of-canada/
         # http://communist-party.ca/
         # http://www.eatgoogle.com/en/candidates/
 
@@ -96,6 +95,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 'independent',
                 'liberal',
                 'libertarian',
+                'marxist_leninist',
                 'ndp',
             )
 
@@ -536,6 +536,26 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     p.add_source(url)
                     yield p
 
+    def scrape_marxist_leninist(self):
+        url = 'http://mlpc.ca/2015/candidates-for-the-marxist-leninist-party-of-canada/'
+        user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
+
+        nodes = self.lxmlize(url, user_agent=user_agent).xpath('//tr[./td[not(@colspan)]]')
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
+            name = clean_string(node.xpath('./td[2]//text()')[0])
+            if name:
+                district = ''.join(node.xpath('./td[1]//text()'))
+
+                if district in DIVISIONS_MAP:
+                    district = DIVISIONS_MAP[district]
+
+                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Marxist–Leninist')
+
+                p.add_source(url)
+                yield p
+
     def scrape_ndp(self):
         # @note Switch to using https://docs.google.com/spreadsheets/d/11suA7-cjo1KH_WtCquQ3IMIzhvzyW3SVNa56iVGEGAY/pub?gid=1264102253&single=true&output=csv
 
@@ -640,13 +660,16 @@ DIVISIONS_MAP = {
     "North Okangan-Shuswap": "North Okanagan—Shuswap",
     "Richmond": "Richmond Centre",
     "Rosement―La Petite-Patrie": "Rosemont—La Petite-Patrie",
+    "Sault-Sainte-Marie": "Sault Ste. Marie",
     "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     'Ville-Marie—Le Sud-Ouest—Île-des-Sœurs': "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     "Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
+    "West Vancouver-Sunshine Coast-Sea to Sky County": "West Vancouver—Sunshine Coast—Sea to Sky Country",
     # Mix of hyphens, m-dashes and/or spaces.
-    "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen
-    "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen
+    "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen remains a hyphen
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
+    "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen remains a hyphen
+    "Laval-Les-Îles": "Laval—Les Îles", # last hyphen becomes a space
 }
 
 for division in Division.get('ocd-division/country:ca').children('ed'):

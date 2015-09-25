@@ -22,6 +22,7 @@ class CanadaCandidates(CanadianJurisdiction):
         {'name': 'Independent'},
         {'name': 'Liberal'},
         {'name': 'Libertarian'},
+        {'name': 'Marxist–Leninist'},
         {'name': 'NDP'},
     ]
 
