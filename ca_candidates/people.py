@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, capitalize, clean_string
 
 import csv
 import json
 import math
+import os
 import re
 
 import lxml.html
@@ -78,49 +79,26 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         self.birth_date = 1900
 
-        # @todo Independent http://www.punditsguide.ca/parties.php?party=10&elec=43#tabCands
-        p = Person(primary_org='lower', name='Scott Andrews', district='10001', role='candidate', party='Independent')
-        p.image = 'http://www.scottandrews.ca/Images/photo_scott.jpg'
-        p.add_contact('voice', '709-631-2355', 'office')
-        p.extras['incumbent'] = True
-        p.add_source('http://www.scottandrews.ca/campaign/default.aspx')
-        p.birth_date = str(self.birth_date)
-        self.birth_date += 1
-        yield p
-
-        p = Person(primary_org='lower', name='James Ford', district='48032', role='candidate', party='Independent')
-        p.image = 'http://jamesfordindependent.ca/jamesfordindependent.ca/HOME_files/PastedGraphic-2.jpg'
-        p.add_contact('email', 'info@jamesfordindependent.ca')
-        p.add_contact('voice', '587-990-2061', 'office')
-        p.add_source('http://jamesfordindependent.ca/')
-        yield p
-
-        p = Person(primary_org='lower', name='Brent Rathgeber', district='48031', role='candidate', party='Independent')
-        p.image = 'http://brentrathgeber.com/wordpress/wp-content/uploads/2015/08/CLA-photo.jpg'
-        p.add_contact('voice', '780-460-1018', 'office')
-        p.add_contact('fax', '780-460-7205', 'office')
-        p.add_contact('email', 'reelectbrent@gmail.com')
-        p.add_link('https://www.facebook.com/Re-Elect-Brent-Rathgeber-for-St-Albert-Edmonton-156806981046354')
-        p.add_link('https://www.youtube.com/user/BrentRathgberMP')
-        p.add_link('https://twitter.com/brentrathgeber')
-        p.extras['incumbent'] = True
-        p.add_source('http://brentrathgeber.com/')
-        yield p
-
         # Scrape each party separately. Unscraped parties with more than 10 candidates:
         # http://mlpc.ca/2015/candidates-for-the-marxist-leninist-party-of-canada/
         # http://communist-party.ca/
         # http://www.eatgoogle.com/en/candidates/
-        methods = (
-            'bloc_quebecois',
-            'christian_heritage',
-            'conservative',
-            'forces_et_democratie',
-            'green',
-            'liberal',
-            'libertarian',
-            'ndp',
-        )
+
+        if os.environ.get('METHOD'):
+            methods = (os.environ.get('METHOD'),)
+        else:
+            methods = (
+                'bloc_quebecois',
+                'christian_heritage',
+                'conservative',
+                'forces_et_democratie',
+                'green',
+                'independent',
+                'liberal',
+                'libertarian',
+                'ndp',
+            )
+
         for method in methods:
             for p in getattr(self, 'scrape_{}'.format(method))():
                 if not p._related[0].post_id:
@@ -270,7 +248,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
             else:
-                district = re.sub(r'\bî', 'Î', district).replace('--', '—').replace(' – ', '—').replace('–', '—').replace('―', '—').replace(' ', ' ').strip()  # m-dash, n-dash -> m-dash, n-dash -> m-dash, horizontal bar -> m-dash, non-breaking space
+                district = re.sub(r'\bî', 'Î', district).replace(' ', ' ').strip() # non-breaking space
+                district = district.replace('--', '—')  # m-dash
+                district = district.replace(' – ', '—')  # n-dash, m-dash
+                district = district.replace('–', '—')  # n-dash, m-dash
+                district = district.replace('―', '—')  # horizontal bar, m-dash
 
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
@@ -392,6 +374,73 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             if name in self.incumbents:
                 p.extras['incumbent'] = True
+
+            p.add_source(url)
+            yield p
+
+    def scrape_independent(self):
+        p = Person(primary_org='lower', name='Scott Andrews', district='10001', role='candidate', party='Independent')
+        p.image = 'http://www.scottandrews.ca/Images/photo_scott.jpg'
+        p.add_contact('voice', '709-631-2355', 'office')
+        p.extras['incumbent'] = True
+        p.add_source('http://www.scottandrews.ca/campaign/default.aspx')
+        p.birth_date = str(self.birth_date)
+        self.birth_date += 1
+        yield p
+
+        p = Person(primary_org='lower', name='James Ford', district='48032', role='candidate', party='Independent')
+        p.image = 'http://jamesfordindependent.ca/jamesfordindependent.ca/HOME_files/PastedGraphic-2.jpg'
+        p.add_contact('email', 'info@jamesfordindependent.ca')
+        p.add_contact('voice', '587-990-2061', 'office')
+        p.add_source('http://jamesfordindependent.ca/')
+        yield p
+
+        p = Person(primary_org='lower', name='Brent Rathgeber', district='48031', role='candidate', party='Independent')
+        p.image = 'http://brentrathgeber.com/wordpress/wp-content/uploads/2015/08/CLA-photo.jpg'
+        p.add_contact('voice', '780-460-1018', 'office')
+        p.add_contact('fax', '780-460-7205', 'office')
+        p.add_contact('email', 'reelectbrent@gmail.com')
+        p.add_link('https://www.facebook.com/Re-Elect-Brent-Rathgeber-for-St-Albert-Edmonton-156806981046354')
+        p.add_link('https://www.youtube.com/user/BrentRathgberMP')
+        p.add_link('https://twitter.com/brentrathgeber')
+        p.extras['incumbent'] = True
+        p.add_source('http://brentrathgeber.com/')
+        yield p
+
+        url = 'http://www.punditsguide.ca/new/inc/get_future_elec_details_tbl.php?party=10'
+        district = None
+
+        nodes = self.lxmlize(url).xpath('//tbody/tr')[1:]
+        if not len(nodes):
+            raise Exception('{} returns no candidates'.format(url))
+        for node in nodes:
+            offset = node.xpath('./td[1]/@colspan')
+
+            if offset:
+                # Use same district as previous row.
+                offset = int(offset[0]) - 1
+            else:
+                district = node.xpath('./td[2]/a/text()')[0]
+                offset = 0
+
+            name = node.xpath('./td[{}]/a/text()'.format(8 - offset))[0]
+            name = ' '.join(re.sub(r' \([^)]+\)', '', clean_string(name)).split(', ')[::-1]).lower()
+            name = ' '.join(re.sub(r'\b([a-z])', lambda s: s.group(1).capitalize(), component) for component in name.split(' '))
+
+            if name in ('Scott Andrews', 'James Ford', 'Brent M. Rathgeber'):
+                continue
+
+            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Independent')
+
+            gender = clean_string(node.xpath('./td[{}]'.format(6 - offset)))
+            if gender == 'F':
+                p.gender = 'female'
+            elif gender == 'M':
+                p.gender = 'male'
+
+            link = node.xpath('./td[{}]/a/@href'.format(9 - offset))
+            if link:
+                p.add_link(link[0])
 
             p.add_source(url)
             yield p
