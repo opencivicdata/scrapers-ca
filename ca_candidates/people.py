@@ -282,7 +282,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     if link:
                         p.add_link(link[0])
                     else:
-                        p.add_link('http://' + details.getprevious().xpath('.//text()')[0].lower())
+                        link = details.xpath('.//text()')[0].lower()
+                        if 'communist-party.ca' not in link:
+                            link = details.getprevious().xpath('.//text()')[0].lower()
+                        if 'communist-party.ca' in link:
+                            p.add_link('http://' + link)
                     p.add_contact('email', next((re.sub(r' ?\[at\] ?', '@', clean_string(text)) for text in details.xpath('.//text()') if '[at]' in text), None))
                     p.add_contact('voice', self.get_phone(details), 'office')
                 else:
