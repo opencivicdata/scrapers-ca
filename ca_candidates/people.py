@@ -181,6 +181,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                         district = DIVISIONS_MAP[district]
 
                     p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Bloc Québécois')
+                    if name == 'Jean-François Caron':
+                        p.birth_date = str(self.birth_date)
+                        self.birth_date += 1
 
                     image = node.xpath('./div[@class="image"]/img/@src')
                     if image:
@@ -328,12 +331,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = DIVISIONS_MAP[district]
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Conservative')
-            if node.attrib['data-image'] != '/media/team/no-image.jpg':
-                p.image = 'https://represent-image-proxy.herokuapp.com/{}/150/150'.format(quote_plus('http://www.conservative.ca{}'.format(node.attrib['data-image'])))
-
             if name == 'Robert Kitchen':
                 p.birth_date = str(self.birth_date)
                 self.birth_date += 1
+
+            if node.attrib['data-image'] != '/media/team/no-image.jpg':
+                p.image = 'https://represent-image-proxy.herokuapp.com/{}/150/150'.format(quote_plus('http://www.conservative.ca{}'.format(node.attrib['data-image'])))
 
             if node.attrib['data-website'] != 'www.conservative.ca':
                 p.add_link('http://{}'.format(node.attrib['data-website']))
@@ -503,6 +506,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 continue
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Independent')
+            if name == 'Jean-François Caron':
+                p.birth_date = str(self.birth_date)
+                self.birth_date += 1
 
             gender = clean_string(node.xpath('./td[{}]'.format(6 - offset)))
             if gender == 'F':
@@ -656,11 +662,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             district = re.search(r'\d{5}', image).group(0)  # node.xpath('.//span[@class="candidate-riding-name"]/text()')[0]
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='NDP')
-            p.image = image
-
             if name in ('Erin Weir', 'Robert Kitchen', 'Scott Andrews'):
                 p.birth_date = str(self.birth_date)
                 self.birth_date += 1
+
+            p.image = image
 
             if node.xpath('.//div[contains(@class,"placeholder-f")]'):
                 p.gender = 'female'
