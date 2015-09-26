@@ -601,7 +601,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     else:
                         email = node.xpath('.//a[./i[contains(@class,"fa-envelope-o")]]/@href')
                         if email:
-                            p.add_contact('email', email[0].replace(url, ''))
+                            p.add_contact('email', re.sub(r'mailto: ?', '', email[0].replace(url, '')))
 
                     self.add_links(p, node)
 
