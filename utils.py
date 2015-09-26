@@ -131,7 +131,7 @@ class CanadianScraper(Scraper):
             return match[0].attrib['href'].replace('tel:', '')
         if area_codes:
             for area_code in area_codes:
-                match = re.search(r'(?:\A|\D)(\(?{}\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)'.format(area_code), node.text_content())
+                match = re.search(r'(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)' % area_code, node.text_content())
                 if match:
                     return match.group(1)
         else:
