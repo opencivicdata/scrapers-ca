@@ -174,7 +174,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = node.xpath('.//h1/a/text()|.//div[@class="infos"]//a[1]/text()')
 
                 if district:
-                    name = ' '.join(node.xpath('.//h2/a/text()|.//div[@class="infos"]//a[2]/text()'))
+                    name = ' '.join(node.xpath('.//h2/a/text()|.//div[@class="infos"]//a[2]/text()')).strip()
                     district = district[0].replace('–', '—').strip()  # n-dash, m-dash
 
                     if district in DIVISIONS_MAP:
