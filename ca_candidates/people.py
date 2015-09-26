@@ -299,7 +299,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                             email = next((clean_string(text).replace(' [at] ', '@') for text in content[0].xpath('.//text()') if '[at]' in text), None)
                         p.add_contact('email', email)
                     else:
-                        print(detail_url)
+                        self.warning('no details for {}'.format(detail_url))
 
                 p.add_source(url)
                 yield p
