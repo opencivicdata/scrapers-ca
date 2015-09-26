@@ -89,6 +89,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             methods = (
                 'bloc_quebecois',
                 'christian_heritage',
+                'communist',
                 'conservative',
                 'forces_et_democratie',
                 'green',
@@ -234,6 +235,75 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             except requests.exceptions.ChunkedEncodingError:
                 pass  # too bad for that candidate
 
+    def scrape_communist(self):
+        urls = self.lxmlize('http://communist-party.ca/').xpath('//aside[@id="text-16"]//@href')
+        for url in urls:
+            if url == 'http://communist-party.ca/east-coast':
+                heading_level = 1
+            else:
+                heading_level = 2
+
+            page = self.lxmlize(url)
+            for empty in page.xpath('//h{}[not(.//text())]'.format(heading_level)):
+                empty.getparent().remove(empty)
+
+            nodes = page.xpath('//div[@id="content"]//h{}'.format(heading_level))
+            if heading_level == 1:
+                nodes = nodes[1:]
+            if not len(nodes):
+                raise Exception('{} returns no candidates'.format(url))
+            for node in nodes:
+                elements = node.xpath('./following-sibling::*')
+                index = next((i for i, e in enumerate(elements) if e.tag == 'h{}'.format(heading_level)), None)
+                if index:
+                    elements = elements[:index]
+
+                name = next((e.xpath('.//text()')[0] for e in elements if e.tag == 'h{}'.format(heading_level + 1)), None)
+                district = node.xpath('.//text()')[0].strip().replace(' — ', '—').replace(' –', '—')  # m-dash, m-dash, n-dash
+
+                if district in DIVISIONS_MAP:
+                    district = DIVISIONS_MAP[district]
+                elif district == 'London':
+                    district = 'London West'
+
+                p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Communist')
+                image = next((e.xpath('.//img[contains(@class,"size-thumbnail")]/@src')[0] for e in elements if e.tag in ('h3', 'p') and e.xpath('.//@src')), None)
+                if image:
+                    p.image = image
+                else:
+                    raise Exception('expected image {}'.format(url))
+
+                details = next((e for e in elements if e.tag == 'h6'), None)
+                if details is not None:
+                    link = details.xpath('.//@href')
+                    if link:
+                        p.add_link(link[0])
+                    else:
+                        p.add_link('http://' + details.getprevious().xpath('.//text()')[0].lower())
+                    p.add_contact('email', next((re.sub(r' ?\[at\] ?', '@', clean_string(text)) for text in details.xpath('.//text()') if '[at]' in text), None))
+                    p.add_contact('voice', self.get_phone(details), 'office')
+                else:
+                    detail_url = next((e.xpath('.//span[contains(@id,"read_moregtgt")]//@href')[0] for e in reversed(elements) if e.tag == 'h3'), None)
+                    if not detail_url:
+                        detail_url = next((e.xpath('.//@href')[0] for e in elements if e.tag == 'p' and e.xpath('.//@href')), None)
+                    p.add_link(detail_url)
+
+                    page = self.lxmlize(detail_url)
+                    content = page.xpath('//div[@id="content"]')
+                    if content:
+                        voice = self.get_phone(content[0], error=False)
+                        if voice:
+                            p.add_contact('voice', voice, 'office')
+                        email = self.get_email(content[0], error=False)
+                        if not email:
+                            email = next((clean_string(text).replace(' [at] ', '@') for text in content[0].xpath('.//text()') if '[at]' in text), None)
+                        p.add_contact('email', email)
+                    else:
+                        print(detail_url)
+
+                p.add_source(url)
+                yield p
+
     def scrape_conservative(self):
         url = 'http://www.conservative.ca/?member=candidates'
         user_agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
@@ -248,7 +318,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if district in DIVISIONS_MAP:
                 district = DIVISIONS_MAP[district]
             else:
-                district = re.sub(r'\bî', 'Î', district).replace(' ', ' ').strip() # non-breaking space
+                district = re.sub(r'\bî', 'Î', district).replace(' ', ' ').strip()  # non-breaking space
                 district = district.replace('--', '—')  # m-dash
                 district = district.replace(' – ', '—')  # n-dash, m-dash
                 district = district.replace('–', '—')  # n-dash, m-dash
@@ -661,7 +731,9 @@ DIVISIONS_MAP = {
     "Richmond": "Richmond Centre",
     "Rosement―La Petite-Patrie": "Rosemont—La Petite-Patrie",
     "Sault-Sainte-Marie": "Sault Ste. Marie",
+    "Surrey Center": "Surrey Centre",
     "Ville-Marie―Le Sud-Ouest―île-des-Sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
+    "Ville-Marie—Le sud-ouest—Île-des-sœurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     'Ville-Marie—Le Sud-Ouest—Île-des-Sœurs': "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     "Ville-Marie―Le Sud-Ouest―Îles-des-Soeurs": "Ville-Marie—Le Sud-Ouest—Île-des-Soeurs",
     "West Vancouver-Sunshine Coast-Sea to Sky County": "West Vancouver—Sunshine Coast—Sea to Sky Country",
@@ -669,7 +741,8 @@ DIVISIONS_MAP = {
     "Barrie-Springwater-Oro-Medonte": "Barrie—Springwater—Oro-Medonte",  # last hyphen remains a hyphen
     "Brossard-Saint Lambert": "Brossard—Saint-Lambert",
     "Chatham-Kent-Leamington": "Chatham-Kent—Leamington",  # first hyphen remains a hyphen
-    "Laval-Les-Îles": "Laval—Les Îles", # last hyphen becomes a space
+    "Laval-Les-Îles": "Laval—Les Îles",  # last hyphen becomes a space
+    "Laurier–Sainte Marie": "Laurier—Sainte-Marie",
 }
 
 for division in Division.get('ocd-division/country:ca').children('ed'):
@@ -684,3 +757,4 @@ for division in Division.get('ocd-division/country:ca').children('ed'):
         if '—' in division.name:  # m-dash
             DIVISIONS_MAP[division.name.replace('—', ' ')] = division.name  # incorrect space
             DIVISIONS_MAP[division.name.replace('—', '-')] = division.name  # incorrect hyphen
+            DIVISIONS_MAP[division.name.replace('—', '–')] = division.name  # incorrect n-dash

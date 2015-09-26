@@ -16,6 +16,7 @@ class CanadaCandidates(CanadianJurisdiction):
     parties = [
         {'name': 'Bloc Québécois'},
         {'name': 'Christian Heritage'},
+        {'name': 'Communist'},
         {'name': 'Conservative'},
         {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},
