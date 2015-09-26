@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from utils import CanadianScraper, CanadianPerson as Person, capitalize, clean_string
+from utils import CanadianScraper, CanadianPerson as Person, clean_string
 
 import csv
 import json
@@ -425,6 +425,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             if name == name.lower():
                 name = name.title()
+            elif re.search(r'\b[a-z]', name):
+                name = ' '.join(component.title() for component in name.split(' '))
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
             detail_url = node.xpath('.//div/@data-src')[0]
@@ -495,7 +497,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             name = node.xpath('./td[{}]/a/text()'.format(8 - offset))[0]
             name = ' '.join(re.sub(r' \([^)]+\)', '', clean_string(name)).split(', ')[::-1]).lower()
-            name = ' '.join(re.sub(r'\b([a-z])', lambda s: s.group(1).capitalize(), component) for component in name.split(' '))
+            name = ' '.join(re.sub(r'\b([a-z])', lambda s: s.group(1).title(), component) for component in name.split(' '))
 
             if name in ('Scott Andrews', 'James Ford', 'Brent M. Rathgeber'):
                 continue
