@@ -185,13 +185,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                         p.birth_date = str(self.birth_date)
                         self.birth_date += 1
 
-                    image = node.xpath('./div[@class="image"]/img/@src')
-                    if image:
-                        p.image = image[0]
+                    p.image = node.xpath('./div[@class="image"]//@src')[0]
 
-                    email = self.get_email(node, error=False)
-                    if email:
-                        p.add_contact('email', email)
+                    p.add_contact('email', node.xpath('.//@data-mail')[0].replace('!', '.').replace('%', '@'))
+
+                    voice = self.get_phone(node, error=False)
+                    if voice:
+                        p.add_contact('voice', voice, 'office')
 
                     self.add_links(p, node)
 
@@ -725,7 +725,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 elif 'facebook.com' in link and 'twitter.com' in link:
                     link = parse_qs(urlparse(link).query)['u'][0]
                 elif 'facebook.com' in link and '?' in link:
-                    link = re.sub(r'\?f?ref=.+', '', link)
+                    link = re.sub(r'\?(?:f?ref|notif_t)=.+', '', link)
                 elif 'twitter.com' in link:
                     if '@' in link:
                         link = link.replace('@', '')
