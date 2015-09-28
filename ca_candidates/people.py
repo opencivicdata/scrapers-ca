@@ -84,7 +84,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         # http://www.eatgoogle.com/en/candidates/
 
         if os.environ.get('METHOD'):
-            methods = (os.environ.get('METHOD'),)
+            methods = os.environ.get('METHOD').split(',')
         else:
             methods = (
                 'bloc_quebecois',

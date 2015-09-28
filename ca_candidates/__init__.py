@@ -14,17 +14,28 @@ class CanadaCandidates(CanadianJurisdiction):
     name = 'Parliament of Canada'
     url = 'http://www.parl.gc.ca'
     parties = [
+        {'name': 'Animal Alliance Environment Voters'},
         {'name': 'Bloc Québécois'},
+        {'name': 'Canada'},
+        {'name': 'Canadian Action'},
         {'name': 'Christian Heritage'},
         {'name': 'Communist'},
         {'name': 'Conservative'},
+        {'name': 'Democratic Advancement'},
         {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},
         {'name': 'Independent'},
         {'name': 'Liberal'},
         {'name': 'Libertarian'},
+        {'name': 'Marijuana'},
         {'name': 'Marxist–Leninist'},
         {'name': 'NDP'},
+        {'name': 'Party for Accountability, Competency and Transparency'},
+        {'name': 'Pirate'},
+        {'name': 'Progressive Canadian'},
+        {'name': 'Rhinoceros'},
+        {'name': 'Seniors'},
+        {'name': 'United'},
     ]
 
     def get_organizations(self):
