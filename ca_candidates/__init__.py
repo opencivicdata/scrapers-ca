@@ -16,6 +16,7 @@ class CanadaCandidates(CanadianJurisdiction):
     parties = [
         {'name': 'Animal Alliance Environment Voters'},
         {'name': 'Bloc Québécois'},
+        {'name': 'Bridge'},
         {'name': 'Canada'},
         {'name': 'Canadian Action'},
         {'name': 'Christian Heritage'},
