@@ -217,8 +217,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             try:
                 page = self.lxmlize(href)
 
-                name = page.xpath('//meta[@property="og:title"]/@content')[0].split(' - ')[0]
+                meta = page.xpath('//meta[@property="og:title"]/@content')[0].split(' - ')
+                name = meta[0]
                 district = page.xpath('//a[contains(@href,".pdf")]/@href')[0].rsplit('/', 1)[1][0:5]
+                if not re.search(r'\A\d{5}\Z', district):
+                    district = meta[1]
 
                 p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Christian Heritage')
 
