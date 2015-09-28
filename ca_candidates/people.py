@@ -98,7 +98,24 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 'libertarian',
                 'marxist_leninist',
                 'ndp',
+                # Run last to fill in any missing slots.
+                'elections_canada',
             )
+
+        seen = {}
+        scraped_parties = (
+            'Bloc Québécois',
+            'Christian Heritage',
+            'Communist',
+            'Conservative',
+            'Forces et Démocratie',
+            'Green Party',
+            'Independent',
+            'Liberal',
+            'Libertarian',
+            'Marxist–Leninist',
+            'NDP',
+        )
 
         for method in methods:
             for p in getattr(self, 'scrape_{}'.format(method))():
@@ -107,12 +124,37 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 # Uniquely identify the candidate.
                 boundary_id = get_pseudo_id(p._related[0].post_id)['label']
+                party = get_pseudo_id(p._related[1].organization_id)['name']
                 if not re.search(r'\A\d{5}\Z', boundary_id):
                     try:
                         boundary_id = boundary_name_to_boundary_id[boundary_id.lower()]
                     except KeyError:
                         raise Exception("KeyError: '{}' on {}".format(boundary_id.lower(), method))
-                key = '{}/{}/{}'.format(get_pseudo_id(p._related[1].organization_id)['name'], boundary_id, p.name)
+                key = '{}/{}/{}'.format(party, boundary_id, p.name)
+
+                # Names from Elections Canada may differ, but there may also be
+                # multiple independents per district.
+                if party == 'Independent':
+                    seen_key = key
+                else:
+                    seen_key = '{}/{}'.format(party, boundary_id)
+                if seen.get(seen_key):
+                    # We got the candidate from a scraper.
+                    if method == 'elections_canada':
+                        continue
+                    # We got the same candidate from different scrapers.
+                    else:
+                        raise Exception('{} seen in {} during {}'.format(seen_key, seen[seen_key], method))
+                elif method == 'elections_canada':
+                    # We should have gotten the candidate from a scraper.
+                    if party in scraped_parties:
+                        if party == 'Independent':
+                            self.error('{} not seen'.format(seen_key))
+                        else:
+                            self.warning('{} not seen'.format(seen_key))
+                # We are getting the candidate from a scraper.
+                else:
+                    seen[seen_key] = method
 
                 # Merge the crowdsourced data.
                 if crowdsourcing.get(key):
@@ -147,7 +189,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     for prop in ['facebook', 'instagram', 'linkedin', 'twitter', 'youtube']:
                         if o[prop]:
                             scraped = links.get(prop)
-                            entered = re.sub(r'\?f?ref=.+|\?_rdr\Z', '', o[prop].replace('@', '').replace('http://twitter.com/', 'https://twitter.com/'))  # Facebook, Twitter
+                            entered = re.sub(r'/timeline/\Z|\?(f?ref|lang|notif_t)=.+|\?_rdr\Z', '', o[prop].replace('@', '').replace('http://twitter.com/', 'https://twitter.com/'))  # Facebook, Twitter
                             if not scraped:
                                 p.add_link(entered)
                                 self.debug('{}: adding {} = {}'.format(key, prop, entered))
@@ -353,6 +395,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             twitter = node.attrib['data-twitter']
             if twitter != 'cpc_hq':
+                twitter = twitter.replace('@', '')
                 # @note Remove once corrected.
                 if twitter == 'DavidAnderson89':
                     twitter = 'DavidAndersonSK'
@@ -360,7 +403,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     twitter = 'joedanielcpc'
                 elif twitter == 'MinRonaAmbrose':
                     twitter = 'RonaAmbrose'
-                p.add_link('https://twitter.com/{}'.format(node.attrib['data-twitter']))
+                p.add_link('https://twitter.com/{}'.format(twitter))
 
             email = node.attrib['data-email']
             if email and email not in ('info@conservative.ca', 'info@conservateur.ca', 'www.reelectandrewscheer.ca'):
@@ -393,6 +436,60 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p.add_link(detail_url)
             p.add_source(url)
             yield p
+
+    def scrape_elections_canada(self):
+        parties = {
+            'Animal Alliance Environment Voters Party of Canada': 'Animal Alliance Environment Voters',
+            'Bloc Québécois': 'Bloc Québécois',
+            'Canada Party': 'Canada',
+            'Canadian Action Party': 'Canadian Action',
+            'Christian Heritage Party of Canada': 'Christian Heritage',
+            'Conservative Party of Canada': 'Conservative',
+            'Communist Party of Canada': 'Communist',
+            'Democratic Advancement Party of Canada': 'Democratic Advancement',
+            'Green Party of Canada': 'Green Party',
+            'Forces et Démocratie': 'Forces et Démocratie',
+            'Independent': 'Independent',
+            'Liberal Party of Canada': 'Liberal',
+            'Libertarian Party of Canada': 'Libertarian',
+            'Marijuana Party': 'Marijuana',
+            'Marxist-Leninist Party of Canada': 'Marxist–Leninist',
+            'New Democratic Party': 'NDP',
+            'No Affiliation': 'Independent',
+            'Party for Accountability, Competency and Transparency': 'Party for Accountability, Competency and Transparency',
+            'Pirate Party of Canada': 'Pirate',
+            'Progressive Canadian Party': 'Progressive Canadian',
+            'Rhinoceros Party': 'Rhinoceros',
+            'Seniors Party of Canada': 'Seniors',
+            'The Bridge Party of Canada': 'Bridge',
+            'United Party of Canada': 'United',
+        }
+
+        for division in Division.get('ocd-division/country:ca').children('ed'):
+            if division.attrs['validFrom'] == '2015-10-19':
+                district = division.id.rsplit(':', 1)[1].replace('-2013', '')
+
+                url = 'http://www.elections.ca/Scripts/vis/candidates?L=e&EV=41&PAGEID=17&ED={}'.format(district)
+                response = requests.get(url)
+
+                nodes = lxml.html.fromstring(response.text).xpath('//table//tr[position()>1]')
+                if not len(nodes):
+                    raise Exception('{} returns no candidates'.format(url))
+                for node in nodes:
+                    name = re.sub(r'\s+', ' ', node.xpath('./td[1]/text()')[0].strip().replace("''", '"'))
+                    party = parties[node.xpath('./td[3]/text()')[0].strip()]
+
+                    p = Person(primary_org='lower', name=name, district=district, role='candidate', party=party)
+
+                    voice = node.xpath('./td[4]/text()')[0].strip()
+                    if voice and voice != '0':
+                        p.add_contact('voice', voice, 'office')
+
+                    if name in self.incumbents and (name != 'Scott Andrews' or district == '10001'):
+                        p.extras['incumbent'] = True
+
+                    p.add_source(url)
+                    yield p
 
     def scrape_forces_et_democratie(self):
         url = 'http://www.forcesetdemocratie.org/l-equipe/candidats.html'
@@ -492,6 +589,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         url = 'http://www.punditsguide.ca/new/inc/get_future_elec_details_tbl.php?party=10'
         district = None
 
+        name_corrections = {
+            'Christopher Lloyd': 'Chris Lloyd',
+            'Cliff Williams': 'Clifford James Williams',
+            'Hector Daniel Clouthier': 'Hector Clouthier',
+            'John C. Turner': 'John Clayton Turner',
+            'Kelvin Chicago-Boucher': 'Kelvin Boucher-Chicago',
+        }
+
         nodes = self.lxmlize(url).xpath('//tbody/tr')[1:]
         if not len(nodes):
             raise Exception('{} returns no candidates'.format(url))
@@ -507,10 +612,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             name = node.xpath('./td[{}]/a/text()'.format(8 - offset))[0]
             name = ' '.join(re.sub(r' \([^)]+\)', '', clean_string(name)).split(', ')[::-1]).lower()
-            name = ' '.join(re.sub(r'\b([a-z])', lambda s: s.group(1).title(), component) for component in name.split(' '))
+            name = ' '.join(re.sub(r'(\b(?:mac)?)([a-z])', lambda s: s.group(1).title() + s.group(2).title(), component) for component in name.split(' '))
 
             if name in ('Scott Andrews', 'James Ford', 'Brent M. Rathgeber'):
                 continue
+            # Conform to Elections Canada.
+            elif name in name_corrections:
+                name = name_corrections[name]
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Independent')
             if name == 'Jean-François Caron':
@@ -708,7 +816,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                         if voice:
                             p.add_contact('voice', voice, 'office')
                 except etree.XMLSyntaxError:
-                    self.warning('lxml.etree.XMLSyntaxError on {}'.format(url))
+                    self.warning('lxml.etree.XMLSyntaxError on {}'.format(link[0]))
 
             if not email and emails.get(int(district)):
                 p.add_contact('email', emails[int(district)])
@@ -727,11 +835,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     link = 'h' + link
                 elif 'facebook.com' in link and 'twitter.com' in link:
                     link = parse_qs(urlparse(link).query)['u'][0]
-                elif 'facebook.com' in link and '?' in link:
-                    link = re.sub(r'\?(?:f?ref|notif_t)=.+', '', link)
+                elif 'facebook.com' in link:
+                    link = re.sub(r'/timeline/\Z|\?(?:f?ref|notif_t)=.+', '', link)
                 elif 'twitter.com' in link:
-                    if '@' in link:
-                        link = link.replace('@', '')
+                    link = re.sub(r'\?lang=fr\Z', '', link.replace('@', ''))
                     if link.startswith('http://'):
                         link = link.replace('http://twitter.com/', 'https://twitter.com/')
                 p.add_link(link)
