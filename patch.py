@@ -110,7 +110,7 @@ organization_schema['properties']['contact_details'] = organization_contact_deta
 organization_schema['properties']['links'] = organization_links
 
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
-name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Rev|Sr|St)\.|da|de|der|la|van|von|\(\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*\)|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander?|vanden)?\p{Lu}\p{Ll}+|Ch'ng|JiCi|JoAnne|MaryAnn|Prud'homme|Di lorio)"""
+name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Rev|Sr|St)\.|da|de|der|la|van|von|[("]\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*[)"]|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander?|vanden)?\p{Lu}\p{Ll}+|97|Ch'ng|CôRhino|Di lorio|JiCi|JoAnne|MaryAnn|Prud'homme)"""
 
 # Name components can be joined by apostrophes, hyphens or spaces.
 person_schema['properties']['name']['pattern'] = re.compile(r'\A(?!(?:Chair|Councillor|Deputy|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)(?:' + name_fragment + r"(?:'|-| - | ))+" + name_fragment + r'\Z')
