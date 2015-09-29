@@ -197,17 +197,17 @@ def tidy():
             if not member_styles.get(division_id):
                 print('{:<60} No member style of address: {}'.format(module_name, division_id))
             if not leader_styles.get(division_id):
-                print('{:<60} No leader style of address: {}'.format($module_name, division_id))
+                print('{:<60} No leader style of address: {}'.format(module_name, division_id))
             url = metadata['url']
             if url and not expected['url']:
                 parsed = urlsplit(url)
                 if parsed.scheme not in ('http', 'https') or parsed.path or parsed.query or parsed.fragment:
-                    print('{:<60} Check: {}'.format($module_name, url))
+                    print('{:<60} Check: {}'.format(module_name, url))
 
             # Warn if the name or classification may be incorrect.
             name = metadata['name']
             if name != expected['name']:
-                print('{:<60} Expected {}'.format($name, expected['name']))
+                print('{:<60} Expected {}'.format(name, expected['name']))
             classification = metadata['classification']
             if classification != 'legislature':
                 print('{:<60} Expected legislature'.format(classification))
@@ -238,7 +238,7 @@ def tidy():
 
             # Name the module correctly.
             if module_name != expected['module_name']:
-                print('{:<60} Expected {}'.format($module_name, expected['module_name']))
+                print('{:<60} Expected {}'.format(module_name, expected['module_name']))
 
 
 @task
