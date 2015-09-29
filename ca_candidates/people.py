@@ -587,58 +587,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         p.add_source('http://brentrathgeber.com/')
         yield p
 
-        url = 'http://www.punditsguide.ca/new/inc/get_future_elec_details_tbl.php?party=10'
-        district = None
-
-        name_corrections = {
-            'Christopher Lloyd': 'Chris Lloyd',
-            'Cliff Williams': 'Clifford James Williams',
-            'Hector Daniel Clouthier': 'Hector Clouthier',
-            'John C. Turner': 'John Clayton Turner',
-            'Kelvin Chicago-Boucher': 'Kelvin Boucher-Chicago',
-        }
-
-        nodes = self.lxmlize(url).xpath('//tbody/tr')[1:]
-        if not len(nodes):
-            raise Exception('{} returns no candidates'.format(url))
-        for node in nodes:
-            offset = node.xpath('./td[1]/@colspan')
-
-            if offset:
-                # Use same district as previous row.
-                offset = int(offset[0]) - 1
-            else:
-                district = node.xpath('./td[2]/a/text()')[0]
-                offset = 0
-
-            name = node.xpath('./td[{}]/a/text()'.format(8 - offset))[0]
-            name = ' '.join(re.sub(r' \([^)]+\)', '', clean_string(name)).split(', ')[::-1]).lower()
-            name = ' '.join(re.sub(r'(\b(?:mac)?)([a-z])', lambda s: s.group(1).title() + s.group(2).title(), component) for component in name.split(' '))
-
-            if name in ('Scott Andrews', 'James Ford', 'Brent M. Rathgeber'):
-                continue
-            # Conform to Elections Canada.
-            elif name in name_corrections:
-                name = name_corrections[name]
-
-            p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Independent')
-            if name == 'Jean-François Caron':
-                p.birth_date = str(self.birth_date)
-                self.birth_date += 1
-
-            gender = clean_string(node.xpath('./td[{}]'.format(6 - offset)))
-            if gender == 'F':
-                p.gender = 'female'
-            elif gender == 'M':
-                p.gender = 'male'
-
-            link = node.xpath('./td[{}]/a/@href'.format(9 - offset))
-            if link:
-                p.add_link(link[0])
-
-            p.add_source(url)
-            yield p
-
     def scrape_liberal(self):
         url = 'https://www.liberal.ca/candidates/'
         cookies = {'YPF8827340282Jdskjhfiw_928937459182JAX666': json.loads(self.get('http://ipinfo.io/json').text)['ip']}
