@@ -439,6 +439,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_elections_canada(self):
         parties = {
+            'Alliance of the North': 'Alliance of the North',
             'Animal Alliance Environment Voters Party of Canada': 'Animal Alliance Environment Voters',
             'Bloc Québécois': 'Bloc Québécois',
             'Canada Party': 'Canada',

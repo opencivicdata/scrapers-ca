@@ -14,6 +14,7 @@ class CanadaCandidates(CanadianJurisdiction):
     name = 'Parliament of Canada'
     url = 'http://www.parl.gc.ca'
     parties = [
+        {'name': 'Alliance of the North'},
         {'name': 'Animal Alliance Environment Voters'},
         {'name': 'Bloc Québécois'},
         {'name': 'Bridge'},
