@@ -152,7 +152,7 @@ def urls():
         if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'disabled'):
             module = importlib.import_module('{}.people'.format(module_name))
             if module.__dict__.get('COUNCIL_PAGE'):
-                print('{:<60} {}'.format($module_name, module.__dict__['COUNCIL_PAGE']))
+                print('{:<60} {}'.format(module_name, module.__dict__['COUNCIL_PAGE']))
             else:
                 print('{:<60} COUNCIL_PAGE not defined'.format(module_name))
 
