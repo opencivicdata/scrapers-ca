@@ -7,4 +7,4 @@ class Burlington(CanadianJurisdiction):
     division_id = 'ocd-division/country:ca/csd:3524002'
     division_name = 'Burlington'
     name = 'Burlington City Council'
-    url = 'http://cms.burlington.ca'
+    url = 'http://www.burlington.ca'
