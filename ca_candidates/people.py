@@ -875,7 +875,7 @@ DIVISIONS_MAP = {
 }
 
 for division in Division.get('ocd-division/country:ca').children('ed'):
-    if division.attrs['validFrom'] == '2015-10-19':
+    if division.attrs.get('validFrom') == '2015-10-19':
         DIVISIONS_MAP[division.name.lower()] = division.name
         if division.attrs['name_fr'] and division.attrs['name_fr'] != division.name:
             DIVISIONS_MAP[division.attrs['name_fr']] = division.name
