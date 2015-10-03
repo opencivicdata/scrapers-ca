@@ -1,5 +1,6 @@
 -e git+git://github.com/opencivicdata/pupa.git#egg=pupa
--e git+git://github.com/opencivicdata/python-opencivicdata-divisions#egg=opencivicdata-divisions
+-e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
+-e git+git://github.com/opencivicdata/python-opencivicdata-django.git@0.6.3#egg=opencivicdata-django
 boto==2.33.0 # pupa unpinned
 cssselect==0.9.1
 Django==1.8.4
