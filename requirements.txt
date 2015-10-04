@@ -1,4 +1,4 @@
--e git+git://github.com/opencivicdata/pupa.git#egg=pupa
+-e git+git://github.com/opencivicdata/pupa.git@fc2f57f0f91514bbd3e78d7942e6f9c310d156ae#egg=pupa
 -e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
 -e git+git://github.com/opencivicdata/python-opencivicdata-django.git@0.6.3#egg=opencivicdata-django
 boto==2.33.0 # pupa unpinned
