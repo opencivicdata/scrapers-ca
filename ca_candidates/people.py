@@ -387,14 +387,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if node.attrib['data-image'] != '/media/team/no-image.jpg':
                 p.image = 'https://represent-image-proxy.herokuapp.com/{}/150/150'.format(quote_plus('http://www.conservative.ca{}'.format(node.attrib['data-image'])))
 
-            if node.attrib['data-website'] != 'www.conservative.ca':
+            if node.attrib['data-website'] not in ('www.conservateur.ca', 'www.conservative.ca'):
                 p.add_link('http://{}'.format(node.attrib['data-website']))
 
             if node.attrib['data-facebook'] != 'cpcpcc':
                 p.add_link('https://www.facebook.com/{}'.format(re.sub(r'\?f?ref=.+', '', node.attrib['data-facebook'])))
 
             twitter = node.attrib['data-twitter']
-            if twitter != 'cpc_hq':
+            if twitter not in ('pcc_hq', 'cpc_hq'):
                 twitter = twitter.replace('@', '')
                 # @note Remove once corrected.
                 if twitter == 'DavidAnderson89':
