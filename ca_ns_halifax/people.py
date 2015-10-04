@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
+import re
+
 COUNCIL_PAGE = 'http://www.halifax.ca/councillors/index.php'
 MAYOR_PAGE = 'http://www.halifax.ca/mayor/'
 MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
@@ -13,7 +15,7 @@ class HalifaxPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')
 
         for councillor in councillors:
-            district = ' '.join(councillor.xpath('./p/text()')).strip().replace('-', ' - ').replace('–', ' - ').replace('\n', ' - ')
+            district = re.sub(r' ?[–—-] ?', '—', '—'.join(filter(None, (text.strip() for text in councillor.xpath('./p/text()')))))
 
             name_elem = councillor.xpath('./p/strong/text()')[0]
             if 'Deputy' in name_elem:
