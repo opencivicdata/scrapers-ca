@@ -546,6 +546,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 self.warning('lxml.etree.XMLSyntaxError on {}'.format(detail_url))
 
             p.add_contact('email', self.get_email(node))
+            voice = self.get_phone(node, error=False)
+            if voice:
+                p.add_contact('voice', voice, 'office')
 
             link = node.xpath('.//div[@class="margin-bottom-gutter"]/a[contains(@href,"http")]/@href')
             if link:

@@ -78,14 +78,15 @@ email_re = re.compile(r'([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})')
 styles_of_address = {}
 for gid in range(3):
     response = requests.get('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid={}&output=csv'.format(gid))
-    response.encoding = 'utf-8'
-    for row in csv.DictReader(StringIO(response.text)):
-        identifier = row.pop('Identifier')
-        for field in list(row.keys()):
-            if not row[field] or field == 'Name':
-                row.pop(field)
-        if row:
-            styles_of_address[identifier] = row
+    if response.status_code == 200:
+        response.encoding = 'utf-8'
+        for row in csv.DictReader(StringIO(response.text)):
+            identifier = row.pop('Identifier')
+            for field in list(row.keys()):
+                if not row[field] or field == 'Name':
+                    row.pop(field)
+            if row:
+                styles_of_address[identifier] = row
 
 
 class CanadianScraper(Scraper):
