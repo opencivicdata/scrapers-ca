@@ -535,6 +535,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 name = name.title()
             elif re.search(r'\b[a-z]', name):
                 name = ' '.join(component.title() for component in name.split(' '))
+            if name == 'Vincent J.Carbonneau':
+                name = 'Vincent J. Carbonneau'
 
             p = Person(primary_org='lower', name=name, district=district, role='candidate', party='Green Party')
             detail_url = node.xpath('.//div/@data-src')[0]
