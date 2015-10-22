@@ -199,71 +199,68 @@ class CSVScraper(CanadianScraper):
     encoding = None
     many_posts_per_area = False
     skip_rows = 0
+    header_converter = lambda s: s.lower()
+    corrections = {}
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
         reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows)
-        reader.fieldnames = [capitalize(field) for field in reader.fieldnames]
+        reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
             if any(row.values()):
-                if row['Last name'] == 'Vacant' or row['First name'] == 'Vacant':
+                if row['last name'] == 'Vacant' or row['first name'] == 'Vacant':
                     continue
 
-                district = row.get('District name') or self.jurisdiction.division_name
-                role = row['Primary role']
-                name = '{} {}'.format(row['First name'], row['Last name'])
-                province = row.get('Province')
+                for key, corrections in self.corrections.items():
+                    if row.get(key) and row[key] in corrections:
+                        row[key] = corrections[row[key]]
 
-                # Oakville
-                role = role.replace('Councilor', 'Councillor')
-                if role == 'Town Councillor':
-                    role = 'Councillor'
-                elif 'Regional and Town' in role:
-                    role = 'Regional Councillor'
+                district = row.get('district name') or self.jurisdiction.division_name
+                role = row['primary role']
+                name = '{} {}'.format(row['first name'], row['last name'])
+                province = row.get('province')
 
                 if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
                     seat_numbers[role][district] += 1
                     district = '{} (seat {})'.format(district, seat_numbers[role][district])
 
                 lines = []
-                if row.get('Address line 1'):
-                    lines.append(row['Address line 1'])
-                if row.get('Address line 2'):
-                    lines.append(row['Address line 2'])
-                if row['Locality']:
-                    parts = [row['Locality']]
+                if row.get('address line 1'):
+                    lines.append(row['address line 1'])
+                if row.get('address line 2'):
+                    lines.append(row['address line 2'])
+                if row.get('locality'):
+                    parts = [row['locality']]
                     if province:
                         parts.append(province)
-                    if row.get('Postal code'):
-                        parts.extend(['', row['Postal code']])
+                    if row.get('postal code'):
+                        parts.extend(['', row['postal code']])
                     lines.append(' '.join(parts))
 
                 p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
                 p.add_source(self.csv_url)
-                if row.get('Gender'):
-                    p.gender = row['Gender']
-                if row.get('Photo URL'):
-                    p.image = row['Photo URL']
-                if row.get('Source URL'):
-                    p.add_source(row['Source URL'])
-                if row.get('Website'):
-                    p.add_link(row['Website'])
-                p.add_contact('email', row['Email'])
+                if row.get('gender'):
+                    p.gender = row['gender']
+                if row.get('photo url'):
+                    p.image = row['photo url']
+                if row.get('source url'):
+                    p.add_source(row['source url'])
+                if row.get('website'):
+                    p.add_link(row['website'])
+                p.add_contact('email', row['email'])
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')
-                if row.get('Phone'):
-                    p.add_contact('voice', row['Phone'], 'legislature')
-                if row.get('Fax'):
-                    p.add_contact('fax', row['Fax'], 'legislature')
-                if row.get('Cell'):
-                    p.add_contact('cell', row['Cell'], 'legislature')
-                elif row.get('Phone (cell)'):  # Oakville
-                    p.add_contact('cell', row['Phone (cell)'], 'legislature')
-                if row.get('Facebook'):
-                    p.add_link(re.sub(r'[#?].+', '', row['Facebook']))
-                if row.get('Twitter'):
-                    p.add_link(row['Twitter'])
+                if row.get('phone'):
+                    p.add_contact('voice', row['phone'], 'legislature')
+                if row.get('fax'):
+                    p.add_contact('fax', row['fax'], 'legislature')
+                if row.get('cell'):
+                    p.add_contact('cell', row['cell'], 'legislature')
+                if row.get('facebook'):
+                    p.add_link(re.sub(r'[#?].+', '', row['facebook']))
+                if row.get('twitter'):
+                    p.add_link(row['twitter'])
                 yield p
 
 
