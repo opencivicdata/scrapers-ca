@@ -32,7 +32,7 @@ class Canada(CanadianJurisdiction):
         lower = Organization('House of Commons', classification='lower', parent_id=parliament)
 
         for division in Division.get(self.division_id).children('ed'):
-            if not division.attrs.get('validFrom') or division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
+            if division.attrs.get('validFrom') and division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
                 lower.add_post(role='MP', label=division.name)
 
         yield upper

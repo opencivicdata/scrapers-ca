@@ -27,7 +27,9 @@ class CanadaPersonScraper(CanadianScraper):
             last_name = name_cell.xpath('.//span[1]//text()')[0]
             first_name = name_cell.xpath('.//span[2]//text()')[0]
             name = '{} {}'.format(first_name, last_name)
-            constituency = row.xpath('./td[2]//text()')[0]
+            constituency = row.xpath('./td[2]//text()')[0].replace('–', '—')  # n-dash, m-dash
+            if constituency == 'Mont-Royal':
+                constituency = 'Mount Royal'
             province = row.xpath('./td[3]//text()')[0]
             party = row.xpath('string(./td[4])')  # allow string()
             url = name_cell.xpath('.//a/@href')[0]
