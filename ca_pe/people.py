@@ -3,7 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.assembly.pe.ca/index.php3?number=1024555&lang=E'
+COUNCIL_PAGE = 'http://www.assembly.pe.ca/current-members'
 
 
 class PrinceEdwardIslandPersonScraper(CanadianScraper):
@@ -34,7 +34,7 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
 
     def scrape_extended_info(self, url):
         root = self.lxmlize(url)
-        if 'DB Error' not in root.text_content():
+        if not root.cssselect('.colmask.rightmenu'):  # Speaker page
             main = root.cssselect('#content table')[0]
             photo_url = main.cssselect('img')[0].get('src')
             contact_cell = main.cssselect('td:contains("Contact information")')[0]

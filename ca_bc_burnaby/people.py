@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.burnaby.ca/Our-City-Hall/Mayor---Council/Council-Profiles.html'
+COUNCIL_PAGE = 'https://www.burnaby.ca/Our-City-Hall/Mayor---Council/Council-Profiles.html'
 
 
 class BurnabyPersonScraper(CanadianScraper):
