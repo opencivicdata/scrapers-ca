@@ -43,11 +43,11 @@ class SurreyPersonScraper(CanadianScraper):
         name_node = mayor_page.xpath('//div[@class="inner-wrapper"]//div[@class="inner-wrapper"]/p/text()')[0]
         name = re.search('([A-Z][a-z]+ [A-Z][a-z]+).', name_node).group(1)
         photo_url = mayor_page.xpath('//div[@class="inner-wrapper"]//img/@src')[0]
-        phone = mayor_page.xpath('//text()[contains(., "Office:")]')[0]
-        # no email
+        contact_page = self.lxmlize(mayor_page.xpath('//a[contains(.,"Contact Mayor")]/@href')[0])
 
         p = Person(primary_org='legislature', name=name, district='Surrey', role='Mayor', image=photo_url)
         p.add_source(COUNCIL_PAGE)
         p.add_source(mayor_url)
-        p.add_contact('voice', phone, 'legislature')
+        p.add_contact('voice', self.get_phone(contact_page, area_codes=[604]), 'legislature')
+        p.add_contact('email', self.get_email(contact_page))
         yield p
