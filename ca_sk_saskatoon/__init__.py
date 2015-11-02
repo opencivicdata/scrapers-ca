@@ -8,3 +8,4 @@ class Saskatoon(CanadianJurisdiction):
     division_name = 'Saskatoon'
     name = 'Saskatoon City Council'
     url = 'http://www.saskatoon.ca'
+    use_type_id = True
