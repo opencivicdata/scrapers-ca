@@ -23,23 +23,24 @@ class HalifaxPersonScraper(CanadianScraper):
             else:
                 name = name_elem.strip()[len('Councillor '):]
 
-            photo = councillor.xpath('./p/a/img/@src')[0]
+            if name != 'To be determined':
+                photo = councillor.xpath('./p/a/img/@src')[0]
 
-            councillor_page = self.lxmlize(councillor.xpath('./h2/a/@href')[0])
-            contact_page_url = councillor_page.xpath('//li/a[contains(@href, "contact")]/@href')[0]
-            contact_page = self.lxmlize(contact_page_url)
-            contact_node = contact_page.xpath('//div[./h1[contains(text(), "Contact")]]')[0]
+                councillor_page = self.lxmlize(councillor.xpath('./h2/a/@href')[0])
+                contact_page_url = councillor_page.xpath('//li/a[contains(@href, "contact")]/@href')[0]
+                contact_page = self.lxmlize(contact_page_url)
+                contact_node = contact_page.xpath('//div[./h1[contains(text(), "Contact")]]')[0]
 
-            phone = self.get_phone(contact_node, area_codes=[902])
-            email = self.get_email(contact_node)
+                phone = self.get_phone(contact_node, area_codes=[902])
+                email = self.get_email(contact_node)
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(contact_page_url)
-            p.add_contact('voice', phone, 'legislature')
-            p.add_contact('email', email)
-            p.image = photo
-            yield p
+                p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+                p.add_source(COUNCIL_PAGE)
+                p.add_source(contact_page_url)
+                p.add_contact('voice', phone, 'legislature')
+                p.add_contact('email', email)
+                p.image = photo
+                yield p
 
         mayor_page = self.lxmlize(MAYOR_PAGE, 'iso-8859-1')
         name = ' '.join(mayor_page.xpath('//h2[contains(., "Bio")]/text()')).strip()[:-len(' Bio')]

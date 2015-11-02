@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-from lxml.html import etree
 
 COUNCIL_PAGE = 'https://www.longueuil.quebec/fr/conseil-ville'
 
