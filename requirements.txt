@@ -1,6 +1,7 @@
 -e git+git://github.com/opencivicdata/pupa.git@0.5.0#egg=pupa
 -e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
 -e git+git://github.com/opencivicdata/python-opencivicdata-django.git@0.7.0#egg=opencivicdata-django
+-e git+git://github.com/sunlightlabs/waterfall#egg=waterfall
 boto==2.33.0 # pupa unpinned
 cssselect==0.9.1
 Django==1.9a1
