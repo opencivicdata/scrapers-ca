@@ -35,7 +35,7 @@ class CanadaPersonScraper(CanadianScraper):
                 url = url.replace('/en/', '/fr/')
 
             mp_page = self.lxmlize(url)
-            email = self.get_email(mp_page, '//span[@class="caucus"]')
+            email = self.get_email(mp_page, '//span[@class="caucus"]', error=False)
             photo = mp_page.xpath('//div[@class="profile overview header"]//img/@src')[0]
 
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
