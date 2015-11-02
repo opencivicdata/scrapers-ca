@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
+from lxml.html import etree
 
 COUNCIL_PAGE = 'https://www.longueuil.quebec/fr/conseil-ville'
 
@@ -13,13 +14,15 @@ class LongueuilPersonScraper(CanadianScraper):
 
         yield self.scrape_mayor(page)
 
-        for tr in page.xpath('//tr'):
-            if tr.xpath('./td[1]'):
-                district = 'Greenfield Park' if ' n' in tr[0].text else tr[0].text
-                name = re.search('(.+) (\(.+\)$)', tr[1].xpath('./a/text()')[0]).group(1)
-                detail_url = tr[1].xpath('./a/@href')[0]
-                detail_page = self.lxmlize(detail_url)
+        for tr in page.xpath('//tbody/tr'):
+            if tr.xpath('./td[2]//text()')[0] != 'Vacant':
+                district = tr.xpath('./td[1]/text()')[0]
+                if 'Conseiller n' in district:
+                    district = 'Greenfield Park'
+                detail_url = tr.xpath('./td[2]/a/@href')[0]
+                detail_page = self.lxmlize(detail_url, 'utf-8')
 
+                name = detail_page.xpath('//h1/text()')[0]
                 photo_node = detail_page.xpath('//img[contains(@alt, "{0}")]/@src'.format(name))
                 if photo_node:
                     photo_url = photo_node[0]
