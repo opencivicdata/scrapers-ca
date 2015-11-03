@@ -12,4 +12,5 @@ class NovaScotia(CanadianJurisdiction):
         {'name': 'Nova Scotia Liberal Party'},
         {'name': 'Progressive Conservative Association of Nova Scotia'},
         {'name': 'Nova Scotia New Democratic Party'},
+        {'name': 'Independent'},
     ]
