@@ -15,38 +15,39 @@ class EdmontonPersonScraper(CanadianScraper):
         for cell in councillor_cells:
             district = cell.text
             name = cell[1].text
-            page_url = cell[1].attrib['href']
-            page = self.lxmlize(page_url)
+            if name != 'Vacant':
+                page_url = cell[1].attrib['href']
+                page = self.lxmlize(page_url)
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(page_url)
+                p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+                p.add_source(COUNCIL_PAGE)
+                p.add_source(page_url)
 
-            image = page.xpath('//div[@id="contentArea"]//img/@src')
-            if image:
-                p.image = image[0]
+                image = page.xpath('//div[@id="contentArea"]//img/@src')
+                if image:
+                    p.image = image[0]
 
-            address = page.xpath('//address//p')
-            if address:
-                address = address[0].text_content()
-                p.add_contact('address', address, 'legislature')
+                address = page.xpath('//address//p')
+                if address:
+                    address = address[0].text_content()
+                    p.add_contact('address', address, 'legislature')
 
-            contacts = page.xpath('//table[@class="contactListing"]//tr')
-            for contact in contacts:
-                contact_type = contact.xpath('./th/text()')[0]
-                value = contact.xpath('./td//text()')[0]
-                if 'Title' in contact_type:
-                    continue
-                elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
-                    value = contact.xpath('./td/a/text()')[0]
-                    p.add_link(value)
-                elif 'Telephone' in contact_type:
-                    p.add_contact('voice', value, 'legislature')
-                elif 'Fax' in contact_type:
-                    p.add_contact('fax', value, 'legislature')
-                elif 'Email' in contact_type:
-                    p.add_contact('email', value)
-            yield p
+                contacts = page.xpath('//table[@class="contactListing"]//tr')
+                for contact in contacts:
+                    contact_type = contact.xpath('./th/text()')[0]
+                    value = contact.xpath('./td//text()')[0]
+                    if 'Title' in contact_type:
+                        continue
+                    elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
+                        value = contact.xpath('./td/a/text()')[0]
+                        p.add_link(value)
+                    elif 'Telephone' in contact_type:
+                        p.add_contact('voice', value, 'legislature')
+                    elif 'Fax' in contact_type:
+                        p.add_contact('fax', value, 'legislature')
+                    elif 'Email' in contact_type:
+                        p.add_contact('email', value)
+                yield p
 
     def scrape_mayor(self):
         page = self.lxmlize(MAYOR_PAGE)
