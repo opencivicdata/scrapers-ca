@@ -3,7 +3,8 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.leg.bc.ca/mla/3-2.htm'
+# Members page load members with javascript
+COUNCIL_PAGE = 'https://www.leg.bc.ca/Pages/BCLASS-Category-MLASeatingPlan.aspx'
 
 
 class BritishColumbiaPersonScraper(CanadianScraper):
@@ -11,47 +12,46 @@ class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@cellpadding="3"]//td//a[text()!=""]/@href')
+        councillors = page.xpath('//table[@cellpadding="4"]//td//a[text()!=""]/@href')
         for councillor in councillors:
             page = self.lxmlize(councillor)
             # Hon. is followed by Dr. in one case but the clean_name function
             # removes only one honorific title
-            name = page.xpath('//b[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Dr.', '').replace(', Q.C.', '').replace('Wm.', '').strip()
-            district = page.xpath('//em/strong/text()')[0].strip()
-
-            party_caps = page.xpath('(//table[@width=440]//b)[last()]//text()')[0]
-            party = party_caps.strip().title().replace('Of', 'of')
+            name = page.xpath('//h2[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Dr.', '').replace(', Q.C.', '').replace('Wm.', '').strip()
+            district, party = cleanup_list(page.xpath('//h2/following-sibling::div[1]/div[2]/div[1]/div/text()'))
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(councillor)
 
-            p.image = page.xpath('//a[contains(@href, "images/members")]/@href')[0]
+            p.image = page.xpath('//img[contains(@src, "Members")]/@src')[0]
 
-            email = self.get_email(page)
-            p.add_contact('email', email)
+            email = page.xpath('//span[@class="convertToEmail"]//text()')[0].strip()
+            if '#' in email:
+                email = email.split('#')[0]
+            if email:
+                p.add_contact('email', email)
 
-            office = ', '.join(page.xpath('//i/b[contains(text(), "Office:")]/ancestor::p/text()'))
+            office = ', '.join(cleanup_list(page.xpath('//h4[contains(text(), "Office:")]/ancestor::div/text()')))
             office = re.sub(r'\s{2,}', ' ', office)
             p.add_contact('address', office, 'legislature')
 
-            constituency = page.xpath('//i/b[contains(text(), "Constituency:")]/ancestor::p/text()')
-            if 'TBD' not in constituency[0]:
-                constituency = re.sub(r'\s{2,}', ' ', ', '.join(constituency))
-                p.add_contact('address', constituency, 'constituency')
+            constituency = ', '.join(cleanup_list(page.xpath('//h4[contains(text(), "Constituency:")]/ancestor::div[1]//text()')))
+            constituency = re.sub(r'\s{2,}', ' ', constituency).split(', Phone')[0]
+            p.add_contact('address', constituency, 'constituency')
 
-            phones = page.xpath('//strong[contains(text(), "Phone:")]/ancestor::tr[1]')[0]
-            office_phone = ''.join(phones.xpath('./td[2]//text()')).strip()
-            if 'TBD' not in office_phone:
-                p.add_contact('voice', office_phone, 'legislature')
-            constituency_phone = ''.join(phones.xpath('./td[4]//text()')).strip()
-            if 'TBD' not in constituency_phone:
-                p.add_contact('voice', constituency_phone, 'constituency')
+            phones = cleanup_list(page.xpath('//span[contains(text(), "Phone:")]/following-sibling::text()'))
+            faxes = cleanup_list(page.xpath('//span[contains(text(), "Fax:")]/following-sibling::span[1]/text()'))
 
-            faxes = page.xpath('//strong[contains(text(), "Fax:")]/ancestor::tr[1]')[0]
-            office_fax = ''.join(faxes.xpath('./td[2]//text()')).strip()
-            if office_fax and 'TBD' not in office_fax:
+            office_phone, constituency_phone = phones
+            p.add_contact('voice', office_phone, 'legislature')
+            p.add_contact('voice', constituency_phone, 'constituency')
+            if len(faxes) > 1:
+                office_fax, constituency_fax = faxes[:2]
                 p.add_contact('fax', office_fax, 'legislature')
-            constituency_fax = ''.join(faxes.xpath('./td[4]//text()')).strip()
-            if 'TBD' not in constituency_fax:
                 p.add_contact('fax', constituency_fax, 'constituency')
+
             yield p
+
+
+def cleanup_list(dirty_list):
+    return [x.strip() for x in dirty_list if x.strip()]
