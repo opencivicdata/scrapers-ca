@@ -5,7 +5,7 @@ import re
 from collections import defaultdict
 from datetime import datetime
 
-from pupa.scrape import Bill, Vote
+from pupa.scrape import Bill, VoteEvent
 from six import StringIO
 from utils import CanadianScraper
 
@@ -137,7 +137,7 @@ class TorontoBillScraper(CanadianScraper):
 
             for key, properties in vote_events.items():
                 counts = properties.pop('counts')
-                v = Vote(**properties)
+                v = VoteEvent(**properties)
                 v.set_count('yes', counts[0])
                 v.set_count('no', counts[1])
                 v.add_source(SOURCE_URL)
