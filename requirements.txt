@@ -5,7 +5,7 @@
 -e git+git://github.com/sunlightlabs/waterfall#egg=waterfall
 boto==2.33.0 # pupa unpinned
 cssselect==0.9.1
-Django==1.9a1
+Django==1.9rc2
 lxml==3.3.5
 psycopg2==2.5.3 # pupa unpinned
 requests==2.6.0
