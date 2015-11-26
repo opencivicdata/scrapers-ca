@@ -16,14 +16,23 @@ class Toronto(CanadianJurisdiction):
         {
             'identifier': '2006-2010',
             'name': '2006-2010',
+            'start_date': '2006-12-01',
+            'end_date': '2010-11-30',
+            'classification': 'primary',
         },
         {
             'identifier': '2010-2014',
             'name': '2010-2014',
+            'start_date': '2010-12-01',
+            'end_date': '2014-11-30',
+            'classification': 'primary',
         },
         {
             'identifier': '2014-2018',
             'name': '2014-2018',
+            'start_date': '2014-12-01',
+            'end_date': '2018-11-30',
+            'classification': 'primary',
         },
     ]
 
