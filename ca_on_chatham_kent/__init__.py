@@ -13,7 +13,7 @@ class ChathamKent(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Chatham-Kent')
+        organization.add_post(role='Mayor', label='Chatham-Kent', division_id=self.division_id)
         for i in range(2):
             organization.add_post(role='Councillor', label='Ward 1 (seat {})'.format(i + 1))
         for i in range(3):

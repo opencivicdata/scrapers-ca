@@ -294,7 +294,7 @@ class CanadianJurisdiction(Jurisdiction):
 
         if not children and parent.attrs['posts_count']:
             for i in range(1, int(parent.attrs['posts_count'])):  # exclude Mayor
-                organization.add_post(role=styles_of_address[self.division_id]['Member'], label='{} (seat {})'.format(parent.name, i))
+                organization.add_post(role=styles_of_address[self.division_id]['Member'], label='{} (seat {})'.format(parent.name, i), division_id=parent.id)
 
         yield organization
 

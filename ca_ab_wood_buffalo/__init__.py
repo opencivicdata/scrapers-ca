@@ -13,7 +13,7 @@ class WoodBuffalo(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Wood Buffalo')
+        organization.add_post(role='Mayor', label='Wood Buffalo', division_id=self.division_id)
         for i in range(6):
             organization.add_post(role='Councillor', label='Ward 1 (seat {})'.format(i + 1))
         for i in range(2):

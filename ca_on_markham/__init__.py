@@ -13,10 +13,10 @@ class Markham(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Markham')
-        organization.add_post(role='Deputy Mayor', label='Markham')
+        organization.add_post(role='Mayor', label='Markham', division_id=self.division_id)
+        organization.add_post(role='Deputy Mayor', label='Markham', division_id=self.division_id)
         for i in range(3):
-            organization.add_post(role='Regional Councillor', label='Markham (seat {})'.format(i + 1))
+            organization.add_post(role='Regional Councillor', label='Markham (seat {})'.format(i + 1), division_id=self.division_id)
         for i in range(8):
             organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
 
