@@ -1,3 +1,4 @@
 /_cache
 /_data
 *.pyc
+/scrapers_ca.egg-info/
