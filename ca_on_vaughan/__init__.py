@@ -15,9 +15,9 @@ class Vaughan(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Vaughan', division_id=self.division_id)
-        for i in range(3):
-            organization.add_post(role='Regional Councillor', label='Vaughan (seat {})'.format(i + 1), division_id=self.division_id)
-        for i in range(5):
-            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
+        for i in range(1, 4):
+            organization.add_post(role='Regional Councillor', label='Vaughan (seat {})'.format(i), division_id=self.division_id)
+        for i in range(1, 6):
+            organization.add_post(role='Councillor', label='Ward {}'.format(i))
 
         yield organization

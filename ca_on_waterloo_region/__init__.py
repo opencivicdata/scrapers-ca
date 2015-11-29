@@ -21,11 +21,11 @@ class Waterloo(CanadianJurisdiction):
         organization.add_post(role='Regional Councillor', label='Wellesley')
         organization.add_post(role='Regional Councillor', label='Wilmot')
         organization.add_post(role='Regional Councillor', label='Woolwich')
-        for i in range(2):
-            organization.add_post(role='Regional Councillor', label='Cambridge (seat {})'.format(i + 1))
-        for i in range(4):
-            organization.add_post(role='Regional Councillor', label='Kitchener (seat {})'.format(i + 1))
-        for i in range(2):
-            organization.add_post(role='Regional Councillor', label='Waterloo (seat {})'.format(i + 1))
+        for i in range(1, 3):
+            organization.add_post(role='Regional Councillor', label='Cambridge (seat {})'.format(i))
+        for i in range(1, 5):
+            organization.add_post(role='Regional Councillor', label='Kitchener (seat {})'.format(i))
+        for i in range(1, 3):
+            organization.add_post(role='Regional Councillor', label='Waterloo (seat {})'.format(i))
 
         yield organization

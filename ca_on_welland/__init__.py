@@ -14,8 +14,8 @@ class Welland(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Welland', division_id=self.division_id)
-        for i in range(6):
-            for j in range(2):
-                organization.add_post(role='Councillor', label='Ward {} (seat {})'.format(i + 1, j + 1))
+        for i in range(1, 7):
+            for j in range(1, 3):
+                organization.add_post(role='Councillor', label='Ward {} (seat {})'.format(i, j))
 
         yield organization

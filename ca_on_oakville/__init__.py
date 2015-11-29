@@ -14,8 +14,8 @@ class Oakville(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Oakville', division_id=self.division_id)
-        for i in range(6):
-            organization.add_post(role='Regional Councillor', label='Ward {}'.format(i + 1))
-            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
+        for i in range(1, 7):
+            organization.add_post(role='Regional Councillor', label='Ward {}'.format(i))
+            organization.add_post(role='Councillor', label='Ward {}'.format(i))
 
         yield organization

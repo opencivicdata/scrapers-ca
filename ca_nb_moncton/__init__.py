@@ -14,10 +14,10 @@ class Moncton(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Moncton', division_id=self.division_id)
-        for i in range(2):
-            organization.add_post(role='Councillor at Large', label='Moncton (seat {})'.format(i + 1), division_id=self.division_id)
-        for i in range(4):
-            for j in range(2):
-                organization.add_post(role='Councillor', label='Ward {} (seat {})'.format(i + 1, j + 1))
+        for i in range(1, 3):
+            organization.add_post(role='Councillor at Large', label='Moncton (seat {})'.format(i), division_id=self.division_id)
+        for i in range(1, 5):
+            for j in range(1, 3):
+                organization.add_post(role='Councillor', label='Ward {} (seat {})'.format(i, j))
 
         yield organization
