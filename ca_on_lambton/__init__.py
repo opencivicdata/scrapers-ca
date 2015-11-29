@@ -15,7 +15,7 @@ class Lambton(CanadianJurisdiction):
 
         organization.add_post(role='Warden', label='Lambton', division_id=self.division_id)
         organization.add_post(role='Deputy Warden', label='Lambton', division_id=self.division_id)
-        for i in range(1, 16):
-            organization.add_post(role='Councillor', label='Lambton (seat {})'.format(i), division_id=self.division_id)
+        for seat_number in range(1, 16):
+            organization.add_post(role='Councillor', label='Lambton (seat {})'.format(seat_number), division_id=self.division_id)
 
         yield organization

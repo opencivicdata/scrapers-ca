@@ -15,8 +15,8 @@ class StJohns(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label="St. John's", division_id=self.division_id)
         organization.add_post(role='Deputy Mayor', label="St. John's", division_id=self.division_id)
-        for i in range(1, 5):
-            organization.add_post(role='Councillor at Large', label="St. John's (seat {})".format(i), division_id=self.division_id)
+        for seat_number in range(1, 5):
+            organization.add_post(role='Councillor at Large', label="St. John's (seat {})".format(seat_number), division_id=self.division_id)
         for i in range(1, 6):
             organization.add_post(role='Councillor', label='Ward {}'.format(i))
 

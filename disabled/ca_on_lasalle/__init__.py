@@ -15,7 +15,7 @@ class LaSalle(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label='LaSalle', division_id=self.division_id)
         organization.add_post(role='Deputy Mayor', label='LaSalle', division_id=self.division_id)
-        for i in range(1, 6):
-            organization.add_post(role='Councillor', label='LaSalle (seat {})'.format(i), division_id=self.division_id)
+        for seat_number in range(1, 6):
+            organization.add_post(role='Councillor', label='LaSalle (seat {})'.format(seat_number), division_id=self.division_id)
 
         yield organization

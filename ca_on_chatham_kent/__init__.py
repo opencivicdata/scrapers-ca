@@ -14,17 +14,17 @@ class ChathamKent(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Chatham-Kent', division_id=self.division_id)
-        for i in range(1, 3):
-            organization.add_post(role='Councillor', label='Ward 1 (seat {})'.format(i))
-        for i in range(1, 4):
-            organization.add_post(role='Councillor', label='Ward 2 (seat {})'.format(i))
-        for i in range(1, 3):
-            organization.add_post(role='Councillor', label='Ward 3 (seat {})'.format(i))
-        for i in range(1, 3):
-            organization.add_post(role='Councillor', label='Ward 4 (seat {})'.format(i))
-        for i in range(1, 3):
-            organization.add_post(role='Councillor', label='Ward 5 (seat {})'.format(i))
-        for i in range(1, 7):
-            organization.add_post(role='Councillor', label='Ward 6 (seat {})'.format(i))
+        for seat_number in range(1, 3):
+            organization.add_post(role='Councillor', label='Ward 1 (seat {})'.format(seat_number))
+        for seat_number in range(1, 4):
+            organization.add_post(role='Councillor', label='Ward 2 (seat {})'.format(seat_number))
+        for seat_number in range(1, 3):
+            organization.add_post(role='Councillor', label='Ward 3 (seat {})'.format(seat_number))
+        for seat_number in range(1, 3):
+            organization.add_post(role='Councillor', label='Ward 4 (seat {})'.format(seat_number))
+        for seat_number in range(1, 3):
+            organization.add_post(role='Councillor', label='Ward 5 (seat {})'.format(seat_number))
+        for seat_number in range(1, 7):
+            organization.add_post(role='Councillor', label='Ward 6 (seat {})'.format(seat_number))
 
         yield organization
