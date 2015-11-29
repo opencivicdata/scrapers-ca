@@ -18,6 +18,6 @@ class Moncton(CanadianJurisdiction):
             organization.add_post(role='Councillor at Large', label='Moncton (seat {})'.format(i), division_id=self.division_id)
         for i in range(1, 5):
             for j in range(1, 3):
-                organization.add_post(role='Councillor', label='Ward {} (seat {})'.format(i, j))
+                organization.add_post(role='Councillor', label='Ward {} (seat {})'.format(i, j), division_id='{}/ward:{}'.format(self.division_id, i))
 
         yield organization
