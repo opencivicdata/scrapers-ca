@@ -16,7 +16,7 @@ class Cambridge(CanadianJurisdiction):
         organization.add_post(role='Mayor', label='Cambridge', division_id=self.division_id)
         for seat_number in range(1, 3):
             organization.add_post(role='Regional Councillor', label='Cambridge (seat {})'.format(seat_number), division_id=self.division_id)
-        for i in range(1, 9):
-            organization.add_post(role='Councillor', label='Ward {}'.format(i))
+        for ward_number in range(1, 9):
+            organization.add_post(role='Councillor', label='Ward {}'.format(ward_number))
 
         yield organization

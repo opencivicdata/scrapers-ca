@@ -17,7 +17,7 @@ class Markham(CanadianJurisdiction):
         organization.add_post(role='Deputy Mayor', label='Markham', division_id=self.division_id)
         for seat_number in range(1, 4):
             organization.add_post(role='Regional Councillor', label='Markham (seat {})'.format(seat_number), division_id=self.division_id)
-        for i in range(1, 9):
-            organization.add_post(role='Councillor', label='Ward {}'.format(i))
+        for ward_number in range(1, 9):
+            organization.add_post(role='Councillor', label='Ward {}'.format(ward_number))
 
         yield organization
