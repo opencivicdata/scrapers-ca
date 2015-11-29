@@ -16,7 +16,7 @@ class Ajax(CanadianJurisdiction):
         organization.add_post(role='Mayor', label='Ajax', division_id=self.division_id)
         organization.add_post(role='Regional Councillor', label='Wards 1 and 2')
         organization.add_post(role='Regional Councillor', label='Wards 3 and 4')
-        for i in range(4):
-            organization.add_post(role='Councillor', label='Ward {}'.format(i + 1))
+        for i in range(1, 5):
+            organization.add_post(role='Councillor', label='Ward {}'.format(i))
 
         yield organization

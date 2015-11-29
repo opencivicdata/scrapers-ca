@@ -14,8 +14,8 @@ class Brantford(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Brantford', division_id=self.division_id)
-        for i in range(5):
-            organization.add_post(role='Councillor', label='Ward {} (seat 1)'.format(i + 1))
-            organization.add_post(role='Councillor', label='Ward {} (seat 2)'.format(i + 1))
+        for i in range(1, 6):
+            organization.add_post(role='Councillor', label='Ward {} (seat 1)'.format(i))
+            organization.add_post(role='Councillor', label='Ward {} (seat 2)'.format(i))
 
         yield organization

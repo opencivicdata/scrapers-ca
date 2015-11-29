@@ -16,22 +16,22 @@ class Niagara(CanadianJurisdiction):
         organization.add_post(role='Regional Chair', label='Niagara', division_id=self.division_id)
 
         counts = {
-            'Fort Erie': 1,
-            'Grimsby': 1,
-            'Lincoln': 1,
-            'Niagara Falls': 3,
-            'Niagara-on-the-Lake': 1,
-            'Pelham': 1,
-            'Port Colborne': 1,
-            'St. Catharines': 6,
-            'Thorold': 1,  # can be 0
-            'Wainfleet': 0,  # can be 1
-            'Welland': 2,
-            'West Lincoln': 0,
+            'Fort Erie': 2,
+            'Grimsby': 2,
+            'Lincoln': 2,
+            'Niagara Falls': 4,
+            'Niagara-on-the-Lake': 2,
+            'Pelham': 2,
+            'Port Colborne': 2,
+            'St. Catharines': 7,
+            'Thorold': 2,  # can be 1
+            'Wainfleet': 1,  # can be 2
+            'Welland': 3,
+            'West Lincoln': 1,
         }
         for label, count in counts.items():
             organization.add_post(role='Mayor', label=label)
-            for i in range(count):
-                organization.add_post(role='Councillor', label='{} (seat {})'.format(label, i + 1))
+            for i in range(1, count):
+                organization.add_post(role='Councillor', label='{} (seat {})'.format(label, i))
 
         yield organization

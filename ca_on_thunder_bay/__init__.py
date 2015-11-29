@@ -14,8 +14,8 @@ class ThunderBay(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         organization.add_post(role='Mayor', label='Thunder Bay', division_id=self.division_id)
-        for i in range(5):
-            organization.add_post(role='Councillor at Large', label='Thunder Bay (seat {})'.format(i + 1), division_id=self.division_id)
+        for i in range(1, 6):
+            organization.add_post(role='Councillor at Large', label='Thunder Bay (seat {})'.format(i), division_id=self.division_id)
         organization.add_post(role='Councillor', label='Current River')
         organization.add_post(role='Councillor', label='Red River')
         organization.add_post(role='Councillor', label='McKellar')
