@@ -13,7 +13,7 @@ class Stratford(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Stratford')
+        organization.add_post(role='Mayor', label='Stratford', division_id=self.division_id)
         organization.add_post(role='Councillor', label="Kelly's Cove (seat 1)")
         organization.add_post(role='Councillor', label="Kelly's Cove (seat 2)")
         organization.add_post(role='Councillor', label='Stewart Cove (seat 1)')

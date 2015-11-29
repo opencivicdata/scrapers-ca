@@ -13,9 +13,9 @@ class Lambton(CanadianJurisdiction):
     def get_organizations(self):  # @todo Fix labels along the lines of Waterloo Region.
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Warden', label='Lambton')
-        organization.add_post(role='Deputy Warden', label='Lambton')
+        organization.add_post(role='Warden', label='Lambton', division_id=self.division_id)
+        organization.add_post(role='Deputy Warden', label='Lambton', division_id=self.division_id)
         for i in range(15):
-            organization.add_post(role='Councillor', label='Lambton (seat {})'.format(i + 1))
+            organization.add_post(role='Councillor', label='Lambton (seat {})'.format(i + 1), division_id=self.division_id)
 
         yield organization

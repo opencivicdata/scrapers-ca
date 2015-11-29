@@ -33,7 +33,7 @@ class Canada(CanadianJurisdiction):
 
         for division in Division.get(self.division_id).children('ed'):
             if division.attrs.get('validFrom') and division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
-                lower.add_post(role='MP', label=division.name)
+                lower.add_post(role='MP', label=division.name, division_id=division.id)
 
         yield upper
         yield lower

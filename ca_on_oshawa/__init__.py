@@ -13,10 +13,10 @@ class Oshawa(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Oshawa')
+        organization.add_post(role='Mayor', label='Oshawa', division_id=self.division_id)
         for i in range(7):
-            organization.add_post(role='Regional Councillor', label='Oshawa (seat {})'.format(i + 1))
+            organization.add_post(role='Regional Councillor', label='Oshawa (seat {})'.format(i + 1), division_id=self.division_id)
         for i in range(3):
-            organization.add_post(role='Councillor', label='Oshawa (seat {})'.format(i + 1))
+            organization.add_post(role='Councillor', label='Oshawa (seat {})'.format(i + 1), division_id=self.division_id)
 
         yield organization
