@@ -9,18 +9,33 @@ COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293
 class TorontoPersonScraper(CanadianScraper):
 
     def scrape(self):
+        # yield from self.scrape_organizations()
+        yield from self.scrape_people()
+
+    def scrape_organizations(self):
+        return
+
+    def scrape_people(self):
+        # yield from self.scrape_appointees()
+        yield from self.scrape_council()
+
+    def scrape_appointees(self):
+        return
+
+    def scrape_council(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
         a = page.xpath('//a[contains(text(),"Mayor")]')[0]
-        yield self.scrape_mayor(a.attrib['href'])
+        yield from self.scrape_mayor(a.attrib['href'])
 
         for a in page.xpath('//table')[0].xpath('.//a[contains(text(),"Councillor")]'):
-            page = self.lxmlize(a.attrib['href'])
-            h1 = page.xpath('//h1//text()')[0]
-            if 'Council seat is vacant' not in h1:
-                yield self.scrape_councilor(page, h1, a.attrib['href'])
+            yield from self.scrape_councilor(a.attrib['href'])
 
-    def scrape_councilor(self, page, h1, url):
+    def scrape_councilor(self, url):
+        page = self.lxmlize(url)
+        h1 = page.xpath('//h1//text()')[0]
+        if 'Council seat is vacant' in h1: return
+
         name = h1.split('Councillor')[1]
         ward_full = page.xpath('//p/descendant-or-self::*[contains(text(), "Profile:")]/text()')[0].replace('\xa0', ' ')
         ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
@@ -46,9 +61,13 @@ class TorontoPersonScraper(CanadianScraper):
         if address:
             p.add_contact('address', address, 'legislature')
 
-        return p
+        yield p
 
     def scrape_mayor(self, url):
+        # TODO: Fix mayor scraper
+        scraper_broken = True
+        if scraper_broken: return
+
         page = self.lxmlize(url)
         name = page.xpath("//h1/text()")[0].replace("Toronto Mayor", "").strip()
 
@@ -70,4 +89,4 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_contact('address', address, 'legislature')
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('email', email)
-        return p
+        yield p
