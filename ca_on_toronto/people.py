@@ -1,19 +1,41 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
+from pupa.scrape import Organization
 
 import re
 
 COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
+AGENDA_SEARCH_PAGE = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare'
 
 
 class TorontoPersonScraper(CanadianScraper):
 
     def scrape(self):
-        # yield from self.scrape_organizations()
+        yield from self.scrape_organizations()
         yield from self.scrape_people()
 
     def scrape_organizations(self):
-        return
+        yield from self.scrape_committees()
+
+    def scrape_committees(self):
+        page = self.lxmlize(AGENDA_SEARCH_PAGE)
+        committee_options = page.xpath('//select[@id="decision_body"]/option')
+
+        def has_value(opt): return bool(opt.text.strip())
+        def to_dict(opt):
+            name, term = re.search('^(.+) \((\d{4}-\d{4})\)$', opt.text).groups()
+            external_id = opt.attrib['value']
+            return {
+                'name': name,
+                'term': term,
+                'id': external_id,
+            }
+
+        committee_sessions = [to_dict(opt) for opt in committee_options if has_value(opt)]
+        for session in committee_sessions:
+            o = Organization(name=session['name'], classification='committee')
+            o.add_source(AGENDA_SEARCH_PAGE)
+            yield o
 
     def scrape_people(self):
         # yield from self.scrape_appointees()
