@@ -40,6 +40,7 @@ class TorontoPersonScraper(CanadianScraper):
 
         def normalize_name(name):
             name = re.sub(r'sub-?committee', 'Subcommittee', name,  flags=re.IGNORECASE)
+            name = re.sub(r'\s+', ' ', name)
             return name
 
         def to_dict(opt):
