@@ -37,7 +37,12 @@ def normalize_org_name(name):
     return name
 
 def normalize_person_name(name):
-    name = re.sub(r'Catherine/Kate', 'Kate', name)
+    name = name.replace('Catherine/Kate', 'Kate')
+    name = name.replace('Justin J. Di Ciano', 'Justin Di Ciano')
+    name = name.replace('Norman Kelly', 'Norm Kelly')
+    name = name.replace('Ming-Tat Cheung', 'Ming Tat Cheung')
+    name = name.replace('Mayor&nbsp John Tory', 'John Tory')
+    name = re.sub(r'\s+', ' ', name)
     return name
 
 def get_parent_committee(child_name):

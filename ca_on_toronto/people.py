@@ -11,8 +11,48 @@ import json
 COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
 AGENDA_SEARCH_PAGE = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare'
 COMMITTEE_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doPrepare&decisionBodyId={}'
+MEMBERS_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&{}={}'
 
 APPOINTMENTS_ENDPOINT = 'https://secure.toronto.ca/pa/appointment/listJtable.json?jtPageSize=2000'
+
+# Some persons are missing from the appointment search listings, and need to be
+# specially accounted for.
+SPECIAL_PEOPLE = [
+    'Ana Skinner',
+    'Jennifer Rieger',
+    'Randy McLin',
+    'Maria Papadimitriou',
+    'Michael Bernard Hickey',
+    'Denise Harris',
+    'Sandrine Batonga',
+    'Maria Rizzo',
+    'Adriana Balen',
+    'Shamara Baidoobonso',
+    'Jo-Ann Davis',
+    'Jill Robinson',
+    'Gilles Marchildon',
+    'Panchetta Barnett',
+    'Tara Riley',
+    'Lise Marie Baudry',
+    'Angela Koh',
+    'Léonie Tchatat',
+    'Diane Chaperon-Lor',
+    'Carol Batstone',
+    "Jean-Francois L'Heureux",
+    'Isabelle Girard',
+    'Robert Allsopp',
+    'Geoff Kettel',
+    'Christine Skura',
+    'Neishaw Ali',
+    'Shelley Eriksen',
+    'Peter Wallace',
+    'Guy Mignault',
+    'Robert Saunders',
+    'Adam Diamond',
+    'Bernard Rasch',
+    'Mary-Catherine Garden',
+    "Claude-Reno D'Aigle",
+]
 
 class TorontoPersonScraper(CanadianScraper):
 
@@ -50,14 +90,23 @@ class TorontoPersonScraper(CanadianScraper):
             o.add_source(AGENDA_SEARCH_PAGE)
             o.add_source(APPOINTMENTS_ENDPOINT)
 
-            try:
-                members = self.fetch_members_from_id(session['id'])
-            except ParserError:
-                members = []
+            # Only have councilors for this term
+            if session['term'] == '2014-2018':
+                try:
+                    members = self.fetch_members_from_id(session['id'])
+                except ParserError:
+                    members = []
 
-            member_names = [m['name'] for m in members]
-            for name in member_names:
-                o.add_member(name)
+                member_names = [normalize_person_name(m['name']) for m in members]
+                for name in member_names:
+                    if name in SPECIAL_PEOPLE:
+                        p = Person(name=name, role="Citizen", district=self.jurisdiction.division_name)
+                        p.add_source(MEMBERS_PAGE_TEMPLATE.format('decisionBodyId', session['id']))
+                        o.add_member(p)
+                        yield p
+                    else:
+                        o.add_member(name)
+
             yield o
 
     def scrape_people(self):
@@ -176,7 +225,7 @@ class TorontoPersonScraper(CanadianScraper):
         return url
 
     def fetch_members_from_id(self, decision_body_id=None, meeting_id=None):
-        url_template = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&{}={}'
+        url_template = MEMBERS_PAGE_TEMPLATE
         url = self.build_url_from_id(url_template, decision_body_id, meeting_id)
 
         return self.fetch_members_from_url(url)
