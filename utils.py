@@ -162,7 +162,7 @@ class CanadianScraper(Scraper):
             text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
             page = lxml.html.fromstring(text)
         except etree.ParserError:
-            raise Exception('lxml.etree.ParserError: Document is empty {}'.format(url))
+            raise etree.ParserError('Document is empty {}'.format(url))
 
         meta = page.xpath('//meta[@http-equiv="refresh"]')
         if meta:
