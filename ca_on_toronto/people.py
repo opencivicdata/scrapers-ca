@@ -7,6 +7,21 @@ import re
 COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
 AGENDA_SEARCH_PAGE = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare'
 
+SUBCOMMITTEES = {
+    '^Budget Subcommittee ': 'Budget Committee',
+    '^Interview Subcommittee for ': 'Civic Appointments Committee',
+    '^Parks and Environment Subcommittee': 'Parks and Environment Committee',
+    '^Toronto and East York Community Council ': 'Toronto and East York Community Council',
+    'CDR Core Service Review Subcommittee': 'Community Development and Recreation Committee',
+    'Holiday Shopping Subcommittee': 'Economic Development Committee',
+    'SSO and Recycling Infrastructure Subcommittee': 'Public Works and Infrastructure Committee',
+    'Seniors Strategy Subcommittee': 'Planning and Growth Management Committee',
+    'Subcommittee on Establishment of Local Appeal Body': 'Planning and Growth Management Committee',
+    'Subcommittee to Review Billy Bishop Airport Consultant Reports': 'Toronto and East York Community Council',
+    'Tenant Issues Committee': 'Executive Committee',
+    'Tenant Issues Subcommittee': 'Community Development and Recreation Committee',
+}
+
 
 class TorontoPersonScraper(CanadianScraper):
 
@@ -36,9 +51,18 @@ class TorontoPersonScraper(CanadianScraper):
                 'id': external_id,
             }
 
+        def get_parent_committee(child_name):
+            for pattern, parent_name in SUBCOMMITTEES.items():
+                if re.search(pattern, child_name): return parent_name
+
         committee_sessions = [to_dict(opt) for opt in committee_options if has_value(opt)]
         for session in committee_sessions:
-            o = Organization(name=session['name'], classification='committee')
+            parent_name = get_parent_committee(session['name'])
+            if parent_name:
+                o = Organization(name=session['name'], classification='committee', parent_id={'name': parent_name})
+                o.add_source('http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doPrepare&decisionBodyId={}'.format(session['id']))
+            else:
+                o = Organization(name=session['name'], classification='committee', parent_id={'classification': 'legislature'})
             o.add_source(AGENDA_SEARCH_PAGE)
             yield o
 
