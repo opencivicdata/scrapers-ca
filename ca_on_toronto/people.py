@@ -126,7 +126,13 @@ class TorontoPersonScraper(CanadianScraper):
     def scrape_mayor(self, url):
         # TODO: Fix mayor scraper
         scraper_broken = True
-        if scraper_broken: return
+        if scraper_broken:
+            name = 'John Tory'
+            p = Person(primary_org='legislature', name=name, district="Toronto", role='Mayor')
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
+            yield p
+            return
 
         page = self.lxmlize(url)
         name = page.xpath("//h1/text()")[0].replace("Toronto Mayor", "").strip()
