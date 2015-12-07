@@ -1,17 +1,18 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 from pupa.scrape import Organization
-
 from lxml.etree import ParserError
 
-from people_helpers import normalize_committee_name, get_parent_committee
+from people_helpers import normalize_org_name, get_parent_committee, format_date
 
 import re
+import json
 
 COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
 AGENDA_SEARCH_PAGE = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare'
 COMMITTEE_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doPrepare&decisionBodyId={}'
 
+APPOINTMENTS_ENDPOINT = 'https://secure.toronto.ca/pa/appointment/listJtable.json?jtPageSize=2000'
 
 class TorontoPersonScraper(CanadianScraper):
 
@@ -32,7 +33,7 @@ class TorontoPersonScraper(CanadianScraper):
             name, term = re.search('^(.+) \((\d{4}-\d{4})\)$', opt.text).groups()
             decision_body_id = opt.attrib['value']
             return {
-                'name': normalize_committee_name(name),
+                'name': normalize_org_name(name),
                 'term': term,
                 'id': decision_body_id,
             }
@@ -53,17 +54,33 @@ class TorontoPersonScraper(CanadianScraper):
                 members = []
 
             member_names = [m['name'] for m in members]
-            print(member_names)
             for name in member_names:
                 o.add_member(name)
             yield o
 
     def scrape_people(self):
-        # yield from self.scrape_appointees()
+        yield from self.scrape_appointees()
         yield from self.scrape_council()
 
     def scrape_appointees(self):
-        return
+        response = self.post(APPOINTMENTS_ENDPOINT)
+        json_data = json.loads(response.text)
+
+        for record in json_data['Records']:
+            if record['role'] in ["Member"]:
+                p = Person(name=record['memberName'], role=record['role'], district=self.jurisdiction.division_name)
+                p.add_source(APPOINTMENTS_ENDPOINT)
+
+                org_name = normalize_org_name(record['decisionBodyName'])
+                o = Organization(name=org_name, classification='committee')
+                o.add_source(APPOINTMENTS_ENDPOINT)
+
+                start_date = format_date(record['appointmentStartDate'])
+                end_date = format_date(record['appointmentEndDate'])
+                o.add_member(p, role=record['role'], start_date=start_date, end_date=end_date)
+
+                yield p
+                yield o
 
     def scrape_council(self):
         page = self.lxmlize(COUNCIL_PAGE)

@@ -1,6 +1,8 @@
 import re
+from datetime import datetime
 
 SUBCOMMITTEES = {
+    # '<match pattern>': '<normalized name>',
     '^Budget Subcommittee ': 'Budget Committee',
     '^Interview Subcommittee for ': 'Civic Appointments Committee',
     '^Parks and Environment Subcommittee': 'Parks and Environment Committee',
@@ -15,11 +17,28 @@ SUBCOMMITTEES = {
     'Tenant Issues Subcommittee': 'Community Development and Recreation Committee',
 }
 
-def normalize_committee_name(name):
+AGENCY_PSEUDONYMS = {
+    # '<match pattern>': '<normalized name>',
+    '^Civic Theatres Toronto$': 'Board of Directors of Civic Theatres Toronto',
+    '^Property Standards Committee/Fence Viewers$': 'Property Standards Committee',
+    '^Sony Centre for the Performing Arts$': 'Board of Directors of The Hummingbird (Sony) Centre for the Performing Arts',
+    '^St\. Lawrence Centre for the Arts$': 'Board of Directors of the St. Lawrence Centre for the Arts',
+    '^Toronto Centre for the Arts$': 'Board of Directors of the Toronto Centre for the Arts',
+    '^Toronto Atmospheric Fund$': 'Board of Directors of the Toronto Atmospheric Fund',
+    '^Toronto Zoo$': 'Board of Management of the Toronto Zoo',
+}
+
+def normalize_org_name(name):
     name = re.sub(r'sub-?committee', 'Subcommittee', name,  flags=re.IGNORECASE)
     name = re.sub(r'\s+', ' ', name)
+    for pattern, org_name in AGENCY_PSEUDONYMS.items():
+        if re.search(pattern, name): name = org_name
+
     return name
 
 def get_parent_committee(child_name):
     for pattern, parent_name in SUBCOMMITTEES.items():
         if re.search(pattern, child_name): return parent_name
+
+def format_date(milli_epoch):
+    return datetime.fromtimestamp(int(milli_epoch)/1000).strftime('%Y-%m-%d')
