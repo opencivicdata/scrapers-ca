@@ -22,11 +22,16 @@ class TorontoPersonScraper(CanadianScraper):
         committee_options = page.xpath('//select[@id="decision_body"]/option')
 
         def has_value(opt): return bool(opt.text.strip())
+
+        def normalize_name(name):
+            name = re.sub(r'sub-?committee', 'Subcommittee', name,  flags=re.IGNORECASE)
+            return name
+
         def to_dict(opt):
             name, term = re.search('^(.+) \((\d{4}-\d{4})\)$', opt.text).groups()
             external_id = opt.attrib['value']
             return {
-                'name': name,
+                'name': normalize_name(name),
                 'term': term,
                 'id': external_id,
             }
