@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 from pupa.scrape import Organization
 
+from lxml.etree import ParserError
+
 from people_helpers import normalize_committee_name, get_parent_committee
 
 import re
@@ -44,6 +46,16 @@ class TorontoPersonScraper(CanadianScraper):
             else:
                 o = Organization(name=session['name'], classification='committee', parent_id={'classification': 'legislature'})
             o.add_source(AGENDA_SEARCH_PAGE)
+
+            try:
+                members = self.fetch_members_from_id(session['id'])
+            except ParserError:
+                members = []
+
+            member_names = [m['name'] for m in members]
+            print(member_names)
+            for name in member_names:
+                o.add_member(name)
             yield o
 
     def scrape_people(self):
@@ -121,3 +133,57 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_contact('voice', phone, 'legislature')
         p.add_contact('email', email)
         yield p
+
+    def build_url_from_id(self, url_template, decision_body_id=None, meeting_id=None):
+        if decision_body_id is not None:
+            url = url_template.format('decisionBodyId', decision_body_id)
+        elif meeting_id is not None:
+            url = url_template.format('meetingId', meeting_id)
+        else: raise
+
+        return url
+
+    def fetch_members_from_id(self, decision_body_id=None, meeting_id=None):
+        url_template = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&{}={}'
+        url = self.build_url_from_id(url_template, decision_body_id, meeting_id)
+
+        return self.fetch_members_from_url(url)
+
+    def fetch_members_from_url(self, url):
+        tree = self.lxmlize(url)
+
+        fields = {
+                'name': {
+                    'pattern': 'li',
+                    'type': 'string',
+                    },
+                'is_chair': {
+                    'pattern': 'li strong:nth-of-type(1)',
+                    'type': 'bool',
+                    },
+                'is_vice': {
+                    'pattern': 'li strong:nth-of-type(2)',
+                    'type': 'bool',
+                    },
+                }
+
+        def has_position(x): return False if x == None else True
+
+        data = {}
+        for name, conf in fields.items():
+            type_ = conf['type']
+            pattern = conf['pattern']
+            if type_ == 'string':
+                data[name] = [result.text.strip() for result in tree.cssselect(pattern)]
+            if type_ == 'bool':
+                data[name] = [has_position(result.text) for result in tree.cssselect(pattern)]
+
+        items = []
+        number_of_results = min([len(n) for n in data.values()])
+        for i in range(number_of_results):
+            item = {}
+            for key in data.keys():
+                item.update({ key : data[key][i] })
+            items.append(item)
+
+        return items
