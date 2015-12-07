@@ -46,7 +46,9 @@ class TorontoPersonScraper(CanadianScraper):
                 o.add_source(COMMITTEE_PAGE_TEMPLATE.format(session['id']))
             else:
                 o = Organization(name=session['name'], classification='committee', parent_id={'classification': 'legislature'})
+
             o.add_source(AGENDA_SEARCH_PAGE)
+            o.add_source(APPOINTMENTS_ENDPOINT)
 
             try:
                 members = self.fetch_members_from_id(session['id'])
@@ -73,7 +75,13 @@ class TorontoPersonScraper(CanadianScraper):
                 p.add_source(APPOINTMENTS_ENDPOINT)
 
                 org_name = normalize_org_name(record['decisionBodyName'])
-                o = Organization(name=org_name, classification='committee')
+                parent_name = get_parent_committee(org_name)
+                if parent_name:
+                    o = Organization(name=org_name, classification='committee', parent_id={'name': parent_name})
+                else:
+                    o = Organization(name=org_name, classification='committee', parent_id={'classification': 'legislature'})
+
+                o.add_source(AGENDA_SEARCH_PAGE)
                 o.add_source(APPOINTMENTS_ENDPOINT)
 
                 start_date = format_date(record['appointmentStartDate'])
