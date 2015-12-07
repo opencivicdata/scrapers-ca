@@ -29,11 +29,15 @@ AGENCY_PSEUDONYMS = {
 }
 
 def normalize_org_name(name):
-    name = re.sub(r'sub-?committee', 'Subcommittee', name,  flags=re.IGNORECASE)
+    name = re.sub(r'sub-?committee', 'Subcommittee', name, flags=re.IGNORECASE)
     name = re.sub(r'\s+', ' ', name)
     for pattern, org_name in AGENCY_PSEUDONYMS.items():
         if re.search(pattern, name): name = org_name
 
+    return name
+
+def normalize_person_name(name):
+    name = re.sub(r'Catherine/Kate', 'Kate', name)
     return name
 
 def get_parent_committee(child_name):

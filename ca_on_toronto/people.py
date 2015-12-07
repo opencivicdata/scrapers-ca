@@ -3,7 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 from pupa.scrape import Organization
 from lxml.etree import ParserError
 
-from people_helpers import normalize_org_name, get_parent_committee, format_date
+from people_helpers import normalize_org_name, get_parent_committee, format_date, normalize_person_name
 
 import re
 import json
@@ -68,7 +68,8 @@ class TorontoPersonScraper(CanadianScraper):
 
         for record in json_data['Records']:
             if record['role'] in ["Member"]:
-                p = Person(name=record['memberName'], role=record['role'], district=self.jurisdiction.division_name)
+                person_name = normalize_person_name(record['memberName'])
+                p = Person(name=person_name, role=record['role'], district=self.jurisdiction.division_name)
                 p.add_source(APPOINTMENTS_ENDPOINT)
 
                 org_name = normalize_org_name(record['decisionBodyName'])
