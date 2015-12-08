@@ -15,59 +15,6 @@ MEMBERS_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?func
 
 APPOINTMENTS_ENDPOINT = 'https://secure.toronto.ca/pa/appointment/listJtable.json?jtPageSize=2000'
 
-# Some persons are missing from the appointment search listings, and need to be
-# specially accounted for.
-SPECIAL_PEOPLE = [
-    'Ana Skinner',
-    'Jennifer Rieger',
-    'Randy McLin',
-    'Maria Papadimitriou',
-    'Michael Bernard Hickey',
-    'Denise Harris',
-    'Sandrine Batonga',
-    'Maria Rizzo',
-    'Adriana Balen',
-    'Shamara Baidoobonso',
-    'Jo-Ann Davis',
-    'Jill Robinson',
-    'Gilles Marchildon',
-    'Panchetta Barnett',
-    'Tara Riley',
-    'Lise Marie Baudry',
-    'Angela Koh',
-    'Léonie Tchatat',
-    'Diane Chaperon-Lor',
-    'Carol Batstone',
-    "Jean-Francois L'Heureux",
-    'Isabelle Girard',
-    'Robert Allsopp',
-    'Geoff Kettel',
-    'Christine Skura',
-    'Neishaw Ali',
-    'Shelley Eriksen',
-    'Peter Wallace',
-    'Guy Mignault',
-    'Robert Saunders',
-    'Adam Diamond',
-    'Bernard Rasch',
-    'Mary-Catherine Garden',
-    "Claude-Reno D'Aigle",
-]
-
-# These committees have non-council membership, of which some do not appear in
-# the appointments search results. For now, we will not try to add
-# membership data for these committees.
-# TODO: Figure out how to determine non-council members, and create new Person
-# objects.
-SKIPPED_COMMITTEES = [
-        'Board of Health Toronto Urban Health Fund Review Panel',
-        'City-School Boards Advisory Committee',
-        'Toronto Preservation Board',
-        'French Language Advisory Committee',
-        'Toronto Film, Television and Digital Media Board',
-        'Sign Variance Committee',
-        'Debenture Committee',
-        ]
 
 class TorontoPersonScraper(CanadianScraper):
 
