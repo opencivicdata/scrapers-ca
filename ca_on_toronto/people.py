@@ -54,6 +54,21 @@ SPECIAL_PEOPLE = [
     "Claude-Reno D'Aigle",
 ]
 
+# These committees have non-council membership, of which some do not appear in
+# the appointments search results. For now, we will not try to add
+# membership data for these committees.
+# TODO: Figure out how to determine non-council members, and create new Person
+# objects.
+SKIPPED_COMMITTEES = [
+        'Board of Health Toronto Urban Health Fund Review Panel',
+        'City-School Boards Advisory Committee',
+        'Toronto Preservation Board',
+        'French Language Advisory Committee',
+        'Toronto Film, Television and Digital Media Board',
+        'Sign Variance Committee',
+        'Debenture Committee',
+        ]
+
 class TorontoPersonScraper(CanadianScraper):
 
     def scrape(self):
