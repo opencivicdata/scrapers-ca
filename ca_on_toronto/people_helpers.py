@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 
 SUBCOMMITTEES = {
-    # '<match pattern>': '<normalized name>',
+    # '<child match pattern>': '<parent name>',
     '^Budget Subcommittee ': 'Budget Committee',
     '^Interview Subcommittee for ': 'Civic Appointments Committee',
     '^Parks and Environment Subcommittee': 'Parks and Environment Committee',
@@ -17,8 +17,9 @@ SUBCOMMITTEES = {
     'Tenant Issues Subcommittee': 'Community Development and Recreation Committee',
 }
 
+# Taking the name from TMMIS to be the normalized name.
 AGENCY_PSEUDONYMS = {
-    # '<match pattern>': '<normalized name>',
+    # '<raw match pattern>': '<normalized tmmis name>',
     '^Civic Theatres Toronto$': 'Board of Directors of Civic Theatres Toronto',
     '^Property Standards Committee/Fence Viewers$': 'Property Standards Committee',
     '^Sony Centre for the Performing Arts$': 'Board of Directors of The Hummingbird (Sony) Centre for the Performing Arts',
