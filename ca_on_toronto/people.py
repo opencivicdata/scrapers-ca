@@ -105,22 +105,31 @@ class TorontoPersonScraper(CanadianScraper):
             o.add_source(AGENDA_SEARCH_PAGE)
             o.add_source(APPOINTMENTS_ENDPOINT)
 
-            # Only have councilors for this term
+            # Only guaranteed councillors for this term.
+            # Also, all members fetched by meetingId in previous term, which is
+            # more complicated.
             if session['term'] == '2014-2018':
                 try:
                     members = self.fetch_members_from_id(session['id'])
                 except ParserError:
                     members = []
 
-                member_names = [normalize_person_name(m['name']) for m in members]
-                for name in member_names:
-                    if name in SPECIAL_PEOPLE:
-                        p = Person(name=name, role="Citizen", district=self.jurisdiction.division_name)
-                        p.add_source(MEMBERS_PAGE_TEMPLATE.format('decisionBodyId', session['id']))
-                        o.add_member(p)
-                        yield p
+                for member in members:
+                    name = normalize_person_name(member['name'])
+                    committee_role = member['role'] or 'Member'
+                    if member['is_councillor']:
+                        o.add_member(name, role='Councillor')
                     else:
-                        o.add_member(name)
+                        p = Person(name=name, role='Member', district=self.jurisdiction.division_name)
+                        # This is a lie, but using the actual source makes it
+                        # unclear how to add people from multiple sources in a
+                        # way that pupa can resolve without dups.
+                        # TODO: Figure this out.
+                        p.add_source(APPOINTMENTS_ENDPOINT)
+                        #p.add_source(MEMBERS_PAGE_TEMPLATE.format('decisionBodyId', session['id'], 'true'))
+
+                        o.add_member(p, role=committee_role)
+                        yield p
 
             yield o
 
