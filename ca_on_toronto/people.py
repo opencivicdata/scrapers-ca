@@ -11,7 +11,7 @@ import json
 COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
 AGENDA_SEARCH_PAGE = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doPrepare'
 COMMITTEE_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doPrepare&decisionBodyId={}'
-MEMBERS_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&{}={}'
+MEMBERS_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&{}={}&showLink=true'
 
 APPOINTMENTS_ENDPOINT = 'https://secure.toronto.ca/pa/appointment/listJtable.json?jtPageSize=2000'
 
@@ -246,40 +246,18 @@ class TorontoPersonScraper(CanadianScraper):
         return self.fetch_members_from_url(url)
 
     def fetch_members_from_url(self, url):
-        tree = self.lxmlize(url)
-
-        fields = {
-                'name': {
-                    'pattern': 'li',
-                    'type': 'string',
-                    },
-                'is_chair': {
-                    'pattern': 'li strong:nth-of-type(1)',
-                    'type': 'bool',
-                    },
-                'is_vice': {
-                    'pattern': 'li strong:nth-of-type(2)',
-                    'type': 'bool',
-                    },
-                }
-
-        def has_position(x): return False if x == None else True
-
-        data = {}
-        for name, conf in fields.items():
-            type_ = conf['type']
-            pattern = conf['pattern']
-            if type_ == 'string':
-                data[name] = [result.text.strip() for result in tree.cssselect(pattern)]
-            if type_ == 'bool':
-                data[name] = [has_position(result.text) for result in tree.cssselect(pattern)]
-
+        page = self.lxmlize(url)
         items = []
-        number_of_results = min([len(n) for n in data.values()])
-        for i in range(number_of_results):
-            item = {}
-            for key in data.keys():
-                item.update({ key : data[key][i] })
+        for li in page.cssselect('li'):
+            content = li.text_content().strip()
+            name, _, role = re.search(r'^(.+)+(\((.+)\))?$', content).groups()
+            is_councillor = False if not li.cssselect('a') else True
+            item = {
+                'name': name,
+                'is_councillor': is_councillor,
+                # Returns None when using decisionBodyId rather than meetingId
+                'role': role,
+            }
             items.append(item)
 
         return items
