@@ -15,6 +15,8 @@ MEMBERS_PAGE_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?func
 
 APPOINTMENTS_ENDPOINT = 'https://secure.toronto.ca/pa/appointment/listJtable.json?jtPageSize=2000'
 
+COUNCIL_PSEUDO_ID = {'classification': 'legislature'}
+
 
 class TorontoPersonScraper(CanadianScraper):
 
@@ -117,9 +119,10 @@ class TorontoPersonScraper(CanadianScraper):
                 org_name = normalize_org_name(record['decisionBodyName'])
                 parent_name = get_parent_committee(org_name)
                 if parent_name:
-                    o = Organization(name=org_name, classification='committee', parent_id={'name': parent_name})
+                    parent_pseudo_id = {'name': parent_name}
                 else:
-                    o = Organization(name=org_name, classification='committee', parent_id={'classification': 'legislature'})
+                    parent_pseudo_id = COUNCIL_PSEUDO_ID
+                o = Organization(name=org_name, classification='committee', parent_id=parent_pseudo_id)
 
                 o.add_source(AGENDA_SEARCH_PAGE)
                 o.add_source(APPOINTMENTS_ENDPOINT)

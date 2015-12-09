@@ -55,8 +55,8 @@ def regex_dict_lookup(lookup_dict, string, default_return=None):
 def normalize_whitespace(string):
     return re.sub(r'\s+', ' ', string)
 
-def get_parent_committee(child_name):
-    return regex_dict_lookup(SUBCOMMITTEES, child_name)
+def get_parent_committee(child_name, default_parent=None):
+    return regex_dict_lookup(SUBCOMMITTEES, child_name, default_parent)
 
 def format_date(milli_epoch):
     return datetime.fromtimestamp(int(milli_epoch)/1000).strftime('%Y-%m-%d')
