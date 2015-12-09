@@ -18,9 +18,13 @@ APPOINTMENTS_ENDPOINT = 'https://secure.toronto.ca/pa/appointment/listJtable.jso
 
 class TorontoPersonScraper(CanadianScraper):
 
+    def __init__(self, jurisdiction, datadir, strict_validation=True, fastmode=False):
+        super(TorontoPersonScraper, self).__init__(jurisdiction, datadir, strict_validation=True, fastmode=False)
+        self.people_d = {}
+
     def scrape(self):
-        yield from self.scrape_organizations()
         yield from self.scrape_people()
+        yield from self.scrape_organizations()
 
     def scrape_organizations(self):
         yield from self.scrape_committees()
@@ -65,9 +69,9 @@ class TorontoPersonScraper(CanadianScraper):
                     name = normalize_person_name(member['name'])
                     committee_role = member['role'] or 'Member'
                     if member['is_councillor']:
-                        True
-                        # TODO: Fix something about sources
-                        # o.add_member(name, role='Councillor')
+                        p = self.people_d[name]
+                        p.add_source(MEMBERS_PAGE_TEMPLATE.format('decisionBodyId', session['id']))
+                        o.add_member(p, role='Councillor')
                     else:
                         p = Person(name=name, role='Member', district=self.jurisdiction.division_name)
                         # This is a lie, but using the actual source makes it
@@ -75,7 +79,7 @@ class TorontoPersonScraper(CanadianScraper):
                         # way that pupa can resolve without dups.
                         # TODO: Figure this out.
                         p.add_source(APPOINTMENTS_ENDPOINT)
-                        #p.add_source(MEMBERS_PAGE_TEMPLATE.format('decisionBodyId', session['id'], 'true'))
+                        #p.add_source(MEMBERS_PAGE_TEMPLATE.format('decisionBodyId', session['id']))
 
                         o.add_member(p, role=committee_role)
                         yield p
@@ -136,6 +140,7 @@ class TorontoPersonScraper(CanadianScraper):
         district = '{0} ({1})'.format(ward_name.replace('-', '\u2014'), ward_num.split()[1])
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+        # TODO: This is a lie about sources
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
 
@@ -152,6 +157,9 @@ class TorontoPersonScraper(CanadianScraper):
         if address:
             p.add_contact('address', address, 'legislature')
 
+        if name not in self.people_d.keys():
+            self.people_d[name] = p
+
         yield p
 
     def scrape_mayor(self, url):
@@ -162,6 +170,7 @@ class TorontoPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district="Toronto", role='Mayor')
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
+            self.people_d[name] = p
             yield p
             return
 
