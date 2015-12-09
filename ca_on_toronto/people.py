@@ -65,7 +65,9 @@ class TorontoPersonScraper(CanadianScraper):
                     name = normalize_person_name(member['name'])
                     committee_role = member['role'] or 'Member'
                     if member['is_councillor']:
-                        o.add_member(name, role='Councillor')
+                        True
+                        # TODO: Fix something about sources
+                        # o.add_member(name, role='Councillor')
                     else:
                         p = Person(name=name, role='Member', district=self.jurisdiction.division_name)
                         # This is a lie, but using the actual source makes it
