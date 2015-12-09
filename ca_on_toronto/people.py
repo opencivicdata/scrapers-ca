@@ -45,6 +45,7 @@ class TorontoPersonScraper(CanadianScraper):
             }
 
         committee_sessions = [to_dict(opt) for opt in committee_options if has_value(opt)]
+        committee_sessions = [session for session in committee_sessions if session['name'] != 'City Council']
         for session in committee_sessions:
             parent_name = get_parent_committee(session['name'])
             if parent_name:
