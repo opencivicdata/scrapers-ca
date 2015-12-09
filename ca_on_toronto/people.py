@@ -59,6 +59,7 @@ class TorontoPersonScraper(CanadianScraper):
             # Only guaranteed councillors for this term.
             # Also, all members fetched by meetingId in previous term, which is
             # more complicated.
+            # TODO: Scrape past session membership.
             if session['term'] == '2014-2018':
                 try:
                     members = self.fetch_members_from_id(session['id'])
