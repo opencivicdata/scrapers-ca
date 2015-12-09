@@ -29,28 +29,48 @@ AGENCY_PSEUDONYMS = {
     '^Toronto Zoo$': 'Board of Management of the Toronto Zoo',
 }
 
+PERSON_PSEUDONYMS = {
+    'Mayor&nbsp John Tory': 'John Tory',
+    # TODO: Add aliases?
+    'Catherine/Kate': 'Kate',
+    'Justin J. Di Ciano': 'Justin Di Ciano',
+    'Norman Kelly': 'Norm Kelly',
+    'Ming-Tat Cheung': 'Ming Tat Cheung',
+    'Derek "drex" Jancar': 'Derek Jancar',
+}
+
+def regex_dict_lookup(lookup_dict, string, default_return=None):
+    matches = []
+    for pattern, value in lookup_dict.items():
+        if re.search(pattern, string): matches.append(value)
+
+    if len(matches) == 1:
+        return matches.pop()
+    elif len(matches) == 0:
+        return default_return
+    else:
+        msg = 'Multiple regex matches for {}: {}'.format(string, matches)
+        raise Exception(msg)
+
+def normalize_whitespace(string):
+    return re.sub(r'\s+', ' ', string)
+
+def get_parent_committee(child_name):
+    return regex_dict_lookup(SUBCOMMITTEES, child_name)
+
+def format_date(milli_epoch):
+    return datetime.fromtimestamp(int(milli_epoch)/1000).strftime('%Y-%m-%d')
+
 def normalize_org_name(name):
     name = re.sub(r'sub-?committee', 'Subcommittee', name, flags=re.IGNORECASE)
-    name = re.sub(r'\s+', ' ', name)
-    for pattern, org_name in AGENCY_PSEUDONYMS.items():
-        if re.search(pattern, name): name = org_name
+    name = normalize_whitespace(name)
+    name = regex_dict_lookup(AGENCY_PSEUDONYMS, name, name)
 
     return name
 
 def normalize_person_name(name):
-    name = re.sub(r'\s+', ' ', name)
-    name = name.replace('Mayor&nbsp John Tory', 'John Tory')
-    # TODO: Add aliases?
-    name = name.replace('Catherine/Kate', 'Kate')
-    name = name.replace('Justin J. Di Ciano', 'Justin Di Ciano')
-    name = name.replace('Norman Kelly', 'Norm Kelly')
-    name = name.replace('Ming-Tat Cheung', 'Ming Tat Cheung')
-    name = name.replace('Derek "drex" Jancar', 'Derek Jancar')
+    name = normalize_whitespace(name)
+    for original, replacement in PERSON_PSEUDONYMS.items():
+        name = name.replace(original, replacement)
+
     return name
-
-def get_parent_committee(child_name):
-    for pattern, parent_name in SUBCOMMITTEES.items():
-        if re.search(pattern, child_name): return parent_name
-
-def format_date(milli_epoch):
-    return datetime.fromtimestamp(int(milli_epoch)/1000).strftime('%Y-%m-%d')
