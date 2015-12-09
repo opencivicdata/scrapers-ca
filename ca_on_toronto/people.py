@@ -127,7 +127,7 @@ class TorontoPersonScraper(CanadianScraper):
         h1 = page.xpath('//h1//text()')[0]
         if 'Council seat is vacant' in h1: return
 
-        name = h1.split('Councillor')[1]
+        name = h1.split('Councillor')[1].strip()
         ward_full = page.xpath('//p/descendant-or-self::*[contains(text(), "Profile:")]/text()')[0].replace('\xa0', ' ')
         ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
         if ward_name == 'Etobicoke Lakeshore':
