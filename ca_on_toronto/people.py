@@ -96,6 +96,18 @@ class TorontoPersonScraper(CanadianScraper):
         json_data = json.loads(response.text)
 
         for record in json_data['Records']:
+            # TODO: Figure out how to deal with other role types:
+            #  - Alternate
+            #  - Chair
+            #  - Commissioner
+            #  - Councillor
+            #  - Deputy Commissioner
+            #  - Deputy Mayor
+            #  - Mayor
+            #  - Mayor's Designate
+            #  - Stakeholder Rep
+            #  - Vice Chair
+            # Source: https://secure.toronto.ca/pa/search/appointments.do
             if record['role'] in ["Member"]:
                 person_name = normalize_person_name(record['memberName'])
                 p = Person(name=person_name, role=record['role'], district=self.jurisdiction.division_name)
