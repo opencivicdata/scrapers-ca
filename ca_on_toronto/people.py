@@ -40,9 +40,9 @@ class TorontoPersonScraper(CanadianScraper):
         page = self.lxmlize(AGENDA_SEARCH_PAGE)
         committee_options = page.xpath('//select[@id="decision_body"]/option')
 
-        def has_value(opt): return bool(opt.text.strip())
+        def elem_has_value(opt): return bool(opt.text.strip())
 
-        def to_dict(opt):
+        def elem_to_dict(opt):
             name, term = re.search('^(.+) \((\d{4}-\d{4})\)$', opt.text).groups()
             decision_body_id = opt.attrib['value']
             return {
@@ -51,7 +51,7 @@ class TorontoPersonScraper(CanadianScraper):
                 'id': decision_body_id,
             }
 
-        committee_sessions = [to_dict(opt) for opt in committee_options if has_value(opt)]
+        committee_sessions = [elem_to_dict(opt) for opt in committee_options if elem_has_value(opt)]
         committee_sessions = [session for session in committee_sessions if session['name'] != 'City Council']
         for session in committee_sessions:
             parent_name = get_parent_committee(session['name'])
