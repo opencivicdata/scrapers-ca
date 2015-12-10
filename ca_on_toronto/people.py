@@ -22,6 +22,7 @@ class TorontoPersonScraper(CanadianScraper):
 
     def __init__(self, jurisdiction, datadir, strict_validation=True, fastmode=False):
         super(TorontoPersonScraper, self).__init__(jurisdiction, datadir, strict_validation=True, fastmode=False)
+        # Used to store councillor and mayor Person objects during scrape_council()
         self.people_d = {}
 
     def scrape(self):
