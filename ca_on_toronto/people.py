@@ -28,6 +28,10 @@ class TorontoPersonScraper(CanadianScraper):
         yield from self.scrape_people()
         yield from self.scrape_organizations()
 
+    def scrape_people(self):
+        yield from self.scrape_council()
+        yield from self.scrape_appointees()
+
     def scrape_organizations(self):
         yield from self.scrape_committees()
 
@@ -90,15 +94,24 @@ class TorontoPersonScraper(CanadianScraper):
 
             yield o
 
-    def scrape_people(self):
-        yield from self.scrape_appointees()
-        yield from self.scrape_council()
-
     def scrape_appointees(self):
         response = self.post(APPOINTMENTS_ENDPOINT)
         json_data = json.loads(response.text)
 
         for record in json_data['Records']:
+            org_name = normalize_org_name(record['decisionBodyName'])
+            parent_name = get_parent_committee(org_name)
+            if parent_name:
+                parent_pseudo_id = {'name': parent_name}
+            else:
+                parent_pseudo_id = COUNCIL_PSEUDO_ID
+            o = Organization(name=org_name, classification='committee', parent_id=parent_pseudo_id)
+
+            o.add_source(AGENDA_SEARCH_PAGE)
+            o.add_source(APPOINTMENTS_ENDPOINT)
+
+            person_name = normalize_person_name(record['memberName'])
+
             # TODO: Figure out how to deal with other role types:
             #  - Alternate
             #  - Chair
@@ -111,21 +124,22 @@ class TorontoPersonScraper(CanadianScraper):
             #  - Stakeholder Rep
             #  - Vice Chair
             # Source: https://secure.toronto.ca/pa/search/appointments.do
-            if record['role'] in ["Member"]:
-                person_name = normalize_person_name(record['memberName'])
+            PUBLIC_ROLES = ['Member']
+            COUNCIL_ROLES = ['Councillor', 'Mayor', 'Deputy Mayor', 'Mayor', "Mayor's Designate"]
+            AMBIGUOUS_ROLES = ['Alternate', 'Chair', 'Commissioner', 'Deputy Commissioner', 'Stakeholder Rep', 'Vice Chair']
+            if record['role'] in COUNCIL_ROLES + AMBIGUOUS_ROLES:
+                if person_name in self.people_d.keys():
+                    p = self.people_d[person_name]
+                    p.add_source(APPOINTMENTS_ENDPOINT)
+
+                    start_date = format_date(record['appointmentStartDate'])
+                    end_date = format_date(record['appointmentEndDate'])
+                    o.add_member(p, role=record['role'], start_date=start_date, end_date=end_date)
+                    yield o
+
+            elif record['role'] in PUBLIC_ROLES:
                 p = Person(name=person_name, role=record['role'], district=self.jurisdiction.division_name)
                 p.add_source(APPOINTMENTS_ENDPOINT)
-
-                org_name = normalize_org_name(record['decisionBodyName'])
-                parent_name = get_parent_committee(org_name)
-                if parent_name:
-                    parent_pseudo_id = {'name': parent_name}
-                else:
-                    parent_pseudo_id = COUNCIL_PSEUDO_ID
-                o = Organization(name=org_name, classification='committee', parent_id=parent_pseudo_id)
-
-                o.add_source(AGENDA_SEARCH_PAGE)
-                o.add_source(APPOINTMENTS_ENDPOINT)
 
                 start_date = format_date(record['appointmentStartDate'])
                 end_date = format_date(record['appointmentEndDate'])
@@ -157,7 +171,6 @@ class TorontoPersonScraper(CanadianScraper):
         district = '{0} ({1})'.format(ward_name.replace('-', '\u2014'), ward_num.split()[1])
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-        # TODO: This is a lie about sources
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
 
