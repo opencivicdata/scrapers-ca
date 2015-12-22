@@ -50,7 +50,7 @@ class TorontoPersonScraper(CanadianScraper):
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
-        name = page.xpath("//h1/text()")[0].replace("Toronto Mayor", "").strip()
+        name = page.xpath('//meta[@property="og:description"]/@content')[0].replace('Office of the Mayor of Toronto, ', '').strip()
 
         p = Person(primary_org='legislature', name=name, district="Toronto", role='Mayor')
         p.add_source(COUNCIL_PAGE)
@@ -62,7 +62,7 @@ class TorontoPersonScraper(CanadianScraper):
         p.add_source(url)
         page = self.lxmlize(url)
 
-        mail_elem, email_elem, phone_elem = page.xpath('//header')[:3]
+        mail_elem, email_elem, phone_elem = page.xpath('//article[contains(@class,"col-sm-6")]//header')[:3]
         address = ''.join(mail_elem.xpath('./following-sibling::p//text()'))
         phone = phone_elem.xpath('./following-sibling::p[1]//text()')[0]
         email = email_elem.xpath('./following-sibling::p[1]//text()')[0]
