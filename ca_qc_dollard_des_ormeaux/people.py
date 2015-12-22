@@ -15,17 +15,19 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
         general_phone = general_contacts[0]
         general_fax = general_contacts[1]
 
-        councillors = page.xpath('//tr/td/p/strong')
-        councillors = [councillor for councillor in councillors if "@" not in councillor.text_content()]
+        councillors = page.xpath('//tr/td/p/b')
         for councillor in councillors:
+            text = councillor.text_content()
+            if '@' in text or 'NEWSLETTER' in text:
+                continue
 
-            if 'Mayor' in councillor.text_content():
-                name = councillor.text_content().replace('Mayor', '')
+            if 'Mayor' in text:
+                name = text.replace('Mayor', '')
                 district = 'Dollard-Des Ormeaux'
                 role = 'Maire'
             else:
-                name = re.split(r'[0-9]', councillor.text_content())[1]
-                district = 'District ' + re.findall(r'[0-9]', councillor.text_content())[0]
+                name = re.split(r'[0-9]', text)[1]
+                district = 'District ' + re.findall(r'[0-9]', text)[0]
                 role = 'Conseiller'
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
