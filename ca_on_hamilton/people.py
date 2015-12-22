@@ -12,10 +12,11 @@ class HamiltonPersonScraper(CanadianScraper):
         mayor_url = page.xpath('//section/h3[contains(., "Mayor\'s Office")]/a/@href')[0]
         yield self.mayor_data(mayor_url)
 
-        councillor_urls = page.xpath('//section/h3[contains(., "City Councillors")]/following-sibling::div/ul/li/a/@href')
+        links = page.xpath('//section/h3[contains(., "City Councillors")]/following-sibling::div/ul/li/a')
 
-        for councillor_url in councillor_urls:
-            yield self.councillor_data(councillor_url)
+        for a in links:
+            if '-' in a.text_content():  # vacant if absent
+                yield self.councillor_data(a.attrib['href'])
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
