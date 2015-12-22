@@ -14,7 +14,10 @@ class StJohnsPersonScraper(CanadianScraper):
         for node in nodes:
             fields = node.xpath('./div')
             role = fields[0].xpath('./div//text()')[0]
-            name = fields[2].xpath('.//a//text()')[0].title().split(role)[-1]
+            name = fields[2].xpath('.//a//text()')[0].title().split(role)[-1].strip()
+            if name == 'Vacant':
+                continue
+
             if 'Ward' in role:
                 district = role
                 role = 'Councillor'
