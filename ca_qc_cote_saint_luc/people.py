@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
+import re
 from six.moves.urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
@@ -13,7 +14,9 @@ class CoteSaintLucPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         mayor_url = page.xpath('//a[contains(text(), "Mayor")]/@href')[0]
-        yield self.scrape_mayor(mayor_url)
+        mayor = self.scrape_mayor(mayor_url)
+        if mayor:
+            yield mayor
 
         councillors_url = page.xpath('//a[contains(text(), "Councillors")]/@href')[0]
         cpage = self.lxmlize(councillors_url)
@@ -38,10 +41,16 @@ class CoteSaintLucPersonScraper(CanadianScraper):
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('//table//text()[contains(., "Mayor")]')[0][len('Mayor '):]
+        text = page.xpath('//h1//text()[contains(., "Mayor")]')[0]
+        if 'Acting Mayor' in text:
+            # A councillor is acting mayor. We would need to add two roles to
+            # the same person, which can be done with a little effort.
+            return
+
+        name = re.sub('(?:Acting )?Mayor ', '', text)
 
         email = self.get_email(page)
-        phone = page.xpath('//table[1]/tbody/tr/td[1]/p[last()]/text()')[2].replace('Telephone: ', '')
+        phone = self.get_phone(page.xpath('//table[1]')[0])
 
         p = Person(primary_org='legislature', name=name, district='Côte-Saint-Luc', role='Maire')
         p.add_source(COUNCIL_PAGE)
