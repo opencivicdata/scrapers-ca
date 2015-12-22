@@ -18,7 +18,7 @@ class LavalPersonScraper(CanadianScraper):
             else:
                 district = re.sub('^C.?irconscription (?:no )?\d+\D- ', '', post).replace("L'", '').replace(' ', '').replace('bois', 'Bois')
                 role = 'Conseiller'
-            full_name = councillor_row.xpath('./td[2]/p/text()[2]')[0].strip()
+            full_name = list(filter(None, (text.strip() for text in councillor_row.xpath('./td[2]/p/text()'))))[1].strip()
             name = ' '.join(full_name.split()[1:])
 
             phone = councillor_row.xpath('.//span[@class="icon-phone"]/following::text()')[0]
