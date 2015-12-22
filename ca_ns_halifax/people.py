@@ -15,13 +15,13 @@ class HalifaxPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')
 
         for councillor in councillors:
-            district = re.sub(r' ?[–—-] ?', '—', '—'.join(filter(None, (text.strip() for text in councillor.xpath('./p/text()')))))
+            district = re.sub(r' ?[–—-] ?', '—', '—'.join(filter(None, (text.replace(',', '').strip() for text in councillor.xpath('./p/text()')))))
 
             name_elem = councillor.xpath('./p/strong/text()')[0]
-            if 'Deputy' in name_elem:
-                name = name_elem.split(',')[0]
-            else:
+            if 'Councillor' in name_elem:
                 name = name_elem.strip()[len('Councillor '):]
+            else:
+                name = name_elem
 
             if name != 'To be determined':
                 photo = councillor.xpath('./p/a/img/@src')[0]
