@@ -36,7 +36,7 @@ class WinnipegPersonScraper(CanadianScraper):
         # email is, sadly, a form
         photo_url = urljoin(url, page.xpath('//img[@class="bio_pic"]/@src')[0])
         phone = page.xpath('//td[contains(., "Phone")]/following-sibling::td//text()')[0]
-        email = page.xpath('//tr[contains(., "Email")]//a/@href')[0].split('=')[1] + '@winnipeg.ca'
+        email = re.search('=([^&]+)', page.xpath('//tr[contains(., "Email")]//a/@href')[0]).group(1) + '@winnipeg.ca'
 
         p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
         p.add_source(COUNCIL_PAGE)
