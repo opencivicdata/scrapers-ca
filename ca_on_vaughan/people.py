@@ -31,11 +31,16 @@ class VaughanPersonScraper(CanadianScraper):
                 district = 'Vaughan'
                 role = 'Mayor'
             name = name.strip()
-            contact_node = page.xpath('//div[@id="WebPartWPQ2"][contains(., "Phone")]')
-            if contact_node:
-                contact_info = contact_node[0]
+
+            if role == 'Mayor':
+                detail = self.lxmlize(page.xpath('//a[contains(@href,"/Contact-the-Mayor")]/@href')[0])
+                contact_info = detail.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]')[0]
             else:
-                contact_info = page.xpath('//div[@id="WebPartWPQ3"]')[0]
+                contact_node = page.xpath('//div[@id="WebPartWPQ2"][contains(., "Phone")]')
+                if contact_node:
+                    contact_info = contact_node[0]
+                else:
+                    contact_info = page.xpath('//div[@id="WebPartWPQ3"]')[0]
 
             phone = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4} ext\. [0-9]{4}', contact_info.text_content())[0].replace('ext. ', 'x')
             fax = re.findall(r'[0-9]{3}-[0-9]{3}-[0-9]{4}', contact_info.text_content())[1]
