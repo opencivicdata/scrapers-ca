@@ -32,12 +32,6 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         for row in page.xpath('//table[not(@id="footer")][not(@style)]/tr')[1:]:
             name, district, _, email = [cell.text_content().replace('\xa0', ' ') for cell in row]
 
-            text = row[2].xpath('./text()')
-            if text and text[0].strip():
-                phone = text[0]
-            else:
-                phone = None
-
             district = district.replace(' - ', '—')  # m-dash
             district = district.replace('Bay De Verde', 'Bay de Verde')
             party = get_party(member_parties[name.strip()])
@@ -45,8 +39,10 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role='MHA', party=party)
 
             p.add_contact('email', email)
-            if phone:
-                p.add_contact('voice', phone, 'legislature')
+
+            text = row[2].xpath('./text()')
+            if text and text[0].strip():
+                p.add_contact('voice', text[0], 'legislature')
 
             p.add_source(COUNCIL_PAGE)
             p.add_source(PARTY_PAGE)
