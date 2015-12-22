@@ -23,11 +23,9 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
             email = self.get_email(detail_page)
 
             contact_text = ''.join(detail_page.xpath('//div[@property="content:encoded"]/p[1]//text()'))
-            phone = re.search(r'P(hone)?: ([-0-9]+)', contact_text).group(2)
 
             p = Person(primary_org='legislature', name=name, district=riding, role='MLA', image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
             p.add_contact('email', email)
-            p.add_contact('voice', phone, 'legislature')
             yield p
