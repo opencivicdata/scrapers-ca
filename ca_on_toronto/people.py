@@ -5,6 +5,10 @@ import re
 
 COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293dc3ef310VgnVCM10000071d60f89RCRD'
 
+OTHER_NAMES = {
+    'Norm Kelly': ['Norman Kelly'],
+    'Justin Di Ciano': ['Justin J. Di Ciano'],
+    }
 
 class TorontoPersonScraper(CanadianScraper):
 
@@ -21,7 +25,7 @@ class TorontoPersonScraper(CanadianScraper):
                 yield self.scrape_councilor(page, h1, a.attrib['href'])
 
     def scrape_councilor(self, page, h1, url):
-        name = h1.split('Councillor')[1]
+        name = h1.split('Councillor')[1].strip()
         ward_full = page.xpath('//p/descendant-or-self::*[contains(text(), "Profile:")]/text()')[0].replace('\xa0', ' ')
         ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
         if ward_name == 'Etobicoke Lakeshore':
@@ -32,6 +36,9 @@ class TorontoPersonScraper(CanadianScraper):
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
+
+        for name in OTHER_NAMES.get(name, []):
+            p.add_name(name)
 
         p.image = page.xpath('//main//img/@src')[0].replace('www.', 'www1.')  # @todo fix lxmlize to use the redirected URL to make links absolute
         email = self.get_email(page)
