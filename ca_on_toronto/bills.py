@@ -61,6 +61,7 @@ class TorontoBillScraper(CanadianScraper):
                 })
 
                 response.encoding = 'windows-1252'
+                newline_regex = re.compile(r' ?\r\n ?')
 
                 for row in csv.DictReader(StringIO(response.text)):
                     # @todo Sent request to City clerk about unique keys for other organizations.
@@ -86,7 +87,7 @@ class TorontoBillScraper(CanadianScraper):
                         bill = {
                             'legislative_session': term.text,
                             'identifier': row['Agenda Item #'],
-                            'title': row['Agenda Item Title'],
+                            'title': newline_regex.sub(' ', row['Agenda Item Title']),
                         }
                         if bills.get(bill_key):
                             if bills[bill_key] != bill:
