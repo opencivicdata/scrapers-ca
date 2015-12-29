@@ -27,15 +27,21 @@ class TorontoPersonScraper(CanadianScraper):
     def scrape_councilor(self, page, h1, url):
         name = h1.split('Councillor')[1].strip()
         ward_full = page.xpath('//p/descendant-or-self::*[contains(text(), "Profile:")]/text()')[0].replace('\xa0', ' ')
-        ward_num, ward_name = re.search(r'(Ward \d+) (.+)', ward_full).groups()
+        ward_num, ward_name = re.search(r'Ward (\d+) (.+)', ward_full).groups()
         if ward_name == 'Etobicoke Lakeshore':
-            ward_name = 'Etobicoke\u2014Lakeshore'
+            ward_name = 'Etobicoke-Lakeshore'
 
-        district = '{0} ({1})'.format(ward_name.replace('-', '\u2014'), ward_num.split()[1])
+        ward_name = ward_name.replace('-', '\u2014')
+
+        district = '{0} ({1})'.format(ward_name, ward_num)
 
         p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
+        p.extras = {
+            'ward_number': ward_num,
+            'ward_name': ward_name,
+            }
 
         for name in OTHER_NAMES.get(name, []):
             p.add_name(name)
