@@ -8,13 +8,21 @@ import datetime as dt
 import pytz
 import re
 
-CALENDAR_DAY_TEMPLATE = 'http://app.toronto.ca/tmmis/meetingCalendarView.do?function=calendarCellView&year={}&month={}&date={}'
-AGENDA_FULL_STANDARD_TEMPLATE = 'http://app.toronto.ca/tmmis/viewPublishedReport.do?function=getAgendaReport&meetingId={}'
-AGENDA_LIST_STANDARD_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&print=N&meetingId={}'
-AGENDA_FULL_COUNCIL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewPublishedReport.do?function=getCouncilAgendaReport&meetingId={}'
-AGENDA_LIST_COUNCIL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&print=N&meetingId={}'
-AGENDA_ITEM_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
-COMMITTEE_LIST_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyList.do?function=displayDecisionBodyList&term={}'
+from .helpers import (
+    committees_from_sessions,
+    build_lookup_dict,
+    )
+
+from .constants import (
+    CALENDAR_DAY_TEMPLATE,
+    AGENDA_FULL_STANDARD_TEMPLATE,
+    AGENDA_LIST_STANDARD_TEMPLATE,
+    AGENDA_FULL_COUNCIL_TEMPLATE,
+    AGENDA_LIST_COUNCIL_TEMPLATE,
+    AGENDA_ITEM_TEMPLATE,
+    COMMITTEE_LIST_TEMPLATE,
+    )
+
 
 STATUS_DICT = {
         'Scheduled': 'confirmed',
@@ -29,7 +37,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
     def __init__(self, jurisdiction, datadir, strict_validation=True, fastmode=False):
         super(TorontoIncrementalEventScraper, self).__init__(jurisdiction, datadir, strict_validation=True, fastmode=False)
         # Used to store mappings of committee names to two-letter codes
-        self.committee_codes_d = {}
+        self.committees_by_name = {}
 
     def scrape(self):
         today = dt.datetime.today()
@@ -37,22 +45,22 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         start_date = today - dt.timedelta(days=delta_days)
         end_date = today + dt.timedelta(days=delta_days*2)
 
-        self.scrape_committee_codes()
+        self.scrape_committee_data()
         yield from self.scrape_events_range(start_date, end_date)
 
-    def scrape_committee_codes(self):
-        self.committee_codes_d = self.committee_codes()
+    def scrape_committee_data(self):
+        self.committees_by_name = self.committee_lookup_dict()
 
     def parse_table(self, table_node):
         items = []
 
         def sanitize_key(str): return str.lower().strip().replace(' ', '_').replace('.', '')
 
-        def sanitize_org_name(str):
-            # Council committee name customized in ca_on_toronto
-            org_name = 'Toronto City Council' if str == 'City Council' else str
+        def sanitize_org_name(org_name):
             # Some meetings preceded with legend, ie "S:" for special meetings.
             org_name = re.sub(r'^[A-Z]: +', '', org_name)
+            # Special case for city council name
+            org_name = self.jurisdiction.name if org_name == 'City Council' else org_name
             return org_name
 
         rows = table_node.xpath('tr')
@@ -130,7 +138,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     return event['publishing_status'] in ['Agenda Published', 'Minutes Published']
 
                 def is_council(event):
-                    return True if event['meeting'] == 'Toronto City Council' else False
+                    return True if event['meeting'] == self.jurisdiction.name else False
 
                 if is_agenda_available(event):
                     template = AGENDA_FULL_COUNCIL_TEMPLATE if is_council(event) else AGENDA_FULL_STANDARD_TEMPLATE
@@ -159,7 +167,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                             identifier = item['identifier']
 
                             # `org_code` is two-letter code for committee
-                            current_org_code = self.committee_codes_d.get(org_name)
+                            current_org_code = self.committees_by_name.get(org_name)[0]['code']
                             originating_org_code = re.search(r'([A-Z]{2})[0-9]+\.[0-9]+', identifier).group(1)
 
                             return current_org_code == originating_org_code
@@ -224,34 +232,15 @@ class TorontoIncrementalEventScraper(CanadianScraper):
 
         return items
 
-    def committee_codes(self):
-        codes = {}
-        terms = [
-            '2014-2018',
-            #'2010-2014', # Disabled for speed
-            #'2006-2010', # Disabled for speed
-            # TODO: Accommodate legacy format pages.
-            #'2003-2006',
-            #'2000-2003',
-            #'1998-2000',
-            ]
-        for term in terms:
-            page = self.lxmlize(COMMITTEE_LIST_TEMPLATE.format(term))
-            committee_links = [(a.attrib['href']) for a in page.xpath('//table[@id="list"]//td[@class="db"]/a')]
+    def committee_lookup_dict(self):
+        # reversed so that most recent first
+        sessions = reversed(self.jurisdiction.legislative_sessions)
+        committee_term_instances = committees_from_sessions(self, sessions)
+        committees_by_name = build_lookup_dict(self, data_list=committee_term_instances, index_key='name')
+        # Manually add our City Council exception.
+        committees_by_name.update({ self.jurisdiction.name: [{'code':'CC'}] })
 
-            for link in committee_links:
-                page = self.lxmlize(link)
-                script_text = page.xpath('//head/script[not(@src)]/text()')[0]
-                committee_name = re.search(r'var decisionBodyName = "(.*)";', script_text).group(1)
-                committee_code = re.search(r'meetingRefs\.push\("[0-9]{4}\.([A-Z]{2})[0-9]+"\);', script_text).group(1)
-
-                data = {'name': committee_name, 'code': committee_code, 'source_url': link}
-                codes.update({committee_name: committee_code})
-
-            # Manually add our renaming exception.
-            codes.update({'Toronto City Council': 'CC'})
-
-        return codes
+        return committees_by_name
 
     def full_identifiers(self, meeting_id, is_council=False, url=None):
         if not url:

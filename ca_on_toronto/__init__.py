@@ -1,18 +1,27 @@
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
 
+from .jurisdiction import TorontoJurisdiction
+from .constants import (
+    CANONICAL_COUNCIL_NAME,
+    )
+
 import lxml.html
 import requests
 
 
-class Toronto(CanadianJurisdiction):
+class Toronto(TorontoJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3520005'
     division_name = 'Toronto'
-    name = 'Toronto City Council'
+    name = CANONICAL_COUNCIL_NAME
     url = 'http://www.toronto.ca'
     check_sessions = True
     legislative_sessions = [
+        # TODO: Accommodate legacy format pages. (bad old PDF days)
+        # {'identifier': '1998-2000'},
+        # {'identifier': '2000-2003'},
+        # {'identifier': '2003-2006'},
         {
             'identifier': '2006-2010',
             'name': '2006-2010',
