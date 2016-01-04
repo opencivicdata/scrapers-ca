@@ -9,8 +9,8 @@ class OakvillePersonScraper(CSVScraper):
     encoding = 'windows-1252'
     header_converter = lambda self, s: s.lower().replace('Phone (cell)', 'Cell')
     corrections = {
-      'primary role': {
-        'Town Councillor': 'Councillor',
-        'Regional and Town Councillor': 'Regional Councillor',
-      },
+        'primary role': {
+            'Town Councillor': 'Councillor',
+            'Regional and Town Councillor': 'Regional Councillor',
+        },
     }

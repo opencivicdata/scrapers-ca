@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'http://www.assembly.gov.nt.ca/meet-members'
 
 
@@ -21,8 +19,6 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
             detail_page = self.lxmlize(detail_url)
             photo_url = detail_page.xpath('//div[@class="field-item even"]/img/@src')[0]
             email = self.get_email(detail_page)
-
-            contact_text = ''.join(detail_page.xpath('//div[@property="content:encoded"]/p[1]//text()'))
 
             p = Person(primary_org='legislature', name=name, district=riding, role='MLA', image=photo_url)
             p.add_source(COUNCIL_PAGE)

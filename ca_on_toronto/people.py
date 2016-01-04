@@ -8,7 +8,8 @@ COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293
 OTHER_NAMES = {
     'Norm Kelly': ['Norman Kelly'],
     'Justin Di Ciano': ['Justin J. Di Ciano'],
-    }
+}
+
 
 class TorontoPersonScraper(CanadianScraper):
 
