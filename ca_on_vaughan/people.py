@@ -27,7 +27,7 @@ class VaughanPersonScraper(CanadianScraper):
                     district = "Vaughan (seat {})".format(regional_councillor_seat_number)
                     regional_councillor_seat_number += 1
             else:
-                name = re.split(r'Mayor', title)[-1]
+                name = re.search(r'Mayor ([^,]+)', page.xpath('//meta[@name="keywords"]/@content')[0]).group(1)
                 district = 'Vaughan'
                 role = 'Mayor'
             name = name.strip()
