@@ -285,7 +285,7 @@ class CanadianJurisdiction(Jurisdiction):
                 pass
 
     def get_organizations(self):
-        exclude_type_ids = getattr(self, 'exclude_type_ids', None)
+        exclude_type_ids = getattr(self, 'exclude_type_ids', [])
         use_type_id = getattr(self, 'use_type_id', False)
 
         organization = Organization(self.name, classification=self.classification)
