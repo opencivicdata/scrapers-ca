@@ -285,17 +285,20 @@ class CanadianJurisdiction(Jurisdiction):
                 pass
 
     def get_organizations(self):
+        exclude_type_ids = getattr(self, 'exclude_type_ids', None)
+        use_type_id = getattr(self, 'use_type_id', False)
+
         organization = Organization(self.name, classification=self.classification)
 
         parent = Division.get(self.division_id)
         if parent._type not in ('province', 'territory'):
             organization.add_post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id)
 
-        children = [child for child in parent.children() if child._type != 'place']
+        children = [child for child in parent.children() if child._type != 'place' and child._type not in exclude_type_ids]
 
         for child in children:
             if child:
-                if getattr(self, 'use_type_id', False):
+                if use_type_id:
                     label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
                     label = child.name
