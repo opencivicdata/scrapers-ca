@@ -8,4 +8,3 @@ class Kingston(CanadianJurisdiction):
     division_name = 'Kingston'
     name = 'Kingston City Council'
     url = 'https://www.cityofkingston.ca'
-    use_type_id = True
