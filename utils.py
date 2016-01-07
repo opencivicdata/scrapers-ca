@@ -72,17 +72,17 @@ CONTACT_DETAIL_NOTE_MAP = {
     'Voice Mail': 'legislature',
     'Work': 'legislature',
 }
+if os.getenv('PRODUCTION', False):
+    SSL_VERIFY = '/usr/lib/ssl/certs/ca-certificates.crt'
+else:
+    SSL_VERIFY = True
 
 email_re = re.compile(r'([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})')
 
 
 styles_of_address = {}
 for gid in range(3):
-    if os.getenv('PRODUCTION', False):
-        verify = '/usr/lib/ssl/certs/ca-certificates.crt'
-    else:
-        verify = True
-    response = requests.get('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid), verify=verify)
+    response = requests.get('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid), verify=SSL_VERIFY)
     if response.status_code == 200:
         response.encoding = 'utf-8'
         for row in csv.DictReader(StringIO(response.text)):
@@ -153,6 +153,12 @@ class CanadianScraper(Scraper):
             return match[0]
         if error:
             raise Exception('No link matching {}'.format(substring))
+
+    def get(self, *args, **kwargs):
+        return super(CanadianScraper, self).get(*args, verify=SSL_VERIFY, **kwargs)
+
+    def post(self, *args, **kwargs):
+        return super(CanadianScraper, self).post(*args, verify=SSL_VERIFY, **kwargs)
 
     def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None):
         self.user_agent = user_agent
