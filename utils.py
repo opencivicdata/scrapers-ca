@@ -201,6 +201,7 @@ class CSVScraper(CanadianScraper):
     skip_rows = 0
     header_converter = lambda self, s: s.lower()
     corrections = {}
+    other_names = {}
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
@@ -261,6 +262,9 @@ class CSVScraper(CanadianScraper):
                     p.add_link(re.sub(r'[#?].+', '', row['facebook']))
                 if row.get('twitter'):
                     p.add_link(row['twitter'])
+                if name in self.other_names:
+                    for other_name in self.other_names[name]:
+                        p.add_name(other_name)
                 yield p
 
 
@@ -359,7 +363,7 @@ class CanadianPerson(Person):
         @see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html
         """
 
-        splits = re.split(r'(?:/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
+        splits = re.split(r'(?:\b \(|/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
         digits = re.sub(r'\D', '', splits[0])
 
         if len(digits) == 7 and area_code:
@@ -370,7 +374,7 @@ class CanadianPerson(Person):
         if len(digits) == 11 and digits[0] == '1' and len(splits) <= 2:
             digits = re.sub(r'\A(\d)(\d{3})(\d{3})(\d{4})\Z', r'\1 \2 \3-\4', digits)
             if len(splits) == 2:
-                return '{} x{}'.format(digits, splits[1])
+                return '{} x{}'.format(digits, splits[1].rstrip(')'))
             else:
                 return digits
         else:
