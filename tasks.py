@@ -163,7 +163,7 @@ def tidy():
     leader_styles = {}
     member_styles = {}
     for gid in range(3):
-        reader = csv_reader('https://docs.google.com/spreadsheet/pub?key=0AtzgYYy0ZABtdFJrVTdaV1h5XzRpTkxBdVROX3FNelE&single=true&gid={}&output=csv'.format(gid))
+        reader = csv_reader('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid))
         next(reader)
         for row in reader:
             key = row[0]
