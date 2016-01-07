@@ -1,10 +1,6 @@
 from __future__ import unicode_literals
-from utils import CanadianJurisdiction
-
 from .jurisdiction import TorontoJurisdiction
-from .constants import (
-    CANONICAL_COUNCIL_NAME,
-    )
+from .constants import CANONICAL_COUNCIL_NAME
 
 import lxml.html
 import requests
@@ -16,6 +12,7 @@ class Toronto(TorontoJurisdiction):
     division_name = 'Toronto'
     name = CANONICAL_COUNCIL_NAME
     url = 'http://www.toronto.ca'
+    use_type_id = True
     check_sessions = True
     legislative_sessions = [
         # TODO: Accommodate legacy format pages. (bad old PDF days)

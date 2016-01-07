@@ -1,9 +1,8 @@
 import re
 from urllib.parse import parse_qs, urlparse
 
-from .constants import (
-    COMMITTEE_LIST_TEMPLATE,
-    )
+from .constants import COMMITTEE_LIST_TEMPLATE
+
 
 def committees_from_sessions(self, sessions=[]):
     for session in sessions:
@@ -15,6 +14,7 @@ def committees_from_sessions(self, sessions=[]):
             data.update({'term': term})
 
             yield data
+
 
 def committee_from_url(self, url=None):
     page = self.lxmlize(url)
@@ -33,9 +33,10 @@ def committee_from_url(self, url=None):
         'info': desc,
         'source_url': url,
         'decision_body_id': decision_body_id,
-        }
+    }
 
     return data
+
 
 def build_lookup_dict(self, data_list, index_key=None):
     lookup_dict = {}
