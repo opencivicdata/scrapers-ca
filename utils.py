@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import csv
+import os
 import re
 from collections import defaultdict
 from ftplib import FTP
@@ -77,7 +78,11 @@ email_re = re.compile(r'([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})')
 
 styles_of_address = {}
 for gid in range(3):
-    response = requests.get('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid), verify='/usr/lib/ssl/certs/ca-certificates.crt')
+    if os.getenv('PRODUCTION', False):
+        verify = '/usr/lib/ssl/certs/ca-certificates.crt'
+    else:
+        verify = True
+    response = requests.get('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid), verify=verify)
     if response.status_code == 200:
         response.encoding = 'utf-8'
         for row in csv.DictReader(StringIO(response.text)):
