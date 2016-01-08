@@ -213,6 +213,7 @@ class CSVScraper(CanadianScraper):
     header_converter = lambda self, s: s.lower()
     corrections = {}
     other_names = {}
+    district_id_to_district_name = None
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
@@ -228,10 +229,17 @@ class CSVScraper(CanadianScraper):
                     if row.get(key) and row[key] in corrections:
                         row[key] = corrections[row[key]]
 
-                district = row.get('district name') or self.jurisdiction.division_name
                 role = row['primary role']
                 name = '{} {}'.format(row['first name'], row['last name'])
                 province = row.get('province')
+
+                if self.district_id_to_district_name:
+                    if row['district id']:
+                        district = self.district_id_to_district_name.format(row['district id'])
+                    else:
+                        district = self.jurisdiction.division_name
+                else:
+                    district = row.get('district name') or self.jurisdiction.division_name
 
                 if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
                     seat_numbers[role][district] += 1

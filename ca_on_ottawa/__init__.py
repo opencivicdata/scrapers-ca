@@ -8,3 +8,4 @@ class Ottawa(CanadianJurisdiction):
     division_name = 'Ottawa'
     name = 'Ottawa City Council'
     url = 'http://www.ottawa.ca'
+    use_type_id = True
