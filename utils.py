@@ -72,7 +72,7 @@ CONTACT_DETAIL_NOTE_MAP = {
     'Voice Mail': 'legislature',
     'Work': 'legislature',
 }
-if os.getenv('PRODUCTION', False):
+if os.getenv('SSL_VERIFY', False):
     SSL_VERIFY = '/usr/lib/ssl/certs/ca-certificates.crt'
 else:
     SSL_VERIFY = True
