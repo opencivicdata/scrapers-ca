@@ -8,6 +8,6 @@ class TorontoPersonScraper(CSVScraper):
     csv_url = 'http://www1.toronto.ca/City%20Of%20Toronto/Information%20&%20Technology/Open%20Data/Data%20Sets/Assets/Files/Toronto_Elected_Officials.csv'
     header_converter = lambda self, s: 'district name' if s == 'District ID' else None if s == 'District name' else s.lower()
     other_names = {
-        'Norm Kelly': ['Norman Kelly'],
+        'Norman Kelly': ['Norm Kelly'],
         'Justin Di Ciano': ['Justin J. Di Ciano'],
     }
