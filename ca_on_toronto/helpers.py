@@ -1,8 +1,16 @@
+import datetime
+import pytz
 import re
+
 from urllib.parse import parse_qs, urlparse
 
-from .constants import COMMITTEE_LIST_TEMPLATE
+from .constants import COMMITTEE_LIST_TEMPLATE, TIMEZONE
 
+def toTime(date, text_time) :
+    time = datetime.datetime.strptime(text_time, '%I:%M %p')
+    time = time.replace(year=date.year, month=date.month, day=date.day)
+    time = pytz.timezone(TIMEZONE).localize(time)
+    return time
 
 def committees_from_sessions(self, sessions=[]):
     for session in sessions:
