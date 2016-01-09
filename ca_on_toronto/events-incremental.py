@@ -30,6 +30,7 @@ STATUS_DICT = {
         'Complete': 'passed',
         'Cancelled': 'cancelled',
         'No Quorum': 'cancelled',
+        'In Recess (will Resume)': 'confirmed',
         }
 
 class TorontoIncrementalEventScraper(CanadianScraper):
