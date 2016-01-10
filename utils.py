@@ -9,10 +9,11 @@ from ftplib import FTP
 
 import lxml.html
 import requests
+from csvkit import convert
 from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Organization, Person
-from six import StringIO, string_types, text_type
+from six import BytesIO, StringIO, string_types, text_type
 from six.moves.urllib.parse import urlparse, unquote
 
 import patch  # patch patches validictory # noqa
@@ -183,20 +184,21 @@ class CanadianScraper(Scraper):
             page.make_links_absolute(url)
             return page
 
-    def csv_reader(self, url, header=False, encoding=None, skip_rows=0, **kwargs):
-        result = urlparse(url)
-        if result.scheme == 'ftp':
-            data = StringIO()
-            ftp = FTP(result.hostname)
-            ftp.login(result.username, result.password)
-            ftp.retrbinary('RETR {}'.format(result.path), lambda block: data.write(block.decode('utf-8')))
-            ftp.quit()
-            data.seek(0)
-        else:
-            response = self.get(url, **kwargs)
-            if encoding:
-                response.encoding = encoding
-            data = StringIO(response.text.strip())
+    def csv_reader(self, url, header=False, encoding=None, skip_rows=0, data=None, **kwargs):
+        if not data:
+            result = urlparse(url)
+            if result.scheme == 'ftp':
+                data = StringIO()
+                ftp = FTP(result.hostname)
+                ftp.login(result.username, result.password)
+                ftp.retrbinary('RETR {}'.format(result.path), lambda block: data.write(block.decode('utf-8')))
+                ftp.quit()
+                data.seek(0)
+            else:
+                response = self.get(url, **kwargs)
+                if encoding:
+                    response.encoding = encoding
+                data = StringIO(response.text.strip())
         if skip_rows:
             for _ in range(skip_rows):
                 data.readline()
@@ -218,7 +220,13 @@ class CSVScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
-        reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows)
+        extension = os.path.splitext(self.csv_url)[1]
+        if extension in ('.xls', '.xlsx'):
+            data = StringIO(convert.convert(BytesIO(self.get(self.csv_url).content), extension[1:]))
+        else:
+            data = None
+
+        reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows, data=data)
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
             if any(row.values()):
