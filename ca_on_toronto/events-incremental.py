@@ -60,6 +60,9 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         def sanitize_org_name(org_name):
             # Some meetings preceded with legend, ie "S:" for special meetings.
             org_name = re.sub(r'^[A-Z]: +', '', org_name)
+            # Strip suffix (ie. cancelled meetings)
+            org_name = re.sub(r'\u2014.*$', '', org_name)
+            org_name = org_name.strip()
             # Special case for city council name
             org_name = self.jurisdiction.name if org_name == 'City Council' else org_name
             return org_name
