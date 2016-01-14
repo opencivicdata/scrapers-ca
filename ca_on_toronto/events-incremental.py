@@ -31,6 +31,7 @@ STATUS_DICT = {
         'Cancelled': 'cancelled',
         'No Quorum': 'cancelled',
         'In Recess (will Resume)': 'confirmed',
+        'In Progress (Public Session)': 'confirmed',
         }
 
 class TorontoIncrementalEventScraper(CanadianScraper):
@@ -126,7 +127,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     start_time = start,
                     timezone = tz.zone,
                     location_name = event['location'],
-                    status=STATUS_DICT[event['meeting_status']],
+                    status=STATUS_DICT.get(event['meeting_status'])
                     )
                 e.add_source(source_url)
                 e.extras = {
