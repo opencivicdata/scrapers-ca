@@ -31,6 +31,7 @@ STATUS_DICT = {
         'Cancelled': 'cancelled',
         'No Quorum': 'cancelled',
         'In Recess (will Resume)': 'confirmed',
+        'In Progress (Public Session)': 'confirmed',
         }
 
 class TorontoIncrementalEventScraper(CanadianScraper):
@@ -126,7 +127,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     start_time = start,
                     timezone = tz.zone,
                     location_name = event['location'],
-                    status=STATUS_DICT[event['meeting_status']],
+                    status=STATUS_DICT.get(event['meeting_status'])
                     )
                 e.add_source(source_url)
                 e.extras = {
@@ -187,6 +188,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                                     legislative_session = '2014-2018',
                                     identifier = full_identifier,
                                     title = item['title'],
+                                    from_organization = {'name': org_name},
                                     )
                                 b.add_source(agenda_url)
                                 b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
