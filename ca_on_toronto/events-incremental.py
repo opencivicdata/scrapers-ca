@@ -187,6 +187,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                                     legislative_session = '2014-2018',
                                     identifier = full_identifier,
                                     title = item['title'],
+                                    from_organization = {'name': org_name},
                                     )
                                 b.add_source(agenda_url)
                                 b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
