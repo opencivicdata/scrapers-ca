@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from .jurisdiction import TorontoJurisdiction
-from .constants import CANONICAL_COUNCIL_NAME
 
 import lxml.html
 import requests
@@ -10,7 +9,7 @@ class Toronto(TorontoJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3520005'
     division_name = 'Toronto'
-    name = CANONICAL_COUNCIL_NAME
+    name = 'Toronto City Council'
     url = 'http://www.toronto.ca'
     use_type_id = True
     check_sessions = True
