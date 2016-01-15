@@ -12,7 +12,7 @@ import requests
 from csvkit import convert
 from lxml import etree
 from opencivicdata.divisions import Division
-from pupa.scrape import Scraper, Jurisdiction, Organization, Person
+from pupa.scrape import Scraper, Jurisdiction, Organization, Person, Post
 from six import BytesIO, StringIO, string_types, text_type
 from six.moves.urllib.parse import urlparse, unquote
 
@@ -314,7 +314,8 @@ class CanadianJurisdiction(Jurisdiction):
 
         parent = Division.get(self.division_id)
         if parent._type not in ('province', 'territory'):
-            organization.add_post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id)
+            post = Post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id, organization_id=organization._id)
+            yield post
 
         children = [child for child in parent.children() if child._type != 'place' and child._type not in exclude_type_ids]
 
@@ -324,7 +325,8 @@ class CanadianJurisdiction(Jurisdiction):
                     label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
                     label = child.name
-                organization.add_post(role=styles_of_address[self.division_id]['Member'], label=label, division_id=child.id)
+                post = Post(role=styles_of_address[self.division_id]['Member'], label=label, division_id=child.id, organization_id=organization._id)
+                yield post
 
         if not children and parent.attrs['posts_count']:
             for i in range(1, int(parent.attrs['posts_count'])):  # exclude Mayor
