@@ -5,12 +5,12 @@ from pupa.scrape import Bill, Event
 from urllib.parse import parse_qs, urlparse
 import lxml.html
 import datetime as dt
-import pytz
 import re
 
 from .helpers import (
     committees_from_sessions,
     build_lookup_dict,
+    toTime,
     )
 
 from .constants import (
@@ -21,6 +21,7 @@ from .constants import (
     AGENDA_LIST_COUNCIL_TEMPLATE,
     AGENDA_ITEM_TEMPLATE,
     COMMITTEE_LIST_TEMPLATE,
+    TIMEZONE,
     )
 
 
@@ -117,15 +118,13 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         for date in daterange(start_date, end_date):
             events = self.extract_events_by_day(date)
             for event in events:
-                tz = pytz.timezone("America/Toronto")
-                time = dt.datetime.strptime(event['time'], '%I:%M %p')
-                start = tz.localize(date.replace(hour=time.hour, minute=time.minute, second=0, microsecond=0))
-                source_url = CALENDAR_DAY_TEMPLATE.format(start.year, start.month, start.day)
+                when = toTime(date, event['time'])
+                source_url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month, date.day)
                 org_name = event['meeting']
                 e = Event(
                     name = org_name,
-                    start_time = start,
-                    timezone = tz.zone,
+                    start_time = when,
+                    timezone = TIMEZONE,
                     location_name = event['location'],
                     status=STATUS_DICT.get(event['meeting_status'])
                     )

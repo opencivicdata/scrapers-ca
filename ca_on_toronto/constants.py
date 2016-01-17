@@ -6,3 +6,4 @@ AGENDA_LIST_COUNCIL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemList.d
 AGENDA_ITEM_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
 COMMITTEE_LIST_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyList.do?function=displayDecisionBodyList&term={}'
 TWO_LETTER_ORG_CODE_SCHEME = 'code'
+TIMEZONE = 'America/Toronto'
