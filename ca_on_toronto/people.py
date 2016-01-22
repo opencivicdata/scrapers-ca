@@ -5,13 +5,9 @@ COUNCIL_PAGE = 'http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=c3a83293
 
 
 class TorontoPersonScraper(CSVScraper):
-    csv_url = 'http://www1.toronto.ca/City%20Of%20Toronto/Information%20&%20Technology/Open%20Data/Data%20Sets/Assets/Files/Toronto_Elected_Officials.csv'
-    district_id_to_district_name = 'Ward {}'
+    csv_url = 'https://gist.githubusercontent.com/jpmckinney/ad8afd5e584667f0a369/raw/05dedacf690e77d395178c70b9afd2ee9e4e2a2e/test.csv'
+    district_name = '{district name} ({district id})'
     other_names = {
         'Norman Kelly': ['Norm Kelly'],
         'Justin Di Ciano': ['Justin J. Di Ciano'],
     }
-
-    # TODO: Remove once original file is fixed.
-    # See: https://github.com/opencivicdata/scrapers-ca/issues/155#issuecomment-169855328
-    csv_url = 'https://gist.githubusercontent.com/patcon/70656c30f544efd3673a/raw/7ed589561c6c68203dd1cbbcefa21cba4dc34f63/Toronto_Elected_Officials.csv'

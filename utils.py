@@ -215,7 +215,7 @@ class CSVScraper(CanadianScraper):
     header_converter = lambda self, s: s.lower()
     corrections = {}
     other_names = {}
-    district_id_to_district_name = None
+    district_name = None
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
@@ -241,9 +241,9 @@ class CSVScraper(CanadianScraper):
                 name = '{} {}'.format(row['first name'], row['last name'])
                 province = row.get('province')
 
-                if self.district_id_to_district_name:
+                if self.district_name:
                     if row['district id']:
-                        district = self.district_id_to_district_name.format(row['district id'])
+                        district = self.district_name.format(**row)
                     else:
                         district = self.jurisdiction.division_name
                 else:

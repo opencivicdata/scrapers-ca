@@ -11,7 +11,6 @@ class Toronto(TorontoJurisdiction):
     division_name = 'Toronto'
     name = 'Toronto City Council'
     url = 'http://www.toronto.ca'
-    use_type_id = True
     check_sessions = True
     legislative_sessions = [
         # TODO: Accommodate legacy format pages. (bad old PDF days)
