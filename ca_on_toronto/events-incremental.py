@@ -155,7 +155,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     for i, item in enumerate(agenda_items):
 
                         a = e.add_agenda_item(item['title'])
-                        a.add_subject(item['type'])
                         a['order'] = str(i)
 
                         def is_vote_event(item):
