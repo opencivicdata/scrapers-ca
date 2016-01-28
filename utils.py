@@ -76,7 +76,7 @@ CONTACT_DETAIL_NOTE_MAP = {
 if os.getenv('SSL_VERIFY', False):
     SSL_VERIFY = '/usr/lib/ssl/certs/ca-certificates.crt'
 else:
-    SSL_VERIFY = True
+    SSL_VERIFY = bool(os.getenv('SSL_VERIFY', False))
 
 email_re = re.compile(r'([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})')
 
