@@ -237,7 +237,7 @@ class CSVScraper(CanadianScraper):
                     if row.get(key) and row[key] in corrections:
                         row[key] = corrections[row[key]]
 
-                role = row['primary role']
+                role = row['primary role'].split(';', 1)[0]
                 name = '{} {}'.format(row['first name'], row['last name'])
                 province = row.get('province')
 
@@ -280,7 +280,7 @@ class CSVScraper(CanadianScraper):
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')
                 if row.get('phone'):
-                    p.add_contact('voice', row['phone'], 'legislature')
+                    p.add_contact('voice', row['phone'].split(';', 1)[0], 'legislature')
                 if row.get('fax'):
                     p.add_contact('fax', row['fax'], 'legislature')
                 if row.get('cell'):
