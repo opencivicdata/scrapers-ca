@@ -14,7 +14,7 @@ class VaughanPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="WebPartWPQ3"]//ul[@class="dfwp-list"][1]/li/div/div/a')
-        assert(len(councillors), 'No councillors found')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             url = councillor.attrib['href']
             page = self.lxmlize(url)

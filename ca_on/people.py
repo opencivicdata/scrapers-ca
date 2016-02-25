@@ -23,7 +23,7 @@ class OntarioPersonScraper(CanadianScraper):
 
             mpp_page = self.lxmlize(mpp_url)
 
-            assert(riding in mpp_page.xpath('//h1/text()')[0], '{} not in ridings'.format(riding))
+            assert riding in mpp_page.xpath('//h1/text()')[0], '{} not in ridings'.format(riding)
 
             image = mpp_page.xpath('//img[@class="mppimg"]/@src')
             party = mpp_page.xpath('//div[@class="mppinfoblock"]/p[last()]/text()')[0].strip()
