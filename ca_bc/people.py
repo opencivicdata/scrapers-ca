@@ -42,16 +42,19 @@ class BritishColumbiaPersonScraper(CanadianScraper):
             phones = cleanup_list(page.xpath('//span[contains(text(), "Phone:")]/following-sibling::text()'))
             faxes = cleanup_list(page.xpath('//span[contains(text(), "Fax:")]/following-sibling::span[1]/text()'))
 
-            office_phone, constituency_phone = phones
+            office_phone = phones[0]
             p.add_contact('voice', office_phone, 'legislature')
-            p.add_contact('voice', constituency_phone, 'constituency')
+            if len(phones) > 1:
+                constituency_phone = phones[1]
+                p.add_contact('voice', constituency_phone, 'constituency')
+            office_fax = faxes[0]
+            p.add_contact('fax', office_fax, 'legislature')
             if len(faxes) > 1:
-                office_fax, constituency_fax = faxes[:2]
-                p.add_contact('fax', office_fax, 'legislature')
+                constituency_fax = faxes[1]
                 p.add_contact('fax', constituency_fax, 'constituency')
 
             yield p
 
 
 def cleanup_list(dirty_list):
-    return [x.strip() for x in dirty_list if x.strip()]
+    return list(filter(None, (x.strip() for x in dirty_list)))

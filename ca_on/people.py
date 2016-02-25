@@ -23,13 +23,14 @@ class OntarioPersonScraper(CanadianScraper):
 
             mpp_page = self.lxmlize(mpp_url)
 
-            assert(riding in mpp_page.xpath('//h1/text()')[0])
+            assert(riding in mpp_page.xpath('//h1/text()')[0], '{} not in ridings'.format(riding))
 
-            photo_url = mpp_page.xpath('//img[@class="mppimg"]/@src')[0]
+            image = mpp_page.xpath('//img[@class="mppimg"]/@src')
             party = mpp_page.xpath('//div[@class="mppinfoblock"]/p[last()]/text()')[0].strip()
 
-            p = Person(primary_org='legislature', name=name, district=district, role='MPP',
-                       party=party, image=photo_url)
+            p = Person(primary_org='legislature', name=name, district=district, role='MPP', party=party)
+            if image:
+                p.image = image[0]
             p.add_source(COUNCIL_PAGE)
             p.add_source(mpp_url)
             if email:

@@ -12,7 +12,7 @@ class SaanichPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         for link in page.xpath('//div[@class="section"]//a'):
             url = link.attrib['href']
-            if url.endswith('address.pdf'):
+            if 'address' in url:  # Mayor's Annual Address
                 continue
             page = self.lxmlize(url)
             role, name = page.xpath('//div[@id="content"]/h1//text()')[0].split(' ', 1)

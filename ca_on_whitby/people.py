@@ -14,8 +14,12 @@ class WhitbyPersonScraper(CanadianScraper):
 
         councillor_nodes = page.xpath('//h3[contains(text(), "Councillors")]/following-sibling::p')[:-1]
         for councillor_node in councillor_nodes:
-            name, role_district = councillor_node.xpath('./strong/text()')
-            name = name.replace(',', '')
+            text = ' '.join(councillor_node.xpath('./strong/text()'))
+            if 'Vacant' in text:
+                continue
+
+            name, role_district = text.split(', ', 1)
+
             if 'Regional Councillor' in role_district:
                 role = role_district
                 district = 'Whitby (seat {})'.format(regional_councillor_seat_number)

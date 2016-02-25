@@ -46,7 +46,7 @@ class ThunderBayPersonScraper(CanadianScraper):
 
             p.add_contact('address', address, 'legislature')
 
-            contacts = info.xpath('./p[2]/text()')
+            contacts = filter(None, (text.strip() for text in info.xpath('./p[2]/text()')))
             for contact in contacts:
                 contact_type, contact = contact.replace('Cel:', 'Cell:').split(':')
                 contact = contact.replace('(1st)', '').replace('(2nd)', '').strip()

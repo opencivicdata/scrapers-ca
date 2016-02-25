@@ -15,6 +15,8 @@ class CapeBretonPersonScraper(CanadianScraper):
         councillors = page.xpath('//table/tbody/tr')[1:]
         for councillor in councillors:
             name = councillor.xpath('.//a')[0].text_content()
+            if 'District ' in name:  # Vacant
+                continue
             district = 'District {}'.format(councillor.xpath('.//strong')[0].text_content())
 
             address = councillor.xpath('.//td')[2].text_content().replace("\r\n", ', ')
@@ -39,7 +41,9 @@ class CapeBretonPersonScraper(CanadianScraper):
             councillor_url = councillor.xpath('.//a/@href')[0]
             p.add_source(councillor_url)
             page = self.lxmlize(councillor_url)
-            p.image = page.xpath('//img[contains(@title, "{0}")]/@src'.format(name))[0]
+            image = page.xpath('//img[contains(@title, "{0}")]/@src'.format(name))
+            if image:
+                p.image = image[0]
             yield p
 
         mayorpage = self.lxmlize(MAYOR_PAGE)
