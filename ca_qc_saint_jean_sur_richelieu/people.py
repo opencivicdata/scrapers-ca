@@ -53,9 +53,8 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
 
         p.image = div.xpath('./preceding-sibling::td//img/@src')[-1]
 
-        contacts = contact_page.xpath('//div[@id="ctl00_PlaceHolderMain_ctl01_ctl01__ControlWrapper_RichHtmlField"]//font/text()')
+        contacts = contact_page.xpath('//div[@id="ctl00_PlaceHolderMain_ctl01_ctl01__ControlWrapper_RichHtmlField"]//div/font/text()')
         address = ' '.join(contacts[:4])
-        print(repr(contacts))
         phone = contacts[-3].split(':')[1].strip().replace(' ', '-')
         fax = contacts[-2].split(':')[1].strip().replace(' ', '-')
         p.add_contact('address', address, 'legislature')
