@@ -13,10 +13,13 @@ from csvkit import convert
 from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Organization, Person, Post
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from six import BytesIO, StringIO, string_types, text_type
 from six.moves.urllib.parse import urlparse, unquote
 
 import patch  # patch patches validictory # noqa
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 CONTACT_DETAIL_TYPE_MAP = {
     'Address': 'address',
