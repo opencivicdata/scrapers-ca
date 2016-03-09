@@ -5,7 +5,7 @@
 Follow the instructions in the [Python Quick Start Guide](https://github.com/opennorth/wiki/wiki/Python-Quick-Start%3A-OS-X) to install Homebrew, Git, PostGIS, Python 3.3+ and virtualenv.
 
 ```
-mkvirtualenv scrapers-ca
+mkvirtualenv scrapers-ca --python=`which python3`
 git clone git://github.com/opencivicdata/scrapers-ca.git
 cd scrapers-ca
 pip install -r requirements.txt
