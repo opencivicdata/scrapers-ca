@@ -40,6 +40,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         super(TorontoIncrementalEventScraper, self).__init__(jurisdiction, datadir, strict_validation=True, fastmode=False)
         # Used to store mappings of committee names to two-letter codes
         self.committees_by_name = {}
+        self.seen_agenda_items = []
 
     def scrape(self):
         today = dt.datetime.today()
@@ -158,9 +159,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                         a.add_classification(item['type'].lower())
                         a['order'] = str(i)
 
-                        def is_vote_event(item):
-                            return True if item['type'] == 'ACTION' else False
-
                         def normalize_wards(raw):
                             if not raw: raw = 'All'
                             if raw == 'All':
@@ -168,36 +166,27 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                             else:
                                 return raw.split(', ')
 
-                        def is_being_introduced(item, event):
-                            org_name = event['meeting']
-                            identifier = item['identifier']
+                        wards = normalize_wards(item['wards'])
+                        identifier_regex = re.compile(r'^[0-9]{4}\.([A-Z]{2}[0-9]+\.[0-9]+)$')
+                        [full_identifier] = [id for id in full_identifiers if identifier_regex.match(id).group(1) == item['identifier']]
+                        a.add_bill(full_identifier)
+                        if full_identifier not in self.seen_agenda_items:
+                            b = Bill(
+                                # TODO: Fix this hardcode
+                                legislative_session = '2014-2018',
+                                identifier = full_identifier,
+                                title = item['title'],
+                                from_organization = {'name': self.jurisdiction.name},
+                                )
+                            b.add_source(agenda_url)
+                            b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
+                            b.extras = {
+                                'wards': wards,
+                                }
 
-                            # `org_code` is two-letter code for committee
-                            current_org_code = self.committees_by_name.get(org_name)[0]['code']
-                            originating_org_code = re.search(r'([A-Z]{2})[0-9]+\.[0-9]+', identifier).group(1)
+                            self.seen_agenda_items.append(full_identifier)
 
-                            return current_org_code == originating_org_code
-
-                        if is_vote_event(item):
-                            wards = normalize_wards(item['wards'])
-                            identifier_regex = re.compile(r'^[0-9]{4}\.([A-Z]{2}[0-9]+\.[0-9]+)$')
-                            [full_identifier] = [id for id in full_identifiers if identifier_regex.match(id).group(1) == item['identifier']]
-                            a.add_bill(full_identifier)
-                            if is_being_introduced(item, event):
-                                b = Bill(
-                                    # TODO: Fix this hardcode
-                                    legislative_session = '2014-2018',
-                                    identifier = full_identifier,
-                                    title = item['title'],
-                                    from_organization = {'name': self.jurisdiction.name},
-                                    )
-                                b.add_source(agenda_url)
-                                b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
-                                b.extras = {
-                                    'wards': wards,
-                                    }
-
-                                yield b
+                            yield b
 
                 yield e
 
