@@ -61,18 +61,16 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
                 p.add_source(photo_page_url[0])
                 for key, heading in PHONE_TD_HEADINGS.items():
                     try:
-                        phone = self.get_phone(
-                            photo_page.xpath(
-                                '//*[.="{0}"]/ancestor::td'.format(
-                                    heading
-                                )
-                            )[0]
-                        )
+                        td = photo_page.xpath(
+                            '//*[.="{0}"]/ancestor::td'.format(
+                                heading
+                            )
+                        )[0]
                     except IndexError:
                         pass  # no match found for heading
-                    except Exception:
-                        pass  # probably get_phone failed to find number
                     else:
-                        p.add_contact('voice', phone, key)
+                        phone = self.get_phone(td, error=False)
+                        if phone:
+                            p.add_contact('voice', phone, key)
 
             yield p
