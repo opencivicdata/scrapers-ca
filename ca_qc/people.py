@@ -24,4 +24,24 @@ class QuebecPersonScraper(CanadianScraper):
             p.add_source(detail_url)
             if email:
                 p.add_contact('email', email)
+            contact_url = detail_url.replace('index.html', 'coordonnees.html')
+            contact_page = self.lxmlize(contact_url)
+            p.add_source(contact_url, note='For telephone number(s)')
+            for div in contact_page.xpath('//div[@class="blockAdresseDepute"]'):
+                try:
+                    phone = self.get_phone(div)
+                    heading = div.find('h3').text
+                except Exception:
+                    pass # probably just no phone number present
+                else:
+                    try:
+                        note = {
+                            'Circonscription': 'constituency',
+                            'Parlement': 'legislature',
+                            'Ministère': 'legislature',
+                        }[heading]
+                    except KeyError:
+                        raise # scraper should be updated to handle new value
+                    else:
+                        p.add_contact('voice', phone, note)
             yield p
