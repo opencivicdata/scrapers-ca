@@ -33,9 +33,24 @@ class AlbertaPersonScraper(CanadianScraper):
                 continue
             party = get_party(mla['Caucus'])
             name_without_status = name.split(',')[0]
-            p = Person(primary_org='legislature', name=name_without_status, district=mla['Riding Name'],
-                       role='MLA', party=party)
+            detail_url = (
+                'http://www.assembly.ab.ca/net/index.aspx?'
+                'p=mla_contact&rnumber={0}&leg=29'.format(
+                    mla['Riding Number']
+                )
+            )
+            detail_page = self.lxmlize(detail_url)
+            photo_url = detail_page.xpath('//img[@class="MemPhoto"]/@src')[0]
+            p = Person(
+                primary_org='legislature',
+                name=name_without_status,
+                district=mla['Riding Name'],
+                role='MLA',
+                party=party,
+                image=photo_url,
+            )
             p.add_source(COUNCIL_PAGE)
+            p.add_source(detail_url)
             if mla['Email']:
                 p.add_contact('email', mla['Email'])
             if mla['Phone Number']:
