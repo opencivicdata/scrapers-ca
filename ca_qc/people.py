@@ -32,7 +32,7 @@ class QuebecPersonScraper(CanadianScraper):
                     phone = self.get_phone(div)
                     heading = div.find('h3').text
                 except Exception:
-                    pass # probably just no phone number present
+                    pass  # probably just no phone number present
                 else:
                     try:
                         note = {
@@ -41,7 +41,7 @@ class QuebecPersonScraper(CanadianScraper):
                             'Ministère': 'legislature',
                         }[heading]
                     except KeyError:
-                        raise # scraper should be updated to handle new value
+                        raise  # scraper should be updated to handle new value
                     else:
                         p.add_contact('voice', phone, note)
             yield p
