@@ -5,15 +5,16 @@ from pupa.scrape import Bill
 from utils import CanadianScraper
 from lxml.etree import tostring
 
-import lxml.etree as etree
 import datetime
+import lxml.etree as etree
+import pytz
 import re
 
 # TODO: Create ticket to move lxmlize into pupa.scrape.Base
 
 ACTION_CLASSIFICATION = {
-        'Adopted' : None,
-        'Adopted on Consent' : None,
+        'Adopted' : 'passage',
+        'Adopted on Consent' : 'passage',
         'Amended' : 'amendment-amended',
         'Confirmed' : 'confirmed',
         'Deferred' : 'deferred',
@@ -34,8 +35,11 @@ ACTION_CLASSIFICATION = {
 class TorontoNewBillScraper(CanadianScraper):
 
     DEFAULT_START_DATE = datetime.datetime(2014, 1, 1)
-    AGENDA_ITEM_SEARCH_URL = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doSearch&fromDate=2016-03-31&toDate=2016-03-31&itemsPerPage=1000'
+    AGENDA_ITEM_SEARCH_URL = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doSearch&fromDate=2016-02-22&toDate=2016-02-22&itemsPerPage=1000'
     AGENDA_ITEM_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
+
+    TIMEZONE = 'America/Toronto'
+    date_format='%B %d, %Y'
 
     def scrape(self):
         for agenda_item in self.agendaItems(updated_after=self.DEFAULT_START_DATE):
@@ -53,7 +57,21 @@ class TorontoNewBillScraper(CanadianScraper):
             # TODO: Fake session for now
             b.legislative_session = '2014-2018'
 
-            agenda_item_details = self.agendaItemDetails(agenda_item['url'])
+            agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
+
+            for version in agenda_item_versions:
+                action_description = version['action']
+                action_date = self.toDate(version['date'])
+                responsible_org = version['responsible_org']
+                action_class = ACTION_CLASSIFICATION[version['action']]
+
+                if responsible_org == 'City Council':
+                    responsible_org = self.jurisdiction.name
+
+                act = b.add_action(action_description,
+                                      action_date,
+                                      organization={'name': responsible_org},
+                                      classification=action_class)
 
             yield b
             #history = agenda_item_details['history']
@@ -91,21 +109,33 @@ class TorontoNewBillScraper(CanadianScraper):
 
             yield agenda_item
 
-    def agendaItemDetails(self, agenda_item_url):
+    def agendaItemVersions(self, agenda_item_url):
         page = self.lxmlize(agenda_item_url)
         versions = []
-        for agenda_item_version_url in self.parseAgendaItemIds(page):
-            version = self.agendaItemVersion(agenda_item_version_url)
+        for version in self.parseAgendaItemVersions(page):
             versions.append(version)
 
-    def parseAgendaItemIds(self, page):
+        return versions
+
+    def parseAgendaItemVersions(self, page):
         script_text = page.xpath('//head/script[not(@src)]/text()')[0]
+        index_qs = re.findall(r'if\(index == (\d)\){', script_text)
         function_qs = re.findall(r'var f = "(.*)";', script_text)
         agenda_item_id_qs = re.findall(r'agendaItemId:"(.*)"', script_text)
         url_template = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function={}&agendaItemId={}'
-        for f, id in zip(function_qs, agenda_item_id_qs):
+        for i, f, id in zip(index_qs, function_qs, agenda_item_id_qs):
             agenda_item_version_url = url_template.format(f, id)
-            yield agenda_item_version_url
+            version = self.agendaItemVersion(agenda_item_version_url)
+
+            xpr = '//div[@id="header{}"]'.format(i)
+            header = page.xpath(xpr)[0].text_content()
+            header_re = re.compile('^(.+) consideration on (.+)$')
+            org, date = re.match(header_re, header).groups()
+            version.update({
+                'responsible_org': org,
+                'date': date,
+                })
+            yield version
 
     def parseDataTable(self, table):
         """
@@ -181,7 +211,6 @@ class TorontoNewBillScraper(CanadianScraper):
     def agendaItemVersion(self, agenda_item_version_url):
         """
         Details:
-            * identifier
             * title
             * sponsors (when Member Motions [MM], primary & secondary from title)
             * type
@@ -206,34 +235,51 @@ class TorontoNewBillScraper(CanadianScraper):
         TODO: Investigate "Bills and By-law" [BL] code for bill context
         """
         page = self.lxmlize(agenda_item_version_url)
-        identifier = page.xpath("//table[@class='border'][1]//td[1]")[0].text_content().strip()
-        item_type = page.xpath("//table[@class='border'][1]//td[2]")[0].text_content().strip().lower()
-        action = page.xpath("//table[@class='border'][1]//td[3]")[0].text_content().strip()
+        version = {}
+        version.update({
+            'type': page.xpath("//table[@class='border'][1]//td[2]")[0].text_content().strip().lower(),
+            'action': page.xpath("//table[@class='border'][1]//td[3]")[0].text_content().strip(),
+            })
 
         wards = page.xpath("//table[@class='border'][1]//td[5]")[0].text_content().strip().lower()
         wards_re = re.compile('ward:(.*)')
-        #wards = re.match(wards_re, wards).group(0)
-        wards = re.match(wards_re, wards).group(1)
-        if wards != 'all':
-            wards = wards.split(', ')
+        matches = re.match(wards_re, wards)
+        if matches:
+            wards = matches.group(1)
+            if wards != 'all':
+                wards = wards.split(', ')
+        else:
+            wards = 'all'
+
+        version.update({'wards': wards})
 
         title = page.xpath("//table[.//font[@face='Arial' and @size=4]][1]")[0].text_content().strip()
-        title_re = re.compile('^(.*)(?: - by ((?:Deputy )?Mayor|Councillor) (.*), seconded by ((?:Deputy )?Mayor|Councillor) (.*))?$')
-        matches = re.match(title_re, title)
+        title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
         title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
+        version.update({'title': title})
+        version.update({'sponsors': {'primary': primary_sponsor, 'secondary': secondary_sponsor}})
 
-        sections = page.xpath("//table[@width=620 and .//font[@face='Arial' and @size=3] and .//tr[3]]")
-        version = {}
-        for section in sections:
-            section_title = section.find('.//tr[1]/td//font/b').text_content().strip()
-            section_content = section.find('.//tr[2]/td')
-            version[section_title] = section_content
+        section_nodes = page.xpath("//table[@width=620 and .//font[@face='Arial' and @size=3] and .//tr[3]]")
+        sections = {}
+        for node in section_nodes:
+            section_title = node.find('.//tr[1]/td//font/b').text_content().strip()
+            section_content = node.find('.//tr[2]/td')
+            sections[section_title] = section_content.text_content()
 
         if 'Motions' in sections:
-            version['Motions'] = self.parseAgendaItemVersionMotions(version['Motions'])
+            sections['Motions'] = self.parseAgendaItemVersionMotions(sections['Motions'])
+
+        version.update({'sections': sections})
 
         return version
 
-    def _parseVersionNumbers(self, inline_script_tag):
-        # TODO: return list of 
-        return []
+    def parseAgendaItemVersionMotions(self, motions_section):
+        return motions_section
+
+    def toTime(self, text) :
+        time = datetime.datetime.strptime(text, self.date_format)
+        time = pytz.timezone(self.TIMEZONE).localize(time)
+        return time
+
+    def toDate(self, text) :
+        return self.toTime(text).date().isoformat()
