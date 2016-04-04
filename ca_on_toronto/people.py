@@ -10,4 +10,5 @@ class TorontoPersonScraper(CSVScraper):
     other_names = {
         'Norman Kelly': ['Norm Kelly'],
         'Justin Di Ciano': ['Justin J. Di Ciano'],
+        'Michelle Berardinetti': ['Michelle Holland'],
     }
