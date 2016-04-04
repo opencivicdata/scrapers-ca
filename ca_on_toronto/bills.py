@@ -26,7 +26,7 @@ vote_map = {
 }
 
 
-class TorontoBillScraper(CanadianScraper):
+class TorontoVoteScraper(CanadianScraper):
     def scrape(self):
         # We store agenda items as bills, because Pupa can only have votes on
         # bills. Toronto has no bills anyhow.
