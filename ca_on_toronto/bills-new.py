@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from collections import defaultdict
+from copy import copy
 from pupa.scrape import Bill
 from utils import CanadianScraper
 from lxml.etree import tostring
@@ -16,7 +17,7 @@ ACTION_CLASSIFICATION = {
         'Adopted' : 'passage',
         'Adopted on Consent' : 'passage',
         'Amended' : 'amendment-amended',
-        'Confirmed' : 'confirmed',
+        'Confirmed' : 'passage',
         'Deferred' : 'deferred',
         'Deferred Indefinitely': 'deferred',
         'Intro Failed' : None,
@@ -30,29 +31,45 @@ ACTION_CLASSIFICATION = {
         'Withdrawn' : 'withdrawal',
         'Without Recs' : None,
         'Waive Referral' : None,
+        # Made this one up
+        'Introduced': 'introduction',
         }
 
 class TorontoNewBillScraper(CanadianScraper):
 
-    DEFAULT_START_DATE = datetime.datetime(2014, 1, 1)
-    AGENDA_ITEM_SEARCH_URL = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doSearch&fromDate=2016-02-22&toDate=2016-02-22&itemsPerPage=1000'
+    DEFAULT_START_DATE = datetime.datetime(2016, 2, 22)
+    AGENDA_ITEM_SEARCH_URL = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doSearch&itemsPerPage=1000&sortBy=meetingDate&sortOrder=A'
     AGENDA_ITEM_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
 
     TIMEZONE = 'America/Toronto'
     date_format='%B %d, %Y'
 
     def scrape(self):
-        for agenda_item in self.agendaItems(updated_after=self.DEFAULT_START_DATE):
+        today = datetime.datetime.today()
+        delta_days = 7
+        start_date = today - datetime.timedelta(days=delta_days)
+        end_date = today + datetime.timedelta(days=delta_days*2)
+
+        for agenda_item in self.agendaItems(date_from=start_date, date_to=end_date):
             # TODO: Add agenda_item type to OCD
             leg_type = 'bill'
+
+            title = agenda_item['Title'].replace('\n', ' ')
+            title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
+            title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
+
             b = Bill(
                     identifier=agenda_item['Item No.'],
-                    title=agenda_item['Title'],
+                    title=title,
                     legislative_session=None,
                     classification=leg_type,
                     from_organization={'name': self.jurisdiction.name},
                     )
             b.add_source(agenda_item['url'], note='web')
+
+            if primary_sponsor and secondary_sponsor:
+                b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
+                b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
 
             # TODO: Fake session for now
             b.legislative_session = '2014-2018'
@@ -60,24 +77,44 @@ class TorontoNewBillScraper(CanadianScraper):
             agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
 
             for version in agenda_item_versions:
-                action_description = version['action']
                 action_date = self.toDate(version['date'])
+
+                if 'Summary' in version['sections']:
+                    # TODO: Investigate whether these vary between versions, as
+                    # we perhaps don't need to add one for each
+                    b.add_abstract(version['sections']['Summary'], note='', date=action_date)
+
+                if not version['action']: continue
+                if re.match(r'\d+:\d+ [A|P]M', version['action']): continue
+
+                action_description = version['action']
                 responsible_org = version['responsible_org']
-                action_class = ACTION_CLASSIFICATION[version['action']]
+                action_class = ACTION_CLASSIFICATION.get(version['action'])
+
+                def is_recommendation(version):
+                    return any('Recommendations' in s for s in version['sections'].keys())
 
                 if responsible_org == 'City Council':
                     responsible_org = self.jurisdiction.name
+                else:
+                    if action_class == 'passage':
+                        action_class = 'committee-passage'
 
-                act = b.add_action(action_description,
-                                      action_date,
-                                      organization={'name': responsible_org},
-                                      classification=action_class)
+                        if is_recommendation(version):
+                            action_class = 'committee-passage-favorable'
+
+                act = b.add_action(
+                        action_description,
+                        action_date,
+                        organization={'name': responsible_org},
+                        classification=action_class
+                        )
 
             yield b
             #history = agenda_item_details['history']
 
-    def agendaItems(self, updated_after=None, updated_before=None):
-        for agenda_item_summary in self.searchAgendaItems(updated_after, updated_before) :
+    def agendaItems(self, date_from=None, date_to=None):
+        for agenda_item_summary in self.searchAgendaItems(date_from, date_to) :
             yield agenda_item_summary
 
     def searchAgendaItems(self, date_from=None, date_to=None):
@@ -85,7 +122,7 @@ class TorontoNewBillScraper(CanadianScraper):
         Submit a search query on the agenda item search page, and return a list
         of result pages.
         """
-        page = self.lxmlize(self.AGENDA_ITEM_SEARCH_URL)
+        page = self.lxmlize(self.AGENDA_ITEM_SEARCH_URL + '&fromDate={}&toDate={}'.format(date_from.strftime('%Y-%m-%d'), date_to.strftime('%Y-%m-%d')))
         for agenda_item_summary in self.parseSearchResults(page):
             yield agenda_item_summary
 
@@ -123,7 +160,7 @@ class TorontoNewBillScraper(CanadianScraper):
         function_qs = re.findall(r'var f = "(.*)";', script_text)
         agenda_item_id_qs = re.findall(r'agendaItemId:"(.*)"', script_text)
         url_template = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function={}&agendaItemId={}'
-        for i, f, id in zip(index_qs, function_qs, agenda_item_id_qs):
+        for i, f, id in sorted(zip(index_qs, function_qs, agenda_item_id_qs), key=lambda tup: tup[2]):
             agenda_item_version_url = url_template.format(f, id)
             version = self.agendaItemVersion(agenda_item_version_url)
 
@@ -135,6 +172,18 @@ class TorontoNewBillScraper(CanadianScraper):
                 'responsible_org': org,
                 'date': date,
                 })
+
+            if 'Origin' in version['sections']:
+                origin_text = version['sections']['Origin']
+                intro_date_re = re.compile('\((.+)\) .+')
+                intro_date = re.match(intro_date_re, origin_text).group(1)
+                intro_version = copy(version)
+                intro_version.update({
+                    'date': intro_date,
+                    'action': 'Introduced',
+                    })
+                yield intro_version
+
             yield version
 
     def parseDataTable(self, table):
@@ -211,12 +260,10 @@ class TorontoNewBillScraper(CanadianScraper):
     def agendaItemVersion(self, agenda_item_version_url):
         """
         Details:
-            * title
-            * sponsors (when Member Motions [MM], primary & secondary from title)
             * type
             * ward(s)
 
-        Possible sections: 
+        Possible sections:
             * [ Board | Community Council | Committee ] Decision Advice and Other Information
             * Origin
             * [ Board | Community Council | Committee ] Recommendations
@@ -252,12 +299,6 @@ class TorontoNewBillScraper(CanadianScraper):
             wards = 'all'
 
         version.update({'wards': wards})
-
-        title = page.xpath("//table[.//font[@face='Arial' and @size=4]][1]")[0].text_content().strip()
-        title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
-        title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
-        version.update({'title': title})
-        version.update({'sponsors': {'primary': primary_sponsor, 'secondary': secondary_sponsor}})
 
         section_nodes = page.xpath("//table[@width=620 and .//font[@face='Arial' and @size=3] and .//tr[3]]")
         sections = {}
