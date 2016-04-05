@@ -11,16 +11,23 @@ def committees_from_sessions(self, sessions=[]):
         for a in page.xpath('//table[@id="list"]//td[@class="db"]/a'):
             link = a.attrib['href']
             data = committee_from_url(self, link)
-            data.update({'term': term})
+            if data is not None:
+                data.update({'term': term})
 
-            yield data
+                yield data
 
 
 def committee_from_url(self, url=None):
     page = self.lxmlize(url)
     script_text = page.xpath('//head/script[not(@src)]/text()')[0]
     committee_name = re.search(r'var decisionBodyName = "(.*)";', script_text).group(1)
-    committee_code = re.search(r'meetingRefs\.push\("[0-9]{4}\.([A-Z]{2})[0-9]+"\);', script_text).group(1)
+    cc_check = re.search(r'meetingRefs\.push\("[0-9]{4}\.([A-Z]{2})[0-9]+"\);', script_text)
+    if cc_check is not None:
+        committee_code = re.search(r'meetingRefs\.push\("[0-9]{4}\.([A-Z]{2})[0-9]+"\);', script_text).group(1)
+    else:
+        data = None
+        return data
+
     decision_body_id = parse_qs(urlparse(url).query)['decisionBodyId'][0]
 
     desc = page.xpath('//div[@id="content_container"]//div[@class="info"]/descendant::text()')
@@ -41,10 +48,11 @@ def committee_from_url(self, url=None):
 def build_lookup_dict(self, data_list, index_key=None):
     lookup_dict = {}
     for data in data_list:
-        key = data[index_key]
-        if not lookup_dict.get(key):
-            lookup_dict[key] = [data]
-        else:
-            lookup_dict[key].append(data)
+        if data is not None:
+            key = data[index_key]
+            if not lookup_dict.get(key):
+                lookup_dict[key] = [data]
+            else:
+                lookup_dict[key].append(data)
 
     return lookup_dict

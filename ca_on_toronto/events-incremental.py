@@ -156,7 +156,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     for i, item in enumerate(agenda_items):
 
                         a = e.add_agenda_item(item['title'])
-                        a.add_classification(item['type'].lower())
+                        #a.add_classification(item['type'].lower())
                         a['order'] = str(i)
 
                         def normalize_wards(raw):
@@ -192,7 +192,12 @@ class TorontoIncrementalEventScraper(CanadianScraper):
 
     def agenda_from_url(self, url):
         page = self.lxmlize(url)
-        main = page.xpath('//table[1]/..')[0]
+        try:
+            main = page.xpath('//table[1]/..')[0]
+        except IndexError:
+            items = []
+            return items
+
         top_level_elems = main.getchildren()
         section_breaks = page.cssselect('table.border')
 
