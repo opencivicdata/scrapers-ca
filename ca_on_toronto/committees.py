@@ -12,7 +12,17 @@ import re
 MEMBERSHIP_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&meetingId={}&showLink=true'
 DEFAULT_COMMITTEE_ROLE = 'Member'
 
-REFERENCE_MEETING_IDS = defaultdict(lambda: {})
+
+"""
+The IDs were chosen by sampling the meeting AJAX links on each committee page,
+while monitoring the right-hand column for changes in membership. We find a
+meeting with maximum information about roles. On finding one, we inspect the
+HTML element of that meeting's header for a class called `header<MEETING_ID>`,
+which we use in this lookup dict.
+
+"""
+# TODO: Improve on this later for more dynamicism.
+REFERENCE_MEETING_IDS = defaultdict(dict)
 REFERENCE_MEETING_IDS['2014-2018'] = {
             'AU': 11008,
             'HL': 10899,
@@ -44,17 +54,15 @@ class TorontoCommitteeScraper(CanadianScraper):
         page = self.lxmlize(member_list_url)
         li_re = re.compile(r'^(?P<name>.+?)(?: \((?P<role>.+)\))?$')
         for li in page.xpath('//ul/li'):
-            member = {'is_councillor': False}
-
-            if li.xpath('.//a'):
-                member['is_councillor'] = True
-
             li_text = li.text_content().strip()
             matches = re.match(li_re, li_text)
-
             role = matches.group('role')
-            member['role'] = role if role else DEFAULT_COMMITTEE_ROLE
-            member['name'] = matches.group('name').strip()
+
+            member = {
+                    'role': role if role else DEFAULT_COMMITTEE_ROLE,
+                    'name': matches.group('name').strip(),
+                    'is_councillor': bool(li.xpath('.//a')),
+                    }
 
             yield member
 
