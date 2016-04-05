@@ -39,12 +39,13 @@ class TorontoCommitteeScraper(CanadianScraper):
         members = []
 
         page = self.lxmlize(member_list_url)
+        li_re = re.compile(r'^(?P<name>.+?)(?: \((?P<role>.+)\))?$')
         for li in page.xpath('//ul/li'):
             member = {'is_councillor': False}
 
-            if li.xpath('.//a'): member['is_councillor'] = True
+            if li.xpath('.//a'):
+                member['is_councillor'] = True
 
-            li_re = re.compile(r'^(?P<name>.+?)(?: \((?P<role>.+)\))?$')
             li_text = li.text_content().strip()
             matches = re.match(li_re, li_text)
 
@@ -68,7 +69,8 @@ class TorontoCommitteeScraper(CanadianScraper):
         if ref_meeting_id:
             membership_url = MEMBERS_URL_TEMPLATE.format(ref_meeting_id)
             for member in self.allMembers(membership_url):
-                if member['is_councillor']: yield member
+                if member['is_councillor']:
+                    yield member
 
 
     def scrape(self):
@@ -90,8 +92,6 @@ class TorontoCommitteeScraper(CanadianScraper):
                     o = Organization(name=inst['name'], classification='committee')
                     extras.update({'description': inst['info']})
                     o.add_identifier(inst['code'], scheme=TWO_LETTER_ORG_CODE_SCHEME)
-
-                    print(inst['code'])
 
                     # TODO: Scrape non-councillor members
                     for councillor in self.councillorMembers(inst['code']):
