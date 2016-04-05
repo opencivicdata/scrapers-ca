@@ -27,6 +27,15 @@ REFERENCE_MEETING_IDS = {
 
 class TorontoCommitteeScraper(CanadianScraper):
     def allMembers(self, member_list_url):
+        """
+        Return a list of dicts representing all members of an organization,
+        including councillors, city staff, and public appointments.
+
+        obj keys:
+        * name (string)
+        * role (string)
+        * is_councillor (bool)
+        """
         members = []
 
         page = self.lxmlize(member_list_url)
@@ -46,12 +55,20 @@ class TorontoCommitteeScraper(CanadianScraper):
             yield member
 
     def councillorMembers(self, org_code):
+        """
+        Return a list of dicts representing all councillor members of an
+        organization.
+
+        obj keys:
+        * name (string)
+        * role (string)
+        * is_councillor (bool)
+        """
         ref_meeting_id = REFERENCE_MEETING_IDS.get(org_code)
         if ref_meeting_id:
             membership_url = MEMBERS_URL_TEMPLATE.format(ref_meeting_id)
             for member in self.allMembers(membership_url):
                 if member['is_councillor']: yield member
-                # TODO: Scrape non-councillor members
 
 
     def scrape(self):
@@ -76,6 +93,7 @@ class TorontoCommitteeScraper(CanadianScraper):
 
                     print(inst['code'])
 
+                    # TODO: Scrape non-councillor members
                     for councillor in self.councillorMembers(inst['code']):
                         o.add_member(councillor['name'], councillor['role'])
 
