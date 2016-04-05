@@ -1,28 +1,31 @@
 from __future__ import unicode_literals
-from utils import CanadianScraper
+from collections import defaultdict
 from pupa.scrape import Organization
+from utils import CanadianScraper
+
 from .helpers import build_lookup_dict, committees_from_sessions
 from .constants import TWO_LETTER_ORG_CODE_SCHEME
 
 import re
 
 
-MEMBERS_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&meetingId={}&showLink=true'
+MEMBERSHIP_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyProfile.do?function=doGetMembers&meetingId={}&showLink=true'
 DEFAULT_COMMITTEE_ROLE = 'Member'
 
-REFERENCE_MEETING_IDS = {
-        'AU': 11008,
-        'HL': 10899,
-        'CA': 10868,
-        'CD': 10948,
-        'ED': 10972,
-        'EX': 10989,
-        'GM': 10881,
-        'LS': 10979,
-        'PE': 10940,
-        'PG': 10957,
-        'PW': 10964,
-        'ST': 11568,
+REFERENCE_MEETING_IDS = defaultdict(lambda: {})
+REFERENCE_MEETING_IDS['2014-2018'] = {
+            'AU': 11008,
+            'HL': 10899,
+            'CA': 10868,
+            'CD': 10948,
+            'ED': 10972,
+            'EX': 10989,
+            'GM': 10881,
+            'LS': 10979,
+            'PE': 10940,
+            'PG': 10957,
+            'PW': 10964,
+            'ST': 11568,
         }
 
 class TorontoCommitteeScraper(CanadianScraper):
@@ -55,7 +58,7 @@ class TorontoCommitteeScraper(CanadianScraper):
 
             yield member
 
-    def councillorMembers(self, org_code):
+    def councillorMembers(self, membership_url):
         """
         Return a list of dicts representing all councillor members of an
         organization.
@@ -65,13 +68,15 @@ class TorontoCommitteeScraper(CanadianScraper):
         * role (string)
         * is_councillor (bool)
         """
-        ref_meeting_id = REFERENCE_MEETING_IDS.get(org_code)
-        if ref_meeting_id:
-            membership_url = MEMBERS_URL_TEMPLATE.format(ref_meeting_id)
-            for member in self.allMembers(membership_url):
-                if member['is_councillor']:
-                    yield member
+        for member in self.allMembers(membership_url):
+            if member['is_councillor']:
+                yield member
 
+    def referenceMeetingId(self, org_code, term='2014-2018'):
+        """
+        Returns a referencial meetingId for a given committee in a given term.
+        """
+        return REFERENCE_MEETING_IDS[term].get(org_code)
 
     def scrape(self):
         sessions = reversed(self.jurisdiction.legislative_sessions)
@@ -98,8 +103,11 @@ class TorontoCommitteeScraper(CanadianScraper):
                     o.add_identifier(inst['code'], scheme=TWO_LETTER_ORG_CODE_SCHEME)
 
                     # TODO: Scrape non-councillor members
-                    for councillor in self.councillorMembers(inst['code']):
-                        o.add_member(councillor['name'], councillor['role'])
+                    meeting_id = self.referenceMeetingId(inst['code'], inst['term'])
+                    if meeting_id:
+                        membership_url = MEMBERSHIP_URL_TEMPLATE.format(meeting_id)
+                        for councillor in self.councillorMembers(membership_url):
+                            o.add_member(councillor['name'], councillor['role'])
 
                 extras['tmmis_decision_body_ids'].append({inst['term']: inst['decision_body_id']})
                 o.extras = extras
