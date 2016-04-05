@@ -22,7 +22,7 @@ REFERENCE_MEETING_IDS = {
         'PE': 10940,
         'PG': 10957,
         'PW': 10964,
-        'ST': 11014,
+        'ST': 11568,
         }
 
 class TorontoCommitteeScraper(CanadianScraper):
@@ -73,6 +73,8 @@ class TorontoCommitteeScraper(CanadianScraper):
                     o = Organization(name=inst['name'], classification='committee')
                     extras.update({'description': inst['info']})
                     o.add_identifier(inst['code'], scheme=TWO_LETTER_ORG_CODE_SCHEME)
+
+                    print(inst['code'])
 
                     for councillor in self.councillorMembers(inst['code']):
                         o.add_member(councillor['name'], councillor['role'])
