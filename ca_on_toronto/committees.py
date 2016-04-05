@@ -83,6 +83,10 @@ class TorontoCommitteeScraper(CanadianScraper):
             if code == 'CC':
                 continue
 
+            # When there are no meetings scheduled and was no way to deduce committee code.
+            if not code:
+                continue
+
             extras = {'tmmis_decision_body_ids': []}
             for i, inst in enumerate(instances):
                 # TODO: Ensure this survives addition of new term (2017)

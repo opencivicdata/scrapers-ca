@@ -20,7 +20,8 @@ def committee_from_url(self, url=None):
     page = self.lxmlize(url)
     script_text = page.xpath('//head/script[not(@src)]/text()')[0]
     committee_name = re.search(r'var decisionBodyName = "(.*)";', script_text).group(1)
-    committee_code = re.search(r'meetingRefs\.push\("[0-9]{4}\.([A-Z]{2})[0-9]+"\);', script_text).group(1)
+    matches = re.search(r'meetingRefs\.push\("[0-9]{4}\.(?P<code>[A-Z]{2})[0-9]+"\);', script_text)
+    committee_code = matches.group('code') if matches else None
     decision_body_id = parse_qs(urlparse(url).query)['decisionBodyId'][0]
 
     desc = page.xpath('//div[@id="content_container"]//div[@class="info"]/descendant::text()')
