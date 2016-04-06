@@ -43,9 +43,9 @@ REFERENCE_MEETING_IDS['2014-2018'] = {
     'SC': 10917,
     'TE': 10909,
     # Other Boards and Committees
-    # 'AA': 0, # TODO: no membership?
+    # 'AA': 0,  # TODO: no membership?
     'AH': 10469,
-    # 'BD': 0, # TODO: no membership?
+    # 'BD': 0,  # TODO: no membership?
     'CT': 11408,
     'HB': 11229,
     'SL': 11212,
@@ -53,7 +53,7 @@ REFERENCE_MEETING_IDS['2014-2018'] = {
     'AC': 11448,
     'HP': 11388,
     'HU': 11003,
-    # '??': 0, # TODO: Board of Health Public Health Champion Awards Selection Committee
+    # '??': 0,  # TODO: Board of Health Public Health Champion Awards Selection Committee
     'HF': 11268,
     'ZB': 11250,
     'BU': 11060,
@@ -67,7 +67,7 @@ REFERENCE_MEETING_IDS['2014-2018'] = {
     'XK': 10249,
     'FA': 11097,
     'XJ': 10328,
-    # 'GP': 0, TODO: no membership?
+    # 'GP': 0,  # TODO: no membership?
     'XQ': 9996,
     'XS': 10049,
     'XT': 10471,
@@ -86,7 +86,7 @@ REFERENCE_MEETING_IDS['2014-2018'] = {
     'NF': 10888,
     'NQ': 10768,
     'PY': 9922,
-    'SV': 9937, # TODO: chair not currently marked?
+    'SV': 9937,  # TODO: chair not currently marked?
     'SY': 11169,
     'SX': 11194,
     'SZ': 11035,
