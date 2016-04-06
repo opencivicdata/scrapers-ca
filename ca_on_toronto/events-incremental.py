@@ -11,7 +11,7 @@ import re
 from .helpers import (
     committees_from_sessions,
     build_lookup_dict,
-    )
+)
 
 from .constants import (
     CALENDAR_DAY_TEMPLATE,
@@ -20,19 +20,19 @@ from .constants import (
     AGENDA_FULL_COUNCIL_TEMPLATE,
     AGENDA_LIST_COUNCIL_TEMPLATE,
     AGENDA_ITEM_TEMPLATE,
-    COMMITTEE_LIST_TEMPLATE,
-    )
+)
 
 
 STATUS_DICT = {
-        'Scheduled': 'confirmed',
-        'Scheduled (Preview)': 'confirmed',
-        'Complete': 'passed',
-        'Cancelled': 'cancelled',
-        'No Quorum': 'cancelled',
-        'In Recess (will Resume)': 'confirmed',
-        'In Progress (Public Session)': 'confirmed',
-        }
+    'Scheduled': 'confirmed',
+    'Scheduled (Preview)': 'confirmed',
+    'Complete': 'passed',
+    'Cancelled': 'cancelled',
+    'No Quorum': 'cancelled',
+    'In Recess (will Resume)': 'confirmed',
+    'In Progress (Public Session)': 'confirmed',
+}
+
 
 class TorontoIncrementalEventScraper(CanadianScraper):
 
@@ -46,7 +46,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         today = dt.datetime.today()
         delta_days = 7
         start_date = today - dt.timedelta(days=delta_days)
-        end_date = today + dt.timedelta(days=delta_days*2)
+        end_date = today + dt.timedelta(days=delta_days * 2)
 
         self.scrape_committee_data()
         yield from self.scrape_events_range(start_date, end_date)
@@ -57,7 +57,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
     def parse_table(self, table_node):
         items = []
 
-        def sanitize_key(str): return str.lower().strip().replace(' ', '_').replace('.', '')
+        def sanitize_key(str):
+            return str.lower().strip().replace(' ', '_').replace('.', '')
 
         def sanitize_org_name(org_name):
             # Some meetings preceded with legend, ie "S:" for special meetings.
@@ -75,14 +76,14 @@ class TorontoIncrementalEventScraper(CanadianScraper):
             meeting_link = row.cssselect('a')[0].attrib['href']
             values = [col.text_content().strip() for col in row]
             item = dict(zip(headers, values))
-            item.update({'meeting': sanitize_org_name(item['meeting']) })
+            item.update({'meeting': sanitize_org_name(item['meeting'])})
             item.update({'meeting_link': meeting_link})
             items.append(item)
 
         return items
 
     def extract_events_by_day(self, date):
-        url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month-1, date.day)
+        url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month - 1, date.day)
         page = self.lxmlize(url)
 
         tables = page.xpath('//table')
@@ -100,13 +101,11 @@ class TorontoIncrementalEventScraper(CanadianScraper):
             meeting_id = parse_qs(urlparse(link).query)['meetingId'][0]
             event_dict.update({'meeting_id': meeting_id})
 
-
             return event_dict
 
         events = [create_event_dict(row) for row in raw_table_data]
 
         return events
-
 
     def scrape_events_range(self, start_date, end_date):
 
@@ -124,21 +123,21 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                 source_url = CALENDAR_DAY_TEMPLATE.format(start.year, start.month, start.day)
                 org_name = event['meeting']
                 e = Event(
-                    name = org_name,
-                    start_time = start,
-                    timezone = tz.zone,
-                    location_name = event['location'],
+                    name=org_name,
+                    start_time=start,
+                    timezone=tz.zone,
+                    location_name=event['location'],
                     status=STATUS_DICT.get(event['meeting_status'])
-                    )
+                )
                 e.add_source(source_url)
                 e.extras = {
                     'meeting_number': event['no'],
                     'tmmis_meeting_id': event['meeting_id'],
-                    }
+                }
                 e.add_participant(
-                    name = org_name,
-                    type = 'organization',
-                    )
+                    name=org_name,
+                    type='organization',
+                )
 
                 def is_agenda_available(event):
                     return event['publishing_status'] in ['Agenda Published', 'Minutes Published']
@@ -160,7 +159,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                         a['order'] = str(i)
 
                         def normalize_wards(raw):
-                            if not raw: raw = 'All'
+                            if not raw:
+                                raw = 'All'
                             if raw == 'All':
                                 return raw.lower()
                             else:
@@ -173,16 +173,16 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                         if full_identifier not in self.seen_agenda_items:
                             b = Bill(
                                 # TODO: Fix this hardcode
-                                legislative_session = '2014-2018',
-                                identifier = full_identifier,
-                                title = item['title'],
-                                from_organization = {'name': self.jurisdiction.name},
-                                )
+                                legislative_session='2014-2018',
+                                identifier=full_identifier,
+                                title=item['title'],
+                                from_organization={'name': self.jurisdiction.name},
+                            )
                             b.add_source(agenda_url)
                             b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
                             b.extras = {
                                 'wards': wards,
-                                }
+                            }
 
                             self.seen_agenda_items.append(full_identifier)
 
@@ -198,7 +198,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
 
         section_break_indices = [i for i, elem in enumerate(top_level_elems) if elem in section_breaks]
 
-        def partition(alist, indices): return [alist[i:j] for i, j in zip([0]+indices, indices+[None])]
+        def partition(alist, indices):
+            return [alist[i:j] for i, j in zip([0] + indices, indices + [None])]
 
         sections = partition(top_level_elems, section_break_indices)
 
@@ -211,18 +212,18 @@ class TorontoIncrementalEventScraper(CanadianScraper):
 
         section_trees = [treeify_section_list(section) for section in sections]
 
-        preamble = section_trees.pop(0)
+        preamble = section_trees.pop(0)  # NOQA
         agenda_items = section_trees
 
         items = []
         newline_regex = re.compile(r' ?\r\n ?')
         for item in agenda_items:
             dict = {
-                    'identifier': item.xpath('//table[1]//td[1]')[0].text_content(),
-                    'type': item.xpath('//table[1]//td[2]')[0].text_content().strip(),
-                    'wards': item.xpath('//table[1]//td[5]')[0].text_content().strip().replace('Ward:',''),
-                    'title': newline_regex.sub(' ', item.xpath('//table[2]//td[1]')[0].text_content().strip()),
-                    }
+                'identifier': item.xpath('//table[1]//td[1]')[0].text_content(),
+                'type': item.xpath('//table[1]//td[2]')[0].text_content().strip(),
+                'wards': item.xpath('//table[1]//td[5]')[0].text_content().strip().replace('Ward:', ''),
+                'title': newline_regex.sub(' ', item.xpath('//table[2]//td[1]')[0].text_content().strip()),
+            }
 
             items.append(dict)
 
@@ -234,7 +235,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         committee_term_instances = committees_from_sessions(self, sessions)
         committees_by_name = build_lookup_dict(self, data_list=committee_term_instances, index_key='name')
         # Manually add our City Council exception.
-        committees_by_name.update({ self.jurisdiction.name: [{'code':'CC'}] })
+        committees_by_name.update({self.jurisdiction.name: [{'code': 'CC'}]})
 
         return committees_by_name
 

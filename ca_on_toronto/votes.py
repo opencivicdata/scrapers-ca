@@ -27,6 +27,7 @@ vote_map = {
 
 
 class TorontoVoteScraper(CanadianScraper):
+
     def scrape(self):
         # We store agenda items as bills, because Pupa can only have votes on
         # bills. Toronto has no bills anyhow.
@@ -81,7 +82,7 @@ class TorontoVoteScraper(CanadianScraper):
                         # * may include the motion's identifier
                         # * may include the motion's creator
                         # @note Unused, because OpenCivicData has no field for quorum, etc.
-                        quorum_match = quorum_re.search(row['Vote Description'])
+                        quorum_match = quorum_re.search(row['Vote Description'])  # NOQA
 
                         bill_key = row['Agenda Item #']
                         bill = {
