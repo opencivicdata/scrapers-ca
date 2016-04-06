@@ -24,6 +24,7 @@ which we use in this lookup dict.
 # TODO: Improve on this later for more dynamicism.
 REFERENCE_MEETING_IDS = defaultdict(dict)
 REFERENCE_MEETING_IDS['2014-2018'] = {
+    # Standing Committees
     'AU': 11008,
     'HL': 10899,
     'CA': 10868,
@@ -36,6 +37,65 @@ REFERENCE_MEETING_IDS['2014-2018'] = {
     'PG': 10957,
     'PW': 10964,
     'ST': 11568,
+    # Community Councils
+    'EY': 10933,
+    'NY': 10924,
+    'SC': 10917,
+    'TE': 10909,
+    # Other Boards and Committees
+    # 'AA': 0, # TODO: no membership?
+    'AH': 10469,
+    # 'BD': 0, # TODO: no membership?
+    'CT': 11408,
+    'HB': 11229,
+    'SL': 11212,
+    'TA': 11308,
+    'AC': 11448,
+    'HP': 11388,
+    'HU': 11003,
+    # '??': 0, # TODO: Board of Health Public Health Champion Awards Selection Committee
+    'HF': 11268,
+    'ZB': 11250,
+    'BU': 11060,
+    'BW': 11138,
+    'BV': 11135,
+    'TS': 11154,
+    'EA': 11430,
+    'DB': 11608,
+    'DI': 11288,
+    'EL': 10668,
+    'XK': 10249,
+    'FA': 11097,
+    'XJ': 10328,
+    # 'GP': 0, TODO: no membership?
+    'XQ': 9996,
+    'XS': 10049,
+    'XT': 10471,
+    'XP': 9995,
+    'XN': 9920,
+    'XR': 10048,
+    'XU': 10271,
+    'LL': 10669,
+    'XL': 11369,
+    'AF': 10288,
+    'XM': 10254,
+    'NT': 11470,
+    'NA': 10189,
+    'NC': 11349,
+    'NE': 11332,
+    'NF': 10888,
+    'NQ': 10768,
+    'PY': 9922,
+    'SV': 9937, # TODO: chair not currently marked?
+    'SY': 11169,
+    'SX': 11194,
+    'SZ': 11035,
+    'PS': 10808,
+    'SD': 11272,
+    'TD': 11389,
+    'FB': 11333,
+    'MA': 11211,
+    'PB': 11031,
 }
 
 
