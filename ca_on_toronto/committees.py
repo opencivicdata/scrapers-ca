@@ -24,21 +24,23 @@ which we use in this lookup dict.
 # TODO: Improve on this later for more dynamicism.
 REFERENCE_MEETING_IDS = defaultdict(dict)
 REFERENCE_MEETING_IDS['2014-2018'] = {
-            'AU': 11008,
-            'HL': 10899,
-            'CA': 10868,
-            'CD': 10948,
-            'ED': 10972,
-            'EX': 10989,
-            'GM': 10881,
-            'LS': 10979,
-            'PE': 10940,
-            'PG': 10957,
-            'PW': 10964,
-            'ST': 11568,
-        }
+    'AU': 11008,
+    'HL': 10899,
+    'CA': 10868,
+    'CD': 10948,
+    'ED': 10972,
+    'EX': 10989,
+    'GM': 10881,
+    'LS': 10979,
+    'PE': 10940,
+    'PG': 10957,
+    'PW': 10964,
+    'ST': 11568,
+}
+
 
 class TorontoCommitteeScraper(CanadianScraper):
+
     def allMembers(self, member_list_url):
         """
         Return a list of dicts representing all members of an organization,
@@ -49,7 +51,6 @@ class TorontoCommitteeScraper(CanadianScraper):
         * role (string)
         * is_councillor (bool)
         """
-        members = []
 
         page = self.lxmlize(member_list_url)
         li_re = re.compile(r'^(?P<name>.+?)(?: \((?P<role>.+)\))?$')
@@ -59,10 +60,10 @@ class TorontoCommitteeScraper(CanadianScraper):
             role = matches.group('role')
 
             member = {
-                    'role': role if role else DEFAULT_COMMITTEE_ROLE,
-                    'name': matches.group('name').strip(),
-                    'is_councillor': bool(li.xpath('.//a')),
-                    }
+                'role': role if role else DEFAULT_COMMITTEE_ROLE,
+                'name': matches.group('name').strip(),
+                'is_councillor': bool(li.xpath('.//a')),
+            }
 
             yield member
 
