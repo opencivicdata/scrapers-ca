@@ -120,7 +120,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                 tz = pytz.timezone("America/Toronto")
                 time = dt.datetime.strptime(event['time'], '%I:%M %p')
                 start = tz.localize(date.replace(hour=time.hour, minute=time.minute, second=0, microsecond=0))
-                source_url = CALENDAR_DAY_TEMPLATE.format(start.year, start.month, start.day)
                 org_name = event['meeting']
                 e = Event(
                     name=org_name,
@@ -129,7 +128,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     location_name=event['location'],
                     status=STATUS_DICT.get(event['meeting_status'])
                 )
-                e.add_source(source_url)
                 e.extras = {
                     'meeting_number': event['no'],
                     'tmmis_meeting_id': event['meeting_id'],
