@@ -73,6 +73,9 @@ class TorontoBillScraper(CanadianScraper):
 
             agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
 
+            # Use one version's full_text (will be most recent)
+            b.extras['full_text'] = agenda_item_versions[0]['full_text']
+
             for version in agenda_item_versions:
                 action_date = self.toDate(version['date'])
 
@@ -278,6 +281,7 @@ class TorontoBillScraper(CanadianScraper):
         version.update({
             'type': page.xpath("//table[@class='border'][1]//td[2]")[0].text_content().strip().lower(),
             'action': page.xpath("//table[@class='border'][1]//td[3]")[0].text_content().strip(),
+            'full_text': etree.tostring(page, pretty_print=True).decode(),
         })
 
         wards = page.xpath("//table[@class='border'][1]//td[5]")[0].text_content().strip().lower()
