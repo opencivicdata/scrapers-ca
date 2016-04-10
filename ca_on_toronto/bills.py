@@ -4,43 +4,44 @@ from collections import defaultdict
 from copy import copy
 from pupa.scrape import Bill
 from utils import CanadianScraper
-from lxml.etree import tostring
 
 import datetime
 import lxml.etree as etree
+import traceback
 import pytz
 import re
 
 # TODO: Create ticket to move lxmlize into pupa.scrape.Base
 
 ACTION_CLASSIFICATION = {
-        'Adopted' : 'passage',
-        'Adopted on Consent' : 'passage',
-        'Amended' : 'amendment-amended',
-        'Confirmed' : 'passage',
-        'Deferred' : 'deferred',
-        'Deferred Indefinitely': 'deferred',
-        'Intro Failed' : None,
-        'No Action' : None,
-        'No Quorum' : 'failure',
-        'Not Adopted' : None,
-        'Noted/Filed' : 'filing',
-        'Received' : None,
-        'Referred' : 'committee-referral',
-        'Recinded' : 'failure',
-        'Withdrawn' : 'withdrawal',
-        'Without Recs' : None,
-        'Waive Referral' : None,
-        # Made this one up
-        'Introduced': 'introduction',
-        }
+    'Adopted': 'passage',
+    'Adopted on Consent': 'passage',
+    'Amended': 'amendment-amended',
+    'Confirmed': 'passage',
+    'Deferred': 'deferred',
+    'Deferred Indefinitely': 'deferred',
+    'Intro Failed': None,
+    'No Action': None,
+    'No Quorum': 'failure',
+    'Not Adopted': None,
+    'Noted/Filed': 'filing',
+    'Received': None,
+    'Referred': 'committee-referral',
+    'Recinded': 'failure',
+    'Withdrawn': 'withdrawal',
+    'Without Recs': None,
+    'Waive Referral': None,
+    # Made this one up
+    'Introduced': 'introduction',
+}
+
 
 class TorontoBillScraper(CanadianScraper):
     AGENDA_ITEM_SEARCH_URL = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doSearch&itemsPerPage=1000&sortBy=meetingDate&sortOrder=A'
     AGENDA_ITEM_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
 
     TIMEZONE = 'America/Toronto'
-    date_format='%B %d, %Y'
+    date_format = '%B %d, %Y'
 
     start_date = datetime.datetime(2014, 12, 2)
     end_date = datetime.datetime.today() + datetime.timedelta(days=14)
@@ -55,12 +56,12 @@ class TorontoBillScraper(CanadianScraper):
             title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
 
             b = Bill(
-                    identifier=agenda_item['Item No.'],
-                    title=title,
-                    legislative_session=None,
-                    classification=leg_type,
-                    from_organization={'name': self.jurisdiction.name},
-                    )
+                identifier=agenda_item['Item No.'],
+                title=title,
+                legislative_session=None,
+                classification=leg_type,
+                from_organization={'name': self.jurisdiction.name},
+            )
             b.add_source(agenda_item['url'], note='web')
 
             if primary_sponsor and secondary_sponsor:
@@ -80,8 +81,10 @@ class TorontoBillScraper(CanadianScraper):
                     # we perhaps don't need to add one for each
                     b.add_abstract(version['sections']['Summary'], note='', date=action_date)
 
-                if not version['action']: continue
-                if re.match(r'\d+:\d+ [A|P]M', version['action']): continue
+                if not version['action']:
+                    continue
+                if re.match(r'\d+:\d+ [A|P]M', version['action']):
+                    continue
 
                 action_description = version['action']
                 responsible_org = version['responsible_org']
@@ -99,18 +102,17 @@ class TorontoBillScraper(CanadianScraper):
                         if is_recommendation(version):
                             action_class = 'committee-passage-favorable'
 
-                act = b.add_action(
-                        action_description,
-                        action_date,
-                        organization={'name': responsible_org},
-                        classification=action_class
-                        )
+                b.add_action(
+                    action_description,
+                    action_date,
+                    organization={'name': responsible_org},
+                    classification=action_class
+                )
 
             yield b
-            #history = agenda_item_details['history']
 
     def agendaItems(self, date_from=None, date_to=None):
-        for agenda_item_summary in self.searchAgendaItems(date_from, date_to) :
+        for agenda_item_summary in self.searchAgendaItems(date_from, date_to):
             yield agenda_item_summary
 
     def searchAgendaItems(self, date_from=None, date_to=None):
@@ -122,7 +124,7 @@ class TorontoBillScraper(CanadianScraper):
         for agenda_item_summary in self.parseSearchResults(page):
             yield agenda_item_summary
 
-    def parseSearchResults(self, page) :
+    def parseSearchResults(self, page):
         """Take a page of search results and return a sequence of data
         of tuples about the agenda_item, of the form
 
@@ -130,7 +132,6 @@ class TorontoBillScraper(CanadianScraper):
         ('Document ID', 'Document URL', 'Type', 'Status', 'Introduction Date'
         'Passed Date', 'Main Sponsor', 'Title')
         """
-        table = page.xpath("//table[@id='searchResultsTable']")[0]
         for agenda_item, headers, _ in self.parseDataTable(page):
             id_key = headers[1]
 
@@ -167,7 +168,7 @@ class TorontoBillScraper(CanadianScraper):
             version.update({
                 'responsible_org': org,
                 'date': date,
-                })
+            })
 
             if 'Origin' in version['sections']:
                 origin_text = version['sections']['Origin']
@@ -177,7 +178,7 @@ class TorontoBillScraper(CanadianScraper):
                 intro_version.update({
                     'date': intro_date,
                     'action': 'Introduced',
-                    })
+                })
                 yield intro_version
 
             yield version
@@ -192,33 +193,28 @@ class TorontoBillScraper(CanadianScraper):
         rows = table.xpath(".//tr[@class='hoverOver']")
 
         keys = []
-        for header in headers :
+        for header in headers:
             text_content = header.text_content().replace('&nbsp;', ' ').strip()
-            if text_content :
+            if text_content:
                 keys.append(text_content)
-            else :
+            else:
                 keys.append(header.xpath('.//input')[0].value)
 
         for row in rows:
             try:
-                data = defaultdict(lambda : None)
+                data = defaultdict(lambda: None)
 
                 for key, field in zip(keys, row.xpath("./td")):
                     text_content = self._stringify(field)
 
-                    if field.find('.//a') is not None :
+                    if field.find('.//a') is not None:
                         address = self._get_link_address(field.find('.//a'))
-                        if address :
-                            if key == '' and 'View.ashx?M=IC' in address :
-                                req = self.get(address, verify=False)
-                                value = icalendar.Calendar.from_ical(req.text)
-                                key = 'iCalendar'
-                            else :
-                                value = {'label': text_content, 
-                                         'url': address}
-                        else :
+                        if address:
+                            value = {'label': text_content,
+                                     'url': address}
+                        else:
                             value = text_content
-                    else :
+                    else:
                         value = text_content
 
                     data[key] = value
@@ -235,21 +231,21 @@ class TorontoBillScraper(CanadianScraper):
         url = None
         if 'onclick' in link.attrib:
             onclick = link.attrib['onclick']
-            if (onclick is not None 
-                and onclick.startswith(("radopen('",
+            if (onclick is not None and
+                    onclick.startswith(("radopen('",
                                         "window.open",
                                         "OpenTelerikWindow"))):
                 url = self.BASE_URL + onclick.split("'")[1]
-        elif 'href' in link.attrib : 
+        elif 'href' in link.attrib:
             url = link.attrib['href']
 
         return url
 
-    def _stringify(self, field) :
+    def _stringify(self, field):
         for br in field.xpath("*//br"):
             br.tail = "\n" + br.tail if br.tail else "\n"
         for em in field.xpath("*//em"):
-            if em.text :
+            if em.text:
                 em.text = "--em--" + em.text + "--em--"
         return field.text_content().replace('&nbsp;', ' ').strip()
 
@@ -282,7 +278,7 @@ class TorontoBillScraper(CanadianScraper):
         version.update({
             'type': page.xpath("//table[@class='border'][1]//td[2]")[0].text_content().strip().lower(),
             'action': page.xpath("//table[@class='border'][1]//td[3]")[0].text_content().strip(),
-            })
+        })
 
         wards = page.xpath("//table[@class='border'][1]//td[5]")[0].text_content().strip().lower()
         wards_re = re.compile('ward:(.*)')
@@ -313,10 +309,10 @@ class TorontoBillScraper(CanadianScraper):
     def parseAgendaItemVersionMotions(self, motions_section):
         return motions_section
 
-    def toTime(self, text) :
+    def toTime(self, text):
         time = datetime.datetime.strptime(text, self.date_format)
         time = pytz.timezone(self.TIMEZONE).localize(time)
         return time
 
-    def toDate(self, text) :
+    def toDate(self, text):
         return self.toTime(text).date().isoformat()
