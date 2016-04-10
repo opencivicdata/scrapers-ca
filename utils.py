@@ -136,6 +136,10 @@ class CanadianScraper(Scraper):
         If writing a new scraper, check that extensions are captured.
         """
 
+        if isinstance(node, etree._ElementUnicodeResult):
+            match = re.search(r'(?:\A|\D)(\(?\d{3}\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)', node)
+            if match:
+                return match.group(1)
         match = node.xpath('.//a[contains(@href,"tel:")]')
         if match:
             return match[0].attrib['href'].replace('tel:', '')

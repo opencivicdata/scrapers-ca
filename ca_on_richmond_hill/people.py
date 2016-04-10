@@ -19,7 +19,7 @@ class RichmondHillPersonScraper(CanadianScraper):
             url = councillor.attrib['href']
             page = self.lxmlize(url)
             header = page.xpath('//div[@class="sectionheading"]')[0].text_content()
-            if header == 'Mayor of Richmond Hill':
+            if 'Mayor' in header and 'Deputy' not in header:
                 district = 'Richmond Hill'
                 role = 'Mayor'
             else:
@@ -38,8 +38,8 @@ class RichmondHillPersonScraper(CanadianScraper):
             address = re.findall(r'(?<=Town of Richmond Hill)(.*(?=Telephone:)|(?=Telephone))', info)[0]
             address = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
             # I expected to be able to do '(.*)(?=\sTelephone|Telephone|Fax)', but nope.
-            phone = re.findall(r'(?<=Telephone:) ((.*) (?=Telephone)|(.*)(?=Telephone)|(.*)(?=Fax))', info)[0][0].replace('(', '').replace(') ', '-').replace(', ext. ', ' x')
-            fax = re.findall(r'(?<=Fax:) (.*)(?=E-mail)', info)[0].replace(' ', '').replace('(', '').replace(')', '-')
+            phone = self.get_phone(page.xpath('//text()[contains(., "Telephone")]')[0])
+            fax = self.get_phone(page.xpath('//text()[contains(., "Fax")]')[0])
             email = self.get_email(page)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)

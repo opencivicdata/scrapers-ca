@@ -33,8 +33,10 @@ class StCatharinesPersonScraper(CanadianScraper):
 
                 if councillor.xpath('./following-sibling::p[1]//a'):
                     position = 1
-                else:
+                elif councillor.xpath('./following-sibling::p[2]//a'):
                     position = 2
+                else:
+                    position = 3
                 phone = self.get_phone(councillor.xpath('./following-sibling::p[{}]'.format(position))[0], area_codes=[289, 905])
                 email = self.get_email(councillor.xpath('./following-sibling::p[{}]'.format(position))[0])
                 address = ' '.join(councillor.xpath('./following-sibling::p[{}]/text()'.format(position + 1)))
@@ -48,13 +50,13 @@ class StCatharinesPersonScraper(CanadianScraper):
     def scrape_mayor(self, url):
         mayor_page = self.lxmlize(url)
         mayor_info = mayor_page.xpath('//div[@class="contentArea"]/div[1]')[0]
-        name = mayor_info.xpath('./h1/text()')[0].replace('Mayor', '')
+        name = mayor_info.xpath('./h2/text()')[0].replace('Mayor', '')
 
         p = Person(primary_org='legislature', name=name, district='St. Catharines', role='Mayor')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
 
-        p.image = mayor_info.xpath('./h1/img/@src')[0]
+        p.image = mayor_info.xpath('./h2/img/@src')[0]
 
         phone = mayor_info.xpath('./p[1]/text()')[1]
         address = ' '.join(mayor_info.xpath('./p[2]/text()'))

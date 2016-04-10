@@ -42,13 +42,11 @@ class ReginaPersonScraper(CanadianScraper):
         photo_url = urljoin(url,
                             page.xpath('(//div[@id="contentcontainer"]//img)[1]/@src')[0])
         contact_page = self.lxmlize(MAYOR_CONTACT_URL)
-        email = self.get_email(contact_page)
 
         m = Person(primary_org='legislature', name=name, district='Regina', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         m.add_source(url)
         m.add_source(MAYOR_CONTACT_URL)
-        m.add_contact('email', email)
         m.image = photo_url
 
         return m
