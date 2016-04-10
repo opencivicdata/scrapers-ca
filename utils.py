@@ -278,7 +278,7 @@ class CSVScraper(CanadianScraper):
                 if row.get('source url'):
                     p.add_source(row['source url'])
                 if row.get('website'):
-                    p.add_link(row['website'])
+                    p.add_link(row['website'], note='web site')
                 p.add_contact('email', row['email'])
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')

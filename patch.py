@@ -83,8 +83,8 @@ organization_contact_details['maxItems'] = 0
 organization_links['maxItems'] = 0
 # A person should not have contact details.
 person_contact_details['maxItems'] = 0
-# A person should not have notes on links.
-person_links['items']['properties']['note']['enum'] = ['']
+# A person should only have a link note for the canonical website.
+person_links['items']['properties']['note']['enum'] = ['', 'web site']
 # A person should have, in most cases, at most one non-social media link, and
 # should have at most one link per social media website.
 person_links['maxMatchingItems'] = [
