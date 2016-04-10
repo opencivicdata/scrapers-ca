@@ -171,7 +171,7 @@ class TorontoBillScraper(CanadianScraper):
 
             if 'Origin' in version['sections']:
                 origin_text = version['sections']['Origin']
-                intro_date_re = re.compile('\((.+)\) .+')
+                intro_date_re = re.compile('\((.+?)\) .+')
                 intro_date = re.match(intro_date_re, origin_text).group(1)
                 intro_version = copy(version)
                 intro_version.update({
