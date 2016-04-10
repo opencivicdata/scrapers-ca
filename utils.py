@@ -302,7 +302,14 @@ class CanadianJurisdiction(Jurisdiction):
 
     def __init__(self):
         super(CanadianJurisdiction, self).__init__()
-        for module, name in (('people', 'Person'), ('bills', 'Bill'), ('votes', 'Vote'), ('committees', 'Committee'), ('events-incremental', 'IncrementalEvent')):
+        for module, name in (
+                ('bills', 'Bill'),
+                ('bills-incremental', 'IncrementalBill'),
+                ('committees', 'Committee'),
+                ('events-incremental', 'IncrementalEvent'),
+                ('people', 'Person'),
+                ('votes', 'Vote'),
+        ):
             try:
                 class_name = self.__class__.__name__ + name + 'Scraper'
                 self.scrapers[module] = getattr(__import__(self.__module__ + '.' + module, fromlist=[class_name]), class_name)

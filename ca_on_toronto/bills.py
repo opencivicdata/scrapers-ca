@@ -35,22 +35,18 @@ ACTION_CLASSIFICATION = {
         'Introduced': 'introduction',
         }
 
-class TorontoNewBillScraper(CanadianScraper):
-
-    DEFAULT_START_DATE = datetime.datetime(2016, 2, 22)
+class TorontoBillScraper(CanadianScraper):
     AGENDA_ITEM_SEARCH_URL = 'http://app.toronto.ca/tmmis/findAgendaItem.do?function=doSearch&itemsPerPage=1000&sortBy=meetingDate&sortOrder=A'
     AGENDA_ITEM_URL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
 
     TIMEZONE = 'America/Toronto'
     date_format='%B %d, %Y'
 
-    def scrape(self):
-        today = datetime.datetime.today()
-        delta_days = 7
-        start_date = today - datetime.timedelta(days=delta_days)
-        end_date = today + datetime.timedelta(days=delta_days*2)
+    start_date = datetime.datetime(2014, 12, 2)
+    end_date = datetime.datetime.today() + datetime.timedelta(days=14)
 
-        for agenda_item in self.agendaItems(date_from=start_date, date_to=end_date):
+    def scrape(self):
+        for agenda_item in self.agendaItems(date_from=self.start_date, date_to=self.end_date):
             # TODO: Add agenda_item type to OCD
             leg_type = 'bill'
 
