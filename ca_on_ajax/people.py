@@ -11,7 +11,7 @@ class AjaxPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//ul[@class="subNav top"]/li/ul//li/a')
+        councillors = page.xpath('//ul[@class="subNav top"]/li/ul//li/a[contains(text(), "Councillor")] | //ul[@class="subNav top"]/li/ul//li/a[contains(text(), "Mayor")]')
         for councillor in councillors:
             name = councillor.text_content()
 

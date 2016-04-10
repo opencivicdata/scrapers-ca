@@ -45,10 +45,6 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
 
             p.add_contact('email', email)
 
-            text = row[2].xpath('./text()')
-            if text and text[0].strip():
-                p.add_contact('voice', text[0], 'legislature')
-
             p.add_source(COUNCIL_PAGE)
             p.add_source(PARTY_PAGE)
 
