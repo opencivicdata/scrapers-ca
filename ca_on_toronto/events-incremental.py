@@ -8,11 +8,6 @@ import datetime as dt
 import pytz
 import re
 
-from .helpers import (
-    committees_from_sessions,
-    build_lookup_dict,
-)
-
 from .constants import (
     CALENDAR_DAY_TEMPLATE,
     AGENDA_FULL_STANDARD_TEMPLATE,
@@ -42,7 +37,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
     def __init__(self, jurisdiction, datadir, strict_validation=True, fastmode=False):
         super(TorontoIncrementalEventScraper, self).__init__(jurisdiction, datadir, strict_validation=True, fastmode=False)
         # Used to store mappings of committee names to two-letter codes
-        self.committees_by_name = {}
         self.seen_agenda_items = []
 
     def scrape(self):
@@ -51,11 +45,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         start_date = today - dt.timedelta(days=delta_days)
         end_date = today + dt.timedelta(days=delta_days * 2)
 
-        self.scrape_committee_data()
         yield from self.scrape_events_range(start_date, end_date)
-
-    def scrape_committee_data(self):
-        self.committees_by_name = self.committee_lookup_dict()
 
     def parse_table(self, table_node):
         items = []
@@ -239,16 +229,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
             items.append(dict)
 
         return items
-
-    def committee_lookup_dict(self):
-        # reversed so that most recent first
-        sessions = reversed(self.jurisdiction.legislative_sessions)
-        committee_term_instances = committees_from_sessions(self, sessions)
-        committees_by_name = build_lookup_dict(self, data_list=committee_term_instances, index_key='name')
-        # Manually add our City Council exception.
-        committees_by_name.update({self.jurisdiction.name: [{'code': 'CC'}]})
-
-        return committees_by_name
 
     def full_identifiers(self, meeting_id, is_council=False, url=None):
         if not url:
