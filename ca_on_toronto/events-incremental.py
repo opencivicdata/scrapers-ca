@@ -33,6 +33,9 @@ STATUS_DICT = {
     'In Progress (Public Session)': 'confirmed',
 }
 
+agenda_item_re = re.compile(r'reference = "(?P<identifier>.+?)";')
+address_re = re.compile(r'codeAddress\("\d", ".+?". "(?P<address>.+?)"')
+
 
 class TorontoIncrementalEventScraper(CanadianScraper):
 
@@ -82,9 +85,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
 
         return items
 
-    def extract_events_by_day(self, date):
-        url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month - 1, date.day)
-        page = self.lxmlize(url)
+    def extract_events_by_url(self, calendar_day_url):
+        page = self.lxmlize(calendar_day_url)
 
         tables = page.xpath('//table')
         if not tables:
@@ -115,7 +117,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                 yield start_date + dt.timedelta(n)
 
         for date in daterange(start_date, end_date):
-            events = self.extract_events_by_day(date)
+            calendar_day_url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month - 1, date.day)
+            events = self.extract_events_by_url(calendar_day_url)
             for event in events:
                 tz = pytz.timezone("America/Toronto")
                 time = dt.datetime.strptime(event['time'], '%I:%M %p')
@@ -132,6 +135,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     'meeting_number': event['no'],
                     'tmmis_meeting_id': event['meeting_id'],
                 }
+                e.add_source(calendar_day_url)
                 e.add_participant(
                     name=org_name,
                     type='organization',
@@ -144,9 +148,13 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     return True if event['meeting'] == self.jurisdiction.name else False
 
                 if is_agenda_available(event):
-                    template = AGENDA_FULL_COUNCIL_TEMPLATE if is_council(event) else AGENDA_FULL_STANDARD_TEMPLATE
-                    agenda_url = template.format(event['meeting_id'])
+                    agenda_url_template = AGENDA_FULL_COUNCIL_TEMPLATE if is_council(event) else AGENDA_FULL_STANDARD_TEMPLATE
+                    agenda_url = agenda_url_template.format(event['meeting_id'])
                     full_identifiers = list(self.full_identifiers(event['meeting_id'], is_council(event)))
+
+                    event_map_url_template = 'http://app.toronto.ca/tmmis/getAddressList.do?function=getMeetingAddressList&meetingId={}'
+                    event_map_url = event_map_url_template.format(event['meeting_id'])
+                    addresses_d = self.addressesByAgendaId(event_map_url)
 
                     e.add_source(agenda_url)
                     agenda_items = self.agenda_from_url(agenda_url)
@@ -178,9 +186,14 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                             )
                             b.add_source(agenda_url)
                             b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
-                            b.extras = {
-                                'wards': wards,
-                            }
+                            b.extras['wards'] = wards
+
+                            addresses = addresses_d.get(full_identifier)
+                            if addresses:
+                                b.extras['locations'] = []
+                                for address in addresses:
+                                    location = {'address': {'full_address': address}}
+                                    b.extras['locations'].append(location)
 
                             self.seen_agenda_items.append(full_identifier)
 
@@ -247,3 +260,20 @@ class TorontoIncrementalEventScraper(CanadianScraper):
             link = a.attrib['href']
             full_identifier = parse_qs(urlparse(link).query)['item'][0]
             yield full_identifier
+
+    def addressesByAgendaId(self, meeting_map_url):
+        addresses_d = {}
+
+        page = self.lxmlize(meeting_map_url)
+        script_text = page.xpath('//script[not(@src)]')[0].text_content()
+
+        agenda_item_ids = re.findall(agenda_item_re, script_text)
+        addresses = re.findall(address_re, script_text)
+
+        for id, address in zip(agenda_item_ids, addresses):
+            if not addresses_d.get(id):
+                addresses_d[id] = [address]
+            else:
+                addresses_d[id].append(address)
+
+        return addresses_d
