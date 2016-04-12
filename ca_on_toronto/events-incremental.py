@@ -82,9 +82,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
 
         return items
 
-    def extract_events_by_day(self, date):
-        url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month - 1, date.day)
-        page = self.lxmlize(url)
+    def extract_events_by_url(self, calendar_day_url):
+        page = self.lxmlize(calendar_day_url)
 
         tables = page.xpath('//table')
         if not tables:
@@ -115,7 +114,8 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                 yield start_date + dt.timedelta(n)
 
         for date in daterange(start_date, end_date):
-            events = self.extract_events_by_day(date)
+            calendar_day_url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month - 1, date.day)
+            events = self.extract_events_by_url(calendar_day_url)
             for event in events:
                 tz = pytz.timezone("America/Toronto")
                 time = dt.datetime.strptime(event['time'], '%I:%M %p')
@@ -132,6 +132,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     'meeting_number': event['no'],
                     'tmmis_meeting_id': event['meeting_id'],
                 }
+                e.add_source(calendar_day_url)
                 e.add_participant(
                     name=org_name,
                     type='organization',
