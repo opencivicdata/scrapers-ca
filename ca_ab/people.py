@@ -53,6 +53,8 @@ class AlbertaPersonScraper(CanadianScraper):
             p.add_source(detail_url)
             if mla['Email']:
                 p.add_contact('email', mla['Email'])
+            elif mla['MLA Email']:
+                p.add_contact('email', mla['MLA Email'])
             if mla['Phone Number']:
                 p.add_contact('voice', mla['Phone Number'], 'legislature')
             yield p
