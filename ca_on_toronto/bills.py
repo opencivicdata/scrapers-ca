@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from collections import defaultdict
 from copy import copy
-from pupa.scrape import Bill
+from pupa.scrape import Bill, VoteEvent
 from utils import CanadianScraper
 
 import datetime
@@ -14,6 +14,7 @@ import re
 # TODO: Create ticket to move lxmlize into pupa.scrape.Base
 
 ACTION_CLASSIFICATION = {
+    # Overall actions
     'Adopted': 'passage',
     'Adopted on Consent': 'passage',
     'Amended': 'amendment-amended',
@@ -33,7 +34,54 @@ ACTION_CLASSIFICATION = {
     'Waive Referral': None,
     # Made this one up
     'Introduced': 'introduction',
+    # Motion actions
+    'Add New Business at Committee': 'introduction',
+    'Adopt Item as Amended': 'passage',
+    'Adopt Item': 'passage',
+    'Adopt Minutes': 'passage',
+    'Adopt Order Paper as Amended': 'passage',
+    'Adopt Order Paper': 'passage',
+    'Amend Item (Additional)': 'ammendment-passage',
+    'Amend Item': 'ammendment-passage',
+    'Amend Motion': None,
+    'Amend the Order Paper': None,
+    'Confirm Order': None,
+    'Defer Item Indefinitely': 'deferred',
+    'Defer Item': 'deferred',
+    'End Debate': None,
+    'Extend the Meeting': None,
+    'Introduce Motion without Notice': 'introduction',
+    'Introduce Report': None,
+    'Introduce and Pass Confirmatory Bill': None,
+    'Introduce and Pass General Bills': None,
+    'Meet in Closed Session': None,
+    'Re-open Item': None,
+    'Receive Item': None,
+    'Reconsider Item': None,
+    'Reconsider Vote': None,
+    'Refer Item': 'committee-referral',
+    'Remove from Committee': None,
+    'Waive Notice': None,
+    'Waive Referral': None,
+    'Withdraw a Motion': None,
+    'Withdraw a Motion': None,
+    'Withdraw an Item"': 'withdrawal',
 }
+
+RESULT_MAP = {
+    'Carried': 'pass',
+    'Lost': 'fail',
+    'Lost (tie)': 'fail',
+    'Redundant': 'fail',
+    'Final': 'fail',
+    'Withdrawn': 'fail',
+    'Amended': 'pass',
+    # TODO: Investigate what this motion status means
+    # see: http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getMinutesItemPreview&agendaItemId=63347
+    'Referred': None,
+}
+
+motion_re = re.compile(r'(?:(?P<number>[0-9a-z]+) - )?Motion to (?P<action>.+?) (?:moved by (?:Councillor|(?:Deputy )?Mayor )?(?P<mover>.+?) )?\((?P<result>.{0,10})\)$')
 
 
 class TorontoBillScraper(CanadianScraper):
@@ -43,7 +91,7 @@ class TorontoBillScraper(CanadianScraper):
     TIMEZONE = 'America/Toronto'
     date_format = '%B %d, %Y'
 
-    start_date = datetime.datetime(2014, 12, 2)
+    start_date = datetime.datetime(2014, 12, 1)
     end_date = datetime.datetime.today() + datetime.timedelta(days=14)
 
     def scrape(self):
@@ -78,10 +126,37 @@ class TorontoBillScraper(CanadianScraper):
             for version in agenda_item_versions:
                 action_date = self.toDate(version['date'])
 
-                if 'Summary' in version['sections']:
-                    # TODO: Investigate whether these vary between versions, as
-                    # we perhaps don't need to add one for each
-                    b.add_abstract(version['sections']['Summary'], note='', date=action_date)
+                for title, content in version['sections'].items():
+                    if 'Summary' in title:
+                        # TODO: Investigate whether these vary between versions, as
+                        # we perhaps don't need to add one for each
+                        b.add_abstract(content, note='', date=action_date)
+
+                    if 'Motions' in title:
+                        motions = content
+                        for i, motion in enumerate(motions):
+                            result = RESULT_MAP[motion['result']]
+                            if result:
+                                v = VoteEvent(
+                                        motion_text=motion['title_text'],
+                                        result=result,
+                                        classification=motion['action'],
+                                        start_date=action_date,
+                                        legislative_session=agenda_item['session'],
+                                        )
+                                if motion['mover']:
+                                    v.extras['mover'] = motion['mover']
+                                if motion['body_text']:
+                                    v.extras['body'] = motion['body_text']
+
+                                count = i + 1
+                                identifier = action_date + '.' + '{0:02d}'.format(count)
+                                v.extras['order'] = count
+                                v.identifier = identifier
+
+                                v.set_bill(agenda_item['Item No.'])
+                                v.add_source(version['url'])
+                                yield v
 
                 if not version['action']:
                     continue
@@ -318,17 +393,34 @@ class TorontoBillScraper(CanadianScraper):
         for node in section_nodes:
             section_title = node.find('.//tr[1]/td//font/b').text_content().strip()
             section_content = node.find('.//tr[2]/td')
-            sections[section_title] = section_content.text_content()
+            sections[section_title] = section_content
 
-        if 'Motions' in sections:
-            sections['Motions'] = self.parseAgendaItemVersionMotions(sections['Motions'])
+        for title, content in sections.items():
+            if 'Motions' in title:
+                sections[title] = self.parseAgendaItemVersionMotions(sections[title])
+            else:
+                sections[title] = content.text_content()
 
         version.update({'sections': sections})
 
         return version
 
-    def parseAgendaItemVersionMotions(self, motions_section):
-        return motions_section
+    def parseAgendaItemVersionMotions(self, content_etree):
+        motions = []
+        motion_titles = content_etree.xpath('.//i')
+        motion_bodies = content_etree.xpath('.//div[@class="wep"]')
+        for title, body in zip(motion_titles, motion_bodies):
+            title_text = title.text_content().replace(u'\xa0', ' ').strip()
+            body_text = body.text_content()
+            if 'Motion to' not in title_text:
+                print(title_text)
+                continue
+            motion = re.match(motion_re, title_text).groupdict()
+            motion['title_text'] = title_text
+            motion['body_text'] = body_text
+            motions.append(motion)
+
+        return motions
 
     def toTime(self, text):
         time = datetime.datetime.strptime(text, self.date_format)

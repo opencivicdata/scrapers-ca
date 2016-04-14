@@ -3,4 +3,4 @@ import datetime
 
 
 class TorontoIncrementalBillScraper(TorontoBillScraper):
-    start_date = datetime.datetime.today() - datetime.timedelta(days=7)
+    start_date = datetime.datetime.today() - datetime.timedelta(days=6)
