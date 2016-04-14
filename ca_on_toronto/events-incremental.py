@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper
 
-from pupa.scrape import Bill, Event
+from pupa.scrape import Event
 from urllib.parse import parse_qs, urlparse
 import lxml.html
 import datetime as dt
@@ -14,7 +14,6 @@ from .constants import (
     AGENDA_LIST_STANDARD_TEMPLATE,
     AGENDA_FULL_COUNCIL_TEMPLATE,
     AGENDA_LIST_COUNCIL_TEMPLATE,
-    AGENDA_ITEM_TEMPLATE,
 )
 
 
@@ -158,7 +157,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                             else:
                                 return raw.split(', ')
 
-                        wards = normalize_wards(item['wards'])
                         identifier_regex = re.compile(r'^[0-9]{4}\.([A-Z]{2}[0-9]+\.[0-9]+)$')
                         [full_identifier] = [id for id in full_identifiers if identifier_regex.match(id).group(1) == item['identifier']]
                         a.add_bill(full_identifier)

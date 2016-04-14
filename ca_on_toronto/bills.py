@@ -427,7 +427,7 @@ class TorontoBillScraper(CanadianScraper):
         motions = []
         motion_titles = content_etree.xpath('.//i')
         # TODO: Body not always present, so figure out how to collect it
-        motion_bodies = content_etree.xpath('.//div[@class="wep"]') # NOQA
+        motion_bodies = content_etree.xpath('.//div[@class="wep"]')  # NOQA
         for title in motion_titles:
             title_text = title.text_content().replace(u'\xa0', ' ').strip()
             if 'Motion to' not in title_text:
