@@ -74,7 +74,7 @@ class TorontoBillScraper(CanadianScraper):
             agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
 
             # Use one version's full_text (will be most recent)
-            b.extras['full_text'] = agenda_item_versions[0]['full_text']
+            b.extras['full_text'] = agenda_item_versions[-1]['full_text']
 
             for version in agenda_item_versions:
                 action_date = self.toDate(version['date'])
