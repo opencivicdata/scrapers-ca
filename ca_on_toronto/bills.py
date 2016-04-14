@@ -416,17 +416,17 @@ class TorontoBillScraper(CanadianScraper):
     def parseAgendaItemVersionMotions(self, content_etree):
         motions = []
         motion_titles = content_etree.xpath('.//i')
+        # TODO: Body not always present, so figure out how to collect it
         motion_bodies = content_etree.xpath('.//div[@class="wep"]')
-        for title, body in zip(motion_titles, motion_bodies):
+        for title in motion_titles:
             title_text = title.text_content().replace(u'\xa0', ' ').strip()
-            body_text = body.text_content()
             if 'Motion to' not in title_text:
                 # Outputting non-motion actions for inspection
                 print(title_text)
                 continue
             motion = re.match(motion_re, title_text).groupdict()
             motion['title_text'] = title_text
-            motion['body_text'] = body_text
+            motion['body_text'] = ''
             motions.append(motion)
 
         return motions
