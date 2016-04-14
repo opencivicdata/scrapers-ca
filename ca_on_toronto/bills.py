@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 
 from collections import defaultdict
-from copy import copy
-from pupa.scrape import Bill
+from pupa.scrape import Bill, VoteEvent
 from utils import CanadianScraper
 
 import datetime
@@ -14,6 +13,7 @@ import re
 # TODO: Create ticket to move lxmlize into pupa.scrape.Base
 
 ACTION_CLASSIFICATION = {
+    # Overall actions
     'Adopted': 'passage',
     'Adopted on Consent': 'passage',
     'Amended': 'amendment-amended',
@@ -32,8 +32,55 @@ ACTION_CLASSIFICATION = {
     'Without Recs': None,
     'Waive Referral': None,
     # Made this one up
-    'Introduced': 'introduction',
+    'Filed': 'filing',
+    # Motion actions
+    'Add New Business at Committee': 'introduction',
+    'Adopt Item as Amended': 'passage',
+    'Adopt Item': 'passage',
+    'Adopt Minutes': 'passage',
+    'Adopt Order Paper as Amended': 'passage',
+    'Adopt Order Paper': 'passage',
+    'Amend Item (Additional)': 'amendment-passage',
+    'Amend Item': 'amendment-passage',
+    'Amend Motion': None,
+    'Amend the Order Paper': None,
+    'Confirm Order': None,
+    'Defer Item Indefinitely': 'deferred',
+    'Defer Item': 'deferred',
+    'End Debate': None,
+    'Extend the Meeting': None,
+    'Introduce Motion without Notice': 'introduction',
+    'Introduce Report': None,
+    'Introduce and Pass Confirmatory Bill': None,
+    'Introduce and Pass General Bills': None,
+    'Meet in Closed Session': None,
+    'Re-open Item': None,
+    'Receive Item': None,
+    'Reconsider Item': None,
+    'Reconsider Vote': None,
+    'Refer Item': 'committee-referral',
+    'Remove from Committee': None,
+    'Waive Notice': None,
+    'Waive Referral': None,
+    'Withdraw a Motion': None,
+    'Withdraw an Item': 'withdrawal',
 }
+
+RESULT_MAP = {
+    'Carried': 'pass',
+    'Lost': 'fail',
+    'Lost (tie)': 'fail',
+    'Redundant': 'fail',
+    'Final': 'fail',
+    'Withdrawn': 'fail',
+    'Amended': 'pass',
+    # TODO: Investigate what this motion status means
+    # see: http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function=getMinutesItemPreview&agendaItemId=63347
+    'Referred': None,
+}
+
+motion_re = re.compile(r'(?:(?P<number>[0-9a-z]+) - )?Motion to (?P<action>.+?) (?:moved by (?:Councillor|(?:Deputy )?Mayor )?(?P<mover>.+?) )?\((?P<result>.{0,10})\)$')
+agenda_item_title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
 
 
 class TorontoBillScraper(CanadianScraper):
@@ -43,52 +90,26 @@ class TorontoBillScraper(CanadianScraper):
     TIMEZONE = 'America/Toronto'
     date_format = '%B %d, %Y'
 
-    start_date = datetime.datetime(2014, 12, 2)
+    start_date = datetime.datetime(2014, 12, 1)
     end_date = datetime.datetime.today() + datetime.timedelta(days=14)
 
     def scrape(self):
         for agenda_item in self.agendaItems(date_from=self.start_date, date_to=self.end_date):
-            # TODO: Add agenda_item type to OCD
-            leg_type = 'bill'
+            b = self.createBill(agenda_item)
+            agenda_item_versions = self.agendaItemVersions(agenda_item)
 
-            title = agenda_item['Title'].replace('\n', ' ')
-            title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
-            title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
-
-            b = Bill(
-                identifier=agenda_item['Item No.'],
-                title=title,
-                legislative_session=None,
-                classification=leg_type,
-                from_organization={'name': self.jurisdiction.name},
-            )
-            b.add_source(agenda_item['url'], note='web')
-
-            if primary_sponsor and secondary_sponsor:
-                b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
-                b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
-
-            # TODO: Fake session for now
-            b.legislative_session = '2014-2018'
-
-            agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
-
-            # Use one version's full_text (will be most recent)
-            b.extras['full_text'] = agenda_item_versions[0]['full_text']
+            # Use most recent agenda item version for summary and fulltext
+            recent_version = agenda_item_versions[-1]
+            b.extras['full_text'] = recent_version['full_text']
+            for title, content in recent_version['sections'].items():
+                if 'Summary' in title:
+                    date = self.toDate(recent_version['date'])
+                    b.add_abstract(content, note='', date=date)
 
             for version in agenda_item_versions:
+                # TODO: "Adopted by Consent" agenda items have no motions, so
+                # will need to add these per-version
                 action_date = self.toDate(version['date'])
-
-                if 'Summary' in version['sections']:
-                    # TODO: Investigate whether these vary between versions, as
-                    # we perhaps don't need to add one for each
-                    b.add_abstract(version['sections']['Summary'], note='', date=action_date)
-
-                if not version['action']:
-                    continue
-                if re.match(r'\d+:\d+ [A|P]M', version['action']):
-                    continue
-
                 action_description = version['action']
                 responsible_org = version['responsible_org']
                 action_class = ACTION_CLASSIFICATION.get(version['action'])
@@ -105,14 +126,83 @@ class TorontoBillScraper(CanadianScraper):
                         if is_recommendation(version):
                             action_class = 'committee-passage-favorable'
 
-                b.add_action(
-                    action_description,
-                    action_date,
-                    organization={'name': responsible_org},
-                    classification=action_class
-                )
+                if version['action'] == 'Filed':
+                    action_description = version['action']
+                    action_class = ACTION_CLASSIFICATION.get(version['action'])
+                    b.add_action(
+                        action_description,
+                        action_date,
+                        organization={'name': responsible_org},
+                        classification=action_class
+                    )
+
+                for title, content in version['sections'].items():
+                    if 'Motions' in title:
+                        motions = content
+                        for i, motion in enumerate(motions):
+                            result = RESULT_MAP[motion['result']]
+                            if result:
+                                v = self.createVoteEvent(motion, version)
+                                count = i + 1
+                                v.extras['order'] = count
+
+                                # TODO: Add actions for failures
+                                if result == 'pass':
+                                    action_description = motion['action']
+                                    action_class = ACTION_CLASSIFICATION[motion['action']]
+                                    b.add_action(
+                                        action_description,
+                                        action_date,
+                                        organization={'name': responsible_org},
+                                        classification=action_class
+                                    )
+
+                                yield v
 
             yield b
+
+    def createBill(self, agenda_item):
+        title = agenda_item['Title'].replace('\n', ' ')
+        title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(agenda_item_title_re, title).groups()
+
+        bill = {
+            'identifier': agenda_item['Item No.'],
+            'title': title,
+            'legislative_session': agenda_item['session'],
+            # TODO: Add agenda_item type to OCD
+            'classification': 'bill',
+            'from_organization': {'name': self.jurisdiction.name},
+        }
+
+        b = Bill(**bill)
+        b.add_source(agenda_item['url'], note='web')
+
+        if primary_sponsor and secondary_sponsor:
+            b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
+            b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
+
+        return b
+
+    def createVoteEvent(self, motion, agenda_item_version):
+        version = agenda_item_version
+        date = self.toDate(version['date'])
+        v = VoteEvent(
+            motion_text=motion['title_text'],
+            result=RESULT_MAP[motion['result']],
+            classification=motion['action'],
+            start_date=date,
+            legislative_session=version['session'],
+        )
+
+        if motion['mover']:
+            v.extras['mover'] = motion['mover']
+        if motion['body_text']:
+            v.extras['body'] = motion['body_text']
+
+        v.set_bill(version['bill_identifier'])
+        v.add_source(version['url'])
+
+        return v
 
     def agendaItems(self, date_from=None, date_to=None):
         for agenda_item_summary in self.searchAgendaItems(date_from, date_to):
@@ -123,9 +213,16 @@ class TorontoBillScraper(CanadianScraper):
         Submit a search query on the agenda item search page, and return a list
         of result pages.
         """
-        page = self.lxmlize(self.AGENDA_ITEM_SEARCH_URL + '&fromDate={}&toDate={}'.format(date_from.strftime('%Y-%m-%d'), date_to.strftime('%Y-%m-%d')))
-        for agenda_item_summary in self.parseSearchResults(page):
-            yield agenda_item_summary
+        for session in self.jurisdiction.sessions():
+            search_qs = '&termId={}'.format(session['termId'])
+
+            if date_from and date_to:
+                search_qs += '&fromDate={}&toDate={}'.format(date_from.strftime('%Y-%m-%d'), date_to.strftime('%Y-%m-%d'))
+
+            page = self.lxmlize(self.AGENDA_ITEM_SEARCH_URL + search_qs)
+            for agenda_item_summary in self.parseSearchResults(page):
+                agenda_item_summary['session'] = session['term_name']
+                yield agenda_item_summary
 
     def parseSearchResults(self, page):
         """Take a page of search results and return a sequence of data
@@ -146,10 +243,12 @@ class TorontoBillScraper(CanadianScraper):
 
             yield agenda_item
 
-    def agendaItemVersions(self, agenda_item_url):
-        page = self.lxmlize(agenda_item_url)
+    def agendaItemVersions(self, agenda_item):
+        page = self.lxmlize(agenda_item['url'])
         versions = []
         for version in self.parseAgendaItemVersions(page):
+            version['bill_identifier'] = agenda_item['Item No.']
+            version['session'] = agenda_item['session']
             versions.append(version)
 
         return versions
@@ -160,8 +259,12 @@ class TorontoBillScraper(CanadianScraper):
         function_qs = re.findall(r'var f = "(.*)";', script_text)
         agenda_item_id_qs = re.findall(r'agendaItemId:"(.*)"', script_text)
         url_template = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function={}&agendaItemId={}'
-        for i, f, id in sorted(zip(index_qs, function_qs, agenda_item_id_qs), key=lambda tup: tup[2]):
-            agenda_item_version_url = url_template.format(f, id)
+        for i, func, id in sorted(zip(index_qs, function_qs, agenda_item_id_qs), key=lambda tup: tup[2]):
+            # Decision document only rarely has motion breakdown.
+            if func == 'getDecisionDocumentItemPreview':
+                func = 'getMinutesItemPreview'
+
+            agenda_item_version_url = url_template.format(func, id)
             version = self.agendaItemVersion(agenda_item_version_url)
 
             xpr = '//div[@id="header{}"]'.format(i)
@@ -171,18 +274,21 @@ class TorontoBillScraper(CanadianScraper):
             version.update({
                 'responsible_org': org,
                 'date': date,
+                'url': agenda_item_version_url,
             })
 
             if 'Origin' in version['sections']:
                 origin_text = version['sections']['Origin']
-                intro_date_re = re.compile('\((.+?)\) .+')
-                intro_date = re.match(intro_date_re, origin_text).group(1)
-                intro_version = copy(version)
-                intro_version.update({
-                    'date': intro_date,
-                    'action': 'Introduced',
+                filing_date_re = re.compile('\((.+?)\) .+')
+                filing_date = re.match(filing_date_re, origin_text).group(1)
+                filing_version = {}
+                filing_version.update({
+                    'date': filing_date,
+                    'action': 'Filed',
+                    'sections': {},
+                    'responsible_org': org,
                 })
-                yield intro_version
+                yield filing_version
 
             yield version
 
@@ -296,22 +402,44 @@ class TorontoBillScraper(CanadianScraper):
 
         version.update({'wards': wards})
 
+        header_elem = page.xpath("//table[@class='border']")[0]
+        page.remove(header_elem)
+        version['full_text'] = etree.tostring(page, pretty_print=True).decode()
+
         section_nodes = page.xpath("//table[@width=620 and .//font[@face='Arial' and @size=3] and .//tr[3]]")
         sections = {}
         for node in section_nodes:
             section_title = node.find('.//tr[1]/td//font/b').text_content().strip()
             section_content = node.find('.//tr[2]/td')
-            sections[section_title] = section_content.text_content()
+            sections[section_title] = section_content
 
-        if 'Motions' in sections:
-            sections['Motions'] = self.parseAgendaItemVersionMotions(sections['Motions'])
+        for title, content in sections.items():
+            if 'Motions' in title:
+                sections[title] = self.parseAgendaItemVersionMotions(sections[title])
+            else:
+                sections[title] = content.text_content()
 
         version.update({'sections': sections})
 
         return version
 
-    def parseAgendaItemVersionMotions(self, motions_section):
-        return motions_section
+    def parseAgendaItemVersionMotions(self, content_etree):
+        motions = []
+        motion_titles = content_etree.xpath('.//i')
+        # TODO: Body not always present, so figure out how to collect it
+        motion_bodies = content_etree.xpath('.//div[@class="wep"]')  # NOQA
+        for title in motion_titles:
+            title_text = title.text_content().replace(u'\xa0', ' ').strip()
+            if 'Motion to' not in title_text:
+                # Outputting non-motion actions for inspection
+                print(title_text)
+                continue
+            motion = re.match(motion_re, title_text).groupdict()
+            motion['title_text'] = title_text
+            motion['body_text'] = ''
+            motions.append(motion)
+
+        return motions
 
     def toTime(self, text):
         time = datetime.datetime.strptime(text, self.date_format)

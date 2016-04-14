@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper
 
-from pupa.scrape import Bill, Event
+from pupa.scrape import Event
 from urllib.parse import parse_qs, urlparse
 import lxml.html
 import datetime as dt
@@ -14,7 +14,6 @@ from .constants import (
     AGENDA_LIST_STANDARD_TEMPLATE,
     AGENDA_FULL_COUNCIL_TEMPLATE,
     AGENDA_LIST_COUNCIL_TEMPLATE,
-    AGENDA_ITEM_TEMPLATE,
 )
 
 
@@ -142,10 +141,6 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                     agenda_url = agenda_url_template.format(event['meeting_id'])
                     full_identifiers = list(self.full_identifiers(event['meeting_id'], is_council(event)))
 
-                    event_map_url_template = 'http://app.toronto.ca/tmmis/getAddressList.do?function=getMeetingAddressList&meetingId={}'
-                    event_map_url = event_map_url_template.format(event['meeting_id'])
-                    addresses_d = self.addressesByAgendaId(event_map_url)
-
                     e.add_source(agenda_url)
                     agenda_items = self.agenda_from_url(agenda_url)
                     for i, item in enumerate(agenda_items):
@@ -162,32 +157,9 @@ class TorontoIncrementalEventScraper(CanadianScraper):
                             else:
                                 return raw.split(', ')
 
-                        wards = normalize_wards(item['wards'])
                         identifier_regex = re.compile(r'^[0-9]{4}\.([A-Z]{2}[0-9]+\.[0-9]+)$')
                         [full_identifier] = [id for id in full_identifiers if identifier_regex.match(id).group(1) == item['identifier']]
                         a.add_bill(full_identifier)
-                        if full_identifier not in self.seen_agenda_items:
-                            b = Bill(
-                                # TODO: Fix this hardcode
-                                legislative_session='2014-2018',
-                                identifier=full_identifier,
-                                title=item['title'],
-                                from_organization={'name': self.jurisdiction.name},
-                            )
-                            b.add_source(agenda_url)
-                            b.add_document_link(note='canonical', media_type='text/html', url=AGENDA_ITEM_TEMPLATE.format(full_identifier))
-                            b.extras['wards'] = wards
-
-                            addresses = addresses_d.get(full_identifier)
-                            if addresses:
-                                b.extras['locations'] = []
-                                for address in addresses:
-                                    location = {'address': {'full_address': address}}
-                                    b.extras['locations'].append(location)
-
-                            self.seen_agenda_items.append(full_identifier)
-
-                            yield b
 
                 yield e
 
@@ -241,6 +213,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
             full_identifier = parse_qs(urlparse(link).query)['item'][0]
             yield full_identifier
 
+    # TODO: Figure out how to get addresses back into bills
     def addressesByAgendaId(self, meeting_map_url):
         addresses_d = {}
 
