@@ -166,8 +166,12 @@ class TorontoBillScraper(CanadianScraper):
         function_qs = re.findall(r'var f = "(.*)";', script_text)
         agenda_item_id_qs = re.findall(r'agendaItemId:"(.*)"', script_text)
         url_template = 'http://app.toronto.ca/tmmis/viewAgendaItemDetails.do?function={}&agendaItemId={}'
-        for i, f, id in sorted(zip(index_qs, function_qs, agenda_item_id_qs), key=lambda tup: tup[2]):
-            agenda_item_version_url = url_template.format(f, id)
+        for i, func, id in sorted(zip(index_qs, function_qs, agenda_item_id_qs), key=lambda tup: tup[2]):
+            # Decision document only rarely has motion breakdown.
+            if func == 'getDecisionDocumentItemPreview':
+                func = 'getMinutesItemPreview'
+
+            agenda_item_version_url = url_template.format(func, id)
             version = self.agendaItemVersion(agenda_item_version_url)
 
             xpr = '//div[@id="header{}"]'.format(i)
@@ -177,6 +181,7 @@ class TorontoBillScraper(CanadianScraper):
             version.update({
                 'responsible_org': org,
                 'date': date,
+                'url': agenda_item_version_url,
             })
 
             if 'Origin' in version['sections']:
