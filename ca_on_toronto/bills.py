@@ -126,6 +126,16 @@ class TorontoBillScraper(CanadianScraper):
                         if is_recommendation(version):
                             action_class = 'committee-passage-favorable'
 
+                if version['action'] == 'Introduced':
+                    action_description = version['action']
+                    action_class = ACTION_CLASSIFICATION.get(version['action'])
+                    b.add_action(
+                        action_description,
+                        action_date,
+                        organization={'name': responsible_org},
+                        classification=action_class
+                    )
+
                 for title, content in version['sections'].items():
                     if 'Motions' in title:
                         motions = content
