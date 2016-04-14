@@ -55,21 +55,20 @@ class TorontoBillScraper(CanadianScraper):
             title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
             title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
 
-            b = Bill(
-                identifier=agenda_item['Item No.'],
-                title=title,
-                legislative_session=None,
-                classification=leg_type,
-                from_organization={'name': self.jurisdiction.name},
-            )
+            bill = {
+                    'identifier': agenda_item['Item No.'],
+                    'title': title,
+                    'legislative_session': agenda_item['session'],
+                    'classification': 'bill',
+                    'from_organization': {'name': self.jurisdiction.name},
+                    }
+
+            b = Bill(**bill)
             b.add_source(agenda_item['url'], note='web')
 
             if primary_sponsor and secondary_sponsor:
                 b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
                 b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
-
-            # TODO: Fake session for now
-            b.legislative_session = '2014-2018'
 
             agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
 
@@ -123,9 +122,16 @@ class TorontoBillScraper(CanadianScraper):
         Submit a search query on the agenda item search page, and return a list
         of result pages.
         """
-        page = self.lxmlize(self.AGENDA_ITEM_SEARCH_URL + '&fromDate={}&toDate={}'.format(date_from.strftime('%Y-%m-%d'), date_to.strftime('%Y-%m-%d')))
-        for agenda_item_summary in self.parseSearchResults(page):
-            yield agenda_item_summary
+        for session in self.jurisdiction.sessions():
+            search_qs = '&termId={}'.format(session['termId'])
+
+            if date_from and date_to:
+                search_qs += '&fromDate={}&toDate={}'.format(date_from.strftime('%Y-%m-%d'), date_to.strftime('%Y-%m-%d'))
+
+            page = self.lxmlize(self.AGENDA_ITEM_SEARCH_URL + search_qs)
+            for agenda_item_summary in self.parseSearchResults(page):
+                agenda_item_summary['session'] = session['term_name']
+                yield agenda_item_summary
 
     def parseSearchResults(self, page):
         """Take a page of search results and return a sequence of data
