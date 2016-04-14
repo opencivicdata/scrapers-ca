@@ -309,6 +309,10 @@ class TorontoBillScraper(CanadianScraper):
 
         version.update({'wards': wards})
 
+        header_elem = page.xpath("//table[@class='border']")[0]
+        page.remove(header_elem)
+        version['full_text'] = etree.tostring(page, pretty_print=True).decode()
+
         section_nodes = page.xpath("//table[@width=620 and .//font[@face='Arial' and @size=3] and .//tr[3]]")
         sections = {}
         for node in section_nodes:
