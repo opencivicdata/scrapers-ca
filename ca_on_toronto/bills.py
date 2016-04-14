@@ -118,7 +118,7 @@ class TorontoBillScraper(CanadianScraper):
                 b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
                 b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
 
-            agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
+            agenda_item_versions = self.agendaItemVersions(agenda_item)
 
             # Use most recent agenda item version for summary and fulltext
             recent_version = agenda_item_versions[-1]
@@ -137,25 +137,10 @@ class TorontoBillScraper(CanadianScraper):
                         for i, motion in enumerate(motions):
                             result = RESULT_MAP[motion['result']]
                             if result:
-                                v = VoteEvent(
-                                        motion_text=motion['title_text'],
-                                        result=result,
-                                        classification=motion['action'],
-                                        start_date=action_date,
-                                        legislative_session=agenda_item['session'],
-                                        )
-                                if motion['mover']:
-                                    v.extras['mover'] = motion['mover']
-                                if motion['body_text']:
-                                    v.extras['body'] = motion['body_text']
-
+                                v = self.create_vote_event(motion, version)
                                 count = i + 1
-                                identifier = action_date + '.' + '{0:02d}'.format(count)
                                 v.extras['order'] = count
-                                v.identifier = identifier
 
-                                v.set_bill(agenda_item['Item No.'])
-                                v.add_source(version['url'])
                                 yield v
 
                 if not version['action']:
@@ -187,6 +172,27 @@ class TorontoBillScraper(CanadianScraper):
                 )
 
             yield b
+
+    def create_vote_event(self, motion, agenda_item_version):
+        version = agenda_item_version
+        date = self.toDate(version['date'])
+        v = VoteEvent(
+                motion_text=motion['title_text'],
+                result=RESULT_MAP[motion['result']],
+                classification=motion['action'],
+                start_date=date,
+                legislative_session=version['session'],
+                )
+
+        if motion['mover']:
+            v.extras['mover'] = motion['mover']
+        if motion['body_text']:
+            v.extras['body'] = motion['body_text']
+
+        v.set_bill(version['bill_identifier'])
+        v.add_source(version['url'])
+
+        return v
 
     def agendaItems(self, date_from=None, date_to=None):
         for agenda_item_summary in self.searchAgendaItems(date_from, date_to):
@@ -227,10 +233,12 @@ class TorontoBillScraper(CanadianScraper):
 
             yield agenda_item
 
-    def agendaItemVersions(self, agenda_item_url):
-        page = self.lxmlize(agenda_item_url)
+    def agendaItemVersions(self, agenda_item):
+        page = self.lxmlize(agenda_item['url'])
         versions = []
         for version in self.parseAgendaItemVersions(page):
+            version['bill_identifier'] = agenda_item['Item No.']
+            version['session'] = agenda_item['session']
             versions.append(version)
 
         return versions
