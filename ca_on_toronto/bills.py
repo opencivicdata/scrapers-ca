@@ -183,10 +183,12 @@ class TorontoBillScraper(CanadianScraper):
                 origin_text = version['sections']['Origin']
                 intro_date_re = re.compile('\((.+?)\) .+')
                 intro_date = re.match(intro_date_re, origin_text).group(1)
-                intro_version = copy(version)
+                intro_version = {}
                 intro_version.update({
                     'date': intro_date,
                     'action': 'Introduced',
+                    'sections': {},
+                    'responsible_org': org,
                 })
                 yield intro_version
 
