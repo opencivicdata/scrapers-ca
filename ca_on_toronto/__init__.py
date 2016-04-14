@@ -20,12 +20,12 @@ class Toronto(TorontoJurisdiction):
         # {'identifier': '1998-2000'},
         # {'identifier': '2000-2003'},
         # {'identifier': '2003-2006'},
-        self.legislative_sessions = [self.leg_session(session) for session in self.sessions()]
+        self.legislative_sessions = [self.legislative_session(session) for session in self.sessions()]
 
     def get_session_list(self):
         return [session['term_name'] for session in self.sessions()]
 
-    def leg_session(self, session):
+    def legislative_session(self, session):
         leg_session = {}
         start_year, end_year = session['term_name'].split('-')
         leg_session['identifier'] = session['term_name']
