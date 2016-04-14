@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from collections import defaultdict
-from copy import copy
 from pupa.scrape import Bill, VoteEvent
 from utils import CanadianScraper
 
@@ -41,8 +40,8 @@ ACTION_CLASSIFICATION = {
     'Adopt Minutes': 'passage',
     'Adopt Order Paper as Amended': 'passage',
     'Adopt Order Paper': 'passage',
-    'Amend Item (Additional)': 'ammendment-passage',
-    'Amend Item': 'ammendment-passage',
+    'Amend Item (Additional)': 'amendment-passage',
+    'Amend Item': 'amendment-passage',
     'Amend Motion': None,
     'Amend the Order Paper': None,
     'Confirm Order': None,
@@ -64,8 +63,7 @@ ACTION_CLASSIFICATION = {
     'Waive Notice': None,
     'Waive Referral': None,
     'Withdraw a Motion': None,
-    'Withdraw a Motion': None,
-    'Withdraw an Item"': 'withdrawal',
+    'Withdraw an Item': 'withdrawal',
 }
 
 RESULT_MAP = {
@@ -158,13 +156,13 @@ class TorontoBillScraper(CanadianScraper):
         title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(agenda_item_title_re, title).groups()
 
         bill = {
-                'identifier': agenda_item['Item No.'],
-                'title': title,
-                'legislative_session': agenda_item['session'],
-                # TODO: Add agenda_item type to OCD
-                'classification': 'bill',
-                'from_organization': {'name': self.jurisdiction.name},
-                }
+            'identifier': agenda_item['Item No.'],
+            'title': title,
+            'legislative_session': agenda_item['session'],
+            # TODO: Add agenda_item type to OCD
+            'classification': 'bill',
+            'from_organization': {'name': self.jurisdiction.name},
+        }
 
         b = Bill(**bill)
         b.add_source(agenda_item['url'], note='web')
@@ -179,12 +177,12 @@ class TorontoBillScraper(CanadianScraper):
         version = agenda_item_version
         date = self.toDate(version['date'])
         v = VoteEvent(
-                motion_text=motion['title_text'],
-                result=RESULT_MAP[motion['result']],
-                classification=motion['action'],
-                start_date=date,
-                legislative_session=version['session'],
-                )
+            motion_text=motion['title_text'],
+            result=RESULT_MAP[motion['result']],
+            classification=motion['action'],
+            start_date=date,
+            legislative_session=version['session'],
+        )
 
         if motion['mover']:
             v.extras['mover'] = motion['mover']
@@ -423,6 +421,7 @@ class TorontoBillScraper(CanadianScraper):
             title_text = title.text_content().replace(u'\xa0', ' ').strip()
             body_text = body.text_content()
             if 'Motion to' not in title_text:
+                # Outputting non-motion actions for inspection
                 print(title_text)
                 continue
             motion = re.match(motion_re, title_text).groupdict()
