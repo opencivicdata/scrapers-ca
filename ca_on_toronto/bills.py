@@ -120,18 +120,18 @@ class TorontoBillScraper(CanadianScraper):
 
             agenda_item_versions = self.agendaItemVersions(agenda_item['url'])
 
-            # Use one version's full_text (will be most recent)
-            b.extras['full_text'] = agenda_item_versions[-1]['full_text']
+            # Use most recent agenda item version for summary and fulltext
+            recent_version = agenda_item_versions[-1]
+            b.extras['full_text'] = recent_version['full_text']
+            for title, content in recent_version['sections'].items():
+                if 'Summary' in title:
+                    date = self.toDate(recent_version['date'])
+                    b.add_abstract(content, note='', date=date)
 
             for version in agenda_item_versions:
                 action_date = self.toDate(version['date'])
 
                 for title, content in version['sections'].items():
-                    if 'Summary' in title:
-                        # TODO: Investigate whether these vary between versions, as
-                        # we perhaps don't need to add one for each
-                        b.add_abstract(content, note='', date=action_date)
-
                     if 'Motions' in title:
                         motions = content
                         for i, motion in enumerate(motions):
