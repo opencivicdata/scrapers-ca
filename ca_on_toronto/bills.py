@@ -32,7 +32,7 @@ ACTION_CLASSIFICATION = {
     'Without Recs': None,
     'Waive Referral': None,
     # Made this one up
-    'Introduced': 'introduction',
+    'Filed': 'filing',
     # Motion actions
     'Add New Business at Committee': 'introduction',
     'Adopt Item as Amended': 'passage',
@@ -126,7 +126,7 @@ class TorontoBillScraper(CanadianScraper):
                         if is_recommendation(version):
                             action_class = 'committee-passage-favorable'
 
-                if version['action'] == 'Introduced':
+                if version['action'] == 'Filed':
                     action_description = version['action']
                     action_class = ACTION_CLASSIFICATION.get(version['action'])
                     b.add_action(
@@ -279,16 +279,16 @@ class TorontoBillScraper(CanadianScraper):
 
             if 'Origin' in version['sections']:
                 origin_text = version['sections']['Origin']
-                intro_date_re = re.compile('\((.+?)\) .+')
-                intro_date = re.match(intro_date_re, origin_text).group(1)
-                intro_version = {}
-                intro_version.update({
-                    'date': intro_date,
-                    'action': 'Introduced',
+                filing_date_re = re.compile('\((.+?)\) .+')
+                filing_date = re.match(filing_date_re, origin_text).group(1)
+                filing_version = {}
+                filing_version.update({
+                    'date': filing_date,
+                    'action': 'Filed',
                     'sections': {},
                     'responsible_org': org,
                 })
-                yield intro_version
+                yield filing_version
 
             yield version
 
