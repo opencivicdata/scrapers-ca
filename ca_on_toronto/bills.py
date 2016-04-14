@@ -82,6 +82,7 @@ RESULT_MAP = {
 }
 
 motion_re = re.compile(r'(?:(?P<number>[0-9a-z]+) - )?Motion to (?P<action>.+?) (?:moved by (?:Councillor|(?:Deputy )?Mayor )?(?P<mover>.+?) )?\((?P<result>.{0,10})\)$')
+agenda_item_title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
 
 
 class TorontoBillScraper(CanadianScraper):
@@ -96,28 +97,7 @@ class TorontoBillScraper(CanadianScraper):
 
     def scrape(self):
         for agenda_item in self.agendaItems(date_from=self.start_date, date_to=self.end_date):
-            # TODO: Add agenda_item type to OCD
-            leg_type = 'bill'
-
-            title = agenda_item['Title'].replace('\n', ' ')
-            title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
-            title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(title_re, title).groups()
-
-            bill = {
-                    'identifier': agenda_item['Item No.'],
-                    'title': title,
-                    'legislative_session': agenda_item['session'],
-                    'classification': 'bill',
-                    'from_organization': {'name': self.jurisdiction.name},
-                    }
-
-            b = Bill(**bill)
-            b.add_source(agenda_item['url'], note='web')
-
-            if primary_sponsor and secondary_sponsor:
-                b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
-                b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
-
+            b = self.createBill(agenda_item)
             agenda_item_versions = self.agendaItemVersions(agenda_item)
 
             # Use most recent agenda item version for summary and fulltext
@@ -137,7 +117,7 @@ class TorontoBillScraper(CanadianScraper):
                         for i, motion in enumerate(motions):
                             result = RESULT_MAP[motion['result']]
                             if result:
-                                v = self.create_vote_event(motion, version)
+                                v = self.createVoteEvent(motion, version)
                                 count = i + 1
                                 v.extras['order'] = count
 
@@ -173,7 +153,29 @@ class TorontoBillScraper(CanadianScraper):
 
             yield b
 
-    def create_vote_event(self, motion, agenda_item_version):
+    def createBill(self, agenda_item):
+        title = agenda_item['Title'].replace('\n', ' ')
+        title, primary_role, primary_sponsor, secondary_role, secondary_sponsor = re.match(agenda_item_title_re, title).groups()
+
+        bill = {
+                'identifier': agenda_item['Item No.'],
+                'title': title,
+                'legislative_session': agenda_item['session'],
+                # TODO: Add agenda_item type to OCD
+                'classification': 'bill',
+                'from_organization': {'name': self.jurisdiction.name},
+                }
+
+        b = Bill(**bill)
+        b.add_source(agenda_item['url'], note='web')
+
+        if primary_sponsor and secondary_sponsor:
+            b.add_sponsorship(primary_sponsor, 'mover', 'person', True)
+            b.add_sponsorship(secondary_sponsor, 'seconder', 'person', False)
+
+        return b
+
+    def createVoteEvent(self, motion, agenda_item_version):
         version = agenda_item_version
         date = self.toDate(version['date'])
         v = VoteEvent(
