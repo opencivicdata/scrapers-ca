@@ -109,25 +109,9 @@ class TorontoBillScraper(CanadianScraper):
                     b.add_abstract(content, note='', date=date)
 
             for version in agenda_item_versions:
+                # TODO: "Adopted by Consent" agenda items have no motions, so
+                # will need to add these per-version
                 action_date = self.toDate(version['date'])
-
-                for title, content in version['sections'].items():
-                    if 'Motions' in title:
-                        motions = content
-                        for i, motion in enumerate(motions):
-                            result = RESULT_MAP[motion['result']]
-                            if result:
-                                v = self.createVoteEvent(motion, version)
-                                count = i + 1
-                                v.extras['order'] = count
-
-                                yield v
-
-                if not version['action']:
-                    continue
-                if re.match(r'\d+:\d+ [A|P]M', version['action']):
-                    continue
-
                 action_description = version['action']
                 responsible_org = version['responsible_org']
                 action_class = ACTION_CLASSIFICATION.get(version['action'])
@@ -144,12 +128,28 @@ class TorontoBillScraper(CanadianScraper):
                         if is_recommendation(version):
                             action_class = 'committee-passage-favorable'
 
-                b.add_action(
-                    action_description,
-                    action_date,
-                    organization={'name': responsible_org},
-                    classification=action_class
-                )
+                for title, content in version['sections'].items():
+                    if 'Motions' in title:
+                        motions = content
+                        for i, motion in enumerate(motions):
+                            result = RESULT_MAP[motion['result']]
+                            if result:
+                                v = self.createVoteEvent(motion, version)
+                                count = i + 1
+                                v.extras['order'] = count
+
+                                # TODO: Add actions for failures
+                                if result == 'pass':
+                                    action_description = motion['action']
+                                    action_class = ACTION_CLASSIFICATION[motion['action']]
+                                    b.add_action(
+                                        action_description,
+                                        action_date,
+                                        organization={'name': responsible_org},
+                                        classification=action_class
+                                    )
+
+                                yield v
 
             yield b
 
