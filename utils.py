@@ -372,6 +372,7 @@ class CanadianPerson(Person):
         super(CanadianPerson, self).__setattr__(name, value)
 
     def add_link(self, url, *, note=''):
+        url = url.strip()
         if url.startswith('www.'):
             url = 'http://{}'.format(url)
         if re.match(r'\A@[A-Za-z]+\Z', url):
