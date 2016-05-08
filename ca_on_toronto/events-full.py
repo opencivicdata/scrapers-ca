@@ -67,6 +67,8 @@ class TorontoFullEventScraper(CanadianScraper):
                 name = row[0]
                 when = row[2]
                 when = dt.datetime.strptime(when, "%Y-%m-%d")
+                time = row[3]
+                time = dt.datetime.strptime(time, "%I:%M %p")
                 location = row[5]
 
                 if name != committee:
@@ -74,12 +76,16 @@ class TorontoFullEventScraper(CanadianScraper):
                     agenda_items = self.find_items(committee)
 
                 tz = pytz.timezone("America/Toronto")
+                start = tz.localize(when.replace(hour=time.hour, minute=time.minute))
 
-                e = Event(name=name,
-                                    start_time=tz.localize(when),
-                                    location_name=location,
-                                    timezone=tz.zone,
-                                    )
+                normalized_name = self.jurisdiction.name if name == 'City Council' else name
+
+                e = Event(
+                    name=normalized_name,
+                    start_time=start,
+                    location_name=location,
+                    timezone=tz.zone,
+                )
 
                 attendees = self.find_attendees(tmpdir, row)
                 if len(attendees) == 0:
@@ -105,7 +111,6 @@ class TorontoFullEventScraper(CanadianScraper):
         shutil.rmtree(tmpdir)
         os.remove('meetings.csv')
 
-
     def find_attendees(self, directory, event):
         # TODO
         # go through all csv files and find members that attended the event
@@ -122,7 +127,6 @@ class TorontoFullEventScraper(CanadianScraper):
                         if (row[0] == event[0]) and (row[1] == event[1]) and (row[5] == "Y"):
                             attendees.append(name)
         return set(attendees)
-
 
     def find_items(self, committee):
 
