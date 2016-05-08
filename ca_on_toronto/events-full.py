@@ -85,6 +85,7 @@ class TorontoFullEventScraper(CanadianScraper):
                     start_time=start,
                     location_name=location,
                     timezone=tz.zone,
+                    status=confirmedOrPassed(start),
                 )
 
                 attendees = self.find_attendees(tmpdir, row)
@@ -216,3 +217,11 @@ class TorontoFullEventScraper(CanadianScraper):
                     notes = ''
 
         return agenda_items
+
+def confirmedOrPassed(when) :
+    if dt.datetime.utcnow().replace(tzinfo = pytz.utc) < when :
+        status = 'confirmed'
+    else :
+        status = 'passed'
+
+    return status
