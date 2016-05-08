@@ -310,6 +310,7 @@ class CanadianJurisdiction(Jurisdiction):
                 ('bills', 'Bill'),
                 ('bills-incremental', 'IncrementalBill'),
                 ('committees', 'Committee'),
+                ('events-full', 'FullEvent'),
                 ('events-incremental', 'IncrementalEvent'),
                 ('people', 'Person'),
                 ('votes', 'Vote'),
