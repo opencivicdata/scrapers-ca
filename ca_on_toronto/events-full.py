@@ -218,10 +218,11 @@ class TorontoFullEventScraper(CanadianScraper):
 
         return agenda_items
 
-def confirmedOrPassed(when) :
-    if dt.datetime.utcnow().replace(tzinfo = pytz.utc) < when :
+
+def confirmedOrPassed(when):
+    if dt.datetime.utcnow().replace(tzinfo=pytz.utc) < when:
         status = 'confirmed'
-    else :
+    else:
         status = 'passed'
 
     return status
