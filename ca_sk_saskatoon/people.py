@@ -20,6 +20,9 @@ class SaskatoonPersonScraper(CanadianScraper):
             district = page.xpath('//div[@id="main-content"]/h1/text()')[0]
             name = page.xpath('//div[@id="main-content"]/h2/text()')[0]
 
+            if name == 'Vacant':
+                continue
+
             p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
