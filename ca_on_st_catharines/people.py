@@ -7,6 +7,7 @@ COUNCIL_PAGE = 'http://www.stcatharines.ca/en/governin/MayorCouncil.asp'
 class StCatharinesPersonScraper(CanadianScraper):
 
     def scrape(self):
+        # TODO Use https://niagaraopendata.ca/dataset/st-catharines-councilors
         page = self.lxmlize(COUNCIL_PAGE)
 
         council = page.xpath('//ul[@id="subNav"]/li[@class="withChildren"]/ul/li/a')
