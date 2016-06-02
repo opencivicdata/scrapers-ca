@@ -9,7 +9,7 @@ def get_party(abbreviation):
         'NDP': 'New Democratic Party of Manitoba',
         'PC': 'Progressive Conservative Party of Manitoba',
         'L': 'Manitoba Liberal Party',
-        'Liberal': 'Manitoba Liberal Party',  # needed for a formatting error
+        'LIB': 'Manitoba Liberal Party',
         'IND': 'Independent',
     }[abbreviation]
 
@@ -17,7 +17,7 @@ def get_party(abbreviation):
 class ManitobaPersonScraper(CanadianScraper):
 
     def scrape(self):
-        member_page = self.lxmlize(COUNCIL_PAGE)
+        member_page = self.lxmlize(COUNCIL_PAGE, encoding='utf-8')
         table = member_page.xpath('//table')[0]
         rows = table.cssselect('tr')[1:]
         for row in rows:
