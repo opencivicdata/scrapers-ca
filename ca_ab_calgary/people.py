@@ -18,7 +18,7 @@ class CalgaryPersonScraper(CanadianScraper):
             ward = ' '.join(node.xpath('.//strong//text()')[0].split()[:-1])
             yield self.councillor_data(url, name, ward)
 
-        mayor_node = page.xpath('//div[contains(@class, "cocis-image-panel")]')[0]
+        # mayor_node = page.xpath('//div[contains(@class, "cocis-image-panel")]')[0]
         photo_url = urljoin(COUNCIL_PAGE, mayor_node.xpath('.//img/@src')[0])
         name = mayor_node.xpath('.//a//text()')[0]
         mayor_page = self.lxmlize(MAYOR_PAGE)
