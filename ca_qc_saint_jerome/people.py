@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.ville.saint-jerome.qc.ca/pages/aSavoir/conseilMunicipal.aspx'
+COUNCIL_PAGE = 'http://www.vsj.ca/fr/membres-du-conseil.aspx'
 
 
 class SaintJeromePersonScraper(CanadianScraper):
@@ -13,16 +13,19 @@ class SaintJeromePersonScraper(CanadianScraper):
         councillor_trs = [tr for tr in page.xpath('//table//tr[1]') if len(tr) == 2][:-1]
         for councillor_tr in councillor_trs:
             desc = [text.strip() for text in councillor_tr.xpath('.//text()[normalize-space()]') if text.strip()]
+            print(repr(desc))
 
             if len(desc) == 3:
                 role = 'Maire'
                 district = 'Saint-Jérôme'
+                name = desc[0]
+                phone = desc[1]
             else:
                 role = 'Conseiller'
                 district = desc[0].replace('numéro ', '')
+                name = desc[1]
+                phone = desc[2]
 
-            name = desc[-3]
-            phone = desc[-2]
             email = desc[-1]
 
             image = councillor_tr.xpath('.//img/@src')[0]
