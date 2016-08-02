@@ -11,18 +11,18 @@ class FrederictonPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table/tbody/tr/td')
+        councillors = page.xpath('//table/tbody/tr')
         for councillor in councillors:
-            if 'Remembering' in councillor.text_content():
+            if not councillor.text_content() or 'Remembering' in councillor.text_content():
                 continue
 
             text = councillor.xpath('.//strong/text()')[0]
-            name = text.split(',')[0].replace('Name:', '').strip()
+            name = text.split(',')[0].replace('Name:', '').replace('\x92', "'").strip()
             if 'Mayor' in text and 'Deputy Mayor' not in text:
                 role = 'Mayor'
                 district = 'Fredericton'
             else:
-                district = re.findall(r'(Ward:.*)(?=Address:)', councillor.text_content())[0].replace(':', '').strip()
+                district = re.findall(r'(Ward:.*)', councillor.text_content())[0].replace(':', '').strip()
                 district = re.search('\((.+?)(?: Area)?\)', district).group(1)
                 role = 'Councillor'
 
@@ -30,17 +30,5 @@ class FrederictonPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
 
             p.image = councillor.xpath('.//img/@src')[0]
-
-            address = re.findall(r'(?<=Address:).*(?=Home:|Cell:)', councillor.text_content())[0].strip()
-            p.add_contact('address', address, 'legislature')
-
-            phone = re.findall(r'(?<=Home: \(|Cell: \().*(?=Fax:)', councillor.text_content())[0]
-            phone = re.sub(r'(?<=[0-9])(\)\D{1,2})(?=[0-9])', '-', phone).split()[0]
-            p.add_contact('voice', phone, 'residence')
-
-            phone = re.findall(r'(?<=Office: \().*(?=Fax:)', councillor.text_content())
-            if phone:
-                phone = phone[0].replace(') ', '-')
-                p.add_contact('voice', phone, 'legislature')
 
             yield p
