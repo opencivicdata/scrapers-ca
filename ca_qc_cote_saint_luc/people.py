@@ -26,10 +26,11 @@ class CoteSaintLucPersonScraper(CanadianScraper):
             img_cell, info_cell = tuple(councillor_row)
             if info_cell.xpath('.//p//text()[contains(., "Vacant")]'):
                 continue
-            name = info_cell.xpath('.//p//text()[contains(., "Councillor")]')[0].replace('Councillor ', '')
+            cells = [x.strip() for x in info_cell.xpath('.//text()') if re.sub('\xa0', ' ', x).strip()]
+            name = cells[0].replace('Councillor ', '')
             district = info_cell.xpath('.//p[contains(text(), "District")]//text()')[0]
             email = self.get_email(info_cell)
-            phone = self.get_phone(info_cell, area_codes=[438, 514])
+            phone = self.get_phone(info_cell, area_codes=[438, 514], error=False)
             img_url_rel = img_cell.xpath('.//img/@src')[0]
             img_url = urljoin(councillors_url, img_url_rel)
 
@@ -37,7 +38,8 @@ class CoteSaintLucPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(councillors_url)
             p.add_contact('email', email)
-            p.add_contact('voice', phone, 'legislature')
+            if phone:
+                p.add_contact('voice', phone, 'legislature')
             p.image = img_url
             yield p
 
@@ -57,7 +59,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
         p = Person(primary_org='legislature', name=name, district='Côte-Saint-Luc', role='Maire')
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.image = page.xpath('.//div[@class="content"]//img/@src')[0]
+        p.image = page.xpath('.//div[contains(@class,"content")]//img/@src')[0]
         p.add_source(url)
         p.add_contact('email', email)
         p.add_contact('voice', phone, 'legislature')
