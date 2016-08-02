@@ -20,15 +20,15 @@ class MonctonPersonScraper(CanadianScraper):
         councillors = page.xpath('//td[@class="cityfonts"]')
         for councillor in councillors:
             parts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub('\xa0', ' ', x).strip()]
-            name = ' '.join(parts[:2])
+            name = ' '.join(councillor.xpath('./p[2]/a[1]//text()'))
 
-            district = parts[2]
+            district = parts[0]
             if district == 'At Large':
                 role = 'Councillor at Large'
                 seat_numbers[district] += 1
                 district = 'Moncton (seat {})'.format(seat_numbers[district])
             elif district == 'Deputy Mayor':
-                district = parts[3]
+                district = parts[1]
                 role = 'Councillor'
                 seat_numbers[district] += 1
                 district = '{} (seat {})'.format(district, seat_numbers[district])
@@ -67,7 +67,7 @@ class MonctonPersonScraper(CanadianScraper):
 
         p.image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
 
-        info = page.xpath('//table[@class="whiteroundedbox"]//tr[2]/td[1]')[1]
+        info = page.xpath('//table[@class="whiteroundedbox"][1]//tr[2]/td[1]')[0]
         address = ', '.join(info.xpath('./p[1]/text()')[1:4])
         address = re.sub(r'\s{2,}', ' ', address).strip()
         phone = info.xpath('.//p[2]/text()')[0].split(':')[1].strip()
