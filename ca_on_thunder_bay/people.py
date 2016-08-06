@@ -26,7 +26,7 @@ class ThunderBayPersonScraper(CanadianScraper):
             if lines[1].endswith(' Ward'):
                 district = lines[1].replace(' Ward', '')
                 role = 'Councillor'
-            elif lines[1] == 'At Large':
+            elif 'At Large' in lines[1]:
                 role = 'Councillor at Large'
                 district = 'Thunder Bay (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
