@@ -13,11 +13,13 @@ class LongueuilPersonScraper(CanadianScraper):
 
         trs = page.xpath('//tbody/tr')
         assert len(trs), 'No councillors found'
+        seat_number = 2
         for tr in trs:
             if tr.xpath('./td[2]//text()')[0] != 'Vacant':
                 district = tr.xpath('./td[1]/text()')[0]
                 if 'Conseiller n' in district:
-                    district = 'Greenfield Park'
+                    district = 'Greenfield Park (siège {})'.format(seat_number)
+                    seat_number += 1
                 detail_url = tr.xpath('./td[2]/a/@href')[0]
                 detail_page = self.lxmlize(detail_url, 'utf-8')
 
