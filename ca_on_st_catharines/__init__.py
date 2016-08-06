@@ -13,7 +13,7 @@ class StCatharines(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='St. Catharines', division_id=self.division_id)
+        organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
         for ward_name in ('Grantham', 'Merritton', 'Port Dalhousie', "St. Andrew's", "St. George's", "St. Patrick's"):
             for seat_number in range(1, 3):
                 organization.add_post(role='Councillor', label='{} (seat {})'.format(ward_name, seat_number))

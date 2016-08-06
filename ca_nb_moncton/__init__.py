@@ -13,7 +13,7 @@ class Moncton(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Moncton', division_id=self.division_id)
+        organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
         for seat_number in range(1, 3):
             organization.add_post(role='Councillor at Large', label='Moncton (seat {})'.format(seat_number), division_id=self.division_id)
         for ward_number in range(1, 5):

@@ -13,7 +13,7 @@ class Grimsby(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Mayor', label='Grimsby', division_id=self.division_id)
+        organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
         for ward_number in range(1, 5):
             for seat_number in range(1, 3):
                 organization.add_post(role='Alderman', label='Ward {} (seat {})'.format(ward_number, seat_number))
