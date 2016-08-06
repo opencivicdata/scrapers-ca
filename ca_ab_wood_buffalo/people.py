@@ -20,6 +20,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         yield self.scrape_mayor(mayor_url)
 
         wards = page.xpath('//b')
+        assert len(wards), 'No councillors found'
         for ward in wards:
             ward_name = ward.text_content()
             councillor_links = ward.xpath('./parent::p/a')

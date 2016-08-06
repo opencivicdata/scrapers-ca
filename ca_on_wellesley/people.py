@@ -21,6 +21,7 @@ class WellesleyPersonScraper(CanadianScraper):
         yield self.scrape_mayor(page.xpath('//div[@class="img_four"][1]/div[1]')[0])
 
         councillors = page.xpath('//div[@class="img_four"][2]/div')
+        assert len(councillors), 'No councillors found'
         for councillor_elem in councillors:
             name, position = councillor_elem.xpath('string(./p/strong)').split(',')  # allow string()
             position = position.strip()

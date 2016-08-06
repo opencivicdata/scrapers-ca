@@ -15,6 +15,7 @@ class AbbotsfordPersonScraper(CanadianScraper):
         councillors = coun_page.xpath('//div[@id="main-content"]//h3')
         contact_data = contact_page.xpath('//p[contains(./strong/text(), "Mayor & Council")]/following-sibling::table[1]//tr')[1:]
 
+        assert len(councillors), 'No councillors found'
         for councillor, contact in zip(councillors, contact_data):
             text = councillor.text_content()
             if text.startswith('Councill'):
