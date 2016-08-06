@@ -8,7 +8,7 @@ class Lambton(CanadianJurisdiction):
     division_id = 'ocd-division/country:ca/cd:3538'
     division_name = 'Lambton'
     name = 'Lambton County Council'
-    url = 'http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx'
+    url = 'http://www.lambtononline.ca'
 
     def get_organizations(self):  # @todo Fix labels along the lines of the regions of Peel, Niagara or Waterloo.
         organization = Organization(self.name, classification=self.classification)

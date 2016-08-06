@@ -7,7 +7,7 @@ class Lincoln(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3526057'
     division_name = 'Lincoln'
-    name = 'Town of Lincoln'
+    name = 'Lincoln Town Council'
     url = 'http://lincoln.ca'
 
     def get_organizations(self):
