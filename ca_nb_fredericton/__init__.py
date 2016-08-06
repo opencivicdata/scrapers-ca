@@ -8,3 +8,4 @@ class Fredericton(CanadianJurisdiction):
     division_name = 'Fredericton'
     name = 'Fredericton City Council'
     url = 'http://www.fredericton.ca'
+    use_type_id = True

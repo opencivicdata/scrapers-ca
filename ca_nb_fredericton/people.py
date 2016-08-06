@@ -22,8 +22,7 @@ class FrederictonPersonScraper(CanadianScraper):
                 role = 'Mayor'
                 district = 'Fredericton'
             else:
-                district = re.findall(r'(Ward:.*)', councillor.text_content())[0].replace(':', '').strip()
-                district = re.search('\((.+?)(?: Area)?\)', district).group(1)
+                district = re.search(r'Ward \d+', councillor.text_content()).group(0)
                 role = 'Councillor'
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
