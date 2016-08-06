@@ -20,14 +20,15 @@ class BrossardPersonScraper(CanadianScraper):
             if name == 'Poste vacant':
                 continue
             if name == 'Francyne Raymond':
-                name = 'Francine Raymond'  # her name is Francine, not Francyne
+                name = 'Francine Raymond'  # her name is Francine on the contact page, not Francyne
             position = elem.xpath('.//div[@class="poste"]/text()')[0]
             role = 'Conseiller'
-            if 'Mayor' in position:
+            district = re.search(r'District \d+', position)
+            if district:
+                district = district.group(0)
+            elif 'Mayor' in position:
                 district = 'Brossard'
                 role = 'Maire'
-            else:
-                district = re.sub(r'(?<=[0-9]).+', '', position).strip()
 
             photo = re.search(r'url\((.+)\)', elem.attrib['style']).group(1)
 
