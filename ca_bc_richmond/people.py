@@ -30,5 +30,5 @@ class RichmondPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(CONTACT_URL)
             p.add_source(url)
-            p.add_contact('email', email)
+            p.add_contact('email', email)  # same for all
             yield p
