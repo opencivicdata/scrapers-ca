@@ -1,3 +1,4 @@
+# coding: utf-8
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
@@ -14,8 +15,13 @@ class HalifaxPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')
 
+        corrections = {
+            'Timberlea—Beechville—Clayton Park—Wedgewood': 'Timberlea—Beechville—Clayton Park West',
+        }
+
         for councillor in councillors:
-            district = re.sub(r' ?[–—-] ?', '—', '—'.join(filter(None, (text.replace(',', '').strip() for text in councillor.xpath('./p/text()')))))
+            district = re.sub(r'\s*[–—-]\s*', '—', '—'.join(filter(None, (text.replace(',', '').strip() for text in councillor.xpath('./p/text()')))))
+            district = corrections.get(district, district)
 
             name_elem = councillor.xpath('./p/strong/text()')[0]
             if 'Councillor' in name_elem:
