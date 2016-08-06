@@ -31,7 +31,7 @@ class GatineauPersonScraper(CanadianScraper):
 
             profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
             profile_page = self.lxmlize(profile_url)
-            photo_url = profile_page.xpath('//img/@src')[0]
+            photo_url = profile_page.xpath('//table//img/@src')[0]
             district = 'District ' + re.search('\d+', raw_district).group(0)
             email = self.get_email(profile_page)
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
