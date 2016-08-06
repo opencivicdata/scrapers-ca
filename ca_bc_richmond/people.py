@@ -14,10 +14,12 @@ class RichmondPersonScraper(CanadianScraper):
         email = self.get_email(contact_page)
 
         page = self.lxmlize(COUNCIL_PAGE)
-        for url in page.xpath('//a/@href[contains(., "members/")]'):
+        urls = page.xpath('//a/@href[contains(., "members/")]')
+        assert len(urls), 'No councillors found'
+        for url in urls:
             page = self.lxmlize(url)
             role, name = page.xpath('//h1//text()')[0].split(' ', 1)
-            photo_url = page.xpath('//img/@src')[0]
+            photo_url = page.xpath('//div[@id="content"]//img/@src')[0]
 
             if role == 'Mayor':
                 district = 'Richmond'
