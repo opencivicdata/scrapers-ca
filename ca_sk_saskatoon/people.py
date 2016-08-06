@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = "https://www.saskatoon.ca/city-hall/mayor-city-councillors/city-councillors"
-MAYOR_PAGE = "https://www.saskatoon.ca/city-hall/mayor-city-councillors/mayors-office"
+COUNCIL_PAGE = 'https://www.saskatoon.ca/city-hall/mayor-city-councillors/city-councillors'
+MAYOR_PAGE = 'https://www.saskatoon.ca/city-hall/mayor-city-councillors/mayors-office'
 
 
 class SaskatoonPersonScraper(CanadianScraper):
