@@ -11,7 +11,9 @@ class LongueuilPersonScraper(CanadianScraper):
 
         yield self.scrape_mayor(page)
 
-        for tr in page.xpath('//tbody/tr'):
+        trs = page.xpath('//tbody/tr')
+        assert len(trs), 'No councillors found'
+        for tr in trs:
             if tr.xpath('./td[2]//text()')[0] != 'Vacant':
                 district = tr.xpath('./td[1]/text()')[0]
                 if 'Conseiller n' in district:
@@ -30,6 +32,7 @@ class LongueuilPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(detail_url)
                 p.image = photo_url
+                p.add_contact('email', self.get_email(detail_page))
                 yield p
 
     def scrape_mayor(self, page):
@@ -42,4 +45,5 @@ class LongueuilPersonScraper(CanadianScraper):
         p.add_source(COUNCIL_PAGE)
         p.add_source(mayor_url)
         p.image = photo_url
+        p.add_contact('email', self.get_email(mayor_page))
         yield p
