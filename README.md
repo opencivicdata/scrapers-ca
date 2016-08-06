@@ -63,10 +63,6 @@ Check jurisdiction URLs:
 
     invoke urls
 
-Check [PEP 8](https://www.python.org/dev/peps/pep-0008/) conformance:
-
-    flake8 .
-
 Update the OCD-IDs:
 
     curl -O https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca.csv
