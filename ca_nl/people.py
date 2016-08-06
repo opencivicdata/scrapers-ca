@@ -51,7 +51,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             photo_page_url = row[0].xpath('./a/@href')
             if photo_page_url:
                 photo_page = self.lxmlize(photo_page_url[0])
-                photo_node = photo_page.xpath('//table//img/@src')
+                photo_node = photo_page.xpath('//table//img[@height]/@src')
                 photo_url = photo_node[0]
                 p.image = photo_url
                 p.add_source(photo_page_url[0])
