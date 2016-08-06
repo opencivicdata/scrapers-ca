@@ -21,11 +21,6 @@ class OshawaPersonScraper(CanadianScraper):
 
             role = role.strip()
 
-            # Line break misplaced…
-            if name == 'Rick KerrCity':
-                name = 'Rick Kerr'
-                role = 'City Councillor'
-
             if role == 'City Councillor':
                 role = 'Councillor'
                 district = 'Oshawa (seat {})'.format(councillor_seat_number)
@@ -43,4 +38,5 @@ class OshawaPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_contact('voice', phone, 'legislature')
+            p.add_contact('email', self.get_email(councillor))
             yield p
