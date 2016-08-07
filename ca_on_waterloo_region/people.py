@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.regionofwaterloo.ca/en/regionalgovernment/regionalcou
 
 class WaterlooPersonScraper(CSVScraper):
     csv_url = 'http://www.regionofwaterloo.ca/opendatadownloads/RegionalMunicipalityOfWaterlooCouncil_2014_2018.xls'
-    many_posts_per_area = True
     corrections = {
         'district name': {
             'City of Cambridge': 'Cambridge',
