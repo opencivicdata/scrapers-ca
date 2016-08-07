@@ -244,7 +244,7 @@ class CSVScraper(CanadianScraper):
                     if row.get(key) and row[key] in corrections:
                         row[key] = corrections[row[key]]
 
-                role = re.split(r'(?: (?:and|et)\b|;)', row['primary role'], 1)[0]  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
+                role = re.split(r'(?: (?:and|et)\b|;)', row['primary role'], 1)[0].strip()  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
                 name = '{} {}'.format(row['first name'], row['last name'])
                 province = row.get('province')
 
