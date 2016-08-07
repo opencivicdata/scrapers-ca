@@ -18,10 +18,10 @@ class Longueuil(CanadianJurisdiction):
 
         organization.add_post(role='Maire', label=self.division_name, division_id=self.division_id)
         for division in Division.get(self.division_id).children('district'):
-          if division.name == 'Greenfield Park':
-            for seat_number in range(1, 4):
-              organization.add_post(role='Conseiller', label='{} (siège {})'.format(division.name, seat_number), division_id=division.id)
-          else:
-            organization.add_post(role='Conseiller', label=division.name, division_id=division.id)
+            if division.name == 'Greenfield Park':
+                for seat_number in range(1, 4):
+                    organization.add_post(role='Conseiller', label='{} (siège {})'.format(division.name, seat_number), division_id=division.id)
+            else:
+                organization.add_post(role='Conseiller', label=division.name, division_id=division.id)
 
         yield organization
