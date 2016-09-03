@@ -18,9 +18,13 @@ class MonctonPersonScraper(CanadianScraper):
         yield self.scrape_mayor(mayor_url)
 
         councillors = page.xpath('//td[@class="cityfonts"]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             parts = [x.strip() for x in councillor.xpath('.//span/text()') if re.sub('\xa0', ' ', x).strip()]
             name = ' '.join(councillor.xpath('./p[2]/a[1]//text()'))
+
+            if councillor.xpath('./p[2]//text()')[0] == 'Vacant':
+                continue
 
             district = parts[0]
             if district == 'At Large':
