@@ -179,12 +179,8 @@ class TorontoCommitteeScraper(CanadianScraper):
                         for councillor in self.councillorMembers(membership_url):
                             o.add_member(councillor['name'], councillor['role'])
                             if councillor['role'] not in seen_posts:
-                                o.add_post(
-                                    role=councillor['role'],
-                                    label=councillor['role'],
-                                    # TODO: More specific divisions for some committee?
-                                    division_id=self.jurisdiction.division_id,
-                                )
+                                # TODO: More specific divisions for some committee?
+                                o.add_post(role=councillor['role'], label=councillor['role'], division_id=self.jurisdiction.division_id)
                                 seen_posts.append(councillor['role'])
 
                 extras['tmmis_decision_body_ids'].append({inst['term']: inst['decision_body_id']})

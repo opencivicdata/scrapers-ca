@@ -19,6 +19,6 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
                 role = 'Reeve'
             else:
                 role = 'Councillor'
-            organization.add_post(role=role, label='Division {}'.format(division_number))
+            organization.add_post(role=role, label='Division {}'.format(division_number), division_id='{}/division:{}'.format(self.division_id, division_number))
 
         yield organization

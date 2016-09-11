@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from utils import CanadianJurisdiction
+from utils import CanadianJurisdiction, clean_type_id
 from pupa.scrape import Organization
 
 
@@ -16,6 +16,6 @@ class StCatharines(CanadianJurisdiction):
         organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
         for ward_name in ('Grantham', 'Merritton', 'Port Dalhousie', "St. Andrew's", "St. George's", "St. Patrick's"):
             for seat_number in range(1, 3):
-                organization.add_post(role='Councillor', label='{} (seat {})'.format(ward_name, seat_number))
+                organization.add_post(role='Councillor', label='{} (seat {})'.format(ward_name, seat_number), division_id='{}/ward:{}'.format(self.division_id, clean_type_id(ward_name)))
 
         yield organization
