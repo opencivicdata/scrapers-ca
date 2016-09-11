@@ -503,6 +503,7 @@ def clean_name(s):
 def capitalize(s):
     return capitalize_re.sub(lambda s: s.group(0).lower(), s.strip())
 
+
 def clean_type_id(type_id):
     # "Uppercase characters should be converted to lowercase."
     type_id = type_id.lower()

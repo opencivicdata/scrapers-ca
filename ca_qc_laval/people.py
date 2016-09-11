@@ -1,31 +1,28 @@
 from __future__ import unicode_literals
-from utils import CanadianScraper, CanadianPerson as Person
-
-import re
+from utils import CSVScraper
 
 COUNCIL_PAGE = 'http://www.laval.ca/Pages/Fr/A-propos/conseillers-municipaux.aspx'
 
 
-class LavalPersonScraper(CanadianScraper):
-
-    def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-        for councillor_row in page.xpath('//tr'):
-            post = list(filter(None, (text.strip() for text in councillor_row.xpath('./td[2]/p/text()'))))[0]
-            if post == 'Maire de Laval':
-                district = 'Laval'
-                role = 'Maire'
-            else:
-                district = re.sub(r'District.\d+.- ', '', post).replace("L'", '').replace(' ', '').replace('bois', 'Bois')
-                role = 'Conseiller'
-            full_name = list(filter(None, (text.strip() for text in councillor_row.xpath('./td[2]/p/text()'))))[1].strip()
-            name = ' '.join(full_name.split()[1:])
-
-            phone = councillor_row.xpath('.//span[@class="icon-phone"]/following::text()')[0]
-            email = self.get_email(councillor_row)
-            photo_url = councillor_row[0][0].attrib['src']
-            p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
-            p.add_source(COUNCIL_PAGE)
-            p.add_contact('voice', phone, 'legislature')
-            p.add_contact('email', email)
-            yield p
+class LavalPersonScraper(CSVScraper):
+    csv_url = 'https://www.donneesquebec.ca/recherche/dataset/8fe69713-fade-4751-a0b4-7e57a81886b1/resource/bb38e19e-26ab-495c-a0f7-ed6b3268b6e6/download/cusersapp.netappdatalocaltemp288c1490-df30-472a-8170-dd06728f449alistedeselus2013-2017.csv'
+    # Absurdly, Québec has decided "les en-têtes ne comportent pas de caractères accentués ou d'espaces".
+    # @todo Waiting for Laval to restore accents and cedillas. (2016-08-01)
+    header_converter = lambda self, s: {
+        'Prenom': 'first name',
+        'Nom': 'last name',
+        'Genre': 'gender',
+        'Role': 'primary role',
+        'ï»¿Nom-du-district': 'district name',
+        'Nom-du-parti': 'party name',
+        'Adresse-ligne-1': 'address line 1',
+        'Adresse-ligne-2': 'address line 2',
+        'Localite': 'locality',
+        'Province': 'province',
+        'Code-postal': 'postal code',
+        'Telephone': 'phone',
+        'Telecopieur': 'fax',
+        'Courriel': 'email',
+        "URL-d'une-photo": 'photo url',
+        'URL-source': 'source url',
+    }.get(s, s)
