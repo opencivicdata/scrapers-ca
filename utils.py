@@ -6,6 +6,7 @@ import os
 import re
 from collections import defaultdict
 from ftplib import FTP
+from zipfile import ZipFile
 
 import lxml.html
 import requests
@@ -216,12 +217,16 @@ class CanadianScraper(Scraper):
 
 
 class CSVScraper(CanadianScraper):
+    # File flags
     encoding = None
-    many_posts_per_area = False
+    filename = None
+    # Table flags
     skip_rows = 0
     header_converter = lambda self, s: s.lower()
+    # Row flags
     corrections = {}
     other_names = {}
+    many_posts_per_area = False
     district_name_format_string = None
 
     def scrape(self):
@@ -230,6 +235,17 @@ class CSVScraper(CanadianScraper):
         extension = os.path.splitext(self.csv_url)[1]
         if extension in ('.xls', '.xlsx'):
             data = StringIO(convert.convert(BytesIO(self.get(self.csv_url).content), extension[1:]))
+        elif extension == '.zip':
+            basename = os.path.basename(self.csv_url)
+            try:
+                response = requests.get(self.csv_url, stream=True)
+                with open(basename, 'wb') as f:
+                    for chunk in response.iter_content():
+                        f.write(chunk)
+                with ZipFile(basename).open(self.filename, 'r') as fp:
+                    data = StringIO(fp.read().decode('utf-8'))
+            finally:
+                os.unlink(basename)
         else:
             data = None
 
@@ -486,3 +502,12 @@ def clean_name(s):
 
 def capitalize(s):
     return capitalize_re.sub(lambda s: s.group(0).lower(), s.strip())
+
+def clean_type_id(type_id):
+    # "Uppercase characters should be converted to lowercase."
+    type_id = type_id.lower()
+    # "Spaces should be converted to underscores."
+    type_id = re.sub(r' ', '_', type_id)
+    # "All invalid characters should be converted to tilde (~)."
+    type_id = re.sub(r'[^\w.~-]', '~', type_id, re.UNICODE)
+    return type_id
