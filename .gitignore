@@ -2,3 +2,4 @@
 /_data
 /csv
 *.pyc
+/scrapers_ca.egg-info/
