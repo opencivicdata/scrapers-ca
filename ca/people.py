@@ -87,8 +87,10 @@ class CanadaPersonScraper(CanadianScraper):
                 voice = li.xpath('./span//text()[contains(., "Telephone:")]|./span//text()[contains(., "Téléphone :")]')[0].replace('Telephone: ', '').replace('Téléphone : ', '')
                 if voice:
                     m.add_contact('voice', voice, note)
-                fax = li.xpath('./span//text()[contains(., "Fax:")]|./span//text()[contains(., "Télécopieur :")]')[0].replace('Fax: ', '').replace('Télécopieur : ', '')
+                fax = li.xpath('./span//text()[contains(., "Fax:")]|./span//text()[contains(., "Télécopieur :")]')
                 if fax:
-                    m.add_contact('fax', fax, note)
+                    fax = fax[0].replace('Fax: ', '').replace('Télécopieur : ', '')
+                    if fax:
+                        m.add_contact('fax', fax, note)
 
             yield m
