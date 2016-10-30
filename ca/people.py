@@ -84,9 +84,11 @@ class CanadaPersonScraper(CanadianScraper):
                     spans[2].text_content(),  # city, region
                     spans[3].text_content(),  # postal code
                 ]), note)
-                voice = li.xpath('./span//text()[contains(., "Telephone:")]|./span//text()[contains(., "Téléphone :")]')[0].replace('Telephone: ', '').replace('Téléphone : ', '')
+                voice = li.xpath('./span//text()[contains(., "Telephone:")]|./span//text()[contains(., "Téléphone :")]')
                 if voice:
-                    m.add_contact('voice', voice, note)
+                    voice = voice[0].replace('Telephone: ', '').replace('Téléphone : ', '')
+                    if voice:
+                        m.add_contact('voice', voice, note)
                 fax = li.xpath('./span//text()[contains(., "Fax:")]|./span//text()[contains(., "Télécopieur :")]')
                 if fax:
                     fax = fax[0].replace('Fax: ', '').replace('Télécopieur : ', '')
