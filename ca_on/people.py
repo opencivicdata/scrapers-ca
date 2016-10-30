@@ -18,6 +18,8 @@ class OntarioPersonScraper(CanadianScraper):
             mpp_url = name_elem.attrib['href']
 
             mpp_page = self.lxmlize(mpp_url)
+            if mpp_page.xpath('//title[contains(text(),"Past & Present MPPs")]'):  # past MPP
+                continue
 
             image = mpp_page.xpath('//img[@class="mppimg"]/@src')
             party = mpp_page.xpath('//div[@class="mppinfoblock"]/p[last()]/text()')[0].strip()
