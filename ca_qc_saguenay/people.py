@@ -22,7 +22,7 @@ class SaguenayPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[./div/h3[contains(text(), "District")]]')
         for councillor in councillors:
             district = councillor.xpath('./div/h3')[0].text_content().replace('#', '')
-            name = councillor.xpath('.//p/text()')[0].encode('latin-1').decode('utf-8')
+            name = councillor.xpath('.//p/text()')[0]
             name = name.replace('M. ', '').replace('Mme ', '').strip()
             phone = councillor.xpath('.//p/text()')[1].split(':')[1].strip().replace(' ', '-')
             email = self.get_email(councillor)
