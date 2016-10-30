@@ -27,13 +27,10 @@ class WellesleyPersonScraper(CanadianScraper):
             position = position.strip()
             position, district = position.split(' ', 1)
             district = post_number(district)
-            addr = '\n'.join(addr_str.strip() for addr_str in
-                             councillor_elem.xpath('./p/text()')).strip()
             phone = councillor_elem.xpath('.//a[starts-with(@href, "tel:")]//text()')[0]
             image = councillor_elem.xpath('.//img[1]/@src')[0]
             p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
             p.add_source(COUNCIL_PAGE)
-            p.add_contact('address', addr, 'legislature')
             p.add_contact('voice', phone, 'legislature')
             yield p
 
@@ -41,12 +38,9 @@ class WellesleyPersonScraper(CanadianScraper):
         name, position = mayor_node.xpath('string(./p/strong)').split(',')  # allow string()
         position = position.strip()
         district = 'Wellesley'
-        addr = '\n'.join(addr_str.strip() for addr_str in
-                         mayor_node.xpath('./p/text()')).strip()
         phone = mayor_node.xpath('.//a[starts-with(@href, "tel:")]//text()')[0]
         image = mayor_node.xpath('.//img[1]/@src')[0]
         p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
         p.add_source(COUNCIL_PAGE)
-        p.add_contact('address', addr, 'legislature')
         p.add_contact('voice', phone, 'legislature')
         return p
