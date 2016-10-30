@@ -51,13 +51,10 @@ class EdmontonPersonScraper(CanadianScraper):
 
     def scrape_mayor(self):
         page = self.lxmlize(MAYOR_PAGE)
-        name = page.xpath('//strong[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
+        name = page.xpath('//h1[contains(text(), "Mayor")]/text()')[0].replace('Mayor', '').strip()
 
         p = Person(primary_org='legislature', name=name, district='Edmonton', role='Mayor')
         p.add_source(MAYOR_PAGE)
-
-        image = page.xpath('//div[@id="contentArea"]//img/@src')[0]
-        p.image = image
 
         address = ' '.join(page.xpath('//address/p/text()'))
         p.add_contact('address', address, 'legislature')
