@@ -132,6 +132,7 @@ def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None
                 self._error("does not match regular expression '{pattern}'",
                             value, fieldname, pattern=pattern)
 
+
 DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
 
 
@@ -145,5 +146,6 @@ def validate_maxMatchingItems(self, x, fieldname, schema, path, arguments=None):
                     count += 1
                 if count > length:
                     self._error(message, value, fieldname)
+
 
 DatetimeValidator.validate_maxMatchingItems = validate_maxMatchingItems
