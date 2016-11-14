@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
-COUNCIL_PAGE = 'http://www.fredericton.ca/en/citygovernment/CityCouncil.asp'
+COUNCIL_PAGE = 'http://www.fredericton.ca/en/city-hall/city-council-committees/mayor-council'
 
 
 class FrederictonPersonScraper(CanadianScraper):
@@ -11,23 +9,24 @@ class FrederictonPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table/tbody/tr')
+        councillors = page.xpath('//div[contains(@class, "view-people")]//div[contains(@class, "views-row")]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            if not councillor.text_content() or 'Remembering' in councillor.text_content():
-                continue
+            name = councillor.xpath('.//div[@property="dc:title"]')[0].text_content()
+            role_and_district = councillor.xpath('.//div[contains(@class, "field-name-field-sub-title")]//p')[-2].text_content().replace('\xa0', ' ')
 
-            text = councillor.xpath('.//strong/text()')[0]
-            name = text.split(',')[0].replace('Name:', '').replace('\x92', "'").strip()
-            if 'Mayor' in text and 'Deputy Mayor' not in text:
-                role = 'Mayor'
+            if role_and_district == 'Mayor':
                 district = 'Fredericton'
+                role = 'Mayor'
             else:
-                district = re.search(r'Ward \d+', councillor.text_content()).group(0)
+                district = role_and_district.split(', ', 1)[1]
                 role = 'Councillor'
 
+            page = self.lxmlize(councillor.xpath('.//@href')[0])
+
             p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.image = councillor.xpath('.//img[@typeof="foaf:Image"]/@src')[0]
+            p.add_contact('email', self.get_email(page))
+            p.add_contact('voice', self.get_phone(page, area_codes=[506]), 'legislature')
             p.add_source(COUNCIL_PAGE)
-
-            p.image = councillor.xpath('.//img/@src')[0]
-
             yield p
