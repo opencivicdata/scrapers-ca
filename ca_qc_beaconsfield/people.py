@@ -1,11 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
-from six.moves import html_parser
-
-COUNCIL_PAGE = 'http://www.beaconsfield.ca/en/your-council.html'
+COUNCIL_PAGE = 'http://www.beaconsfield.ca/fr/notre-ville/conseil-de-ville-et-districts-electoraux'
 
 
 class BeaconsfieldPersonScraper(CanadianScraper):
@@ -13,43 +9,24 @@ class BeaconsfieldPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//h1[@class="title"]')
+        councillors = page.xpath('//div[contains(@class, "items-row")]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            if ',' not in councillor.text_content():
-                continue
-            name, district = councillor.text_content().split(',')
-            name = name.strip()
-            if 'Mayor' in district:
-                p = Person(primary_org='legislature', name=name, district='Beaconsfield', role='Maire')
-                p.add_source(COUNCIL_PAGE)
-                p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
-                phone = councillor.xpath('.//parent::div/following-sibling::div[contains(text(), "514")]/text()')[0]
-                phone = phone.split(':')[1].strip().replace(' ', '-')
-                p.add_contact('voice', phone, 'legislature')
-                script = councillor.xpath('.//parent::div/following-sibling::div/script')[0].text_content()
-                p.add_contact('email', get_email(script))
-                yield p
+            text = councillor.xpath('.//h2')[0].text_content().strip()
+            if ',' not in text:
                 continue
 
-            district = district.split('-')[1].strip()
-            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
+            name, role_and_district = text.split(', ', 1)
+            if role_and_district == 'Maire':
+                district = 'Beaconsfield'
+                role = 'Maire'
+            else:
+                district = role_and_district.split(' - ', 1)[1]
+                role = 'Conseiller'
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.image = councillor.xpath('.//@src')[0]
+            p.add_contact('email', self.get_email(councillor))
+            p.add_contact('voice', self.get_phone(councillor, area_codes=[514]), 'legislature')
             p.add_source(COUNCIL_PAGE)
-
-            p.image = councillor.xpath('./parent::div/parent::div/p//img/@src')[0]
-
-            phone = councillor.xpath('.//parent::div/following-sibling::p[contains(text(), "514")]/text()')
-            if phone:
-                phone = phone[0]
-                phone = phone.split(':')[1].strip().replace(' ', '-')
-                p.add_contact('voice', phone, 'legislature')
-            script = councillor.xpath('.//parent::div/following-sibling::p/script')[0].text_content()
-            p.add_contact('email', get_email(script))
             yield p
-
-
-def get_email(script):
-    var = re.findall(r'var addy\d{4,5} = \'(.*)\'', script)[0].replace('\' + \'', '').replace('\'', '')
-    ext = re.findall(r'addy\d{4,5} = addy\d{4,5} \+ \'(.*);', script)[0].replace('\' + \'', '').replace('\'', '')
-    h = html_parser.HTMLParser()
-    email = h.unescape(var + ext)
-    return email
