@@ -22,11 +22,13 @@ class FrederictonPersonScraper(CanadianScraper):
                 district = role_and_district.split(', ', 1)[1]
                 role = 'Councillor'
 
-            page = self.lxmlize(councillor.xpath('.//@href')[0])
+            url = councillor.xpath('.//@href')[0]
+            page = self.lxmlize(url)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.image = councillor.xpath('.//img[@typeof="foaf:Image"]/@src')[0]
             p.add_contact('email', self.get_email(page))
             p.add_contact('voice', self.get_phone(page, area_codes=[506]), 'legislature')
             p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
             yield p
