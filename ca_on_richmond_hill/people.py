@@ -20,7 +20,6 @@ class RichmondHillPersonScraper(CanadianScraper):
             if ' - ' in p.text_content():
                 yield self.process(p.xpath('.//@href')[0], p.text_content().split(' - ', 1)[0], 'Councillor')
 
-
     def process(self, url, district, role):
         div = self.lxmlize(url).xpath('//div[@id="printAreaContent"]')[0]
 
