@@ -3,7 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.pointe-claire.ca/en/municipal-council.html'
+COUNCIL_PAGE = 'http://www.pointe-claire.ca/fr/ville/conseil-municipal/membres'
 
 
 class PointeClairePersonScraper(CanadianScraper):
@@ -11,32 +11,22 @@ class PointeClairePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        mayor = page.xpath('.//div[@class="item-page clearfix"]//table[1]//p')[1]
-        name = mayor.xpath('.//strong/text()')[0]
+        councillors = page.xpath('//section[contains(@id, "js-council-member")]')
+        assert len(councillors), 'No councillors found'
+        for index, councillor in enumerate(councillors):
+            name = ' '.join(councillor.xpath('.//h2/text()'))
+            district = councillor.xpath('.//span[contains(@class, "c-info-list_label")][contains(text(), "District ")]')
+            role = 'Conseiller'
 
-        p = Person(primary_org='legislature', name=name, district='Pointe-Claire', role='Maire')
-        p.add_source(COUNCIL_PAGE)
+            if not district and index == 0:
+                district = 'Pointe-Claire'
+                role = 'Maire'
+            elif district:
+                district = district[0].text_content().split(' – ')[0]
 
-        phone = re.findall(r'[0-9]{3}[ -][0-9]{3}-[0-9]{4}', mayor.text_content())[0].replace(' ', '-')
-        p.add_contact('voice', phone, 'legislature')
-        yield p
-
-        rows = page.xpath('//tr')
-        for i, row in enumerate(rows):
-            if i % 2 == 0:
-                continue
-            councillors = row.xpath('./td')
-            for j, councillor in enumerate(councillors):
-                name = councillor.text_content()
-                # rows[i + 1].xpath('.//td//a[contains(@href, "maps")]/text()')[j] # district number
-                district = rows[i + 1].xpath('.//td/p[1]/text()')[j].replace(' / ', '/')
-
-                p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
-                p.add_source(COUNCIL_PAGE)
-                p.image = councillor.xpath('.//img/@src')[0]
-
-                phone = re.findall(r'[0-9]{3}[ -][0-9]{3}-[0-9]{4}', rows[i + 1].xpath('.//td')[j].text_content())[0].replace(' ', '-')
-
-                p.add_contact('voice', phone, 'legislature')
-
-                yield p
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.image = councillor.xpath('.//@src')[0]
+            p.add_contact('email', self.get_email(councillor))
+            p.add_contact('voice', self.get_phone(councillor, area_codes=[514]), 'legislature')
+            p.add_source(COUNCIL_PAGE)
+            yield p

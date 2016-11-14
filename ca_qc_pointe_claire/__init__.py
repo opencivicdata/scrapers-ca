@@ -8,3 +8,4 @@ class PointeClaire(CanadianJurisdiction):
     division_name = 'Pointe-Claire'
     name = 'Conseil municipal de Pointe-Claire'
     url = 'http://www.ville.pointe-claire.qc.ca'
+    use_type_id = True
