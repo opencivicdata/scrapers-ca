@@ -27,13 +27,17 @@ class ReginaPersonScraper(CanadianScraper):
     def councillor_data(self, url, name, ward):
         page = self.lxmlize(url)
         # sadly, email is a form on a separate page
-        phone = page.xpath('//strong[contains(., "Phone")]//text()')[0].split(':')[1]
         photo_url_rel = page.xpath('//div[@id="contentcontainer"]//img/@src')[0]
         photo_url = urljoin(url, photo_url_rel)
+
         m = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
         m.add_source(COUNCIL_PAGE)
         m.add_source(url)
-        m.add_contact('voice', phone, 'legislature')
+
+        phone = self.get_phone(page.xpath('//div[@id="contentcontainer"]')[0], area_codes=[306], error=False)
+        if phone:
+            m.add_contact('voice', phone, 'legislature')
+
         m.image = photo_url
         yield m
 
