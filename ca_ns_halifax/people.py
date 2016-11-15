@@ -23,14 +23,10 @@ class HalifaxPersonScraper(CanadianScraper):
             district = re.sub(r'\s*[–—-]\s*', '—', '—'.join(filter(None, (text.replace(',', '').strip() for text in councillor.xpath('./p/text()')))))
             district = corrections.get(district, district)
 
-            name_elem = councillor.xpath('./p/strong/text()')[0]
-            if 'Councillor' in name_elem:
-                name = name_elem.strip()[len('Councillor '):]
-            else:
-                name = name_elem
+            name = councillor.xpath('./p/strong/text()')[0].replace('Councillor ', '').replace('Deputy Mayor ', '')
 
             if name != 'To be determined':
-                photo = councillor.xpath('./p/a/img/@src')[0]
+                photo = councillor.xpath('.//img/@src')[0]
 
                 councillor_page = self.lxmlize(councillor.xpath('./h2/a/@href')[0])
                 contact_page_url = councillor_page.xpath('//li/a[contains(@href, "contact")]/@href')[0]
