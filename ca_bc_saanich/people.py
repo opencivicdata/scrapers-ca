@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.saanich.ca/living/mayor/council/index.html'
+COUNCIL_PAGE = 'http://www.saanich.ca/EN/main/local-government/mayor-council/meet-your-council.html'
 
 
 class SaanichPersonScraper(CanadianScraper):
@@ -10,23 +10,29 @@ class SaanichPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        for link in page.xpath('//div[@class="section"]//a'):
-            url = link.attrib['href']
-            if 'address' in url:  # Mayor's Annual Address
-                continue
-            page = self.lxmlize(url)
-            role, name = page.xpath('//div[@id="content"]/h1//text()')[0].split(' ', 1)
-            photo_url = page.xpath('//div[@id="content"]//@src')[0]
-            email = self.get_email(page)
 
-            if role == 'Mayor':
+        for url in page.xpath('//div[contains(@class, "entry")]')[0].xpath('.//@href'):
+            if '@' in url:
+                continue
+
+            page = self.lxmlize(url)
+            main = page.xpath('//main[@id="content"]')[0]
+
+            name = main.xpath('.//h1//text()')[0]
+
+            if 'Mayor' in name:
+                name = name.replace('Mayor ', '')
+                role = 'Mayor'
                 district = 'Saanich'
             else:
+                role = 'Councillor'
                 district = 'Saanich (seat {})'.format(councillor_seat_number)
                 councillor_seat_number += 1
 
-            p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.image = page.xpath('.//@src')[0]
+            p.add_contact('voice', self.get_phone(page, area_codes=[250]), 'legislature')
+            p.add_contact('email', self.get_email(page))
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
-            p.add_contact('email', email)
             yield p
