@@ -29,14 +29,20 @@ class SaskatoonPersonScraper(CanadianScraper):
 
             contacts = page.xpath('//aside[@class="page-sidebar"]/div[1]/p')
             for contact in contacts[:-1]:
-                contact_type = contact.xpath('./strong/text()')[0]
-                if 'Contact' in contact_type:
-                    continue
-                value = contact.xpath('./a/text()')[0]
-                if 'Fax' in contact_type:
-                    p.add_contact('fax', value, 'legislature')
-                if 'Phone' in contact_type:
-                    p.add_contact(contact_type, value, contact_type)
+                label = contact.xpath('./strong/text()')
+                if label:
+                    label = label[0]
+                    value = contact.xpath('./a/text()')[0]
+                    if 'Fax' in label:
+                        contact_type = 'fax'
+                    elif 'Cell' in label:
+                        contact_type = 'cell'
+                    elif 'Home' in label:
+                        contact_type = 'voice'
+                    else:
+                        contact_type = None
+                    if contact_type:
+                        p.add_contact(contact_type, value, 'legislature')
 
             yield p
 
