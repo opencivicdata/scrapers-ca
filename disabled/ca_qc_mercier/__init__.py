@@ -13,7 +13,7 @@ class Mercier(CanadianJurisdiction):
     def get_organizations(self):  # @todo Eliminate once shapefile is found and ocd-division-ids is updated.
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Maire', label='Mercier', division_id=self.division_id)
+        organization.add_post(role='Maire', label=self.division_name, division_id=self.division_id)
         for district_number in range(1, 7):
             organization.add_post(role='Conseiller', label='District {}'.format(district_number))
 

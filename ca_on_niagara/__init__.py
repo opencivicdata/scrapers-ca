@@ -13,7 +13,7 @@ class Niagara(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Regional Chair', label='Niagara', division_id=self.division_id)
+        organization.add_post(role='Regional Chair', label=self.division_name, division_id=self.division_id)
 
         divisions = {
             'Fort Erie': {

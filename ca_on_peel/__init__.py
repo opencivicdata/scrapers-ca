@@ -13,7 +13,7 @@ class Peel(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Regional Chair', label='Peel', division_id=self.division_id)
+        organization.add_post(role='Regional Chair', label=self.division_name, division_id=self.division_id)
         organization.add_post(role='Mayor', label='Caledon', division_id='ocd-division/country:ca/csd:3521024')
         organization.add_post(role='Mayor', label='Brampton', division_id='ocd-division/country:ca/csd:3521010')
         organization.add_post(role='Mayor', label='Mississauga', division_id='ocd-division/country:ca/csd:3521005')

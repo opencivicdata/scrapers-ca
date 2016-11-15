@@ -13,7 +13,7 @@ class Waterloo(CanadianJurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
-        organization.add_post(role='Chair', label='Waterloo', division_id=self.division_id)
+        organization.add_post(role='Chair', label=self.division_name, division_id=self.division_id)
         organization.add_post(role='Regional Councillor', label='Cambridge', division_id='ocd-division/country:ca/csd:3530010')
         organization.add_post(role='Regional Councillor', label='Kitchener', division_id='ocd-division/country:ca/csd:3530013')
         organization.add_post(role='Regional Councillor', label='Waterloo', division_id='ocd-division/country:ca/csd:3530016')
