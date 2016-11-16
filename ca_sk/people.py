@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
+from six.moves.urllib.parse import quote_plus
+
 COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 
 
@@ -21,7 +23,8 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                p.image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
+                p.image = 'http://dbnwgw85c64xt.cloudfront.net/{}/185/259'.format(quote_plus(page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]))
+                self.get(p.image)  # trigger cache
 
                 contact = page.xpath('//div[@id="mla-contact"]/div[2]')[0]
                 website = contact.xpath('./div[3]/div[3]/div[2]/a')
