@@ -11,12 +11,14 @@ class PickeringPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        mayor_contacts = page.xpath('//table[@class="nicEdit-visualClass"]//tr/td[1]/text()')
-        council_contacts = page.xpath('//table[@class="nicEdit-visualClass"]//tr/td[2]/text()')
+        mayor_contacts = page.xpath('//table[1]//tr/td[1]/text()')
+        council_contacts = page.xpath('//table[1]//tr/td[2]/text()')
 
-        councillors = page.xpath('//table[@id="Table3table"]//strong/ancestor::td')
+        councillors = page.xpath('//table[@id="Table3table"]//img/ancestor::td')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            name = councillor.xpath('.//strong/text()')[0]
+            name = councillor.xpath('.//strong//text()')[0]
+
             if 'Councillor' in name:
                 name = name.replace('Councillor', '').strip()
                 role_ward = councillor.xpath('./text()')[0]
@@ -29,6 +31,7 @@ class PickeringPersonScraper(CanadianScraper):
                 name = councillor.xpath('.//strong/text()')[1]
                 role = 'Mayor'
                 ward = 'Pickering'
+
             email = self.get_email(councillor)
             p = Person(primary_org='legislature', name=name, district=ward, role=role)
             p.add_source(COUNCIL_PAGE)
