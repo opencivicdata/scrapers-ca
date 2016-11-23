@@ -29,7 +29,8 @@ class CapeBretonPersonScraper(CanadianScraper):
                 phone = phone.split('or')[0]
 
             # email protected by js
-            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+            clean_name = name.replace('“', '"').replace('”', '"')
+            p = Person(primary_org='legislature', name=clean_name, district=district, role='Councillor')
             p.add_source(COUNCIL_PAGE)
             p.add_contact('address', address, 'legislature')
             p.add_contact('voice', phone, 'legislature')
