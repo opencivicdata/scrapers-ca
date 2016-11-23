@@ -27,7 +27,7 @@ class ReginaPersonScraper(CanadianScraper):
     def councillor_data(self, url, name, ward):
         page = self.lxmlize(url)
         # sadly, email is a form on a separate page
-        photo_url_rel = page.xpath('//div[@id="contentcontainer"]//img/@src')[0]
+        photo_url_rel = page.xpath('//div[contains(@id, "contentcontainer")]//img/@src')[0]
         photo_url = urljoin(url, photo_url_rel)
 
         m = Person(primary_org='legislature', name=name, district=ward, role='Councillor')

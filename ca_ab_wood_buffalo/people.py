@@ -67,7 +67,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
         name = page.xpath('//h1[@id="pagetitle"]/text()')[0].replace('Mayor', '').strip()
-        image = page.xpath('//div[@id="content"]/p[1]/img/@src')[0]
+        image = page.xpath('//div[@id="content"]//@src')[0]
         contact_url = page.xpath('//li[@id="pageid1954"]/a/@href')[0]
 
         p = Person(primary_org='legislature', name=name, district='Wood Buffalo', role='Mayor')

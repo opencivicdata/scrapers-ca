@@ -37,7 +37,7 @@ class VaughanPersonScraper(CanadianScraper):
                 detail = self.lxmlize(page.xpath('//a[contains(@href,"/Contact-the-Mayor")]/@href')[0])
                 contact_info = detail.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]')[0]
             else:
-                contact_node = page.xpath('//div[@id="WebPartWPQ2"][contains(., "Phone")]')
+                contact_node = page.xpath('//div[contains(@id, "WebPartWPQ")][contains(., "Phone")]')
                 if contact_node:
                     contact_info = contact_node[0]
                 else:
