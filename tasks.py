@@ -151,10 +151,15 @@ def urls():
     for module_name in os.listdir('.'):
         if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'csv', 'disabled'):
             module = importlib.import_module('{}.people'.format(module_name))
-            if module.__dict__.get('COUNCIL_PAGE'):
-                print('{:<60} {}'.format(module_name, module.__dict__['COUNCIL_PAGE']))
+            class_name = next(key for key in module.__dict__.keys() if 'PersonScraper' in key)
+            if module.__dict__[class_name].__bases__[0].__name__ == 'CSVScraper':
+                if module.__dict__.get('COUNCIL_PAGE'):
+                    print('{:<60} COUNCIL_PAGE defined'.format(module_name))
             else:
-                print('{:<60} COUNCIL_PAGE not defined'.format(module_name))
+                if module.__dict__.get('COUNCIL_PAGE'):
+                    print('{:<60} {}'.format(module_name, module.__dict__['COUNCIL_PAGE']))
+                else:
+                    print('{:<60} COUNCIL_PAGE not defined'.format(module_name))
 
 
 @task

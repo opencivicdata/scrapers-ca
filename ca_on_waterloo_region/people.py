@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 from utils import CSVScraper
 
-COUNCIL_PAGE = 'http://www.regionofwaterloo.ca/en/regionalgovernment/regionalcouncil.asp'
-
 
 class WaterlooPersonScraper(CSVScraper):
     csv_url = 'http://www.regionofwaterloo.ca/opendatadownloads/RegionalMunicipalityOfWaterlooCouncil_2014_2018.xls'

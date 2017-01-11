@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 from utils import CSVScraper
 
-COUNCIL_PAGE = 'http://www.saintjohn.ca/en/home/cityhall/mayor-and-council/councillors.aspx'
-
 
 class SaintJohnPersonScraper(CSVScraper):
     csv_url = 'http://www.saintjohn.ca/site/media/SaintJohn/Saint_John_NB_Elected_Officials_Contact_Info.zip'

@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 from utils import CSVScraper
 
-COUNCIL_PAGE = 'http://www.newmarket.ca/en/townhall/contactinformationmayorandtowncouncil.asp'
-
 
 class NewmarketPersonScraper(CSVScraper):
     # There's no permalink to the ZIP or CSV.
