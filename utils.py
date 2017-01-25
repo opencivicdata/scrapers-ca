@@ -237,13 +237,15 @@ class CSVScraper(CanadianScraper):
             data = StringIO(convert.convert(BytesIO(self.get(self.csv_url).content), extension[1:]))
         elif extension == '.zip':
             basename = os.path.basename(self.csv_url)
+            if not self.encoding:
+                self.encoding = 'utf-8'
             try:
                 response = requests.get(self.csv_url, stream=True)
                 with open(basename, 'wb') as f:
                     for chunk in response.iter_content():
                         f.write(chunk)
                 with ZipFile(basename).open(self.filename, 'r') as fp:
-                    data = StringIO(fp.read().decode('utf-8'))
+                    data = StringIO(fp.read().decode(self.encoding))
             finally:
                 os.unlink(basename)
         else:
