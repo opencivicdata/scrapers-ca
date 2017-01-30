@@ -1,69 +1,7 @@
 from __future__ import unicode_literals
-from utils import CanadianScraper, CanadianPerson as Person
-
-COUNCIL_PAGE = 'https://www.saskatoon.ca/city-hall/mayor-city-councillors/city-councillors'
-MAYOR_PAGE = 'https://www.saskatoon.ca/city-hall/mayor-city-councillors/mayors-office'
+from utils import CSVScraper
 
 
-class SaskatoonPersonScraper(CanadianScraper):
-
-    def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-
-        yield self.scrape_mayor()
-
-        councillors = page.xpath('//h2[@class="landing-block-title"]/a')[:-1]
-        for councillor in councillors:
-            url = councillor.attrib['href']
-            page = self.lxmlize(url)
-
-            district = page.xpath('//div[@id="main-content"]/h1/text()')[0]
-            name = page.xpath('//div[@id="main-content"]/h2/text()')[0]
-
-            if name == 'Vacant':
-                continue
-
-            p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(url)
-
-            contacts = page.xpath('//aside[@class="page-sidebar"]/div[1]/p')
-            for contact in contacts[:-1]:
-                label = contact.xpath('./strong/text()')
-                if label:
-                    label = label[0]
-                    value = contact.xpath('./a/text()')[0]
-                    if 'Fax' in label:
-                        contact_type = 'fax'
-                    elif 'Cell' in label:
-                        contact_type = 'cell'
-                    elif 'Home' in label:
-                        contact_type = 'voice'
-                    else:
-                        contact_type = None
-                    if contact_type:
-                        p.add_contact(contact_type, value, 'legislature')
-
-            yield p
-
-    def scrape_mayor(self):
-        page = self.lxmlize(MAYOR_PAGE)
-        image = page.xpath('//img[contains(@alt, "Mayor")]/@src')[0]
-
-        contact_url = page.xpath('//a[contains(text(), "Contact the Mayor")]/@href')[0]
-        contact_page = self.lxmlize(contact_url)
-
-        infos = contact_page.xpath('//h4[contains(text(), "Address")]/following-sibling::p')
-        name = ' '.join(infos[0].text_content().split('\n')[0].split()[2:])
-        address = ' '.join(infos[0].text_content().split('\n')[1:])
-        phone = infos[1].text_content().split('\n')[0].replace('Phone', '')
-        fax = infos[1].text_content().split('\n')[1].replace('Fax', '')
-
-        p = Person(primary_org='legislature', name=name, district='Saskatoon', role='Mayor')
-        p.add_source(MAYOR_PAGE)
-        p.add_source(contact_url)
-        p.image = image
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('fax', fax, 'legislature')
-        return p
+class SaskatoonPersonScraper(CSVScraper):
+    # The CSV is not yet online, so we must manually upload a copy to S3.
+    csv_url = 'http://represent.opennorth.ca.s3.amazonaws.com/data/2017-01-27-saskatoon.csv'
