@@ -4,14 +4,15 @@ from utils import CanadianScraper, CanadianPerson as Person
 COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
 MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor.aspx'
 
+
 class EdmontonPersonScraper(CanadianScraper):
 
     def scrape(self):
         yield self.scrape_mayor()
         page = self.lxmlize(COUNCIL_PAGE)
+
         councillors = page.xpath('//div[contains(@class, "documentexcerpt-module__item")]')
         assert len(councillors), 'No councillors found'
-
         for cell in councillors:
             name = cell[1].text
             if name != 'Vacant':
