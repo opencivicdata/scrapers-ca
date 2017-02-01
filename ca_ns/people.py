@@ -22,7 +22,9 @@ class NovaScotiaPersonScraper(CanadianScraper):
                 return code
 
         page = self.lxmlize(COUNCIL_PAGE)
-        for row in page.xpath('//div[@id="content"]/table/tbody/tr'):
+        members = page.xpath('//div[@id="content"]/table/tbody/tr')
+        assert len(members), 'No members found'
+        for row in members:
             if 'Vacant' not in row.xpath('./td//text()')[0]:
                 full_name, party, district = row.xpath('./td//text()')[:3]
                 name = ' '.join(reversed(full_name.split(',')))

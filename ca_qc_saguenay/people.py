@@ -20,6 +20,7 @@ class SaguenayPersonScraper(CanadianScraper):
         yield m
 
         councillors = page.xpath('//div[./div/h3[contains(text(), "District")]]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             district = councillor.xpath('./div/h3')[0].text_content().replace('#', '')
             name = councillor.xpath('.//p/text()')[0]

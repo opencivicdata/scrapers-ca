@@ -21,8 +21,10 @@ class CoteSaintLucPersonScraper(CanadianScraper):
         councillors_url = page.xpath('//a[contains(text(), "Councillors")]/@href')[0]
         cpage = self.lxmlize(councillors_url)
 
-        councillor_rows = cpage.xpath('//tr[td//img]')[:-1]
-        for councillor_row in councillor_rows:
+        councillors = cpage.xpath('//tr[td//img]')[:-1]
+
+        assert len(councillors), 'No councillors found'
+        for councillor_row in councillors:
             img_cell, info_cell = tuple(councillor_row)
             if info_cell.xpath('.//p//text()[contains(., "Vacant")]'):
                 continue

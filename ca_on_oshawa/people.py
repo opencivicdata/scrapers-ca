@@ -13,6 +13,7 @@ class OshawaPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//table//td')
 
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             if councillor.xpath('./p[1]/text()'):
                 name, role = councillor.xpath('./p[1]/text()')

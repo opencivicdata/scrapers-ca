@@ -10,8 +10,9 @@ class StJohnsPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        nodes = page.xpath('//div[@class="view-content"]/div')
-        for node in nodes:
+        councillors = page.xpath('//div[@class="view-content"]/div')
+        assert len(councillors), 'No councillors found'
+        for node in councillors:
             fields = node.xpath('./div')
             role = fields[0].xpath('./div//text()')[0]
             name = fields[2].xpath('.//a//text()')[0].title().split(role)[-1].strip()

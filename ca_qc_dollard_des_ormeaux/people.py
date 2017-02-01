@@ -16,6 +16,7 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
         general_fax = general_contacts[1]
 
         councillors = page.xpath('//tr/td/p/b')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             text = councillor.text_content()
             if '@' in text or 'NEWSLETTER' in text:

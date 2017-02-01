@@ -17,6 +17,7 @@ class LambtonPersonScraper(CanadianScraper):
         councillors_left = page.xpath('//div[@id="content"]/table/tr/td[1]/table/tr')
         councillors_right = page.xpath('//div[@id="content"]/table/tr/td[2]/table/tr')
         councillors = councillors_left + councillors_right
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             node = councillor.xpath('.//tr[1]')
             text = node[0].text_content()

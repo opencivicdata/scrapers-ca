@@ -12,6 +12,7 @@ class HaldimandCountyPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//a/parent::p')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             if not councillor.text_content().strip():
                 continue

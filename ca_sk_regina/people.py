@@ -12,8 +12,9 @@ class ReginaPersonScraper(CanadianScraper):
     def scrape(self):
         root = self.lxmlize(COUNCIL_PAGE)
 
-        councillor_links = root.xpath('//div[@id="right_col"]//li[contains(., "Ward")]/a')
-        for link in councillor_links:
+        councillors = root.xpath('//div[@id="right_col"]//li[contains(., "Ward")]/a')
+        assert len(councillors), 'No councillors found'
+        for link in councillors:
             text = link.xpath('.//text()')[0]
             ward, name = text.split(' - Councillor ')
             url = link.xpath('./@href')[0]

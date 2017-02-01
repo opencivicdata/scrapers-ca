@@ -10,6 +10,7 @@ class SennevillePersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@class="field-item even"]//tr')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             district = councillor.xpath('./td[1]//strong/text()')[0].replace('no. ', '')
             role = 'Conseiller'

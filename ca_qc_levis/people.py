@@ -10,8 +10,9 @@ class LevisPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        people_links = page.xpath('//div[@class="drawers"]//div[@class="dropdown"]')
-        for person in people_links:
+        councillors = page.xpath('//div[@class="drawers"]//div[@class="dropdown"]')
+        assert len(councillors), 'No councillors found'
+        for person in councillors:
             position, name = person.xpath('./h2/text()')[0].replace('–', '-').split(' - ')
             if ',' in position:
                 role, district = position.title().split(', ')[0].split(' ', 1)

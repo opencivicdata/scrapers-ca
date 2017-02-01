@@ -26,7 +26,10 @@ class TroisRivieresPersonScraper(CanadianScraper):
         resp = self.get(COUNCIL_PAGE)
         # page rendering through JS on the client
         page_re = re.compile(r'createItemNiv3.+"District (.+?)".+(index.+)\\"')
-        for district, url_rel in page_re.findall(resp.text):
+        councillors = page_re.findall(resp.text)
+
+        assert len(councillors), 'No councillors found'
+        for district, url_rel in councillors:
             if district not in ('des Estacades', 'des Plateaux', 'des Terrasses', 'du Sanctuaire'):
                 district = re.sub('\A(?:de(?: la)?|des|du) ', '', district)
 

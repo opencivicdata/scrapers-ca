@@ -9,15 +9,16 @@ COUNCIL_PAGE = 'http://www.assembly.gov.nt.ca/meet-members'
 class NorthwestTerritoriesPersonScraper(CanadianScraper):
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-
         corrections = {
             'Mackenzie Delta': 'Mackenzie-Delta',
             'Tu Nedhe - Wiilideh': 'Tu Nedhe',
         }
 
-        member_cells = page.xpath('//div[@class="views-field views-field-field-picture"]/parent::td')
-        for cell in member_cells:
+        page = self.lxmlize(COUNCIL_PAGE)
+
+        members = page.xpath('//div[@class="views-field views-field-field-picture"]/parent::td')
+        assert len(members), 'No members found'
+        for cell in members:
             name = cell[1].text_content().replace(' .', '. ')  # typo on page
             riding = cell[2].text_content().strip()
             riding = corrections.get(riding, riding)

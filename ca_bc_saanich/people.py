@@ -10,8 +10,9 @@ class SaanichPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-
-        for url in page.xpath('//div[contains(@class, "entry")]')[0].xpath('.//@href'):
+        councillors = page.xpath('//div[contains(@class, "entry")]')[0].xpath('.//@href')
+        assert len(councillors), 'No councillors found'
+        for url in councillors:
             if '@' in url:
                 continue
 

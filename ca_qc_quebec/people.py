@@ -13,6 +13,7 @@ class QuebecPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[contains(@class, "ligne")]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
 
             name = ' '.join(councillor.xpath('.//h3')[0].text_content().strip().split(', ')[::-1])

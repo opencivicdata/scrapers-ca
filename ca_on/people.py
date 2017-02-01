@@ -9,7 +9,9 @@ class OntarioPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        for block in page.xpath('//div[@class="addressblock"]'):
+        members = page.xpath('//div[@class="addressblock"]')
+        assert len(members), 'No members found'
+        for block in members:
             name_elem = block.xpath('.//a[@class="mpp"]')[0]
             name = ' '.join(name_elem.text.split())
 

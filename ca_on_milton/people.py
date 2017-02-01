@@ -12,6 +12,7 @@ class MiltonPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//table[@id="Table1table"]/tbody/tr')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             name = councillor.xpath('./td[2]/p/text()')[1]
             role = councillor.xpath('./td[2]/p/text()')[0].strip()

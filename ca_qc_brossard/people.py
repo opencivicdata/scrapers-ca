@@ -13,9 +13,11 @@ class BrossardPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         contact_page = self.lxmlize(CONTACT_PAGE)
 
-        councillor_elems = page.xpath('//a[contains(@class, "slide item-")]')
+        councillors = page.xpath('//a[contains(@class, "slide item-")]')
         email_links = contact_page.xpath('//a[contains(@href, "mailto:")]')
-        for elem in councillor_elems:
+
+        assert len(councillors), 'No councillors found'
+        for elem in councillors:
             name = elem.xpath('.//div[@class="titre"]/text()')[0]
             if name == 'Poste vacant':
                 continue

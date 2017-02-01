@@ -247,14 +247,20 @@ def tidy():
 
 
 @task
-def sources():
+def sources_and_assertions():
     for module_name in os.listdir('.'):
         if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'csv', 'disabled'):
             path = os.path.join(module_name, 'people.py')
             with codecs.open(path, 'r', 'utf-8') as f:
                 content = f.read()
-                if content.count('add_source') < content.count('lxmlize') - 1:  # exclude the import
-                    print('Add source? {}'.format(path))
+
+                source_count = content.count('add_source')
+                request_count = content.count('lxmlize') + content.count('self.get(') + content.count('requests.get')
+                if source_count < request_count:
+                    print('Expected {} sources after {} requests {}'.format(source_count, request_count, path))
+
+                if 'CSVScraper' not in content and 'assert len(' not in content:
+                    print("Expected an assertion like: assert len(councillors), 'No councillors found' {}".format(path))
 
 
 def module_name_to_metadata(module_name):

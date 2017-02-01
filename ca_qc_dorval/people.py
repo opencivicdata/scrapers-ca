@@ -10,6 +10,7 @@ class DorvalPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//td/p[2]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             info = councillor.xpath('./strong/text()')
 

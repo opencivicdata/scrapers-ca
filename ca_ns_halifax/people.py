@@ -12,13 +12,14 @@ MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
 class HalifaxPersonScraper(CanadianScraper):
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')
-
         corrections = {
             'Timberlea—Beechville—Clayton Park—Wedgewood': 'Timberlea—Beechville—Clayton Park West',
         }
 
+        page = self.lxmlize(COUNCIL_PAGE)
+        councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')
+
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             district = re.sub(r'\s*[–—-]\s*', '—', '—'.join(filter(None, (text.replace(',', '').strip() for text in councillor.xpath('./p/text()')))))
             district = corrections.get(district, district)

@@ -25,7 +25,9 @@ class GatineauPersonScraper(CanadianScraper):
         p.add_contact('email', email)
         yield p
 
-        for raw_district, name, url in list(zip(districts, names, urls))[1:]:
+        councillors = list(zip(districts, names, urls))[1:]
+        assert len(councillors), 'No councillors found'
+        for raw_district, name, url in councillors:
             if name == 'Vacant':
                 continue
 

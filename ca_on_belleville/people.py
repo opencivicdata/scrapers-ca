@@ -16,8 +16,9 @@ class BellevillePersonScraper(CanadianScraper):
         mayor_node = page.xpath('//div[@class="content-field"]/h3[contains(./text(), "Mayor")]/following-sibling::p[2]')[0]
         yield self.scrape_mayor(mayor_node)
 
-        ward_elems = page.xpath('//h3[contains(text(), "Councillors")]')
-        for ward_elem in ward_elems:
+        councillors = page.xpath('//h3[contains(text(), "Councillors")]')
+        assert len(councillors), 'No councillors found'
+        for ward_elem in councillors:
             ward = re.search(r'(Ward.+) Councillors', ward_elem.text).group(1)
             councillor_name_elems = ward_elem.xpath('./following-sibling::div[1]//strong')
             for name_elem in councillor_name_elems:

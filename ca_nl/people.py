@@ -34,7 +34,9 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
                 member_parties[name] = party
 
         page = self.lxmlize(COUNCIL_PAGE)
-        for row in page.xpath('//table[not(@id="footer")][not(@style)]/tr')[1:]:
+        members = page.xpath('//table[not(@id="footer")][not(@style)]/tr')[1:]
+        assert len(members), 'No members found'
+        for row in members:
             name, district, _, email = [cell.text_content().replace('\xa0', ' ') for cell in row]
 
             district = district.replace(' - ', '—')  # m-dash

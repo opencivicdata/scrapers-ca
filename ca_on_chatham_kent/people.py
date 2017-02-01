@@ -14,8 +14,9 @@ class ChathamKentPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        wards = page.xpath('//table[@class="ms-rteTable-4"]')
-        for ward in wards:
+        councillors = page.xpath('//table[@class="ms-rteTable-4"]')
+        assert len(councillors), 'No councillors found'
+        for ward in councillors:
             district_info = ward.xpath('.//p')[0].text_content()
             if 'Mayor' in district_info:
                 area = 'Chatham-Kent'

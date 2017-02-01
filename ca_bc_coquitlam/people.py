@@ -10,7 +10,9 @@ class CoquitlamPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        for person_link in page.xpath('//div[@id="subnav"]//a[@class="L4"]'):
+        councillors = page.xpath('//div[@id="subnav"]//a[@class="L4"]')
+        assert len(councillors), 'No councillors found'
+        for person_link in councillors:
             role, name = person_link.text_content().split(' ', 1)
             url = person_link.attrib['href']
             page = self.lxmlize(url)

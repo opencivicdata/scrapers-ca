@@ -11,8 +11,9 @@ class SurreyPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        councillor_links = page.xpath('//div[@class="inner-wrapper"]//a[contains(text(), "Councillor")]')
-        for link in councillor_links:
+        councillors = page.xpath('//div[@class="inner-wrapper"]//a[contains(text(), "Councillor")]')
+        assert len(councillors), 'No councillors found'
+        for link in councillors:
             role, name = link.text.split(' ', 1)
             url = link.attrib['href']
             councillor_page = self.lxmlize(url)

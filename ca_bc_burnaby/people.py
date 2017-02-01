@@ -10,8 +10,9 @@ class BurnabyPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-
-        for person_url in page.xpath('//h4/a/@href'):
+        councillors = page.xpath('//h4/a/@href')
+        assert len(councillors), 'No councillors found'
+        for person_url in councillors:
             page = self.lxmlize(person_url)
 
             role, name = page.xpath('//title//text()')[0].split(' ', 1)

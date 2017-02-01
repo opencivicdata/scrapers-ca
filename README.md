@@ -55,9 +55,9 @@ Check module names, class names, `classification`, `division_name`, `name` and `
 
     invoke tidy
 
-Check sources are credited:
+Check sources are credited and assertions are made:
 
-    invoke sources
+    invoke sources_and_assertions
 
 Check jurisdiction URLs:
 

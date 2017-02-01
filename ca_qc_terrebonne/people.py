@@ -8,7 +8,9 @@ class TerrebonnePersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
-        for councillor_elem in page.xpath('//div[@class="member-box member-box--gray"]'):
+        councillors = page.xpath('//div[@class="member-box member-box--gray"]')
+        assert len(councillors), 'No councillors found'
+        for councillor_elem in councillors:
             name = councillor_elem.xpath('.//div[@class="fiche__name"]/text()')[0]
             district = councillor_elem.xpath('.//div[@class="fiche__category"]/text()')[0]
             phone = councillor_elem.xpath('.//div[@class="fiche__social"]/span/text()')[0].split('T')[1]

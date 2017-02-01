@@ -10,6 +10,7 @@ class SherbrookePersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="c2087"]//a')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             name = councillor.text_content()
             url = councillor.attrib['href']

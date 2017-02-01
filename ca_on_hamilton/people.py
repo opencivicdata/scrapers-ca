@@ -12,9 +12,9 @@ class HamiltonPersonScraper(CanadianScraper):
         mayor_url = page.xpath('//section/h3[contains(., "Mayor\'s Office")]/a/@href')[0]
         yield self.mayor_data(mayor_url)
 
-        links = page.xpath('//section/h3[contains(., "City Councillors")]/following-sibling::div/ul/li/a')
-
-        for a in links:
+        councillors = page.xpath('//section/h3[contains(., "City Councillors")]/following-sibling::div/ul/li/a')
+        assert len(councillors), 'No councillors found'
+        for a in councillors:
             if '-' in a.text_content():  # vacant if absent
                 yield self.councillor_data(a.attrib['href'])
 

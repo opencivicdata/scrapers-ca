@@ -9,7 +9,10 @@ class QuebecPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        for row in page.xpath('//*[@id="ListeDeputes"]/tbody/tr'):
+        members = page.xpath('//*[@id="ListeDeputes"]/tbody/tr')
+
+        assert len(members), 'No members found'
+        for row in members:
             name_comma, division = [cell.text_content() for cell in row[:2]]
             name = ' '.join(reversed(name_comma.strip().split(',')))
             party = row[2].text_content()

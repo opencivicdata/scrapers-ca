@@ -12,6 +12,7 @@ class KirklandPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 
         councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             if not councillor.text_content().strip():
                 continue

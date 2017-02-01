@@ -22,6 +22,7 @@ class CanadaPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
         rows = page.xpath('//div[@class="main-content"]//tr')[1:]
+        assert len(rows), 'No members found'
         for row in rows:
             name_cell = row.xpath('./td[1]')[0]
             last_name = name_cell.xpath('.//span[1]//text()')[0]

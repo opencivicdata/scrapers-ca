@@ -13,6 +13,7 @@ class CapeBretonPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//table/tbody/tr')[1:]
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             name = councillor.xpath('./td[2]//text()')[0]
             if 'District ' in name:  # Vacant

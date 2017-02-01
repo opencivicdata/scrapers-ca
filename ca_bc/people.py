@@ -12,16 +12,17 @@ class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@cellpadding="4"]//td//a[text()!=""]/@href')
-        for councillor in councillors:
-            page = self.lxmlize(councillor)
+        members = page.xpath('//table[@cellpadding="4"]//td//a[text()!=""]/@href')
+        assert len(members), 'No members found'
+        for member in members:
+            page = self.lxmlize(member)
             # Hon. is followed by Dr. in one case but the clean_name function
             # removes only one honorific title
             name = page.xpath('//h2[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Dr.', '').replace(', Q.C.', '').replace('Wm.', '').strip()
             district, party = cleanup_list(page.xpath('//h2/following-sibling::div[1]/div[2]/div[1]/div/text()'))
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)
-            p.add_source(councillor)
+            p.add_source(member)
 
             p.image = page.xpath('//img[contains(@src, "Members")]/@src')[0]
 

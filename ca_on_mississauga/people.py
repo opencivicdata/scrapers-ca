@@ -11,9 +11,9 @@ class MississaugaPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillor_urls = page.xpath('//li/a[contains(@href, "ward")]')
-
-        for councillor_url in councillor_urls:
+        councillors = page.xpath('//li/a[contains(@href, "ward")]')
+        assert len(councillors), 'No councillors found'
+        for councillor_url in councillors:
             if 'Vacant' not in councillor_url.xpath('./following-sibling::div[2]/text()')[0]:
                 yield self.councillor_data(councillor_url.attrib['href'])
 

@@ -10,20 +10,21 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//table[1]//tr')
+        members = page.xpath('//table[1]//tr')
 
-        for councillor in councillors:
-            name = councillor.xpath('./td[2]//a[1]//text()')[0]
+        assert len(members), 'No members found'
+        for member in members:
+            name = member.xpath('./td[2]//a[1]//text()')[0]
 
-            district_name = councillor.xpath('./td[2]//a[contains(.//text(), "MLA")]//text()')[0].split(':')[1].replace('St ', 'St. ').split('-')
+            district_name = member.xpath('./td[2]//a[contains(.//text(), "MLA")]//text()')[0].split(':')[1].replace('St ', 'St. ').split('-')
             district = district_name[0].strip() + '-' + district_name[1].strip()
-            url = councillor.xpath('./td[2]//a[1]/@href')[0]
+            url = member.xpath('./td[2]//a[1]/@href')[0]
             ext_infos = self.scrape_extended_info(url)
             p = Person(primary_org='legislature', name=name, district=district, role='MLA')
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
-            if ext_infos:  # councillor pages might return errors
+            if ext_infos:  # member pages might return errors
                 email, phone, photo_url = ext_infos
                 p.image = photo_url
                 if email:

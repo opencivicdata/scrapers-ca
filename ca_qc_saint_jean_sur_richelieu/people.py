@@ -13,6 +13,7 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
 
         councillors = page.xpath('//div[@class="article-content"]//td[@class="ms-rteTableOddCol-0"]')
         yield self.scrape_mayor(councillors[0])
+        assert len(councillors), 'No councillors found'
         for councillor in councillors[1:]:
             if not councillor.xpath('.//a'):
                 continue

@@ -12,8 +12,9 @@ class WhitbyPersonScraper(CanadianScraper):
 
         yield self.scrape_mayor(page)
 
-        councillor_nodes = page.xpath('//h3[contains(text(), "Councillors")]/following-sibling::p')[:-1]
-        for councillor_node in councillor_nodes:
+        councillors = page.xpath('//h3[contains(text(), "Councillors")]/following-sibling::p')[:-1]
+        assert len(councillors), 'No councillors found'
+        for councillor_node in councillors:
             text = councillor_node.xpath('./strong/text()')
             if not text or 'Vacant' in text:
                 continue

@@ -13,10 +13,13 @@ class RichmondHillPersonScraper(CanadianScraper):
         yield self.process(url, 'Richmond Hill', 'Mayor')
 
         urls = page.xpath('//h3[contains(text(), "Regional and Local Councillors")]/following-sibling::p[1]//@href')
+        assert len(urls), 'No regional councillors found'
         for index, url in enumerate(urls, 1):
             yield self.process(url, 'Richmond Hill (seat {})'.format(index), 'Regional Councillor')
 
-        for p in page.xpath('//h3[text()="Local Councillors"]/following-sibling::p'):
+        councillors = page.xpath('//h3[text()="Local Councillors"]/following-sibling::p')
+        assert len(councillors), 'No councillors found'
+        for p in councillors:
             if ' - ' in p.text_content():
                 yield self.process(p.xpath('.//@href')[0], p.text_content().split(' - ', 1)[0], 'Councillor')
 

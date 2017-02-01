@@ -10,6 +10,7 @@ class NorthDumfriesPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//table/tbody/tr')[1:]
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             info = councillor.xpath('./td//text()')
             info = [x for x in info if x.strip()]

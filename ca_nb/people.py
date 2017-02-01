@@ -25,7 +25,9 @@ class NewBrunswickPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         councillor_table = page.xpath('//table[@id="customers"]')[0]
-        for row in councillor_table.xpath('.//tr')[1:]:
+        members = councillor_table.xpath('.//tr')[1:]
+        assert len(members), 'No members found'
+        for row in members:
             riding, table_name, email = (' '.join(td.text_content().split()) for td in row[1:])
 
             if 'Vacant' in table_name:

@@ -11,8 +11,9 @@ class EdmontonPersonScraper(CanadianScraper):
         yield self.scrape_mayor()
 
         page = self.lxmlize(COUNCIL_PAGE)
-        councillor_cells = page.xpath('//th[contains(text(), "Ward")]')
-        for cell in councillor_cells:
+        councillors = page.xpath('//th[contains(text(), "Ward")]')
+        assert len(councillors), 'No councillors found'
+        for cell in councillors:
             district = cell.text
             name = cell[1].text
             if name != 'Vacant':

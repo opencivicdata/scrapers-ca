@@ -17,6 +17,7 @@ class MarkhamPersonScraper(CanadianScraper):
         yield self.scrape_mayor(mayor_url)
 
         councillors = page.xpath('//div[@class="interiorContentWrapper"]//td[./a]')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             name_elem = ' '.join(councillor.xpath('.//strong/text()'))
             if 'Mayor' in name_elem:

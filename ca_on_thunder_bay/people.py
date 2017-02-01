@@ -14,6 +14,7 @@ class ThunderBayPersonScraper(CanadianScraper):
 
         mayor = page.xpath('//div/a[contains(@title, "Profile")][1]/@href')
         councillors = mayor + page.xpath('//td//a[contains(@title, "Profile")][1]/@href')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             page = self.lxmlize(councillor)
             info = page.xpath('//table/tbody/tr/td[2]')[0]

@@ -17,6 +17,7 @@ class BrantfordPersonScraper(CanadianScraper):
         yield self.scrape_mayor()
 
         councillors = page.xpath('//div[@id="centre_content"]//tr')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             if 'Position' in councillor.text_content():
                 continue

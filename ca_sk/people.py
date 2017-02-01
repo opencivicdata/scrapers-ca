@@ -11,13 +11,14 @@ class SaskatchewanPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@id="MLAs"]//tr')[1:]
-        for councillor in councillors:
-            if 'Vacant' not in councillor.xpath('./td')[0].text_content():
-                name = councillor.xpath('./td')[0].text_content().split('. ', 1)[1]
-                party = councillor.xpath('./td')[1].text
-                district = councillor.xpath('./td')[2].text_content()
-                url = councillor.xpath('./td[1]/a/@href')[0]
+        members = page.xpath('//table[@id="MLAs"]//tr')[1:]
+        assert len(members), 'No members found'
+        for member in members:
+            if 'Vacant' not in member.xpath('./td')[0].text_content():
+                name = member.xpath('./td')[0].text_content().split('. ', 1)[1]
+                party = member.xpath('./td')[1].text
+                district = member.xpath('./td')[2].text_content()
+                url = member.xpath('./td[1]/a/@href')[0]
                 page = self.lxmlize(url)
 
                 p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)

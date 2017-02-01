@@ -10,8 +10,9 @@ class SaintJeromePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillor_trs = [tr for tr in page.xpath('//table//tr[1]') if len(tr) == 2][:-1]
-        for councillor_tr in councillor_trs:
+        councillors = [tr for tr in page.xpath('//table//tr[1]') if len(tr) == 2][:-1]
+        assert len(councillors), 'No councillors found'
+        for councillor_tr in councillors:
             desc = [text.strip() for text in councillor_tr.xpath('.//text()[normalize-space()]') if text.strip()]
             print(repr(desc))
 

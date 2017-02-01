@@ -20,6 +20,7 @@ class ManitobaPersonScraper(CanadianScraper):
         member_page = self.lxmlize(COUNCIL_PAGE, encoding='utf-8')
         table = member_page.xpath('//table')[0]
         rows = table.cssselect('tr')[1:]
+        assert len(rows), 'No members found'
         for row in rows:
             (namecell, constitcell, partycell) = row.cssselect('td')
             full_name = namecell.text_content().strip()

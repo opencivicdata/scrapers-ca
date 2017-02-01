@@ -12,8 +12,9 @@ class WinnipegPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
-        nodes = page.xpath('//td[@width="105"]')
-        for node in nodes:
+        councillors = page.xpath('//td[@width="105"]')
+        assert len(councillors), 'No councillors found'
+        for node in councillors:
             url = urljoin(COUNCIL_PAGE, node.xpath('.//a/@href')[0])
             ward = re.search('([A-Z].+) Ward', node.xpath('.//a//text()')[0]).group(1)
             ward = ward.replace(' – ', '—').replace(' - ', '—')  # n-dash, m-dash, hyphen, m-dash
