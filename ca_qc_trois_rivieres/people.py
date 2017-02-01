@@ -40,6 +40,7 @@ class TroisRivieresPersonScraper(CanadianScraper):
                 photo_url = page.xpath('//img/@src[contains(., "Conseiller")]')[0]
                 p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
                            image=photo_url)
+                p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
                 p.add_contact('email', email)
                 yield p

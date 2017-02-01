@@ -33,8 +33,10 @@ class VaughanPersonScraper(CanadianScraper):
                 role = 'Mayor'
             name = name.strip()
 
+            contact_details_url = None
             if role == 'Mayor':
-                detail = self.lxmlize(page.xpath('//a[contains(@href,"/Contact-the-Mayor")]/@href')[0])
+                contact_details_url = page.xpath('//a[contains(@href,"/Contact-the-Mayor")]/@href')[0]
+                detail = self.lxmlize(contact_details_url)
                 contact_info = detail.xpath('//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]')[0]
             else:
                 contact_node = page.xpath('//div[contains(@id, "WebPartWPQ")][contains(., "Phone")]')
@@ -49,6 +51,8 @@ class VaughanPersonScraper(CanadianScraper):
 
             p = Person(primary_org='legislature', name=name, district=district.strip(), role=role)
             p.add_source(COUNCIL_PAGE)
+            if contact_details_url:
+                p.add_source(contact_details_url)
             p.add_source(url)
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('fax', fax, 'legislature')

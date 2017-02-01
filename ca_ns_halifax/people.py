@@ -28,9 +28,10 @@ class HalifaxPersonScraper(CanadianScraper):
             if name != 'To be determined':
                 photo = councillor.xpath('.//img/@src')[0]
 
-                councillor_page = self.lxmlize(councillor.xpath('./h2/a/@href')[0])
-                contact_page_url = councillor_page.xpath('//li/a[contains(@href, "contact")]/@href')[0]
-                contact_page = self.lxmlize(contact_page_url)
+                url = councillor.xpath('./h2/a/@href')[0]
+                councillor_page = self.lxmlize(url)
+                contact_details_url = councillor_page.xpath('//li/a[contains(@href, "contact")]/@href')[0]
+                contact_page = self.lxmlize(contact_details_url)
                 contact_node = contact_page.xpath('//div[./h1[contains(text(), "Contact")]]')[0]
 
                 phone = self.get_phone(contact_node, area_codes=[902])
@@ -38,7 +39,8 @@ class HalifaxPersonScraper(CanadianScraper):
 
                 p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
-                p.add_source(contact_page_url)
+                p.add_source(contact_details_url)
+                p.add_source(url)
                 p.add_contact('voice', phone, 'legislature')
                 p.add_contact('email', email)
                 p.image = photo
