@@ -154,12 +154,12 @@ def urls():
             class_name = next(key for key in module.__dict__.keys() if 'PersonScraper' in key)
             if module.__dict__[class_name].__bases__[0].__name__ == 'CSVScraper':
                 if module.__dict__.get('COUNCIL_PAGE'):
-                    print('{:<60} COUNCIL_PAGE defined'.format(module_name))
+                    print('{:<60} Delete COUNCIL_PAGE'.format(module_name))
             else:
                 if module.__dict__.get('COUNCIL_PAGE'):
                     print('{:<60} {}'.format(module_name, module.__dict__['COUNCIL_PAGE']))
                 else:
-                    print('{:<60} COUNCIL_PAGE not defined'.format(module_name))
+                    print('{:<60} Missing COUNCIL_PAGE'.format(module_name))
 
 
 @task
@@ -200,9 +200,9 @@ def tidy():
 
             # Ensure presence of url and styles of address.
             if not member_styles.get(division_id):
-                print('{:<60} No member style of address: {}'.format(module_name, division_id))
+                print('{:<60} Missing member style of address: {}'.format(module_name, division_id))
             if not leader_styles.get(division_id):
-                print('{:<60} No leader style of address: {}'.format(module_name, division_id))
+                print('{:<60} Missing leader style of address: {}'.format(module_name, division_id))
             url = metadata['url']
             if url and not expected['url']:
                 parsed = urlsplit(url)

@@ -47,7 +47,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
                 district = line[:column_index['dist_end']]
                 name = line[column_index['name_start']:column_index['name_end']].strip()
                 phone = line[column_index['phone_start']:column_index['phone_end']].strip().replace('(', '').replace(') ', '-')
-                fax = line[column_index['fax_start']:column_index['fax_end']].strip().replace('(', '').replace(') ', '-')
+                # fax = line[column_index['fax_start']:column_index['fax_end']].strip().replace('(', '').replace(') ', '-')
                 email = line[column_index['email_start']:column_index['email_end']].strip()
                 address = line[column_index['address_start']:column_index['address_end']].strip()
                 address = re.sub(r'\s{2,}', ', ', address)
@@ -65,7 +65,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
                 membership = p.add_membership(org, role='Mayor', district=district)
                 if phone:
                     membership.add_contact_detail('voice', phone, 'legislature')
-                # Im excluding fax because that column isn't properly aligned
+                # I'm excluding fax because that column isn't properly aligned
                 # if fax:
                 #   membership.add_contact_detail('fax', fax)
                 if email:

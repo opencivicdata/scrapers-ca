@@ -60,10 +60,12 @@ class AlbertaPersonScraper(CanadianScraper):
             yield p
 
     def get_csv_url(self):
+        def get_hidden_val(v):
+            return csv_gen_page.xpath('//input[@id="{}"]/@value'.format(v))[0]
+
         csv_gen_page = self.lxmlize(COUNCIL_PAGE)
 
         # ASP forms store session state. Looks like we can't just play back a POST.
-        get_hidden_val = lambda v: csv_gen_page.xpath('//input[@id="{}"]/@value'.format(v))[0]
         post_data = {
             '__VIEWSTATE': get_hidden_val('__VIEWSTATE'),
             '__VIEWSTATEGENERATOR': get_hidden_val('__VIEWSTATEGENERATOR'),

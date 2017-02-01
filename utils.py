@@ -222,12 +222,14 @@ class CSVScraper(CanadianScraper):
     filename = None
     # Table flags
     skip_rows = 0
-    header_converter = lambda self, s: s.lower()
     # Row flags
     corrections = {}
     other_names = {}
     many_posts_per_area = False
     district_name_format_string = None
+
+    def header_converter(self, s):
+        return s.lower()
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
