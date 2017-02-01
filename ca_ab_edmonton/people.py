@@ -19,8 +19,7 @@ class EdmontonPersonScraper(CanadianScraper):
                 page_url = cell[0].attrib['href']
                 page = self.lxmlize(page_url)
                 district_name = page.xpath('//h1[contains(@class, "page-title")]')[0].text_content()
-                district = district_name.split(' - ')[0]
-                name = district_name.split(' - ')[1]
+                district, name = district_name.split(' - ', 1)
 
                 p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
