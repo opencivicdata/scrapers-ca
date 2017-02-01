@@ -9,10 +9,9 @@ class EdmontonPersonScraper(CanadianScraper):
     def scrape(self):
         yield self.scrape_mayor()
         page = self.lxmlize(COUNCIL_PAGE)
-
-
         councillors = page.xpath('//div[contains(@class, "documentexcerpt-module__item")]')
         assert len(councillors), 'No councillors found'
+
         for cell in councillors:
             name = cell[1].text
             if name != 'Vacant':
@@ -34,7 +33,6 @@ class EdmontonPersonScraper(CanadianScraper):
                 if address:
                     address = address[0].text_content()
                     p.add_contact('address', address, 'legislature')
-                    print(address)
 
                 contacts = page.xpath('//table[@summary="Contact information"]//tr')
                 for contact in contacts:
@@ -45,7 +43,6 @@ class EdmontonPersonScraper(CanadianScraper):
                     elif 'Website' in contact_type or 'Facebook' in contact_type or 'Twitter' in contact_type:
                         value = contact.xpath('./td/a/text()')[0]
                         p.add_link(value)
-                        print(value)
                     elif 'Telephone' in contact_type:
                         p.add_contact('voice', value, 'legislature')
                     elif 'Fax' in contact_type:
