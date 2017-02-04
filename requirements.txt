@@ -1,8 +1,8 @@
-# @see https://github.com/opencivicdata/pupa/pull/221
--e git+git://github.com/opencivicdata/pupa.git@83900c3703816375e4573d9c80c36784b37a5922#egg=pupa
+# @see https://github.com/opencivicdata/pupa/issues/249
+-e git+git://github.com/opencivicdata/pupa.git@274cd0ddf9d550c5b20cd99d6d19720041d21222#egg=pupa
 -e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
--e git+git://github.com/opencivicdata/python-opencivicdata-django.git@0.8.0#egg=opencivicdata-django
--e git+git://github.com/sunlightlabs/waterfall#egg=waterfall
+opencivicdata-django==0.8.2
+
 boto==2.33.0 # pupa unpinned
 cssselect==0.9.1
 csvkit==0.9.1
