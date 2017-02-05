@@ -37,7 +37,7 @@ For documentation on the `update` subcommand:
 
 ## Create a scraper
 
-Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID) Viewer](https://opencivicdata.github.io/ocd-id-viewer/) or by browsing the [list of identifiers](https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca.csv). In most cases, a municipality will have a division identifier with a type ID of `csd`. Then, create a scraper with:
+Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID) Viewer](https://opencivicdata.github.io/ocd-id-viewer/) or by browsing the [list of identifiers](https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca.csv). In most cases, a municipality will have a division identifier with a type ID of `csd`. Create a scraper with:
 
     pupa init ca_on_toronto
 
