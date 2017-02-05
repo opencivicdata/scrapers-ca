@@ -26,8 +26,9 @@ class AlbertaPersonScraper(CanadianScraper):
 
     def scrape(self):
         csv_text = self.get(self.get_csv_url()).text
-        cr = csv.DictReader(csv_text.split('\n'))
-        assert len(cr), 'No members found'
+        lines = csv_text.split('\n')
+        cr = csv.DictReader(lines)
+        assert len(lines), 'No members found'
         for mla in cr:
             name = '{} {} {}'.format(mla['MLA First Name'], mla['MLA Middle Names'], mla['MLA Last Name'])
             if name.strip() == '':
