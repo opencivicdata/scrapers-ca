@@ -51,6 +51,10 @@ Use the `get_email` and `get_phone` helpers as much as possible.
 
 ## Maintenance
 
+Make the code style consistent:
+
+    flake8
+
 Check module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files:
 
     invoke tidy
