@@ -65,7 +65,7 @@ Check sources are credited and assertions are made:
 
     invoke sources_and_assertions
 
-Check jurisdiction URLs:
+Check jurisdiction URLs (look for `Delete COUNCIL_PAGE` or `Missing COUNCIL_PAGE` instructions):
 
     invoke urls
 
