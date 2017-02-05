@@ -225,11 +225,15 @@ class CSVScraper(CanadianScraper):
     # Row flags
     corrections = {}
     other_names = {}
+    fallbacks = {}
     many_posts_per_area = False
     district_name_format_string = None
 
     def header_converter(self, s):
         return s.lower()
+
+    def is_valid_row(self, row):
+        return any(row.values()) and row['last name'] != 'Vacant' and row['first name'] != 'Vacant'
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
@@ -256,17 +260,17 @@ class CSVScraper(CanadianScraper):
         reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows, data=data)
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
-            if any(row.values()):
-                if row['last name'] == 'Vacant' or row['first name'] == 'Vacant':
-                    continue
+            if row.get('primary role'):
+                row['primary role'] = re.split(r'(?: (?:and\b|et\b|[A-Z])|[;\n])', row['primary role'], 1)[0].strip()  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
 
+            if self.is_valid_row(row):
                 for key, corrections in self.corrections.items():
                     if row.get(key) and row[key] in corrections:
                         row[key] = corrections[row[key]]
 
-                role = re.split(r'(?: (?:and|et)\b|;)', row['primary role'], 1)[0].strip()  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
                 name = '{} {}'.format(row['first name'], row['last name'])
                 province = row.get('province')
+                role = row['primary role']
 
                 if not re.search(r'[A-Z]', role):  # ca_qc_laval
                     role = role.capitalize()
@@ -276,8 +280,14 @@ class CSVScraper(CanadianScraper):
                         district = self.district_name_format_string.format(**row)
                     else:
                         district = self.jurisdiction.division_name
+                elif row.get('district name'):
+                    district = row['district name']
+                elif self.fallbacks.get('district name'):
+                    district = row[self.fallbacks['district name']]
                 else:
-                    district = row.get('district name') or self.jurisdiction.division_name
+                    district = self.jurisdiction.division_name
+
+                district = district.replace('–', '—')  # n-dash, m-dash
 
                 if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
                     seat_numbers[role][district] += 1
@@ -306,7 +316,8 @@ class CSVScraper(CanadianScraper):
                     p.add_source(row['source url'])
                 if row.get('website'):
                     p.add_link(row['website'], note='web site')
-                p.add_contact('email', row['email'])
+                if row['email']:
+                    p.add_contact('email', row['email'])
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')
                 if row.get('phone'):
