@@ -49,6 +49,8 @@ Avoid using the XPath `string()` function unless the expression is known to not 
 
 Use the `get_email` and `get_phone` helpers as much as possible.
 
+In late 2014/early 2015, we disabled some single-jurisdiction scrapers to lower maintenance costs, some of which have been re-enabled, and disabled all [multi-jurisdiction scrapers](https://github.com/opennorth/represent-canada/issues/95), because Pupa didn't support them. The disabled scrapers are in `disabled/`.
+
 ## Maintenance
 
 Make the code style consistent:
