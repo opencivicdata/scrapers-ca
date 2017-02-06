@@ -283,7 +283,7 @@ class CSVScraper(CanadianScraper):
                 elif row.get('district name'):
                     district = row['district name']
                 elif self.fallbacks.get('district name'):
-                    district = row[self.fallbacks['district name']]
+                    district = row[self.fallbacks['district name']] or self.jurisdiction.division_name
                 else:
                     district = self.jurisdiction.division_name
 
