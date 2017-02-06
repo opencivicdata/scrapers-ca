@@ -314,7 +314,7 @@ class CSVScraper(CanadianScraper):
                 province = row.get('province')
                 role = row['primary role']
 
-                if not re.search(r'[A-Z]', role):  # ca_qc_laval
+                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):  # ca_qc_laval
                     role = role.capitalize()
 
                 if self.district_name_format_string:

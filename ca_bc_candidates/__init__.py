@@ -22,6 +22,7 @@ class BritishColumbiaCandidates(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         for division in Division.get(self.division_id).children('ed'):
-            organization.add_post(role='candidate', label=division.name)
+            if division.attrs['validFrom'] == '2017-05-09':
+                organization.add_post(role='candidate', label=division.name)
 
         yield organization
