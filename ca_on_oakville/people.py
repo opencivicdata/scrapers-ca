@@ -8,7 +8,7 @@ class OakvillePersonScraper(CSVScraper):
     corrections = {
         'primary role': {
             'Town Councillor': 'Councillor',
-            'Regional and Town Councillor': 'Regional Councillor',
+            'Regional': 'Regional Councillor',
         },
     }
 
