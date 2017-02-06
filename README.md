@@ -57,6 +57,10 @@ Make the code style consistent:
 
     flake8
 
+Check whether any non-authoritative CSVs are likely to be stale:
+
+    invoke stale
+
 Check module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files:
 
     invoke tidy
@@ -67,7 +71,7 @@ Check sources are credited and assertions are made:
 
 Check jurisdiction URLs (look for `Delete COUNCIL_PAGE` or `Missing COUNCIL_PAGE` instructions):
 
-    invoke urls
+    invoke council_pages
 
 Update the OCD-IDs:
 

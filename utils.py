@@ -227,6 +227,7 @@ class CSVScraper(CanadianScraper):
     other_names = {}
     fallbacks = {}
     many_posts_per_area = False
+    unique_roles = ('Mayor', 'Regional Chair')
     district_name_format_string = None
 
     def header_converter(self, s):
@@ -268,7 +269,11 @@ class CSVScraper(CanadianScraper):
                     if row.get(key) and row[key] in corrections:
                         row[key] = corrections[row[key]]
 
-                name = '{} {}'.format(row['first name'], row['last name'])
+                if row.get('name'):
+                    name = row['name']
+                else:
+                    name = '{} {}'.format(row['first name'], row['last name'])
+
                 province = row.get('province')
                 role = row['primary role']
 
@@ -289,7 +294,7 @@ class CSVScraper(CanadianScraper):
 
                 district = district.replace('–', '—')  # n-dash, m-dash
 
-                if self.many_posts_per_area and role not in ('Mayor', 'Regional Chair'):
+                if self.many_posts_per_area and role not in self.unique_roles:
                     seat_numbers[role][district] += 1
                     district = '{} (seat {})'.format(district, seat_numbers[role][district])
 

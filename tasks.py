@@ -6,6 +6,7 @@ import csv
 import importlib
 import os
 import re
+from datetime import date, timedelta
 
 import lxml.html
 import requests
@@ -147,7 +148,7 @@ def get_definition(division_id, aggregation=False):
 
 
 @task
-def urls():
+def council_pages():
     for module_name in os.listdir('.'):
         if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'csv', 'disabled'):
             module = importlib.import_module('{}.people'.format(module_name))
@@ -160,6 +161,18 @@ def urls():
                     print('{:<60} {}'.format(module_name, module.__dict__['COUNCIL_PAGE']))
                 else:
                     print('{:<60} Missing COUNCIL_PAGE'.format(module_name))
+
+
+@task
+def stale():
+    for module_name in os.listdir('.'):
+        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'csv', 'disabled'):
+            module = importlib.import_module('{}.people'.format(module_name))
+            class_name = next(key for key in module.__dict__.keys() if 'PersonScraper' in key)
+            if module.__dict__[class_name].__bases__[0].__name__ == 'CSVScraper':
+                klass = module.__dict__[class_name]
+                if hasattr(klass, 'created_at') and klass.created_at < date.today() - timedelta(days=365):
+                    print('{}: Created over a year ago by {}'.format(module_name, klass.contact_person))
 
 
 @task
