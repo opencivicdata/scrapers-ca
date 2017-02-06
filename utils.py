@@ -261,7 +261,7 @@ class CSVScraper(CanadianScraper):
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
             if row.get('primary role'):
-                row['primary role'] = re.split(r'(?: (?:and\b|et\b|[A-Z])|[;\n])', row['primary role'], 1)[0].strip()  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
+                row['primary role'] = re.split(r'(?: (?:and|et|Membre)\b|[;\n])', row['primary role'], 1)[0].strip()  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
 
             if self.is_valid_row(row):
                 for key, corrections in self.corrections.items():
