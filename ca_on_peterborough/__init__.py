@@ -15,7 +15,7 @@ class Peterborough(CanadianJurisdiction):
 
         organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
         for ward_name in ('Ashburnham', 'Monaghan', 'Northcrest', 'Otonabee', 'Town'):
-            for seat_number in range(1, 9):
+            for seat_number in range(1, 3):
                 organization.add_post(role='Councillor', label='{} (seat {})'.format(ward_name, seat_number), division_id=self.division_id)
 
         yield organization
