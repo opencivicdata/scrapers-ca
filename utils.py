@@ -218,21 +218,58 @@ class CanadianScraper(Scraper):
 
 class CSVScraper(CanadianScraper):
     # File flags
+    """
+    Set the CSV file's encoding, like 'windows-1252' ('utf-8' by default).
+    """
     encoding = None
+    """
+    If `csv_url` is a ZIP file, set the compressed file to read.
+    """
     filename = None
+
     # Table flags
+    """
+    If the CSV table starts with non-data rows, set the number of rows to skip.
+    """
     skip_rows = 0
+
     # Row flags
+    """
+    A dictionary of column names to dictionaries of actual to corrected values.
+    """
     corrections = {}
-    other_names = {}
-    fallbacks = {}
+    """
+    Set whether the jurisdiction has multiple members per division, in which
+    case a seat number is appended to the district.
+    """
     many_posts_per_area = False
+    """
+    If `many_posts_per_area` is set, set the roles without seat numbers.
+    """
     unique_roles = ('Mayor', 'Regional Chair')
+    """
+    A dictionary of column names to alternate column names. Rarely used.
+    """
+    fallbacks = {}
+    """
+    A dictionary of people's names to lists of alternate names. Rarely used.
+    """
+    other_names = {}
+    """
+    A format string to generate the district name. Rarely used.
+    """
     district_name_format_string = None
 
+    """
+    Normalizes a column header name. By default, lowercases it.
+    """
     def header_converter(self, s):
         return s.lower()
 
+    """
+    Returns whether the row should be imported. By default, skips empty rows
+    and rows in which a name component is "Vacant".
+    """
     def is_valid_row(self, row):
         return any(row.values()) and row['last name'] != 'Vacant' and row['first name'] != 'Vacant'
 
@@ -311,7 +348,7 @@ class CSVScraper(CanadianScraper):
                         parts.extend(['', row['postal code']])
                     lines.append(' '.join(parts))
 
-                p = CanadianPerson(primary_org='legislature', name=name, district=district, role=role)
+                p = CanadianPerson(primary_org=self.jurisdiction.classification, name=name, district=district, role=role)
                 p.add_source(self.csv_url)
                 if row.get('gender'):
                     p.gender = row['gender']
