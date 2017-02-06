@@ -7,7 +7,7 @@ class Georgina(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3519070'
     division_name = 'Georgina'
-    name = 'Town of Georgina'
+    name = 'Georgina Town Council'
     url = 'http://www.georgina.ca'
 
     def get_organizations(self):

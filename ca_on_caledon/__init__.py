@@ -7,8 +7,8 @@ class Caledon(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3521024'
     division_name = 'Caledon'
-    name = 'Town of Caledon'
-    url = 'http://www.caledon.ca'
+    name = 'Caledon Town Council'
+    url = 'http://www.town.caledon.on.ca'
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)

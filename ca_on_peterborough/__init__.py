@@ -7,7 +7,7 @@ class Peterborough(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3515014'
     division_name = 'Peterborough'
-    name = 'City of Peterborough'
+    name = 'Peterborough City Council'
     url = 'http://www.city.peterborough.on.ca'
 
     def get_organizations(self):

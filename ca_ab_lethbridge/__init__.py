@@ -7,7 +7,7 @@ class Lethbridge(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:4802012'
     division_name = 'Lethbridge'
-    name = 'City of Lethbridge'
+    name = 'Lethbridge City Council'
     url = 'http://www.lethbridge.ca'
 
     def get_organizations(self):

@@ -7,7 +7,7 @@ class WhitchurchStouffville(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3519044'
     division_name = 'Whitchurch-Stouffville'
-    name = 'Town of Whitchurch-Stouffville'
+    name = 'Whitchurch-Stouffville Town Council'
     url = 'http://www.townofws.ca'
 
     def get_organizations(self):

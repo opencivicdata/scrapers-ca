@@ -7,7 +7,7 @@ class Uxbridge(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:3518029'
     division_name = 'Uxbridge'
-    name = 'Township of Uxbridge'
+    name = 'Uxbridge Township Council'
     url = 'http://www.town.uxbridge.on.ca'
 
     def get_organizations(self):
