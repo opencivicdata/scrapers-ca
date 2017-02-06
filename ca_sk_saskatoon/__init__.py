@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from utils import CanadianJurisdiction
-from pupa.scrape import Organization
 
 
 class Saskatoon(CanadianJurisdiction):
