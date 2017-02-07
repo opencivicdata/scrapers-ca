@@ -37,9 +37,7 @@ For documentation on the `update` subcommand:
 
 ## Create a scraper
 
-Find division identifiers using the [Open Civic Data Division Identifier (OCD-ID) Viewer](https://opencivicdata.github.io/ocd-id-viewer/) or by browsing the [list of identifiers](https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca.csv). In most cases, a municipality will have a division identifier with a type ID of `csd`. Create a scraper with:
-
-    pupa init ca_on_toronto
+See the first few steps of [this wiki page](https://github.com/opennorth/represent-canada/wiki/Tasks%3A-Represent-CSV-Schema#3-importing-the-data-into-represent) to create a scraper.
 
 ## Develop a scraper
 
@@ -50,6 +48,8 @@ Avoid using the XPath `string()` function unless the expression is known to not 
 Use the `get_email` and `get_phone` helpers as much as possible.
 
 In late 2014/early 2015, we disabled some single-jurisdiction scrapers to lower maintenance costs, some of which have been re-enabled, and disabled all [multi-jurisdiction scrapers](https://github.com/opennorth/represent-canada/issues/95), because Pupa didn't support them. The disabled scrapers are in `disabled/`.
+
+We heavily modify Pupa's validations in `patch.py` to be as strict as possible in order to keep data quality high. We subclass Pupa's `Scraper`, `Jurisdiction` and `Person` classes in `utils.py` to reduce code duplication and to correct common data quality issues.
 
 ## Maintenance
 

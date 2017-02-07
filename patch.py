@@ -11,7 +11,9 @@ from pupa.scrape.schemas.membership import schema as membership_schema
 from pupa.scrape.schemas.organization import schema as organization_schema
 from six import string_types
 
+# contact_details[].type must not be blank.
 _contact_details['items']['properties']['type']['blank'] = False
+# Override CONTACT_TYPES in https://github.com/opencivicdata/python-opencivicdata-django/blob/master/opencivicdata/common.py
 _contact_details['items']['properties']['type']['enum'] = [
     'address',
     'cell',
@@ -19,7 +21,9 @@ _contact_details['items']['properties']['type']['enum'] = [
     'fax',
     'voice',
 ]
+# contact_details[].value must not be blank.
 _contact_details['items']['properties']['value']['blank'] = False
+# Validate the format of contact_details[].value if contact_details[].type is an email address or telephone number.
 _contact_details['items']['properties']['value']['conditionalPattern'] = [
     (r'\A([A-Za-z0-9._\'-]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z',
         lambda x: x['type'] == 'email'),
@@ -30,16 +34,23 @@ _contact_details['items']['properties']['value']['conditionalPattern'] = [
     # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
     #  lambda x: x['type'] == 'address'),
 ]
+# Validate the format of contact_details[].note.
 _contact_details['items']['properties']['note']['pattern'] = r'\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z'
-
+# contact_details[] must not include unexpected properties.
 _contact_details['items']['additionalProperties'] = False
 
+# links[].url must not be blank.
 _links['items']['properties']['url']['blank'] = False
+# Validate the format of links[].url.
 _links['items']['properties']['url']['pattern'] = r'\A(?:ftp|https?)://'
+# links[] must not include unexpected properties.
 _links['items']['additionalProperties'] = False
 
+# sources[].url must not be blank.
 _sources['items']['properties']['url']['blank'] = False
+# Validate the format of sources[].url.
 _sources['items']['properties']['url']['pattern'] = r'\A(?:ftp|https?)://'
+# sources[] must not include unexpected properties.
 _sources['items']['additionalProperties'] = False
 
 # We must copy the subschema for each model.
@@ -102,6 +113,7 @@ person_links['maxMatchingItems'] = [
         'Person has many youtube.com links'),
 ]
 
+# memberships[].role must not be blank.
 membership_schema['properties']['role']['blank'] = False
 membership_schema['properties']['contact_details'] = membership_contact_details
 membership_schema['properties']['links'] = membership_links

@@ -178,7 +178,6 @@ class CanadianScraper(Scraper):
 
         try:
             text = response.text
-            text = text.replace('"www.facebook.com/', '"https://www.facebook.com/')  # XXX ca_candidates
             text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
             page = lxml.html.fromstring(text)
         except etree.ParserError:
