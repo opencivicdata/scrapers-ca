@@ -13,7 +13,7 @@ class VaughanPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="WebPartWPQ3"]//ul[@class="dfwp-list"][1]/li/div/div/a')
+        councillors = page.xpath('//table[@class="ms-rteTable-0"]//a')
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
             url = councillor.attrib['href']
