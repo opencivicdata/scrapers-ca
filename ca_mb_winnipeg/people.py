@@ -12,19 +12,20 @@ class WinnipegPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
-        councillors = page.xpath('//td[@width="105"]')
+        councillors = page.xpath('//table[@class="council-table"]//td[not(@colspan)]')
         assert len(councillors), 'No councillors found'
         for node in councillors:
             url = urljoin(COUNCIL_PAGE, node.xpath('.//a/@href')[0])
-            ward = re.search('([A-Z].+) Ward', node.xpath('.//a//text()')[0]).group(1)
+            text = ' '.join(node.xpath('.//a//text()'))
+            ward = re.search('([A-Z].+) Ward', text).group(1)
             ward = ward.replace(' – ', '—').replace(' - ', '—')  # n-dash, m-dash, hyphen, m-dash
             ward = ward.replace('St. Norbert', 'St Norbert')  # to match ocd-division-ids
             name = ' '.join(node.xpath('.//span[@class="k80B"][1]/text()'))
             yield self.councillor_data(url, name, ward)
 
-        mayor_node = page.xpath('//td[@width="315"]')[0]
-        mayor_name = mayor_node.xpath('./a//text()')[0][len('Mayor '):]
-        mayor_photo_url = mayor_node.xpath('./img/@src')[0]
+        mayor_node = page.xpath('//td[@colspan]')[0]
+        mayor_name = mayor_node.xpath('.//p[@class="k90B"][1]/text()')[0].replace('Mayor ', '')
+        mayor_photo_url = mayor_node.xpath('.//img/@src')[0]
         m = Person(primary_org='legislature', name=mayor_name, district='Winnipeg', role='Mayor')
         m.add_source(COUNCIL_PAGE)
         # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail
