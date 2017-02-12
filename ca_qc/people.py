@@ -15,16 +15,21 @@ class QuebecPersonScraper(CanadianScraper):
         for row in members:
             name_comma, division = [cell.text_content() for cell in row[:2]]
             name = ' '.join(reversed(name_comma.strip().split(',')))
-            party = row[2].text_content()
+            party = row[2].text_content().strip()
             email = self.get_email(row[3], error=False)
             detail_url = row[0][0].attrib['href']
             detail_page = self.lxmlize(detail_url)
-            photo_url = detail_page.xpath('//img[@class="photoDepute"]/@src')[0]
+            photo_url = detail_page.xpath('//img[@class="photoDepute"]/@src')
             division = division.replace('–', '—')  # n-dash, m-dash
+            if party == 'Indépendante':
+                party = 'Indépendant'
+
             p = Person(primary_org='legislature', name=name, district=division, role='MNA',
-                       party=party, image=photo_url)
+                       party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
+            if photo_url:
+                p.image = photo_url[0]
             if email:
                 p.add_contact('email', email)
             contact_url = detail_url.replace('index.html', 'coordonnees.html')

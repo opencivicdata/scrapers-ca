@@ -14,7 +14,9 @@ class SaintJeromePersonScraper(CanadianScraper):
         assert len(councillors), 'No councillors found'
         for councillor_tr in councillors:
             desc = [text.strip() for text in councillor_tr.xpath('.//text()[normalize-space()]') if text.strip()]
-            print(repr(desc))
+
+            if 'vacant' in desc[1]:
+                continue
 
             if len(desc) == 3:
                 role = 'Maire'
