@@ -5,6 +5,7 @@ import csv
 import os
 import re
 from collections import defaultdict
+from datetime import datetime
 from ftplib import FTP
 from zipfile import ZipFile
 
@@ -378,6 +379,14 @@ class CSVScraper(CanadianScraper):
 
 
 class CanadianJurisdiction(Jurisdiction):
+    """
+    Whether to create posts whose labels match division names or type IDs.
+    """
+    use_type_id = False
+    """
+    Which division types to skip when creating posts.
+    """
+    exclude_types = []
 
     def __init__(self):
         super(CanadianJurisdiction, self).__init__()
@@ -396,9 +405,6 @@ class CanadianJurisdiction(Jurisdiction):
                 pass
 
     def get_organizations(self):
-        exclude_type_ids = getattr(self, 'exclude_type_ids', [])
-        use_type_id = getattr(self, 'use_type_id', False)
-
         organization = Organization(self.name, classification=self.classification)
 
         parent = Division.get(self.division_id)
@@ -406,11 +412,11 @@ class CanadianJurisdiction(Jurisdiction):
             post = Post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id, organization_id=organization._id)
             yield post
 
-        children = [child for child in parent.children() if child._type != 'place' and child._type not in exclude_type_ids]
+        children = [child for child in parent.children() if child._type != 'place' and child._type not in self.exclude_types]
 
         for child in children:
-            if child:
-                if use_type_id:
+            if not child.attrs.get('validFrom') or child.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
+                if self.use_type_id:
                     label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
                     label = child.name
