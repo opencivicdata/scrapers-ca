@@ -39,31 +39,6 @@ class LambtonPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
 
             p.image = councillor.xpath('.//img/@src')[0]
-
-            info = councillor.xpath('./td/table/tr[2]/td')[0].text_content()
-            residential_info = re.search('(?<=Residence:)(.*(?=Business Phone)|.*(?=Municipal Office))', info, flags=re.DOTALL).group(0)
-            self.get_contacts(residential_info, 'residence', p)
-            municipal_info = re.findall(r'(?<=Municipal Office:)(.*(?=Bio)|.*)', info, flags=re.DOTALL)[0]
-            self.get_contacts(municipal_info, 'legislature', p)
+            p.add_contact('email', self.get_email(councillor))
 
             yield p
-
-    def get_contacts(self, text, note, councillor):
-        address = text.split('Telephone')[0].split('Phone')[0]
-        councillor.add_contact('address', address, note)
-        text = text.replace(address, '').split(':')
-        for i, contact in enumerate(text):
-            if i == 0:
-                continue
-            contact_type = next(x.strip() for x in re.findall(r'[A-Za-z ]+', text[i - 1]) if x.strip() and x.strip() != 'ext')
-            if '@' in contact:
-                contact = contact.strip()
-            else:
-                contact = re.findall(r'[0-9]{3}[- ][0-9]{3}-[0-9]{4}(?: ext\. [0-9]+)?', contact)[0].replace(' ', '-')
-
-            if 'Fax' in contact_type:
-                councillor.add_contact('fax', contact, note)
-            elif 'Tel' in contact_type:
-                councillor.add_contact('voice', contact, note)
-            elif 'email' in contact_type:
-                councillor.add_contact('email', contact)
