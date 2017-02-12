@@ -306,10 +306,10 @@ class CSVScraper(CanadianScraper):
                     if row.get(key) and row[key] in corrections:
                         row[key] = corrections[row[key]]
 
-                if row.get('name'):
-                    name = row['name']
-                else:
+                if row.get('first name') and row.get('last name'):
                     name = '{} {}'.format(row['first name'], row['last name'])
+                else:
+                    name = row['name']
 
                 province = row.get('province')
                 role = row['primary role']
