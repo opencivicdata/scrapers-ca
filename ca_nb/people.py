@@ -33,14 +33,18 @@ class NewBrunswickPersonScraper(CanadianScraper):
             if 'Vacant' in table_name:
                 continue
 
-            riding_fixed = riding.replace('\x97', '-')
+            district = riding.replace('\x97', '-')
             name_with_status, party_abbr = re.match(
                 r'(.+) \((.+)\)', table_name).groups()
             name = name_with_status.split(',')[0]
             photo_page_url = row[2][0].attrib['href']
             photo_url = self.get_photo_url(photo_page_url)
 
-            p = Person(primary_org='legislature', name=name, district=riding_fixed, role='MLA',
+            # @see https://en.wikipedia.org/wiki/Charlotte-Campobello
+            if district == 'Saint Croix':
+                district = 'Charlotte-Campobello'
+
+            p = Person(primary_org='legislature', name=name, district=district, role='MLA',
                        party=get_party(party_abbr.strip()), image=photo_url)
             p.add_contact('email', email)
             p.add_source(photo_page_url)
