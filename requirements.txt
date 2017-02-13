@@ -1,19 +1,20 @@
 # @see https://github.com/opencivicdata/pupa/issues/249
 -e git+git://github.com/opencivicdata/pupa.git@274cd0ddf9d550c5b20cd99d6d19720041d21222#egg=pupa
--e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
-opencivicdata-django==0.8.2
 
-boto==2.33.0 # pupa unpinned
-cssselect==0.9.1
-csvkit==0.9.1
-Django==1.9.11
+# pupa unpinned
+Django==1.10.5
+opencivicdata-django==0.8.2
+psycopg2==2.5.5
+validictory==1.0.1
+-e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
+
+# Scrapers
+csvkit==0.9.1 # @todo Use agate-excel
 lxml==3.3.5
-psycopg2==2.5.3 # pupa unpinned
 requests==2.6.0
-six==1.8.0
+six==1.10.0
 
 # Validation
-validictory==1.0.1
 regex==2014.04.10
 
 # Maintenance

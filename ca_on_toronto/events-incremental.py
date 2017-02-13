@@ -65,7 +65,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         rows = table_node.xpath('tr')
         headers = [sanitize_key(col.text) for col in rows.pop(0)]
         for row in rows:
-            meeting_link = row.cssselect('a')[0].attrib['href']
+            meeting_link = row.xpath('.//a')[0].attrib['href']
             values = [col.text_content().strip() for col in row]
             item = dict(zip(headers, values))
             item.update({'meeting': sanitize_org_name(item['meeting'])})
@@ -167,7 +167,7 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         page = self.lxmlize(url)
         main = page.xpath('//table[1]/..')[0]
         top_level_elems = main.getchildren()
-        section_breaks = page.cssselect('table.border')
+        section_breaks = page.xpath('.//table[contains(@class, "border")]')
 
         section_break_indices = [i for i, elem in enumerate(top_level_elems) if elem in section_breaks]
 

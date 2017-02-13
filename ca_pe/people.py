@@ -35,10 +35,10 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
 
     def scrape_extended_info(self, url):
         root = self.lxmlize(url)
-        if not root.cssselect('.colmask.rightmenu'):  # Speaker page
-            main = root.cssselect('#content table')[0]
-            photo_url = main.cssselect('img')[0].get('src')
-            contact_cell = main.cssselect('td:contains("Contact information")')[0]
+        if not root.xpath('//div[contains(@class, "colmask")][contains(@class, "rightmenu")]'):  # Speaker page
+            main = root.xpath('//div[@id="content"]//table')[0]
+            photo_url = main.xpath('.//img')[0].get('src')
+            contact_cell = main.xpath('.//td[contains(., "nformation")]')[0]
             phone = None
             phone_s = re.search(r'(?:Telephone|Tel|Phone):(.+?)\n', contact_cell.text_content())
             if phone_s:
