@@ -1,14 +1,14 @@
 from __future__ import unicode_literals
-
-from collections import defaultdict
-from pupa.scrape import Bill, VoteEvent
 from utils import CanadianScraper
+from pupa.scrape import Bill, VoteEvent
 
-import datetime
-import lxml.etree as etree
-import traceback
-import pytz
 import re
+import datetime
+import traceback
+from collections import defaultdict
+
+import lxml.etree as etree
+import pytz
 
 # TODO: Create ticket to move lxmlize into pupa.scrape.Base
 

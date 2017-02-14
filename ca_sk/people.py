@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-from six.moves.urllib.parse import quote_plus
+from urllib.parse import quote_plus
 
 COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 

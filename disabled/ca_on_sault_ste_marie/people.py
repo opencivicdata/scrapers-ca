@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
-from six.moves.urllib.parse import urljoin
+from urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.city.sault-ste-marie.on.ca/Open_Page.aspx?ID=174&deptid=1'
 

@@ -8,13 +8,13 @@ import os
 import re
 from datetime import date, timedelta
 from inspect import getsource
+from urllib.parse import urlsplit
 
 import lxml.html
 import requests
 from invoke import task
 from opencivicdata.divisions import Division
 from six import next, StringIO, text_type
-from six.moves.urllib.parse import urlsplit
 from unidecode import unidecode
 
 # Map Standard Geographical Classification codes to the OCD identifiers of provinces and territories.

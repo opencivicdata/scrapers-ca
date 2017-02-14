@@ -1,12 +1,13 @@
 from __future__ import unicode_literals
 from utils import CanadianScraper
-
 from pupa.scrape import Event
-from urllib.parse import parse_qs, urlparse
-import lxml.html
-import datetime as dt
-import pytz
+
 import re
+import datetime
+from urllib.parse import parse_qs, urlparse
+
+import lxml.html
+import pytz
 
 from .constants import (
     CALENDAR_DAY_TEMPLATE,
@@ -39,10 +40,10 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         self.seen_agenda_items = []
 
     def scrape(self):
-        today = dt.datetime.today()
+        today = datetime.datetime.today()
         delta_days = 7
-        start_date = today - dt.timedelta(days=delta_days)
-        end_date = today + dt.timedelta(days=delta_days * 2)
+        start_date = today - datetime.timedelta(days=delta_days)
+        end_date = today + datetime.timedelta(days=delta_days * 2)
 
         yield from self.scrape_events_range(start_date, end_date)
 
@@ -103,14 +104,14 @@ class TorontoIncrementalEventScraper(CanadianScraper):
         def daterange(start_date, end_date):
             number_of_days = int((end_date - start_date).days)
             for n in range(number_of_days):
-                yield start_date + dt.timedelta(n)
+                yield start_date + datetime.timedelta(n)
 
         for date in daterange(start_date, end_date):
             calendar_day_url = CALENDAR_DAY_TEMPLATE.format(date.year, date.month - 1, date.day)
             events = self.extract_events_by_url(calendar_day_url)
             for event in events:
                 tz = pytz.timezone("America/Toronto")
-                time = dt.datetime.strptime(event['time'], '%I:%M %p')
+                time = datetime.datetime.strptime(event['time'], '%I:%M %p')
                 start = tz.localize(date.replace(hour=time.hour, minute=time.minute, second=0, microsecond=0))
                 org_name = event['meeting']
                 e = Event(

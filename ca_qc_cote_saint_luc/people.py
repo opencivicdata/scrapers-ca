@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-from six.moves.urllib.parse import urljoin
+from urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
 

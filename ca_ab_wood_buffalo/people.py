@@ -3,8 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 from collections import defaultdict
-
-from six.moves.urllib.parse import urljoin
+from urllib.parse import urljoin
 
 COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Council/Councillor-Profiles.htm'
 
