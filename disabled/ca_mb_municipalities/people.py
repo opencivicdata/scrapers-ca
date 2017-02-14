@@ -1,8 +1,7 @@
 from utils import CanadianScraper, CanadianPerson as Person
+from pupa.scrape import Organization
 
 import re
-
-from pupa.scrape import Organization
 
 COUNCIL_PAGE = 'http://web5.gov.mb.ca/Public/municipalities.aspx'
 

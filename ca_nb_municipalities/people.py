@@ -1,5 +1,4 @@
 from utils import CanadianScraper, CanadianPerson as Person
-
 from pupa.scrape import Organization
 
 COUNCIL_PAGE = 'http://www2.gnb.ca/content/gnb/en/departments/elg/local_government/content/community_profiles.html'

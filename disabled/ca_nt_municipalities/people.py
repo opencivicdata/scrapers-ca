@@ -1,6 +1,5 @@
 # coding: utf-8
 from utils import CanadianScraper, CanadianPerson as Person
-
 from pupa.scrape import Organization
 
 COUNCIL_PAGE = 'http://www.nwtac.com/about/communities/'
