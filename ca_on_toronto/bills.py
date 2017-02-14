@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianScraper
 from pupa.scrape import Bill, VoteEvent
 

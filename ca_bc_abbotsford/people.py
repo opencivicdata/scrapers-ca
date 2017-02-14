@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.abbotsford.ca/city_hall/mayor_and_council/city_council.htm'

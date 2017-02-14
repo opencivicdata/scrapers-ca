@@ -1,5 +1,4 @@
 # coding: utf-8
-from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.ontla.on.ca/web/members/member_addresses.do'

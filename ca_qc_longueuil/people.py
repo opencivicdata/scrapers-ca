@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'https://www.longueuil.quebec/fr/conseil-ville'

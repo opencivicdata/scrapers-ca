@@ -1,5 +1,4 @@
 # coding: utf-8
-from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://ville.montreal-est.qc.ca/la-ville/conseil-municipal/conseils-municipaux/'

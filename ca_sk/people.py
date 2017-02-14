@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 from urllib.parse import quote_plus

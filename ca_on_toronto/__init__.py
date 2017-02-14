@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from .jurisdiction import TorontoJurisdiction
 
 import lxml.html

@@ -1,13 +1,11 @@
-from __future__ import unicode_literals
+from pupa.scrape import Bill, VoteEvent
+from utils import CanadianScraper
 
 import csv
 import re
 from collections import defaultdict
 from datetime import datetime
-
-from pupa.scrape import Bill, VoteEvent
-from six import StringIO
-from utils import CanadianScraper
+from io import StringIO
 
 SOURCE_URL = 'http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport'
 

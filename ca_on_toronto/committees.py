@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from collections import defaultdict
 from pupa.scrape import Organization
 from utils import CanadianScraper

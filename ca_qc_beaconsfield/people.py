@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'http://www.beaconsfield.ca/fr/notre-ville/conseil-de-ville-et-districts-electoraux'

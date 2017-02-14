@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianJurisdiction, clean_type_id
 from pupa.scrape import Organization
 

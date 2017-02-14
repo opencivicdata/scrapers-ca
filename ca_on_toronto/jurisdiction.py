@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from utils import CanadianJurisdiction
 from pupa.scrape import Organization
 from .constants import TWO_LETTER_ORG_CODE_SCHEME

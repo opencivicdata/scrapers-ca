@@ -1,5 +1,4 @@
 # coding: utf-8
-from __future__ import unicode_literals
 from utils import CanadianJurisdiction
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
