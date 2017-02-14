@@ -7,13 +7,13 @@ import os
 import re
 from datetime import date, timedelta
 from inspect import getsource
+from io import StringIO
 from urllib.parse import urlsplit
 
 import lxml.html
 import requests
 from invoke import task
 from opencivicdata.divisions import Division
-from six import next, StringIO, text_type
 from unidecode import unidecode
 
 # Map Standard Geographical Classification codes to the OCD identifiers of provinces and territories.
@@ -52,7 +52,7 @@ def slug(name):
     """
     Slugifies a division name.
     """
-    return unidecode(text_type(name).lower().translate({
+    return unidecode(str(name).lower().translate({
         ord(' '): '_',
         ord("'"): '_',
         ord('-'): '_',  # dash
@@ -153,7 +153,7 @@ def get_definition(division_id, aggregation=False):
 
     # Determine the class name.
     class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', division.name)))
-    expected['class_name'] = unidecode(text_type(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
+    expected['class_name'] = unidecode(str(''.join(word if re.match('[A-Z]', word) else word.capitalize() for word in class_name_parts)))
     if aggregation:
         expected['class_name'] += 'Municipalities'
 

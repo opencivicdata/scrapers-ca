@@ -8,7 +8,6 @@ from pupa.scrape.schemas.common import contact_details as _contact_details, link
 from pupa.scrape.schemas.person import schema as person_schema
 from pupa.scrape.schemas.membership import schema as membership_schema
 from pupa.scrape.schemas.organization import schema as organization_schema
-from six import string_types
 
 # contact_details[].type must not be blank.
 _contact_details['items']['properties']['type']['blank'] = False
@@ -137,7 +136,7 @@ person_schema['properties']['district'] = {'type': 'string', 'blank': False}
 
 def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
     value = x.get(fieldname)
-    if isinstance(value, string_types):
+    if isinstance(value, str):
         for pattern, method in arguments:
             if method(x) and not re.search(pattern, value):
                 self._error("does not match regular expression '{pattern}'",

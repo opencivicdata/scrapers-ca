@@ -6,6 +6,7 @@ import re
 from collections import defaultdict
 from datetime import datetime
 from ftplib import FTP
+from io import BytesIO, StringIO
 from urllib.parse import urlparse, unquote
 from zipfile import ZipFile
 
@@ -16,7 +17,6 @@ from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Organization, Person, Post
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from six import BytesIO, StringIO, string_types, text_type
 
 import patch  # patch patches validictory # noqa
 
@@ -477,7 +477,7 @@ class CanadianPerson(Person):
         if role == 'City Councillor':
             role = 'Councillor'
         for k, v in kwargs.items():
-            if isinstance(v, string_types):
+            if isinstance(v, str):
                 kwargs[k] = clean_string(v)
         super(CanadianPerson, self).__init__(name=name, district=district, role=role, **kwargs)
 
@@ -593,11 +593,11 @@ abbreviations = {
 
 
 def clean_string(s):
-    return re.sub(r' *\n *', '\n', whitespace_and_newline_re.sub(' ', text_type(s).translate(table)).strip())
+    return re.sub(r' *\n *', '\n', whitespace_and_newline_re.sub(' ', str(s).translate(table)).strip())
 
 
 def clean_name(s):
-    return honorific_suffix_re.sub('', honorific_prefix_re.sub('', whitespace_re.sub(' ', text_type(s).translate(table)).strip()))
+    return honorific_suffix_re.sub('', honorific_prefix_re.sub('', whitespace_re.sub(' ', str(s).translate(table)).strip()))
 
 
 def capitalize(s):
