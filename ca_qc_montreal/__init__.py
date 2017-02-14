@@ -10,6 +10,16 @@ class Montreal(CanadianJurisdiction):
     division_name = 'Montréal'
     name = 'Conseil municipal de Montréal'
     url = 'http://www.ville.montreal.qc.ca'
+    parties = [
+        {'name': 'Coalition Montréal'},
+        {'name': 'Indépendante'},
+        {'name': 'Projet Montréal'},
+        {'name': 'Vrai changement pour Montréal'},
+        {'name': 'Équipe Anjou'},
+        {'name': 'Équipe Barbe Team – Pro action LaSalle'},
+        {'name': 'Équipe Dauphin Lachine'},
+        {'name': 'Équipe Denis Coderre pour Montréal'},
+    ]
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)

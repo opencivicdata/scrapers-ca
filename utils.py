@@ -292,7 +292,7 @@ class CSVScraper(CanadianScraper):
     """
     def header_converter(self, s):
         header = s.lower().replace('_', ' ')
-        if self.locale:
+        if hasattr(self, 'locale'):
             return self.column_headers[self.locale].get(header, header)
         else:
             return header
@@ -381,16 +381,24 @@ class CSVScraper(CanadianScraper):
                         parts.extend(['', row['postal code']])
                     lines.append(' '.join(parts))
 
-                p = CanadianPerson(primary_org=self.jurisdiction.classification, name=name, district=district, role=role)
+                p = CanadianPerson(primary_org=self.jurisdiction.classification, name=name, district=district, role=role, party=row.get('party name'))
                 p.add_source(self.csv_url)
+
                 if row.get('gender'):
                     p.gender = row['gender']
                 if row.get('photo url'):
                     p.image = row['photo url']
+
                 if row.get('source url'):
                     p.add_source(row['source url'])
+
                 if row.get('website'):
                     p.add_link(row['website'], note='web site')
+                if row.get('facebook'):
+                    p.add_link(re.sub(r'[#?].+', '', row['facebook']))
+                if row.get('twitter'):
+                    p.add_link(row['twitter'])
+
                 if row['email']:
                     p.add_contact('email', row['email'])
                 if lines:
@@ -401,13 +409,11 @@ class CSVScraper(CanadianScraper):
                     p.add_contact('fax', row['fax'], 'legislature')
                 if row.get('cell'):
                     p.add_contact('cell', row['cell'], 'legislature')
-                if row.get('facebook'):
-                    p.add_link(re.sub(r'[#?].+', '', row['facebook']))
-                if row.get('twitter'):
-                    p.add_link(row['twitter'])
+
                 if name in self.other_names:
                     for other_name in self.other_names[name]:
                         p.add_name(other_name)
+
                 yield p
 
 
