@@ -471,6 +471,9 @@ class CanadianJurisdiction(Jurisdiction):
 class CanadianPerson(Person):
 
     def __init__(self, *, name, district, role, **kwargs):
+        """
+        Cleans a person's name, district, role and any other attributes.
+        """
         name = clean_name(name)
         district = clean_string(district).replace('&', 'and')
         role = clean_string(role)
@@ -482,6 +485,9 @@ class CanadianPerson(Person):
         super(CanadianPerson, self).__init__(name=name, district=district, role=role, **kwargs)
 
     def __setattr__(self, name, value):
+        """
+        Corrects gender values.
+        """
         if name == 'gender':
             value = value.lower()
             if value == 'm':
@@ -491,18 +497,20 @@ class CanadianPerson(Person):
         super(CanadianPerson, self).__setattr__(name, value)
 
     def add_link(self, url, *, note=''):
+        """
+        Corrects links without schemes or domains.
+        """
         url = url.strip()
         if url.startswith('www.'):
             url = 'http://{}'.format(url)
         if re.match(r'\A@[A-Za-z]+\Z', url):
             url = 'https://twitter.com/{}'.format(url[1:])
-
         self.links.append({'note': note, 'url': url})
 
-    # @todo Over time, we should replace all calls to `add_contact` with calls to
-    # `add_contact_detail` on a Membership. We will have to override Membership's
-    # `add_contact_detail` method to tidy the values.
     def add_contact(self, type, value, note='', area_code=None):
+        """
+        Cleans and adds a contact detail to the person's membership.
+        """
         if type:
             type = clean_string(type)
         if note:
@@ -528,7 +536,6 @@ class CanadianPerson(Person):
         """
         @see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html
         """
-
         splits = re.split(r'(?:\b \(|/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
         digits = re.sub(r'\D', '', splits[0])
 
@@ -551,7 +558,6 @@ class CanadianPerson(Person):
         Corrects the postal code, abbreviates the province or territory name, and
         formats the last line of the address.
         """
-
         # The letter "O" instead of the numeral "0" is a common mistake.
         s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), clean_string(s))
         for k, v in abbreviations.items():
