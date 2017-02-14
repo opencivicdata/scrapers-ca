@@ -246,7 +246,11 @@ class CSVScraper(CanadianScraper):
     """
     If `many_posts_per_area` is set, set the roles without seat numbers.
     """
-    unique_roles = ('Mayor', 'Regional Chair')
+    unique_roles = ('Mayor', 'Deputy Mayor', 'Regional Chair')
+    """
+    A format string to generate the district name. Rarely used.
+    """
+    district_name_format_string = None
     """
     A dictionary of column names to alternate column names. Rarely used.
     """
@@ -255,16 +259,43 @@ class CSVScraper(CanadianScraper):
     A dictionary of people's names to lists of alternate names. Rarely used.
     """
     other_names = {}
-    """
-    A format string to generate the district name. Rarely used.
-    """
-    district_name_format_string = None
+
+    column_headers = {
+        'fr': {
+            'nom du district': 'district name',
+            'identifiant du district': 'district id',
+            'rôle': 'primary role',
+            'prénom': 'first name',
+            'nom': 'last name',
+            'genre': 'gender',
+            'nom du parti': 'party name',
+            'courriel': 'email',
+            "url d'une photo": 'photo url',
+            'url source': 'source url',
+            'site web': 'website',
+            'adresse ligne 1': 'address line 1',
+            'adresse ligne 2': 'address line 2',
+            'localité': 'locality',
+            'province': 'province',
+            'code postal': 'postal code',
+            'téléphone': 'phone',
+            'télécopieur': 'fax',
+            'cellulaire': 'cell',
+            'facebook': 'facebook',
+            'twitter': 'twitter',
+        },
+    }
 
     """
-    Normalizes a column header name. By default, lowercases it.
+    Normalizes a column header name. By default, lowercases it and replaces
+    underscores with spaces (e.g. because Esri fields can't contain spaces).
     """
     def header_converter(self, s):
-        return s.lower()
+        header = s.lower().replace('_', ' ')
+        if self.locale:
+            return self.column_headers[self.locale].get(header, header)
+        else:
+            return header
 
     """
     Returns whether the row should be imported. By default, skips empty rows
@@ -299,7 +330,9 @@ class CSVScraper(CanadianScraper):
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
             if row.get('primary role'):
-                row['primary role'] = re.split(r'(?: (?:and|et|Membre)\b|[;\n])', row['primary role'], 1)[0].strip()  # ca_on_newmarket, ca_qc_laval, ca_qc_montreal
+                # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
+                # ca_qc_montreal: "Conseiller d'arrondissement Membre…", "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
+                row['primary role'] = re.split(r'(?: (?:et|Membre)\b|[;\n])', row['primary role'], 1)[0].strip()
 
             if self.is_valid_row(row):
                 for key, corrections in self.corrections.items():
@@ -314,7 +347,7 @@ class CSVScraper(CanadianScraper):
                 province = row.get('province')
                 role = row['primary role']
 
-                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):  # ca_qc_laval
+                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):  # ca_qc_laval: "maire", "conseiller"
                     role = role.capitalize()
 
                 if self.district_name_format_string:

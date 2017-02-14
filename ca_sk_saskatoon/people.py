@@ -4,6 +4,3 @@ from utils import CSVScraper
 
 class SaskatoonPersonScraper(CSVScraper):
     csv_url = 'https://saskatoonopendataconfig.blob.core.windows.net/converteddata/MayorAndCityCouncilContactInformation.csv'
-
-    def header_converter(self, s):
-        return s.lower().replace('_', ' ')
