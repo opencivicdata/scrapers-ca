@@ -53,13 +53,13 @@ We heavily modify Pupa's validations in `patch.py` to be as strict as possible i
 
 ## Maintenance
 
+List the available maintenance tasks:
+
+    invoke -l
+
 Make the code style consistent:
 
     flake8
-
-Check whether any non-authoritative CSVs are likely to be stale:
-
-    invoke stale
 
 Check module names, class names, `classification`, `division_name`, `name` and `url` in `__init.py__` files:
 
@@ -76,6 +76,14 @@ Check jurisdiction URLs (look for `Delete COUNCIL_PAGE` or `Missing COUNCIL_PAGE
 Update the OCD-IDs:
 
     curl -O https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca.csv
+
+Check whether any non-authoritative CSVs are likely to be stale:
+
+    invoke csv_stale
+
+Check whether any CSV errors can be reported to data publishers:
+
+    invoke csv_error
 
 Scraper code rarely undergoes code review. The focus is on the quality of the data.
 
