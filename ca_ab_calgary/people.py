@@ -5,7 +5,6 @@ MAYOR_PAGE = 'http://calgarymayor.ca/contact'
 
 
 class CalgaryPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

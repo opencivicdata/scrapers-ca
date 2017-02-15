@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.thunderbay.ca/City_Government/Your_Council.htm'
 
 
 class ThunderBayPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)

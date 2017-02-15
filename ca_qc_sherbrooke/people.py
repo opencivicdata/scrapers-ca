@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/con
 
 
 class SherbrookePersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

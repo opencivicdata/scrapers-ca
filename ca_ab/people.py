@@ -22,7 +22,6 @@ def get_party(abbr):
 
 
 class AlbertaPersonScraper(CanadianScraper):
-
     def scrape(self):
         csv_text = self.get(self.get_csv_url()).text
         lines = csv_text.split('\n')

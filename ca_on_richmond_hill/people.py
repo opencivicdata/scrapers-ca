@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'https://www.richmondhill.ca/en/our-services/Mayor-and-Council.as
 
 
 class RichmondHillPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'http://web5.gov.mb.ca/Public/municipalities.aspx'
 
 
 class ManitobaMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

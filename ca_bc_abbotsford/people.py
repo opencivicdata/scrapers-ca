@@ -5,7 +5,6 @@ CONTACT_PAGE = 'http://www.abbotsford.ca/contact_us.htm'
 
 
 class AbbotsfordPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

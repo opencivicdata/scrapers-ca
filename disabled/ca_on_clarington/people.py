@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.clarington.net/index.php?content=townhall/council'
 
 
 class ClaringtonPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://ville.saguenay.ca/fr/administration-municipale/conseils-m
 
 
 class SaguenayPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

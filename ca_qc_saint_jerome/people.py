@@ -5,7 +5,6 @@ COUNCIL_PAGE = 'http://www.vsj.ca/fr/membres-du-conseil.aspx'
 
 
 class SaintJeromePersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

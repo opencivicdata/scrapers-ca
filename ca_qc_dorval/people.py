@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.ville.dorval.qc.ca/en/democratic-life/municipal-counc
 
 
 class DorvalPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

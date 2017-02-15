@@ -5,7 +5,6 @@ COUNCIL_PAGE = 'http://www.ontla.on.ca/web/members/member_addresses.do'
 
 
 class OntarioPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath('//div[@class="addressblock"]')

@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 
 
 class SaskatchewanPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

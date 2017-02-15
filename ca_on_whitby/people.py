@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.whitby.ca/en/townhall/meetyourcouncil.asp'
 
 
 class WhitbyPersonScraper(CanadianScraper):
-
     def scrape(self):
         regional_councillor_seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)

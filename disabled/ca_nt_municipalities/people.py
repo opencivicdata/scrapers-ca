@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.nwtac.com/about/communities/'
 
 
 class NorthwestTerritoriesMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

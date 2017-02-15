@@ -10,7 +10,6 @@ COUNCIL_PAGE = 'http://www.unsm.ca/doc_download/880-mayor-list-2013'
 
 
 class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         response = urlopen(COUNCIL_PAGE).read()
         pdf = open('/tmp/ns.pdf', 'w')

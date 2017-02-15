@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.stjohns.ca/city-hall/about-city-hall/council'
 
 
 class StJohnsPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

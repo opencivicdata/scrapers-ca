@@ -11,7 +11,6 @@ COUNCIL_PAGE = 'http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Direc
 
 
 class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         response = urlopen(COUNCIL_PAGE).read()
         pdf = open('/tmp/sk.pdf', 'w')

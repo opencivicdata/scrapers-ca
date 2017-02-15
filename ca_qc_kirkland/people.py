@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-munic
 
 
 class KirklandPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 

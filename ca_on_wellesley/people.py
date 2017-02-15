@@ -13,7 +13,6 @@ def post_number(name):
 
 
 class WellesleyPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

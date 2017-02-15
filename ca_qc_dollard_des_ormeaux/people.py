@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17'
 
 
 class DollardDesOrmeauxPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 

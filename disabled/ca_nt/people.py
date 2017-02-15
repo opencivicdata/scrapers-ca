@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.assembly.gov.nt.ca/meet-members'
 
 
 class NorthwestTerritoriesPersonScraper(CanadianScraper):
-
     def scrape(self):
         corrections = {
             'Mackenzie Delta': 'Mackenzie-Delta',

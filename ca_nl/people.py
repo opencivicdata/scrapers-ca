@@ -22,7 +22,6 @@ def get_party(abbr):
 
 
 class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
-
     def scrape(self):
         member_parties = {}
         for elem in self.lxmlize(PARTY_PAGE).xpath('//h3/u'):

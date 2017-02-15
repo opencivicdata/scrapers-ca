@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.beaconsfield.ca/fr/notre-ville/conseil-de-ville-et-di
 
 
 class BeaconsfieldPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

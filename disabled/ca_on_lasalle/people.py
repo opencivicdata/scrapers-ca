@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.town.lasalle.on.ca/en/town-hall/LaSalle-Council.asp'
 
 
 class LaSallePersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

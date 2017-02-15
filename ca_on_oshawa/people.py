@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.oshawa.ca/city-hall/city-council-members.asp'
 
 
 class OshawaPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
         regional_councillor_seat_number = 1

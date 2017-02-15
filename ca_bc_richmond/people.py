@@ -5,7 +5,6 @@ CONTACT_URL = 'http://www.richmond.ca/contact/departments/council.htm'
 
 
 class RichmondPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

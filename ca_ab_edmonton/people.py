@@ -5,7 +5,6 @@ MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor
 
 
 class EdmontonPersonScraper(CanadianScraper):
-
     def scrape(self):
         yield self.scrape_mayor()
         page = self.lxmlize(COUNCIL_PAGE)

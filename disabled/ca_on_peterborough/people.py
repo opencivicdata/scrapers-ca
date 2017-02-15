@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.peterborough.ca/City_Hall/City_Council_2833/City_Coun
 
 
 class PeterboroughPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

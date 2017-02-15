@@ -7,7 +7,6 @@ MAYOR_CONTACT_URL = 'http://www.regina.ca/residents/regina-mayor/contact_mayor'
 
 
 class ReginaPersonScraper(CanadianScraper):
-
     def scrape(self):
         root = self.lxmlize(COUNCIL_PAGE)
 

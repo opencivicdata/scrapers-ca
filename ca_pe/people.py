@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.assembly.pe.ca/current-members'
 
 
 class PrinceEdwardIslandPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath('//table[1]//tr')

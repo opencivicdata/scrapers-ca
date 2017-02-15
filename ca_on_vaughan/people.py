@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.vaughan.ca/council/Pages/default.aspx'
 
 
 class VaughanPersonScraper(CanadianScraper):
-
     def scrape(self):
         regional_councillor_seat_number = 1
 

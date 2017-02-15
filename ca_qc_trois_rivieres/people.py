@@ -10,7 +10,6 @@ MAYOR_URL = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1
 
 
 class TroisRivieresPersonScraper(CanadianScraper):
-
     def scrape(self):
         # mayor first, can't find email
         page = self.lxmlize(MAYOR_URL)

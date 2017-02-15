@@ -14,7 +14,6 @@ def get_party(abbreviation):
 
 
 class ManitobaPersonScraper(CanadianScraper):
-
     def scrape(self):
         member_page = self.lxmlize(COUNCIL_PAGE, encoding='utf-8')
         table = member_page.xpath('//table')[0]

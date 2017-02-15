@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.villagesenneville.qc.ca/fr/membres-du-conseil-municip
 
 
 class SennevillePersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

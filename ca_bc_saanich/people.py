@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.saanich.ca/EN/main/local-government/mayor-council/mee
 
 
 class SaanichPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

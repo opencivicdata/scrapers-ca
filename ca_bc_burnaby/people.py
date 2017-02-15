@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'https://www.burnaby.ca/Our-City-Hall/Mayor---Council/Council-Pro
 
 
 class BurnabyPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

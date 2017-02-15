@@ -8,7 +8,6 @@ MAYOR_PAGE = 'http://city.summerside.pe.ca/mayor-and-council/pages/2012/2/mayor/
 
 
 class SummersidePersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
 

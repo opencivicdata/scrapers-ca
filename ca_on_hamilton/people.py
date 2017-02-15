@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.hamilton.ca/council-committee/mayor-councillors/city-
 
 
 class HamiltonPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

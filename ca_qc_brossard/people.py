@@ -7,7 +7,6 @@ CONTACT_PAGE = 'http://www.ville.brossard.qc.ca/Ma-ville/conseil-municipal/Munic
 
 
 class BrossardPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         contact_page = self.lxmlize(CONTACT_PAGE)

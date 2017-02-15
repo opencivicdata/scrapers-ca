@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.coquitlam.ca/city-hall/mayor-and-council/mayor-and-co
 
 
 class CoquitlamPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

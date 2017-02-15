@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.town.caledon.on.ca/en/townhall/council.asp'
 
 
 class CaledonPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

@@ -6,7 +6,6 @@ CONTACT_PAGE = 'http://www.mississauga.ca/portal/helpfeedback/contactus'
 
 
 class MississaugaPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

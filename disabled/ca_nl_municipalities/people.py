@@ -10,7 +10,6 @@ COUNCIL_PAGE = 'http://www.ma.gov.nl.ca/ma/municipal_directory/index.html'
 
 
 class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]

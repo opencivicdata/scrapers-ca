@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/May
 
 
 class MarkhamPersonScraper(CanadianScraper):
-
     def scrape(self):
         regional_councillor_seat_number = 1
 

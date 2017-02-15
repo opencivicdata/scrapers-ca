@@ -19,7 +19,6 @@ def get_party(abbr):
 
 
 class NewBrunswickPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         councillor_table = page.xpath('//table[@id="customers"]')[0]

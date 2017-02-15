@@ -5,7 +5,6 @@ COUNCIL_PAGE = 'http://ville.montreal-est.qc.ca/la-ville/conseil-municipal/conse
 
 
 class MontrealEstPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

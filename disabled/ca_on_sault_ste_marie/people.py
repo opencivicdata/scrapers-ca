@@ -17,7 +17,6 @@ def district_name_using_number(name):
 
 
 class SaultSteMariePersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         table_data = page.xpath('//div[@id="litcontentDiv"]//tr')

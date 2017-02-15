@@ -8,7 +8,6 @@ COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
 
 
 class CoteSaintLucPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

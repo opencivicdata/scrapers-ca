@@ -10,7 +10,6 @@ COUNCIL_PAGE = 'http://www.community.gov.yk.ca/pdf/loc_govdir.pdf'
 
 
 class YukonMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         response = urlopen(COUNCIL_PAGE).read()
         pdf = open('/tmp/yt.pdf', 'w')

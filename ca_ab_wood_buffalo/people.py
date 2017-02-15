@@ -8,7 +8,6 @@ COUNCIL_PAGE = 'http://www.woodbuffalo.ab.ca/Municipal-Government/Mayor-and-Coun
 
 
 class WoodBuffaloPersonScraper(CanadianScraper):
-
     def scrape(self):
         seat_numbers = defaultdict(int)
 

@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.fredericton.ca/en/city-hall/city-council-committees/m
 
 
 class FrederictonPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

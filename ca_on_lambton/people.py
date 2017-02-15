@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.lambtononline.ca/home/government/accessingcountycounc
 
 
 class LambtonPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

@@ -5,7 +5,6 @@ COUNCIL_PAGE = 'https://www.ville.levis.qc.ca/la-ville/conseil-municipal/elus/'
 
 
 class LevisPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

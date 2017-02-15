@@ -7,7 +7,6 @@ MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor.html'
 
 
 class CapeBretonPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

@@ -5,7 +5,6 @@ COUNCIL_PAGE = 'http://www.assnat.qc.ca/fr/deputes/index.html'
 
 
 class QuebecPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath('//*[@id="ListeDeputes"]/tbody/tr')

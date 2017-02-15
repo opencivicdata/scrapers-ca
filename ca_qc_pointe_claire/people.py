@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://www.pointe-claire.ca/fr/ville/conseil-municipal/membres'
 
 
 class PointeClairePersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

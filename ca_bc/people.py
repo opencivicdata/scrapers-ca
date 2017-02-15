@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'https://www.leg.bc.ca/Pages/BCLASS-Category-MLASeatingPlan.aspx'
 
 
 class BritishColumbiaPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

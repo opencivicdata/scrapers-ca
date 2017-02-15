@@ -4,7 +4,6 @@ COUNCIL_PAGE = 'http://westmount.org/conseil/conseil-de-la-ville/'
 
 
 class WestmountPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.city.langley.bc.ca/index.php/city-hall/city-council'
 
 
 class LangleyPersonScraper(CanadianScraper):
-
     def scrape(self):
         councillor_seat_number = 1
 

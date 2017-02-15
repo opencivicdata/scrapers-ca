@@ -6,7 +6,6 @@ COUNCIL_PAGE = 'http://www.wilmot.ca/current-council.php'
 
 
 class WilmotPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

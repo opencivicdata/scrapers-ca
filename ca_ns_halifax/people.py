@@ -9,7 +9,6 @@ MAYOR_CONTACT_URL = 'http://www.halifax.ca/mayor/contact.php'
 
 
 class HalifaxPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//div[./h2/a[contains(@href, "/District")]]')

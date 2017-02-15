@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'http://www.city.charlottetown.pe.ca/mayorandcouncil.php'
 
 
 class CharlottetownPersonScraper(CanadianScraper):
-
     def scrape(self):
         root = self.lxmlize(COUNCIL_PAGE)
         everyone = root.xpath('//span[@class="Title"]')

@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'http://www.chatham-kent.ca/Council/councilmembers/Pages/CouncilM
 
 
 class ChathamKentPersonScraper(CanadianScraper):
-
     def scrape(self):
         seat_numbers = defaultdict(int)
 

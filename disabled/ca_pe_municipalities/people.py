@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'http://www.gov.pe.ca/mapp/municipalitites.php'
 
 
 class PrinceEdwardIslandMunicipalitiesPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 

@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'http://www.brantford.ca/govt/council/members/Pages/default.aspx'
 
 
 class BrantfordPersonScraper(CanadianScraper):
-
     def scrape(self):
         seat_numbers = defaultdict(int)
 

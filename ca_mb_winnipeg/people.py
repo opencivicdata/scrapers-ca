@@ -7,7 +7,6 @@ COUNCIL_PAGE = 'http://winnipeg.ca/council/'
 
 
 class WinnipegPersonScraper(CanadianScraper):
-
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
         councillors = page.xpath('//table[@class="council-table"]//td[not(@colspan)]')
