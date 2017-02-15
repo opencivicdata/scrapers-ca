@@ -7,3 +7,8 @@ class Laval(CanadianJurisdiction):
     division_name = 'Laval'
     name = 'Conseil municipal de Laval'
     url = 'http://www.ville.laval.qc.ca'
+    parties = [
+        {'name': 'Action Laval'},
+        {'name': 'Independant'},
+        {'name': 'Mouvement lavallois'},
+    ]

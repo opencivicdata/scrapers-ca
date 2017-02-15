@@ -7,3 +7,6 @@ class Surrey(CanadianJurisdiction):
     division_name = 'Surrey'
     name = 'Surrey City Council'
     url = 'http://www.surrey.ca'
+    parties = [
+        {'name': 'Surrey First'},
+    ]

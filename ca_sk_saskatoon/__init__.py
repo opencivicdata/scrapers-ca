@@ -8,3 +8,6 @@ class Saskatoon(CanadianJurisdiction):
     name = 'Saskatoon City Council'
     url = 'http://www.saskatoon.ca'
     use_type_id = True
+    parties = [
+      {'name': 'City Saskatoon'},
+    ]
