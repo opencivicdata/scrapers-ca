@@ -130,6 +130,8 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                         if url:
                             p.add_link(url)
 
+                        p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(division_id.rsplit(':', 1)[1])
+
                         yield p
 
                 yield organization
