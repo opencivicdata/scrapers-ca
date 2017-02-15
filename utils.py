@@ -447,6 +447,7 @@ class CanadianJurisdiction(Jurisdiction):
 
         parent = Division.get(self.division_id)
         if parent._type not in ('province', 'territory'):
+            # Yield posts to allow ca_on_toronto to make changes.
             post = Post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id, organization_id=organization._id)
             yield post
 
@@ -458,6 +459,7 @@ class CanadianJurisdiction(Jurisdiction):
                     label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
                     label = child.name
+                # Yield posts to allow ca_on_toronto to make changes.
                 post = Post(role=styles_of_address[self.division_id]['Member'], label=label, division_id=child.id, organization_id=organization._id)
                 yield post
 
