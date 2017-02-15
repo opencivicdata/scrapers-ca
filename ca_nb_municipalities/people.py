@@ -55,7 +55,6 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 else:
                     names_to_ids[division.name] = division.id
 
-
         page = self.lxmlize(COUNCIL_PAGE)
         list_links = page.xpath('//div[@id="sidebar"]//div[contains(@class, "list")][1]//a')
 

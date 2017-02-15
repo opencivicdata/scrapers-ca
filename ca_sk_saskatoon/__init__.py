@@ -9,5 +9,5 @@ class Saskatoon(CanadianJurisdiction):
     url = 'http://www.saskatoon.ca'
     use_type_id = True
     parties = [
-      {'name': 'City Saskatoon'},
+        {'name': 'City Saskatoon'},
     ]
