@@ -275,9 +275,9 @@ def tidy():
         expected = get_definition(division_id, bool(module_name.endswith('_municipalities')))
 
         # Ensure presence of url and styles of address.
-        if not member_styles.get(division_id):
+        if division_id not in member_styles:
             print('{:<60} Missing member style of address: {}'.format(module_name, division_id))
-        if not leader_styles.get(division_id):
+        if division_id not in leader_styles:
             print('{:<60} Missing leader style of address: {}'.format(module_name, division_id))
         url = metadata['url']
         if url and not expected['url']:
