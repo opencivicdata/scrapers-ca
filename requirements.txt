@@ -1,12 +1,6 @@
-# @see https://github.com/opencivicdata/pupa/issues/249
--e git+git://github.com/opencivicdata/pupa.git@274cd0ddf9d550c5b20cd99d6d19720041d21222#egg=pupa
-
-# pupa unpinned
-Django==1.10.5
-opencivicdata-django==0.8.2
-psycopg2==2.5.5
-validictory==1.0.1
+-e git+git://github.com/opencivicdata/pupa.git#egg=pupa
 -e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
+Django==1.10.5
 
 # Scrapers
 csvkit==0.9.1 # @todo Use agate-excel
