@@ -105,10 +105,10 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
 
                         if role in unique_roles:
                             district = division_name
-                            organization.add_post(role=role, label=division_name, division_id=division_id)
                         else:
                             district = '{} (seat {})'.format(division_name, seat_number)
-                            organization.add_post(role=role, label='{} (seat {})'.format(division_name, seat_number), division_id=division_id)
+
+                        organization.add_post(role=role, label=district, division_id=division_id)
 
                         p = Person(primary_org='legislature', primary_org_name=organization_name, name=name, district=district, role=role)
                         p.add_source(COUNCIL_PAGE)
