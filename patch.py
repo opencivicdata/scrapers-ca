@@ -128,9 +128,11 @@ name_fragment = r'(?:'           \
     r')'
 
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['pattern'] = re.compile(r'\A' \
-    '(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|Hon|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)' \
-    '(?:' + name_fragment + r"(?:'|-| - | )" r')+' + name_fragment + r'\Z')
+person_schema['properties']['name']['pattern'] = re.compile(
+    r'\A'
+    r'(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|Hon|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)'
+    r'(?:' + name_fragment + r"(?:'|-| - | )" r')+' + name_fragment +
+    r'\Z')
 person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
 # image resolves. Testing URLs here would slow down scraping.
