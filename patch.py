@@ -27,10 +27,6 @@ _contact_details['items']['properties']['value']['conditionalPattern'] = [
         lambda x: x['type'] == 'email'),
     (r'\A1 \d{3} \d{3}-\d{4}(?: x\d+)?\Z',
         lambda x: x['type'] in ('text', 'voice', 'fax', 'cell', 'video', 'pager')),
-    # Ends with a locality, a province or territory code, and an optional postal code.
-    # @note We realistically will never uncomment this, as addresses are not important.
-    # (re.compile(r'\n(?:(?:\d+[A-C]?|St\.|a|aux|de|des|du|la|sur|\p{Lu}|(?:D'|d'|L'|l'|Mc|Qu')?\p{L}+(?:'s|!)?)(?:--?| - | ))+(?:BC|AB|MB|SK|ON|QC|NB|PE|NS|NL|YT|NT|NU)(?:  [ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])?\Z', flags=re.U),
-    #  lambda x: x['type'] == 'address'),
 ]
 # Validate the format of contact_details[].note.
 _contact_details['items']['properties']['note']['pattern'] = r'\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z'
@@ -120,10 +116,21 @@ organization_schema['properties']['contact_details'] = organization_contact_deta
 organization_schema['properties']['links'] = organization_links
 
 # Match initials, all-caps, short words, parenthesized nickname, and regular names.
-name_fragment = r"""(?:(?:\p{Lu}\.)+|\p{Lu}+|(?:Jr|Rev|Sr|St)\.|da|de|der|la|van|von|[("]\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*[)"]|(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander?|vanden)?\p{Lu}\p{Ll}+|97|Ch'ng|CôRhino|Di lorio|JiCi|JoAnne|MaryAnn|Prud'homme)"""
+name_fragment = r'(?:'           \
+    r'(?:\p{Lu}\.)+|'            \
+    r'\p{Lu}+|'                  \
+    r'(?:Jr|Rev|Sr|St)\.|'       \
+    r'da|de|den|der|la|van|von|' \
+    r'[("]\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*[)"]|' \
+    r"(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander?|vanden)?\p{Lu}\p{Ll}+|" \
+    r'\p{Lu}\p{Ll}+Anne?|'       \
+    r"Ch'ng|Prud'homme"          \
+    r')'
 
 # Name components can be joined by apostrophes, hyphens or spaces.
-person_schema['properties']['name']['pattern'] = re.compile(r'\A(?!(?:Chair|Councillor|Deputy|Dr|Hon|M|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)(?:' + name_fragment + r"(?:'|-| - | ))+" + name_fragment + r'\Z')
+person_schema['properties']['name']['pattern'] = re.compile(r'\A' \
+    '(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|Hon|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)' \
+    '(?:' + name_fragment + r"(?:'|-| - | )" r')+' + name_fragment + r'\Z')
 person_schema['properties']['gender']['enum'] = ['male', 'female', '']
 # @note https://github.com/opennorth/represent-canada-images checks whether an
 # image resolves. Testing URLs here would slow down scraping.
