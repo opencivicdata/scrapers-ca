@@ -66,6 +66,11 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         seen = set()
 
         for row in reader:
+            name = row['full name']
+
+            if not any(row.values()) or 'vacant' in name.lower():
+                continue
+
             if row['district id']:
                 division_id = 'ocd-division/country:ca/csd:{}'.format(row['district id'])
             else:
@@ -86,10 +91,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
                 organizations[division_id] = Organization(name=organization_name, classification='government')
 
             organization = organizations[division_id]
-
-            name = row['full name']
-            if 'vacant' in name.lower():
-                continue
 
             role = row['primary role']
             if role not in expected_roles:
