@@ -144,6 +144,7 @@ person_schema['properties']['district'] = {'type': 'string', 'blank': False}
 
 organization_schema['properties']['classification']['enum'] += ['government']
 
+
 def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
     value = x.get(fieldname)
     if isinstance(value, str):
