@@ -81,7 +81,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 seen.add(division_id)
                 division_name = Division.get(division_id).name
                 organization_name = '{} {} Council'.format(division_name, classifications[list_link.text])
-                organization = Organization(name=organization_name, classification='executive')
+                organization = Organization(name=organization_name, classification='government')
 
                 address = ', '.join(page.xpath('//div[@class="left_contents"]/p[1]/text()'))
 
@@ -110,7 +110,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
 
                         organization.add_post(role=role, label=district, division_id=division_id)
 
-                        p = Person(primary_org='executive', primary_org_name=organization_name, name=name, district=district, role=role)
+                        p = Person(primary_org='government', primary_org_name=organization_name, name=name, district=district, role=role)
                         p.add_source(COUNCIL_PAGE)
                         p.add_source(list_link.attrib['href'])
                         p.add_source(detail_url)

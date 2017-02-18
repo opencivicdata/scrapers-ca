@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class NewBrunswickMunicipalities(CanadianJurisdiction):
-    classification = 'executive'  # just to avoid clash
+    classification = 'government'
     division_id = 'ocd-division/country:ca/province:nb'
     division_name = 'New Brunswick'
     name = 'New Brunswick municipal councils'

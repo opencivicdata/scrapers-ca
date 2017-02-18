@@ -83,7 +83,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
             if division_id not in seen:
                 seen.add(division_id)
-                organizations[division_id] = Organization(name=organization_name, classification='legislature')
+                organizations[division_id] = Organization(name=organization_name, classification='government')
 
             organization = organizations[division_id]
 
@@ -105,7 +105,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
             organization.add_post(role=role, label=district, division_id=division_id)
 
-            p = Person(primary_org='legislature', primary_org_name=organization_name, name=name, district=district, role=role)
+            p = Person(primary_org='government', primary_org_name=organization_name, name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(row['source url'])
 
