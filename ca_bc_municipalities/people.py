@@ -108,7 +108,8 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
             p = Person(primary_org='government', primary_org_name=organization_name, name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.add_source(row['source url'])
+            if row['source url']:
+                p.add_source(row['source url'])
 
             if name in duplicate_names:
                 p.birth_date = str(birth_date)

@@ -142,6 +142,7 @@ person_schema['properties']['links'] = person_links
 # district is used to disambiguate people within a jurisdiction.
 person_schema['properties']['district'] = {'type': 'string', 'blank': False}
 
+organization_schema['properties']['classification']['enum'] += ['government']
 
 def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
     value = x.get(fieldname)
