@@ -28,17 +28,11 @@ def module_names():
             yield module_name
 
 
-def modules_and_module_names_and_class_names():
+def modules_and_module_names_and_classes():
     for module_name in module_names():
         module = importlib.import_module('{}.people'.format(module_name))
         class_name = next(key for key in module.__dict__.keys() if 'PersonScraper' in key)
-        yield (module, module_name, class_name)
-
-
-def module_names_and_csv_classes():
-    for (module, module_name, class_name) in modules_and_module_names_and_class_names():
-        if module.__dict__[class_name].__bases__[0].__name__ == 'CSVScraper':
-            yield (module_name, module.__dict__[class_name])
+        yield (module, module_name, module.__dict__[class_name])
 
 
 def csv_reader(url):
@@ -171,8 +165,8 @@ def council_pages():
     """
     Prints scrapers' council page, or warns if it is missing or unneeded.
     """
-    for (module, module_name, class_name) in modules_and_module_names_and_class_names():
-        if module.__dict__[class_name].__bases__[0].__name__ == 'CSVScraper':
+    for (module, module_name, klass) in modules_and_module_names_and_classes():
+        if klass.__bases__[0].__name__ == 'CSVScraper':
             if hasattr(module, 'COUNCIL_PAGE'):
                 print('{:<60} Delete COUNCIL_PAGE'.format(module_name))
         else:
@@ -187,9 +181,9 @@ def csv_stale():
     """
     Lists scrapers with stale manual CSV data.
     """
-    for (module_name, csv_class) in module_names_and_csv_classes():
-        if hasattr(csv_class, 'created_at') and csv_class.created_at < date.today() - timedelta(days=365):
-            print('{}: Created on {} by {}'.format(module_name, csv_class.created_at, csv_class.contact_person))
+    for (module, module_name, klass) in modules_and_module_names_and_classes():
+        if hasattr(klass, 'created_at') and klass.created_at < date.today() - timedelta(days=365):
+            print('{}: Created on {} by {}'.format(module_name, klass.created_at, klass.contact_person))
 
 
 @task
@@ -197,41 +191,42 @@ def csv_error():
     """
     Notes corrections that CSV publishers should make.
     """
-    for (module_name, csv_class) in module_names_and_csv_classes():
-        if '_candidates' in module_name and hasattr(csv_class, 'created_at'):
-            continue
+    for (module, module_name, klass) in modules_and_module_names_and_classes():
+        if klass.__bases__[0].__name__ == 'CSVScraper':
+            if '_candidates' in module_name and hasattr(klass, 'created_at'):
+                continue
 
-        keys = csv_class.__dict__.keys() - {
-            # Internal keys.
-            '__module__', '__doc__',
-            # Acceptable configuration.
-            'csv_url', 'filename', 'locale', 'many_posts_per_area',
-            'unique_roles', 'district_name_format_string', 'other_names',
-            # Required for manual CSVs.
-            'created_at', 'contact_person',
-        }
+            keys = klass.__dict__.keys() - {
+                # Internal keys.
+                '__module__', '__doc__',
+                # Acceptable configuration.
+                'csv_url', 'filename', 'locale', 'many_posts_per_area',
+                'unique_roles', 'district_name_format_string', 'other_names',
+                # Required for manual CSVs.
+                'created_at', 'contact_person',
+            }
 
-        if 'encoding' in keys and csv_class.encoding in ('utf-8', 'windows-1252'):
-            keys -= {'encoding'}
+            if 'encoding' in keys and klass.encoding in ('utf-8', 'windows-1252'):
+                keys -= {'encoding'}
 
-        if keys:
-            print('\n{}\n{}'.format(module_name, csv_class.csv_url))
+            if keys:
+                print('\n{}\n{}'.format(module_name, klass.csv_url))
 
-            extra_keys = keys - {'corrections', 'encoding', 'header_converter'}
-            if extra_keys:
-                print('- Manually check the configuration of: {}'.format(', '.join(extra_keys)))
+                extra_keys = keys - {'corrections', 'encoding', 'header_converter'}
+                if extra_keys:
+                    print('- Manually check the configuration of: {}'.format(', '.join(extra_keys)))
 
-            if 'encoding' in keys:
-                print("- The CSV file should be encoded as 'utf-8' or 'windows-1252', not '{}'".format(csv_class.encoding))
+                if 'encoding' in keys:
+                    print("- The CSV file should be encoded as 'utf-8' or 'windows-1252', not '{}'".format(klass.encoding))
 
-            if 'corrections' in keys:
-                for key, values in csv_class.corrections.items():
-                    for actual, expected in values.items():
-                        print("- Change '{}' to '{}' in {}".format(actual, expected, key))
+                if 'corrections' in keys:
+                    for key, values in klass.corrections.items():
+                        for actual, expected in values.items():
+                            print("- Change '{}' to '{}' in {}".format(actual, expected, key))
 
-            if 'header_converter' in keys:
-                print('- Correct column headers according to:')
-                print(getsource(csv_class.header_converter))
+                if 'header_converter' in keys:
+                    print('- Correct column headers according to:')
+                    print(getsource(klass.header_converter))
 
 
 @task
