@@ -89,6 +89,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             if division_id not in seen:
                 seen.add(division_id)
                 organizations[division_id] = Organization(name=organization_name, classification='government')
+                organizations[division_id].add_source(COUNCIL_PAGE)
 
             organization = organizations[division_id]
 

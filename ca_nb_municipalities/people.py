@@ -82,6 +82,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 division_name = Division.get(division_id).name
                 organization_name = '{} {} Council'.format(division_name, classifications[list_link.text])
                 organization = Organization(name=organization_name, classification='government')
+                organization.add_source(detail_url)
 
                 address = ', '.join(page.xpath('//div[@class="left_contents"]/p[1]/text()'))
 
