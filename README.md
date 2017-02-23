@@ -6,7 +6,7 @@ Follow the instructions in the [Python Quick Start Guide](https://github.com/ope
 
 ```
 mkvirtualenv scrapers-ca --python=`which python3`
-git clone git://github.com/opencivicdata/scrapers-ca.git
+git clone https://github.com/opencivicdata/scrapers-ca.git
 cd scrapers-ca
 pip install -r requirements.txt
 ```
