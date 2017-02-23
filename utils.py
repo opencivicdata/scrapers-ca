@@ -563,8 +563,10 @@ class CanadianPerson(Person):
         # The letter "O" instead of the numeral "0" is a common mistake.
         s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), clean_string(s))
         for k, v in abbreviations.items():
-            s = re.sub(r'[,\n ]+\(?' + k + r'\)?(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
-        return re.sub(r'[,\n ]+([A-Z]{2})(?:[,\n ]+Canada)?[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])\Z', r' \1  \2 \3', s)
+            # Replace a province/territory name with its abbreviation.
+            s = re.sub(r'[,\n ]+' r'\(?' + k + r'\)?' r'(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
+        # Add spaces between province/territory abbreviation, FSA and LDU and remove "Canada".
+        return re.sub(r'[,\n ]+' r'([A-Z]{2})' r'(?:[,\n ]+Canada)?' r'[,\n ]+([A-Z][0-9][A-Z])\s?([0-9][A-Z][0-9])' r'\Z', r' \1  \2 \3', s)
 
 
 whitespace_re = re.compile(r'\s+', flags=re.U)
