@@ -1,5 +1,6 @@
 -e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
-pupa==0.6.0
+-e git+git://github.com/opencivicdata/pupa.git@5b21ce6b2acf557a3f7e147bf2e04bbdb46ce075#egg=pupa
+# pupa==0.6.1
 Django==1.10.5
 
 # Scrapers
