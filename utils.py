@@ -446,6 +446,7 @@ class CanadianJurisdiction(Jurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         parent = Division.get(self.division_id)
+        # Don't yield posts for premiers.
         if parent._type not in ('province', 'territory'):
             # Yield posts to allow ca_on_toronto to make changes.
             post = Post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id, organization_id=organization._id)
