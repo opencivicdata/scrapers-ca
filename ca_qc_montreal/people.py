@@ -21,6 +21,9 @@ class MontrealPersonScraper(CSVScraper):
             'Mile End': 'Mile-End',
             'Saint-Henri–La Petite-Bourgogne–Pointe-Saint-Charles': 'Saint-Henri—Petite-Bourgogne—Pointe-Saint-Charles',
         },
+        'party name': {
+            'Indépendante': 'Indépendant',
+        }
     }
     fallbacks = {
         'district name': 'arrondissement',
