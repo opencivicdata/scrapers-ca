@@ -563,7 +563,7 @@ class CanadianPerson(Person):
         """
         # The letter "O" instead of the numeral "0" is a common mistake.
         s = re.sub(r'\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b', lambda x: x.group(0).replace('O', '0'), clean_string(s))
-        for k, v in abbreviations.items():
+        for k, v in province_or_territory_abbreviations().items():
             # Replace a province/territory name with its abbreviation.
             s = re.sub(r'[,\n ]+' r'\(?' + k + r'\)?' r'(?=(?:[,\n ]+Canada)?(?:[,\n ]+[A-Z][0-9][A-Z]\s?[0-9][A-Z][0-9])?\Z)', ' ' + v, s)
         # Add spaces between province/territory abbreviation, FSA and LDU and remove "Canada".
@@ -575,6 +575,7 @@ whitespace_and_newline_re = re.compile(r'[^\S\n]+', flags=re.U)
 honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ')
 honorific_suffix_re = re.compile(r', Ph\.D\Z')
 capitalize_re = re.compile(r' [A-Z](?=[a-z])')  # to not lowercase "URL"
+province_or_territory_abbreviation_memo = {}
 
 table = {
     ord('​'): ' ',  # zero-width space
@@ -582,25 +583,16 @@ table = {
     ord('\xc2'): " ",  # non-breaking space if mixing ISO-8869-1 into UTF-8
 }
 
-# @see https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca/ca_provinces_and_territories.csv
-# @see https://github.com/opencivicdata/ocd-division-ids/blob/master/identifiers/country-ca/ca_provinces_and_territories-name_fr.csv
-abbreviations = {
-    'Newfoundland and Labrador': 'NL',
-    'Prince Edward Island': 'PE',
-    'Nova Scotia': 'NS',
-    'New Brunswick': 'NB',
-    'Québec': 'QC',
-    'Ontario': 'ON',
-    'Manitoba': 'MB',
-    'Saskatchewan': 'SK',
-    'Alberta': 'AB',
-    'British Columbia': 'BC',
-    'Yukon': 'YT',
-    'Northwest Territories': 'NT',
-    'Nunavut': 'NU',
 
-    'PEI': 'PE',
-}
+def province_or_territory_abbreviations():
+    if not province_or_territory_abbreviation_memo:
+        province_or_territory_abbreviation_memo['PEI'] = 'PE'
+        for division in Division.all('ca'):
+            if division._type in ('province', 'territory'):
+                abbreviation = division.id.rsplit(':', 1)[1].upper()
+                province_or_territory_abbreviation_memo[division.name] = abbreviation
+                province_or_territory_abbreviation_memo[division.attrs['name_fr']] = abbreviation
+    return province_or_territory_abbreviation_memo
 
 
 def clean_string(s):

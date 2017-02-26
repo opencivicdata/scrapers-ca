@@ -17,29 +17,36 @@ from opencivicdata.divisions import Division
 from unidecode import unidecode
 
 # Map Standard Geographical Classification codes to the OCD identifiers of provinces and territories.
-province_and_territory_codes = {}
+province_or_territory_abbreviation_memo = {}
 # Map OpenCivicData Division Identifier to Census type name.
 ocdid_to_type_name_map = {}
+ocd_division_csv = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'country-ca.csv')
 
 
 def module_names():
+    """
+    Returns all module names.
+    """
     for module_name in os.listdir('.'):
-        if os.path.isdir(module_name) and module_name not in ('.git', '_cache', '_data', '__pycache__', 'csv', 'disabled'):
+        if os.path.isdir(module_name) and os.path.isfile(os.path.join(module_name, '__init__.py')):
             yield module_name
 
 
 def modules_and_module_names_and_classes():
+    """
+    Returns modules, module names, and person scraper classes.
+    """
     for module_name in module_names():
         module = importlib.import_module('{}.people'.format(module_name))
         class_name = next(key for key in module.__dict__.keys() if 'PersonScraper' in key)
         yield (module, module_name, module.__dict__[class_name])
 
 
-def csv_reader(url):
+def csv_dict_reader(url):
     """
     Reads a remote CSV file.
     """
-    return csv.reader(StringIO(requests.get(url).text))
+    return csv.DictReader(StringIO(requests.get(url).text))
 
 
 def slug(name):
@@ -56,6 +63,21 @@ def slug(name):
     }))
 
 
+def province_or_territory_abbreviation(code):
+    if not province_or_territory_abbreviation_memo:
+        for division in Division.all('ca', from_csv=ocd_division_csv):
+            if division._type in ('province', 'territory'):
+                province_or_territory_abbreviation_memo[division.attrs['sgc']] = type_id(division.id)
+    return province_or_territory_abbreviation_memo[type_id(code)[:2]]
+
+
+def type_id(id):
+    """
+    Returns an OCD identifier's type ID.
+    """
+    return id.rsplit(':', 1)[1]
+
+
 def get_definition(division_id, aggregation=False):
     """
     Returns the expected configuration for a given division.
@@ -63,41 +85,37 @@ def get_definition(division_id, aggregation=False):
     if not ocdid_to_type_name_map:
         # Map census division type codes to names.
         census_division_type_names = {}
-        document = lxml.html.fromstring(requests.get('https://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-4-eng.cfm').content)
-        for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
-            census_division_type_names[abbr.text_content()] = re.sub(' ?/.+\Z', '', abbr.attrib['title'])
+        document = lxml.html.fromstring(requests.get('https://www12.statcan.gc.ca/census-recensement/2016/ref/dict/tab/t1_4-eng.cfm').content)
+        for text in document.xpath('//table//th[@headers]/text()'):
+            code, name = text.split(' – ', 1)
+            census_division_type_names[code] = name.split(' / ', 1)[0]
 
         # Map census subdivision type codes to names.
         census_subdivision_type_names = {}
-        document = lxml.html.fromstring(requests.get('https://www12.statcan.gc.ca/census-recensement/2011/ref/dict/table-tableau/table-tableau-5-eng.cfm').content)
-        for abbr in document.xpath('//table/tbody/tr/th[1]/abbr'):
-            census_subdivision_type_names[abbr.text_content()] = re.sub(' ?/.+\Z', '', abbr.attrib['title'])
+        document = lxml.html.fromstring(requests.get('https://www12.statcan.gc.ca/census-recensement/2016/ref/dict/tab/t1_5-eng.cfm').content)
+        for text in document.xpath('//table//th[@headers]/text()'):
+            code, name = text.split(' – ', 1)  # non-breaking space
+            census_subdivision_type_names[code] = name.split(' / ', 1)[0]
 
         # Map OCD identifiers to census types.
-        for division in Division.all('ca'):
+        for division in Division.all('ca', from_csv=ocd_division_csv):
             if division._type == 'cd':
                 ocdid_to_type_name_map[division.id] = census_division_type_names[division.attrs['classification']]
             elif division._type == 'csd':
                 ocdid_to_type_name_map[division.id] = census_subdivision_type_names[division.attrs['classification']]
 
-    if not province_and_territory_codes:
-        for division in Division.all('ca'):
-            if division._type in ('province', 'territory'):
-                province_and_territory_codes[division.attrs['sgc']] = division.id
-
-    division = Division.get(division_id)
+    division = Division.get(division_id, from_csv=ocd_division_csv)
+    ocd_type_id = type_id(division.id)
 
     expected = {}
     vowels = ('A', 'À', 'E', 'É', 'I', 'Î', 'O', 'Ô', 'U')
 
-    sections = division_id.split('/')
-    ocd_type, ocd_type_id = sections[-1].split(':')
-
     # Determine the module name, name and classification.
-    if ocd_type == 'country':
+    if division._type == 'country':
         expected['module_name'] = 'ca'
         expected['name'] = 'Parliament of Canada'
-    elif ocd_type in ('province', 'territory'):
+
+    elif division._type in ('province', 'territory'):
         pattern = 'ca_{}_municipalities' if aggregation else 'ca_{}'
         expected['module_name'] = pattern.format(ocd_type_id)
         if aggregation:
@@ -108,23 +126,23 @@ def get_definition(division_id, aggregation=False):
             expected['name'] = 'Assemblée nationale du Québec'
         else:
             expected['name'] = 'Legislative Assembly of {}'.format(division.name)
-    elif ocd_type == 'cd':
-        province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_{}_{}'.format(province_or_territory_type_id, slug(division.name))
-        name_infix = ocdid_to_type_name_map[division_id]
+
+    elif division._type == 'cd':
+        expected['module_name'] = 'ca_{}_{}'.format(province_or_territory_abbreviation(division.id), slug(division.name))
+        name_infix = ocdid_to_type_name_map[division.id]
         if name_infix == 'Regional municipality':
             name_infix = 'Regional'
         expected['name'] = '{} {} Council'.format(division.name, name_infix)
-    elif ocd_type == 'csd':
-        province_or_territory_type_id = province_and_territory_codes[ocd_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_{}_{}'.format(province_or_territory_type_id, slug(division.name))
+
+    elif division._type == 'csd':
+        expected['module_name'] = 'ca_{}_{}'.format(province_or_territory_abbreviation(division.id), slug(division.name))
         if ocd_type_id[:2] == '24':
             if division.name[0] in vowels:
                 expected['name'] = "Conseil municipal d'{}".format(division.name)
             else:
                 expected['name'] = "Conseil municipal de {}".format(division.name)
         else:
-            name_infix = ocdid_to_type_name_map[division_id]
+            name_infix = ocdid_to_type_name_map[division.id]
             if name_infix in ('Municipality', 'Specialized municipality'):
                 name_infix = 'Municipal'
             elif name_infix == 'District municipality':
@@ -132,18 +150,18 @@ def get_definition(division_id, aggregation=False):
             elif name_infix == 'Regional municipality':
                 name_infix = 'Regional'
             expected['name'] = '{} {} Council'.format(division.name, name_infix)
-    elif ocd_type == 'arrondissement':
-        census_subdivision_type_id = sections[-2].split(':')[-1]
-        province_or_territory_type_id = province_and_territory_codes[census_subdivision_type_id[:2]].split(':')[-1]
-        expected['module_name'] = 'ca_{}_{}_{}'.format(province_or_territory_type_id, slug(Division.get('/'.join(sections[:-1])).name), slug(division.name))
+
+    elif division._type == 'arrondissement':
+        expected['module_name'] = 'ca_{}_{}_{}'.format(province_or_territory_abbreviation(division.parent.id), slug(division.parent.name), slug(division.name))
         if division.name[0] in vowels:
             expected['name'] = "Conseil d'arrondissement d'{}".format(division.name)
         elif division.name[:3] == 'Le ':
             expected['name'] = "Conseil d'arrondissement du {}".format(division.name[3:])
         else:
             expected['name'] = "Conseil d'arrondissement de {}".format(division.name)
+
     else:
-        raise Exception('{}: Unrecognized OCD type {}'.format(division_id, ocd_type))
+        raise Exception('{}: Unrecognized OCD type {}'.format(division.id, division._type))
 
     # Determine the class name.
     class_name_parts = re.split('[ -]', re.sub("[—–]", '-', re.sub("['.]", '', division.name)))
@@ -238,17 +256,16 @@ def tidy():
     leader_styles = {}
     member_styles = {}
     for gid in range(3):
-        reader = csv_reader('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid))
-        next(reader)
+        reader = csv_dict_reader('https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv'.format(gid))
         for row in reader:
-            key = row[0]
-            leader_styles[key] = row[2]
-            member_styles[key] = row[3]
+            key = row['Identifier']
+            leader_styles[key] = row['Leader']
+            member_styles[key] = row['Member']
 
     division_ids = set()
     jurisdiction_ids = set()
     for module_name in module_names():
-        if module_name.endswith('_candidates'):
+        if module_name.endswith('_candidates') or module_name.endswith('_municipalities'):
             continue
 
         metadata = module_name_to_metadata(module_name)
