@@ -42,11 +42,13 @@ def modules_and_module_names_and_classes():
         yield (module, module_name, module.__dict__[class_name])
 
 
-def csv_dict_reader(url):
+def csv_dict_reader(url, encoding='utf-8'):
     """
     Reads a remote CSV file.
     """
-    return csv.DictReader(StringIO(requests.get(url).text))
+    response = requests.get(url)
+    response.encoding = encoding
+    return csv.DictReader(StringIO(response.text))
 
 
 def slug(name):
@@ -351,6 +353,32 @@ def sources_and_assertions():
 
             if 'CSVScraper' not in content and 'assert len(' not in content:
                 print("Expected an assertion like: assert len(councillors), 'No councillors found' {}".format(path))
+
+
+@task
+def validate_spreadsheet(url, identifier_header, geographic_name_header):
+    """
+    Validates the identifiers, geographic names and geographic types in a spreadsheet.
+    """
+    sgc_to_id = {}
+
+    for division in Division.all('ca', from_csv=ocd_division_csv):
+        sgc_to_id[division.attrs['sgc']] = division.id
+
+    reader = csv_dict_reader(url)
+    for row in reader:
+        identifier = row[identifier_header]
+
+        if len(identifier) == 2:
+            identifier = sgc_to_id[identifier]
+        elif len(identifier) == 4:
+            identifier = 'ocd-division/country:ca/cd:{}'.format(identifier)
+        elif len(identifier) == 7:
+            identifier = 'ocd-division/country:ca/csd:{}'.format(identifier)
+
+        division = Division.get(identifier)
+        if row[geographic_name_header] != division.name:
+            print('{}: name: {} not {}'.format(identifier, division.name, row[geographic_name_header]))
 
 
 def module_name_to_metadata(module_name):
