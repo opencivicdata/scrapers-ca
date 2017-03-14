@@ -28,7 +28,7 @@ def module_names():
     Returns all module names.
     """
     for module_name in os.listdir('.'):
-        if os.path.isdir(module_name) and os.path.isfile(os.path.join(module_name, '__init__.py')):
+        if os.path.isfile(os.path.join(module_name, '__init__.py')):
             yield module_name
 
 
