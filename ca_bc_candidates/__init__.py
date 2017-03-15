@@ -14,6 +14,7 @@ class BritishColumbiaCandidates(CanadianJurisdiction):
         {'name': 'New Democratic Party of British Columbia'},
         {'name': 'Green Party of British Columbia'},
         {'name': 'British Columbia Conservatives'},
+        {'name': 'Libertarian'},
         {'name': 'Independent'},
     ]
 
