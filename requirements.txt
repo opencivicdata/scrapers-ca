@@ -1,4 +1,4 @@
--e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git#egg=opencivicdata-divisions
+-e git+git://github.com/opencivicdata/python-opencivicdata-divisions.git@c1f7458f08db4d8d449ad1ba7314ec98c61c2f57#egg=opencivicdata-divisions
 -e git+git://github.com/opencivicdata/pupa.git@5b21ce6b2acf557a3f7e147bf2e04bbdb46ce075#egg=pupa
 -e git+git://github.com/opencivicdata/python-opencivicdata-django.git@ca8217f596f77559bb31762cdbed15bb76bbf984#egg=opencivicdata-django
 # pupa==0.6.1
