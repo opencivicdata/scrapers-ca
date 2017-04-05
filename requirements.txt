@@ -2,7 +2,7 @@
 -e git+git://github.com/opencivicdata/pupa.git@5b21ce6b2acf557a3f7e147bf2e04bbdb46ce075#egg=pupa
 -e git+git://github.com/opencivicdata/python-opencivicdata-django.git@ca8217f596f77559bb31762cdbed15bb76bbf984#egg=opencivicdata-django
 # pupa==0.6.1
-Django==1.11b1
+Django==1.11
 
 # Scrapers
 csvkit==0.9.1 # @todo Use agate-excel
