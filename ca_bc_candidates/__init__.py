@@ -13,6 +13,7 @@ class BritishColumbiaCandidates(CanadianJurisdiction):
         {'name': 'BC Refederation Party'},
         {'name': 'British Columbia Conservatives'},
         {'name': 'British Columbia Liberal Party'},
+        {'name': 'Communist Party of British Columbia'},
         {'name': 'Green Party of British Columbia'},
         {'name': 'Independent'},
         {'name': 'Libertarian'},
