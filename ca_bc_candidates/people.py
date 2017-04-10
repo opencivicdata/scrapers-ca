@@ -9,7 +9,7 @@ class BritishColumbiaCandidatesPersonScraper(CSVScraper):
     contact_person = 'andrew@newmode.net'
     corrections = {
         'party_name': {
-            'British Columbia Conservatives': "British Columbia Conservative Party",
+            # 'British Columbia Conservatives': "British Columbia Conservative Party",
             'Communist Party of British Columbia': "Communist Party of BC",
             'Communist': "Communist Party of BC",
             # 'Green Party of British Columbia': "Green Party Political Association of British Columbia",
