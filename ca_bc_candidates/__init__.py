@@ -10,12 +10,13 @@ class BritishColumbiaCandidates(CanadianJurisdiction):
     name = 'Legislative Assembly of British Columbia'
     url = 'http://www.leg.bc.ca'
     parties = [
-        {'name': 'British Columbia Liberal Party'},
-        {'name': 'New Democratic Party of British Columbia'},
-        {'name': 'Green Party of British Columbia'},
+        {'name': 'BC Refederation Party'},
         {'name': 'British Columbia Conservatives'},
-        {'name': 'Libertarian'},
+        {'name': 'British Columbia Liberal Party'},
+        {'name': 'Green Party of British Columbia'},
         {'name': 'Independent'},
+        {'name': 'Libertarian'},
+        {'name': 'New Democratic Party of British Columbia'},
     ]
 
     def get_organizations(self):
