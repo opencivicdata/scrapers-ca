@@ -65,7 +65,6 @@ class CanadaPersonScraper(CanadianScraper):
             preferred_languages = mp_page.xpath('//span[@class="label"][contains(., "Preferred Language")]/following-sibling::span[@class="constituency"]/text()')
             if preferred_languages:
                 m.extras['preferred_languages'] = [language.replace('/', '').strip() for language in preferred_languages]
-                print(repr(m.extras))
 
             if province == 'Québec':
                 m.add_contact('address', 'Chambre des communes\nOttawa ON  K1A 0A6', 'legislature')
