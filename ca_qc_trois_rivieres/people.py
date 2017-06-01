@@ -2,45 +2,47 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-from urllib.parse import urljoin
 
-COUNCIL_PAGE = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=150&CPage=1'
+COUNCIL_PAGE = 'http://www.v3r.net/a-propos-de-la-ville/vie-democratique/conseil-municipal/conseillers-municipaux'
 
-MAYOR_URL = 'http://laville.v3r.net/portail/index.aspx?sect=0&module=5&module2=1&MenuID=1&CPage=1'
+MAYOR_URL = 'http://www.v3r.net/a-propos-de-la-ville/vie-democratique/mairie'
 
 
 class TroisRivieresPersonScraper(CanadianScraper):
     def scrape(self):
         # mayor first, can't find email
         page = self.lxmlize(MAYOR_URL)
-        photo_url = page.xpath('//img/@src[contains(., "maire")]')[0]
-        name = page.xpath('//td[@class="contenu"]/text()[last()]')[0]
+        photo_url = page.xpath('//img[contains(@alt, "Maire")]//@src')[0]
+        name = page.xpath('//img/@alt[contains(., "Maire")]')[0]
+        assert len(name), "missing mayor's name"
+        name = re.sub(r'Maire', '', name, flags=re.I).strip()
         p = Person(primary_org='legislature', name=name, district="Trois-Rivières", role="Maire",
                    image=photo_url)
         p.add_source(MAYOR_URL)
         yield p
 
-        resp = self.get(COUNCIL_PAGE)
-        # page rendering through JS on the client
-        page_re = re.compile(r'createItemNiv3.+"District (.+?)".+(index.+)\\"')
-        councillors = page_re.findall(resp.text)
+        page = self.lxmlize(COUNCIL_PAGE)
+        members = page.xpath('//div[@class="photos_conseillers"]//figure')
+        assert len(members), 'No councillors found'
 
-        assert len(councillors), 'No councillors found'
-        for district, url_rel in councillors:
-            if district not in ('des Estacades', 'des Plateaux', 'des Terrasses', 'du Sanctuaire'):
-                district = re.sub('\A(?:de(?: la)?|des|du) ', '', district)
+        for member in members:
+            photo_url = member.xpath('.//a//img/@src')[0]
+            url = member.xpath('.//figcaption//a/@href')[0]
+            email = self.lxmlize(url).xpath(
+                '//div[@class="content-page"]//a[starts-with(@href, "mailto:")]/@href')[0]
 
-            url = urljoin(COUNCIL_PAGE, url_rel)
-            page = self.lxmlize(url)
+            email = re.sub('^mailto:', '', email)
+            name, district = map(
+                lambda x: x.strip(),
+                member.xpath('.//figcaption//text()'))
 
-            name_content = page.xpath('//h2//text()')
-            if name_content:
-                name = name_content[0]
-                email = self.get_email(page)
-                photo_url = page.xpath('//img/@src[contains(., "Conseiller")]')[0]
-                p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
-                           image=photo_url)
-                p.add_source(COUNCIL_PAGE)
-                p.add_source(url)
-                p.add_contact('email', email)
-                yield p
+            if district.lower() not in ('des estacades', 'des plateaux',
+                                        'des terrasses', 'du sanctuaire'):
+                district = re.sub('\A(?:de(?: la)?|des|du) ', '', district, flags=re.I)
+
+            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
+                       image=photo_url)
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
+            p.add_contact('email', email)
+            yield p
