@@ -197,6 +197,16 @@ def council_pages():
 
 
 @task
+def csv_list():
+    """
+    Lists scrapers with CSV data.
+    """
+    for (module, module_name, klass) in modules_and_module_names_and_classes():
+        if hasattr(klass, 'csv_url'):
+            print('{}: {}'.format(module_name, klass.csv_url))
+
+
+@task
 def csv_stale():
     """
     Lists scrapers with stale manual CSV data.
