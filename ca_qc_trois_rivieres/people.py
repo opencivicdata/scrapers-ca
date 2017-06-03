@@ -36,8 +36,10 @@ class TroisRivieresPersonScraper(CanadianScraper):
                 lambda x: x.strip(),
                 member.xpath('.//figcaption//text()'))
 
-            if district.lower() not in ('des estacades', 'des plateaux',
+            if district.lower() in ('des estacades', 'des plateaux',
                                         'des terrasses', 'du sanctuaire'):
+                district = re.sub('\A(?:de(?: la)?|des|du) ', lambda match: match.group(0).lower(), district, flags=re.I)
+            else:
                 district = re.sub('\A(?:de(?: la)?|des|du) ', '', district, flags=re.I)
 
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
