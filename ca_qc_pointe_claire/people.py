@@ -1,6 +1,6 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.pointe-claire.ca/fr/ville/conseil-municipal/membres'
+COUNCIL_PAGE = 'http://www.pointe-claire.ca/fr/membres/'
 
 
 class PointeClairePersonScraper(CanadianScraper):
@@ -10,7 +10,8 @@ class PointeClairePersonScraper(CanadianScraper):
         councillors = page.xpath('//section[contains(@id, "js-council-member")]')
         assert len(councillors), 'No councillors found'
         for index, councillor in enumerate(councillors):
-            name = ' '.join(councillor.xpath('.//h2/text()'))
+
+            name = ' '.join([n.strip() for n in councillor.xpath('.//h2/text()')])
             district = councillor.xpath('.//span[contains(@class, "c-info-list_label")][contains(text(), "District ")]')
             role = 'Conseiller'
 
@@ -18,7 +19,9 @@ class PointeClairePersonScraper(CanadianScraper):
                 district = 'Pointe-Claire'
                 role = 'Maire'
             elif district:
-                district = district[0].text_content().split(' – ')[0]
+                district = district[0].text_content().split(' – ')[0].strip()
+            else:
+                assert False, "error parsing district"
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.image = councillor.xpath('.//@src')[0]
