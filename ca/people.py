@@ -20,7 +20,7 @@ class CanadaPersonScraper(CanadianScraper):
         screen_names = json.loads(self.get('http://scrapers-ruby.herokuapp.com/twitter_users').text)
 
         page = self.lxmlize(COUNCIL_PAGE)
-        rows = page.xpath('//div[@class="main-content"]//tr')[1:]
+        rows = page.xpath('//div[@class="content-primary"]//tr')[1:]
         assert len(rows), 'No members found'
         for row in rows:
             name_cell = row.xpath('./td[1]')[0]

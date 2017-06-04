@@ -1,14 +1,14 @@
 # coding: utf-8
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.assembly.nl.ca/members/cms/membersdirectlines.htm'
-PARTY_PAGE = 'http://www.assembly.nl.ca/members/cms/membersparty.htm'
+COUNCIL_PAGE = 'http://www.assembly.nl.ca/members/cms/membersalpha.htm'
 
-PARTIES = [
-    'Progressive Conservative Party of Newfoundland and Labrador',
-    'New Democratic Party of Newfoundland and Labrador',
-    'Liberal Party of Newfoundland and Labrador',
-]
+PARTIES = {
+    'Progressive Conservative': 'Progressive Conservative Party of Newfoundland and Labrador',
+    'New Democrat': 'New Democratic Party of Newfoundland and Labrador',
+    'Liberal': 'Liberal Party of Newfoundland and Labrador',
+    'Independent/Non-Affiliated': 'Independent/Non-Affiliated',
+}
 
 PHONE_TD_HEADINGS = {
     'legislature': "Confederation Building Office",
@@ -16,50 +16,36 @@ PHONE_TD_HEADINGS = {
 }
 
 
-def get_party(abbr):
-    """Return a full party name from an abbreviation"""
-    return next((party for party in PARTIES if party[0] == abbr[0]), None)
-
-
 class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
     def scrape(self):
-        member_parties = {}
-        for elem in self.lxmlize(PARTY_PAGE).xpath('//h3/u'):
-            party = elem.text
-            members = elem.xpath('./ancestor::tr/following-sibling::tr/td')
-            member_names = [elem.text_content().replace('\xa0', ' ') for elem in members]
-            for name in member_names:
-                member_parties[name] = party
-
         page = self.lxmlize(COUNCIL_PAGE)
-        members = page.xpath('//table[not(@id="footer")][not(@style)]/tr')[1:]
+        members = page.xpath('//div[@id="content"]/table//tr')[1:]
         assert len(members), 'No members found'
         for row in members:
-            name, district, _, email = [cell.text_content().replace('\xa0', ' ') for cell in row]
-
+            member_url = row[0].xpath('./a/@href')[0]
+            name = row[0].text_content().strip()
+            party = row[2].text_content().strip()
+            assert party in PARTIES, "unexpected party %s" % party
+            party = PARTIES[party]
+            district = row[1].text_content().strip()
             district = district.replace(' - ', '—')  # m-dash
-            district = district.replace('Bay De Verde', 'Bay de Verde')
-            party = get_party(member_parties[name.strip()])
 
-            p = Person(primary_org='legislature', name=name, district=district, role='MHA', party=party)
+            member_page = self.lxmlize(member_url)
+            email = self.get_email(member_page.xpath('//div[@id="content"]')[0])
+            photo_url = member_page.xpath('//div[@id="content"]//img/@src')[0]
+
+            p = Person(primary_org='legislature', name=name,
+                       district=district, role='MHA', party=party)
 
             p.add_contact('email', email)
-
             p.add_source(COUNCIL_PAGE)
-            p.add_source(PARTY_PAGE)
+            p.add_source(member_url)
+            p.image = photo_url
 
-            photo_page_url = row[0].xpath('./a/@href')
-            if photo_page_url:
-                photo_page = self.lxmlize(photo_page_url[0])
-                photo_node = photo_page.xpath('//table//img[@height]/@src')
-                photo_url = photo_node[0]
-                p.image = photo_url
-                p.add_source(photo_page_url[0])
-                for key, heading in PHONE_TD_HEADINGS.items():
-                    td = photo_page.xpath('//*[.="{0}"]/ancestor::td'.format(heading))
-                    if td:
-                        phone = self.get_phone(td[0], error=False)
-                        if phone:
-                            p.add_contact('voice', phone, key)
-
+            for key, heading in PHONE_TD_HEADINGS.items():
+                td = member_page.xpath('//*[.="{0}"]/ancestor::td'.format(heading))
+                if td:
+                    phone = self.get_phone(td[0], error=False)
+                    if phone:
+                        p.add_contact('voice', phone, key)
             yield p
