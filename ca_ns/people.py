@@ -25,10 +25,13 @@ class NovaScotiaPersonScraper(CanadianScraper):
         assert len(members), 'No members found'
         for row in members:
             if 'Vacant' not in row.xpath('./td//text()')[0]:
-                full_name, party, district = row.xpath('./td//text()')[:3]
+                full_name, _, party, district = row.xpath('./td//text()')[:4]
                 name = ' '.join(reversed(full_name.split(',')))
+                assert party in self.PARTIES, "missing party %s" % party
+                party = self.PARTIES[party]
 
-                p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=self.PARTIES[party])
+                p = Person(primary_org='legislature', name=name, district=district,
+                           role='MLA', party=party)
 
                 detail_url = row[0][0].attrib['href']
                 detail = self.lxmlize(detail_url)
