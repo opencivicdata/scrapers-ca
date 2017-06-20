@@ -169,7 +169,7 @@ class CanadianScraper(Scraper):
     def post(self, *args, **kwargs):
         return super(CanadianScraper, self).post(*args, verify=SSL_VERIFY, **kwargs)
 
-    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None):
+    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None, xml=False):
         self.user_agent = user_agent
 
         response = self.get(url, cookies=cookies)
@@ -178,8 +178,12 @@ class CanadianScraper(Scraper):
 
         try:
             text = response.text
-            text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
-            page = lxml.html.fromstring(text)
+            if xml:
+                text = text.replace('<?xml version="1.0" encoding="utf-8"?>', '') # XXX ca_bc
+                page = etree.fromstring(text)
+            else:
+                text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
+                page = lxml.html.fromstring(text)
         except etree.ParserError:
             raise etree.ParserError('Document is empty {}'.format(url))
 
@@ -187,6 +191,8 @@ class CanadianScraper(Scraper):
         if meta:
             _, url = meta[0].attrib['content'].split('=', 1)
             return self.lxmlize(url, encoding)
+        elif xml:
+            return page
         else:
             page.make_links_absolute(url)
             return page
@@ -573,7 +579,7 @@ class CanadianPerson(Person):
 whitespace_re = re.compile(r'\s+', flags=re.U)
 whitespace_and_newline_re = re.compile(r'[^\S\n]+', flags=re.U)
 honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ')
-honorific_suffix_re = re.compile(r', Ph\.D\Z')
+honorific_suffix_re = re.compile(r', (?:Ph\.D, Q\.C\.)\Z')
 capitalize_re = re.compile(r' [A-Z](?=[a-z])')  # to not lowercase "URL"
 province_or_territory_abbreviation_memo = {}
 

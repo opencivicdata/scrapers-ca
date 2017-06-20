@@ -7,7 +7,7 @@ PARTIES = {
     'Progressive Conservative': 'Progressive Conservative Party of Newfoundland and Labrador',
     'New Democrat': 'New Democratic Party of Newfoundland and Labrador',
     'Liberal': 'Liberal Party of Newfoundland and Labrador',
-    'Independent/Non-Affiliated': 'Independent/Non-Affiliated',
+    'Independent/Non-Affiliated': 'Independent',
 }
 
 PHONE_TD_HEADINGS = {

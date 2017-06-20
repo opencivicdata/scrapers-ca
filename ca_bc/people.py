@@ -2,25 +2,25 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-# Members page load members with javascript
-COUNCIL_PAGE = 'https://www.leg.bc.ca/Pages/BCLASS-Category-MLASeatingPlan.aspx'
+COUNCIL_PAGE = "https://www.leg.bc.ca/_api/search/query?querytext='(contentclass:sts_listitem%20OR%20IsDocument:True)%20SPSiteUrl:/content%20ListId:8ecafcaa-2bf9-4434-a60c-3663a9afd175%20MLAActiveOWSBOOL:1%20-LastNameOWSTEXT:Vacant'&selectproperties='Picture1OWSIMGE,Title,Path'&&sortlist='LastNameSort:ascending'&rowlimit=100&QueryTemplatePropertiesUrl='spfile://webroot/queryparametertemplate.xml'"
 
 
 class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, xml=True)
 
-        members = page.xpath('//table[@cellpadding="4"]//td//a[text()!=""]/@href')
+        nsmap = {'d': 'http://schemas.microsoft.com/ado/2007/08/dataservices'}
+        members = page.xpath('//d:Cells', namespaces=nsmap)
         assert len(members), 'No members found'
         for member in members:
-            page = self.lxmlize(member)
-            # Hon. is followed by Dr. in one case but the clean_name function
-            # removes only one honorific title
-            name = page.xpath('//h2[contains(text(), "MLA:")]')[0].text_content().replace('MLA:', '').replace('Dr.', '').replace(', Q.C.', '').replace('Wm.', '').strip()
-            district, party = cleanup_list(page.xpath('//h2/following-sibling::div[1]/div[2]/div[1]/div/text()'))
+            url = member.xpath('./d:element/d:Key[text()="Path"]/following-sibling::d:Value/text()', namespaces=nsmap)[0]
+            page = self.lxmlize(url)
+
+            name = page.xpath('//div[contains(@class, "BCLASS-pagetitle")]//h3/text()')[0].replace('Wm.', '').strip()
+            district, party = cleanup_list(page.xpath('//div[@id="MinisterTitle"]/following-sibling::text()'))
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)
-            p.add_source(member)
+            p.add_source(url)
 
             p.image = page.xpath('//img[contains(@src, "Members")]/@src')[0]
 

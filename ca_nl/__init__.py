@@ -11,4 +11,5 @@ class NewfoundlandAndLabrador(CanadianJurisdiction):
         {'name': 'Progressive Conservative Party of Newfoundland and Labrador'},
         {'name': 'New Democratic Party of Newfoundland and Labrador'},
         {'name': 'Liberal Party of Newfoundland and Labrador'},
+        {'name': 'Independent'},
     ]
