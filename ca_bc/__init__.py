@@ -1,4 +1,8 @@
 from utils import CanadianJurisdiction
+from opencivicdata.divisions import Division
+from pupa.scrape import Organization
+
+from datetime import datetime
 
 
 class BritishColumbia(CanadianJurisdiction):
@@ -12,3 +16,12 @@ class BritishColumbia(CanadianJurisdiction):
         {'name': 'British Columbia Liberal Party'},
         {'name': 'Independent'},
     ]
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        for division in Division.get(self.division_id).children('ed'):
+            if division.attrs.get('validFrom') and division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
+                organization.add_post(role='MLA', label=division.name, division_id=division.id)
+
+        yield organization

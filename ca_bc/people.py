@@ -7,6 +7,10 @@ COUNCIL_PAGE = "https://www.leg.bc.ca/_api/search/query?querytext='(contentclass
 
 class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
+        parties = {
+            'BC NDP': 'New Democratic Party of British Columbia',
+        }
+
         page = self.lxmlize(COUNCIL_PAGE, xml=True)
 
         nsmap = {'d': 'http://schemas.microsoft.com/ado/2007/08/dataservices'}
@@ -16,8 +20,9 @@ class BritishColumbiaPersonScraper(CanadianScraper):
             url = member.xpath('./d:element/d:Key[text()="Path"]/following-sibling::d:Value/text()', namespaces=nsmap)[0]
             page = self.lxmlize(url)
 
-            name = page.xpath('//div[contains(@class, "BCLASS-pagetitle")]//h3/text()')[0].replace('Wm.', '').strip()
+            name = page.xpath('//div[contains(@class, "BCLASS-pagetitle")]//h3/text()')[0].replace('Wm.', '').replace(', Q.C.', '').strip()
             district, party = cleanup_list(page.xpath('//div[@id="MinisterTitle"]/following-sibling::text()'))
+            party = parties.get(party, party)
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
@@ -39,18 +44,12 @@ class BritishColumbiaPersonScraper(CanadianScraper):
             p.add_contact('address', constituency, 'constituency')
 
             phones = cleanup_list(page.xpath('//span[contains(text(), "Phone:")]/following-sibling::text()'))
-            faxes = cleanup_list(page.xpath('//span[contains(text(), "Fax:")]/following-sibling::span[1]/text()'))
 
             office_phone = phones[0]
             p.add_contact('voice', office_phone, 'legislature')
             if len(phones) > 1:
                 constituency_phone = phones[1]
                 p.add_contact('voice', constituency_phone, 'constituency')
-            office_fax = faxes[0]
-            p.add_contact('fax', office_fax, 'legislature')
-            if len(faxes) > 1:
-                constituency_fax = faxes[1]
-                p.add_contact('fax', constituency_fax, 'constituency')
 
             yield p
 
