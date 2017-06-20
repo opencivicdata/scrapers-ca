@@ -179,7 +179,7 @@ class CanadianScraper(Scraper):
         try:
             text = response.text
             if xml:
-                text = text.replace('<?xml version="1.0" encoding="utf-8"?>', '') # XXX ca_bc
+                text = text.replace('<?xml version="1.0" encoding="utf-8"?>', '')  # XXX ca_bc
                 page = etree.fromstring(text)
             else:
                 text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
