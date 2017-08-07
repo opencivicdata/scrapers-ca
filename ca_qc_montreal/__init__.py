@@ -12,10 +12,10 @@ class Montreal(CanadianJurisdiction):
     parties = [
         {'name': 'Coalition Montréal'},
         {'name': 'Indépendant'},
-        {'name': 'Projet Montréal'},
+        {'name': 'Projet Montréal - Équipe Valérie Plante'},
         {'name': 'Vrai changement pour Montréal'},
         {'name': 'Équipe Anjou'},
-        {'name': 'Équipe Barbe Team – Pro action LaSalle'},
+        {'name': 'Équipe Barbe Team'},
         {'name': 'Équipe Dauphin Lachine'},
         {'name': 'Équipe Denis Coderre pour Montréal'},
     ]

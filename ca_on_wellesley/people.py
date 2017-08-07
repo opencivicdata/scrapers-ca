@@ -1,4 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
+import re
 
 COUNCIL_PAGE = 'http://www.wellesley.ca/council/councillors/?q=council/councillors'
 
@@ -15,30 +16,22 @@ def post_number(name):
 class WellesleyPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
+        members = [el for el in page.xpath('//div[@id="printAreaContent"]//td') if
+                   el.text_content().strip().lower().split()[0] in ["mayor", "councillor"]][1:]
+        assert len(members) == 5
 
-        yield self.scrape_mayor(page.xpath('//div[@class="img_four"][1]/div[1]')[0])
+        for member in members:
+            position = member.text_content().split()[0]
+            srch = re.search(r'\w+(.+?) is.*? for (.+?)\.', member.text_content().strip())
+            name = srch.group(1).strip()
+            district = srch.group(2).strip()
+            phone = self.get_phone(member)
+            if position == "Mayor":
+                district = "Wellesley"
+            else:
+                district = post_number(district)
 
-        councillors = page.xpath('//div[@class="img_four"][2]/div')
-        assert len(councillors), 'No councillors found'
-        for councillor_elem in councillors:
-            name, position = councillor_elem.xpath('string(./p/strong)').split(',')  # allow string()
-            position = position.strip()
-            position, district = position.split(' ', 1)
-            district = post_number(district)
-            phone = councillor_elem.xpath('.//a[starts-with(@href, "tel:")]//text()')[0]
-            image = councillor_elem.xpath('.//img[1]/@src')[0]
-            p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
-            p.add_source(COUNCIL_PAGE)
+            p = Person(primary_org='legislature', name=name, district=district, role=position)
             p.add_contact('voice', phone, 'legislature')
+            p.add_source(COUNCIL_PAGE)
             yield p
-
-    def scrape_mayor(self, mayor_node):
-        name, position = mayor_node.xpath('string(./p/strong)').split(',')  # allow string()
-        position = position.strip()
-        district = 'Wellesley'
-        phone = mayor_node.xpath('.//a[starts-with(@href, "tel:")]//text()')[0]
-        image = mayor_node.xpath('.//img[1]/@src')[0]
-        p = Person(primary_org='legislature', name=name, district=district, role=position, image=image)
-        p.add_source(COUNCIL_PAGE)
-        p.add_contact('voice', phone, 'legislature')
-        return p
