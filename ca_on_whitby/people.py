@@ -40,7 +40,7 @@ class WhitbyPersonScraper(CanadianScraper):
         name = mayor_node.xpath('./strong')[0].text_content().replace(',', '')
         email = self.get_email(mayor_node)
         phone = page.xpath('//p[contains(text(), "Phone")]/text()')[0].split(':')[1]
-        image = mayor_node.xpath('./preceding-sibling::img/@src')[0]
+        image = mayor_node.xpath('./preceding-sibling::p/img/@src')[0]
         p = Person(primary_org='legislature', name=name, district='Whitby', role='Mayor', image=image)
         p.add_source(COUNCIL_PAGE)
         p.add_contact('voice', phone, 'legislature')

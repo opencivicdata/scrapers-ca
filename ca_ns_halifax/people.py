@@ -18,6 +18,10 @@ class HalifaxPersonScraper(CanadianScraper):
             photo_div = councillor.xpath('./a/div[1]')[0]
             info_div = councillor.xpath('./a/div[2]')[0]
             district = re.sub(r'\s*[–—-]\s*', '—', '—'.join(info_div.xpath('./p/text()')))
+            # FIXME: we special-case one malformed district name. If you're editing this file,
+            # try removing these lines
+            if district.startswith("District 16 "):
+                district = district[len("District 16 "):]
 
             name = info_div.xpath('./strong/p/text()')[0].replace('Councillor ', '').replace('Deputy Mayor ', '')
 

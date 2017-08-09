@@ -19,8 +19,6 @@ class BrossardPersonScraper(CanadianScraper):
             name = elem.xpath('.//div[@class="titre"]/text()')[0]
             if name == 'Poste vacant':
                 continue
-            if name == 'Francyne Raymond':
-                name = 'Francine Raymond'  # her name is Francine on the contact page, not Francyne
             position = elem.xpath('.//div[@class="poste"]/text()')[0]
             role = 'Conseiller'
             district = re.search(r'District \d+', position)
@@ -40,7 +38,13 @@ class BrossardPersonScraper(CanadianScraper):
                           if name in link.text_content().replace('\u2019', "'")][0]
             email = re.match('mailto:(.+@brossard.ca)', email_elem.attrib['href']).group(1)
             p.add_contact('email', email)
-            phone = email_elem.xpath('./following-sibling::text()[contains(., "450")]')[0]
+            phone = email_elem.xpath('./following-sibling::text()[contains(., "450")]')
+            if len(phone) == 0:
+                # one field is misordered.
+                assert name == "Francine Raymond"
+                phone = "450 923-6304, poste 6503"
+            else:
+                phone = phone[0]
             p.add_contact('voice', phone, 'legislature')
 
             yield p

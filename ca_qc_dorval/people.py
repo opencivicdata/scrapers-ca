@@ -1,13 +1,13 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.ville.dorval.qc.ca/en/democratic-life/municipal-council'
+COUNCIL_PAGE = 'http://www.ville.dorval.qc.ca/en/the-city/page/council-members'
 
 
 class DorvalPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//td/p[2]')
+        councillors = page.xpath('//div[@id="large_content"]//td/p[2]')
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
             info = councillor.xpath('./strong/text()')

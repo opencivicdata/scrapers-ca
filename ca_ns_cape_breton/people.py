@@ -28,7 +28,7 @@ class CapeBretonPersonScraper(CanadianScraper):
                 contact_nodes = councillor.xpath('.//td[4]/p/text()')
 
             phone = contact_nodes[0].split(':')[1]
-            phone = self.get_phone(phone)
+
             # one number had a U+00A0 in it for some reason
             phone = phone.replace("(", '').replace(")", '-').replace(" ", '').replace("\N{NO-BREAK SPACE}", "")
             if 'or' in phone:  # phone and cell

@@ -12,6 +12,7 @@ PARTIES = {
     'ND': 'Alberta New Democratic Party',
     'PC': 'Progressive Conservative Association of Alberta',
     'W': 'Wildrose Alliance Party',
+    'UC': 'United Conservative',
     'IND': 'Independent',
 }
 
