@@ -2,7 +2,7 @@ from utils import CSVScraper
 
 
 class TorontoPersonScraper(CSVScraper):
-    csv_url = 'http://www1.toronto.ca/City%20Of%20Toronto/Information%20&%20Technology/Open%20Data/Data%20Sets/Assets/Files/Toronto_Elected_Officials.csv'
+    csv_url = 'https://www1.toronto.ca/City%20Of%20Toronto/Information%20&%20Technology/Open%20Data/Data%20Sets/Assets/Files/CouncillorContact.csv'
     district_name_format_string = '{district name} ({district id})'
     encoding = 'windows-1252'
     other_names = {
