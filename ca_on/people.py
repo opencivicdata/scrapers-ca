@@ -10,6 +10,9 @@ class OntarioPersonScraper(CanadianScraper):
         members = page.xpath('//div[@class="addressblock"]')
         assert len(members), 'No members found'
         for block in members:
+            if block.xpath('.//div[@class="vacant-seat"]'):
+                continue
+
             name_elem = block.xpath('.//a[@class="mpp"]')[0]
             name = ' '.join(name_elem.text.split())
 

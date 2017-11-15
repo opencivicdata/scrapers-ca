@@ -1,4 +1,4 @@
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, clean_string
 
 import re
 
@@ -16,8 +16,9 @@ class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
             if not councillor.xpath('.//a'):
                 continue
 
-            name = councillor.xpath('.//a')[0].text_content().strip()
-            district = councillor.xpath('.//a')[1].text_content()
+            texts = [text for text in councillor.xpath('.//text()') if clean_string(text)]
+            name = texts[0]
+            district = texts[1]
             url = councillor.xpath('.//a/@href')[0]
             page = self.lxmlize(url)
 

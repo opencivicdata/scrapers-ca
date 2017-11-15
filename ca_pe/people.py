@@ -12,6 +12,9 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
 
         assert len(members), 'No members found'
         for member in members:
+            if not member.text_content().strip():
+                continue
+
             name = member.xpath('./td[2]//a[1]//text()')[0]
 
             district_name = member.xpath('./td[2]//a[contains(.//text(), "MLA")]//text()')[0].split(':')[1].replace('St ', 'St. ').split('-')

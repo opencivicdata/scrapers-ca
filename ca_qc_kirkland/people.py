@@ -32,5 +32,7 @@ class KirklandPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('email', email)
-            p.image = councillor.xpath('.//img/@src')[0]
+            image = councillor.xpath('.//img/@src')
+            if image:
+                p.image = image[0]
             yield p

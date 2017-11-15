@@ -11,4 +11,5 @@ class Ontario(CanadianJurisdiction):
         {'name': 'Ontario Liberal Party'},
         {'name': 'New Democratic Party of Ontario'},
         {'name': 'Progressive Conservative Party of Ontario'},
+        {'name': 'Independent'},
     ]
