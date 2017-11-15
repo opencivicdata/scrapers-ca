@@ -307,7 +307,7 @@ class CSVScraper(CanadianScraper):
     and rows in which a name component is "Vacant".
     """
     def is_valid_row(self, row):
-        return any(row.values()) and row['last name'] != 'Vacant' and row['first name'] != 'Vacant'
+        return any(row.values()) and row['last name'] not in ('', 'Vacant') and row['first name'] not in ('', 'Vacant')
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
