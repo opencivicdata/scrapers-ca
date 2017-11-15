@@ -10,9 +10,11 @@ PARTIES = {
     'AP': 'Alberta Party',
     'AL': 'Alberta Liberal Party',
     'ND': 'Alberta New Democratic Party',
+    'NDP': 'Alberta New Democratic Party',
     'PC': 'Progressive Conservative Association of Alberta',
     'W': 'Wildrose Alliance Party',
     'UC': 'United Conservative',
+    'UCP': 'United Conservative Party',
     'IND': 'Independent',
 }
 
