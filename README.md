@@ -19,6 +19,8 @@ psql pupa -c "CREATE EXTENSION postgis;"
 pupa dbinit ca
 ```
 
+If you get an error like "no password supplied", then you need to configure the default `DATABASE_URL` in `pupa_settings.py`, e.g. `postgis://USERNAME:PASSWORD@localhost/pupa`.
+
 ## Run a scraper
 
     pupa update ca_ab_edmonton
