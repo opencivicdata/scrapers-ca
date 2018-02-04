@@ -1,5 +1,5 @@
 pupa==0.8.0
-Django==1.11
+Django==1.11.10
 
 # Scrapers
 csvkit==0.9.1 # @todo Use agate-excel
