@@ -3,7 +3,7 @@ from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
 
-class BritishColumbiaCandidates(CanadianJurisdiction):
+class OntarioCandidates(CanadianJurisdiction):
     classification = 'executive'  # just to avoid clash
     division_id = 'ocd-division/country:ca/province:on'
     division_name = 'Ontario'
