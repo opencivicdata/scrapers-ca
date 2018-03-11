@@ -1,27 +1,22 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.villagesenneville.qc.ca/fr/membres-du-conseil-municipal'
+COUNCIL_PAGE = 'http://www.villagesenneville.qc.ca/fr/7/conseil-municipal'
 
 
 class SennevillePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@class="field-item even"]//tr')
+        councillors = page.xpath('//section[@class="block text"][./header/h2][position() > 1]')
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            district = councillor.xpath('./td[1]//strong/text()')[0].replace('no. ', '')
-            role = 'Conseiller'
-            if 'Maire' in district:
+            role_and_district, name = councillor.xpath('.//h2/text()')[0].split('-')
+            role, district = role_and_district.split(' ', 1)
+            if role == 'Maire':
                 district = 'Senneville'
-                role = 'Maire'
-            name = councillor.xpath('./td[2]//p//text()')[0].title()
             email = self.get_email(councillor)
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            try:
-                p.image = councillor.xpath('.//img/@src')[0]
-            except IndexError:
-                pass
+            p.image = councillor.xpath('.//img/@src')[0]
             p.add_contact('email', email)
             yield p
