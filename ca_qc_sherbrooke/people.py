@@ -17,7 +17,7 @@ class SherbrookePersonScraper(CanadianScraper):
                 district = 'Sherbrooke'
                 role = 'Maire'
             else:
-                district = page.xpath('//div[@class="csc-default"]//a[@target="_blank"]/text()')[0].replace('district', '').replace('Domaine Howard', 'Domaine-Howard').strip()
+                district = page.xpath('//div[@class="csc-default"]//a[contains(@href, "fileadmin")]/text()')[0].replace('district', '').strip()
                 role = 'Conseiller'
             if district in ('de Brompton', 'de Lennoxville'):
                 district = district.replace('de ', '')
