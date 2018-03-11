@@ -18,6 +18,7 @@ class Canada(CanadianJurisdiction):
         {'name': 'Conservative Independent'},
         {'name': 'Forces et Démocratie'},
         {'name': 'Green Party'},
+        {'name': 'Groupe parlementaire québécois'},
         {'name': 'Independent'},
         {'name': 'Liberal'},
         {'name': 'NDP'},
