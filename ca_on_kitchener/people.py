@@ -2,4 +2,4 @@ from utils import CSVScraper
 
 
 class KitchenerPersonScraper(CSVScraper):
-    csv_url = 'http://app.kitchener.ca/opendata/csv/Elected_Officials.csv'
+    csv_url = 'https://app2.kitchener.ca/appdocs/opendata/staticdatasets/Elected_Officials.csv'
