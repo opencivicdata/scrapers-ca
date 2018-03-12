@@ -407,7 +407,7 @@ class CSVScraper(CanadianScraper):
                     p.add_link(row['twitter'])
 
                 if row['email']:
-                    p.add_contact('email', row['email'])
+                    p.add_contact('email', row['email'].split('\n')[-1])  # ca_qc_montreal
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')
                 if row.get('phone'):
@@ -547,7 +547,7 @@ class CanadianPerson(Person):
         """
         @see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html
         """
-        splits = re.split(r'(?:\b \(|/|x|ext[.:]?|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
+        splits = re.split(r'(?:\b \(|/|x|ext[.:]?|p\.|poste)[\s-]?(?=\b|\d)', s, flags=re.IGNORECASE)
         digits = re.sub(r'\D', '', splits[0])
 
         if len(digits) == 7 and area_code:

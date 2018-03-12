@@ -11,10 +11,9 @@ class MontrealPersonScraper(CSVScraper):
             # Normalize to masculine role descriptor.
             'Conseillère de la ville': 'Conseiller de la ville',
             "Mairesse d'arrondissement": "Maire d'arrondissement",
-            # Skip this first role (update if second role changes).
-            'Chef intérimaire': 'Conseiller de la ville',
         },
         'district name': {
+            "Champlain—'Île-des-Sœurs": "Champlain—'Île-des-Soeurs",
             'De Lorimier': 'DeLorimier',
             'la Côte-de-Liesse': 'Côte-de-Liesse',
             'Loyala': 'Loyola',
@@ -23,7 +22,11 @@ class MontrealPersonScraper(CSVScraper):
         },
         'party name': {
             'Indépendante': 'Indépendant',
-        }
+        },
+        'gender': {
+            'Madame': 'female',
+            'Monsieur': 'male',
+        },
     }
     fallbacks = {
         'district name': 'arrondissement',

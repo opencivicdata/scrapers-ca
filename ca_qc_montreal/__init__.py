@@ -11,6 +11,7 @@ class Montreal(CanadianJurisdiction):
     url = 'http://www.ville.montreal.qc.ca'
     parties = [
         {'name': 'Coalition Montréal'},
+        {'name': 'Ensemble Montréal'},
         {'name': 'Indépendant'},
         {'name': 'Projet Montréal - Équipe Valérie Plante'},
         {'name': 'Vrai changement pour Montréal'},
