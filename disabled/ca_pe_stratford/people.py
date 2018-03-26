@@ -1,4 +1,4 @@
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, CUSTOM_USER_AGENT
 
 import re
 from collections import defaultdict
@@ -10,7 +10,7 @@ class StratfordPersonScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(int)
 
-        page = self.lxmlize(COUNCIL_PAGE, user_agent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)')
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 
         yield self.scrape_mayor(page)
 

@@ -1,13 +1,9 @@
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, CUSTOM_USER_AGENT
 
 import re
 
 COUNCIL_PAGE = 'http://www.cbrm.ns.ca/mayor-council-2.html'
 MAYOR_PAGE = 'http://www.cbrm.ns.ca/mayor'
-
-
-# server is returning 403 for python-requests user-agent
-CUSTOM_USER_AGENT = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
 
 
 class CapeBretonPersonScraper(CanadianScraper):

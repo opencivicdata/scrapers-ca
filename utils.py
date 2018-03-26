@@ -22,6 +22,8 @@ import patch  # patch patches validictory # noqa
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+CUSTOM_USER_AGENT = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
+
 CONTACT_DETAIL_TYPE_MAP = {
     'Address': 'address',
     'bb': 'cell',  # BlackBerry

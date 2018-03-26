@@ -1,5 +1,5 @@
 # coding: utf-8
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, CUSTOM_USER_AGENT
 
 import re
 from urllib.parse import urljoin
@@ -9,7 +9,7 @@ COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
 
 class CoteSaintLucPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 
         mayor_url = page.xpath('//a[contains(text(), "Mayor")]/@href')[0]
         mayor = self.scrape_mayor(mayor_url)
@@ -17,7 +17,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
             yield mayor
 
         councillors_url = page.xpath('//a[contains(text(), "Councillors")]/@href')[0]
-        cpage = self.lxmlize(councillors_url)
+        cpage = self.lxmlize(councillors_url, user_agent=CUSTOM_USER_AGENT)
 
         councillors = cpage.xpath('//tr[td//img]')[:-1]
 
@@ -44,7 +44,7 @@ class CoteSaintLucPersonScraper(CanadianScraper):
             yield p
 
     def scrape_mayor(self, url):
-        page = self.lxmlize(url)
+        page = self.lxmlize(url, user_agent=CUSTOM_USER_AGENT)
         text = page.xpath('//h1//text()[contains(., "Mayor")]')[0]
         if 'Acting Mayor' in text:
             # A councillor is acting mayor. We would need to add two roles to
