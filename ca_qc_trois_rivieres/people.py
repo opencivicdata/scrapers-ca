@@ -1,5 +1,5 @@
 # coding: utf-8
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, clean_french_prepositions
 
 import re
 
@@ -36,14 +36,9 @@ class TroisRivieresPersonScraper(CanadianScraper):
                 lambda x: x.strip(),
                 member.xpath('.//figcaption//text()'))
 
-            if district.lower() in ('des estacades', 'des plateaux',
-                                    'des terrasses', 'du sanctuaire'):
-                district = re.sub('\A(?:de(?: la)?|des|du) ', lambda match: match.group(0).lower(), district, flags=re.I)
-            else:
-                district = re.sub('\A(?:de(?: la)?|des|du) ', '', district, flags=re.I)
+            district = re.sub(r'\A(?:de|des|du) ', lambda match: match.group(0).lower(), district, flags=re.I)
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller',
-                       image=photo_url)
+            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller', image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.add_contact('email', email)
