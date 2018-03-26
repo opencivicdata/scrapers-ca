@@ -233,6 +233,10 @@ class CSVScraper(CanadianScraper):
     If `csv_url` is a ZIP file, set the compressed file to read.
     """
     filename = None
+    """
+    The locale of the data, like 'fr'.
+    """
+    locale = None
 
     # Table flags
     """
