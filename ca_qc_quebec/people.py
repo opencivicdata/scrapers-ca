@@ -24,17 +24,14 @@ class QuebecPersonScraper(CanadianScraper):
                     district = 'Québec'
                     role = 'Maire'
                 else:
-                    text = councillor.xpath('./p[@itemprop="jobTitle"]/a/text()')[0]
-                    district = re.search(r'\ADistrict (?:de|du|des) ([\w —–-]+)', text, flags=re.U).group(1)
+                    district = councillor.xpath('./p[@itemprop="jobTitle"]/a/text()')[0]
+                    district = re.search(r'\ADistrict (?:de(?: la)?|du|des) ([\w —–-]+)', district, flags=re.U).group(1)
                     role = 'Conseiller'
 
-                if district == 'Monts':
-                    district = 'Les Monts'
-                elif district == 'Plateau':
-                    district = 'Le Plateau'
+                if district == 'Saules':
+                    district = 'Les Saules'
                 else:
                     district = re.sub(r'–', '—', district)  # n-dash, m-dash
-                    district = re.sub(r'\Ala ', 'La ', district)
 
                 p = Person(primary_org='legislature', name=name, district=district, role=role)
                 p.add_source(COUNCIL_PAGE)
