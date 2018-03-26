@@ -1,6 +1,7 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'https://www.longueuil.quebec/fr/conseil-ville'
+MAYOR_PAGE = 'https://www.longueuil.quebec/fr/conseil/mairesse/biographie'
 
 
 class LongueuilPersonScraper(CanadianScraper):
@@ -18,6 +19,13 @@ class LongueuilPersonScraper(CanadianScraper):
                 if 'Greenfield Park' in district or 'Conseiller n' in district:
                     district = 'Greenfield Park (siège {})'.format(seat_number)
                     seat_number += 1
+
+                district = {
+                    'Fatima-du Parcours-du-Cerf': 'Fatima-Parcours-du-Cerf',
+                    'LeMoyne-de Jacques-Cartier': 'LeMoyne-Jacques-Cartier',
+                    'Vieux-Saint-Hubert-de la Savane': 'Vieux-Saint-Hubert-la Savane'
+                }.get(district, district)
+
                 detail_url = tr.xpath('./td[2]/a/@href')[0]
                 detail_page = self.lxmlize(detail_url, 'utf-8')
 
@@ -36,14 +44,12 @@ class LongueuilPersonScraper(CanadianScraper):
                 yield p
 
     def scrape_mayor(self, page):
-        mayor_node = page.xpath('//a[contains(@href, "maire")]/ancestor::strong')[0]
-        name, position = [string.title() for string in mayor_node.text_content().split(', ')]
-        mayor_url = mayor_node.xpath('.//a/@href')[0]
-        mayor_page = self.lxmlize(mayor_url)
-        photo_url = mayor_page.xpath('//img[contains(@alt, "{0}")]/@src'.format(name))[0]
+        page = self.lxmlize(MAYOR_PAGE)
+        img = page.xpath('//img[@class="droite border"]')[0]
+        name = img.attrib['alt']
         p = Person(primary_org='legislature', name=name, district='Longueuil', role='Maire')
         p.add_source(COUNCIL_PAGE)
-        p.add_source(mayor_url)
-        p.image = photo_url
-        p.add_contact('email', self.get_email(mayor_page))
+        p.add_source(MAYOR_PAGE)
+        p.image = img.attrib['src']
+        p.add_contact('email', self.get_email(page))
         yield p
