@@ -1,4 +1,4 @@
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, clean_french_prepositions
 
 COUNCIL_PAGE = 'http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/conseil-municipal/elus-municipaux/'
 
@@ -13,14 +13,18 @@ class SherbrookePersonScraper(CanadianScraper):
             name = councillor.text_content()
             url = councillor.attrib['href']
             page = self.lxmlize(url)
+
             if 'Maire' in page.xpath('//h2/text()')[0]:
                 district = 'Sherbrooke'
                 role = 'Maire'
             else:
-                district = page.xpath('//div[@class="csc-default"]//a[contains(@href, "fileadmin")]/text()')[0].replace('district', '').strip()
+                district = page.xpath('//div[@class="csc-default"]//a[contains(@href, "fileadmin")]/text()')[0]
+                district = clean_french_prepositions(district).replace('district', '').strip()
                 role = 'Conseiller'
-            if district in ('de Brompton', 'de Lennoxville'):
-                district = district.replace('de ', '')
+
+            if district == 'Lennoxville':
+                district = 'Arrondissement 3'
+
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
