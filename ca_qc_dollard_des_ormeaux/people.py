@@ -2,40 +2,36 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.ville.ddo.qc.ca/en/default.asp?contentID=17'
+COUNCIL_PAGE = 'http://ville.ddo.qc.ca/en/my-municipality/members-council'
 
 
 class DollardDesOrmeauxPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, 'iso-8859-1')
+        page = self.lxmlize(COUNCIL_PAGE)
 
-        general_contacts = page.xpath('//p[@class="large_title"]/following-sibling::p/text()')
+        general_contacts = page.xpath('//h3/following-sibling::p/text()')
         general_phone = general_contacts[0]
         general_fax = general_contacts[1]
 
-        councillors = page.xpath('//tr/td/p/b')
+        councillors = page.xpath('//div[@class="membre-conseil-single"]')
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            text = councillor.text_content()
-            if '@' in text or 'NEWSLETTER' in text:
-                continue
+            name = councillor.xpath('./div[@class="membre-conseil-nom"]/text()')[0]
+            name = ' '.join(reversed(name.split(', ')))
+            district = councillor.xpath('./div[@class="membre-conseil-poste"]/text()')[0]
+            email = self.get_email(councillor)
 
-            if 'Mayor' in text:
-                name = text.replace('Mayor', '')
+            if district == 'Mayor':
                 district = 'Dollard-Des Ormeaux'
                 role = 'Maire'
             else:
-                name = re.split(r'[0-9]', text)[1]
-                district = 'District ' + re.findall(r'[0-9]', text)[0]
                 role = 'Conseiller'
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.image = councillor.xpath('./parent::p/parent::td/parent::tr/preceding-sibling::tr//img/@src')[0]
+            p.image = councillor.xpath('./div[@class="membre-conseil-photo"]//@src')[0]
 
-            email = self.get_email(councillor, './parent::p/following-sibling::p')
             p.add_contact('email', email)
-
             p.add_contact('voice', general_phone, 'legislature')
             p.add_contact('fax', general_fax, 'legislature')
 
