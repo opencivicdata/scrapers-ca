@@ -233,10 +233,6 @@ class CSVScraper(CanadianScraper):
     If `csv_url` is a ZIP file, set the compressed file to read.
     """
     filename = None
-    """
-    The locale of the data, like 'fr'.
-    """
-    locale = None
 
     # Table flags
     """
@@ -271,6 +267,9 @@ class CSVScraper(CanadianScraper):
     """
     other_names = {}
 
+    """
+    Set the `locale` of the data, like 'fr'.
+    """
     column_headers = {
         'fr': {
             'nom du district': 'district name',
@@ -342,8 +341,8 @@ class CSVScraper(CanadianScraper):
         for row in reader:
             if row.get('primary role'):
                 # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
-                # ca_qc_montreal: "Conseiller d'arrondissement Membre…", "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
-                row['primary role'] = re.split(r'(?: (?:et|Membre)\b|[;\n])', row['primary role'], 1)[0].strip()
+                # ca_qc_montreal: "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
+                row['primary role'] = re.split(r'(?: (?:et)\b|[;\n])', row['primary role'], 1)[0].strip()
 
             if self.is_valid_row(row):
                 for key, corrections in self.corrections.items():
@@ -358,7 +357,7 @@ class CSVScraper(CanadianScraper):
                 province = row.get('province')
                 role = row['primary role']
 
-                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):  # ca_qc_laval: "maire", "conseiller"
+                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):  # ca_qc_laval: "maire …", "conseiller …"
                     role = role.capitalize()
 
                 if self.district_name_format_string:
@@ -374,6 +373,9 @@ class CSVScraper(CanadianScraper):
                     district = self.jurisdiction.division_name
 
                 district = district.replace('–', '—')  # n-dash, m-dash
+
+                if district == 'Ville-Marie' and role == 'Maire de la Ville de Montréal':  # ca_qc_montreal
+                    district = self.jurisdiction.division_name
 
                 if self.many_posts_per_area and role not in self.unique_roles:
                     seat_numbers[role][district] += 1
@@ -627,3 +629,7 @@ def clean_type_id(type_id):
     # "All invalid characters should be converted to tilde (~)."
     type_id = re.sub(r'[^\w.~-]', '~', type_id, re.UNICODE)
     return type_id
+
+
+def clean_french_prepositions(s):
+    return re.sub(r"\b(?:d'|de (?:l'|la )?|du |des |l')", '', clean_string(s), flags=re.I)

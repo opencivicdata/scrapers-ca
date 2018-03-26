@@ -11,14 +11,26 @@ class MontrealPersonScraper(CSVScraper):
             # Normalize to masculine role descriptor.
             'Conseillère de la ville': 'Conseiller de la ville',
             "Mairesse d'arrondissement": "Maire d'arrondissement",
+            "Mairesse de la Ville de Montréal": "Maire de la Ville de Montréal",
+        },
+        'arrondissement': {
+            # Articles.
+            'Ile-Bizard - Sainte-Genevi\u00e8ve': "L'Île-Bizard—Sainte-Geneviève",
+            # Hyphens.
+            'Côte-des-Neiges - Notre-Dame-de-Grâce': 'Côte-des-Neiges—Notre-Dame-de-Grâce',
+            'Mercier - Hochelaga-Maisonneuve': 'Mercier—Hochelaga-Maisonneuve',
+            'Rivière-des-Prairies - Pointe-aux-Trembles': 'Rivière-des-Prairies—Pointe-aux-Trembles',
+            'Rosemont-La Petite-Patrie': 'Rosemont—La Petite-Patrie',
+            'Villeray - Saint-Michel - Parc-Extension': 'Villeray—Saint-Michel—Parc-Extension',
         },
         'district name': {
-            "Champlain—'Île-des-Sœurs": "Champlain—'Île-des-Soeurs",
+            "Champlain—L'Île-des-Sœurs": "Champlain—L'Île-des-Soeurs",
             'De Lorimier': 'DeLorimier',
-            'la Côte-de-Liesse': 'Côte-de-Liesse',
-            'Loyala': 'Loyola',
-            'Mile End': 'Mile-End',
-            'Saint-Henri–La Petite-Bourgogne–Pointe-Saint-Charles': 'Saint-Henri—Petite-Bourgogne—Pointe-Saint-Charles',
+            'Saint-Henri-Est-Petite-Bourgogne-Pointe-Saint-Charles-Griffintown': 'Saint-Henri—Petite-Bourgogne—Pointe-Saint-Charles',
+            'Saint-Paul-Émard-Saint-Henri-Ouest': 'Saint-Paul—Émard',
+            # Hyphens.
+            'Maisonneuve-Longue-Pointe': 'Maisonneuve—Longue-Pointe',
+            'Norman McLaren': 'Norman-McLaren',
         },
         'party name': {
             'Indépendante': 'Indépendant',
