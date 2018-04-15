@@ -22,8 +22,10 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                p.image = 'http://dbnwgw85c64xt.cloudfront.net/{}/185/259'.format(quote_plus(page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]))
-                self.get(p.image)  # trigger cache
+                image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
+                # image = 'http://dbnwgw85c64xt.cloudfront.net/{}/185/259'.format(quote_plus(image))
+                # self.get(image)  # trigger cache
+                p.image = image
 
                 contact = page.xpath('//div[@id="mla-contact"]/div[2]')[0]
                 website = contact.xpath('./div[3]/div[3]/div[2]/a')
