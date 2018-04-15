@@ -19,8 +19,7 @@ class KirklandPersonScraper(CanadianScraper):
                 role = 'Maire'
             else:
                 district = councillor.xpath('.//h2')[0].text_content()
-                district = re.search('- (.+)', district).group(1).strip()
-                district = district.replace(' Ouest', ' ouest').replace(' Est', ' est')
+                district = re.search('District \d', district).group(0)
                 role = 'Conseiller'
 
             name = councillor.xpath('.//strong/text()')[0]

@@ -10,7 +10,7 @@ class LavalPersonScraper(CSVScraper):
         'district name': {
             'Concorde - Bois-de-Boulogne': 'Concorde-Bois-de-Boulogne',
             "L'Abord-a-Plouffe": 'Abord-à-Plouffe',
-            "L'Oree-des-bois": 'Orée-des-Bois',
+            "L'Oree-des-bois": "L'Orée-des-Bois",
             'Laval-les-Iles': 'Laval-les-Îles',
             'Marc-Aurele-Fortin': 'Marc-Aurèle-Fortin',
             'Saint-Francois': 'Saint-François',
