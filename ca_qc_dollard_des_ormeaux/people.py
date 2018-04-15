@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'http://ville.ddo.qc.ca/en/my-municipality/members-council'
 
 

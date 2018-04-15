@@ -1,5 +1,5 @@
 # coding: utf-8
-from utils import CanadianScraper, CanadianPerson as Person, clean_french_prepositions
+from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
