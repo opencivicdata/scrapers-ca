@@ -11,7 +11,6 @@ class OntarioCandidatesPersonScraper(CSVScraper):
     corrections = {
         'district name': {
             'Brantford-Brant': 'Brantford\u2014Brant',
-            'Timmins': 'Timmins\u2014James Bay',
         }
     }
 
