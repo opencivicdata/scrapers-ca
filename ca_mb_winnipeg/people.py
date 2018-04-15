@@ -16,7 +16,6 @@ class WinnipegPersonScraper(CanadianScraper):
             text = ' '.join(node.xpath('.//a//text()'))
             ward = re.search('([A-Z].+) Ward', text).group(1)
             ward = ward.replace(' – ', '—').replace(' - ', '—')  # n-dash, m-dash, hyphen, m-dash
-            ward = ward.replace('St. Norbert', 'St Norbert')  # to match ocd-division-ids
             name = ' '.join(node.xpath('.//span[@class="k80B"][1]/text()'))
             yield self.councillor_data(url, name, ward)
 
