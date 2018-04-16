@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-from urllib.parse import quote_plus
-
 COUNCIL_PAGE = 'http://www.legassembly.sk.ca/mlas/'
 
 
@@ -22,10 +20,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
-                # image = 'http://dbnwgw85c64xt.cloudfront.net/{}/185/259'.format(quote_plus(image))
-                # self.get(image)  # trigger cache
-                p.image = image
+                p.image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
 
                 contact = page.xpath('//div[@id="mla-contact"]/div[2]')[0]
                 website = contact.xpath('./div[3]/div[3]/div[2]/a')
