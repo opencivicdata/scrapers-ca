@@ -212,8 +212,8 @@ def csv_stale():
     Lists scrapers with stale manual CSV data.
     """
     for (module, module_name, klass) in modules_and_module_names_and_classes():
-        if hasattr(klass, 'created_at') and klass.created_at < date.today() - timedelta(days=365):
-            print('{}: Created on {} by {}'.format(module_name, klass.created_at, klass.contact_person))
+        if hasattr(klass, 'updated_at') and klass.updated_at < date.today() - timedelta(days=365):
+            print('{}: Created on {} by {}'.format(module_name, klass.updated_at, klass.contact_person))
 
 
 @task
@@ -223,7 +223,7 @@ def csv_error():
     """
     for (module, module_name, klass) in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == 'CSVScraper':
-            if '_candidates' in module_name and hasattr(klass, 'created_at'):
+            if '_candidates' in module_name and hasattr(klass, 'updated_at'):
                 continue
 
             keys = klass.__dict__.keys() - {
@@ -233,7 +233,7 @@ def csv_error():
                 'csv_url', 'filename', 'locale', 'many_posts_per_area',
                 'unique_roles', 'district_name_format_string', 'other_names',
                 # Required for manual CSVs.
-                'created_at', 'contact_person',
+                'updated_at', 'contact_person',
             }
 
             if 'encoding' in keys and klass.encoding in ('utf-8', 'windows-1252'):

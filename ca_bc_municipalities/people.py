@@ -9,7 +9,7 @@ COUNCIL_PAGE = 'https://docs.google.com/spreadsheets/d/1KHp2o8UzBhuYYYxdv4viFAPV
 
 
 class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
-    created_at = date(2016, 11, 8)
+    updated_at = date(2016, 11, 8)
     contact_person = 'andrew@newmode.net'
 
     def scrape(self):
