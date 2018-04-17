@@ -186,7 +186,6 @@ class CanadianScraper(Scraper):
                 text = text.replace('<?xml version="1.0" encoding="utf-8"?>', '')  # XXX ca_bc
                 page = etree.fromstring(text)
             else:
-                text = re.sub('(?<=<!DOCTYPE html>)<script .+?</script>.', '', text, flags=re.DOTALL)  # XXX ca_qc_longueuil
                 page = lxml.html.fromstring(text)
         except etree.ParserError:
             raise etree.ParserError('Document is empty {}'.format(url))
@@ -314,7 +313,12 @@ class CSVScraper(CanadianScraper):
     and rows in which a name component is "Vacant".
     """
     def is_valid_row(self, row):
-        return any(row.values()) and row['last name'] not in ('', 'Vacant') and row['first name'] not in ('', 'Vacant')
+        empty = ('', 'Vacant')
+        if not any(row.values()):
+            return False
+        if 'first name' in row and 'last name' in row:
+            return row['last name'] not in empty and row['first name'] not in empty
+        return row['name'] not in empty
 
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
@@ -341,15 +345,19 @@ class CSVScraper(CanadianScraper):
         reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows, data=data)
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
+            # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
+            # ca_qc_montreal: "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
             if row.get('primary role'):
-                # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
-                # ca_qc_montreal: "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
                 row['primary role'] = re.split(r'(?: (?:et)\b|[;\n])', row['primary role'], 1)[0].strip()
 
             if self.is_valid_row(row):
                 for key, corrections in self.corrections.items():
-                    if row.get(key) and row[key] in corrections:
+                    if row[key] in corrections:
                         row[key] = corrections[row[key]]
+
+                # ca_qc_montreal
+                if row.get('last name') and not re.search(r'[a-z]', row['last name']):
+                    row['last name'] = re.sub(r'(?<=\b[A-Z])[A-ZÀÈÉ]+\b', lambda x: x.group(0).lower(), row['last name'])
 
                 if row.get('first name') and row.get('last name'):
                     name = '{} {}'.format(row['first name'], row['last name'])
@@ -359,7 +367,8 @@ class CSVScraper(CanadianScraper):
                 province = row.get('province')
                 role = row['primary role']
 
-                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):  # ca_qc_laval: "maire …", "conseiller …"
+                # ca_qc_laval: "maire …", "conseiller …"
+                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
                     role = role.capitalize()
 
                 if self.district_name_format_string:
@@ -376,7 +385,8 @@ class CSVScraper(CanadianScraper):
 
                 district = district.replace('–', '—')  # n-dash, m-dash
 
-                if district == 'Ville-Marie' and role == 'Maire de la Ville de Montréal':  # ca_qc_montreal
+                # ca_qc_montreal
+                if district == 'Ville-Marie' and role == 'Maire de la Ville de Montréal':
                     district = self.jurisdiction.division_name
 
                 if self.many_posts_per_area and role not in self.unique_roles:
@@ -590,7 +600,6 @@ whitespace_re = re.compile(r'\s+', flags=re.U)
 whitespace_and_newline_re = re.compile(r'[^\S\n]+', flags=re.U)
 honorific_prefix_re = re.compile(r'\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ')
 honorific_suffix_re = re.compile(r', (?:Ph\.D, Q\.C\.)\Z')
-capitalize_re = re.compile(r' [A-Z](?=[a-z])')  # to not lowercase "URL"
 province_or_territory_abbreviation_memo = {}
 
 table = {
@@ -617,10 +626,6 @@ def clean_string(s):
 
 def clean_name(s):
     return honorific_suffix_re.sub('', honorific_prefix_re.sub('', whitespace_re.sub(' ', str(s).translate(table)).strip()))
-
-
-def capitalize(s):
-    return capitalize_re.sub(lambda s: s.group(0).lower(), s.strip())
 
 
 def clean_type_id(type_id):

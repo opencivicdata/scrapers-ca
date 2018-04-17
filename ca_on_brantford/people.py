@@ -25,6 +25,3 @@ class BrantfordPersonScraper(CSVScraper):
             'EMAIL': 'email',
             'MOBILE': 'cell',
         }.get(s, s)
-
-    def is_valid_row(self, row):
-        return True

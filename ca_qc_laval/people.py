@@ -4,6 +4,7 @@ from utils import CSVScraper
 
 class LavalPersonScraper(CSVScraper):
     csv_url = 'https://www.donneesquebec.ca/recherche/dataset/8fe69713-fade-4751-a0b4-7e57a81886b1/resource/bb38e19e-26ab-495c-a0f7-ed6b3268b6e6/download/cusersapp.netappdatalocaltemp288c1490-df30-472a-8170-dd06728f449alistedeselus2013-2017.csv'
+    encoding = 'utf-8-sig'
     locale = 'fr'
     # Laval also removes accents and cedillas from data.
     corrections = {
@@ -23,7 +24,6 @@ class LavalPersonScraper(CSVScraper):
     def header_converter(self, s):
         s = super(LavalPersonScraper, self).header_converter(s.replace('-', ' '))
         return {
-            'ï»¿nom du district': 'district name',
             'role': 'primary role',
             'prenom': 'first name',
             'localite': 'locality',
