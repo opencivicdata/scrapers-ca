@@ -12,9 +12,9 @@ PARTIES = {
     'Independent/Non-Affiliated': 'Independent',
 }
 
-PHONE_TD_HEADINGS = {
-    'legislature': "Confederation Building Office",
-    'constituency': "Constituency Office",
+HEADING_TYPE = {
+    'Confederation Building Office:': 'legislature',
+    'Constituency Office:': 'constituency',
 }
 
 
@@ -40,11 +40,11 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
 
-            for key, heading in PHONE_TD_HEADINGS.items():
-                node = detail.xpath('//*[.="{0}"]/ancestor::div'.format(heading))
+            for heading, _type in HEADING_TYPE.items():
+                node = detail.xpath('//b[.="%s"]/../..' % heading)
                 if node:
-                    phone = self.get_phone(node[0], area_codes=[709])
+                    phone = self.get_phone(node[0], error=False)
                     if phone:
-                        p.add_contact('voice', phone, key)
+                        p.add_contact('voice', phone, _type)
 
             yield p
