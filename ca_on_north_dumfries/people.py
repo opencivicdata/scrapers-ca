@@ -1,6 +1,6 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.northdumfries.ca/en/ourtownship/MeetYourCouncil.asp'
+COUNCIL_PAGE = 'https://www.northdumfries.ca/en/township-services/mayor-and-council.aspx'
 
 
 class NorthDumfriesPersonScraper(CanadianScraper):

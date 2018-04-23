@@ -2,7 +2,6 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
 import hashlib
-import json
 
 COUNCIL_PAGE = 'http://www.parl.gc.ca/Parliamentarians/en/members?view=ListAll'
 IMAGE_PLACEHOLDER_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']
