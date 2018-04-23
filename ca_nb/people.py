@@ -31,8 +31,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 continue
 
             district = riding.replace('\x97', '-')
-            name_with_status, party_abbr = re.match(
-                r'(.+) \((.+)\)', table_name).groups()
+            name_with_status, party_abbr = re.match(r'(.+) \((.+)\)', table_name).groups()
             name = name_with_status.split(',')[0]
             photo_page_url = row[2][0].attrib['href']
             photo_url = self.get_photo_url(photo_page_url)
@@ -40,6 +39,9 @@ class NewBrunswickPersonScraper(CanadianScraper):
             # @see https://en.wikipedia.org/wiki/Charlotte-Campobello
             if district == 'Saint Croix':
                 district = 'Charlotte-Campobello'
+            # @see https://en.wikipedia.org/wiki/Oromocto-Lincoln-Fredericton
+            elif district == 'Oromocto-Lincoln-Fredericton':
+                district = 'Oromocto-Lincoln'
 
             p = Person(primary_org='legislature', name=name, district=district, role='MLA',
                        party=get_party(party_abbr.strip()), image=photo_url)
