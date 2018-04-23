@@ -31,7 +31,7 @@ class SaanichPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.image = page.xpath('.//@src')[0]
             p.add_contact('voice', self.get_phone(page, area_codes=[250]), 'legislature')
-            p.add_contact('email', self.get_email(page))
+            p.add_contact('email', self.get_email(page.xpath('//main[@id="content"]')[0]))
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             yield p
