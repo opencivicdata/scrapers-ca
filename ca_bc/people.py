@@ -29,7 +29,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
 
             p.image = page.xpath('//img[contains(@src, "Members")]/@src')[0]
 
-            email = page.xpath('//span[@class="convertToEmail"]//text()')[0].strip()
+            email = page.xpath('//div[@class="convertToEmail"]//text()')[0].strip()
             if '#' in email:
                 email = email.split('#')[0]
             if email:
