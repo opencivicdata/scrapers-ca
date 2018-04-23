@@ -17,8 +17,6 @@ class CanadaPersonScraper(CanadianScraper):
     """
 
     def scrape(self):
-        screen_names = json.loads(self.get('http://scrapers-ruby.herokuapp.com/twitter_users').text)
-
         page = self.lxmlize(COUNCIL_PAGE)
         rows = page.xpath('//div[@class="content-primary"]//tr')[1:]
         assert len(rows), 'No members found'
@@ -43,9 +41,6 @@ class CanadaPersonScraper(CanadianScraper):
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
             m.add_source(COUNCIL_PAGE)
             m.add_source(url)
-            screen_name = screen_names.get(name)
-            if screen_name:
-                m.add_link('https://twitter.com/{}'.format(screen_name))
             # @see http://www.parl.gc.ca/Parliamentarians/en/members/David-Yurdiga%2886260%29
             if email:
                 m.add_contact('email', email)
