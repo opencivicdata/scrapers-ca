@@ -434,6 +434,8 @@ class CSVScraper(CanadianScraper):
                     p.add_contact('fax', row['fax'], 'legislature')
                 if row.get('cell'):
                     p.add_contact('cell', row['cell'], 'legislature')
+                if row.get('birth date'):
+                    p.birth_date = row['birth date']
 
                 if name in self.other_names:
                     for other_name in self.other_names[name]:
