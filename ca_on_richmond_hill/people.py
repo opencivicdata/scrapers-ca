@@ -27,7 +27,6 @@ class RichmondHillPersonScraper(CanadianScraper):
         name = div.xpath('.//h2/text()')[0]
 
         p = Person(primary_org='legislature', name=name, district=district, role=role)
-        p.image = div.xpath('.//@src')[0]
         p.add_contact('email', self.get_email(div))
         p.add_contact('voice', self.get_phone(div, area_codes=[905]), 'legislature')
         p.add_source(COUNCIL_PAGE)
