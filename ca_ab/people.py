@@ -7,15 +7,16 @@ import lxml.html
 COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 
 PARTIES = {
-    'AP': 'Alberta Party',
     'AL': 'Alberta Liberal Party',
+    'AP': 'Alberta Party',
+    'IC': 'Independent Conservative',
+    'IND': 'Independent',
     'ND': 'Alberta New Democratic Party',
     'NDP': 'Alberta New Democratic Party',
     'PC': 'Progressive Conservative Association of Alberta',
-    'W': 'Wildrose Alliance Party',
     'UC': 'United Conservative',
     'UCP': 'United Conservative Party',
-    'IND': 'Independent',
+    'W': 'Wildrose Alliance Party',
 }
 
 
