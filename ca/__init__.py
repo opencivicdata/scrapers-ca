@@ -14,6 +14,7 @@ class Canada(CanadianJurisdiction):
     url = 'http://www.parl.gc.ca'
     parties = [
         {'name': 'Bloc Québécois'},
+        {'name': 'Co-operative Commonwealth Federation'},
         {'name': 'Conservative'},
         {'name': 'Conservative Independent'},
         {'name': 'Forces et Démocratie'},
