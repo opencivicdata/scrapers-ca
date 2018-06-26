@@ -23,6 +23,7 @@ class Canada(CanadianJurisdiction):
         {'name': 'Independent'},
         {'name': 'Liberal'},
         {'name': 'NDP'},
+        {'name': 'Québec debout'},
     ]
 
     def get_organizations(self):
