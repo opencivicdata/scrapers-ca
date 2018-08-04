@@ -13,3 +13,4 @@ class Ontario(CanadianJurisdiction):
         {'name': 'Progressive Conservative Party of Ontario'},
         {'name': 'Independent'},
     ]
+    skip_null_valid_from = True

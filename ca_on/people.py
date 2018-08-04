@@ -1,44 +1,49 @@
 # coding: utf-8
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.ontla.on.ca/web/members/member_addresses.do'
+import re
+
+COUNCIL_PAGE = 'https://www.ola.org/en/members/current/contact-information'
 
 
 class OntarioPersonScraper(CanadianScraper):
     def scrape(self):
+        headings = {
+            "Queen's Park": 'legislature',
+            'Ministry': 'legislature',
+            'Constituency': 'constituency',
+        }
+
         page = self.lxmlize(COUNCIL_PAGE)
-        members = page.xpath('//div[@class="addressblock"]')
+        members = page.xpath('//h2[@class="view-grouping-header"]//@href')
         assert len(members), 'No members found'
-        for block in members:
-            if block.xpath('.//div[@class="vacant-seat"]'):
-                continue
+        for url in members:
+            page = self.lxmlize(url)
 
-            name_elem = block.xpath('.//a[@class="mpp"]')[0]
-            name = ' '.join(name_elem.text.split())
-
-            riding = block.xpath('.//div[@class="riding"]//text()')[0].strip().replace('--', '\u2014')
-            district = riding.replace('Chatham—Kent', 'Chatham-Kent')  # m-dash to hyphen
-            mpp_url = name_elem.attrib['href']
-
-            mpp_page = self.lxmlize(mpp_url)
-            if mpp_page.xpath('//title[contains(text(),"Past & Present MPPs")]'):  # past MPP
-                continue
-
-            image = mpp_page.xpath('//img[@class="mppimg"]/@src')
-            party = mpp_page.xpath('//div[@class="mppinfoblock"]/p[last()]/text()')[0].strip()
+            name = re.match(r'(.+) \|', page.xpath('//title/text()')[0]).group(1)
+            district = page.xpath('//div[contains(@class, "view-display-id-member_riding_block")]//span[@class="field-content"]/text()')[0]
+            party = page.xpath('//div[contains(@class, "view-display-id-current_party_block")]//div[@class="field-content"]/text()')[0]
+            image = page.xpath('//div[contains(@class, "view-display-id-member_headshot")]//@src')
 
             p = Person(primary_org='legislature', name=name, district=district, role='MPP', party=party)
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
+
             if image:
                 p.image = image[0]
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(mpp_url)
 
-            email = block.xpath('.//div[@class="email"]')
-            if email:
-                p.add_contact('email', self.get_email(email[0]))
+            nodes = page.xpath('//div[contains(@class, "views-field-field-email-address")]')
+            emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
+            if emails:
+                p.add_contact('email', emails.pop())
+                if emails:
+                    p.extras['constituency_email'] = emails.pop()
 
-            phone = block.xpath('.//div[@class="phone"]//text()')
-            if phone:
-                p.add_contact('voice', phone[0], 'legislature')
+            for heading, note in headings.items():
+                office = page.xpath('//h3[contains(., "{}")]'.format(heading))
+                if office:
+                    voice = self.get_phone(office[0], error=False)
+                    if voice:
+                        p.add_contact('voice', voice, note)
 
             yield p
