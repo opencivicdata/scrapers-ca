@@ -30,17 +30,17 @@ class ManitobaPersonScraper(CanadianScraper):
             party = get_party(partycell.text)
 
             url = namecell.xpath('.//a')[0].get('href')
-            photo, email = self.get_details(url)
 
-            p = Person(primary_org='legislature', name=name, district=district, role='MLA',
-                       party=party, image=photo)
+            page = self.lxmlize(url)
+            email = self.get_email(page)
+
+            p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.add_contact('email', email)
-            yield p
 
-    def get_details(self, url):
-        page = self.lxmlize(url)
-        photo = page.xpath('//img[@class="page_graphic"]/@src')[0]
-        email = self.get_email(page)
-        return photo, email
+            image = page.xpath('//img[@class="page_graphic"]/@src')
+            if image:
+                p.image = image[0]
+
+            yield p
