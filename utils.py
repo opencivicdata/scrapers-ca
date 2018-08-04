@@ -201,7 +201,7 @@ class CanadianScraper(Scraper):
             page.make_links_absolute(url)
             return page
 
-    def csv_reader(self, url, header=False, encoding=None, skip_rows=0, data=None, **kwargs):
+    def csv_reader(self, url, delimiter=None, header=False, encoding=None, skip_rows=0, data=None, **kwargs):
         if not data:
             result = urlparse(url)
             if result.scheme == 'ftp':
@@ -220,13 +220,17 @@ class CanadianScraper(Scraper):
             for _ in range(skip_rows):
                 data.readline()
         if header:
-            return csv.DictReader(data)
+            return csv.DictReader(data, delimiter=delimiter)
         else:
-            return csv.reader(data)
+            return csv.reader(data, delimiter=delimiter)
 
 
 class CSVScraper(CanadianScraper):
     # File flags
+    """
+    Set the CSV file's delimiter.
+    """
+    delimiter = None
     """
     Set the CSV file's encoding, like 'windows-1252' ('utf-8' by default).
     """
@@ -350,7 +354,7 @@ class CSVScraper(CanadianScraper):
         else:
             data = None
 
-        reader = self.csv_reader(self.csv_url, header=True, encoding=self.encoding, skip_rows=self.skip_rows, data=data)
+        reader = self.csv_reader(self.csv_url, delimiter=self.delimiter, header=True, encoding=self.encoding, skip_rows=self.skip_rows, data=data)
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
             # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
