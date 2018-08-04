@@ -10,9 +10,10 @@ from io import BytesIO, StringIO
 from urllib.parse import urlparse, unquote
 from zipfile import ZipFile
 
+import agate
+import agateexcel  # noqa
 import lxml.html
 import requests
-from csvkit import convert
 from lxml import etree
 from opencivicdata.divisions import Division
 from pupa.scrape import Scraper, Jurisdiction, Organization, Person, Post
@@ -325,7 +326,14 @@ class CSVScraper(CanadianScraper):
 
         extension = os.path.splitext(self.csv_url)[1]
         if extension in ('.xls', '.xlsx'):
-            data = StringIO(convert.convert(BytesIO(self.get(self.csv_url).content), extension[1:]))
+            data = StringIO()
+            binary = BytesIO(self.get(self.csv_url).content)
+            if extension == '.xls':
+                table = agate.Table.from_xls(binary)
+            elif extension == '.xlsx':
+                table = agate.Table.from_xlsx(binary)
+            table.to_csv(data)
+            data.seek(0)
         elif extension == '.zip':
             basename = os.path.basename(self.csv_url)
             if not self.encoding:
