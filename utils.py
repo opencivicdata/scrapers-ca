@@ -465,6 +465,10 @@ class CanadianJurisdiction(Jurisdiction):
     Which division types to skip when creating posts.
     """
     exclude_types = []
+    """
+    Whether to skip divisions whose `validFrom` are null.
+    """
+    skip_null_valid_from = False
 
     def __init__(self):
         super(CanadianJurisdiction, self).__init__()
@@ -495,7 +499,7 @@ class CanadianJurisdiction(Jurisdiction):
         children = [child for child in parent.children() if child._type != 'place' and child._type not in self.exclude_types]
 
         for child in children:
-            if not child.attrs.get('validFrom') or child.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
+            if not self.skip_null_valid_from and not child.attrs.get('validFrom') or child.attrs.get('validFrom') and child.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
                 if self.use_type_id:
                     label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
