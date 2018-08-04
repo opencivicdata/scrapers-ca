@@ -529,6 +529,8 @@ class CanadianPerson(Person):
         for k, v in kwargs.items():
             if isinstance(v, str):
                 kwargs[k] = clean_string(v)
+        if not district:
+            raise Exception('No district')
         super(CanadianPerson, self).__init__(name=name, district=district, role=role, **kwargs)
 
     def __setattr__(self, name, value):
