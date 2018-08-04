@@ -11,6 +11,7 @@ PARTIES = {
     'AP': 'Alberta Party',
     'IC': 'Independent Conservative',
     'IND': 'Independent',
+    'FCP': 'Freedom Conservative Party',
     'ND': 'Alberta New Democratic Party',
     'NDP': 'Alberta New Democratic Party',
     'PC': 'Progressive Conservative Association of Alberta',
