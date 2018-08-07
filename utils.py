@@ -201,7 +201,7 @@ class CanadianScraper(Scraper):
             page.make_links_absolute(url)
             return page
 
-    def csv_reader(self, url, delimiter=None, header=False, encoding=None, skip_rows=0, data=None, **kwargs):
+    def csv_reader(self, url, delimiter=',', header=False, encoding=None, skip_rows=0, data=None, **kwargs):
         if not data:
             result = urlparse(url)
             if result.scheme == 'ftp':
