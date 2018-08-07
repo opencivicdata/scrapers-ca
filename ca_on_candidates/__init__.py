@@ -1,6 +1,4 @@
 from utils import CanadianJurisdiction
-from opencivicdata.divisions import Division
-from pupa.scrape import Organization
 
 
 class OntarioCandidates(CanadianJurisdiction):
@@ -33,12 +31,6 @@ class OntarioCandidates(CanadianJurisdiction):
         {'name': "Vegan Environmental Party"},
         {'name': "Independent"},
     ]
-
-    def get_organizations(self):
-        organization = Organization(self.name, classification=self.classification)
-
-        for division in Division.get(self.division_id).children('ed'):
-            if division.attrs['validFrom'] == '2018-06-07':
-                organization.add_post(role='candidate', label=division.name)
-
-        yield organization
+    skip_null_valid_from = True
+    valid_from = '2018-06-07'
+    member_role = 'candidate'

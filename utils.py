@@ -299,6 +299,7 @@ class CSVScraper(CanadianScraper):
             'cellulaire': 'cell',
             'facebook': 'facebook',
             'twitter': 'twitter',
+            'date de naissance': 'birth date',
         },
     }
 
@@ -449,6 +450,9 @@ class CSVScraper(CanadianScraper):
                 if row.get('birth date'):
                     p.birth_date = row['birth date']
 
+                if row.get('incumbent'):
+                    p.extras['incumbent'] = row['incumbent']
+
                 if name in self.other_names:
                     for other_name in self.other_names[name]:
                         p.add_name(other_name)
@@ -466,9 +470,17 @@ class CanadianJurisdiction(Jurisdiction):
     """
     exclude_types = []
     """
-    Whether to skip divisions whose `validFrom` are null.
+    Whether to skip divisions whose `validFrom` dates are null.
     """
     skip_null_valid_from = False
+    """
+    The `validFrom` date of the divisions to create (used for candidates).
+    """
+    valid_from = None
+    """
+    Override the style of address of members (used for candidates).
+    """
+    member_role = None
 
     def __init__(self):
         super(CanadianJurisdiction, self).__init__()
@@ -489,28 +501,31 @@ class CanadianJurisdiction(Jurisdiction):
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
+        leader_role = styles_of_address[self.division_id]['Leader']
+        member_role = self.member_role or styles_of_address[self.division_id]['Member']
+
         parent = Division.get(self.division_id)
         # Don't yield posts for premiers.
         if parent._type not in ('province', 'territory'):
             # Yield posts to allow ca_on_toronto to make changes.
-            post = Post(role=styles_of_address[self.division_id]['Leader'], label=parent.name, division_id=parent.id, organization_id=organization._id)
+            post = Post(role=leader_role, label=parent.name, division_id=parent.id, organization_id=organization._id)
             yield post
 
         children = [child for child in parent.children() if child._type != 'place' and child._type not in self.exclude_types]
 
         for child in children:
-            if not self.skip_null_valid_from and not child.attrs.get('validFrom') or child.attrs.get('validFrom') and child.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
+            if not self.skip_null_valid_from and not child.attrs.get('validFrom') or child.attrs.get('validFrom') and (child.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d') or child.attrs['validFrom'] == self.valid_from):
                 if self.use_type_id:
                     label = child.id.rsplit('/', 1)[1].capitalize().replace(':', ' ')
                 else:
                     label = child.name
                 # Yield posts to allow ca_on_toronto to make changes.
-                post = Post(role=styles_of_address[self.division_id]['Member'], label=label, division_id=child.id, organization_id=organization._id)
+                post = Post(role=member_role, label=label, division_id=child.id, organization_id=organization._id)
                 yield post
 
         if not children and parent.attrs['posts_count']:
             for i in range(1, int(parent.attrs['posts_count'])):  # exclude Mayor
-                organization.add_post(role=styles_of_address[self.division_id]['Member'], label='{} (seat {})'.format(parent.name, i), division_id=parent.id)
+                organization.add_post(role=member_role, label='{} (seat {})'.format(parent.name, i), division_id=parent.id)
 
         yield organization
 
