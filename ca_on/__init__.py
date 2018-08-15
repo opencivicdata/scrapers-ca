@@ -8,8 +8,9 @@ class Ontario(CanadianJurisdiction):
     name = 'Legislative Assembly of Ontario'
     url = 'http://www.ontla.on.ca'
     parties = [
-        {'name': 'Ontario Liberal Party'},
+        {'name': 'Green Party of Ontario'},
         {'name': 'New Democratic Party of Ontario'},
+        {'name': 'Ontario Liberal Party'},
         {'name': 'Progressive Conservative Party of Ontario'},
         {'name': 'Independent'},
     ]

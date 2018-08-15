@@ -22,7 +22,7 @@ class OntarioPersonScraper(CanadianScraper):
 
             name = re.match(r'(.+) \|', page.xpath('//title/text()')[0]).group(1)
             district = page.xpath('//div[contains(@class, "view-display-id-member_riding_block")]//span[@class="field-content"]')[0].text_content()
-            party = page.xpath('//div[contains(@class, "view-display-id-current_party_block")]//div[@class="field-content"]/text()')[0]
+            party = page.xpath('//div[contains(@class, "view-display-id-current_party_block")]//div[@class="field-content"]')[0].text_content()
             image = page.xpath('//div[contains(@class, "view-display-id-member_headshot")]//@src')
 
             p = Person(primary_org='legislature', name=name, district=district, role='MPP', party=party)
