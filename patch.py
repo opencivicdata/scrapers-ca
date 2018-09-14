@@ -124,7 +124,7 @@ name_fragment = r'(?:'           \
     r'[("]\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*[)"]|' \
     r"(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander?|vanden)?\p{Lu}\p{Ll}+|" \
     r'\p{Lu}\p{Ll}+Anne?|'       \
-    r"Ch'ng|Prud'homme"          \
+    r"Ch'ng|Prud'homme|"          \
     r"D!ONNE"                    \
     r')'
 
