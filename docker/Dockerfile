@@ -14,25 +14,3 @@ RUN echo 'source /usr/local/bin/virtualenvwrapper.sh' >> $HOME/.bashrc
 RUN mkdir /src
 
 WORKDIR /src
-
-#
-# TODO: AUTOMATE THESE STEPS:
-#
-
-#ssh into the Docker environment:
-#docker-compose exec scrapers-ca /bin/bash
-
-#cd scrapers-ca
-
-#Then run:
-# PostgreSQL
-#RUN service postgresql start
-#RUN sudo -u postgres createuser root
-#RUN sudo -u postgres psql -c 'ALTER USER root WITH SUPERUSER;'
-#RUN sudo -u postgres psql -c "ALTER USER root WITH PASSWORD 'root';"
-#RUN sudo -u postgres createdb pupa
-#RUN sudo -u postgres psql pupa -c "CREATE EXTENSION postgis;"
-#RUN pupa dbinit ca
-
-#mkvirtualenv scrapers-ca --python=`which python3`
-#pip install -r requirements.txt

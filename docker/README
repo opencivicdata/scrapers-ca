@@ -1,0 +1,26 @@
+
+Run deploy.sh to build a scrapers-ca Docker environment for development.
+
+Ideally we'd pass the scrapers-ca Git clone path to deploy.sh, but for now
+replace "/your/local/path/to/scrapers-ca" in docker-compose.yml with your
+local scrapers-ca's Git clone directory (must be an absolute path).
+
+The following steps need to be automated. For now, run them manually:
+
+# ssh into the Docker environment:
+docker-compose exec scrapers-ca /bin/bash
+cd scrapers-ca
+
+# PostgreSQL:
+service postgresql start
+sudo -u postgres createuser root
+sudo -u postgres psql -c 'ALTER USER root WITH SUPERUSER;'
+sudo -u postgres psql -c "ALTER USER root WITH PASSWORD 'root';"
+sudo -u postgres createdb pupa
+sudo -u postgres psql pupa -c "CREATE EXTENSION postgis;"
+# Pupa:
+pupa dbinit ca
+# Virtual Environment:
+mkvirtualenv scrapers-ca --python=`which python3`
+pip install -r requirements.txt
+# You can now run your scraper. Ex: pupa update ca_on_candidates
