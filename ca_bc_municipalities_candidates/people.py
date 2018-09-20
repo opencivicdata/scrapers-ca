@@ -1,8 +1,6 @@
 from utils import CanadianScraper, CanadianPerson as Person
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
-
-from collections import defaultdict
 from datetime import date
 
 COUNCIL_PAGE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTP3PplANMDX5EkNBwLN1zz4IxDvUcMbT3L2l6RoA5Hr27p5NovyzlpV2wlBNAHsA8sdDxXdMQ78eF0/pub?gid=726311062&single=true&output=csv'
@@ -14,16 +12,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
     def scrape(self):
         exclude_divisions = {
-            #'ocd-division/country:ca/csd:5909052',  # Abbotsford
-            #'ocd-division/country:ca/csd:5915001',  # Langley (DM)
-            #'ocd-division/country:ca/csd:5915004',  # Surrey
-            #'ocd-division/country:ca/csd:5915015',  # Richmond
-            #'ocd-division/country:ca/csd:5915022',  # Vancouver
-            #'ocd-division/country:ca/csd:5915025',  # Burnaby
-            #'ocd-division/country:ca/csd:5915034',  # Coquitlam
-            #'ocd-division/country:ca/csd:5917021',  # Saanich
-            #'ocd-division/country:ca/csd:5917034',  # Victoria
-            #'ocd-division/country:ca/csd:5935010',  # Kelowna
         }
         exclude_districts = {
             'Alberni-Clayoquot',
@@ -45,16 +33,10 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         }
         duplicate_names = {
         }
-        exceptional_names = {
-            'Françoise Raunet',
-            'Gölök Z Buday',
-            'Tiffany Paré',
-        }
 
         names_to_ids = {}
         for division in Division.get('ocd-division/country:ca').children('csd'):
             type_id = division.id.rsplit(':', 1)[1]
-            print("DEBUG - DIVISION: " + division.name)
             if type_id.startswith('59'):
                 if division.attrs['classification'] == 'IRI':
                     continue
@@ -74,7 +56,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         for row in reader:
             name = row['full name']
             district_name = row['district name']
-            print("DEBUG - NAME: " + name)
 
             if not any(row.values()) or 'vacant' in name.lower() or not name or district_name in exclude_districts:
                 continue
@@ -102,7 +83,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             organization = organizations[division_id]
 
             role = row['primary role']
-            print("DEBUG - ROLE: " + role)
             if role not in expected_roles:
                 raise Exception('unexpected role: {}'.format(role))
 
