@@ -14,8 +14,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         exclude_divisions = {
         }
         exclude_districts = {
-            'Alberni-Clayoquot',
-            'Capital',
             'Islands Trust',
             'Sunshine Coast',
         }
@@ -57,7 +55,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             name = row['full name']
             district_name = row['district name']
 
-            if not any(row.values()) or 'vacant' in name.lower() or not name or district_name in exclude_districts:
+            if not any(row.values()) or name.lower() in ('', 'vacant') or district_name in exclude_districts:
                 continue
 
             if row['district id']:

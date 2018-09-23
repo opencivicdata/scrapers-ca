@@ -9,22 +9,20 @@ class TorontoCandidatesPersonScraper(CSVScraper):
     contact_person = 'andrew@newmode.net'
     encoding = 'utf-8'
     corrections = {
+        # Correct hyphen to m-dash.
         'district name': {
-            'Humber River-Black Creek': 'Humber River—Black Creek',
-            'Scarborough-Agincourt': 'Scarborough—Agincourt',
-            'Eglinton-Lawrence': 'Eglinton—Lawrence',
-            'Spadina-Fort York': 'Spadina—Fort York',
             'Beaches-East York': 'Beaches—East York',
-            'Scarborough-Rouge Park': 'Scarborough—Rouge Park',
-            'York South-Weston': 'York South—Weston',
-            'Parkdale-High Park': 'Parkdale—High Park',
-            'Scarborough-Guildwood': 'Scarborough—Guildwood',
+            'Eglinton-Lawrence': 'Eglinton—Lawrence',
             'Etobicoke-Lakeshore': 'Etobicoke—Lakeshore',
+            'Humber River-Black Creek': 'Humber River—Black Creek',
+            'Parkdale-High Park': 'Parkdale—High Park',
+            'Scarborough-Agincourt': 'Scarborough—Agincourt',
+            'Scarborough-Guildwood': 'Scarborough—Guildwood',
+            'Scarborough-Rouge Park': 'Scarborough—Rouge Park',
+            'Spadina-Fort York': 'Spadina—Fort York',
+            'Toronto-Danforth': 'Toronto—Danforth',
             'Toronto-St. Paul\'s': 'Toronto—St. Paul\'s',
             'University-Rosedale': 'University—Rosedale',
-            'Toronto-Danforth': 'Toronto—Danforth',
+            'York South-Weston': 'York South—Weston',
         },
     }
-
-    def is_valid_row(self, row):
-        return any(row.values()) and row['last name'] and row['first name']
