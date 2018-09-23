@@ -11,7 +11,6 @@ class TorontoCandidatesPersonScraper(CSVScraper):
     corrections = {
         # Correct hyphen to m-dash.
         'district name': {
-            '': 'Toronto',
             'Beaches-East York': 'Beaches—East York',
             'Eglinton-Lawrence': 'Eglinton—Lawrence',
             'Etobicoke-Lakeshore': 'Etobicoke—Lakeshore',
