@@ -5,6 +5,7 @@ COUNCIL_PAGE = 'http://www.gov.mb.ca/legislature/members/mla_list_alphabetical.h
 
 def get_party(abbreviation):
     return {
+        'MAN': 'Manitoba Party',
         'NDP': 'New Democratic Party of Manitoba',
         'PC': 'Progressive Conservative Party of Manitoba',
         'L': 'Manitoba Liberal Party',
