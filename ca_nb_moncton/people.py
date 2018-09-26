@@ -2,7 +2,10 @@ from utils import CSVScraper
 
 
 class MonctonPersonScraper(CSVScraper):
-    csv_url = 'http://www.moncton.ca/OpenData/Elected_Officials_Contact_Information-Coordonnes_des_elus.zip'
-    encoding = 'windows-1252'
-    filename = 'Elected Officials Contact Information.csv'
+    csv_url = 'https://opendata.arcgis.com/datasets/d81d30cf2b0d4bf7ae7aea5b0acc9d5f_0.csv'
     many_posts_per_area = True
+    corrections = {
+        'last name': {
+            'Th�riault': 'Thériault',
+        },
+    }

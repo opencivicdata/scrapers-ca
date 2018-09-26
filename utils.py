@@ -215,7 +215,10 @@ class CanadianScraper(Scraper):
                 response = self.get(url, **kwargs)
                 if encoding:
                     response.encoding = encoding
-                data = StringIO(response.text.strip())
+                text = response.text.strip()
+                if text.startswith('\ufeff'):  # BOM
+                    text = text[1:]
+                data = StringIO(text)
         if skip_rows:
             for _ in range(skip_rows):
                 data.readline()
