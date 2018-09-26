@@ -422,7 +422,7 @@ class CSVScraper(CanadianScraper):
                 p = CanadianPerson(primary_org=self.jurisdiction.classification, name=name, district=district, role=role, party=row.get('party name'))
                 p.add_source(self.csv_url)
 
-                if not row['district name'] and row.get('district id'):  # ca_on_toronto_candidates
+                if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
                     if len(row['district id']) == 7:
                         p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(row['district id'])
 
