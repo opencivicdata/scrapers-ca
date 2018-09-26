@@ -1,6 +1,7 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
 import csv
+from io import StringIO
 
 import lxml.html
 
@@ -29,9 +30,7 @@ def get_party(abbr):
 class AlbertaPersonScraper(CanadianScraper):
     def scrape(self):
         csv_text = self.get(self.get_csv_url()).text
-        lines = csv_text.split('\n')
-        cr = csv.DictReader(lines)
-        assert len(lines), 'No members found'
+        cr = csv.DictReader(StringIO(csv_text))
         for mla in cr:
             name = '{} {} {}'.format(mla['MLA First Name'], mla['MLA Middle Names'], mla['MLA Last Name'])
             if name.strip() == '':
@@ -58,7 +57,7 @@ class AlbertaPersonScraper(CanadianScraper):
             p.add_source(detail_url)
             if mla['Email']:
                 p.add_contact('email', mla['Email'])
-            elif mla['MLA Email']:
+            elif mla.get('MLA Email'):
                 p.add_contact('email', mla['MLA Email'])
             if mla['Phone Number']:
                 p.add_contact('voice', mla['Phone Number'], 'legislature')
