@@ -215,7 +215,10 @@ class CanadianScraper(Scraper):
                 response = self.get(url, **kwargs)
                 if encoding:
                     response.encoding = encoding
-                data = StringIO(response.text.strip())
+                text = response.text.strip()
+                if text.startswith('\ufeff'):  # BOM
+                    text = text[1:]
+                data = StringIO(text)
         if skip_rows:
             for _ in range(skip_rows):
                 data.readline()
@@ -421,6 +424,10 @@ class CSVScraper(CanadianScraper):
 
                 p = CanadianPerson(primary_org=self.jurisdiction.classification, name=name, district=district, role=role, party=row.get('party name'))
                 p.add_source(self.csv_url)
+
+                if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
+                    if len(row['district id']) == 7:
+                        p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(row['district id'])
 
                 if row.get('gender'):
                     p.gender = row['gender']

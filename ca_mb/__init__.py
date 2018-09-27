@@ -11,5 +11,6 @@ class Manitoba(CanadianJurisdiction):
         {'name': 'New Democratic Party of Manitoba'},
         {'name': 'Progressive Conservative Party of Manitoba'},
         {'name': 'Manitoba Liberal Party'},
+        {'name': 'Manitoba Party'},
         {'name': 'Independent'},
     ]

@@ -23,6 +23,7 @@ class Canada(CanadianJurisdiction):
         {'name': 'Independent'},
         {'name': 'Liberal'},
         {'name': 'NDP'},
+        {'name': "People's Party"},
         {'name': 'Québec debout'},
     ]
 
