@@ -3,7 +3,7 @@ from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 from datetime import date
 
-COUNCIL_PAGE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTP3PplANMDX5EkNBwLN1zz4IxDvUcMbT3L2l6RoA5Hr27p5NovyzlpV2wlBNAHsA8sdDxXdMQ78eF0/pub?gid=726311062&single=true&output=csv'
+COUNCIL_PAGE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTP3PplANMDX5EkNBwLN1zz4IxDvUcMbT3L2l6RoA5Hr27p5NovyzlpV2wlBNAHsA8sdDxXdMQ78eF0/pub?gid=1928681855&single=true&output=csv'
 
 
 class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
@@ -14,8 +14,33 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         exclude_divisions = {
         }
         exclude_districts = {
+            'Capital',
+            'Capital F',
+            'Capital G',
+            'Capital H',
+            'Central Coast B',
+            'Central Okanagan East',
+            'Central Okanagan West',
+            'Comox Valley B',
+            'Comox Valley C',
             'Islands Trust',
-            'Sunshine Coast',
+            'Kitimat-Stikine C',
+            'Kootenay Boundary B',
+            'Kootenay Boundary C',
+            'Kootenay Boundary D',
+            'Kootenay Boundary E',
+            'Metro Vancouver A',
+            'North Coast A',
+            'North Coast C',
+            'North Coast D',
+            'North Coast E',
+            'Okanagan-Similkameen I',
+            'Okanagan-Similkameen Olalla Local Community Commission',
+            'Qathet A',
+            'Qathet B',
+            'Qathet C',
+            'Qathet D',
+            'Qathet E',
         }
         expected_roles = {
             'candidate',
@@ -28,8 +53,12 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             'RGM': 'Regional',
             'T': 'Town',
             'VL': 'Village',
+            'RDA': 'District',
         }
         duplicate_names = {
+            'Rick Smith',
+            'Sung Y Wong',
+            'Elizabeth Taylor',
         }
 
         names_to_ids = {}
@@ -71,6 +100,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             division = Division.get(division_id)
 
             division_name = division.name
+
             organization_name = '{} {} Council'.format(division_name, infixes[division.attrs['classification']])
 
             if division_id not in seen:
@@ -83,7 +113,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             role = row['primary role']
             if role not in expected_roles:
                 raise Exception('unexpected role: {}'.format(role))
-
             if row['district id']:
                 district = format(division_id)
             else:
