@@ -4,7 +4,7 @@ services:
   scrapers-ca:
     build: .
     volumes:
-      - "/your/local/path/to/scrapers-ca:/src/scrapers-ca"
+      - "../:/src/scrapers-ca"
     ports:
       - "80"
     working_dir: /src
