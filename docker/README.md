@@ -18,14 +18,14 @@ docker-compose exec scrapers-ca sed -i -e 's/localhost/root:root@localhost/' /sr
 # ssh into the Docker environment:
 `docker-compose exec scrapers-ca /bin/bash`
 
-# Usage (see README.md for most up to date instructions)
+# Usage
 ```
 cd scrapers-ca
 mkvirtualenv scrapers-ca --python=`which python3`
 pip install -r requirements.txt
 pupa dbinit ca
 ```
-You can now run your scraper. Ex: pupa update ca_on_candidates
+You can now run your scraper. Ex: `pupa update ca_on_candidates`
 
 # To wipe the database:
 ```
