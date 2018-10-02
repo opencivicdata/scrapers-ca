@@ -7,7 +7,7 @@ from datetime import datetime
 
 class TorontoCandidates(CanadianJurisdiction):
     classification = 'executive'  # just to avoid clash
-    division_id = 'ocd-division/country:ca/province:on'
+    division_id = 'ocd-division/country:ca/csd:3520005'
     division_name = 'Toronto'
     name = 'Toronto City Council'
     url = 'http://www.toronto.ca'
@@ -70,10 +70,10 @@ class TorontoCandidates(CanadianJurisdiction):
             'York South—Weston',
         }
 
-        division = Division.get('ocd-division/country:ca/csd:3520005')  # Toronto
+        division = Division.get(self.division_id)
         organization.add_post(role='candidate', label=division.name, division_id=division.id)
 
-        for division in Division.get(self.division_id).children('ed'):
+        for division in Division.get('ocd-division/country:ca/province:on').children('ed'):
             if not self.skip_null_valid_from and not division.attrs.get('validFrom') or division.attrs.get('validFrom') and (division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d') or division.attrs['validFrom'] == self.valid_from):
                 if division.name in division_names:
                     organization.add_post(role='candidate', label=division.name, division_id=division.id)
