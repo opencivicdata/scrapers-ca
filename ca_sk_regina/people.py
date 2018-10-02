@@ -36,6 +36,10 @@ class ReginaPersonScraper(CanadianScraper):
         phone = self.get_phone(page.xpath('//div[@id="contentcontainer"]')[0], area_codes=[306], error=False)
         if phone:
             m.add_contact('voice', phone, 'legislature')
+        else:
+            phone = self.get_phone(page.xpath('//div[@id="lowercontentcontainer"]')[0], area_codes=[306], error=False)
+            if phone:
+                m.add_contact('voice', phone, 'legislature')
 
         m.image = photo_url
         yield m
