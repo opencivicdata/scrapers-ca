@@ -1,7 +1,7 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
-MAYOR_PAGE = 'http://www.edmonton.ca/city_government/city_organization/the-mayor.aspx'
+COUNCIL_PAGE = 'https://www.edmonton.ca/city_government/city_organization/city-councillors.aspx'
+MAYOR_PAGE = 'https://www.edmonton.ca/city_government/city_organization/the-mayor.aspx'
 
 
 class EdmontonPersonScraper(CanadianScraper):
