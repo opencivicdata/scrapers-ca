@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'https://www.thunderbay.ca/en/city-hall/mayor-and-council.aspx'
 
 
