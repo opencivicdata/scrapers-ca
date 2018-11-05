@@ -123,8 +123,8 @@ name_fragment = r'(?:'           \
     r'da|de|den|der|la|van|von|' \
     r'[("]\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*[)"]|' \
     r"(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|Van|Vander?|vanden)?\p{Lu}\p{Ll}+|" \
-    r'\p{Lu}\p{Ll}+Anne?|'       \
-    r"Ch'ng|Prud'homme|"          \
+    r'\p{Lu}\p{Ll}+Anne?|Marie\p{Lu}\p{Ll}+|' \
+    r"Ch'ng|Prud'homme|"         \
     r"D!ONNE"                    \
     r')'
 

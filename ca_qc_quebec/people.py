@@ -15,8 +15,8 @@ class QuebecPersonScraper(CanadianScraper):
             councillors = section.xpath('./div')
             assert len(councillors), 'No councillors found'
             for councillor in councillors:
-                name = ' '.join(reversed(councillor.xpath('./h3/span/text()')))
-                if 'vacant' in name:
+                name = ' '.join(reversed(councillor.xpath('./h3//text()')))
+                if 'vacant' in name.lower():
                     continue
 
                 header = section.xpath('./preceding-sibling::h2/text()')[-1]
