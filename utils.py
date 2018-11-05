@@ -368,7 +368,9 @@ class CSVScraper(CanadianScraper):
 
             if self.is_valid_row(row):
                 for key, corrections in self.corrections.items():
-                    if row[key] in corrections:
+                    if not isinstance(corrections, dict):
+                        row[key] = corrections(row[key])
+                    elif row[key] in corrections:
                         row[key] = corrections[row[key]]
 
                 # ca_qc_montreal
