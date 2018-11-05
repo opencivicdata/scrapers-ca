@@ -9,8 +9,8 @@ from io import StringIO
 
 SOURCE_URL = 'http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport'
 
-result_re = re.compile('^(Carried|Lost(?: \(tie\))?), (\d+)-(\d+)$')
-quorum_re = re.compile('^(Majority Required|Two-Thirds Required|Two-Thirds full Council Required) - (.+)')
+result_re = re.compile(r'^(Carried|Lost(?: \(tie\))?), (\d+)-(\d+)$')
+quorum_re = re.compile(r'^(Majority Required|Two-Thirds Required|Two-Thirds full Council Required) - (.+)')
 
 result_map = {
     'Carried': 'pass',

@@ -79,7 +79,7 @@ RESULT_MAP = {
 }
 
 motion_re = re.compile(r'(?:(?P<number>[0-9a-z]+) - )?Motion to (?P<action>.+?) (?:moved by (?:Councillor|(?:Deputy )?Mayor )?(?P<mover>.+?) )?\((?P<result>.{0,10})\)$')
-agenda_item_title_re = re.compile('^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
+agenda_item_title_re = re.compile(r'^(.+?)(?: - (?:by )?((?:Deputy )?Mayor|Councillor) (.+), seconded by ((?:Deputy )?Mayor|Councillor) (.+))?$')
 
 
 class TorontoBillScraper(CanadianScraper):
@@ -278,7 +278,7 @@ class TorontoBillScraper(CanadianScraper):
 
             if 'Origin' in version['sections']:
                 origin_text = version['sections']['Origin']
-                filing_date_re = re.compile('\((.+?)\) .+')
+                filing_date_re = re.compile(r'\((.+?)\) .+')
                 filing_date = re.match(filing_date_re, origin_text).group(1)
                 filing_version = {}
                 filing_version.update({
@@ -339,10 +339,7 @@ class TorontoBillScraper(CanadianScraper):
         url = None
         if 'onclick' in link.attrib:
             onclick = link.attrib['onclick']
-            if (onclick is not None and
-                    onclick.startswith(("radopen('",
-                                        "window.open",
-                                        "OpenTelerikWindow"))):
+            if (onclick is not None and onclick.startswith(("radopen('", "window.open", "OpenTelerikWindow"))):
                 url = self.BASE_URL + onclick.split("'")[1]
         elif 'href' in link.attrib:
             url = link.attrib['href']

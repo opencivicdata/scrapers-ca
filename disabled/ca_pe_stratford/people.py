@@ -18,7 +18,7 @@ class StratfordPersonScraper(CanadianScraper):
         for councillor in councillors:
 
             name = councillor.xpath('./strong/text()|./b/text()')[0].replace('Councillor', '').strip()
-            post = re.findall('(?<=Ward \d, ).*', councillor.text_content())[0].strip()
+            post = re.findall(r'(?<=Ward \d, ).*', councillor.text_content())[0].strip()
 
             seat_numbers[post] += 1
             post = '{} (seat {})'.format(post, seat_numbers[post])

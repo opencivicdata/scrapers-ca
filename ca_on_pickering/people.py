@@ -23,7 +23,7 @@ class PickeringPersonScraper(CanadianScraper):
                 if not role_ward.strip():
                     role_ward = councillor.xpath('.//p/text()')[0]
                 role_ward = role_ward.split(' ')
-                role = re.sub('\ACity ', '', ' '.join(role_ward[:2]))
+                role = re.sub(r'\ACity ', '', ' '.join(role_ward[:2]))
                 ward = ' '.join(role_ward[2:])
             else:
                 name = councillor.xpath('.//strong/text()')[1]

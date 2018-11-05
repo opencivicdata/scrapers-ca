@@ -15,7 +15,7 @@ class WoolwichPersonScraper(CanadianScraper):
             if not info:
                 info = councillor.xpath('./parent::div/text()')
             info = [x for x in info if x.strip()]
-            district = re.sub('(?<=Ward \d).+', '', info.pop(0))
+            district = re.sub(r'(?<=Ward \d).+', '', info.pop(0))
             if 'Mayor' in district:
                 district = 'Woolwich'
                 role = 'Mayor'
