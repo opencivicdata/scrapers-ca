@@ -24,8 +24,6 @@ class MiltonPersonScraper(CanadianScraper):
                 district = 'Milton'
             else:
                 district = councillor.xpath('./td[2]/p/text()')[2]
-                if district.startswith('Wards'):
-                    district = re.sub(r'Wards (\d),(\d),(\d),(\d)', r'Wards \1, \2, \3 and \4', district)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
