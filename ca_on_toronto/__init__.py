@@ -1,4 +1,6 @@
 from .jurisdiction import TorontoJurisdiction
+from opencivicdata.divisions import Division
+from pupa.scrape import Organization
 
 import lxml.html
 import requests
@@ -11,6 +13,16 @@ class Toronto(TorontoJurisdiction):
     name = 'Toronto City Council'
     url = 'http://www.toronto.ca'
     legislative_sessions = []
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
+        for division in Division.get('ocd-division/country:ca/csd:3520005').children('ward'):
+            if '2018' in division.id:
+                organization.add_post(role='Councillor', label=division.name, division_id=division.id)
+
+        yield organization
 
     def __init__(self):
         super(Toronto, self).__init__()
