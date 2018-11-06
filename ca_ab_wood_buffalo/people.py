@@ -17,20 +17,21 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         yield self.scrape_mayor(mayor_url)
 
         wards = page.xpath('//div[@id="content"]//h3')
+        assert len(wards), 'No wards found'
         for ward in wards:
-            ward_name = ward.text_content()
+            area = ward.text_content()
             councillors = ward.xpath('./following-sibling::ul[1]//a')
 
-            assert len(councillors), 'No councillors found for ward {}'.format(ward_name)
+            assert len(councillors), 'No councillors found for ward {}'.format(area)
             for councillor in councillors:
                 name = ' '.join(reversed(councillor.text.split(', ')))
                 url = councillor.attrib['href']
 
-                if ward_name in ('Ward 1', 'Ward 2'):
-                    seat_numbers[ward_name] += 1
-                    district = '{} (seat {})'.format(ward_name, seat_numbers[ward_name])
+                if area in ('Ward 1', 'Ward 2'):
+                    seat_numbers[area] += 1
+                    district = '{} (seat {})'.format(area, seat_numbers[area])
                 else:
-                    district = ward_name
+                    district = area
 
                 p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
                 p.add_source(COUNCIL_PAGE)
