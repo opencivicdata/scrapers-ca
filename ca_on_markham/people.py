@@ -85,18 +85,11 @@ class MarkhamPersonScraper(CanadianScraper):
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('//div[@class="interiorContentWrapper"]/p/strong/text()')[0]
-        address = ' '.join(page.xpath('//div[@class="interiorContentWrapper"]/p/text()')[1:3])
-        address = re.sub(r'\s{2,}', ' ', address)
-        contact_elem = page.xpath('//div[@class="interiorContentWrapper"]/p[3]')[0]
-        phone = contact_elem.text.split(':')[1].strip()
-        email = self.get_email(contact_elem)
+        name = page.xpath('//img/@alt[contains(., "Mayor")]')[0].split(' ', 1)[1]
 
         p = Person(primary_org='legislature', name=name, district='Markham', role='Mayor')
         p.add_source(url)
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('email', email)
+
         yield p
 
 
