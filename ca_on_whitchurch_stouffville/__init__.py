@@ -16,6 +16,6 @@ class WhitchurchStouffville(CanadianJurisdiction):
         for ward_number in range(1, 7):
             # @todo Until a boundary set is received and loaded into Represent, we treat this as having no divisions.
             # organization.add_post(role='Councillor', label='Ward {}'.format(ward_number), division_id=self.division_id)
-            organization.add_post(role='Councillor', label='Whitchurch-Stouffville (seat {})'.format(ward_number), division_id=self.division_id)
+            organization.add_post(role='Councillor', label='{} (seat {})'.format(self.division_name, ward_number), division_id=self.division_id)
 
         yield organization
