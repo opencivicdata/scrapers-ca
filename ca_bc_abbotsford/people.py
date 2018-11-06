@@ -25,14 +25,16 @@ class AbbotsfordPersonScraper(CanadianScraper):
                 role = 'Mayor'
                 district = 'Abbotsford'
             name = text.split(' ', 1)[1]
-            image = councillor.xpath('./img/@src')[0]
+            image = councillor.xpath('./img/@src')
             phone = contact.xpath('./td[2]/text()')[0]
             fax = contact.xpath('./td[3]/text()')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(CONTACT_PAGE)
-            p.image = image
+
+            if image:
+                p.image = image[0]
             p.add_contact('voice', phone, 'legislature')
             p.add_contact('fax', fax, 'legislature')
 
