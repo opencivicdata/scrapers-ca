@@ -15,8 +15,6 @@ class Uxbridge(CanadianJurisdiction):
         organization.add_post(role='Mayor', label=self.division_name, division_id=self.division_id)
         organization.add_post(role='Regional Councillor', label=self.division_name, division_id=self.division_id)
         for ward_number in range(1, 6):
-            # @todo Until a boundary set is received and loaded into Represent, we treat this as having no divisions.
-            # organization.add_post(role='Councillor', label='Ward {}'.format(ward_number), division_id=self.division_id)
-            organization.add_post(role='Councillor', label='Uxbridge (seat {})'.format(ward_number), division_id=self.division_id)
+            organization.add_post(role='Councillor', label='Ward {}'.format(ward_number), division_id=self.division_id)
 
         yield organization
