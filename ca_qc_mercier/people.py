@@ -10,6 +10,7 @@ class MercierPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT, encoding='windows-1252')
 
         councillors = page.xpath('//table[@width="800"]/tr')
+        assert len(councillors), 'No councillors found'
         for councillor in councillors:
             if councillor == councillors[0]:
                 name = councillor.xpath('.//strong/text()')[0].replace('Monsieur', '').replace('Madame', '').strip()
