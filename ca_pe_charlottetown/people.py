@@ -1,54 +1,50 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
 import re
-from urllib.parse import urljoin
 
-COUNCIL_PAGE = 'http://www.city.charlottetown.pe.ca/mayorandcouncil.php'
+COUNCIL_PAGE = 'https://www.charlottetown.ca/mayor___council/city_council/meet_my_councillor'
 
 
 class CharlottetownPersonScraper(CanadianScraper):
     def scrape(self):
-        root = self.lxmlize(COUNCIL_PAGE)
-        everyone = root.xpath('//span[@class="Title"]')
-        mayornode = everyone[0]
-        mayor = {}
-        spantext = ' '.join(mayornode.xpath('.//text()'))
-        mayor['name'] = re.search(r'[^(]+', spantext).group(0).strip()
-        mayor['photo_url'] = urljoin(COUNCIL_PAGE, mayornode.xpath('img/@src')[0])
-        mayor['email'] = mayornode.xpath('following::a[1]/text()')[0]
+        page = self.lxmlize(COUNCIL_PAGE)
 
-        m = Person(primary_org='legislature', name=mayor['name'], district='Charlottetown', role='Mayor')
-        m.add_source(COUNCIL_PAGE)
-        m.add_contact('email', mayor['email'])
-        m.image = mayor['photo_url']
+        nodes = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ctl14_divContent"]/*')
+        groups = [[]]
+        for node in nodes:
+            if node.tag == 'hr':
+                groups.append([])
+            else:
+                groups[-1].append(node)
 
-        yield m
+        assert len(groups), 'No councillors found'
+        for group in groups:
+            para = group[0]
+            match = re.search(r'(Mayor|Councillor) (.+?)(?: - (Ward \d+)(?: \([^)]+\))?)?$', para.xpath('.//strong[1]/text()')[0])
+            image = para.xpath('.//@src')[0]
 
-        councillors = root.xpath('//span[@class="Title"]')[1:]
-        assert len(councillors), 'No councillors found'
-        for span in councillors:
-            spantext = ' '.join(span.xpath('.//text()'))
-            header = spantext.replace('\u2013', '-').replace('\x96', '-').split('-')
-            if len(header) != 2:
-                continue
+            role = match.group(1)
+            name = match.group(2)
+            if role == 'Mayor':
+                district = 'Charlottetown'
+            else:
+                district = match.group(3)
 
-            name = header[0].strip()
-            name = name.replace('Councillor', '')
-            name = re.sub(r'\(.+?\)', '', name)
-            name = ' '.join(name.split())
-
-            district_id = ' '.join(header[1].split()[:2])
-
-            # needed a wacky xpath to deal with ward 8
-            photo = span.xpath('preceding::hr[1]/following::img[1]/@src')
-            photo_url = urljoin(COUNCIL_PAGE, photo[0])
-
-            email = span.xpath('string(following::a[1]/text())')  # can be empty
-
-            p = Person(primary_org='legislature', name=name, district=district_id, role='Councillor')
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
+
+            p.image = image
+            email = self.get_email(para, error=False)
             if email:
                 p.add_contact('email', email)
-            p.image = photo_url
+
+            for text in para.xpath('.//strong[contains(., "Phone")]/following-sibling::text()'):
+                if re.search(r'\d', text):
+                    match = re.search(r'(.+) \((.+)\)', text)
+                    if match.group(2) == 'Fax':
+                        contact_type = 'fax'
+                    else:
+                        contact_type = 'voice'
+                    p.add_contact(contact_type, match.group(1), match.group(2))
 
             yield p
