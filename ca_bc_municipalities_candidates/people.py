@@ -80,7 +80,9 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         birth_date = 1900
         seen = set()
 
-        for row in reader:
+        rows = [row for row in reader]
+        assert len(rows), 'No councillors found'
+        for row in rows:
             name = row['full name']
             district_name = row['district name']
 

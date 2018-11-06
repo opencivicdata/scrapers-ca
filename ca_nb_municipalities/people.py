@@ -35,9 +35,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
             'Saint-Hilaire': 'Saint Hilaire',
         }
         unknown_names = {
-            'Cocagne',
-            'Hanwell',
-            'Tracadie',
+            'Haut-Madawaska',  # incorporated after Census 2016
         }
         duplicate_names = {
             'Josée Levesque',
@@ -61,10 +59,12 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
         birth_date = 1900
         seen = set()
 
+        assert len(list_links), 'No list items found'
         for list_link in list_links:
             page = self.lxmlize(list_link.attrib['href'])
             detail_urls = page.xpath('//td[1]//@href')
 
+            assert len(detail_urls), 'No municipalities found'
             for detail_url in detail_urls:
                 page = self.lxmlize(detail_url, encoding='utf-8')
                 division_name = re.sub(r'\ASt\b\.?', 'Saint', page.xpath('//h1/text()')[0].split(' - ', 1)[1])
@@ -95,12 +95,16 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 if url:
                     url = url[0]
 
-                for p in page.xpath('//div[contains(@class, "right_contents")]/p'):
+                groups = page.xpath('//div[contains(@class, "right_contents")]/p')
+                assert len(groups), 'No groups found'
+                for p in groups:
                     role = p.xpath('./b/text()')[0].rstrip('s')
                     if role not in expected_roles:
                         raise Exception('unexpected role: {}'.format(role))
 
-                    for seat_number, name in enumerate(p.xpath('./text()'), 1):
+                    councillors = p.xpath('./text()')
+                    assert len(councillors), 'No councillors found'
+                    for seat_number, name in enumerate(councillors, 1):
                         if 'vacant' in name.lower():
                             continue
 

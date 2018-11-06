@@ -30,8 +30,9 @@ def get_party(abbr):
 class AlbertaPersonScraper(CanadianScraper):
     def scrape(self):
         csv_text = self.get(self.get_csv_url()).text
-        cr = csv.DictReader(StringIO(csv_text))
-        for mla in cr:
+        rows = [row for row in csv.DictReader(StringIO(csv_text))]
+        assert len(rows), 'No members found'
+        for mla in rows:
             name = '{} {} {}'.format(mla['MLA First Name'], mla['MLA Middle Names'], mla['MLA Last Name'])
             if name.strip() == '':
                 continue
