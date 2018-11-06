@@ -1,20 +1,15 @@
 from utils import CSVScraper
 
+import re
+
 
 class WaterlooPersonScraper(CSVScraper):
-    csv_url = 'http://www.regionofwaterloo.ca/opendatadownloads/RegionalMunicipalityOfWaterlooCouncil_2014_2018.xls'
+    # https://rowopendata-rmw.opendata.arcgis.com/datasets/a6f9364a68644b628ae7faa3b931b1b6_0
+    csv_url = 'https://opendata.arcgis.com/datasets/a6f9364a68644b628ae7faa3b931b1b6_0.csv'
     corrections = {
-        'district name': {
-            'City of Cambridge': 'Cambridge',
-            'City of Kitchener': 'Kitchener',
-            'City of Waterloo': 'Waterloo',
-            'Region of Waterloo': 'Waterloo',
-            'Township of North Dumfries': 'North Dumfries',
-            'Township of Wellesley': 'Wellesley',
-            'Township of Wilmot': 'Wilmot',
-            'Township of Woolwich': 'Woolwich',
-        },
+        'district name': lambda value: re.sub(r'(?:City|Region|Township) of ', '', value),
         'primary role': {
             'Regional Chair': 'Chair',
         },
+        'twitter': lambda value: re.sub(r'^@', 'https://twitter.com/', value),
     }
