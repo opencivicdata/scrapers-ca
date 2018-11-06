@@ -19,11 +19,12 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         wards = page.xpath('//div[@id="content"]//h3')
         for ward in wards:
             ward_name = ward.text_content()
-            councillor_links = ward.xpath('./following-sibling::p[1]/a')
+            councillors = ward.xpath('./following-sibling::ul[1]//a')
 
-            assert len(councillor_links), 'No councillors found for ward {}'.format(ward_name)
-            for councillor_link in councillor_links:
-                name = councillor_link.text
+            assert len(councillors), 'No councillors found for ward {}'.format(ward_name)
+            for councillor in councillors:
+                name = ' '.join(reversed(councillor.text.split(', ')))
+                url = councillor.attrib['href']
 
                 if ward_name in ('Ward 1', 'Ward 2'):
                     seat_numbers[ward_name] += 1
@@ -32,15 +33,13 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                     district = ward_name
 
                 p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
-                url = councillor_link.attrib['href']
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                cpage = self.lxmlize(url)
-                image_url_rel = cpage.xpath('//div[@id="content"]//img[contains(@alt, "Councillor")]/@src')[0]
-                image_url = urljoin(url, image_url_rel)
-                p.image = image_url
 
-                contacts = page.xpath('//div[@id="content"]//div[@class="block"]/text()')
+                page = self.lxmlize(url)
+                p.image = page.xpath('//div[@id="content"]//img[contains(@alt, "Councillor")]/@src')[0]
+
+                contacts = page.xpath('//div[@id="content"]//div[@id="content"]/text()')
                 for contact in contacts:
                     if not re.search(r'[0-9]', contact):
                         continue
@@ -57,7 +56,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                         p.add_contact('cell', contact, 'legislature')
                     if 'F' in contact_type:
                         p.add_contact('fax', contact, 'legislature')
-                email = self.get_email(cpage, '//div[@id="content"]//div[@class="block"]')
+                email = self.get_email(page.xpath('//div[@id="content"]')[0])
                 p.add_contact('email', email)
                 yield p
 
@@ -65,10 +64,12 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
         name = page.xpath('//h1[@id="pagetitle"]/text()')[0].replace('Mayor', '').strip()
         image = page.xpath('//div[@id="content"]//@src')[0]
-        contact_url = page.xpath('//li[@id="pageid1954"]/a/@href')[0]
 
         p = Person(primary_org='legislature', name=name, district='Wood Buffalo', role='Mayor')
         p.add_source(url)
-        p.add_source(contact_url)
+
         p.image = image
+        p.add_contact('voice', self.get_phone(page.xpath('//div[@id="icon5"]')[0]), 'legislature')
+        p.add_contact('email', 'mayor@rmwb.ca')
+
         return p
