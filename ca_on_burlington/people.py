@@ -2,4 +2,5 @@ from utils import CSVScraper
 
 
 class BurlingtonPersonScraper(CSVScraper):
-    csv_url = 'http://www.burlington.ca/en/services-for-you/resources/Ongoing_Projects/Open_Data/Catalogue/Feb_23_2015_Update/Elected_Official_Contact_PostedMar19.csv'
+    # https://navburl-burlington.opendata.arcgis.com/datasets/elected-official-contact
+    csv_url = 'https://opendata.arcgis.com/datasets/f2c404c667904f03be38443cbd474cd3_0.csv'
