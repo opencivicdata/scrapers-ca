@@ -119,7 +119,7 @@ class CanadianScraper(Scraper):
             matches.append(match.text_content())
         # The text version is more likely to be correct, as it is more visible,
         # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
-        for match in node.xpath('{}//a[contains(@href,"mailto:")]'.format(expression)):
+        for match in node.xpath('{}//a[contains(@href, "mailto:")]'.format(expression)):
             matches.append(unquote(match.attrib['href']))
         # If the node has no sub-tags.
         if not matches:
