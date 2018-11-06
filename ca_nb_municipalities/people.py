@@ -38,6 +38,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
             'Haut-Madawaska',  # incorporated after Census 2016
         }
         duplicate_names = {
+            'Denis Savoie',
             'Josée Levesque',
             'Luc Levesque',
         }
@@ -88,7 +89,8 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
 
                 contacts = page.xpath('//div[@class="left_contents"]/p[contains(., "Contact")]/text()')
                 phone = contacts[0].split(':')[1]
-                fax = contacts[1].split(':')[1]
+                if len(contacts) > 1:
+                    fax = contacts[1].split(':')[1]
                 email = self.get_email(page, '//div[@class="left_contents"]', error=False)
 
                 url = page.xpath('//div[@class="left_contents"]//@href[not(contains(., "mailto:"))]')
