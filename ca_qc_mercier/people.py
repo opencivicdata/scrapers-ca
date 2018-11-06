@@ -7,7 +7,7 @@ COUNCIL_PAGE = 'http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp'
 
 class MercierPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT, encoding='windows-1252')
 
         councillors = page.xpath('//table[@width="800"]/tr')
         for councillor in councillors:
