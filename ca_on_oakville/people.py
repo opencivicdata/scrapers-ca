@@ -2,6 +2,7 @@ from utils import CSVScraper
 
 
 class OakvillePersonScraper(CSVScraper):
+    # https://portal-exploreoakville.opendata.arcgis.com/datasets/toak::oakville-town-council
     csv_url = 'http://opendata.oakville.ca/Oakville_Town_Council/Oakville_Town_Council.csv'
     encoding = 'windows-1252'
     corrections = {

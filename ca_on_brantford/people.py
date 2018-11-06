@@ -2,6 +2,7 @@ from utils import CSVScraper
 
 
 class BrantfordPersonScraper(CSVScraper):
+    # http://data-brantford.opendata.arcgis.com/datasets/city-of-brantford-elected-officials-2014-to-2018
     csv_url = 'https://opendata.arcgis.com/datasets/320d27b8b20a467f8283a78835a33003_0.csv'
     encoding = 'utf-8-sig'
     many_posts_per_area = True
