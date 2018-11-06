@@ -39,25 +39,9 @@ class WoodBuffaloPersonScraper(CanadianScraper):
                 page = self.lxmlize(url)
                 p.image = page.xpath('//div[@id="content"]//img[contains(@alt, "Councillor")]/@src')[0]
 
-                contacts = page.xpath('//div[@id="content"]//div[@id="content"]/text()')
-                for contact in contacts:
-                    if not re.search(r'[0-9]', contact):
-                        continue
-                    if '(' not in contact:
-                        contact_type = 'T'
-                    else:
-                        contact_type, contact = contact.split('(')
-                    contact = contact.replace(') ', '-').strip()
-                    if 'T' in contact_type:
-                        p.add_contact('voice', contact, 'legislature')
-                    if 'H' in contact_type:
-                        p.add_contact('voice', contact, 'residence')
-                    if 'C' in contact_type:
-                        p.add_contact('cell', contact, 'legislature')
-                    if 'F' in contact_type:
-                        p.add_contact('fax', contact, 'legislature')
                 email = self.get_email(page.xpath('//div[@id="content"]')[0])
                 p.add_contact('email', email)
+
                 yield p
 
     def scrape_mayor(self, url):
