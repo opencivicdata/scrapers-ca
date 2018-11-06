@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'http://www.milton.ca/en/townhall/mayorandcouncil.asp?_mid_=5972'
 
 

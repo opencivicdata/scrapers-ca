@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'http://www.markham.ca/wps/portal/Markham/MunicipalGovernment/MayorAndCouncil/RegionalAndWardCouncillors/!ut/p/a1/04_Sj9CPykssy0xPLMnMz0vMAfGjzOJN_N2dnX3CLAKNgkwMDDw9XcJM_VwCDUMDDfULsh0VAfz7Fis!/'
 
 
