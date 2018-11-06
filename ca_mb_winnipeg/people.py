@@ -1,46 +1,61 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
+import json
 import re
-from urllib.parse import urljoin
+import requests
 
 COUNCIL_PAGE = 'http://winnipeg.ca/council/'
 
 
 class WinnipegPersonScraper(CanadianScraper):
     def scrape(self):
+        # https://winnipeg.ca/council/wards/includes/wards.js
+        # var COUNCIL_API = 'https://data.winnipeg.ca/resource/r4tk-7dip.json';
+        api_url = 'https://data.winnipeg.ca/resource/r4tk-7dip.json'
+        data = json.loads(requests.get(api_url).content)
+
         page = self.lxmlize(COUNCIL_PAGE, 'utf-8')
-        councillors = page.xpath('//table[@class="council-table"]//td[not(@colspan)]')
+
+        councillors = page.xpath('//div[@class="box"]')
         assert len(councillors), 'No councillors found'
-        for node in councillors:
-            url = urljoin(COUNCIL_PAGE, node.xpath('.//a/@href')[0])
-            text = ' '.join(node.xpath('.//a//text()'))
-            ward = re.search('([A-Z].+) Ward', text).group(1)
-            ward = ward.replace(' – ', '—').replace(' - ', '—')  # n-dash, m-dash, hyphen, m-dash
-            name = ' '.join(node.xpath('.//span[@class="k80B"][1]/text()'))
-            yield self.councillor_data(url, name, ward)
+        for councillor in councillors:
+            role = councillor.xpath('.//div[@class="insideboxtitle"]/a/text()')[0]
+            name = councillor.xpath('.//p[@class="insideboxtext"]/a/text()')[0]
+            image = councillor.xpath('.//@src')[0]
 
-        mayor_node = page.xpath('//td[@colspan]')[0]
-        mayor_name = mayor_node.xpath('.//p[@class="k90B"][1]/text()')[0].replace('Mayor ', '')
-        mayor_photo_url = mayor_node.xpath('.//img/@src')[0]
-        m = Person(primary_org='legislature', name=mayor_name, district='Winnipeg', role='Mayor')
-        m.add_source(COUNCIL_PAGE)
-        # @see http://www.winnipeg.ca/interhom/mayor/MayorForm.asp?Recipient=CLK-MayorWebMail
-        m.add_contact('email', 'CLK-MayorWebMail@winnipeg.ca')  # hardcoded
-        m.image = mayor_photo_url
-        yield m
+            if role == 'Mayor':
+                district = 'Winnipeg'
 
-    def councillor_data(self, url, name, ward):
-        page = self.lxmlize(url)
-        # email is, sadly, a form
-        photo_url = urljoin(url, page.xpath('//img[@class="bio_pic"]/@src')[0])
-        phone = page.xpath('//td[contains(., "Phone")]/following-sibling::td//text()')[0]
-        email = re.search('=([^&]+)', page.xpath('//tr[contains(., "Email")]//a/@href')[0]).group(1) + '@winnipeg.ca'
+                # https://winnipeg.ca/interhom/mayor/navData.xml
+                # <pos1 text="Contact the Mayor" link="/interhom/mayor/contact.asp" />
+                url = 'https://winnipeg.ca/interhom/mayor/contact.asp'
+                page = self.lxmlize(url)
 
-        p = Person(primary_org='legislature', name=name, district=ward, role='Councillor')
-        p.add_source(COUNCIL_PAGE)
-        p.add_source(url)
-        p.add_contact('email', email)
-        p.add_contact('voice', phone, 'legislature')
-        p.image = photo_url
+                email = page.xpath('//i[contains(@class, "fa-envelope")]/following-sibling::strong[1]//@href')[0]
+                voice = page.xpath('//span[@itemprop="telephone"]/text()')[0]
+                fax = page.xpath('//span[@itemprop="faxNumber"]/text()')[0]
+            else:
+                district = councillor.xpath('.//p[@class="wardname"]/a/text()')
 
-        return p
+                url = api_url
+                item = next(item for item in data if item['person'] == name)
+
+                email = item['email_link']
+                voice = item['phone']
+                fax = item['fax']
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
+
+            if not image.endswith('nophoto.jpg'):
+                p.image = image
+            p.add_contact('email', parse_email(email))
+            p.add_contact('voice', voice, 'legislature')
+            p.add_contact('fax', fax, 'legislature')
+
+            yield p
+
+
+def parse_email(email):
+    return re.search('=([^&]+)', email).group(1) + '@winnipeg.ca'
