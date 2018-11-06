@@ -1,5 +1,4 @@
 from utils import CanadianJurisdiction
-from pupa.scrape import Organization
 
 
 class Mercier(CanadianJurisdiction):

@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'https://www.caledon.ca/en/townhall/council.asp'
 
 
