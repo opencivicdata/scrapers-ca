@@ -6,7 +6,7 @@ from datetime import date
 COUNCIL_PAGE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTP3PplANMDX5EkNBwLN1zz4IxDvUcMbT3L2l6RoA5Hr27p5NovyzlpV2wlBNAHsA8sdDxXdMQ78eF0/pub?gid=1928681855&single=true&output=csv'
 
 
-class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
+class BritishColumbiaMunicipalitiesCandidatesPersonScraper(CanadianScraper):
     updated_at = date(2018, 9, 20)
     contact_person = 'andrew@newmode.net'
 
