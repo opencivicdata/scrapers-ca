@@ -3,13 +3,14 @@ from utils import CanadianScraper, CanadianPerson as Person
 import re
 from urllib.parse import urljoin
 
-COUNCIL_PAGE = 'http://www1.gnb.ca/legis/bios/58/index-e.asp'
+COUNCIL_PAGE = 'https://www1.gnb.ca/legis/bios/59/index-e.asp'  # update each election
 
 PARTIES = {
-    'PC': 'Progressive Conservative Party of New Brunswick',
-    'L': 'New Brunswick Liberal Association',
+    'G': 'Green Party',
     'IND': 'Independent',
-    'GP': 'Green Party'
+    'L': 'New Brunswick Liberal Association',
+    'PA': "People's Alliance",
+    'PC': 'Progressive Conservative Party of New Brunswick',
 }
 
 
@@ -21,8 +22,7 @@ def get_party(abbr):
 class NewBrunswickPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillor_table = page.xpath('//table[@id="customers"]')[0]
-        members = councillor_table.xpath('.//tr')[1:]
+        members = page.xpath('//table/tbody/tr')
         assert len(members), 'No members found'
         for row in members:
             riding, table_name, email = (' '.join(td.text_content().split()) for td in row[1:])
