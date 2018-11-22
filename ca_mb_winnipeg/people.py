@@ -23,26 +23,22 @@ class WinnipegPersonScraper(CanadianScraper):
             name = councillor.xpath('.//p[@class="insideboxtext"]/text()')[0]
             image = councillor.xpath('.//@src')[0]
 
-            if role == 'Mayor':
-                district = 'Winnipeg'
+            if 'Councillor' in name:
+                role = 'Councillor'
+                name = name.replace('Councillor ', '')
 
-                # https://winnipeg.ca/interhom/mayor/navData.xml
-                # <pos1 text="Contact the Mayor" link="/interhom/mayor/contact.asp" />
-                url = 'https://winnipeg.ca/interhom/mayor/contact.asp'
-                page = self.lxmlize(url)
+            url = api_url
+            item = next((item for item in data if item['person'] == name), None)
+            if item is None:
+                raise Exception(name)
 
-                email = page.xpath('//i[contains(@class, "fa-envelope")]/following-sibling::strong[1]//@href')[0]
-                voice = page.xpath('//span[@itemprop="telephone"]/text()')[0]
-                fax = page.xpath('//span[@itemprop="faxNumber"]/text()')[0]
-            else:
-                district = councillor.xpath('.//p[@class="wardname"]/a/text()')
+            district = item['name_english'].replace(' - ', '—')  # hyphen, m-dash
+            if district == 'Charleswood—Tuxedo':
+                district = 'Charleswood—Tuxedo—Whyte Ridge'
 
-                url = api_url
-                item = next(item for item in data if item['person'] == name)
-
-                email = item['email_link']
-                voice = item['phone']
-                fax = item['fax']
+            email = item['email_link']
+            voice = item['phone']
+            fax = item['fax']
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
