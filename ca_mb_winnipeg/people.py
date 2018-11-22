@@ -19,8 +19,8 @@ class WinnipegPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[@class="box"]')
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            role = councillor.xpath('.//div[@class="insideboxtitle"]/a/text()')[0]
-            name = councillor.xpath('.//p[@class="insideboxtext"]/a/text()')[0]
+            role = councillor.xpath('.//div[@class="insideboxtitle"]/text()')[0].strip()
+            name = councillor.xpath('.//p[@class="insideboxtext"]/text()')[0]
             image = councillor.xpath('.//@src')[0]
 
             if role == 'Mayor':
