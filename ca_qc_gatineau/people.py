@@ -2,7 +2,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.gatineau.ca/page.asp?p=la_ville/conseil_municipal'
+COUNCIL_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=guichet_municipal%2fconseil_municipal'
 MAYOR_CONTACT_PAGE = 'http://www.gatineau.ca/portail/default.aspx?p=la_ville/conseil_municipal/maire'
 
 
