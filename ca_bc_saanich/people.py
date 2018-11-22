@@ -19,7 +19,7 @@ class SaanichPersonScraper(CanadianScraper):
 
             name = main.xpath('.//h1//text()')[0]
 
-            if 'Mayor' in name:
+            if 'Mayor' in main.text_content():
                 name = name.replace('Mayor ', '')
                 role = 'Mayor'
                 district = 'Saanich'
