@@ -169,7 +169,7 @@ class QuebecPersonScraper(CanadianScraper):
             if email:
                 p.add_contact('email', email)
 
-            identifier = re.search(r'/(.+)/index.html', detail_url).group(1)
+            identifier = re.search(r'/([^/]+)/index.html', detail_url).group(1)
             facebook, twitter = SOCIAL_MEDIA_DATA.get(identifier, ('', ''))
             if facebook:
                 p.add_link(facebook)
