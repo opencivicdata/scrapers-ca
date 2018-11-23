@@ -45,7 +45,6 @@ SOCIAL_MEDIA_DATA = {
     'bussiere-robert-17921': ('https://www.facebook.com/pg/RobertBussiereCAQ', 'https://twitter.com/coalitionavenir'),
     'nadeau-dubois-gabriel-16827': ('https://www.facebook.com/GNadeauDubois/', 'https://twitter.com/GNadeauDubois'),
     'bonnardel-francois-11': ('https://www.facebook.com/Bonnardel.coalition/', 'https://twitter.com/fbonnardelCAQ'),
-    'girard-eric-17957': ('https://www.facebook.com/EricGirardCAQ/', 'https://twitter.com/coalitionavenir'),
     'leduc-alexandre-17935': ('https://www.facebook.com/LeducAlexandreQS/', 'https://twitter.com/LeducAlexandre'),
     'gaudreault-maryse-959': ('https://www.facebook.com/maryse.gaudreault.14', 'https://twitter.com/MGaudreaultHull'),
     'isabelle-claire-17939': ('https://www.facebook.com/isabelle.coalition/', 'https://twitter.com/IsaBelCoalition'),
