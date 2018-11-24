@@ -2,35 +2,52 @@ from utils import CanadianScraper, CanadianPerson as Person
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
-from collections import defaultdict
-from datetime import date
+LIST_PAGE = 'https://www.civicinfo.bc.ca/people'
 
-COUNCIL_PAGE = 'https://docs.google.com/spreadsheets/d/1KHp2o8UzBhuYYYxdv4viFAPV6mZZwMSSK7f3Q43xy9k/pub?gid=400954018&single=true&output=csv'
-
+import re
 
 class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
-    updated_at = date(2016, 11, 8)
-    contact_person = 'andrew@newmode.net'
+
+    birth_date = 1900
 
     def scrape(self):
-        exclude_divisions = {
-            'ocd-division/country:ca/csd:5909052',  # Abbotsford
-            'ocd-division/country:ca/csd:5915001',  # Langley (DM)
-            'ocd-division/country:ca/csd:5915004',  # Surrey
-            'ocd-division/country:ca/csd:5915015',  # Richmond
-            'ocd-division/country:ca/csd:5915022',  # Vancouver
-            'ocd-division/country:ca/csd:5915025',  # Burnaby
-            'ocd-division/country:ca/csd:5915034',  # Coquitlam
-            'ocd-division/country:ca/csd:5917021',  # Saanich
-            'ocd-division/country:ca/csd:5917034',  # Victoria
-            'ocd-division/country:ca/csd:5935010',  # Kelowna
+        unknown_names = {}
+        exclude_districts = {
+            'Alberni-Clayoquot',
+            'Bulkley-Nechako',
+            'Capital',
+            'Cariboo',
+            'Central Coast',
+            'Central Kootenay',
+            'Columbia Shuswap',
+            'Comox Valley',
+            'Cowichan Valley',
+            'East Kootenay',
+            'Fraser Valley',
+            'Fraser-Fort George',
+            'Islands Trust',
+            'Jumbo Glacier',
+            'Kitimat-Stikine',
+            'Kootenay Boundary',
+            'Metro Vancouver',
+            'Mount Waddington',
+            'North Coast',
+            'North Okanagan',
+            'Okanagan-Similkameen',
+            'Peace River',
+            'qathet',
+            'Sechelt Indian Government District',
+            'Squamish-Lillooet',
+            'Strathcona',
+            'Sun Peaks',
+            'Sunshine Coast',
+            'Thompson-Nicola',
         }
-        expected_roles = {
-            'Mayor',
-            'Councillor',
-        }
-        unique_roles = {
-            'Mayor',
+        processed_ids = set()
+        exclude_divisions = {}
+        processed_divisions = set()
+        division_corrections = {
+            '100 Mile House': 'One Hundred Mile House',
         }
         infixes = {
             'CY': 'City',
@@ -40,11 +57,10 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             'RGM': 'Regional',
             'T': 'Town',
             'VL': 'Village',
+            'RDA': 'District',
         }
-        duplicate_names = {
-            'Colleen Evans',
-        }
-
+        organizations = {}
+        # Create list mapping names to IDs.
         names_to_ids = {}
         for division in Division.get('ocd-division/country:ca').children('csd'):
             type_id = division.id.rsplit(':', 1)[1]
@@ -56,74 +72,118 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
                 else:
                     names_to_ids[division.name] = division.id
 
-        reader = self.csv_reader(COUNCIL_PAGE, header=True)
-        reader.fieldnames = [field.lower() for field in reader.fieldnames]
+        # Scrape list of municpalities.
+        list_page = self.lxmlize(LIST_PAGE)
+        municipalities = list_page.xpath('//select[@name="lgid"]/option')
+        assert len(municipalities), 'No municipalities found'
 
-        organizations = {}
-        seat_numbers = defaultdict(int)
+        # Iterate through each municipality.
+        for municipality in municipalities:
+            municipality_text = municipality.text
+            municipal_id = municipality.get('value')
+            municipal_type = municipality_text[municipality_text.find('(') + 1 : municipality_text.find(')')]
+            division_name = municipality_text.split(' (')[0]
+            division_name = division_corrections.get(division_name, division_name)
 
-        birth_date = 1900
-        seen = set()
+            record_url = LIST_PAGE + '?stext=&type=ss&lgid=' + municipal_id + '&agencyid=+'
 
-        rows = [row for row in reader]
-        assert len(rows), 'No councillors found'
-        for row in rows:
-            name = row['full name']
+            # If we have a municipal ID, process that municipality.
+            if municipal_id and municipal_id.strip():
+                # Get division ID from municipal name and filter out duplicates or unknowns.
+                if division_name in unknown_names:
+                    continue
+                if division_name in exclude_districts:
+                    continue
+                if division_name in processed_divisions:
+                    continue
+                division_id = names_to_ids[division_name]
+                if not isinstance(division_id, str):
+                    continue
+                if division_id in exclude_divisions:
+                    continue
+                if division_id in processed_ids:
+                    raise Exception('unhandled collision: {}'.format(division_id))
+                division = Division.get(division_id)
+                processed_divisions.add(division_name)
 
-            if not any(row.values()) or 'vacant' in name.lower():
-                continue
+                # Get division name and create org.
+                division_name = division.name
+                organization_name = '{} {} Council'.format(division_name, infixes[division.attrs['classification']])
+                if division_id not in processed_ids:
+                    processed_ids.add(division_id)
+                    organizations[division_id] = Organization(name=organization_name, classification='government')
+                    organizations[division_id].add_source(record_url)
+                organization = organizations[division_id]
+                organization.add_post(role='Mayor', label=division_name, division_id=division_id)
+                organization.add_post(role='Councillor', label=division_name, division_id=division_id)
 
-            if row['district id']:
-                division_id = 'ocd-division/country:ca/csd:{}'.format(row['district id'])
-            else:
-                division_id = names_to_ids[row['district name']]
+                # Load records for municipality.
+                municipal_page = self.lxmlize(record_url)
+                number_of_records_text = municipal_page.xpath('//main/h4/text()')
+                number_of_records = int(re.search(r'\d+', number_of_records_text[0]).group())
 
-            if division_id in exclude_divisions:
-                continue
-            if not division_id:
-                raise Exception('unhandled collision: {}'.format(row['district name']))
+                # Collate mayor and councillor representatives on first page of records.
+                leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")]')
+                councillor_reps = municipal_page.xpath('//main/ol/li[contains(., "Councillor")]')
 
-            division = Division.get(division_id)
+                # Iterate through additional pages of records if they exists adding reps.
+                if number_of_records > 10:
+                    quotient, remainder = divmod(number_of_records, 10)
+                    number_of_pages = quotient + int(bool(remainder))
+                    for i in range(2, number_of_pages + 1):
+                        municipal_page = self.lxmlize(record_url + '&pn=' + str(i))
+                        additional_leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")]')
+                        leader_reps.extend(additional_leader_reps)
+                        additional_councillor_reps = municipal_page.xpath('//main/ol/li[contains(., "Councillor")]')
+                        leader_reps.extend(additional_councillor_reps)
 
-            division_name = division.name
-            organization_name = '{} {} Council'.format(division_name, infixes[division.attrs['classification']])
+                # Create person records for all mayor and councillor representatives.
+                for leader_rep in leader_reps:
+                    yield self.person_data(leader_rep, municipal_id, municipal_type, division_name, 'Mayor', organization_name)
+                for councillor_rep in councillor_reps:
+                    yield self.person_data(councillor_rep, municipal_id, municipal_type, division_name, 'Councillor', organization_name)
 
-            if division_id not in seen:
-                seen.add(division_id)
-                organizations[division_id] = Organization(name=organization_name, classification='government')
-                organizations[division_id].add_source(COUNCIL_PAGE)
-
-            organization = organizations[division_id]
-
-            role = row['primary role']
-            if role not in expected_roles:
-                raise Exception('unexpected role: {}'.format(role))
-
-            if role in unique_roles:
-                district = division_name
-            else:
-                seat_numbers[division_id] += 1
-                district = '{} (seat {})'.format(division_name, seat_numbers[division_id])
-            if row['district id']:
-                district += ' ({})'.format(division_id)
-
-            organization.add_post(role=role, label=district, division_id=division_id)
-
-            p = Person(primary_org='government', primary_org_name=organization_name, name=name, district=district, role=role)
-            p.add_source(COUNCIL_PAGE)
-            if row['source url']:
-                p.add_source(row['source url'])
-
-            if name in duplicate_names:
-                p.birth_date = str(birth_date)
-                birth_date += 1
-
-            p.add_contact('email', row['email'])
-            p.add_contact('voice', row['phone'], 'legislature')
-
-            p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(division_id.rsplit(':', 1)[1])
-
-            yield p
-
+        # Iterate through each organization.
         for organization in organizations.values():
             yield organization
+
+    def person_data(self, representative, municipal_id, municipal_type, division_name, role, organization_name):
+        # Corrections and tweaks.
+        birth_date = 1900
+        duplicate_names = {
+            'Colleen Evans',
+        }
+        name_corrections = {
+            'Claire l Moglove': 'Claire Moglove',
+            'KSenya Dorwart': 'Ksenya Dorwart',
+        }
+        email_corrections = {
+            'sharrison@qualicumbeach,com': 'sharrison@qualicumbeach.com'
+        }
+
+        # Get name.
+        representative_name = re.sub(' +', ' ', str(representative.xpath('a/b/text()')[0]).strip())
+        representative_name = name_corrections.get(representative_name, representative_name)
+
+        # Get phone.
+        representative_phone = str(representative.xpath('text()[contains(., "Phone")]'))[12:-2].replace('-', '')
+
+        # Get email.
+        representative_email = representative.xpath('a[contains(@href,"mailto:")]/text()')[0]
+        representative_email = email_corrections.get(representative_email, representative_email)
+
+        # Create record and append contact data.
+        p = Person(primary_org='government', primary_org_name=organization_name, name=representative_name, district=division_name, role=role)
+        p.add_source(LIST_PAGE)
+
+        # Handle duplicate names.
+        if representative_name in duplicate_names:
+            p.birth_date = str(self.birth_date)
+            self.birth_date += 1
+        if representative_email:
+            p.add_contact('email', representative_email)
+        if representative_phone and len(representative_phone) is 10:
+            p.add_contact('voice', representative_phone, 'legislature')
+
+        return p
+
