@@ -2,12 +2,12 @@ from utils import CanadianScraper, CanadianPerson as Person
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
-LIST_PAGE = 'https://www.civicinfo.bc.ca/people'
-
 import re
 
-class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
+LIST_PAGE = 'https://www.civicinfo.bc.ca/people'
 
+
+class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
     birth_date = 1900
 
     def scrape(self):
@@ -81,7 +81,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         for municipality in municipalities:
             municipality_text = municipality.text
             municipal_id = municipality.get('value')
-            municipal_type = municipality_text[municipality_text.find('(') + 1 : municipality_text.find(')')]
+            municipal_type = municipality_text[municipality_text.find('(') + 1:municipality_text.find(')')]
             division_name = municipality_text.split(' (')[0]
             division_name = division_corrections.get(division_name, division_name)
 
@@ -149,7 +149,6 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
     def person_data(self, representative, municipal_id, municipal_type, division_name, role, organization_name):
         # Corrections and tweaks.
-        birth_date = 1900
         duplicate_names = {
             'Colleen Evans',
         }
@@ -186,4 +185,3 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             p.add_contact('voice', representative_phone, 'legislature')
 
         return p
-
