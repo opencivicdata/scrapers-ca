@@ -2,35 +2,19 @@
 
 ## Setup
 
-Build the environment:
+cd ./docker && ./deploy.sh
 
-    docker pull ubuntu:17.10
-    docker-compose build
-    docker-compose up -d
+The first time you run ./deploy.sh, it might take several minutes, but will take a few seconds on future runs.
 
-Setup the database:
+## Destroying the environment
 
-    docker-compose exec scrapers-ca service postgresql start
-    docker-compose exec scrapers-ca sudo -u postgres createuser root
-    docker-compose exec scrapers-ca sudo -u postgres psql -c 'ALTER USER root WITH SUPERUSER;'
-    docker-compose exec scrapers-ca sudo -u postgres psql -c "ALTER USER root WITH PASSWORD 'root';"
-    docker-compose exec scrapers-ca sudo -u postgres createdb pupa
-    docker-compose exec scrapers-ca sudo -u postgres psql pupa -c "CREATE EXTENSION postgis;"
+docker-compose down
 
-Modify `pupa_settings.py`:
+## Opening a shell
 
-    docker-compose exec scrapers-ca sed -i -e 's/localhost/root:root@localhost/' /src/scrapers-ca/pupa_settings.py
+Once Docker is set up (deployed), open a shell like this:
 
-Open a shell:
-
-    docker-compose exec scrapers-ca /bin/bash
-    cd scrapers-ca
-
-Setup the application:
-
-    mkvirtualenv scrapers-ca --python=`which python3`
-    pip install -r requirements.txt
-    pupa dbinit ca
+    cd ./docker && docker-compose exec scrapers-ca /bin/bash
 
 ## Usage
 
