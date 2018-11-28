@@ -21,7 +21,7 @@ def get_party(abbr):
 
 class NewBrunswickPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, encoding='utf-8')
         members = page.xpath('//table/tbody/tr')
         assert len(members), 'No members found'
         for row in members:
