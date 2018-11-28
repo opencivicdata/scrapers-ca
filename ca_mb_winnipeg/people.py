@@ -33,8 +33,6 @@ class WinnipegPersonScraper(CanadianScraper):
                 raise Exception(name)
 
             district = item['name_english'].replace(' - ', '—')  # hyphen, m-dash
-            if district == 'Charleswood—Tuxedo':
-                district = 'Charleswood—Tuxedo—Whyte Ridge'
 
             email = item['email_link']
             voice = item['phone']
