@@ -139,15 +139,15 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
                 # Create person records for all mayor and councillor representatives.
                 for leader_rep in leader_reps:
-                    yield self.person_data(leader_rep, municipal_id, municipal_type, division_name, 'Mayor', organization_name)
+                    yield self.person_data(leader_rep, municipal_id, municipal_type, division_id, division_name, 'Mayor', organization_name)
                 for councillor_rep in councillor_reps:
-                    yield self.person_data(councillor_rep, municipal_id, municipal_type, division_name, 'Councillor', organization_name)
+                    yield self.person_data(councillor_rep, municipal_id, municipal_type, division_id, division_name, 'Councillor', organization_name)
 
         # Iterate through each organization.
         for organization in organizations.values():
             yield organization
 
-    def person_data(self, representative, municipal_id, municipal_type, division_name, role, organization_name):
+    def person_data(self, representative, municipal_id, municipal_type, division_id, division_name, role, organization_name):
         # Corrections and tweaks.
         duplicate_names = {
             'Colleen Evans',
@@ -183,5 +183,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             p.add_contact('email', representative_email)
         if representative_phone and len(representative_phone) is 10:
             p.add_contact('voice', representative_phone, 'legislature')
+
+        p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(division_id.rsplit(':', 1)[1])
 
         return p
