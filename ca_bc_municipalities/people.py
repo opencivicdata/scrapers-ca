@@ -123,7 +123,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
                 number_of_records = int(re.search(r'\d+', number_of_records_text[0]).group())
 
                 # Collate mayor and councillor representatives on first page of records.
-                leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")]')
+                leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")][not(contains(., "Chief"))]')
                 councillor_reps = municipal_page.xpath('//main/ol/li[contains(., "Councillor")]')
 
                 # Iterate through additional pages of records if they exists adding reps.
@@ -132,10 +132,10 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
                     number_of_pages = quotient + int(bool(remainder))
                     for i in range(2, number_of_pages + 1):
                         municipal_page = self.lxmlize(record_url + '&pn=' + str(i))
-                        additional_leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")]')
+                        additional_leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")][not(contains(., "Chief"))]')
                         leader_reps.extend(additional_leader_reps)
                         additional_councillor_reps = municipal_page.xpath('//main/ol/li[contains(., "Councillor")]')
-                        leader_reps.extend(additional_councillor_reps)
+                        councillor_reps.extend(additional_councillor_reps)
 
                 # Create person records for all mayor and councillor representatives.
                 for leader_rep in leader_reps:
