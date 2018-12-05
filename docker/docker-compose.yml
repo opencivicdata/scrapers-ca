@@ -7,9 +7,6 @@ services:
       - "../:/src/scrapers-ca"
     ports:
       - "80"
-    working_dir: /src
+    working_dir: /src/scrapers-ca
     restart: always
     command: "tail -f /dev/null"
-
-volumes:
-  scrapers-ca:

@@ -9,6 +9,7 @@ RUN pip3 install virtualenv virtualenvwrapper ndg_httpsclient tidy flake8
 # .bashrc
 RUN echo 'export WORKON_HOME=$HOME/.virtualenvs' >> $HOME/.bashrc
 RUN echo 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6' >> $HOME/.bashrc
+RUN echo 'export PROJECT_HOME=/src/scrapers-ca' >> $HOME/.bashrc
 RUN echo 'source /usr/local/bin/virtualenvwrapper.sh' >> $HOME/.bashrc
 
 RUN mkdir /src
