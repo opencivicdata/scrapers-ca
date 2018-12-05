@@ -2,13 +2,13 @@
 
 ## Setup
 
-cd ./docker && ./deploy.sh
+    cd ./docker && ./deploy.sh
 
 The first time you run ./deploy.sh, it might take several minutes, but will take a few seconds on future runs.
 
 ## Destroying the environment
 
-docker-compose down
+    docker-compose down
 
 ## Opening a shell
 
@@ -18,9 +18,9 @@ Once Docker is set up (deployed), open a shell like this:
 
 ## Usage
 
-To run a scraper, e.g. `ca_on_candidates`, open a shell as above, and:
+To run a scraper, e.g. `ca_on`, open a shell as above, and:
 
-    pupa update ca_on_candidates
+    pupa update ca_on
 
 To wipe the database:
 
