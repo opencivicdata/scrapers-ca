@@ -1,6 +1,6 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.whitby.ca/en/townhall/meetyourcouncil.asp'
+COUNCIL_PAGE = 'https://www.whitby.ca/en/townhall/meetyourcouncil.asp?_mid_=11883'
 
 
 class WhitbyPersonScraper(CanadianScraper):
@@ -8,41 +8,31 @@ class WhitbyPersonScraper(CanadianScraper):
         regional_councillor_seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)
 
-        yield self.scrape_mayor(page)
-
-        councillors = page.xpath('//h3[contains(text(), "Councillors")]/following-sibling::p')[:-1]
+        councillors = page.xpath('//a[@title="Mayor and Council::Meet Your Council"]/following-sibling::ul//@href')
         assert len(councillors), 'No councillors found'
-        for councillor_node in councillors:
-            text = councillor_node.xpath('./strong/text()')
-            if not text or 'Vacant' in text:
-                continue
+        for councillor in councillors:
+            node = self.lxmlize(councillor).xpath('//div[@id="printArea"]')[0]
+            name = node.xpath('.//h1/text()')[0]
 
-            name, role_district = text
-            name = name.rstrip(',')
-
-            if 'Regional Councillor' in role_district:
-                role = role_district
-                district = 'Whitby (seat {})'.format(regional_councillor_seat_number)
-                regional_councillor_seat_number += 1
+            if 'Mayor' in name:
+                role = 'Mayor'
+                district = 'Whitby'
+                name = name.replace('Mayor ', '')
             else:
-                role, district = role_district.strip().split(', ')
-                district = district.split(' (')[0]
+                role = node.xpath('.//h2/text()')[0]
+                if 'Regional Councillor' in role:
+                    district = 'Whitby (seat {})'.format(regional_councillor_seat_number)
+                    regional_councillor_seat_number += 1
+                else:
+                    role, district = role.split(', ')
+                    district = district.split(' (')[0]
 
-            email = self.get_email(councillor_node)
-            image = councillor_node.xpath('./img/@src')[0]
-            p = Person(primary_org='legislature', name=name, district=district, role=role, image=image)
+            image = node.xpath('.//img/@src')[0]
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.add_contact('email', email)
-            yield p
+            p.add_contact('voice', self.get_phone(node), 'legislature')
+            p.add_contact('email', self.get_email(node))
+            p.image = image
 
-    def scrape_mayor(self, page):
-        mayor_node = page.xpath('//p[strong[contains(text(), "Mayor")]]')[0]
-        name = mayor_node.xpath('./strong')[0].text_content().replace(',', '')
-        email = self.get_email(mayor_node)
-        phone = page.xpath('//p[contains(text(), "Phone")]/text()')[0].split(':')[1]
-        image = mayor_node.xpath('./preceding-sibling::p/img/@src')[0]
-        p = Person(primary_org='legislature', name=name, district='Whitby', role='Mayor', image=image)
-        p.add_source(COUNCIL_PAGE)
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('email', email)
-        return p
+            yield p
