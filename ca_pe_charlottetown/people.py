@@ -20,15 +20,18 @@ class CharlottetownPersonScraper(CanadianScraper):
         assert len(groups), 'No councillors found'
         for group in groups:
             para = group[0]
-            match = re.search(r'(Mayor|Councillor) (.+?)(?: - (Ward \d+)(?: \([^)]+\))?)?$', para.xpath('.//strong[1]/text()')[0])
-            image = para.xpath('.//@src')[0]
-
-            role = match.group(1)
-            name = match.group(2)
-            if role == 'Mayor':
+            text = para.xpath('.//strong[1]/text()')[0]
+            if 'Mayor' in text:
+                role = 'Mayor'
+                match = re.search(r'Mayor (.+)', text)
                 district = 'Charlottetown'
             else:
-                district = match.group(3)
+                role = 'Councillor'
+                match = re.search(r'Councillor (.+) - (Ward \d+)', text)
+                district = match.group(2)
+
+            image = para.xpath('.//@src')[0]
+            name = match.group(1)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
