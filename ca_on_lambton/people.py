@@ -8,15 +8,10 @@ class LambtonPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-
-        # Tableception here, first tr is left column, second the right column
-        councillors_left = page.xpath('//div[@id="content"]/table/tr/td[1]/table/tr')
-        councillors_right = page.xpath('//div[@id="content"]/table/tr/td[2]/table/tr')
-        councillors = councillors_left + councillors_right
+        councillors = page.xpath('//div[@id="content"]//table//tr[position() mod 2 = 1]')
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
-            node = councillor.xpath('.//tr[1]')
-            text = node[0].text_content()
+            text = councillor.xpath('.//strong/text()')[0]
             if 'Deputy Warden' in text:
                 role = 'Deputy Warden'
                 name = text.replace('Deputy Warden', '')
