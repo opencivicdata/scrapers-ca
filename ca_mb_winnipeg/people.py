@@ -28,7 +28,7 @@ class WinnipegPersonScraper(CanadianScraper):
                 name = name.replace('Councillor ', '')
 
             url = api_url
-            item = next((item for item in data if item['person'] == name), None)
+            item = next((item for item in data if item['person'] == name and item['current_council']), None)
             if item is None:
                 raise Exception(name)
 
