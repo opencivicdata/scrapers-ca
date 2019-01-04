@@ -17,9 +17,9 @@ class CaledonPersonScraper(CanadianScraper):
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
 
-        p.image = image
         p.add_contact('voice', voice, 'legislature')
         p.add_contact('email', self.get_email(self.lxmlize(url)))
+        p.image = image
 
         yield p
 
@@ -29,10 +29,14 @@ class CaledonPersonScraper(CanadianScraper):
         for i in range(len(councillors) // 3):
             i = i // 4 * 12 + i % 4
             district, role = councillors[i].xpath('.//h3/text()')
-            image = councillors[i + 4].xpath('.//@src')[0]
             name = councillors[i + 8].xpath('.//strong/text()')[0]
             voice = self.get_phone(councillors[i + 8])
             url = councillors[i + 8].xpath('.//a[contains(., "Visit")]/@href')[0]
+
+            if 'photo to come' in councillors[i + 4].text_content():
+                image = None
+            else:
+                image = councillors[i + 4].xpath('.//@src')[0]
 
             district = district.replace('\xa0', ' ')
             if ' and ' in district:
@@ -42,8 +46,9 @@ class CaledonPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
-            p.image = image
             p.add_contact('voice', voice, 'legislature')
             p.add_contact('email', self.get_email(self.lxmlize(url)))
+            if image:
+                p.image = image
 
             yield p
