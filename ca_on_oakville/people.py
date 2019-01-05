@@ -13,4 +13,4 @@ class OakvillePersonScraper(CSVScraper):
     }
 
     def header_converter(self, s):
-        return s.lower().replace('phone (cell)', 'cell')
+        return super(OakvillePersonScraper, self).header_converter(s).replace('phone (cell)', 'cell')
