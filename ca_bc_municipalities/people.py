@@ -11,44 +11,33 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
     birth_date = 1900
 
     def scrape(self):
-        unknown_names = {}
         exclude_districts = {
-            'Alberni-Clayoquot',
-            'Bulkley-Nechako',
-            'Capital',
-            'Cariboo',
-            'Central Coast',
-            'Central Kootenay',
-            'Columbia Shuswap',
-            'Comox Valley',
-            'Cowichan Valley',
-            'East Kootenay',
-            'Fraser Valley',
-            'Fraser-Fort George',
-            'Islands Trust',
-            'Jumbo Glacier',
-            'Kitimat-Stikine',
-            'Kootenay Boundary',
-            'Metro Vancouver',
-            'Mount Waddington',
-            'North Coast',
-            'North Okanagan',
-            'Okanagan-Similkameen',
-            'Peace River',
-            'qathet',
-            'Sechelt Indian Government District',
-            'Squamish-Lillooet',
-            'Strathcona',
-            'Sun Peaks',
-            'Sunshine Coast',
-            'Thompson-Nicola',
+            # Existing scrapers
+            'Abbotsford',
+            'Burnaby',
+            'Coquitlam',
+            'Kelowna',
+            'Langley',
+            'New Westminster',
+            'Richmond',
+            'Saanich',
+            'Surrey',
+            'Vancouver',
+            'Victoria',
         }
-        processed_ids = set()
-        exclude_divisions = {}
-        processed_divisions = set()
+        excluded_district_types = {
+            'Regional District',
+            'Indian Government District',
+            'Islands Trust',
+            'Mountain Resort Municipality',
+        }
         division_corrections = {
             '100 Mile House': 'One Hundred Mile House',
         }
+
+        processed_ids = set()
+        exclude_divisions = {}
+        processed_divisions = set()
         infixes = {
             'CY': 'City',
             'DM': 'District',
@@ -80,8 +69,11 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         # Iterate through each municipality.
         for municipality in municipalities:
             municipality_text = municipality.text
-            municipal_id = municipality.get('value')
             municipal_type = municipality_text[municipality_text.find('(') + 1:municipality_text.find(')')]
+            if municipal_type in excluded_district_types:
+                continue
+
+            municipal_id = municipality.get('value')
             division_name = municipality_text.split(' (')[0]
             division_name = division_corrections.get(division_name, division_name)
 
@@ -90,11 +82,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             # If we have a municipal ID, process that municipality.
             if municipal_id and municipal_id.strip():
                 # Get division ID from municipal name and filter out duplicates or unknowns.
-                if division_name in unknown_names:
-                    continue
-                if division_name in exclude_districts:
-                    continue
-                if division_name in processed_divisions:
+                if division_name in exclude_districts or division_name in processed_divisions:
                     continue
                 division_id = names_to_ids[division_name]
                 if not isinstance(division_id, str):
@@ -139,15 +127,15 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
 
                 # Create person records for all mayor and councillor representatives.
                 for leader_rep in leader_reps:
-                    yield self.person_data(leader_rep, municipal_id, municipal_type, division_id, division_name, 'Mayor', organization_name)
+                    yield self.person_data(leader_rep, division_id, division_name, 'Mayor', organization_name)
                 for councillor_rep in councillor_reps:
-                    yield self.person_data(councillor_rep, municipal_id, municipal_type, division_id, division_name, 'Councillor', organization_name)
+                    yield self.person_data(councillor_rep, division_id, division_name, 'Councillor', organization_name)
 
         # Iterate through each organization.
         for organization in organizations.values():
             yield organization
 
-    def person_data(self, representative, municipal_id, municipal_type, division_id, division_name, role, organization_name):
+    def person_data(self, representative, division_id, division_name, role, organization_name):
         # Corrections and tweaks.
         duplicate_names = {
             'Colleen Evans',
