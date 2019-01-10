@@ -120,7 +120,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
                     number_of_pages = quotient + int(bool(remainder))
                     for i in range(2, number_of_pages + 1):
                         municipal_page = self.lxmlize(record_url + '&pn=' + str(i))
-                        additional_leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")][not(contains(., "Chief"))]')
+                        additional_leader_reps = municipal_page.xpath('//main/ol/li[contains(., "Mayor")][not(contains(., "Chief"))][not(contains(., "Assistant"))]')
                         leader_reps.extend(additional_leader_reps)
                         additional_councillor_reps = municipal_page.xpath('//main/ol/li[contains(., "Councillor")]')
                         councillor_reps.extend(additional_councillor_reps)
