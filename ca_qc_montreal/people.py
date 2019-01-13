@@ -12,6 +12,7 @@ class MontrealPersonScraper(CSVScraper):
             'Conseillère de la ville': 'Conseiller de la ville',
             "Mairesse d'arrondissement": "Maire d'arrondissement",
             "Mairesse de la Ville de Montréal": "Maire de la Ville de Montréal",
+            "Mairesse suppl\u00e9ante d'arrondissement": 'Conseiller de la ville',
         },
         'arrondissement': {
             # Articles.
