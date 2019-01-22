@@ -1,4 +1,4 @@
-# Canadian Legislative Scrapers [![Build Status](https://travis-ci.org/opencivicdata/scrapers-ca.png?branch=master)](https://travis-ci.org/opencivicdata/scrapers-ca)
+# Canadian Legislative Scrapers [![Build Status](https://travis-ci.com/opencivicdata/scrapers-ca.png?branch=master)](https://travis-ci.com/opencivicdata/scrapers-ca)
 
 ## Usage
 
