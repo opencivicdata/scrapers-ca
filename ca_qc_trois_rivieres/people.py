@@ -15,11 +15,11 @@ class TroisRivieresPersonScraper(CanadianScraper):
         photo_url = page.xpath('//img[contains(@alt, "Maire")]//@src')[0]
         name = page.xpath('//img/@alt[contains(., "Maire")]')[0]
         assert len(name), "missing mayor's name"
-        name = re.sub(r'Maire', '', name, flags=re.I).strip()
-        p = Person(primary_org='legislature', name=name, district="Trois-Rivières", role="Maire",
-                   image=photo_url)
-        p.add_source(MAYOR_URL)
-        yield p
+        if 'suppleant' not in name:
+            name = re.sub(r'Maire(sse suppleante)?', '', name, flags=re.I).strip()
+            p = Person(primary_org='legislature', name=name, district='Trois-Rivières', role='Maire', image=photo_url)
+            p.add_source(MAYOR_URL)
+            yield p
 
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath('//div[@class="photos_conseillers"]//figure')
