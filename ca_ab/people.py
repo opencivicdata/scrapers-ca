@@ -62,6 +62,8 @@ class AlbertaPersonScraper(CanadianScraper):
                 p.add_contact('email', mla['MLA Email'])
             if mla['Phone Number']:
                 p.add_contact('voice', mla['Phone Number'], 'legislature')
+            if mla['Fax Number']:
+                p.add_contact('fax', mla['Fax Number'], 'legislature')
             yield p
 
     def get_csv_url(self):
