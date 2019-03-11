@@ -1,12 +1,22 @@
 from utils import CanadianJurisdiction
 
-
 class AlbertaCandidates(CanadianJurisdiction):
     classification = 'executive'  # just to avoid clash
     division_id = 'ocd-division/country:ca/province:ab'
     division_name = 'Alberta'
-    name = 'Alberta Candidates'
-    url = 'http://civicinfo.ab.ca'
-
-    def get_organizations(self):
-        return []
+    name = 'Alberta Election Candidates'
+    url = 'http://www.assembly.ab.ca/'
+    parties = [
+        {'name': "Alberta Advantage Party"},
+        {'name': "Alberta Liberal Party"},
+        {'name': "Alberta New Democratic Party"},
+        {'name': "Alberta Party"},
+        {'name': "Freedom Conservative"},
+        {'name': "Freedom Party of Ontario"},
+        {'name': "Green Party of Alberta"},
+        {'name': "Alberta Independance Party"},
+        {'name': "United Conservative Party"},
+    ]
+    skip_null_valid_from = True
+    valid_from = '2019-03-07'
+member_role = 'candidate'
