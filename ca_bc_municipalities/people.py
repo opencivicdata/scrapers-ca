@@ -169,7 +169,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
             self.birth_date += 1
         if representative_email:
             p.add_contact('email', representative_email)
-        if representative_phone and len(representative_phone) is 10:
+        if representative_phone and len(representative_phone) == 10:
             p.add_contact('voice', representative_phone, 'legislature')
 
         p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(division_id.rsplit(':', 1)[1])
