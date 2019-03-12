@@ -453,7 +453,7 @@ class CSVScraper(CanadianScraper):
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')
                 if row.get('phone'):
-                    p.add_contact('voice', row['phone'].split(';', 1)[0], 'legislature')  # ca_qc_montreal
+                    p.add_contact('voice', row['phone'].split(';', 1)[0], 'legislature')  # ca_qc_montreal, ca_on_huron
                 if row.get('fax'):
                     p.add_contact('fax', row['fax'], 'legislature')
                 if row.get('cell'):
