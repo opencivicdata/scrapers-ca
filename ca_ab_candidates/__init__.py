@@ -12,11 +12,10 @@ class AlbertaCandidates(CanadianJurisdiction):
         {'name': "Alberta New Democratic Party"},
         {'name': "Alberta Party"},
         {'name': "Freedom Conservative"},
-        {'name': "Freedom Party of Ontario"},
         {'name': "Green Party of Alberta"},
         {'name': "Alberta Independance Party"},
         {'name': "United Conservative Party"},
     ]
     skip_null_valid_from = True
-    valid_from = '2019-03-07'
-member_role = 'candidate'
+    valid_from = '2019-05-31'
+    member_role = 'candidate'
