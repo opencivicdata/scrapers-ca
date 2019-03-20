@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class AlbertaCandidates(CanadianJurisdiction):
     classification = 'executive'  # just to avoid clash
     division_id = 'ocd-division/country:ca/province:ab'

@@ -1,6 +1,7 @@
 from utils import CSVScraper
 from datetime import date
 
+
 class AlbertaCandidatesPersonScraper(CSVScraper):
     csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR4i0tdtPJxFSXAccxZ1rjl8aIT-HApNcFs7In-thJJeLi4rKkXZMxIXkF1W0h_tK58QBgb3TZiEjQG/pub?output=csv'
     updated_at = date(2019, 3, 7)
