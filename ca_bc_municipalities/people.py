@@ -139,6 +139,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         # Corrections and tweaks.
         duplicate_names = {
             'Colleen Evans',
+            'Kim Watt-Senner',
         }
         name_corrections = {
             'Claire l Moglove': 'Claire Moglove',
