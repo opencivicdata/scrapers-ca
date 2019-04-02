@@ -1,5 +1,5 @@
 # coding: utf-8
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianScraper, CanadianPerson as Person, CUSTOM_USER_AGENT
 
 import re
 
@@ -20,12 +20,13 @@ HEADING_TYPE = {
 
 class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
     def scrape(self):
+        self.user_agent = CUSTOM_USER_AGENT
         page = self.get(COUNCIL_PAGE)
         members = re.findall('/Members/YourMember/[^"]+', page.text)
         assert len(members), 'No members found'
         for member in members:
             detail_url = 'http://www.assembly.nl.ca%s' % member
-            detail = self.lxmlize(detail_url)
+            detail = self.lxmlize(detail_url, user_agent=CUSTOM_USER_AGENT)
 
             name = detail.xpath('//h1/text()')[0]
             district = re.sub(r' [\xa0–-] ', '—', detail.xpath('//h2/text()')[0])  # # n-dash, m-dash
