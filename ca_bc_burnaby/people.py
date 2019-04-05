@@ -16,6 +16,8 @@ class BurnabyPersonScraper(CanadianScraper):
             role, name = page.xpath('//title//text()')[0].split(' ', 1)
             photo_url = page.xpath('//div[@id="content"]//img[@style]/@src')[0]
 
+            email = None
+            phone = None
             contact_node = page.xpath('//div[@id="column-right"]//div[contains(., "Contact")]')
             if contact_node:
                 email = self.get_email(contact_node[0])
@@ -30,7 +32,8 @@ class BurnabyPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_source(person_url)
-            p.add_contact('email', email)
+            if email:
+                p.add_contact('email', email)
             if phone:
                 p.add_contact('voice', phone, 'legislature')
             yield p
