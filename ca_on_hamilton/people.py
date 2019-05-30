@@ -1,6 +1,6 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-COUNCIL_PAGE = 'http://www.hamilton.ca/council-committee/mayor-councillors/city-councillors'
+COUNCIL_PAGE = 'http://www.hamilton.ca/council-committee/mayor-council/city-councillors'
 
 
 class HamiltonPersonScraper(CanadianScraper):
@@ -10,17 +10,16 @@ class HamiltonPersonScraper(CanadianScraper):
         mayor_url = page.xpath('//section/h3[contains(., "Mayor\'s Office")]/a/@href')[0]
         yield self.mayor_data(mayor_url)
 
-        councillors = page.xpath('//section/h3[contains(., "City Councillors")]/following-sibling::div/ul/li/a')
+        councillors = page.xpath('//div[contains(@class, "menu-name-menu-service-structure")]/li/a')
         assert len(councillors), 'No councillors found'
         for a in councillors:
-            if '-' in a.text_content():  # vacant if absent
-                yield self.councillor_data(a.attrib['href'])
+            yield self.councillor_data(a.attrib['href'])
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
 
-        district, name = page.xpath('//h1[contains(., "Ward")]/text()')[0].split('-')
-
+        district = page.xpath('//h1[contains(., "Ward")]/text()')[0]
+        name = page.xpath('//div[@id="wb-pri"]//div[contains(@class, "coh-column third")]/p/strong/text()')[0]
         info_node = page.xpath('//div[@id="wb-pri"]')[0]
         phone = self.get_phone(info_node, area_codes=[289, 365, 905])
         email = self.get_email(info_node)
