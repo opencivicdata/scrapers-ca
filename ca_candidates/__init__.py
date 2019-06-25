@@ -34,6 +34,7 @@ class CanadaCandidates(CanadianJurisdiction):
         {'name': 'Rhinoceros'},
         {'name': 'Seniors'},
         {'name': 'United'},
+        {'name': 'People\'s Party'},
     ]
     skip_null_valid_from = True
     valid_from = '2019-05-31'
