@@ -17,7 +17,7 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
 
             name = member.xpath('./td[2]//a[1]//text()')[0]
 
-            district_name = member.xpath('./td[2]//a[contains(.//text(), "MLA")]//text()')[0].split(':')[1].replace('St ', 'St. ').split('-')
+            district_name = member.xpath('./td[2]//em[contains(.//text(), "MLA")]//text()')[0].split(':')[1].replace('St ', 'St. ').split('-')
             district = district_name[0].strip() + '-' + district_name[1].strip()
             url = member.xpath('./td[2]//a[1]/@href')[0]
             ext_infos = self.scrape_extended_info(url)
@@ -39,7 +39,7 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
         if not root.xpath('//div[contains(@class, "colmask")][contains(@class, "rightmenu")]'):  # Speaker page
             main = root.xpath('//div[@id="content"]//table')[0]
             photo_url = main.xpath('.//img')[0].get('src')
-            contact_cell = main.xpath('.//td[contains(., "nformation")]')[0]
+            contact_cell = main.xpath('.//td[contains(., "ontact")]')[0]
             phone = None
             phone_s = re.search(r'(?:Telephone|Tel|Phone):(.+?)\n', contact_cell.text_content())
             if phone_s:
