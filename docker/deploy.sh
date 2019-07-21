@@ -42,6 +42,7 @@ else
   pip3 install -r requirements.txt && \
   pupa dbinit ca'
 fi
+
 echo ""
 echo "Everything seems up and running."
 echo ""
