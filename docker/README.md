@@ -30,3 +30,9 @@ To wipe the database:
 Then, open a shell as above, and:
 
     pupa dbinit ca
+
+To interact with the postgres db directly for debugging purposes:
+
+    psql pupa root
+
+
