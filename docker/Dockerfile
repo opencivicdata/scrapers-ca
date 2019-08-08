@@ -1,9 +1,11 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Base setup
 RUN apt-get -y update
 # PostgreSQL
-RUN apt-get -y install postgresql libpq-dev postgresql-client postgresql-client-common gdal-bin postgresql-9.6-postgis-scripts
+RUN apt-get -y install postgresql libpq-dev postgresql-client postgresql-client-common gdal-bin postgresql-contrib postgis
 # Python
 RUN apt-get -y install python3 python3-pip python3-dev build-essential python3-invoke python3-lxml python3-unidecode python3-regex libxml2-dev libxslt-dev lib32z1-dev git sudo
 RUN apt-get clean
