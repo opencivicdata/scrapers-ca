@@ -7,6 +7,8 @@ import lxml.html
 
 COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
 
+LEGISLATURE_NO = '30'
+
 PARTIES = {
     'AL': 'Alberta Liberal Party',
     'AP': 'Alberta Party',
@@ -40,8 +42,9 @@ class AlbertaPersonScraper(CanadianScraper):
             name_without_status = name.split(',')[0]
             detail_url = (
                 'http://www.assembly.ab.ca/net/index.aspx?'
-                'p=mla_contact&rnumber={0}&leg=29'.format(
-                    mla['Riding Number']
+                'p=mla_contact&rnumber={0}&leg={1}'.format(
+                    mla['Riding Number'],
+                    LEGISLATURE_NO
                 )
             )
             detail_page = self.lxmlize(detail_url)
@@ -60,9 +63,9 @@ class AlbertaPersonScraper(CanadianScraper):
                 p.add_contact('email', mla['Email'])
             elif mla.get('MLA Email'):
                 p.add_contact('email', mla['MLA Email'])
-            if mla['Phone Number']:
+            if mla['Phone Number'] and mla['Phone Number'] != 'Pending':
                 p.add_contact('voice', mla['Phone Number'], 'legislature')
-            if mla['Fax Number']:
+            if mla['Fax Number'] and mla['Fax Number'] != 'Pending':
                 p.add_contact('fax', mla['Fax Number'], 'legislature')
             yield p
 
