@@ -18,3 +18,5 @@ class Alberta(CanadianJurisdiction):
         {'name': 'Wildrose Alliance Party'},
         {'name': 'Independent'},
     ]
+    skip_null_valid_from = True
+    valid_from = '2019-05-31'
