@@ -15,5 +15,5 @@ class ManitobaCandidates(CanadianJurisdiction):
         {'name': "Progressive Conservative"},
     ]
     skip_null_valid_from = True
-    valid_from = '2019-07-08'
+    valid_from = '2019-09-10'
     member_role = 'candidate'
