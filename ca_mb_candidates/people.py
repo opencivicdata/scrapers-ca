@@ -7,10 +7,6 @@ class ManitobaCandidatesPersonScraper(CSVScraper):
     updated_at = date(2019, 7, 8)
     contact_person = 'andrew@newmode.net'
     encoding = 'utf-8'
-    corrections = {
-        'district name': {
-        }
-    }
 
     def is_valid_row(self, row):
         return any(row.values()) and row['last name'] and row['first name']
