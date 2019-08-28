@@ -10,12 +10,14 @@ class SurreyPersonScraper(CanadianScraper):
         members = page.xpath("//a[@class='gtm-grid']")
 
         assert len(members), 'No members found'
+        seat_number = 1
         for member in members:
             if not member.text_content().strip():
                 continue
 
             name = member.text_content().strip()
-            district = 'Surrey'
+            district = 'Surrey (seat {})'.format(seat_number)
+            seat_number += 1
             role = 'Councillor'
 
             url = member.attrib['href']
