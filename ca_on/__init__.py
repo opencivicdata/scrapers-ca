@@ -15,3 +15,4 @@ class Ontario(CanadianJurisdiction):
         {'name': 'Independent'},
     ]
     skip_null_valid_from = True
+    exclude_types = ['school_district']
