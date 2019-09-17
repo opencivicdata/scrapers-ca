@@ -14,6 +14,7 @@ class OntarioEnglishPublicSchoolBoards(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         for division in Division.get(self.division_id).children('school_district'):
-            organization.add_post(role='Representative', label=division.name, division_id=division.id)
+            for i in range (0, 15):  # XXX made-up number
+                organization.add_post(role='Representative (seat {})'.format(i), label=division.name, division_id=division.id)
 
         yield organization
