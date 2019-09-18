@@ -7,6 +7,8 @@ class OntarioEnglishPublicSchoolBoardsPersonScraper(CSVScraper):
     # CSV source: https://docs.google.com/spreadsheets/d/1smXFR3nB9lovc6bWWcLvr621wb6E5b2TZKqUtxRTUtE/edit#gid=785048945
     updated_at = date(2019, 9, 13)
     contact_person = 'andrew@newmode.net'
+    many_posts_per_area = True
+    unique_roles = ['Chair']
     encoding = 'utf-8'
     corrections = {
         'district name': {
