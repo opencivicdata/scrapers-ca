@@ -14,10 +14,16 @@ class OntarioPersonScraper(CanadianScraper):
             'Constituency': 'constituency',
         }
 
+        excluded_urls = {
+            'https://www.ola.org/en/members/all/vacant-seat-ottawa-vanier',
+        }
+
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath('//h2[@class="view-grouping-header"]//@href')
         assert len(members), 'No members found'
         for url in members:
+            if url in excluded_urls:
+                continue
             page = self.lxmlize(url)
 
             name = re.match(r'(.+) \|', page.xpath('//title/text()')[0]).group(1)
