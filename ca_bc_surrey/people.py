@@ -4,6 +4,7 @@ import re
 
 COUNCIL_PAGE = 'https://www.surrey.ca/city-government/2999.aspx'
 
+
 class SurreyPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)

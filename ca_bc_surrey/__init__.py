@@ -1,5 +1,6 @@
 from utils import CanadianJurisdiction
 
+
 class Surrey(CanadianJurisdiction):
     classification = 'legislature'
     division_id = 'ocd-division/country:ca/csd:5915004'
