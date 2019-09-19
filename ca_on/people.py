@@ -22,7 +22,7 @@ class OntarioPersonScraper(CanadianScraper):
         members = page.xpath('//h2[@class="view-grouping-header"]//@href')
         assert len(members), 'No members found'
         for url in members:
-            if url in excluded_urls :
+            if url in excluded_urls:
                 continue
             page = self.lxmlize(url)
 
