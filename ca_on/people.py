@@ -24,7 +24,6 @@ class OntarioPersonScraper(CanadianScraper):
         for url in members:
             if url in excluded_urls :
                 continue
-            print(url);
             page = self.lxmlize(url)
 
             name = re.match(r'(.+) \|', page.xpath('//title/text()')[0]).group(1)
