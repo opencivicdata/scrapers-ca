@@ -277,6 +277,10 @@ class CSVScraper(CanadianScraper):
     A dictionary of people's names to lists of alternate names. Rarely used.
     """
     other_names = {}
+    """
+    The classification of the organization.
+    """
+    organization_classification = None
 
     """
     Set the `locale` of the data, like 'fr'.
@@ -426,7 +430,8 @@ class CSVScraper(CanadianScraper):
                         parts.extend(['', row['postal code']])
                     lines.append(' '.join(parts))
 
-                p = CanadianPerson(primary_org=self.jurisdiction.classification, name=name, district=district, role=role, party=row.get('party name'))
+                organization_classification = self.organization_classification or self.jurisdiction.classification
+                p = CanadianPerson(primary_org=organization_classification, name=name, district=district, role=role, party=row.get('party name'))
                 p.add_source(self.csv_url)
 
                 if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
