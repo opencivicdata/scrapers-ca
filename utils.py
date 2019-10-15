@@ -454,7 +454,7 @@ class CSVScraper(CanadianScraper):
                     p.add_link(row['twitter'])
 
                 if row['email']:
-                    p.add_contact('email', row['email'].split('\n')[-1])  # ca_qc_montreal
+                    p.add_contact('email', row['email'].strip().split('\n')[-1])  # ca_qc_montreal
                 if lines:
                     p.add_contact('address', '\n'.join(lines), 'legislature')
                 if row.get('phone'):
