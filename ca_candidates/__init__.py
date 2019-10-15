@@ -15,7 +15,6 @@ class CanadaCandidates(CanadianJurisdiction):
         {'name': 'Canada'},
         {'name': 'Canadian Action'},
         {'name': 'Christian Heritage'},
-        {'name': 'Communist'},
         {'name': 'Conservative'},
         {'name': 'Co-operative Commonwealth Federation'},
         {'name': 'Democratic Advancement'},
@@ -25,7 +24,7 @@ class CanadaCandidates(CanadianJurisdiction):
         {'name': 'Liberal'},
         {'name': 'Libertarian'},
         {'name': 'Marijuana'},
-        {'name': 'Marxist–Leninist'},
+        {'name': 'Marxist-Leninist Party of Canada'},
         {'name': 'NDP'},
         {'name': 'Party for Accountability, Competency and Transparency'},
         {'name': 'Pirate'},
@@ -35,6 +34,8 @@ class CanadaCandidates(CanadianJurisdiction):
         {'name': 'Seniors'},
         {'name': 'United'},
         {'name': 'People\'s Party'},
+        {'name': 'Communist Party of Canada'},
+        {'name': 'Animal Protection Party of Canada'}
     ]
     skip_null_valid_from = True
     valid_from = '2019-05-31'
