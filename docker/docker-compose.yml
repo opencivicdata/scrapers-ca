@@ -5,6 +5,7 @@ services:
     build: .
     volumes:
       - "../:/src/scrapers-ca"
+      - "../_data:/src/_data"
     ports:
       - "80"
     working_dir: /src/scrapers-ca
