@@ -1,6 +1,6 @@
 # coding: utf-8
 from utils import CanadianScraper, CanadianPerson as Person
-#from pprint import pprint
+# from pprint import pprint
 
 import hashlib
 
@@ -22,7 +22,7 @@ class CanadaPersonScraper(CanadianScraper):
         assert len(rows), 'No members found'
         for row in rows:
             name = row.xpath('.//div[@class="ce-mip-mp-name"][1]')[0].text_content()
-            #pprint(name)
+            # pprint(name)
             constituency = row.xpath('.//div[@class="ce-mip-mp-constituency"][1]')[0].text_content()
             constituency = constituency.replace('–', '—')  # n-dash, m-dash
             if constituency == 'Mont-Royal':
@@ -33,16 +33,16 @@ class CanadaPersonScraper(CanadianScraper):
             party = row.xpath('.//div[@class="ce-mip-mp-party"][1]')[0].text_content()
 
             url = row.xpath('.//a[@class="ce-mip-mp-tile"]/@href')[0]
-            #pprint(url)
+            # pprint(url)
             if province == 'Québec':
                 url = url.replace('/en/', '/fr/')
 
             mp_page = self.lxmlize(url)
             email = self.get_email(mp_page, '//*[@id="contact"]/div/p/a', error=False)
-            #pprint(email)
+            # pprint(email)
 
             photo = mp_page.xpath('.//div[@class="ce-mip-mp-profile-container"]//img/@src')[0]
-            #pprint(photo)
+            # pprint(photo)
 
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
             m.add_source(COUNCIL_PAGE)
@@ -64,7 +64,7 @@ class CanadaPersonScraper(CanadianScraper):
             personal_url = mp_page.xpath('.//a[contains(@title, "Personal Web Site")]/@href')
             if personal_url:
                 m.add_link(personal_url[0])
-                #pprint(personal_url[0])
+                # pprint(personal_url[0])
 
             preferred_languages = mp_page.xpath('.//dt[contains(., "Preferred Language")]/following-sibling::dd/text()')
             if preferred_languages:
@@ -86,8 +86,8 @@ class CanadaPersonScraper(CanadianScraper):
                 phone_and_fax = phone_and_fax_el[0].text_content().strip().splitlines()
                 voice = phone_and_fax[0].replace('Telephone:', '').replace('Téléphone :', '').strip()
                 fax = phone_and_fax[1].replace('Fax:', '').replace('Télécopieur :', '').strip()
-                #pprint(voice)
-                #pprint(fax)
+                # pprint(voice)
+                # pprint(fax)
                 if voice:
                     m.add_contact('voice', voice, 'legislature')
 
@@ -96,19 +96,19 @@ class CanadaPersonScraper(CanadianScraper):
 
             # Constituency Office contacts
             # Some people has more than one, e.g. https://www.ourcommons.ca/Members/en/ben-lobb(35600)#contact
-            for i,constituency_office_el in enumerate(mp_page.xpath('.//div[@class="ce-mip-contact-constituency-office-container"]/div')):
+            for i, constituency_office_el in enumerate(mp_page.xpath('.//div[@class="ce-mip-contact-constituency-office-container"]/div')):
                 note = 'constituency'
                 if i:
                     note += ' ({})'.format(i + 1)
 
-                #pprint(note)
+                # pprint(note)
                 address = constituency_office_el.xpath('./p[1]')[0]
                 address = address.text_content().strip().splitlines()
                 address = list(map(str.strip, address))
-                #pprint(address)
+                # pprint(address)
                 m.add_contact('address', '\n'.join(address), note)
 
-                phone_and_fax_el = constituency_office_el.xpath('./p[contains(., "Telephone")]|./p[contains(., "Téléphone")]');
+                phone_and_fax_el = constituency_office_el.xpath('./p[contains(., "Telephone")]|./p[contains(., "Téléphone")]')
                 if len(phone_and_fax_el):
                     phone_and_fax = phone_and_fax_el[0].text_content().strip().splitlines()
                     # Note that https://www.ourcommons.ca/Members/en/michael-barrett(102275)#contact
@@ -122,6 +122,5 @@ class CanadaPersonScraper(CanadianScraper):
 
                     if fax:
                         m.add_contact('fax', fax, note)
-
 
             yield m
