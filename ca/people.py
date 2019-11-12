@@ -75,6 +75,7 @@ class CanadaPersonScraper(CanadianScraper):
             else:
                 m.add_contact('address', 'House of Commons\nOttawa ON  K1A 0A6', 'legislature')
 
+            # Hill Office contacts
             # Now phone and fax are in the same element
             # <p>
             #   Telephone: xxx-xxx-xxxx<br/>
@@ -83,8 +84,8 @@ class CanadaPersonScraper(CanadianScraper):
             phone_and_fax_el = mp_page.xpath('.//h4[contains(., "Hill Office")]/../p[contains(., "Telephone")]|.//h4[contains(., "Hill Office")]/../p[contains(., "Téléphone :")]')
             if len(phone_and_fax_el):
                 phone_and_fax = phone_and_fax_el[0].text_content().strip().splitlines()
-                voice = phone_and_fax[0].replace('Telephone: ', '').replace('Téléphone : ', '').strip()
-                fax = phone_and_fax[1].replace('Fax: ', '').replace('Télécopieur : ', '').strip()
+                voice = phone_and_fax[0].replace('Telephone:', '').replace('Téléphone :', '').strip()
+                fax = phone_and_fax[1].replace('Fax:', '').replace('Télécopieur :', '').strip()
                 #pprint(voice)
                 #pprint(fax)
                 if voice:
@@ -93,27 +94,34 @@ class CanadaPersonScraper(CanadianScraper):
                 if fax:
                     m.add_contact('fax', fax, 'legislature')
 
+            # Constituency Office contacts
+            # Some people has more than one, e.g. https://www.ourcommons.ca/Members/en/ben-lobb(35600)#contact
+            for i,constituency_office_el in enumerate(mp_page.xpath('.//div[@class="ce-mip-contact-constituency-office-container"]/div')):
+                note = 'constituency'
+                if i:
+                    note += ' ({})'.format(i + 1)
 
-            # for i, li in enumerate(mp_page.xpath('.//div[@class="constituencyoffices"]//li')):
-            #     spans = li.xpath('./span[not(@class="spacer")]')
-            #     note = 'constituency'
-            #     if i:
-            #         note += ' ({})'.format(i + 1)
-            #     m.add_contact('address', '\n'.join([
-            #         spans[0].text_content(),  # address line 1
-            #         spans[1].text_content(),  # address line 2
-            #         spans[2].text_content(),  # city, region
-            #         spans[3].text_content(),  # postal code
-            #     ]), note)
-            #     voice = li.xpath('./span//text()[contains(., "Telephone:")]|./span//text()[contains(., "Téléphone :")]')
-            #     if voice:
-            #         voice = voice[0].replace('Telephone: ', '').replace('Téléphone : ', '')
-            #         if voice:
-            #             m.add_contact('voice', voice, note)
-            #     fax = li.xpath('./span//text()[contains(., "Fax:")]|./span//text()[contains(., "Télécopieur :")]')
-            #     if fax:
-            #         fax = fax[0].replace('Fax: ', '').replace('Télécopieur : ', '')
-            #         if fax:
-            #             m.add_contact('fax', fax, note)
+                #pprint(note)
+                address = constituency_office_el.xpath('./p[1]')[0]
+                address = address.text_content().strip().splitlines()
+                address = list(map(str.strip, address))
+                #pprint(address)
+                m.add_contact('address', '\n'.join(address), note)
+
+                phone_and_fax_el = constituency_office_el.xpath('./p[contains(., "Telephone")]|./p[contains(., "Téléphone")]');
+                if len(phone_and_fax_el):
+                    phone_and_fax = phone_and_fax_el[0].text_content().strip().splitlines()
+                    # Note that https://www.ourcommons.ca/Members/en/michael-barrett(102275)#contact
+                    # has a empty value - "Telephone:". So the search / replace cannot include space.
+                    voice = phone_and_fax[0].replace('Telephone:', '').replace('Téléphone :', '').strip()
+                    if len(phone_and_fax) > 1:
+                        fax = phone_and_fax[1].replace('Fax:', '').replace('Télécopieur :', '').strip()
+
+                    if voice:
+                        m.add_contact('voice', voice, note)
+
+                    if fax:
+                        m.add_contact('fax', fax, note)
+
 
             yield m
