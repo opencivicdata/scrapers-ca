@@ -6,8 +6,7 @@ set -e
 
 echo "Setting up a Docker environment."
 
-docker pull ubuntu:17.10
-docker-compose build
+docker-compose build --pull
 docker-compose up -d
 
 echo ""
