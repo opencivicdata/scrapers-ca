@@ -3,7 +3,8 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import hashlib
 
-COUNCIL_PAGE = 'https://www.ourcommons.ca/Members/en/search?view=ListAll'
+COUNCIL_PAGE_MALE = 'https://www.ourcommons.ca/Members/en/search?view=ListAll' # TODO
+COUNCIL_PAGE_FEMALE = 'https://www.ourcommons.ca/Members/en/search?view=ListAll' # TODO
 IMAGE_PLACEHOLDER_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']
 
 
@@ -16,8 +17,16 @@ class CanadaPersonScraper(CanadianScraper):
     """
 
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-        rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
+        genders = {
+        'male': COUNCIL_PAGE_MALE,
+        'female': COUNCIL_PAGE_FEMALE,
+        }
+        for gender, url in genders.items():
+            page = self.lxmlize(url)
+            rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
+            yield from self.scrape_people(rows, gender)
+
+    def scrape_people(self, rows, gender):
         assert len(rows), 'No members found'
         for row in rows:
             name = row.xpath('.//div[@class="ce-mip-mp-name"][1]')[0].text_content()
@@ -43,6 +52,7 @@ class CanadaPersonScraper(CanadianScraper):
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
             m.add_source(COUNCIL_PAGE)
             m.add_source(url)
+            m.gender = gender
             # @see https://www.ourcommons.ca/Members/en/ziad-aboultaif(89156)
             if email:
                 m.add_contact('email', email)
