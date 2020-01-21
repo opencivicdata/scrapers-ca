@@ -17,7 +17,7 @@ class CanadaPersonScraper(CanadianScraper):
 
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        rows = page.xpath('//div[@class="ce-mip-mp-tile-container"]')[1:]
+        rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
         assert len(rows), 'No members found'
         for row in rows:
             name = row.xpath('.//div[@class="ce-mip-mp-name"][1]')[0].text_content()
