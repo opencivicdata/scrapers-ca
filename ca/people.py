@@ -3,13 +3,13 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import hashlib
 
-COUNCIL_PAGE_MALE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=M' 
+COUNCIL_PAGE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all'
+COUNCIL_PAGE_MALE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=M'
 COUNCIL_PAGE_FEMALE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=F'
 IMAGE_PLACEHOLDER_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']
 
 
 class CanadaPersonScraper(CanadianScraper):
-
     """
     The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
     accessible from http://www.parl.gc.ca/Parliamentarians/en/members has no
@@ -18,8 +18,8 @@ class CanadaPersonScraper(CanadianScraper):
 
     def scrape(self):
         genders = {
-        'male': COUNCIL_PAGE_MALE,
-        'female': COUNCIL_PAGE_FEMALE,
+            'male': COUNCIL_PAGE_MALE,
+            'female': COUNCIL_PAGE_FEMALE
         }
         for gender, url in genders.items():
             page = self.lxmlize(url)
@@ -50,7 +50,7 @@ class CanadaPersonScraper(CanadianScraper):
             photo = mp_page.xpath('.//div[@class="ce-mip-mp-profile-container"]//img/@src')[0]
 
             m = Person(primary_org='lower', name=name, district=constituency, role='MP', party=party)
-            m.add_source(COUNCIL_PAGE_MALE)
+            m.add_source(COUNCIL_PAGE)
             m.add_source(url)
             m.gender = gender
             # @see https://www.ourcommons.ca/Members/en/ziad-aboultaif(89156)
