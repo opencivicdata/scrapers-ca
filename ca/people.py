@@ -3,13 +3,13 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import hashlib
 
-COUNCIL_PAGE_MALE = 'https://www.ourcommons.ca/Members/en/search?view=ListAll' # TODO
-COUNCIL_PAGE_FEMALE = 'https://www.ourcommons.ca/Members/en/search?view=ListAll' # TODO
+COUNCIL_PAGE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all'
+COUNCIL_PAGE_MALE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=M'
+COUNCIL_PAGE_FEMALE = 'https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=F'
 IMAGE_PLACEHOLDER_SHA1 = ['e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d']
 
 
 class CanadaPersonScraper(CanadianScraper):
-
     """
     The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
     accessible from http://www.parl.gc.ca/Parliamentarians/en/members has no
@@ -18,8 +18,8 @@ class CanadaPersonScraper(CanadianScraper):
 
     def scrape(self):
         genders = {
-        'male': COUNCIL_PAGE_MALE,
-        'female': COUNCIL_PAGE_FEMALE,
+            'male': COUNCIL_PAGE_MALE,
+            'female': COUNCIL_PAGE_FEMALE
         }
         for gender, url in genders.items():
             page = self.lxmlize(url)
