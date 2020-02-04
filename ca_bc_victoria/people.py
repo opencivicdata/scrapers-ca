@@ -2,6 +2,6 @@ from utils import CSVScraper
 
 
 class VictoriaPersonScraper(CSVScraper):
-    # http://opendata.victoria.ca/datasets/councillor-contact-information-2014-2018
-    csv_url = 'http://www.victoria.ca/assets/City~Hall/Open~Data/Councillor%20Contact%20Info.csv'
+    # http://opendata.victoria.ca/datasets/councillor-contact-information-2018-2022
+    csv_url = 'https://opendata.arcgis.com/datasets/d524b5f7e64b40a5ae118dde1852fc22_0.csv?outSR=4326'
     many_posts_per_area = True
