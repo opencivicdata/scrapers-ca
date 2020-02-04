@@ -15,11 +15,11 @@ class CalgaryPersonScraper(CanadianScraper):
         for index, councillor in enumerate(councillors):
             h2 = councillor.xpath('.//h2')[0]
             name = h2.xpath('./text()')[0]
+
             district = h2.xpath('./following-sibling::div//text()')[0]
             role = 'Councillor'
             email = None
-
-            if not district and index == 0:
+            if 'Mayor' in district:
                 district = 'Calgary'
                 role = 'Mayor'
                 email = 'themayor@calgary.ca'
