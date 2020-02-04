@@ -21,7 +21,11 @@ class CharlottetownPersonScraper(CanadianScraper):
         for group in groups:
             para = group[0]
             text = para.xpath('.//strong[1]/text()')[0]
-            if 'Mayor' in text:
+            if 'Deputy Mayor' in text:
+                role = 'Councillor'
+                match = re.search(r'Deputy Mayor (.+) - Councillor (Ward \d+)', text)
+                district = match.group(2)
+            elif 'Mayor' in text:
                 role = 'Mayor'
                 match = re.search(r'Mayor (.+)', text)
                 district = 'Charlottetown'
