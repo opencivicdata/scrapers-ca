@@ -317,7 +317,7 @@ class CSVScraper(CanadianScraper):
     underscores with spaces (e.g. because Esri fields can't contain spaces).
     """
     def header_converter(self, s):
-        header = s.lower().replace('_', ' ')
+        header = clean_string(s.lower().replace('_', ' '))
         if hasattr(self, 'locale'):
             return self.column_headers[self.locale].get(header, header)
         else:
