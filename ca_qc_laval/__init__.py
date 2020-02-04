@@ -11,4 +11,5 @@ class Laval(CanadianJurisdiction):
         {'name': 'Action Laval'},
         {'name': 'Independant'},
         {'name': 'Mouvement lavallois'},
+        {'name': 'Parti Laval'},
     ]
