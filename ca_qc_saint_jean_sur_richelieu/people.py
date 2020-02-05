@@ -2,7 +2,7 @@ from utils import CanadianScraper, CanadianPerson as Person, clean_string
 
 import re
 
-COUNCIL_PAGE = 'http://www.ville.saint-jean-sur-richelieu.qc.ca/conseil-municipal/membres-conseil/Pages/membres-conseil.aspx'
+COUNCIL_PAGE = 'https://sjsr.ca/conseil-municipal/'
 
 
 class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
