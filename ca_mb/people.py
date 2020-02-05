@@ -11,6 +11,7 @@ def get_party(abbreviation):
         'L': 'Manitoba Liberal Party',
         'LIB': 'Manitoba Liberal Party',
         'IND': 'Independent',
+        'IND LIB': 'Independent Liberal',
     }[abbreviation]
 
 
