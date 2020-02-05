@@ -8,6 +8,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
         'Liberal': 'Nova Scotia Liberal Party',
         'PC': 'Progressive Conservative Association of Nova Scotia',
         'NDP': 'Nova Scotia New Democratic Party',
+        'Independent': 'Independent',
     }
 
     def scrape(self):
