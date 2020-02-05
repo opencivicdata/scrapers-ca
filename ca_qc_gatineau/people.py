@@ -11,7 +11,7 @@ class GatineauPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         # it's all javascript rendered on the client... wow.
-        js = page.xpath('string(//div[@class="inner_container"]/div/script[2])')  # allow string()
+        js = page.xpath('string(//div[@id="contenu-principal-centre-contenu-index"]/script[2])')  # allow string()
         districts = re.findall(r'arrayDistricts\[a.+"(.+)"', js)
         names = re.findall(r'arrayMembres\[a.+"(.+)"', js)
         urls = re.findall(r'arrayLiens\[a.+"(.+)"', js)
@@ -31,7 +31,7 @@ class GatineauPersonScraper(CanadianScraper):
 
             profile_url = COUNCIL_PAGE + '/' + url.split('/')[-1]
             profile_page = self.lxmlize(profile_url)
-            photo_url = profile_page.xpath('//table//img/@src')[0]
+            photo_url = profile_page.xpath('//div[@class="colonnes-2"]//img/@src')[0]
             district = 'District ' + re.search(r'\d+', raw_district).group(0)
             email = self.get_email(profile_page)
             p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
