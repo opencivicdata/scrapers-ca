@@ -2,7 +2,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 
 import re
 
-COUNCIL_PAGE = 'http://www.assembly.pe.ca/current-members'
+COUNCIL_PAGE = 'https://www.assembly.pe.ca/members'
 
 
 class PrinceEdwardIslandPersonScraper(CanadianScraper):

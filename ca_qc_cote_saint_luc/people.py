@@ -4,7 +4,7 @@ from utils import CanadianScraper, CanadianPerson as Person, CUSTOM_USER_AGENT
 import re
 from urllib.parse import urljoin
 
-COUNCIL_PAGE = 'http://www.cotesaintluc.org/Administration'
+COUNCIL_PAGE = 'https://cotesaintluc.org/city-government/council/#councilmembers'
 
 
 class CoteSaintLucPersonScraper(CanadianScraper):
