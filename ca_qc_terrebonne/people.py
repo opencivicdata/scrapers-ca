@@ -17,7 +17,6 @@ class TerrebonnePersonScraper(CanadianScraper):
             page = self.lxmlize(councillor.xpath('.//a[@class="member-box__calltoaction"]/@href')[0])
             district = page.xpath('.//div[@class="fiche__category"]/text()')[0]
 
-
             if district == 'Maire':
                 district = 'Terrebonne'
                 role = 'Maire'
