@@ -37,7 +37,7 @@ class ReginaPersonScraper(CanadianScraper):
         # Scrape and add phone.
         phone_path = page.xpath('//div[@class="councillor__contact"]//ul/li/a/@href[contains(., "306")]')[0]
         phone_string = phone_path.rsplit('/', 1)[-1]
-        phone = re.sub('[^0-9]','', phone_string)
+        phone = re.sub('[^0-9]', '', phone_string)
         if phone:
             m.add_contact('voice', phone, 'legislature')
 
@@ -60,7 +60,7 @@ class ReginaPersonScraper(CanadianScraper):
         # Scrape and add phone.
         phone_path = page.xpath('//div[@class="councillor__contact"]//ul/li/a/@href[contains(., "306")]')[0]
         phone_string = phone_path.rsplit('/', 1)[-1]
-        phone = re.sub('[^0-9]','', phone_string)
+        phone = re.sub('[^0-9]', '', phone_string)
         if phone:
             m.add_contact('voice', phone, 'legislature')
 
