@@ -157,8 +157,10 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         representative_phone = str(representative.xpath('text()[contains(., "Phone")]'))[12:-2].replace('-', '')
 
         # Get email.
-        representative_email = representative.xpath('a[contains(@href,"mailto:")]/text()')[0]
-        representative_email = email_corrections.get(representative_email, representative_email)
+        email_scrape = representative.xpath('a[contains(@href,"mailto:")]/text()')
+        if email_scrape:
+            representative_email = email_scrape[0]
+            representative_email = email_corrections.get(representative_email, representative_email)
 
         # Create record and append contact data.
         p = Person(primary_org='government', primary_org_name=organization_name, name=representative_name, district=division_name, role=role)
@@ -168,7 +170,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         if representative_name in duplicate_names:
             p.birth_date = str(self.birth_date)
             self.birth_date += 1
-        if representative_email:
+        if email_scrape:
             p.add_contact('email', representative_email)
         if representative_phone and len(representative_phone) == 10:
             p.add_contact('voice', representative_phone, 'legislature')
