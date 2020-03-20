@@ -159,8 +159,8 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
         # Get email.
         email_scrape = representative.xpath('a[contains(@href,"mailto:")]/text()')
         if email_scrape:
-          representative_email = email_scrape[0]
-          representative_email = email_corrections.get(representative_email, representative_email)
+            representative_email = email_scrape[0]
+            representative_email = email_corrections.get(representative_email, representative_email)
 
         # Create record and append contact data.
         p = Person(primary_org='government', primary_org_name=organization_name, name=representative_name, district=division_name, role=role)
