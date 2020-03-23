@@ -109,7 +109,6 @@ for gid in range(3):
 class CanadianScraper(Scraper):
 
     def get_email(self, node, expression='.', *, error=True):
-
         """
         Make sure that the node/expression is narrow enough to not capture a
         generic email address in the footer of the page, for example.
@@ -138,7 +137,6 @@ class CanadianScraper(Scraper):
             raise Exception('No email node in {}'.format(etree.tostring(node)))
 
     def get_phone(self, node, *, area_codes=[], error=True):
-
         """
         Don't use if multiple telephone numbers are present, e.g. voice and fax.
         If writing a new scraper, check that extensions are captured.
@@ -312,22 +310,24 @@ class CSVScraper(CanadianScraper):
         },
     }
 
-    """
-    Normalizes a column header name. By default, lowercases it and replaces
-    underscores with spaces (e.g. because Esri fields can't contain spaces).
-    """
     def header_converter(self, s):
+        """
+        Normalizes a column header name. By default, lowercases it and replaces
+        underscores with spaces (e.g. because Esri fields can't contain spaces).
+        """
+
         header = clean_string(s.lower().replace('_', ' '))
         if hasattr(self, 'locale'):
             return self.column_headers[self.locale].get(header, header)
         else:
             return header
 
-    """
-    Returns whether the row should be imported. By default, skips empty rows
-    and rows in which a name component is "Vacant".
-    """
     def is_valid_row(self, row):
+        """
+        Returns whether the row should be imported. By default, skips empty rows
+        and rows in which a name component is "Vacant".
+        """
+
         empty = ('', 'Vacant')
         if not any(row.values()):
             return False
