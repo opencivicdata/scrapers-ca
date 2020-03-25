@@ -1,75 +1,39 @@
-from utils import CanadianScraper, CanadianPerson as Person, clean_string
-
-import re
+from utils import CanadianScraper, CanadianPerson as Person
+from urllib.parse import urljoin
 
 COUNCIL_PAGE = 'https://sjsr.ca/conseil-municipal/'
 
 
 class SaintJeanSurRichelieuPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, encoding='utf-8')
 
-        councillors = page.xpath('//div[@class="article-content"]//td[@class="ms-rteTableOddCol-0"]')
-        yield self.scrape_mayor(councillors[0])
+        councillors = page.xpath('//div[contains(@class,"fl-module-content fl-node-content")]/div[@class="fl-rich-text"]')[1:]
         assert len(councillors), 'No councillors found'
-        for councillor in councillors[1:]:
-            if not councillor.xpath('.//a'):
-                continue
+        for councillor in councillors:
 
-            texts = [text for text in councillor.xpath('.//text()') if clean_string(text)]
-            name = texts[0]
-            district = texts[1]
-            url = councillor.xpath('.//a/@href')[0]
-            page = self.lxmlize(url)
+            name = councillor.xpath('.//a//text()')[0]
+            url = councillor.xpath('.//a//@href')[0]
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
+            if 'maire' in url:
+                ward = 'Saint-Jean-sur-Richelieu'
+                role = 'Maire'
+            else:
+                role = 'Conseiller'
+                ward = councillor.xpath('.//p[contains(.,"District")]/text()')[-1]
+
+            node = self.lxmlize(url)
+            photo_url_rel = node.xpath('//div[@class="fl-photo-content fl-photo-img-jpg"]//img/@src')[0]
+            photo_url = urljoin(url, photo_url_rel)
+
+            p = Person(primary_org='legislature', name=name, district=ward, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
+            p.image = photo_url
 
-            p.image = councillor.xpath('./preceding-sibling::td//img/@src')[-1]
+            voice = node.xpath('//div[contains(@class,"fl-module-content fl-node-content")]/div[@class="fl-rich-text"]/p[2]/strong//text()')
 
-            contacts = page.xpath('.//td[@class="ms-rteTableOddCol-0"]//text()')
-            for contact in contacts:
-                if re.findall(r'[0-9]{4}', contact):
-                    phone = contact.strip().replace(' ', '-')
-                    p.add_contact('voice', phone, 'legislature')
-            get_links(p, page.xpath('.//td[@class="ms-rteTableOddCol-0"]')[0])
+            if voice:
+                p.add_contact('voice', voice[0], 'legislature')
 
-            email = self.get_email(page)
-            p.add_contact('email', email)
             yield p
-
-    def scrape_mayor(self, div):
-        name = div.xpath('.//a')[0].text_content()
-        url = div.xpath('.//a/@href')[0]
-        page = self.lxmlize(url)
-        contact_url = page.xpath('//a[@title="Joindre le maire"]/@href')[0]
-        contact_page = self.lxmlize(contact_url)
-
-        p = Person(primary_org='legislature', name=name, district='Saint-Jean-sur-Richelieu', role='Maire')
-        p.add_source(COUNCIL_PAGE)
-        p.add_source(url)
-        p.add_source(contact_url)
-
-        p.image = div.xpath('./preceding-sibling::td//img/@src')[-1]
-
-        contacts = contact_page.xpath('//div[@id="ctl00_PlaceHolderMain_ctl01_ctl01__ControlWrapper_RichHtmlField"]//div/font/text()')
-        address = ' '.join(contacts[:4])
-        phone = contacts[-3].split(':')[1].strip().replace(' ', '-')
-        fax = contacts[-2].split(':')[1].strip().replace(' ', '-')
-        p.add_contact('address', address, 'legislature')
-        p.add_contact('voice', phone, 'legislature')
-        p.add_contact('fax', fax, 'legislature')
-        # mayor's email is a form
-        return p
-
-
-def get_links(councillor, div):
-    links = div.xpath('.//a')
-    for link in links:
-        link = link.attrib['href']
-
-        if 'mailto:' in link:
-            continue
-        else:
-            councillor.add_link(link)
