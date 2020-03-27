@@ -1,7 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-
 COUNCIL_PAGE = 'https://www.vsj.ca/conseil-municipal-et-comite-executif/membres-du-conseil-municipal'
 
 
