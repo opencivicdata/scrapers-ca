@@ -13,23 +13,22 @@ class SaintJeromePersonScraper(CanadianScraper):
 
         for councillor in councillors:
             name = councillor.xpath('.//h2/text()')[0]
-            district_data = councillor.xpath('.//div[contains(@class,"district")]/text()')[0]
+            district = councillor.xpath('.//div[contains(@class,"district")]/text()')[0].replace('numéro ', '')
 
-            if 'Maire' in district_data:
-                district = 'Saint-Jerome'
+            if 'Maire' in district:
+                district = 'Saint-Jérôme'
                 role = 'Maire'
             else:
-                district = 'District ' + re.sub('[^0-9]', '', district_data.split('ro')[-1])
                 role = 'Conseiller'
 
             image = councillor.xpath('.//div[@class="portrait_single"]/img/@data-lazy-src')[0]
             contact = councillor.xpath('.//div[contains(@class,"phone")]/text()')[0]
-            p = Person(primary_org='legislature',
-                       name=name,
-                       district=district,
-                       role=role)
+
+            p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.image = image
+
             p.add_contact('voice', contact, 'legislature')
             p.add_contact('email', self.get_email(councillor))
+
             yield p
