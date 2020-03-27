@@ -1,5 +1,4 @@
 from utils import CSVScraper, CanadianPerson as Person
-from opencivicdata.divisions import Division
 from pupa.scrape import Organization, Post
 from collections import defaultdict
 
@@ -85,7 +84,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     name = '{}'.format(row['full name']).strip(' .,')
 
-                    province = row.get('province')
                     role = row['primary role']
 
                     # ca_qc_laval: "maire …", "conseiller …"
@@ -157,7 +155,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                             p.add_name(other_name)
 
                     p.validate()
-
 
                     yield p
             except Exception:

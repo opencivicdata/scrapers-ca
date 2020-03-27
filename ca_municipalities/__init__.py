@@ -1,4 +1,3 @@
-from pupa.scrape.base import BaseModel
 from utils import CanadianJurisdiction
 
 
