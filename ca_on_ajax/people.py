@@ -11,31 +11,29 @@ class AjaxPersonScraper(CanadianScraper):
         assert len(councillors), 'No councillors found'
         for councillor in councillors:
             image = councillor.xpath('.//@src')[0]
-            councillor_name = councillor.xpath('.//tr/td[1]/p[1]/img/@alt')[0]
-            name = councillor_name.split('-', 1)[0].strip()
-            district = councillor_name.split('Councillor ')[-1].strip()
+            alt = councillor.xpath('.//tr/td[1]/p[1]/img/@alt')[0]
 
-            if 'Mayor' in councillor_name:
+            if 'Mayor' in alt:
+                name = alt
                 district = 'Ajax'
                 role = 'Mayor'
-
             else:
-                role = councillor_name.split('Ward ')[0].strip()
-                role = role.split('-', 1)[-1].strip()
+                name, rest = alt.split(' - ', 1)
+                district = rest.split('Councillor ', 1)[-1].strip()
+                role = rest.split('Ward ', 1)[0].strip()
 
-            cell = councillor.xpath('.//p[contains(.,"Cel")]/text()')[0]
-            tel = councillor.xpath('.//p[contains(.,"Cel")]/text()')[1]
-            phone = cell.replace('\xa0', ' ')
+            cell = councillor.xpath('.//p[contains(.,"Cel")]/text()')[0].replace('\xa0', ' ')
+            voice = councillor.xpath('.//p[contains(.,"Cel")]/text()')[1]
+            email = self.get_email(councillor)
 
             p = Person(primary_org='legislature', name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.image = image
-            email = self.get_email(councillor)
 
-            if phone:
-                p.add_contact('cell', phone, 'legislature')
-            if tel:
-                p.add_contact('voice', tel, 'legislature')
+            if cell:
+                p.add_contact('cell', cell, 'legislature')
+            if voice:
+                p.add_contact('voice', voice, 'legislature')
             if email:
                 p.add_contact('email', email)
             yield p
