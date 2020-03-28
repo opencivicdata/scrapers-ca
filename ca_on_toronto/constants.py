@@ -1,8 +1,0 @@
-CALENDAR_DAY_TEMPLATE = 'http://app.toronto.ca/tmmis/meetingCalendarView.do?function=calendarCellView&year={}&month={}&date={}'
-AGENDA_FULL_STANDARD_TEMPLATE = 'http://app.toronto.ca/tmmis/viewPublishedReport.do?function=getAgendaReport&meetingId={}'
-AGENDA_LIST_STANDARD_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getAgendaItems&print=N&meetingId={}'
-AGENDA_FULL_COUNCIL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewPublishedReport.do?function=getCouncilAgendaReport&meetingId={}'
-AGENDA_LIST_COUNCIL_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemList.do?function=getCouncilAgendaItems&print=N&meetingId={}'
-AGENDA_ITEM_TEMPLATE = 'http://app.toronto.ca/tmmis/viewAgendaItemHistory.do?item={}'
-COMMITTEE_LIST_TEMPLATE = 'http://app.toronto.ca/tmmis/decisionBodyList.do?function=displayDecisionBodyList&term={}'
-TWO_LETTER_ORG_CODE_SCHEME = 'code'
