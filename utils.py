@@ -169,10 +169,10 @@ class CanadianScraper(Scraper):
             raise Exception('No link matching {}'.format(substring))
 
     def get(self, *args, **kwargs):
-        return super(CanadianScraper, self).get(*args, verify=SSL_VERIFY, **kwargs)
+        return super().get(*args, verify=SSL_VERIFY, **kwargs)
 
     def post(self, *args, **kwargs):
-        return super(CanadianScraper, self).post(*args, verify=SSL_VERIFY, **kwargs)
+        return super().post(*args, verify=SSL_VERIFY, **kwargs)
 
     def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None, xml=False):
         self.user_agent = user_agent
@@ -372,108 +372,110 @@ class CSVScraper(CanadianScraper):
             if row.get('primary role'):
                 row['primary role'] = re.split(r'(?: (?:et)\b|[;\n])', row['primary role'], 1)[0].strip()
 
-            if self.is_valid_row(row):
-                for key, corrections in self.corrections.items():
-                    if not isinstance(corrections, dict):
-                        row[key] = corrections(row[key])
-                    elif row[key] in corrections:
-                        row[key] = corrections[row[key]]
+            if not self.is_valid_row(row):
+                continue
 
-                # ca_qc_montreal
-                if row.get('last name') and not re.search(r'[a-z]', row['last name']):
-                    row['last name'] = re.sub(r'(?<=\b[A-Z])[A-ZÀÈÉ]+\b', lambda x: x.group(0).lower(), row['last name'])
+            for key, corrections in self.corrections.items():
+                if not isinstance(corrections, dict):
+                    row[key] = corrections(row[key])
+                elif row[key] in corrections:
+                    row[key] = corrections[row[key]]
 
-                if row.get('first name') and row.get('last name'):
-                    name = '{} {}'.format(row['first name'], row['last name'])
-                else:
-                    name = row['name']
+            # ca_qc_montreal
+            if row.get('last name') and not re.search(r'[a-z]', row['last name']):
+                row['last name'] = re.sub(r'(?<=\b[A-Z])[A-ZÀÈÉ]+\b', lambda x: x.group(0).lower(), row['last name'])
 
-                province = row.get('province')
-                role = row['primary role']
+            if row.get('first name') and row.get('last name'):
+                name = '{} {}'.format(row['first name'], row['last name'])
+            else:
+                name = row['name']
 
-                # ca_qc_laval: "maire …", "conseiller …"
-                if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
-                    role = role.capitalize()
+            province = row.get('province')
+            role = row['primary role']
 
-                if self.district_name_format_string:
-                    if row['district id']:
-                        district = self.district_name_format_string.format(**row)
-                    else:
-                        district = self.jurisdiction.division_name
-                elif row.get('district name'):
-                    district = row['district name']
-                elif self.fallbacks.get('district name'):
-                    district = row[self.fallbacks['district name']] or self.jurisdiction.division_name
+            # ca_qc_laval: "maire …", "conseiller …"
+            if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
+                role = role.capitalize()
+
+            if self.district_name_format_string:
+                if row['district id']:
+                    district = self.district_name_format_string.format(**row)
                 else:
                     district = self.jurisdiction.division_name
+            elif row.get('district name'):
+                district = row['district name']
+            elif self.fallbacks.get('district name'):
+                district = row[self.fallbacks['district name']] or self.jurisdiction.division_name
+            else:
+                district = self.jurisdiction.division_name
 
-                district = district.replace('–', '—')  # n-dash, m-dash
+            district = district.replace('–', '—')  # n-dash, m-dash
 
-                # ca_qc_montreal
-                if district == 'Ville-Marie' and role == 'Maire de la Ville de Montréal':
-                    district = self.jurisdiction.division_name
+            # ca_qc_montreal
+            if district == 'Ville-Marie' and role == 'Maire de la Ville de Montréal':
+                district = self.jurisdiction.division_name
 
-                if self.many_posts_per_area and role not in self.unique_roles:
-                    seat_numbers[role][district] += 1
-                    district = '{} (seat {})'.format(district, seat_numbers[role][district])
+            if self.many_posts_per_area and role not in self.unique_roles:
+                seat_numbers[role][district] += 1
+                district = '{} (seat {})'.format(district, seat_numbers[role][district])
 
-                lines = []
-                if row.get('address line 1'):
-                    lines.append(row['address line 1'])
-                if row.get('address line 2'):
-                    lines.append(row['address line 2'])
-                if row.get('locality'):
-                    parts = [row['locality']]
-                    if province:
-                        parts.append(province)
-                    if row.get('postal code'):
-                        parts.extend(['', row['postal code']])
-                    lines.append(' '.join(parts))
+            lines = []
+            if row.get('address line 1'):
+                lines.append(row['address line 1'])
+            if row.get('address line 2'):
+                lines.append(row['address line 2'])
+            if row.get('locality'):
+                parts = [row['locality']]
+                if province:
+                    parts.append(province)
+                if row.get('postal code'):
+                    parts.extend(['', row['postal code']])
+                lines.append(' '.join(parts))
 
-                organization_classification = self.organization_classification or self.jurisdiction.classification
-                p = CanadianPerson(primary_org=organization_classification, name=name, district=district, role=role, party=row.get('party name'))
-                p.add_source(self.csv_url)
+            organization_classification = self.organization_classification or self.jurisdiction.classification
+            p = CanadianPerson(primary_org=organization_classification, name=name, district=district, role=role, party=row.get('party name'))
+            p.add_source(self.csv_url)
 
-                if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
-                    if len(row['district id']) == 7:
-                        p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(row['district id'])
+            if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
+                if len(row['district id']) == 7:
+                    p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(row['district id'])
 
-                if row.get('gender'):
-                    p.gender = row['gender']
-                if row.get('photo url'):
-                    p.image = row['photo url']
+            if row.get('gender'):
+                p.gender = row['gender']
+            if row.get('photo url'):
+                p.image = row['photo url']
 
-                if row.get('source url'):
-                    p.add_source(row['source url'])
+            if row.get('source url'):
+                p.add_source(row['source url'])
 
-                if row.get('website'):
-                    p.add_link(row['website'], note='web site')
-                if row.get('facebook'):
-                    p.add_link(re.sub(r'[#?].+', '', row['facebook']))
-                if row.get('twitter'):
-                    p.add_link(row['twitter'])
+            if row.get('website'):
+                p.add_link(row['website'], note='web site')
+            if row.get('facebook'):
+                p.add_link(re.sub(r'[#?].+', '', row['facebook']))
+            if row.get('twitter'):
+                p.add_link(row['twitter'])
 
-                if row['email']:
-                    p.add_contact('email', row['email'].strip().split('\n')[-1])  # ca_qc_montreal
-                if lines:
-                    p.add_contact('address', '\n'.join(lines), 'legislature')
-                if row.get('phone'):
-                    p.add_contact('voice', row['phone'].split(';', 1)[0], 'legislature')  # ca_qc_montreal, ca_on_huron
-                if row.get('fax'):
-                    p.add_contact('fax', row['fax'], 'legislature')
-                if row.get('cell'):
-                    p.add_contact('cell', row['cell'], 'legislature')
-                if row.get('birth date'):
-                    p.birth_date = row['birth date']
+            if row['email']:
+                p.add_contact('email', row['email'].strip().split('\n')[-1])  # ca_qc_montreal
+            if lines:
+                p.add_contact('address', '\n'.join(lines), 'legislature')
+            if row.get('phone'):
+                p.add_contact('voice', row['phone'].split(';', 1)[0], 'legislature')  # ca_qc_montreal, ca_on_huron
+            if row.get('fax'):
+                p.add_contact('fax', row['fax'], 'legislature')
+            if row.get('cell'):
+                p.add_contact('cell', row['cell'], 'legislature')
+            if row.get('birth date'):
+                p.birth_date = row['birth date']
 
-                if row.get('incumbent'):
-                    p.extras['incumbent'] = row['incumbent']
+            if row.get('incumbent'):
+                p.extras['incumbent'] = row['incumbent']
 
-                if name in self.other_names:
-                    for other_name in self.other_names[name]:
-                        p.add_name(other_name)
+            if name in self.other_names:
+                for other_name in self.other_names[name]:
+                    p.add_name(other_name)
 
-                yield p
+            yield p
 
 
 class CanadianJurisdiction(Jurisdiction):
@@ -499,7 +501,7 @@ class CanadianJurisdiction(Jurisdiction):
     member_role = None
 
     def __init__(self):
-        super(CanadianJurisdiction, self).__init__()
+        super().__init__()
         for module, name in (
                 ('bills', 'Bill'),
                 ('bills-incremental', 'IncrementalBill'),
@@ -562,7 +564,7 @@ class CanadianPerson(Person):
                 kwargs[k] = clean_string(v)
         if not district:
             raise Exception('No district')
-        super(CanadianPerson, self).__init__(name=name, district=district, role=role, **kwargs)
+        super().__init__(name=name, district=district, role=role, **kwargs)
 
     def __setattr__(self, name, value):
         """
@@ -574,7 +576,7 @@ class CanadianPerson(Person):
                 value = 'male'
             elif value == 'f':
                 value = 'female'
-        super(CanadianPerson, self).__setattr__(name, value)
+        super().__setattr__(name, value)
 
     def add_link(self, url, *, note=''):
         """
