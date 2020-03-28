@@ -26,7 +26,7 @@ class LavalPersonScraper(CSVScraper):
     # Absurdly, Laval has decided "les en-têtes ne comportent pas de
     # caractères accentués ou d'espaces" and includes a byte order mark.
     def header_converter(self, s):
-        s = super(LavalPersonScraper, self).header_converter(s.replace('-', ' '))
+        s = super().header_converter(s.replace('-', ' '))
         return {
             'role': 'primary role',
             'prenom': 'first name',

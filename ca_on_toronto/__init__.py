@@ -25,7 +25,7 @@ class Toronto(TorontoJurisdiction):
         yield organization
 
     def __init__(self):
-        super(Toronto, self).__init__()
+        super().__init__()
         self.legislative_sessions = [self.legislative_session(session) for session in self.sessions()]
 
     def get_session_list(self):

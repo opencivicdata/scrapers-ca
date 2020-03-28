@@ -11,7 +11,7 @@ class StrathconaCountyPersonScraper(CSVScraper):
     }
 
     def header_converter(self, s):
-        s = super(StrathconaCountyPersonScraper, self).header_converter(s)
+        s = super().header_converter(s)
         if s == 'district id':
             return 'district name'
         return s

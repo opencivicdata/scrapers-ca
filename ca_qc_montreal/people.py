@@ -46,7 +46,7 @@ class MontrealPersonScraper(CSVScraper):
     }
 
     def header_converter(self, s):
-        s = super(MontrealPersonScraper, self).header_converter(s).strip()
+        s = super().header_converter(s).strip()
         return {
             'rôles': 'primary role',
             'adresse ligne 1 (arrondissement)': 'address line 1',

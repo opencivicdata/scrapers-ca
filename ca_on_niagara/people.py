@@ -12,7 +12,7 @@ class NiagaraPersonScraper(CSVScraper):
     }
 
     def header_converter(self, s):
-        s = super(NiagaraPersonScraper, self).header_converter(s)
+        s = super().header_converter(s)
         if s == 'district id':
             return 'district name'
         return s
