@@ -54,18 +54,20 @@ class ChathamKentPersonScraper(CanadianScraper):
                 voice_note_index = 0
                 for contact in contacts:
                     content = contact.text_content().strip()
-                    if content:
-                        contact_type, contact = contact.text_content().split(':')
-                        contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type.strip()]
+                    if not content:
+                        continue
 
-                        if contact_type == 'voice':
-                            note = voice_notes[voice_note_index]
-                            voice_note_index += 1
-                        elif contact_type == 'email':
-                            note = ''
-                        else:
-                            note = 'legislature'
+                    contact_type, contact = contact.text_content().split(':')
+                    contact_type = CONTACT_DETAIL_TYPE_MAP[contact_type.strip()]
 
-                        p.add_contact(contact_type, contact.strip(), note)
+                    if contact_type == 'voice':
+                        note = voice_notes[voice_note_index]
+                        voice_note_index += 1
+                    elif contact_type == 'email':
+                        note = ''
+                    else:
+                        note = 'legislature'
+
+                    p.add_contact(contact_type, contact.strip(), note)
 
                 yield p
