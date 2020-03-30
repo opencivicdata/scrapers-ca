@@ -4,39 +4,18 @@ from collections import defaultdict
 
 import re
 
-LIST_PAGE = 'https://www.civicinfo.bc.ca/people'
-
-
 class CanadaMunicipalitiesPersonScraper(CSVScraper):
     csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrGXQy8qk16OhuTjlccoGB4jL5e8X1CEqRbg896ufLdh67DQk9nuGm-oufIT0HRMPEnwePw2HDx1Vj/pub?gid=0&single=true&output=csv'
-    other_names = {}
-    corrections = {}
-    organizations = {}
     encoding = 'utf-8'
 
     """
-    Returns whether the row should be imported. By default, skips empty rows
-    and rows in which a name component is "Vacant".
+    Returns whether the row should be imported.
     """
     def is_valid_row(self, row):
-        empty = ('', 'Vacant')
-        if not any(row.values()):
-            return False
-        if 'first name' in row and 'last name' in row:
-            return row['last name'] not in empty and row['first name'] not in empty
-        return row['full name'] not in empty
-
-    def validateOrganizationClassification(self, organizationClassification):
-        if not organizationClassification:
-            organizationClassification = 'government'
-        else:
-            allowedClassifications = ['legislature', 'executive', 'upper', 'lower', 'party', 'committee', 'commission', 'corporation', 'agency', 'department', 'government']
-            if (organizationClassification not in allowedClassifications):
-                organizationClassification = 'government'
-
-        return organizationClassification
+        return super().is_valid_row(row) and row['organization']
 
     def scrape(self):
+        organizations = {}
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
         reader = self.csv_reader(self.csv_url, delimiter=self.delimiter, header=True, encoding=self.encoding, skip_rows=self.skip_rows)
@@ -51,68 +30,37 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                         elif row[key] in corrections:
                             row[key] = corrections[row[key]]
 
-                    organizationClassification = row.get('classification')
-                    organizationClassification = self.validateOrganizationClassification(organizationClassification)
+                    organization_classification = 'government'
 
                     organization = None
-                    organizationName = row['organization']
-                    if organizationName:
-                        if self.organizations.get(organizationName.lower()):
-                            organization = self.organizations.get(organizationName.lower())
-                        else:
-                            organization = Organization(organizationName, classification=organizationClassification)
-                            organization.add_source(self.csv_url)
-                            yield organization
-                            self.organizations[organizationName] = organization
+                    organization_name = row['organization']
+                    organization_key = organization_name.lower()
+                    if organization_key in organizations:
+                        organization = organizations[organization_key]
                     else:
-                        continue
-
-                    # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
-                    # ca_qc_montreal: "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
-                    if row.get('primary role'):
-                        row['primary role'] = re.split(r'(?: (?:et)\b|[;\n])', row['primary role'], 1)[0].strip()
-                    else:
-                        row['primary role'] = 'Councillor'
-
-                    roleName = row.get('primary role')
-
-                    post = Post(role=roleName, label=organizationName, organization_id=organization._id)
-                    yield post
-
-                    if row.get('full name') and not re.search(r'[a-z]', row['full name']):
-                        row['full name'] = re.sub(r'(?<=\b[A-Z])[A-ZÀÈÉ]+\b', lambda x: x.group(0).lower(), row['full name'])
-
-                    name = '{}'.format(row['full name']).strip(' .,')
+                        organization = Organization(organization_name, classification=organization_classification)
+                        organization.add_source(self.csv_url)
+                        yield organization
+                        organizations[organization_key] = organization
 
                     role = row['primary role']
+
+                    post = Post(role=role, label=organization_name, organization_id=organization._id)
+                    yield post
+
+                    name = row['full name'].strip(' .,')
 
                     # ca_qc_laval: "maire …", "conseiller …"
                     if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
                         role = role.capitalize()
 
-                    if self.district_name_format_string:
-                        if row['district id']:
-                            district = self.district_name_format_string.format(**row)
-                        else:
-                            district = self.jurisdiction.division_name
-                    elif row.get('district name'):
-                        district = row['district name']
-                    elif self.fallbacks.get('district name'):
-                        district = row[self.fallbacks['district name']] or self.jurisdiction.division_name
-                    else:
-                        district = self.jurisdiction.division_name
-
-                    district = district.replace('–', '—')  # n-dash, m-dash
-
-                    # ca_qc_montreal
-                    if district == 'Ville-Marie' and role == 'Maire de la Ville de Montréal':
-                        district = self.jurisdiction.division_name
+                    district = row['district name']
 
                     if self.many_posts_per_area and role not in self.unique_roles:
                         seat_numbers[role][district] += 1
                         district = '{} (seat {})'.format(district, seat_numbers[role][district])
 
-                    p = Person(primary_org=organizationClassification, name=name, district=district, role=role, party=row.get('party name'))
+                    p = Person(primary_org=organization_classification, name=name, district=district, role=role, party=row.get('party name'))
                     p.add_source(self.csv_url)
 
                     if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
@@ -154,9 +102,10 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                         for other_name in self.other_names[name]:
                             p.add_name(other_name)
 
+                    # Validate person entity so that we can catch the exception if needed.
                     p.validate()
 
                     yield p
-            except Exception:
-                print('ERROR')
+            except Exception as e:
+                print(repr(e))
                 continue
