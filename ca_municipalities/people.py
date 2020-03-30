@@ -48,7 +48,7 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                     post = Post(role=role, label=organization_name, organization_id=organization._id)
                     yield post
 
-                    name = row['full name'].strip(' .,')
+                    name = row['name'].strip(' .,')
 
                     # ca_qc_laval: "maire …", "conseiller …"
                     if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
