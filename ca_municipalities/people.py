@@ -33,7 +33,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     organization_classification = 'legislature'
 
-                    organization = None
                     organization_name = row['organization']
                     organization_key = organization_name.lower()
                     if organization_key in organizations:
@@ -54,10 +53,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     name = row['name'].strip(' .,')
 
-                    # ca_qc_laval: "maire …", "conseiller …"
-                    if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
-                        role = role.capitalize()
-
                     district = row['district name']
 
                     if self.many_posts_per_area and role not in self.unique_roles:
@@ -66,10 +61,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     p = Person(primary_org=organization_classification, name=name, district=district, role=role, party=row.get('party name'))
                     p.add_source(self.csv_url)
-
-                    if not row.get('district name') and row.get('district id'):  # ca_on_toronto_candidates
-                        if len(row['district id']) == 7:
-                            p._related[0].extras['boundary_url'] = '/boundaries/census-subdivisions/{}/'.format(row['district id'])
 
                     if row.get('gender'):
                         p.gender = row['gender']
@@ -87,11 +78,11 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                         p.add_link(row['twitter'])
 
                     if row['email']:
-                        p.add_contact('email', row['email'].strip(' .,').split('\n')[-1])  # ca_qc_montreal
+                        p.add_contact('email', row['email'].strip(' .,'))
                     if row['address']:
                         p.add_contact('address', row['address'], 'legislature')
                     if row.get('phone'):
-                        p.add_contact('voice', row['phone'].split(';', 1)[0], 'legislature')  # ca_qc_montreal, ca_on_huron
+                        p.add_contact('voice', row['phone'], 'legislature')
                     if row.get('fax'):
                         p.add_contact('fax', row['fax'], 'legislature')
                     if row.get('cell'):
