@@ -4,6 +4,7 @@ from collections import defaultdict
 
 import re
 
+
 class CanadaMunicipalitiesPersonScraper(CSVScraper):
     csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrGXQy8qk16OhuTjlccoGB4jL5e8X1CEqRbg896ufLdh67DQk9nuGm-oufIT0HRMPEnwePw2HDx1Vj/pub?gid=0&single=true&output=csv'
     encoding = 'utf-8'
@@ -43,12 +44,19 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                         yield organization
                         organizations[organization_key] = organization
 
+                    if not row['primary role']:
+                        row['primary role'] = 'Councillor'
+
                     role = row['primary role']
 
                     post = Post(role=role, label=organization_name, organization_id=organization._id)
                     yield post
 
                     name = row['name'].strip(' .,')
+
+                    # ca_qc_laval: "maire …", "conseiller …"
+                    if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
+                        role = role.capitalize()
 
                     district = row['district name']
 
