@@ -31,7 +31,7 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                         elif row[key] in corrections:
                             row[key] = corrections[row[key]]
 
-                    organization_classification = 'government'
+                    organization_classification = 'legislature'
 
                     organization = None
                     organization_name = row['organization']

@@ -2,7 +2,7 @@ from utils import CanadianJurisdiction
 
 
 class CanadaMunicipalities(CanadianJurisdiction):
-    classification = 'upper'
+    classification = 'legislature'
     division_id = 'ocd-division/country:ca'
     division_name = 'Canada'
     name = 'Canada rural towns and villages municipal councils'
