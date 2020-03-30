@@ -50,10 +50,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     name = row['name'].strip(' .,')
 
-                    # ca_qc_laval: "maire …", "conseiller …"
-                    if role not in ('candidate', 'member') and not re.search(r'[A-Z]', role):
-                        role = role.capitalize()
-
                     district = row['district name']
 
                     if self.many_posts_per_area and role not in self.unique_roles:
