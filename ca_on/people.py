@@ -1,7 +1,6 @@
 # coding: utf-8
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
 
 COUNCIL_PAGE = 'https://www.ola.org/en/members/current/contact-information'
 
@@ -14,42 +13,45 @@ class OntarioPersonScraper(CanadianScraper):
             'Constituency': 'constituency',
         }
 
-        excluded_urls = {
-            'https://www.ola.org/en/members/all/vacant-seat-ottawa-vanier',
-        }
-
-        page = self.lxmlize(COUNCIL_PAGE)
-        members = page.xpath('//h2[@class="view-grouping-header"]//@href')
+        page = self.lxmlize(COUNCIL_PAGE, encoding='utf-8')
+        members = page.xpath('//div[@class="view-content"]//h2')
+        # print(members)
         assert len(members), 'No members found'
-        for url in members:
-            if url in excluded_urls:
-                continue
-            page = self.lxmlize(url)
+        for member in members:
+            name = member.xpath('.//a//text()')[0]
+            url = member.xpath('.//a//@href')[0]
+            node = self.lxmlize(url, encoding='utf-8')
+            fax = node.xpath('//div[@class="field field--name-field-fax-number field--type-string field--label-inline"]//div[@class="field__item"]//text()')
+            image = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src')[0]
 
-            name = re.match(r'(.+) \|', page.xpath('//title/text()')[0]).group(1)
-            district = page.xpath('//div[contains(@class, "view-display-id-member_riding_block")]//span[@class="field-content"]')[0].text_content()
-            party = page.xpath('//div[contains(@class, "view-display-id-current_party_block")]//div[@class="field-content"]')[0].text_content()
-            image = page.xpath('//div[contains(@class, "view-display-id-member_headshot")]//@src')
+            district = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-block-1"]//h3/text()')[0]
+            nodes = node.xpath('//div[@class="field__item"]//a')
+            emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
+            party = node.xpath('//div[@block="block-views-block-member-current-party-block"]//div[@class="field-content"]//text()')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role='MPP', party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
+            p.image = image
 
-            if image:
-                p.image = image[0]
+            # p.add_contact('voice', phone, 'legislature')
+            if fax:
+                p.add_contact('fax', fax[-1], 'legislature')
 
-            nodes = page.xpath('//div[contains(@class, "views-field-field-email-address")]')
-            emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
             if emails:
                 p.add_contact('email', emails.pop(0))
                 if emails:
                     p.extras['constituency_email'] = emails.pop(0)
 
             for heading, note in headings.items():
-                office = page.xpath('//h3[contains(., "{}")]'.format(heading))
+                office = node.xpath('//h3[contains(., "{}")]'.format(heading))
                 if office:
-                    voice = self.get_phone(office[0].xpath('./following-sibling::div[1]')[0], error=False)
-                    if voice:
-                        p.add_contact('voice', voice, note)
+                    try:
+                        voice = self.get_phone(office[0].xpath('./following-sibling::div[@class="field field--name-field-number field--type-string field--label-inline"]//div[@class="field__item"]//text()')[0], error=False)
+                    except Exception:
+                        pass
+                    else:
+                        if voice:
+                            p.add_contact('voice', voice, note)
 
             yield p
