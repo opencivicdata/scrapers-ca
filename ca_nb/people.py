@@ -3,7 +3,7 @@ from utils import CanadianScraper, CanadianPerson as Person
 import re
 from urllib.parse import urljoin
 
-COUNCIL_PAGE = 'https://www1.gnb.ca/legis/bios/59/index-e.asp'  # update each election
+COUNCIL_PAGE = 'https://www1.gnb.ca/legis/bios/60/index-e.asp'  # update each election
 
 PARTIES = {
     'G': 'Green Party',
