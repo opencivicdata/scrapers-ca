@@ -27,6 +27,7 @@ def get_party(abbr):
     """Return full party name from abbreviation"""
     return PARTIES[abbr]
 
+
 OFFICE_FIELDS = (
     'Address Type',
     'Address Line1',
@@ -47,11 +48,12 @@ ADDRESS_FIELDS = (
     'Country',
 )
 
+
 class AlbertaPersonScraper(CanadianScraper):
     def scrape(self):
         index = self.lxmlize(MEMBER_INDEX_URL)
         csv_text = self.get(COUNCIL_PAGE).text
-        csv_text = '\n'.join(csv_text.split('\n')[3:]) # discard first 3 rows
+        csv_text = '\n'.join(csv_text.split('\n')[3:])  # discard first 3 rows
         reader = csv.reader(StringIO(csv_text))
         # make unique field names for the two sets of address fields
         field_names = next(reader)
