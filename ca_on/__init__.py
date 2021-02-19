@@ -13,6 +13,7 @@ class Ontario(CanadianJurisdiction):
         {'name': 'Ontario Liberal Party'},
         {'name': 'Progressive Conservative Party of Ontario'},
         {'name': 'Independent'},
+        {'name': 'New Blue Party of Ontario'},
     ]
     skip_null_valid_from = True
     exclude_types = ['school_district']
