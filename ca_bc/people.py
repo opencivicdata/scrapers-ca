@@ -9,6 +9,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
         parties = {
             'BC NDP': 'New Democratic Party of British Columbia',
+            'BC Liberal Party': 'British Columbia Liberal Party',
         }
 
         page = self.lxmlize(COUNCIL_PAGE, xml=True)
