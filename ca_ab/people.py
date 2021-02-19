@@ -57,10 +57,10 @@ class AlbertaPersonScraper(CanadianScraper):
         reader = csv.reader(StringIO(csv_text))
         # make unique field names for the two sets of address fields
         field_names = next(reader)
-        for field_name in OFFICE_FIELDS:
-            assert(field_names.count(field_name) == 2)
-            field_names[field_names.index(field_name)] = f'{field_name} 1'
-            field_names[field_names.index(field_name)] = f'{field_name} 2'
+        for name in OFFICE_FIELDS:
+            assert(field_names.count(name) == 2)
+            field_names[field_names.index(name)] = '{} 1'.format(name)
+            field_names[field_names.index(name)] = '{} 2'.format(name)
         rows = [dict(zip(field_names, row)) for row in reader]
         assert len(rows), 'No members found'
         for mla in rows:
@@ -76,8 +76,8 @@ class AlbertaPersonScraper(CanadianScraper):
             row_xpath = '//td[normalize-space()="{}"]/..'.format(
                 mla['Constituency Name'],
             )
-            detail_url, = index.xpath(f'{row_xpath}//a/@href')
-            photo_url, = index.xpath(f'{row_xpath}//img/@src')
+            detail_url, = index.xpath('{}//a/@href'.format(row_xpath))
+            photo_url, = index.xpath('{}//img/@src'.format(row_xpath))
             p = Person(
                 primary_org='legislature',
                 name=name_without_status,
@@ -97,14 +97,14 @@ class AlbertaPersonScraper(CanadianScraper):
 
             for suffix, note in ((1, 'legislature'), (2, 'constituency')):
                 for key, contact_type in (('Phone', 'voice'), ('Fax', 'fax')):
-                    value = mla[f'{key} Number {suffix}']
+                    value = mla['{} Number {}'.format(key, suffix)]
                     if value and value != 'Pending':
                         p.add_contact(contact_type, value, note)
                 address = ', '.join(
                     filter(
                         bool, [
                             mla[
-                                f'{field} {suffix}'
+                                '{} {}'.format(field, suffix)
                             ] for field in ADDRESS_FIELDS
                         ]
                     )
