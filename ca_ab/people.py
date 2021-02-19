@@ -3,11 +3,10 @@ from utils import CanadianScraper, CanadianPerson as Person
 import csv
 from io import StringIO
 
-import lxml.html
-
-COUNCIL_PAGE = 'http://www.assembly.ab.ca/net/index.aspx?p=mla_csv'
-
-LEGISLATURE_NO = '30'
+COUNCIL_PAGE = 'https://www.assembly.ab.ca/txt/mla_home/contacts.csv'
+MEMBER_INDEX_URL = (
+    'https://www.assembly.ab.ca/members/members-of-the-legislative-assembly'
+)
 
 PARTIES = {
     'AL': 'Alberta Liberal Party',
@@ -29,30 +28,60 @@ def get_party(abbr):
     return PARTIES[abbr]
 
 
+OFFICE_FIELDS = (
+    'Address Type',
+    'Address Line1',
+    'Address Line2',
+    'City',
+    'Province',
+    'Country',
+    'Postal Code',
+    'Phone Number',
+    'Fax Number',
+)
+
+ADDRESS_FIELDS = (
+    'Address Line1',
+    'Address Line2',
+    'City',
+    'Province',
+    'Country',
+)
+
+
 class AlbertaPersonScraper(CanadianScraper):
     def scrape(self):
-        csv_text = self.get(self.get_csv_url()).text
-        rows = [row for row in csv.DictReader(StringIO(csv_text))]
+        index = self.lxmlize(MEMBER_INDEX_URL)
+        csv_text = self.get(COUNCIL_PAGE).text
+        csv_text = '\n'.join(csv_text.split('\n')[3:])  # discard first 3 rows
+        reader = csv.reader(StringIO(csv_text))
+        # make unique field names for the two sets of address fields
+        field_names = next(reader)
+        for name in OFFICE_FIELDS:
+            assert(field_names.count(name) == 2)
+            field_names[field_names.index(name)] = '{} 1'.format(name)
+            field_names[field_names.index(name)] = '{} 2'.format(name)
+        rows = [dict(zip(field_names, row)) for row in reader]
         assert len(rows), 'No members found'
         for mla in rows:
-            name = '{} {} {}'.format(mla['MLA First Name'], mla['MLA Middle Names'], mla['MLA Last Name'])
+            name = '{} {} {}'.format(
+                mla['MLA First Name'],
+                mla['MLA Middle Names'],
+                mla['MLA Last Name'],
+            )
             if name.strip() == '':
                 continue
             party = get_party(mla['Caucus'])
             name_without_status = name.split(',')[0]
-            detail_url = (
-                'http://www.assembly.ab.ca/net/index.aspx?'
-                'p=mla_contact&rnumber={0}&leg={1}'.format(
-                    mla['Riding Number'],
-                    LEGISLATURE_NO
-                )
+            row_xpath = '//td[normalize-space()="{}"]/..'.format(
+                mla['Constituency Name'],
             )
-            detail_page = self.lxmlize(detail_url)
-            photo_url = detail_page.xpath('//img[@class="MemPhoto"]/@src')[0]
+            detail_url, = index.xpath('{}//a/@href'.format(row_xpath))
+            photo_url, = index.xpath('{}//img/@src'.format(row_xpath))
             p = Person(
                 primary_org='legislature',
                 name=name_without_status,
-                district=mla['Riding Name'],
+                district=mla['Constituency Name'],
                 role='MLA',
                 party=party,
                 image=photo_url,
@@ -63,30 +92,23 @@ class AlbertaPersonScraper(CanadianScraper):
                 p.add_contact('email', mla['Email'])
             elif mla.get('MLA Email'):
                 p.add_contact('email', mla['MLA Email'])
-            if mla['Phone Number'] and mla['Phone Number'] != 'Pending':
-                p.add_contact('voice', mla['Phone Number'], 'legislature')
-            if mla['Fax Number'] and mla['Fax Number'] != 'Pending':
-                p.add_contact('fax', mla['Fax Number'], 'legislature')
+            assert(mla['Address Type 1'] == 'Legislature Office')
+            assert(mla['Address Type 2'] == 'Constituency Office')
+
+            for suffix, note in ((1, 'legislature'), (2, 'constituency')):
+                for key, contact_type in (('Phone', 'voice'), ('Fax', 'fax')):
+                    value = mla['{} Number {}'.format(key, suffix)]
+                    if value and value != 'Pending':
+                        p.add_contact(contact_type, value, note)
+                address = ', '.join(
+                    filter(
+                        bool, [
+                            mla[
+                                '{} {}'.format(field, suffix)
+                            ] for field in ADDRESS_FIELDS
+                        ]
+                    )
+                )
+                if address:
+                    p.add_contact('address', address, note)
             yield p
-
-    def get_csv_url(self):
-        def get_hidden_val(v):
-            return csv_gen_page.xpath('//input[@id="{}"]/@value'.format(v))[0]
-
-        csv_gen_page = self.lxmlize(COUNCIL_PAGE)
-
-        # ASP forms store session state. Looks like we can't just play back a POST.
-        post_data = {
-            '__VIEWSTATE': get_hidden_val('__VIEWSTATE'),
-            '__VIEWSTATEGENERATOR': get_hidden_val('__VIEWSTATEGENERATOR'),
-            '__EVENTVALIDATION': get_hidden_val('__EVENTVALIDATION'),
-            '_ctl0:radlstGroup': 'Information for All MLAs',
-            '_ctl0:chklstFields:0': 'on',
-            '_ctl0:chklstFields:1': 'on',
-            '_ctl0:chklstFields:2': 'on',
-            '_ctl0:btnCreateCSV': "Create '.csv' file",
-        }
-
-        resp = self.post(COUNCIL_PAGE, data=post_data)
-        result_page = lxml.html.fromstring(resp.text)
-        return result_page.xpath('//a[@id="_ctl0_HL_file"]/@href')[0]
