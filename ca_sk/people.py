@@ -27,15 +27,52 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 if website:
                     p.add_link(website[0].text_content())
 
-                p.add_contact('address', ' '.join(contact.xpath('.//div[@class="col-md-4"][2]/div//text()')[1:9]), 'constituency')
+                def handle_address(lines, address_type):
+                    address_lines = []
+                    for line in lines:
+                        if line.endswith(':'):  # Room:, Phone:, Fax:
+                            break
+                        address_lines.append(line)
+                    if address_lines:
+                        p.add_contact(
+                            'address',
+                            ' '.join(address_lines),
+                            address_type,
+                        )
 
-                phone_leg = contact.xpath('.//span[@id="MainContent_ContentBottom_Property6"]//text()')
-                if phone_leg:
-                    p.add_contact('voice', phone_leg[0], 'legislature', area_code=306)
+                def handle_phone(lines, phone_type):
+                    if 'Phone:' in lines:
+                        next_line = lines[lines.index('Phone:') + 1]
+                        if next_line.endswith(':'):
+                            return
+                        number = None
+                        if '/' in next_line:
+                            for fragment in next_line.split('/'):
+                                if fragment.strip().startswith('306-'):
+                                    number = fragment.strip()
+                                    break
+                        else:
+                            number = next_line
+                        p.add_contact(
+                            'voice',
+                            number,
+                            phone_type,
+                            area_code=306
+                        )
 
-                phone_const = contact.xpath('.//div[@class="col-md-4"]/div[4]/span/span/text()')
-                if phone_const:
-                    p.add_contact('voice', phone_const[0], 'constituency', area_code=306)
+                legislature_lines = contact.xpath(
+                    './/div[@class="col-md-4"][1]/div//text()'
+                )
+                assert(legislature_lines[0] == 'Legislative Building Address')
+                handle_address(legislature_lines[1:], 'legislature')
+                handle_phone(legislature_lines[1:], 'legislature')
+
+                constituency_lines = contact.xpath(
+                    './/div[@class="col-md-4"][2]/div//text()'
+                )
+                assert(constituency_lines[0] == 'Constituency Address')
+                handle_address(constituency_lines[1:], 'constituency')
+                handle_phone(constituency_lines[1:], 'constituency')
 
                 email = self.get_email(contact, error=False)
                 if email:
