@@ -9,5 +9,6 @@ class PrinceEdwardIsland(CanadianJurisdiction):
     url = 'http://www.assembly.pe.ca'
     parties = [
         {'name': 'Liberal Party of Prince Edward Island'},
+        {'name': 'Green Party of Prince Edward Island'},
         {'name': 'Progressive Conservative Party of Prince Edward Island'},
     ]

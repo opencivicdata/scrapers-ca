@@ -8,41 +8,58 @@ COUNCIL_PAGE = 'https://www.assembly.pe.ca/members'
 class PrinceEdwardIslandPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        members = page.xpath('//table[1]//tr')
+        members = page.xpath('//div[@class="views-row"]')
 
         assert len(members), 'No members found'
         for member in members:
             if not member.text_content().strip():
                 continue
 
-            name = member.xpath('./td[2]//a[1]//text()')[0]
-
-            district_name = member.xpath('./td[2]//em[contains(.//text(), "MLA")]//text()')[0].split(':')[1].replace('St ', 'St. ').split('-')
-            district = district_name[0].strip() + '-' + district_name[1].strip()
-            url = member.xpath('./td[2]//a[1]/@href')[0]
-            ext_infos = self.scrape_extended_info(url)
-            p = Person(primary_org='legislature', name=name, district=district, role='MLA')
+            title = member.xpath(
+                './/span[contains(@class, "member-title")]//a[1]'
+            )[0]
+            district = member.xpath(
+                './/div[contains(@class, '
+                '"views-field-field-member-constituency")]//text()'
+            )[0]
+            party = member.xpath(
+                './/div[contains(@class, '
+                '"views-field-field-member-pol-affiliation")]//text()'
+            )[0]
+            url = title.attrib['href']
+            p = Person(
+                primary_org='legislature',
+                name=title.text.split(',')[0],
+                district=district,
+                party={
+                    'Green': 'Green Party of Prince Edward Island',
+                    'PC': (
+                        'Progressive Conservative Party '
+                        'of Prince Edward Island'
+                    ),
+                    'Liberal': 'Liberal Party of Prince Edward Island',
+                }.get(party, party),
+                role='MLA',
+            )
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
-            if ext_infos:  # member pages might return errors
-                email, phone, photo_url = ext_infos
-                p.image = photo_url
-                if email:
-                    p.add_contact('email', email)
-                if phone:
-                    p.add_contact('voice', phone, 'legislature')
-            yield p
+            details = self.lxmlize(url)
+            p.image = details.xpath(
+                '//div[contains(@class, "member-portrait")]//img'
+            )[0].get('src')
+            info = details.xpath(
+                '//div[contains(@class, "member-contact-info")]'
+            )[0]
 
-    def scrape_extended_info(self, url):
-        root = self.lxmlize(url)
-        if not root.xpath('//div[contains(@class, "colmask")][contains(@class, "rightmenu")]'):  # Speaker page
-            main = root.xpath('//div[@id="content"]//table')[0]
-            photo_url = main.xpath('.//img')[0].get('src')
-            contact_cell = main.xpath('.//td[contains(., "ontact")]')[0]
-            phone = None
-            phone_s = re.search(r'(?:Telephone|Tel|Phone):(.+?)\n', contact_cell.text_content())
-            if phone_s:
-                phone = phone_s.group(1)
-            email = self.get_email(contact_cell, error=False)
-            return email, phone, photo_url
+            phone = re.search(
+                r'(?:Telephone|Tel|Phone):\s*(.+?)\n',
+                info.text_content()
+            )
+            if phone:
+                p.add_contact('voice', phone.group(1), 'legislature')
+            email = self.get_email(info, error=False)
+            if email:
+                p.add_contact('email', email)
+
+            yield p
