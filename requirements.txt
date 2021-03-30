@@ -6,7 +6,7 @@ Django==2.2.13
 # Scrapers
 agate
 agate-excel
-lxml==4.6.2
+lxml==4.6.3
 regex==2014.04.10
 requests[security]==2.20.0
 
