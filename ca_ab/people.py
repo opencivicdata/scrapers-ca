@@ -17,7 +17,7 @@ PARTIES = {
     'ND': 'Alberta New Democratic Party',
     'NDP': 'Alberta New Democratic Party',
     'PC': 'Progressive Conservative Association of Alberta',
-    'UC': 'United Conservative',
+    'UC': 'United Conservative Party',
     'UCP': 'United Conservative Party',
     'W': 'Wildrose Alliance Party',
 }
