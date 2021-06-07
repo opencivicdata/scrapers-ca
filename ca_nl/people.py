@@ -1,9 +1,10 @@
 # coding: utf-8
 from utils import CanadianScraper, CanadianPerson as Person, CUSTOM_USER_AGENT
 
+import json
 import re
 
-COUNCIL_PAGE = 'http://www.assembly.nl.ca/js/members-index.js'
+COUNCIL_PAGE = 'https://www.assembly.nl.ca/js/members-index.js'
 
 PARTIES = {
     'Progressive Conservative': 'Progressive Conservative Party of Newfoundland and Labrador',
@@ -22,30 +23,46 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
     def scrape(self):
         self.user_agent = CUSTOM_USER_AGENT
         page = self.get(COUNCIL_PAGE)
-        members = re.findall('/Members/YourMember/[^"]+', page.text)
-        assert len(members), 'No members found'
-        for member in members:
-            detail_url = 'http://www.assembly.nl.ca%s' % member
-            detail = self.lxmlize(detail_url, user_agent=CUSTOM_USER_AGENT)
-
-            name = detail.xpath('//h1/text()')[0]
-            district = re.sub(r' [\xa0–-] ', '—', detail.xpath('//h2/text()')[0])  # # n-dash, m-dash
-            party = PARTIES[detail.xpath('//h3/text()')[0]]
-
-            p = Person(primary_org='legislature', name=name, district=district, role='MHA', party=party)
-            p.image = detail.xpath('//img[@class="img-responsive"]/@src')[0]
-
-            contact = detail.xpath('//div[@class="col-md-12"]')[0]
-            p.add_contact('email', self.get_email(contact))
+        members = re.search(
+            r'members = (\[([^\]]+)\])',
+            page.content.decode(),
+            re.DOTALL
+        ).groups()[0]  # extract javascript array
+        members = re.sub('<!--.+?-->', '', members)  # remove comments
+        members = re.sub('<a.+?>', '', members).replace('</a>', '')  # tags
+        members = members.replace('"', r'\"')  # escape double quotes
+        members = members.replace("'", '"')  # replace single quotes
+        members = re.sub(
+            '(name|district|party|phone|email):',
+            r'"\1":',
+            members
+        )  # quote attributes
+        for member in json.loads(members):
+            if not member['name'].strip():
+                print('Skipping blank member: {}'.format(member))
+                continue
+            p = Person(
+                primary_org='legislature',
+                name=' '.join(reversed(member['name'].split(','))).strip(),
+                district=member['district'].replace('&apos;', "'").replace(
+                    ' - ',
+                    '\u2014',
+                ),  # match messy boundary data
+                role='MHA',
+                party=PARTIES.get(member['party']),
+            )
+            if member.get('email'):
+                p.add_contact(
+                    'email',
+                    member['email'].replace(
+                        '@gov.nl.ca@gov.nl.ca',  # seriously guys?!
+                        '@gov.nl.ca'
+                    )
+                )
 
             p.add_source(COUNCIL_PAGE)
-            p.add_source(detail_url)
-
-            for heading, _type in HEADING_TYPE.items():
-                node = detail.xpath('//b[.="%s"]/../..' % heading)
-                if node:
-                    phone = self.get_phone(node[0], error=False)
-                    if phone:
-                        p.add_contact('voice', phone, _type)
+            phone = member['phone'].split('/')[0].replace('TBD', '').strip()
+            if phone:
+                p.add_contact('voice', phone, 'legislature')
 
             yield p
