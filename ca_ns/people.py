@@ -25,7 +25,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
             detail_url = member.xpath('.//@href')[0]
             detail = self.lxmlize(detail_url)
 
-            name = detail.xpath('//div[contains(@class, "views-field-field-last-name")]/div/h1/text()')[0]
+            name = detail.xpath('//div[contains(@class, "views-field-field-last-name")]/div/h1/text()')[0].replace('Honourable ', '')
             party = self.PARTIES[party]
 
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
