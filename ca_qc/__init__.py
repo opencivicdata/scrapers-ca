@@ -11,6 +11,7 @@ class Quebec(CanadianJurisdiction):
     parties = [
         {'name': 'Parti libéral du Québec'},
         {'name': 'Parti québécois'},
+        {'name': 'Parti conservateur du Québec'},
         {'name': 'Coalition avenir Québec'},
         {'name': 'Québec solidaire'},
         {'name': 'Indépendant'},
