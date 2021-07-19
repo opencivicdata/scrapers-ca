@@ -24,7 +24,7 @@ class OntarioPersonScraper(CanadianScraper):
             fax = node.xpath('//div[@class="field field--name-field-fax-number field--type-string field--label-inline"]//div[@class="field__item"]//text()')
             image = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src')[0]
 
-            district = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-block-1"]//h3/text()')[0]
+            district = node.xpath('//div[@block="block-views-block-member-member-riding-block"]//span[@class="field-content"]/text()')[0]
             nodes = node.xpath('//div[@class="field__item"]//a')
             emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
             party = node.xpath('//div[@block="block-views-block-member-current-party-block"]//div[@class="field-content"]//text()')[0]
