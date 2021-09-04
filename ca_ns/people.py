@@ -1,3 +1,5 @@
+import re
+
 from utils import CanadianScraper, CanadianPerson as Person
 
 COUNCIL_PAGE = 'https://nslegislature.ca/members/profiles'
@@ -25,14 +27,19 @@ class NovaScotiaPersonScraper(CanadianScraper):
             detail_url = member.xpath('.//@href')[0]
             detail = self.lxmlize(detail_url)
 
-            name = detail.xpath('//div[contains(@class, "views-field-field-last-name")]/div/h1/text()')[0].replace('Honourable ', '')
-            party = self.PARTIES[party]
+            name = detail.xpath(
+                '//div[contains(@class, "views-field-field-last-name")]/div/h1/text()'
+            )[0]
+            name = re.sub(r'(Honourable |\(MLA Elect\)|\(New MLA Elect\))', '', name)
+            party = self.PARTIES[party.replace('LIberal', 'Liberal')]
 
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
             p.image = detail.xpath('//img[@typeof="foaf:Image"]/@src')[0]
 
             contact = detail.xpath('//div[contains(@class, "mla-current-profile-contact")]')[0]
-            p.add_contact('email', self.get_email(contact))
+            email = self.get_email(contact, error=False)
+            if email:
+                p.add_contact('email', email)
             p.add_contact('voice', self.get_phone(contact, area_codes=[902]), 'constituency')
 
             p.add_source(COUNCIL_PAGE)
