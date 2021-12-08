@@ -83,14 +83,18 @@ class CanadaPersonScraper(CanadianScraper):
             #   Telephone: xxx-xxx-xxxx<br/>
             #   Fax: xxx-xxx-xxx
             # </p>
-            phone_and_fax_el = mp_page.xpath('.//h4[contains(., "Hill Office")]/../p[contains(., "Telephone")]|.//h4[contains(., "Hill Office")]/../p[contains(., "Téléphone :")]')
-            if len(phone_and_fax_el):
-                phone_and_fax = phone_and_fax_el[0].text_content().strip().splitlines()
-                voice = phone_and_fax[0].replace('Telephone:', '').replace('Téléphone :', '').strip()
-                fax = phone_and_fax[1].replace('Fax:', '').replace('Télécopieur :', '').strip()
-                if voice:
-                    m.add_contact('voice', voice, 'legislature')
+            phone_el = mp_page.xpath('.//h4[contains(., "Hill Office")]/../p[contains(., "Telephone")]|.//h4[contains(., "Hill Office")]/../p[contains(., "Téléphone :")]')
+            fax_el = mp_page.xpath('.//h4[contains(., "Hill Office")]/../p[contains(., "Fax")]|.//h4[contains(., "Hill Office")]/../p[contains(., "Télécopieur :")]')
 
+            if phone_el:
+                phone = phone_el[0].text_content().strip().splitlines()
+                phone = phone[0].replace('Telephone:', '').replace('Téléphone :', '').strip()
+                if phone:
+                    m.add_contact('voice', phone, 'legislature')
+
+            if fax_el:
+                fax = fax_el[0].text_content().strip().splitlines()
+                fax = fax[0].replace('Fax:', '').replace('Télécopieur :', '').strip()
                 if fax:
                     m.add_contact('fax', fax, 'legislature')
 
