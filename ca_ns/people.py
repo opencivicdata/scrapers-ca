@@ -34,7 +34,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
             party = self.PARTIES[party.replace('LIberal', 'Liberal')]
 
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
-            p.image = detail.xpath('//img[@typeof="foaf:Image"]/@src')[0]
+            p.image = detail.xpath('//div[contains(@class, "field-content")]//img[@typeof="foaf:Image"]/@src')[0]
 
             contact = detail.xpath('//div[contains(@class, "mla-current-profile-contact")]')[0]
             email = self.get_email(contact, error=False)
