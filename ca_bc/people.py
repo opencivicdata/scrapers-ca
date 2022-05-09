@@ -19,6 +19,8 @@ class BritishColumbiaPersonScraper(CanadianScraper):
         assert len(members), 'No members found'
         for member in members:
             url = member.xpath('./d:element/d:Key[text()="Path"]/following-sibling::d:Value/text()', namespaces=nsmap)[0]
+            if 'vacant' in url.lower():
+                continue
             page = self.lxmlize(url)
 
             name = page.xpath('//div[contains(@class, "BCLASS-pagetitle")]//h3/text()')[0].replace('Wm.', '').replace(', Q.C.', '').strip()
