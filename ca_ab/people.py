@@ -92,10 +92,18 @@ class AlbertaPersonScraper(CanadianScraper):
                 p.add_contact('email', mla['Email'])
             elif mla.get('MLA Email'):
                 p.add_contact('email', mla['MLA Email'])
-            assert(mla['Address Type 1'] == 'Legislature Office')
-            assert(mla['Address Type 2'] == 'Constituency Office')
 
-            for suffix, note in ((1, 'legislature'), (2, 'constituency')):
+            addresses = [(1, 'legislature'), (2, 'constituency')]
+            if not mla['Address Type 1'].strip():
+                addresses.pop(0)
+            else:
+                assert(mla['Address Type 1'] == 'Legislature Office')
+            if not mla['Address Type 2']:
+                addresses.pop()
+            else:
+                assert(mla['Address Type 2'] == 'Constituency Office')
+
+            for suffix, note in addresses:
                 for key, contact_type in (('Phone', 'voice'), ('Fax', 'fax')):
                     value = mla['{} Number {}'.format(key, suffix)]
                     if value and value != 'Pending':
