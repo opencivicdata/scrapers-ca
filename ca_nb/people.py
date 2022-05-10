@@ -27,19 +27,22 @@ class NewBrunswickPersonScraper(CanadianScraper):
             party, riding = [span.text_content().strip() for span in node.xpath(
                 '//div[contains(@class, "member-details-meta")]//span'
             )]
-            district = riding.replace('\x97', '-')
+            district = riding.replace('\x97', '-').replace(' - ', '-')
+            if district == 'Madawaska Les lacs-Edmundston':
+                district = 'Madawaska Les Lacs-Edmundston'
+            if district == 'Fundy-The-Isles-Saint John West':
+                district = 'Fundy-The Isles-Saint John West'
+            if district == 'Bathurst East-Nepisiguit-Saint Isidore':
+                district = 'Bathurst East-Nepisiguit-Saint-Isidore'
+            if district == 'Shippagan-Lam\u00eaque-Miscou':
+                district = 'Shippagan-Lamèque-Miscou'
+            if district == 'Saint John-East':
+                district = 'Saint John East'
             name = node.xpath('//h1')[0].text_content()
             name = name.replace(', Q.C.', '')
             photo_url = node.xpath(
                 '//div[contains(@class, "member-details-portrait")]//img//@src'
             )[0]
-
-            # @see https://en.wikipedia.org/wiki/Charlotte-Campobello
-            if district == 'Saint Croix':
-                district = 'Charlotte-Campobello'
-            # @see https://en.wikipedia.org/wiki/Oromocto-Lincoln-Fredericton
-            elif district == 'Oromocto-Lincoln-Fredericton':
-                district = 'Oromocto-Lincoln'
 
             p = Person(primary_org='legislature', name=name, district=district, role='MLA',
                        party=party, image=photo_url)
