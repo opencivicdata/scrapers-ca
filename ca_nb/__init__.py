@@ -6,11 +6,10 @@ class NewBrunswick(CanadianJurisdiction):
     division_id = 'ocd-division/country:ca/province:nb'
     division_name = 'New Brunswick'
     name = 'Legislative Assembly of New Brunswick'
-    url = 'http://www.gnb.ca/legis/index.asp'
+    url = 'https://www.legnb.ca/'
     parties = [
         {'name': 'Green Party'},
         {'name': 'Independent'},
-        {'name': 'New Brunswick Liberal Association'},
-        {'name': "People's Alliance"},
-        {'name': 'Progressive Conservative Party of New Brunswick'},
+        {'name': 'Liberal Party'},
+        {'name': 'Progressive Conservative Party'},
     ]
