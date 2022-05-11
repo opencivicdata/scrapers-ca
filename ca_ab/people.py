@@ -78,10 +78,13 @@ class AlbertaPersonScraper(CanadianScraper):
             )
             detail_url, = index.xpath('{}//a/@href'.format(row_xpath))
             photo_url, = index.xpath('{}//img/@src'.format(row_xpath))
+            district = mla['Constituency Name']
+            if district == 'Calgary-Bhullar-McCall':
+                district = 'Calgary-McCall'
             p = Person(
                 primary_org='legislature',
                 name=name_without_status,
-                district=mla['Constituency Name'],
+                district=district,
                 role='MLA',
                 party=party,
                 image=photo_url,
