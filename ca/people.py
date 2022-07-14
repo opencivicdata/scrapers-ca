@@ -63,8 +63,8 @@ class CanadaPersonScraper(CanadianScraper):
                 if (photo_response.status_code == 200 and hashlib.sha1(photo_response.content).hexdigest() not in IMAGE_PLACEHOLDER_SHA1):
                     m.image = photo
 
-            # I don't think the new parliment website has personal website anymore
-            personal_url = mp_page.xpath('.//a[contains(@title, "Personal Web Site")]/@href')
+            # The "Personal Web Site" section changed to "Website" some time around 2019
+            personal_url = mp_page.xpath('.//a[contains(@title, "Website")]/@href')
             if personal_url:
                 m.add_link(personal_url[0])
 
