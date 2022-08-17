@@ -19,15 +19,19 @@ class OntarioPersonScraper(CanadianScraper):
         assert len(members), 'No members found'
         for member in members:
             name = member.xpath('.//a//text()')[0]
+            print('************************************************* ',name,' ***********************************************')
             url = member.xpath('.//a//@href')[0]
             node = self.lxmlize(url, encoding='utf-8')
             fax = node.xpath('//div[@class="field field--name-field-fax-number field--type-string field--label-inline"]//div[@class="field__item"]//text()')
-            image = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src')[0]
+            if node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src'):
+                image = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src')[0]
 
-            district = node.xpath('//div[@block="block-views-block-member-member-riding-block"]//span[@class="field-content"]/text()')[0]
+            if node.xpath('//div[@block="block-views-block-member-member-riding-block"]//span[@class="field-content"]/text()'):
+                district = node.xpath('//div[@block="block-views-block-member-member-riding-block"]//span[@class="field-content"]/text()')[0]
             nodes = node.xpath('//div[@class="field__item"]//a')
             emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
-            party = node.xpath('//div[@block="block-views-block-member-current-party-block"]//div[@class="field-content"]//text()')[0]
+            if node.xpath('//div[@block="block-views-block-member-current-party-block"]//div[@class="field-content"]//text()'):
+                party = node.xpath('//div[@block="block-views-block-member-current-party-block"]//div[@class="field-content"]//text()')[0]
 
             p = Person(primary_org='legislature', name=name, district=district, role='MPP', party=party)
             p.add_source(COUNCIL_PAGE)
