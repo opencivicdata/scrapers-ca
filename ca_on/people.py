@@ -19,7 +19,6 @@ class OntarioPersonScraper(CanadianScraper):
         assert len(members), 'No members found'
         for member in members:
             name = member.xpath('.//a//text()')[0]
-            print('************************************************* ',name,' ***********************************************')
             url = member.xpath('.//a//@href')[0]
             node = self.lxmlize(url, encoding='utf-8')
             fax = node.xpath('//div[@class="field field--name-field-fax-number field--type-string field--label-inline"]//div[@class="field__item"]//text()')
