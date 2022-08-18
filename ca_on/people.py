@@ -19,10 +19,12 @@ class OntarioPersonScraper(CanadianScraper):
         assert len(members), 'No members found'
         for member in members:
             name = member.xpath('.//a//text()')[0]
+            if name == 'Vacant seat':
+                continue
             url = member.xpath('.//a//@href')[0]
             node = self.lxmlize(url, encoding='utf-8')
             fax = node.xpath('//div[@class="field field--name-field-fax-number field--type-string field--label-inline"]//div[@class="field__item"]//text()')
-            image = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src')[0]
+            image = node.xpath('//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src')
 
             district = node.xpath('//div[@block="block-views-block-member-member-riding-block"]//span[@class="field-content"]/text()')[0]
             nodes = node.xpath('//div[@class="field__item"]//a')
@@ -32,7 +34,8 @@ class OntarioPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role='MPP', party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
-            p.image = image
+            if image:
+                p.image = image[0]
 
             # p.add_contact('voice', phone, 'legislature')
             if fax:
