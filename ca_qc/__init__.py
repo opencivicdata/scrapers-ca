@@ -16,5 +16,3 @@ class Quebec(CanadianJurisdiction):
         {'name': 'Québec solidaire'},
         {'name': 'Indépendant'},
     ]
-    skip_null_valid_from = True
-    valid_from = '2018-10-01'
