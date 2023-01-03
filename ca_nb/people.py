@@ -39,7 +39,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
             if district == 'Saint John-East':
                 district = 'Saint John East'
             name = node.xpath('//h1')[0].text_content()
-            name = name.replace(', Q.C.', '')
+            name = name.replace(', Q.C.', '').replace(', K.C.', '')
             photo_url = node.xpath(
                 '//div[contains(@class, "member-details-portrait")]//img//@src'
             )[0]
