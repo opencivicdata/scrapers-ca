@@ -23,7 +23,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
                 continue
             page = self.lxmlize(url)
 
-            name = page.xpath('//div[contains(@class, "BCLASS-pagetitle")]//h3/text()')[0].replace('Wm.', '').replace(', Q.C.', '').strip()
+            name = page.xpath('//div[contains(@class, "BCLASS-pagetitle")]//h3/text()')[0].replace('Wm.', '').replace(', Q.C.', '').replace(', K.C.', '').strip()
             district, party = cleanup_list(page.xpath('//div[@id="MinisterTitle"]/following-sibling::text()'))
             party = parties.get(party, party)
             p = Person(primary_org='legislature', name=name, district=district, role='MLA', party=party)
