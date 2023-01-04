@@ -145,6 +145,9 @@ class QuebecPersonScraper(CanadianScraper):
             name = ' '.join(reversed(name_comma.strip().split(',')))
 
             division = division.replace('–', '-')  # n-dash, hyphen
+            division = division.strip()
+            if division == 'Camille-Laurin':
+                division = 'Bourget'
 
             party = row[2].text_content().strip()
             if party == 'Indépendante':
