@@ -16,7 +16,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
             phone = ''
             email = ''
             hrefs = node.xpath(
-                '//div[contains(@class, "properties-table")]//a//@href'
+                '//table[contains(@class, "properties-table")]//a//@href'
             )
             for href in hrefs:
                 if href.startswith('mailto:'):
