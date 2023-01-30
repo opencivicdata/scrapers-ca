@@ -1,8 +1,9 @@
-from utils import CanadianScraper, CanadianPerson as Person
-
 import re
 
-COUNCIL_PAGE = 'http://www.city.langley.bc.ca/index.php/city-hall/city-council'
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
+
+COUNCIL_PAGE = "http://www.city.langley.bc.ca/index.php/city-hall/city-council"
 
 
 class LangleyPersonScraper(CanadianScraper):
@@ -15,7 +16,7 @@ class LangleyPersonScraper(CanadianScraper):
         mayor = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Mayor")]/@href')[0]
 
         for url in councillors:
-            district = 'Langley (seat {})'.format(councillor_seat_number)
+            district = "Langley (seat {})".format(councillor_seat_number)
             councillor_seat_number += 1
             yield self.scrape_councillor(url, district)
 
@@ -25,23 +26,23 @@ class LangleyPersonScraper(CanadianScraper):
         infos_page = self.lxmlize(url)
         infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
-        name = ' '.join(infos.xpath('p[2]/text()')[0].split(' ')[1:3])
+        name = " ".join(infos.xpath("p[2]/text()")[0].split(" ")[1:3])
         lname = name.lower()
-        email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
-        photo_url = infos.xpath('p[1]/img/@src')[0]
+        email = lname.split(" ")[0][0] + lname.split(" ")[1] + "@langleycity.ca"
+        photo_url = infos.xpath("p[1]/img/@src")[0]
 
-        p = Person(primary_org='legislature', name=name, district=district, role='Councillor', image=photo_url)
+        p = Person(primary_org="legislature", name=name, district=district, role="Councillor", image=photo_url)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_contact('email', email)
+        p.add_contact("email", email)
 
-        personal_infos = infos.xpath('p[last()]/text()')
+        personal_infos = infos.xpath("p[last()]/text()")
 
-        if 'Residence' in personal_infos[0]:
-            phone = re.findall(r'(Phone|Res)(:?) (.*)', '\n'.join(personal_infos))[0][2]
-            address = re.findall(r'Address: (.*) (Phone|Res)', ' '.join(personal_infos))[0][0]
-            p.add_contact('address', address, 'residence')
-            p.add_contact('voice', phone, 'residence')
+        if "Residence" in personal_infos[0]:
+            phone = re.findall(r"(Phone|Res)(:?) (.*)", "\n".join(personal_infos))[0][2]
+            address = re.findall(r"Address: (.*) (Phone|Res)", " ".join(personal_infos))[0][0]
+            p.add_contact("address", address, "residence")
+            p.add_contact("voice", phone, "residence")
 
         return p
 
@@ -49,21 +50,21 @@ class LangleyPersonScraper(CanadianScraper):
         infos_page = self.lxmlize(url)
         infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
-        name = ' '.join(infos.xpath('p[2]/text()')[0].split(' ')[2:4])
+        name = " ".join(infos.xpath("p[2]/text()")[0].split(" ")[2:4])
         lname = name.lower()
-        email = lname.split(' ')[0][0] + lname.split(' ')[1] + '@langleycity.ca'
-        photo_url = infos.xpath('p[1]/img/@src')[0]
+        email = lname.split(" ")[0][0] + lname.split(" ")[1] + "@langleycity.ca"
+        photo_url = infos.xpath("p[1]/img/@src")[0]
 
-        p = Person(primary_org='legislature', name=name, district='Langley', role='Mayor', image=photo_url)
+        p = Person(primary_org="legislature", name=name, district="Langley", role="Mayor", image=photo_url)
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_contact('email', email)
+        p.add_contact("email", email)
 
-        personal_infos = infos.xpath('p[last()]/text()')
+        personal_infos = infos.xpath("p[last()]/text()")
 
-        phone = re.findall(r'Phone(:?) (.*)', '\n'.join(personal_infos))[0][1]
-        address = re.findall(r'Address: (.*) Phone', ' '.join(personal_infos))[0]
-        p.add_contact('address', address, 'office')
-        p.add_contact('voice', phone, 'office')
+        phone = re.findall(r"Phone(:?) (.*)", "\n".join(personal_infos))[0][1]
+        address = re.findall(r"Address: (.*) Phone", " ".join(personal_infos))[0]
+        p.add_contact("address", address, "office")
+        p.add_contact("voice", phone, "office")
 
         return p

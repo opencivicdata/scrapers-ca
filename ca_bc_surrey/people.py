@@ -1,8 +1,9 @@
-from utils import CanadianScraper, CanadianPerson as Person
-
 import re
 
-COUNCIL_PAGE = 'https://www.surrey.ca/city-government/2999.aspx'
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
+
+COUNCIL_PAGE = "https://www.surrey.ca/city-government/2999.aspx"
 
 
 class SurreyPersonScraper(CanadianScraper):
@@ -10,20 +11,20 @@ class SurreyPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath("//a[@class='gtm-grid']")
 
-        assert len(members), 'No members found'
+        assert len(members), "No members found"
         seat_number = 1
         for member in members:
             if not member.text_content().strip():
                 continue
 
             name = member.text_content().strip()
-            district = 'Surrey (seat {})'.format(seat_number)
+            district = "Surrey (seat {})".format(seat_number)
             seat_number += 1
-            role = 'Councillor'
+            role = "Councillor"
 
-            url = member.attrib['href']
+            url = member.attrib["href"]
             ext_infos = self.scrape_extended_info(url)
-            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
@@ -32,9 +33,9 @@ class SurreyPersonScraper(CanadianScraper):
                 if photo_url:
                     p.image = photo_url
                 if email:
-                    p.add_contact('email', email)
+                    p.add_contact("email", email)
                 if phone:
-                    p.add_contact('voice', phone, 'legislature')
+                    p.add_contact("voice", phone, "legislature")
             yield p
 
     def scrape_extended_info(self, url):
@@ -42,12 +43,12 @@ class SurreyPersonScraper(CanadianScraper):
         email = None
         root = self.lxmlize(url)
         main = root.xpath("//div[@class='inner-wrapper']")[0]
-        photo_url = main.xpath('.//img/@src')
-        paras = main.xpath('.//p')
+        photo_url = main.xpath(".//img/@src")
+        paras = main.xpath(".//p")
         for para in paras:
-            pattern = re.compile('(?:Office: )(.+?)\n(Email: )(.+)')
+            pattern = re.compile("(?:Office: )(.+?)\n(Email: )(.+)")
             matches = re.search(pattern, para.text_content())
-            if (matches):
+            if matches:
                 phone = matches[1]
                 email = matches[3]
         return email, phone, photo_url[0]

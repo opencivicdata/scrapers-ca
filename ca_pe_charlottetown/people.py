@@ -1,8 +1,9 @@
-from utils import CanadianScraper, CanadianPerson as Person
-
 import re
 
-COUNCIL_PAGE = 'https://www.charlottetown.ca/mayor___council/city_council/meet_my_councillor'
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
+
+COUNCIL_PAGE = "https://www.charlottetown.ca/mayor___council/city_council/meet_my_councillor"
 
 
 class CharlottetownPersonScraper(CanadianScraper):
@@ -12,46 +13,46 @@ class CharlottetownPersonScraper(CanadianScraper):
         nodes = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ctl14_divContent"]/*')
         groups = [[]]
         for node in nodes:
-            if node.tag == 'hr':
+            if node.tag == "hr":
                 groups.append([])
             else:
                 groups[-1].append(node)
 
-        assert len(groups), 'No councillors found'
+        assert len(groups), "No councillors found"
         for group in groups:
             para = group[0]
-            text = para.xpath('.//strong[1]/text()')[0]
-            if 'Deputy Mayor' in text:
-                role = 'Councillor'
-                match = re.search(r'Deputy Mayor (.+) - Councillor (Ward \d+)', text)
+            text = para.xpath(".//strong[1]/text()")[0]
+            if "Deputy Mayor" in text:
+                role = "Councillor"
+                match = re.search(r"Deputy Mayor (.+) - Councillor (Ward \d+)", text)
                 district = match.group(2)
-            elif 'Mayor' in text:
-                role = 'Mayor'
-                match = re.search(r'Mayor (.+)', text)
-                district = 'Charlottetown'
+            elif "Mayor" in text:
+                role = "Mayor"
+                match = re.search(r"Mayor (.+)", text)
+                district = "Charlottetown"
             else:
-                role = 'Councillor'
-                match = re.search(r'Councillor (.+) - (Ward \d+)', text)
+                role = "Councillor"
+                match = re.search(r"Councillor (.+) - (Ward \d+)", text)
                 district = match.group(2)
 
-            image = para.xpath('.//@src')[0]
+            image = para.xpath(".//@src")[0]
             name = match.group(1)
 
-            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
             p.image = image
             email = self.get_email(para, error=False)
             if email:
-                p.add_contact('email', email)
+                p.add_contact("email", email)
 
             for text in para.xpath('.//strong[contains(., "Phone")]/following-sibling::text()'):
-                if re.search(r'\d', text):
-                    match = re.search(r'(.+) \((.+)\)', text)
-                    if match.group(2) == 'Fax':
-                        contact_type = 'fax'
+                if re.search(r"\d", text):
+                    match = re.search(r"(.+) \((.+)\)", text)
+                    if match.group(2) == "Fax":
+                        contact_type = "fax"
                     else:
-                        contact_type = 'voice'
+                        contact_type = "voice"
                     p.add_contact(contact_type, match.group(1), match.group(2))
 
             yield p

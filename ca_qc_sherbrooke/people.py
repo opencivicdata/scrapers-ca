@@ -1,6 +1,7 @@
-from utils import CanadianScraper, CanadianPerson as Person, clean_french_prepositions
+from utils import CanadianPerson as Person
+from utils import CanadianScraper, clean_french_prepositions
 
-COUNCIL_PAGE = 'http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/conseil-municipal/elus-municipaux/'
+COUNCIL_PAGE = "http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/conseil-municipal/elus-municipaux/"
 
 
 class SherbrookePersonScraper(CanadianScraper):
@@ -8,36 +9,36 @@ class SherbrookePersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="c2087"]//a')
-        assert len(councillors), 'No councillors found'
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.text_content()
-            url = councillor.attrib['href']
+            url = councillor.attrib["href"]
             page = self.lxmlize(url)
 
-            if 'Maire' in page.xpath('//h2/text()')[0]:
-                district = 'Sherbrooke'
-                role = 'Maire'
+            if "Maire" in page.xpath("//h2/text()")[0]:
+                district = "Sherbrooke"
+                role = "Maire"
             else:
                 district = page.xpath('//div[@class="csc-default"]//a[contains(@href, "fileadmin")]/text()')[0]
-                district = clean_french_prepositions(district).replace('district', '').strip()
-                role = 'Conseiller'
+                district = clean_french_prepositions(district).replace("district", "").strip()
+                role = "Conseiller"
 
-            if district == 'Lennoxville':
-                district = 'Arrondissement 3'
+            if district == "Lennoxville":
+                district = "Arrondissement 3"
 
-            p = Person(primary_org='legislature', name=name, district=district, role=role)
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.image = page.xpath('//div[@class="csc-textpic-image csc-textpic-last"]//img/@src')[0]
-            parts = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(':')
+            parts = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(":")
             note = parts[0]
             phone = parts[1]
             p.add_contact(note, phone, note)
             email = self.get_email(page)
             if email:
-                p.add_contact('email', email)
-            if district == 'Brompton':
-                p._related[0].extras['boundary_url'] = '/boundaries/sherbrooke-boroughs/brompton/'
-            elif district == 'Lennoxville':
-                p._related[0].extras['boundary_url'] = '/boundaries/sherbrooke-boroughs/lennoxville/'
+                p.add_contact("email", email)
+            if district == "Brompton":
+                p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/brompton/"
+            elif district == "Lennoxville":
+                p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/lennoxville/"
             yield p

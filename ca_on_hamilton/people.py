@@ -1,6 +1,7 @@
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
 
-COUNCIL_PAGE = 'http://www.hamilton.ca/council-committee/mayor-council/city-councillors'
+COUNCIL_PAGE = "http://www.hamilton.ca/council-committee/mayor-council/city-councillors"
 
 
 class HamiltonPersonScraper(CanadianScraper):
@@ -11,9 +12,9 @@ class HamiltonPersonScraper(CanadianScraper):
         yield self.mayor_data(mayor_url)
 
         councillors = page.xpath('//div[contains(@class, "menu-name-menu-service-structure")]/li/a')
-        assert len(councillors), 'No councillors found'
+        assert len(councillors), "No councillors found"
         for a in councillors:
-            yield self.councillor_data(a.attrib['href'])
+            yield self.councillor_data(a.attrib["href"])
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
@@ -23,15 +24,15 @@ class HamiltonPersonScraper(CanadianScraper):
         info_node = page.xpath('//div[@id="wb-pri"]')[0]
         phone = self.get_phone(info_node, area_codes=[289, 365, 905])
         email = self.get_email(info_node)
-        photo_url = info_node.xpath('.//img/@src')  # can be empty
+        photo_url = info_node.xpath(".//img/@src")  # can be empty
 
-        p = Person(primary_org='legislature', name=name, district=district, role='Councillor')
+        p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_contact('email', email)
+        p.add_contact("email", email)
 
         if phone:
-            p.add_contact('voice', phone, 'legislature')
+            p.add_contact("voice", phone, "legislature")
         if photo_url:
             p.image = photo_url[0]
 
@@ -40,18 +41,18 @@ class HamiltonPersonScraper(CanadianScraper):
     def mayor_data(self, url):
         page = self.lxmlize(url)
 
-        name = page.xpath('//h1[contains(., "Mayor")]/text()')[0].split('-')[1].replace('Mayor', '')
+        name = page.xpath('//h1[contains(., "Mayor")]/text()')[0].split("-")[1].replace("Mayor", "")
 
         info_node = page.xpath('//div[@id="wb-pri"]')[0]
         phone = self.get_phone(info_node, area_codes=[289, 365, 905])
         email = self.get_email(info_node)
-        photo_url = info_node.xpath('.//img/@src')[0]
+        photo_url = info_node.xpath(".//img/@src")[0]
 
-        p = Person(primary_org='legislature', name=name, district='Hamilton', role='Mayor')
+        p = Person(primary_org="legislature", name=name, district="Hamilton", role="Mayor")
         p.add_source(COUNCIL_PAGE)
         p.add_source(url)
-        p.add_contact('email', email)
-        p.add_contact('voice', phone, 'legislature')
+        p.add_contact("email", email)
+        p.add_contact("voice", phone, "legislature")
         p.image = photo_url
 
         return p

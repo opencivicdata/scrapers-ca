@@ -1,42 +1,43 @@
 # coding: utf-8
-from utils import CanadianJurisdiction
+from datetime import datetime
+
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
-from datetime import datetime
+from utils import CanadianJurisdiction
 
 
 class Canada(CanadianJurisdiction):
-    classification = 'legislature'
-    division_id = 'ocd-division/country:ca'
-    division_name = 'Canada'
-    name = 'Parliament of Canada'
-    url = 'http://www.parl.gc.ca'
+    classification = "legislature"
+    division_id = "ocd-division/country:ca"
+    division_name = "Canada"
+    name = "Parliament of Canada"
+    url = "http://www.parl.gc.ca"
     parties = [
-        {'name': 'Bloc Québécois'},
-        {'name': 'Co-operative Commonwealth Federation'},
-        {'name': 'Conservative'},
-        {'name': 'Conservative Independent'},
-        {'name': 'Forces et Démocratie'},
-        {'name': 'Green Party'},
-        {'name': 'Groupe parlementaire québécois'},
-        {'name': 'Independent'},
-        {'name': 'Liberal'},
-        {'name': 'NDP'},
-        {'name': "People's Party"},
-        {'name': 'Québec debout'},
+        {"name": "Bloc Québécois"},
+        {"name": "Co-operative Commonwealth Federation"},
+        {"name": "Conservative"},
+        {"name": "Conservative Independent"},
+        {"name": "Forces et Démocratie"},
+        {"name": "Green Party"},
+        {"name": "Groupe parlementaire québécois"},
+        {"name": "Independent"},
+        {"name": "Liberal"},
+        {"name": "NDP"},
+        {"name": "People's Party"},
+        {"name": "Québec debout"},
     ]
 
     def get_organizations(self):
         parliament = Organization(self.name, classification=self.classification)
         yield parliament
 
-        upper = Organization('Senate', classification='upper', parent_id=parliament)
-        lower = Organization('House of Commons', classification='lower', parent_id=parliament)
+        upper = Organization("Senate", classification="upper", parent_id=parliament)
+        lower = Organization("House of Commons", classification="lower", parent_id=parliament)
 
-        for division in Division.get(self.division_id).children('ed'):
-            if division.attrs.get('validFrom') and division.attrs['validFrom'] <= datetime.now().strftime('%Y-%m-%d'):
-                lower.add_post(role='MP', label=division.name, division_id=division.id)
+        for division in Division.get(self.division_id).children("ed"):
+            if division.attrs.get("validFrom") and division.attrs["validFrom"] <= datetime.now().strftime("%Y-%m-%d"):
+                lower.add_post(role="MP", label=division.name, division_id=division.id)
 
         yield upper
         yield lower

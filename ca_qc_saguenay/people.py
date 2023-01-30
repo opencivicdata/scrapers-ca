@@ -1,8 +1,9 @@
-from utils import CanadianScraper, CanadianPerson as Person
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
 
-COUNCIL_PAGE = 'https://ville.saguenay.ca/la-ville-et-vie-democratique/conseils-municipaux-et-darrondissement/membres-des-conseils'
-MAYOR_PAGE = 'https://ville.saguenay.ca'
-CONTACT_PAGE = 'https://ville.saguenay.ca/la-ville-et-vie-democratique/cabinet'
+COUNCIL_PAGE = "https://ville.saguenay.ca/la-ville-et-vie-democratique/conseils-municipaux-et-darrondissement/membres-des-conseils"
+MAYOR_PAGE = "https://ville.saguenay.ca"
+CONTACT_PAGE = "https://ville.saguenay.ca/la-ville-et-vie-democratique/cabinet"
 
 
 class SaguenayPersonScraper(CanadianScraper):
@@ -10,24 +11,24 @@ class SaguenayPersonScraper(CanadianScraper):
         mayor_page = self.lxmlize(MAYOR_PAGE)
         contact_page = self.lxmlize(CONTACT_PAGE)
 
-        name = mayor_page.xpath('//span/text()[contains(., "maire")]')[0].split(', ', 1)[0]
-        p = Person(primary_org='legislature', name=name, district='Saguenay', role='Maire')
+        name = mayor_page.xpath('//span/text()[contains(., "maire")]')[0].split(", ", 1)[0]
+        p = Person(primary_org="legislature", name=name, district="Saguenay", role="Maire")
         p.add_source(MAYOR_PAGE)
         p.add_source(CONTACT_PAGE)
         node = contact_page.xpath('//h2[contains(., "Coordonnées du cabinet")]/following-sibling::p')[1]
-        p.add_contact('voice', self.get_phone(node, area_codes=[418]), 'legislature')
-        p.add_contact('email', self.get_email(node))
+        p.add_contact("voice", self.get_phone(node, area_codes=[418]), "legislature")
+        p.add_contact("email", self.get_email(node))
         yield p
 
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//div[contains(./h3, "District")]')
-        assert len(councillors), 'No councillors found'
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
-            district = councillor.xpath('./h3/text()')[0].replace('#', '')
-            name = councillor.xpath('.//p/text()')[0]
+            district = councillor.xpath("./h3/text()")[0].replace("#", "")
+            name = councillor.xpath(".//p/text()")[0]
 
-            p = Person(primary_org='legislature', name=name, district=district, role='Conseiller')
+            p = Person(primary_org="legislature", name=name, district=district, role="Conseiller")
             p.add_source(COUNCIL_PAGE)
-            p.add_contact('voice', self.get_phone(councillor), 'legislature')
-            p.add_contact('email', self.get_email(councillor))
+            p.add_contact("voice", self.get_phone(councillor), "legislature")
+            p.add_contact("email", self.get_email(councillor))
             yield p
