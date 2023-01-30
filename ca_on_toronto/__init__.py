@@ -2,8 +2,6 @@ from utils import CanadianJurisdiction
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
-from datetime import datetime
-
 
 class Toronto(CanadianJurisdiction):
     classification = 'executive'  # just to avoid clash
@@ -40,34 +38,6 @@ class Toronto(CanadianJurisdiction):
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
-
-        division_names = {
-            'Etobicoke North',
-            'Etobicoke Centre',
-            'Etobicoke-Lakeshore',
-            'Parkdale-High Park',
-            'York South-Weston',
-            'York Centre',
-            'Humber River-Black Creek',
-            'Eglinton-Lawrence',
-            'Davenport',
-            'Spadina-Fort York',
-            'University-Rosedale',
-            'Toronto-St. Paul\'s',
-            'Toronto Centre',
-            'Toronto-Danforth',
-            'Don Valley West',
-            'Don Valley East',
-            'Don Valley North',
-            'Willowdale',
-            'Beaches-East York',
-            'Scarborough Southwest',
-            'Scarborough Centre',
-            'Scarborough-Agincourt',
-            'Scarborough North',
-            'Scarborough-Guildwood',
-            'Scarborough-Rouge Park',
-        }
 
         division = Division.get(self.division_id)
         organization.add_post(role='Mayor', label=division.name, division_id=division.id)

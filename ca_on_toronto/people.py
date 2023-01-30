@@ -1,5 +1,4 @@
 from utils import CSVScraper
-from datetime import date
 
 
 class TorontoPersonScraper(CSVScraper):
