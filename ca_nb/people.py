@@ -1,8 +1,5 @@
 from utils import CanadianScraper, CanadianPerson as Person
 
-import re
-from urllib.parse import urljoin
-
 COUNCIL_PAGE = 'https://www.legnb.ca/en/members/current'  # update each election
 
 
@@ -47,8 +44,8 @@ class NewBrunswickPersonScraper(CanadianScraper):
             p = Person(primary_org='legislature', name=name, district=district, role='MLA',
                        party=party, image=photo_url)
             if phone:
-                  p.add_contact('voice', phone, 'legislature')
+                p.add_contact('voice', phone, 'legislature')
             if email:
-                  p.add_contact('email', email)
+                p.add_contact('email', email)
             p.add_source(url)
             yield p

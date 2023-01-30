@@ -58,7 +58,7 @@ class AlbertaPersonScraper(CanadianScraper):
         # make unique field names for the two sets of address fields
         field_names = next(reader)
         for name in OFFICE_FIELDS:
-            assert(field_names.count(name) == 2)
+            assert field_names.count(name) == 2
             field_names[field_names.index(name)] = '{} 1'.format(name)
             field_names[field_names.index(name)] = '{} 2'.format(name)
         rows = [dict(zip(field_names, row)) for row in reader]
@@ -100,11 +100,11 @@ class AlbertaPersonScraper(CanadianScraper):
             if not mla['Address Type 1'].strip():
                 addresses.pop(0)
             else:
-                assert(mla['Address Type 1'] == 'Legislature Office')
+                assert mla['Address Type 1'] == 'Legislature Office'
             if not mla['Address Type 2']:
                 addresses.pop()
             else:
-                assert(mla['Address Type 2'] == 'Constituency Office')
+                assert mla['Address Type 2'] == 'Constituency Office'
 
             for suffix, note in addresses:
                 for key, contact_type in (('Phone', 'voice'), ('Fax', 'fax')):

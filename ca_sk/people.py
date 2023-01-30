@@ -63,14 +63,14 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 legislature_lines = contact.xpath(
                     './/div[@class="col-md-4"][1]/div//text()'
                 )
-                assert(legislature_lines[0] == 'Legislative Building Address')
+                assert legislature_lines[0] == 'Legislative Building Address'
                 handle_address(legislature_lines[1:], 'legislature')
                 handle_phone(legislature_lines[1:], 'legislature')
 
                 constituency_lines = contact.xpath(
                     './/div[@class="col-md-4"][2]/div//text()'
                 )
-                assert(constituency_lines[0] == 'Constituency Address')
+                assert constituency_lines[0] == 'Constituency Address'
                 handle_address(constituency_lines[1:], 'constituency')
                 handle_phone(constituency_lines[1:], 'constituency')
 
