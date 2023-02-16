@@ -1,7 +1,6 @@
+from utils import CanadianJurisdiction
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
-
-from utils import CanadianJurisdiction
 
 
 class Toronto(CanadianJurisdiction):
@@ -10,6 +9,7 @@ class Toronto(CanadianJurisdiction):
     division_name = "Toronto"
     name = "Toronto City Council"
     url = "http://www.toronto.ca"
+    skip_null_valid_from = True
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
