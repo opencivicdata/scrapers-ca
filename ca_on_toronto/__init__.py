@@ -4,7 +4,7 @@ from pupa.scrape import Organization
 
 
 class Toronto(CanadianJurisdiction):
-    classification = "executive"  # just to avoid clash
+    classification = "legislature"
     division_id = "ocd-division/country:ca/csd:3520005"
     division_name = "Toronto"
     name = "Toronto City Council"
