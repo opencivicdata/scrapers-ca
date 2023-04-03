@@ -13,10 +13,13 @@ class SaskatchewanPersonScraper(CanadianScraper):
         for member in members:
             if "Vacant" not in member.xpath("./td")[0].text_content():
                 name = member.xpath("./td")[0].text_content().split(". ", 1)[1]
-                party = member.xpath("./td")[1].text
                 district = member.xpath("./td")[2].text_content()
                 url = member.xpath("./td[1]/a/@href")[0]
                 page = self.lxmlize(url)
+                party = page.xpath(
+                    '//span[@id="ContentContainer_MainContent_ContentBottom_Property4"]'
+                    '/span'
+                )[0].text
 
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
