@@ -11,6 +11,7 @@ class BritishColumbia(CanadianJurisdiction):
         {"name": "New Democratic Party of British Columbia"},
         {"name": "British Columbia Liberal Party"},
         {"name": "BC Green Party"},
+        {"name": "BC United"},
         {"name": "Independent"},
     ]
     skip_null_valid_from = True
