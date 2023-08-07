@@ -30,13 +30,16 @@ class OntarioPersonScraper(CanadianScraper):
                 '//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src'
             )
 
-            district = node.xpath(
-                '//div[@block="block-views-block-member-member-riding-block"]//span[@class="field-content"]/text()'
-            )[0]
+            district = ''.join(
+                node.xpath(
+                    '//div[@block="block-views-block-member-member-riding-block"]'
+                    '//p[@class="riding"]//a//text()'
+                )
+            ).strip()
             nodes = node.xpath('//div[@class="field__item"]//a')
             emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
             party = node.xpath(
-                '//div[@block="block-views-block-member-current-party-block"]//div[@class="field-content"]//text()'
+                '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
             )[0]
 
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
