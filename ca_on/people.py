@@ -59,20 +59,21 @@ class OntarioPersonScraper(CanadianScraper):
 
             for heading, note in headings.items():
                 office = node.xpath('//h3[contains(., "{}")]'.format(heading))
-                print(note, " office: ", office)
                 if office:
-                    print(office[0].xpath('./preceding::div[@class="views-field views-field-nothing"]//span[@class="field-content"]//text()'))
-                #     try:
-                #         voice = self.get_phone(
-                #             office[0].xpath(
-                #                 './following-sibling::div[@class="field field--name-field-number field--type-string field--label-inline"]//div[@class="field__item"]//text()'
-                #             )[0],
-                #             error=False,
-                #         )
-                #     except Exception:
-                #         pass
-                #     else:
-                #         if voice:
-                #             p.add_contact("voice", voice, note)
+                    try:
+                        voice = self.get_phone(
+                            office[0].xpath(
+                                '../following-sibling::div[@class="views-field views-field-nothing"]'
+                                '//span[@class="field-content"]'
+                                '//strong[contains(text(),"Tel.")]'
+                                '/following-sibling::text()[1]'
+                            )[0],
+                            error=False,
+                        )
+                    except Exception:
+                        pass
+                    else:
+                        if voice:
+                            p.add_contact("voice", voice, note)
 
             yield p
