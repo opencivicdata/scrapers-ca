@@ -8,14 +8,14 @@ COUNCIL_PAGE = "https://www.ola.org/en/members/current/contact-information"
 class OntarioPersonScraper(CanadianScraper):
     def scrape(self):
         headings = {
-            "Queen's Park": "legislature",
+            "Legislative": "legislature",
             "Ministry": "office",
             "Constituency": "constituency",
         }
 
         page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
         members = page.xpath('//div[@class="view-content"]//h2')
-        # print(members)
+
         assert len(members), "No members found"
         for member in members:
             name = member.xpath(".//a//text()")[0]
@@ -36,11 +36,12 @@ class OntarioPersonScraper(CanadianScraper):
                     '//p[@class="riding"]//a//text()'
                 )
             ).strip()
-            nodes = node.xpath('//div[@class="field__item"]//a')
+            nodes = node.xpath('//div[@class="views-element-container"]//a')
             emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
             party = node.xpath(
                 '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
-            )[0]
+            )
+            party = [item for item in party if item.strip()][0]
 
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
             p.add_source(COUNCIL_PAGE)
@@ -48,7 +49,6 @@ class OntarioPersonScraper(CanadianScraper):
             if image:
                 p.image = image[0]
 
-            # p.add_contact('voice', phone, 'legislature')
             if fax:
                 p.add_contact("fax", fax[-1], "legislature")
 
@@ -63,7 +63,10 @@ class OntarioPersonScraper(CanadianScraper):
                     try:
                         voice = self.get_phone(
                             office[0].xpath(
-                                './following-sibling::div[@class="field field--name-field-number field--type-string field--label-inline"]//div[@class="field__item"]//text()'
+                                '../following-sibling::div[@class="views-field views-field-nothing"]'
+                                '//span[@class="field-content"]'
+                                '//strong[contains(text(),"Tel.")]'
+                                '/following-sibling::text()[1]'
                             )[0],
                             error=False,
                         )
