@@ -1,4 +1,5 @@
 import csv
+from itertools import zip_longest
 from io import StringIO
 
 from utils import CanadianPerson as Person
@@ -60,7 +61,7 @@ class AlbertaPersonScraper(CanadianScraper):
             assert field_names.count(name) == 2
             field_names[field_names.index(name)] = "{} 1".format(name)
             field_names[field_names.index(name)] = "{} 2".format(name)
-        rows = [dict(zip(field_names, row)) for row in reader]
+        rows = [dict(zip_longest(field_names, row)) for row in reader]
         assert len(rows), "No members found"
         for mla in rows:
             name = "{} {} {}".format(
