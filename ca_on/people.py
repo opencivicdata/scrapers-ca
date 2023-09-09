@@ -36,7 +36,7 @@ class OntarioPersonScraper(CanadianScraper):
                     '//p[@class="riding"]//a//text()'
                 )
             ).strip()
-            nodes = node.xpath('//div[@class="views-element-container"]//a')
+            nodes = node.xpath('//div[@id="main-content"]//a')
             emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
             party = node.xpath(
                 '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
