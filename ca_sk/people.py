@@ -24,7 +24,12 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                p.image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
+                try:
+                    p.image = page.xpath(
+                        '//div[contains(@class, "mla-image-cell")]/img/@src'
+                    )[0]
+                except IndexError:
+                    pass
 
                 contact = page.xpath('//div[@id="mla-contact"]/div[2]')[0]
                 website = contact.xpath("./div[3]/div[3]/div[2]/a")
