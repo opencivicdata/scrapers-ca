@@ -38,6 +38,13 @@ class NovaScotiaPersonScraper(CanadianScraper):
             p.image = detail.xpath('//div[contains(@class, "field-content")]//img[@typeof="foaf:Image"]/@src')[0]
 
             contact = detail.xpath('//div[contains(@class, "mla-current-profile-contact")]')[0]
+
+            address = detail.xpath('//div[contains(@class, "mla-current-profile-contact")]//p[2]')[0]
+            address = address.text_content().strip().splitlines()
+            address = list(map(str.strip, address))
+            if address:
+                p.add_contact("address", "\n".join(address), "constituency")
+
             email = self.get_email(contact, error=False)
             if email:
                 p.add_contact("email", email)
