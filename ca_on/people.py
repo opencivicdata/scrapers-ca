@@ -6,6 +6,7 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.ola.org/en/members/current/contact-information"
 
+
 class OntarioPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
@@ -41,7 +42,7 @@ class OntarioPersonScraper(CanadianScraper):
             party = node.xpath(
                 '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
             )
-            
+
             party = [item for item in party if item.strip()][0]
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
             p.add_source(COUNCIL_PAGE)
@@ -61,14 +62,18 @@ class OntarioPersonScraper(CanadianScraper):
                 office = node.xpath('//h3[contains(., "{}")]'.format(heading))
                 if office:
                     try:
-                        office_info = office[0].xpath('../following-sibling::div[@class="views-field views-field-nothing"]//span[@class="field-content"]//text()')
+                        office_info = office[0].xpath(
+                            '../following-sibling::div[@class="views-field views-field-nothing"]//span[@class="field-content"]//text()'
+                        )
                         office_items = [item for item in office_info if item.strip()]
                         office_items = list(map(str.strip, office_items))
-                        
+
                         phone_index = office_items.index("Tel.:")
-                        phone = office_items[phone_index+1]
-                        
-                        regex = re.compile(r"(\b[\w.-]+@+[\w.]+.+[\w.]\b)|(\d{3}[-\.\s]\d{3}[-\.\s]\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]\d{4}|\d{3}[-\.\s]\d{4})|(?:Tel.:)|(?:Fax:)|(?:Toll free:)") #remove none address items
+                        phone = office_items[phone_index + 1]
+
+                        regex = re.compile(
+                            r"(\b[\w.-]+@+[\w.]+.+[\w.]\b)|(\d{3}[-\.\s]\d{3}[-\.\s]\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]\d{4}|\d{3}[-\.\s]\d{4})|(?:Tel.:)|(?:Fax:)|(?:Toll free:)"
+                        )  # remove none address items
                         address = [i for i in office_items if not regex.match(i)]
                     except Exception:
                         pass
@@ -77,5 +82,5 @@ class OntarioPersonScraper(CanadianScraper):
                             p.add_contact("voice", phone, note)
                         if address:
                             p.add_contact("address", "\n".join(address), note)
-                    
+
             yield p

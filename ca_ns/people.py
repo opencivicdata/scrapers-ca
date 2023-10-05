@@ -47,15 +47,23 @@ class NovaScotiaPersonScraper(CanadianScraper):
             p.add_source(detail_url)
 
             address_root = contact.xpath('//h4[contains(text(),"Constituency")]')
-            
+
             try:
-                mailing_address = address_root[0].xpath('//following-sibling::p[contains(text(),"Mailing address:")]//following-sibling::p[1]/text()')
-                civic_address = address = address_root[0].xpath('//following-sibling::p[contains(text(),"Civic address:")]/text()')
-                civic_address_alt = address_root[0].xpath('//following-sibling::p[contains(text(),"Civic address:")]//following-sibling::p[1]/text()') # for inconsistant dom
-                business_address = address_root[0].xpath('//following-sibling::h4[contains(text(),"Business address")]//following-sibling::p[2]/text()')
+                mailing_address = address_root[0].xpath(
+                    '//following-sibling::p[contains(text(),"Mailing address:")]//following-sibling::p[1]/text()'
+                )
+                civic_address = address = address_root[0].xpath(
+                    '//following-sibling::p[contains(text(),"Civic address:")]/text()'
+                )
+                civic_address_alt = address_root[0].xpath(
+                    '//following-sibling::p[contains(text(),"Civic address:")]//following-sibling::p[1]/text()'
+                )  # for inconsistant dom
+                business_address = address_root[0].xpath(
+                    '//following-sibling::h4[contains(text(),"Business address")]//following-sibling::p[2]/text()'
+                )
             except Exception:
                 pass
-            
+
             if len(mailing_address) > 0:
                 address = mailing_address
             else:
@@ -64,7 +72,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
                         address = civic_address_alt
                     else:
                         address = civic_address
-                        address.remove(address[0]) #remove civic address
+                        address.remove(address[0])  # remove civic address
                 else:
                     if len(business_address) > 0:
                         address = business_address

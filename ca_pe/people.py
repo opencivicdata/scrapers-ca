@@ -5,6 +5,7 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.assembly.pe.ca/members"
 
+
 class PrinceEdwardIslandPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
@@ -41,7 +42,9 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
             if phone:
                 p.add_contact("voice", phone.group(1), "legislature")
 
-            address = re.search(r"(?:Office location):\s*(.+)\n*(.+)\n(175 Richmond Street)\n(.+)", info.text_content()) # Richmond Street is the legislature
+            address = re.search(
+                r"(?:Office location):\s*(.+)\n*(.+)\n(175 Richmond Street)\n(.+)", info.text_content()
+            )  # Richmond Street is the legislature
             if address:
                 address = address.group(1) + " " + address.group(2) + " " + address.group(3) + " " + address.group(4)
                 p.add_contact("address", address, "legislature")
