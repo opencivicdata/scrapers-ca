@@ -1,10 +1,10 @@
+import logging
 import re
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.assembly.pe.ca/members"
-
 
 class PrinceEdwardIslandPersonScraper(CanadianScraper):
     def scrape(self):
@@ -41,6 +41,12 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
             phone = re.search(r"(?:Telephone|Tel|Phone):\s*(.+?)\n", info.text_content())
             if phone:
                 p.add_contact("voice", phone.group(1), "legislature")
+
+            address = re.search(r"(?:Office location):\s*(.+)\n*(.+)\n(175 Richmond Street)\n(.+)", info.text_content()) # Richmond Street is the legislature
+            if address:
+                address = address.group(1) + " " + address.group(2) + " " + address.group(3) + " " + address.group(4)
+                p.add_contact("address", address, "legislature")
+
             email = self.get_email(info, error=False)
             if email:
                 p.add_contact("email", email)
