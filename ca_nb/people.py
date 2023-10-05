@@ -1,3 +1,4 @@
+import logging
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -13,6 +14,9 @@ class NewBrunswickPersonScraper(CanadianScraper):
             node = self.lxmlize(url, encoding="utf-8")
             phone = ""
             email = ""
+            address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')[0]
+            address = address.text_content().strip().splitlines()
+            address = list(map(str.strip, address))
             hrefs = node.xpath('//table[contains(@class, "properties-table")]//a//@href')
             for href in hrefs:
                 if href.startswith("mailto:"):
@@ -43,8 +47,11 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 primary_org="legislature", name=name, district=district, role="MLA", party=party, image=photo_url
             )
             if phone:
-                p.add_contact("voice", phone, "legislature")
+                p.add_contact("voice", phone, "constituency")
             if email:
                 p.add_contact("email", email)
+            if address:
+                p.add_contact("address", "\n".join(address), "constituency")
+
             p.add_source(url)
             yield p
