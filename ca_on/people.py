@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -7,14 +9,14 @@ COUNCIL_PAGE = "https://www.ola.org/en/members/current/contact-information"
 
 class OntarioPersonScraper(CanadianScraper):
     def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
+        members = page.xpath('//div[@class="view-content"]//h2')
+
         headings = {
             "Legislative": "legislature",
             "Ministry": "office",
             "Constituency": "constituency",
         }
-
-        page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
-        members = page.xpath('//div[@class="view-content"]//h2')
 
         assert len(members), "No members found"
         for member in members:
@@ -40,8 +42,8 @@ class OntarioPersonScraper(CanadianScraper):
             party = node.xpath(
                 '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
             )
-            party = [item for item in party if item.strip()][0]
 
+            party = [item for item in party if item.strip()][0]
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
@@ -60,19 +62,25 @@ class OntarioPersonScraper(CanadianScraper):
                 office = node.xpath('//h3[contains(., "{}")]'.format(heading))
                 if office:
                     try:
-                        voice = self.get_phone(
-                            office[0].xpath(
-                                '../following-sibling::div[@class="views-field views-field-nothing"]'
-                                '//span[@class="field-content"]'
-                                '//strong[contains(text(),"Tel.")]'
-                                "/following-sibling::text()[1]"
-                            )[0],
-                            error=False,
+                        office_info = office[0].xpath(
+                            '../following-sibling::div[@class="views-field views-field-nothing"]//span[@class="field-content"]//text()'
                         )
+                        office_items = [item for item in office_info if item.strip()]
+                        office_items = list(map(str.strip, office_items))
+
+                        phone_index = office_items.index("Tel.:")
+                        phone = office_items[phone_index + 1]
+
+                        regex = re.compile(
+                            r"(\b[\w.-]+@+[\w.]+.+[\w.]\b)|(\d{3}[-\.\s]\d{3}[-\.\s]\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]\d{4}|\d{3}[-\.\s]\d{4})|(?:Tel.:)|(?:Fax:)|(?:Toll free:)"
+                        )  # remove none address items
+                        address = [i for i in office_items if not regex.match(i)]
                     except Exception:
                         pass
                     else:
-                        if voice:
-                            p.add_contact("voice", voice, note)
+                        if phone:
+                            p.add_contact("voice", phone, note)
+                        if address:
+                            p.add_contact("address", "\n".join(address), note)
 
             yield p

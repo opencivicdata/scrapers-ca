@@ -38,13 +38,6 @@ class NovaScotiaPersonScraper(CanadianScraper):
             p.image = detail.xpath('//div[contains(@class, "field-content")]//img[@typeof="foaf:Image"]/@src')[0]
 
             contact = detail.xpath('//div[contains(@class, "mla-current-profile-contact")]')[0]
-
-            address = detail.xpath('//div[contains(@class, "mla-current-profile-contact")]//p[2]')[0]
-            address = address.text_content().strip().splitlines()
-            address = list(map(str.strip, address))
-            if address:
-                p.add_contact("address", "\n".join(address), "constituency")
-
             email = self.get_email(contact, error=False)
             if email:
                 p.add_contact("email", email)
@@ -53,4 +46,37 @@ class NovaScotiaPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
 
+            address_root = contact.xpath('//h4[contains(text(),"Constituency")]')
+
+            try:
+                mailing_address = address_root[0].xpath(
+                    '//following-sibling::p[contains(text(),"Mailing address:")]//following-sibling::p[1]/text()'
+                )
+                civic_address = address = address_root[0].xpath(
+                    '//following-sibling::p[contains(text(),"Civic address:")]/text()'
+                )
+                civic_address_alt = address_root[0].xpath(
+                    '//following-sibling::p[contains(text(),"Civic address:")]//following-sibling::p[1]/text()'
+                )  # for inconsistant dom
+                business_address = address_root[0].xpath(
+                    '//following-sibling::h4[contains(text(),"Business address")]//following-sibling::p[2]/text()'
+                )
+            except Exception:
+                pass
+
+            if len(mailing_address) > 0:
+                address = mailing_address
+            else:
+                if len(civic_address) > 0 or len(civic_address_alt) > 0:
+                    if len(civic_address_alt) > 0:
+                        address = civic_address_alt
+                    else:
+                        address = civic_address
+                        address.remove(address[0])  # remove civic address
+                else:
+                    if len(business_address) > 0:
+                        address = business_address
+
+            address = list(map(str.strip, address))
+            p.add_contact("address", "\n".join(address), "constituency")
             yield p

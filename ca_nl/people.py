@@ -37,15 +37,19 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             if not member["name"].strip():
                 print("Skipping blank member: {}".format(member))
                 continue
-            p = Person(
-                primary_org="legislature",
-                name=" ".join(reversed(member["name"].split(","))).strip(),
-                district=member["district"]
+            name = " ".join(reversed(member["name"].split(","))).strip()
+            district = (
+                member["district"]
                 .replace("&apos;", "'")
                 .replace(
                     " - ",
                     "\u2014",
-                ),  # match messy boundary data
+                )
+            )  # match messy boundary data
+            p = Person(
+                primary_org="legislature",
+                name=name,
+                district=district,
                 role="MHA",
                 party=PARTIES.get(member["party"]),
             )
@@ -58,5 +62,19 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             phone = member["phone"].split("/")[0].replace("TBD", "").strip()
             if phone:
                 p.add_contact("voice", phone, "legislature")
+
+            # as per https://www.assembly.nl.ca/Members/members.aspx
+            # All Members may be written to by using the following address:
+
+            # [Member's Name]
+            # MHA, [Member's District]
+            # Confederation Building
+            # PO Box 8700
+            # St. John's NL
+            # A1B 4J6
+            address = name + " MHA, " + district + " Confederation Building PO Box 8700 St. John's NL A1B 4J6"
+            # as per https://www.assembly.nl.ca/Members/members.aspx
+
+            p.add_contact("address", address, "legislature")
 
             yield p
