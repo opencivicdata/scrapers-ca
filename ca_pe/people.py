@@ -1,4 +1,3 @@
-import logging
 import re
 
 from utils import CanadianPerson as Person

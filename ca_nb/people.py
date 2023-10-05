@@ -1,4 +1,3 @@
-import logging
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
