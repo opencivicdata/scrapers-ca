@@ -30,10 +30,9 @@ class OntarioPersonScraper(CanadianScraper):
                 '//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src'
             )
 
-            district = ''.join(
+            district = "".join(
                 node.xpath(
-                    '//div[@block="block-views-block-member-member-riding-block"]'
-                    '//p[@class="riding"]//a//text()'
+                    '//div[@block="block-views-block-member-member-riding-block"]' '//p[@class="riding"]//a//text()'
                 )
             ).strip()
             nodes = node.xpath('//div[@id="main-content"]//a')
@@ -66,7 +65,7 @@ class OntarioPersonScraper(CanadianScraper):
                                 '../following-sibling::div[@class="views-field views-field-nothing"]'
                                 '//span[@class="field-content"]'
                                 '//strong[contains(text(),"Tel.")]'
-                                '/following-sibling::text()[1]'
+                                "/following-sibling::text()[1]"
                             )[0],
                             error=False,
                         )
