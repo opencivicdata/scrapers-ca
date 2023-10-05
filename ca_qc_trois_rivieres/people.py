@@ -21,7 +21,7 @@ class TroisRivieresPersonScraper(CanadianScraper):
             email = self.lxmlize(url).xpath('//div[@class="content-page"]//a[starts-with(@href, "mailto:")]/@href')[0]
 
             email = re.sub("^mailto:", "", email)
-            name, district = map(lambda x: x.strip(), member.xpath(".//figcaption//text()"))
+            name, district = [x.strip() for x in member.xpath(".//figcaption//text()")]
             district = re.sub(r"\A(?:de|des|du) ", lambda match: match.group(0).lower(), district, flags=re.I)
             role = "Conseiller"
 

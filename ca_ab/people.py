@@ -1,6 +1,6 @@
 import csv
-from itertools import zip_longest
 from io import StringIO
+from itertools import zip_longest
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
