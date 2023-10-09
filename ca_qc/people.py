@@ -238,15 +238,15 @@ class QuebecPersonScraper(CanadianScraper):
 
             for heading, note in headings.items():
                 office = contact_page.xpath('//h3[contains(., "{}")]/parent::div'.format(heading))
-                
+
                 try:
                     phone = self.get_phone(office[0])
-                    office_info = contact_page.xpath('//h3[contains(., "{}")]/parent::div/address[1]/span/text()'.format(heading))
+                    office_info = contact_page.xpath(
+                        '//h3[contains(., "{}")]/parent::div/address[1]/span/text()'.format(heading)
+                    )
                     office_items = [item for item in office_info if item.strip()]
                     office_items = list(map(str.strip, office_items))
-                    regex = re.compile(
-                            r"^Télé.+"
-                        )  # remove none address items
+                    regex = re.compile(r"^Télé.+")  # remove none address items
                     address = [i for i in office_items if not regex.match(i)]
                 except Exception:
                     pass  # probably just no phone number present
