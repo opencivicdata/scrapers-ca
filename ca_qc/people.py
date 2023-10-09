@@ -192,6 +192,11 @@ class QuebecPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath('//*[@id="ListeDeputes"]/tbody/tr')
+        headings = {
+            "Circonscription": "constituency",
+            "Parlement": "legislature",
+            "Ministère": "office",
+        }
 
         assert len(members), "No members found"
         for row in members:
@@ -231,21 +236,23 @@ class QuebecPersonScraper(CanadianScraper):
             if twitter:
                 p.add_link(twitter)
 
-            for div in contact_page.xpath('//div[@class="blockAdresseDepute"]'):
+            for heading, note in headings.items():
+                office = contact_page.xpath('//h3[contains(., "{}")]/parent::div'.format(heading))
+                
                 try:
-                    phone = self.get_phone(div)
-                    heading = div.find("h3").text
+                    phone = self.get_phone(office[0])
+                    office_info = contact_page.xpath('//h3[contains(., "{}")]/parent::div/address[1]/span/text()'.format(heading))
+                    office_items = [item for item in office_info if item.strip()]
+                    office_items = list(map(str.strip, office_items))
+                    regex = re.compile(
+                            r"^Télé.+"
+                        )  # remove none address items
+                    address = [i for i in office_items if not regex.match(i)]
                 except Exception:
                     pass  # probably just no phone number present
                 else:
-                    try:
-                        note = {
-                            "Circonscription": "constituency",
-                            "Parlement": "legislature",
-                            "Ministère": "legislature",
-                        }[heading]
-                    except KeyError:
-                        raise  # scraper should be updated to handle new value
-                    else:
+                    if phone:
                         p.add_contact("voice", phone, note)
+                    if address:
+                        p.add_contact("address", "\n".join(address), note)
             yield p
