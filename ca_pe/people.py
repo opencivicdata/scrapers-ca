@@ -41,9 +41,9 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
             phone = re.search(r"(?:Telephone|Tel|Phone):\s*(.+?)\n", info.text_content())
             if phone:
                 p.add_contact("voice", phone.group(1), "legislature")
-
             address = re.search(
-                r"(?:Office location):\s*(.+)\n*(.+)\n(175 Richmond Street)\n(.+)", info.text_content()
+                r"(?:Office location):\s*(.+)\n*(.+)\n(175 Richmond Street|175 Richmond Street.+)\n(.+)",
+                info.text_content(),
             )  # Richmond Street is the legislature
             if address:
                 address = address.group(1) + " " + address.group(2) + " " + address.group(3) + " " + address.group(4)
