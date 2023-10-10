@@ -57,7 +57,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
                 )
                 civic_address_alt = address_root[0].xpath(
                     '//following-sibling::p[contains(text(),"Civic address:")]//following-sibling::p[1]/text()'
-                )  # for inconsistant dom
+                )  # for inconsistent dom
                 business_address = address_root[0].xpath(
                     '//following-sibling::h4[contains(text(),"Business address")]//following-sibling::p[2]/text()'
                 )
