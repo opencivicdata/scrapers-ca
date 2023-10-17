@@ -65,6 +65,10 @@ class BritishColumbiaPersonScraper(CanadianScraper):
                 constituency_phone = phones[1]
                 p.add_contact("voice", constituency_phone, "constituency")
 
+            roles = page.xpath('//div[@id="MinisterTitle"]/text()')[0].strip()
+            if roles:
+                p.extras["roles"] = [roles]
+
             yield p
 
 
