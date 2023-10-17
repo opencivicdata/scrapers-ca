@@ -72,10 +72,22 @@ class CanadaPersonScraper(CanadianScraper):
             preferred_languages = mp_page.xpath(
                 './/dt[contains(., "Preferred Language")]/following-sibling::dd/text()'
             )
+
             if preferred_languages:
                 m.extras["preferred_languages"] = [
                     language.replace("/", "").strip() for language in preferred_languages
                 ]
+            
+            roles_node = mp_page.xpath('.//div[@id="roles"]')
+
+            try:
+                roles = roles_node[0].xpath('//h4[contains(., "Offices and Roles")]/following-sibling::ul[1]/li/text()')
+                if roles: 
+                    m.extras["roles"] = roles
+                
+            except Exception:
+                pass
+
 
             if province == "Québec":
                 m.add_contact("address", "Chambre des communes\nOttawa ON  K1A 0A6", "legislature")
