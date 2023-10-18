@@ -79,15 +79,9 @@ class CanadaPersonScraper(CanadianScraper):
                 ]
             
             roles_node = mp_page.xpath('.//div[@id="roles"]')
-
-            try:
-                roles = roles_node[0].xpath('//h4[contains(., "Offices and Roles")]/following-sibling::ul[1]/li/text()')
-                if roles: 
-                    m.extras["roles"] = roles
-                
-            except Exception:
-                pass
-
+            roles = roles_node[0].xpath('//h4[contains(., "Offices and Roles")]/following-sibling::ul[1]/li/text()')
+            if roles: 
+                m.extras["roles"] = roles
 
             if province == "Québec":
                 m.add_contact("address", "Chambre des communes\nOttawa ON  K1A 0A6", "legislature")

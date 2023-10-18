@@ -85,6 +85,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
             linked_roles = detail.xpath('//div[contains(@class, "pane-cabinet")]/div//ul/li/div/span/a/text()')
 
             if roles or linked_roles:
-                p.extras["roles"] = list(itertools.chain(list(map(lambda role: role.strip(), linked_roles)),list(map(lambda role: role.strip(), roles))))
+                roles = [role.strip() for role in roles + linked_roles]
+                p.extras["roles"] = roles
 
             yield p

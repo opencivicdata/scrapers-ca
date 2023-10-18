@@ -117,11 +117,8 @@ class AlbertaPersonScraper(CanadianScraper):
             
             members_page = self.lxmlize(detail_url)
 
-            try:
-                roles = members_page.xpath('//div[contains(@class, "heading-block")]/following-sibling::h4/div/text()')
-                if roles:
-                    p.extras["roles"] = roles
-            except Exception:
-                pass
-
+            roles = members_page.xpath('//div[contains(@class, "heading-block")]/following-sibling::h4/div/text()')
+            if roles:
+                p.extras["roles"] = roles
+            
             yield p

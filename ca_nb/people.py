@@ -54,7 +54,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 p.add_contact("address", "\n".join(address), "constituency")
 
             if roles:
-                p.extras["roles"] = list(map(lambda role: role.strip(), roles))
+                p.extras["roles"] = [role.strip() for role in roles]
 
             p.add_source(url)
             yield p

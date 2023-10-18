@@ -86,12 +86,7 @@ class OntarioPersonScraper(CanadianScraper):
             roles = node.xpath('//h3[contains(.,"Current roles")]/../following-sibling::div/div/ul/li/text()')
 
             if roles:
-                def clearRoles(role):
-                    role = role.strip()
-                    if len(role) > 0:
-                        return role
-                roles = list(map(clearRoles, roles))
-                roles = list(filter(None, roles))
+                roles = [role.strip() for role in roles if role.strip()]
                 p.extras["roles"] = roles
 
             yield p
