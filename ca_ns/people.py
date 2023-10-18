@@ -1,3 +1,4 @@
+import itertools
 import re
 
 from utils import CanadianPerson as Person
@@ -79,4 +80,11 @@ class NovaScotiaPersonScraper(CanadianScraper):
 
             address = list(map(str.strip, address))
             p.add_contact("address", "\n".join(address), "constituency")
+
+            roles = detail.xpath('//div[contains(@class, "pane-cabinet")]/div//ul/li/div/span/text()')
+            linked_roles = detail.xpath('//div[contains(@class, "pane-cabinet")]/div//ul/li/div/span/a/text()')
+
+            if roles or linked_roles:
+                p.extras["roles"] = list(itertools.chain(list(map(lambda role: role.strip(), linked_roles)),list(map(lambda role: role.strip(), roles))))
+
             yield p
