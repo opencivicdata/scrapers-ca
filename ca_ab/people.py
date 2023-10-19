@@ -114,11 +114,11 @@ class AlbertaPersonScraper(CanadianScraper):
                 address = ", ".join(filter(bool, [mla["{} {}".format(field, suffix)] for field in ADDRESS_FIELDS]))
                 if address:
                     p.add_contact("address", address, note)
-            
+
             members_page = self.lxmlize(detail_url)
 
             roles = members_page.xpath('//div[contains(@class, "heading-block")]/following-sibling::h4/div/text()')
             if roles:
                 p.extras["roles"] = roles
-            
+
             yield p

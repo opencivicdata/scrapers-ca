@@ -42,7 +42,7 @@ class NewBrunswickPersonScraper(CanadianScraper):
             name = name.replace(", Q.C.", "").replace(", K.C.", "")
             photo_url = node.xpath('//div[contains(@class, "member-details-portrait")]//img//@src')[0]
             roles = node.xpath('//ul[@class="member-details-positions"]/li/text()')
-            
+
             p = Person(
                 primary_org="legislature", name=name, district=district, role="MLA", party=party, image=photo_url
             )

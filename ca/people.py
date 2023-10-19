@@ -77,10 +77,10 @@ class CanadaPersonScraper(CanadianScraper):
                 m.extras["preferred_languages"] = [
                     language.replace("/", "").strip() for language in preferred_languages
                 ]
-            
+
             roles_node = mp_page.xpath('.//div[@id="roles"]')
             roles = roles_node[0].xpath('//h4[contains(., "Offices and Roles")]/following-sibling::ul[1]/li/text()')
-            if roles: 
+            if roles:
                 m.extras["roles"] = roles
 
             if province == "Québec":

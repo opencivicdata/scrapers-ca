@@ -90,4 +90,3 @@ class OntarioPersonScraper(CanadianScraper):
                 p.extras["roles"] = roles
 
             yield p
-    

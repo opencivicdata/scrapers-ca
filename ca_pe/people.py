@@ -53,7 +53,9 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
             if email:
                 p.add_contact("email", email)
 
-            roles = details.xpath('//td[contains(@class, "end-date") and contains(text(), "Current")]/preceding-sibling::td[contains(@class, "role-name")]/text()')
+            roles = details.xpath(
+                '//td[contains(@class, "end-date") and contains(text(), "Current")]/preceding-sibling::td[contains(@class, "role-name")]/text()'
+            )
             if roles:
                 p.extras["roles"] = [role.strip() for role in roles]
 
