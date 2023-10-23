@@ -255,4 +255,16 @@ class QuebecPersonScraper(CanadianScraper):
                         p.add_contact("voice", phone, note)
                     if address:
                         p.add_contact("address", "\n".join(address), note)
+
+            en_detail_page = self.lxmlize(detail_url.replace("/fr/", "/en/"))
+            # roles = detail_page.xpath(
+            #     '//ul/h4[contains(.,"Fonctions actuelles")]/following-sibling::li[preceding-sibling::h4[contains(.,"Fonctions actuelles")] and following-sibling::h4[contains(.,"Fonctions précédentes") or contains(.,"")]]/text()'
+            # )
+            roles = en_detail_page.xpath(
+                '//ul/h4[contains(.,"Current Offices")]/following-sibling::li[preceding-sibling::h4[contains(.,"Current Offices")] and following-sibling::h4[contains(.,"Previous Offices") or contains(.,"")]]/text()'
+            )
+            if roles:
+                # p.extras["roles"] = [role.split("depuis")[0].strip() for role in roles]
+                p.extras["roles"] = [role.split("since")[0].strip() for role in roles]
+
             yield p

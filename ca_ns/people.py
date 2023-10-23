@@ -79,4 +79,12 @@ class NovaScotiaPersonScraper(CanadianScraper):
 
             address = list(map(str.strip, address))
             p.add_contact("address", "\n".join(address), "constituency")
+
+            roles = detail.xpath('//div[contains(@class, "pane-cabinet")]/div//ul/li/div/span/text()')
+            linked_roles = detail.xpath('//div[contains(@class, "pane-cabinet")]/div//ul/li/div/span/a/text()')
+
+            if roles or linked_roles:
+                roles = [role.strip() for role in roles + linked_roles]
+                p.extras["roles"] = roles
+
             yield p

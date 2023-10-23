@@ -83,4 +83,10 @@ class OntarioPersonScraper(CanadianScraper):
                         if address:
                             p.add_contact("address", "\n".join(address), note)
 
+            roles = node.xpath('//h3[contains(.,"Current roles")]/../following-sibling::div/div/ul/li/text()')
+
+            if roles:
+                roles = [role.strip() for role in roles if role.strip()]
+                p.extras["roles"] = roles
+
             yield p
