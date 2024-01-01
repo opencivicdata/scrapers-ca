@@ -27,7 +27,6 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
         )
         reader.fieldnames = [self.header_converter(field) for field in reader.fieldnames]
         for row in reader:
-
             try:
                 if self.is_valid_row(row):
                     for key, corrections in self.corrections.items():

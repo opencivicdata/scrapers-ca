@@ -203,7 +203,7 @@ def council_pages():
     """
     Prints scrapers' council page, or warns if it is missing or unneeded.
     """
-    for (module, module_name, klass) in modules_and_module_names_and_classes():
+    for module, module_name, klass in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == "CSVScraper":
             if hasattr(module, "COUNCIL_PAGE"):
                 print("{:<60} Delete COUNCIL_PAGE".format(module_name))
@@ -219,7 +219,7 @@ def csv_list():
     """
     Lists scrapers with CSV data.
     """
-    for (module, module_name, klass) in modules_and_module_names_and_classes():
+    for module, module_name, klass in modules_and_module_names_and_classes():
         if hasattr(klass, "csv_url"):
             print("{}: {}".format(module_name, klass.csv_url))
 
@@ -229,7 +229,7 @@ def csv_stale():
     """
     Lists scrapers with stale manual CSV data.
     """
-    for (module, module_name, klass) in modules_and_module_names_and_classes():
+    for module, module_name, klass in modules_and_module_names_and_classes():
         if hasattr(klass, "updated_at") and klass.updated_at < date.today() - timedelta(days=365):
             print("{}: Created on {} by {}".format(module_name, klass.updated_at, klass.contact_person))
 
@@ -239,7 +239,7 @@ def csv_error():
     """
     Notes corrections that CSV publishers should make.
     """
-    for (module, module_name, klass) in modules_and_module_names_and_classes():
+    for module, module_name, klass in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == "CSVScraper":
             if "_candidates" in module_name and hasattr(klass, "updated_at"):
                 continue
