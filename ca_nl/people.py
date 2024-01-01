@@ -37,6 +37,9 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             if not member["name"].strip():
                 print("Skipping blank member: {}".format(member))
                 continue
+            if member["name"] == "<em>Vacant</em>":
+                print("Skipping vacant 'member': {}".format(member))
+                continue
             name = " ".join(reversed(member["name"].split(","))).strip()
             district = (
                 member["district"]
