@@ -8,7 +8,6 @@ COUNCIL_PAGE = "http://www.city.kawarthalakes.on.ca/city-hall/mayor-council/memb
 
 class KawarthaLakesPersonScraper(CanadianScraper):
     def scrape(self):
-
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//p[@class="WSIndent"]/a')

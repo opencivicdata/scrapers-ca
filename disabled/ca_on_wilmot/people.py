@@ -49,7 +49,6 @@ class WilmotPersonScraper(CanadianScraper):
 
 
 def scrape_mayor(div, name):
-
     p = Person(primary_org="legislature", name=name, district="Wilmot", role="Mayor")
     p.add_source(COUNCIL_PAGE)
 

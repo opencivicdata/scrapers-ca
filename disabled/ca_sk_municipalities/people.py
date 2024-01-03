@@ -47,7 +47,6 @@ class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
             districts.append(dist2)
 
         for district in districts:
-
             district_name = district.pop(0).split(",")[0].title()
 
             org = Organization(

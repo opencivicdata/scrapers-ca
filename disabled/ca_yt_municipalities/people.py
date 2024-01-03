@@ -21,7 +21,6 @@ class YukonMunicipalitiesPersonScraper(CanadianScraper):
         data = subprocess.check_output(["pdftotext", "-layout", "/tmp/yt.pdf", "-"])
         data = re.split(r"\n\s*\n", data)
         for municipality in data:
-
             if "Councillors" not in municipality:
                 continue
             lines = municipality.split("\n")

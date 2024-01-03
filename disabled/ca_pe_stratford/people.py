@@ -20,7 +20,6 @@ class StratfordPersonScraper(CanadianScraper):
             '//div[@id="street-container"]//strong[contains(text(), "Councillor")]/parent::p|//div[@id="street-container"]//b[contains(text(), "Councillor")]/parent::p'
         )
         for councillor in councillors:
-
             name = councillor.xpath("./strong/text()|./b/text()")[0].replace("Councillor", "").strip()
             post = re.findall(r"(?<=Ward \d, ).*", councillor.text_content())[0].strip()
 

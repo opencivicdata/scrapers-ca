@@ -11,7 +11,6 @@ class PointeClairePersonScraper(CanadianScraper):
         councillors = page.xpath('//section[contains(@id, "js-council-member")]')
         assert len(councillors), "No councillors found"
         for index, councillor in enumerate(councillors):
-
             name = " ".join([n.strip() for n in councillor.xpath(".//h2/text()")])
             district = councillor.xpath(
                 './/span[contains(@class, "c-info-list_label")][contains(text(), "District ")]'
