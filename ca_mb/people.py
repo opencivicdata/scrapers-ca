@@ -30,6 +30,8 @@ class ManitobaPersonScraper(CanadianScraper):
             (last, first) = full_name.split(",")
             name = first.replace("Hon.", "").strip() + " " + last.title().strip()
             district = " ".join(constitcell.text_content().split())
+            if district == "Portage-la-Prairie":
+                district = district.replace("-", " ")
             party = get_party(partycell.text)
 
             url = namecell.xpath(".//a")[0].get("href")
