@@ -26,10 +26,10 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         self.user_agent = CUSTOM_USER_AGENT
         page = self.get(COUNCIL_PAGE)
         members = re.search(
-            r"members = (\[(.+)\]);",
-            page.content.decode().replace('<em>[Member-elect]</em>', ''),
-            re.DOTALL
-        ).groups()[0]  # extract javascript array
+            r"members = (\[(.+)\]);", page.content.decode().replace("<em>[Member-elect]</em>", ""), re.DOTALL
+        ).groups()[
+            0
+        ]  # extract javascript array
         members = re.sub("<!--.+?-->", "", members)  # remove comments
         members = re.sub("<a.+?>", "", members).replace("</a>", "")  # tags
         members = members.replace('"', r"\"")  # escape double quotes
