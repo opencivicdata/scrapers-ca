@@ -25,14 +25,16 @@ class MississaugaPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         name_district = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        hyphen = name_district.find('Councillor')
-        district = name_district[:hyphen -3]
+        hyphen = name_district.find("Councillor")
+        district = name_district[: hyphen - 3]
         name = name_district[hyphen:]
-        bracket = name.find('(')
+        bracket = name.find("(")
         if bracket != -1:
             name = name[:bracket]
         email = self.get_email(page, '//section[contains(@class, "module-content")]')
-        photo = page.xpath('//section[contains(@class, "module-content")]/p[1]/img/@src|//section[contains(@class, "module-content")]/p[1]/b/img/@src|//section[contains(@class, "module-content")]/p[1]/strong/img/@src')[0]
+        photo = page.xpath(
+            '//section[contains(@class, "module-content")]/p[1]/img/@src|//section[contains(@class, "module-content")]/p[1]/b/img/@src|//section[contains(@class, "module-content")]/p[1]/strong/img/@src'
+        )[0]
 
         p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
         p.add_source(COUNCIL_PAGE)
