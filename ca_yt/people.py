@@ -14,10 +14,14 @@ class YukonPersonScraper(CanadianScraper):
             if "Vacant" not in member.xpath("./div/span")[0].text_content():
                 url = member.xpath("./div/span/a/@href")[0]
                 page = self.lxmlize(url)
-                name = page.xpath("//html/body/div[1]/div/div/section/div[2]/article/div/h1/span/span")[0].text_content()
-                district = page.xpath("//div[contains(@class, 'field--name-field-constituency')]/div[2]")[0].text_content()
+                name = page.xpath("//html/body/div[1]/div/div/section/div[2]/article/div/h1/span/span")[
+                    0
+                ].text_content()
+                district = page.xpath("//div[contains(@class, 'field--name-field-constituency')]/div[2]")[
+                    0
+                ].text_content()
                 party = page.xpath('//div[contains(@class, "field--name-field-party-affiliation")]/div[2]')[0].text
-                
+
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
@@ -59,8 +63,8 @@ class YukonPersonScraper(CanadianScraper):
                             number = next_line
                         p.add_contact("voice", number, phone_type, area_code=867)
 
-                address_lines = contact.xpath('//address//text()')
-                contact_lines = contact.xpath('//p[2]//text()')
+                address_lines = contact.xpath("//address//text()")
+                contact_lines = contact.xpath("//p[2]//text()")
                 assert address_lines[0].strip() == "Yukon Legislative Assembly"
                 handle_address(address_lines[1:], "legislature")
                 handle_phone(contact_lines[1:], "legislature")

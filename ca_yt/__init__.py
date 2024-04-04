@@ -7,8 +7,4 @@ class Yukon(CanadianJurisdiction):
     division_name = "Yukon"
     name = "Yukon Legislative Assembly"
     url = "https://yukonassembly.ca"
-    parties = [
-        {"name": "Yukon Liberal Party"},
-        {"name": "Yukon Party"},
-        {"name": "New Democratic Party"}
-    ]
+    parties = [{"name": "Yukon Liberal Party"}, {"name": "Yukon Party"}, {"name": "New Democratic Party"}]
