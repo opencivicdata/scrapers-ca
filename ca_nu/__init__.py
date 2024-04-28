@@ -7,4 +7,3 @@ class Nunavut(CanadianJurisdiction):
     division_name = "Nunavut"
     name = "Nunavut Legislative Assembly"
     url = "https://www.assembly.nu.ca"
-    parties = []
