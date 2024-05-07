@@ -8,9 +8,7 @@ class NorthwestPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        members = page.xpath(
-            '//div[contains(@class, "view-id-member")]/div/div[contains(@class, "views-row")]'
-        )
+        members = page.xpath('//div[contains(@class, "view-id-member")]/div/div[contains(@class, "views-row")]')
         assert len(members), "No members found"
         for member in members:
             if "Vacant" not in member.xpath('//span[contains(@class, "field--name-title")]')[0].text_content():
@@ -21,7 +19,7 @@ class NorthwestPersonScraper(CanadianScraper):
                     page.xpath('//*[contains(@class, "field--name-field-constituency")]')[0]
                     .text_content()
                     .replace("Member ", "")
-                    .replace(' - ', '-')
+                    .replace(" - ", "-")
                 )
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA")
                 p.add_source(COUNCIL_PAGE)
@@ -35,9 +33,18 @@ class NorthwestPersonScraper(CanadianScraper):
 
                 def handle_address(contact, address_type):
                     address_lines = []
-                    po_box_line = 'PO Box ' + contact.xpath('./div[contains(@class, "office-address-wrapper")]/div[2]/div[2]')[0].text_content().strip()
+                    po_box_line = (
+                        "PO Box "
+                        + contact.xpath('./div[contains(@class, "office-address-wrapper")]/div[2]/div[2]')[0]
+                        .text_content()
+                        .strip()
+                    )
                     address_lines.append(po_box_line)
-                    address_lines.append(contact.xpath('./div[contains(@class, "office-address-wrapper")]/div[1]/p')[0].text_content().strip())
+                    address_lines.append(
+                        contact.xpath('./div[contains(@class, "office-address-wrapper")]/div[1]/p')[0]
+                        .text_content()
+                        .strip()
+                    )
                     if address_lines:
                         p.add_contact(
                             "address",
@@ -61,7 +68,9 @@ class NorthwestPersonScraper(CanadianScraper):
                 handle_address(contact, "legislature")
                 handle_phone(contact_lines, "legislature")
 
-                email_elements = page.xpath('//*[contains(@class, "field--paragraph--field-email")]/div[@class="field__item"]')
+                email_elements = page.xpath(
+                    '//*[contains(@class, "field--paragraph--field-email")]/div[@class="field__item"]'
+                )
                 for element in email_elements:
                     email = self.get_email(element, error=False)
                     if email:
