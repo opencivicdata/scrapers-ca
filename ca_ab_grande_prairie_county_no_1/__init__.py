@@ -15,8 +15,10 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
 
         for division_number in range(1, 10):
             # One of the councillors is the Reeve.
-            if division_number == 3:
+            if division_number == 5:
                 role = "Reeve"
+            elif division_number == 7:
+                role = "Deputy Reeve"
             else:
                 role = "Councillor"
             organization.add_post(
