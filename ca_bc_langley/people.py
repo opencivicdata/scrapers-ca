@@ -12,6 +12,8 @@ class LangleyPersonScraper(CanadianScraper):
         for url in councillors:
             page = self.lxmlize(url)
             name = page.xpath('//h1')[0].text_content().strip()
+            if name == "Misty vanPopta":
+                name = "Misty Vanpopta"
             district = "Langley (seat {})".format(seat_number)
             seat_number +=1
             email = self.get_email(page)
@@ -29,10 +31,13 @@ class LangleyPersonScraper(CanadianScraper):
         email = self.get_email(page)
         phone = self.get_phone(page)
         address_block = page.xpath('//p/a[@rel="noopener noreferrer"]/parent::p')[0].text_content()
-        address = ", ".join(address_block.split("\n")[1:2])
+        line1 = address_block[address_block.find("Facility")+8:address_block.find("Langley,")]
+        line2 = address_block[address_block.find("Langley,"):address_block.find("Phone")-1]
+        address = ", ".join([line1,line2])
         p = Person(primary_org="legislature",name=name,role="Mayor",district="Langley")
         p.add_contact("email",email)
         p.add_contact("voice",phone,"legislature")
         p.add_contact("address",address,"legislature")
+        p.add_source(MAYOR_PAGE)
         yield p
             
