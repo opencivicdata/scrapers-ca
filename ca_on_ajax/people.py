@@ -23,8 +23,9 @@ class AjaxPersonScraper(CanadianScraper):
                 district = rest.split("Councillor ", 1)[-1].strip()
                 role = rest.split("Ward ", 1)[0].strip()
 
-            cell = councillor.xpath('.//p[contains(.,"Cel")]/text()')[0].replace("\xa0", " ")
-            voice = councillor.xpath('.//p[contains(.,"Cel")]/text()')[1]
+            cell = councillor.xpath('.//p[contains(.,"Cel")]/text()')[0].replace("Cell: ", "")
+            if councillor.xpath('.//p[contains(.,"Tel")]/text()'):
+                voice = councillor.xpath('.//p[contains(.,"Tel")]/text()')[1].replace(" Tel: ", "")
             email = self.get_email(councillor)
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
