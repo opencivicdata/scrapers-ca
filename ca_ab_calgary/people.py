@@ -1,34 +1,26 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.calgary.ca/citycouncil/Pages/Councillors-and-Wards.aspx"
-MAYOR_PAGE = "http://calgarymayor.ca/contact"
-
+COUNCIL_PAGE = "https://www.calgary.ca/council/councillors-and-wards.html"
 
 class CalgaryPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[contains(@class, "plcards")]')
+        councillors = page.xpath('//div[contains(@class, "cui card ")]')
         assert len(councillors), "No councillors found"
-        for index, councillor in enumerate(councillors):
-            h2 = councillor.xpath(".//h2")[0]
-            name = h2.xpath("./text()")[0]
+        for councillor in councillors:
+            name = councillor.xpath(".//h3")[0].text_content()
+            district = councillor.xpath(".//p")[0].text_content()
 
-            district = h2.xpath("./following-sibling::div//text()")[0]
             role = "Councillor"
-            email = None
+
             if "Mayor" in district:
                 district = "Calgary"
                 role = "Mayor"
-                email = "themayor@calgary.ca"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
-            style = councillor.xpath('.//div[contains(@class, "card-media")]//@style')[0]
-            p.image = re.search(r"http[^)]+", style).group(0)
-            if email:
-                p.add_contact("email", email)
+            photo_style = councillor.xpath('.//div[contains(@class, "background-image  bg-pos-x-center bg-pos-y-center ratio-1x1")]/@style')
+            p.image = photo_style[0].split("\'")[1]
             p.add_source(COUNCIL_PAGE)
             yield p
