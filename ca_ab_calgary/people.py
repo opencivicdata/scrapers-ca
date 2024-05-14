@@ -3,6 +3,7 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.calgary.ca/council/councillors-and-wards.html"
 
+
 class CalgaryPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
@@ -20,7 +21,9 @@ class CalgaryPersonScraper(CanadianScraper):
                 role = "Mayor"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
-            photo_style = councillor.xpath('.//div[contains(@class, "background-image  bg-pos-x-center bg-pos-y-center ratio-1x1")]/@style')
-            p.image = photo_style[0].split("\'")[1]
+            photo_style = councillor.xpath(
+                './/div[contains(@class, "background-image  bg-pos-x-center bg-pos-y-center ratio-1x1")]/@style'
+            )
+            p.image = photo_style[0].split("'")[1]
             p.add_source(COUNCIL_PAGE)
             yield p

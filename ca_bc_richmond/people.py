@@ -3,6 +3,7 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.richmond.ca/city-hall/city-council.htm"
 
+
 class RichmondPersonScraper(CanadianScraper):
     def scrape(self):
         councillor_seat_number = 1
@@ -28,5 +29,5 @@ class RichmondPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             p.add_contact("email", email)
-            p.add_contact("voice",phone,"legislature")
+            p.add_contact("voice", phone, "legislature")
             yield p

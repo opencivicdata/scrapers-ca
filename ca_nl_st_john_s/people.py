@@ -13,14 +13,14 @@ class StJohnsPersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for url in councillors:
             page = self.lxmlize(url)
-            role,name = page.xpath('//h1')[0].text_content().strip().split(" ",1)
+            role, name = page.xpath("//h1")[0].text_content().strip().split(" ", 1)
             if role == "Deputy":
                 role = "Deputy Mayor"
-                name = name.split(" ",1)[1]
+                name = name.split(" ", 1)[1]
             description = page.xpath('//div[@data-lm-tokenid="StandardOneColumnTK1"]/p')[0].text_content()
             if "Ward" in description:
                 index = description.find("Ward")
-                district = description[index:index+6]
+                district = description[index : index + 6]
             else:
                 district = "St. John's"
                 if role != "Mayor" and role != "Deputy Mayor":
@@ -32,10 +32,10 @@ class StJohnsPersonScraper(CanadianScraper):
             phone = self.get_phone(page)
             photo = page.xpath('//div[@class="fbg-row lb-imageBox cm-datacontainer"]//img/@src')[0]
 
-            p = Person(primary_org = "legislature", name = name, district = district, role = role)
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.image = photo
-            p.add_contact("voice",phone,"legislature")
-            p.add_contact("email",email)
+            p.add_contact("voice", phone, "legislature")
+            p.add_contact("email", email)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
