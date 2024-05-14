@@ -1,10 +1,40 @@
-from datetime import date
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
 
-from utils import CSVScraper
+COUNCIL_PAGE = "https://www.lethbridge.ca/council-administration-governance/mayor-and-councillors/councillors-office"
+MAYOR_PAGE = "https://www.lethbridge.ca/council-administration-governance/mayor-and-councillors/mayors-office"
 
+class LethbridgePersonScraper(CanadianScraper):
+    def scrape(self):
+        def councillor_scraper(self,url,seat_number):
+            page = self.lxmlize(url)
+            name = page.xpath('//h1[contains(@class, "heading main base-heading")]')[0].text_content().split(",")[0]
+            
+            p = Person(primary_org="legislature", name = name, district = "Lethbridge (seat {})".format(seat_number+1), role="Councillor")
+            
+            p.image = page.xpath('//span[contains(@class, "img-right")]/img/@src[1]')[0]
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(url)
+            
+            return p
 
-class LethbridgePersonScraper(CSVScraper):
-    csv_url = "https://docs.google.com/spreadsheets/d/1OnHJq_j-r3R4MMkRQ5ahNkApuDp1NpTYn4UVTTNGY5c/pub?gid=908195318&single=true&output=csv"
-    updated_at = date(2017, 11, 8)
-    contact_person = "annelies@avowebworks.ca"
-    many_posts_per_area = True
+        def mayor_scraper(self):
+            page = self.lxmlize(MAYOR_PAGE)
+            paragraph = page.xpath('//p[1]')[0].text_content().split()
+            name = " ".join([paragraph[0],paragraph[1]])
+
+            p = Person(primary_org="legislature", name = name, district = "Lethbridge", role="Mayor")
+            p.image = page.xpath('//img/@src')[0]
+            p.add_source(MAYOR_PAGE)
+
+            return p
+        
+        yield mayor_scraper(self)
+        page = self.lxmlize(COUNCIL_PAGE)
+        councillors = page.xpath('//div[contains(@class, "inner ")]/a[@href]')
+        for seat_number,councillor in enumerate(councillors):
+            name = councillor.xpath('.//span')[0].text_content()
+            if "Vacant" in name:
+                 continue
+            url = councillor.xpath('./@href')[0]
+            yield councillor_scraper(self,url,seat_number)
