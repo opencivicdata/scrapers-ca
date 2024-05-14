@@ -1,5 +1,3 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
