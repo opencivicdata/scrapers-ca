@@ -1,10 +1,9 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.surrey.ca/city-government/mayor-council/city-councillors"
 MAYOR_PAGE = "https://www.surrey.ca/city-government/mayor-council/mayor-brenda-locke"
+
 
 class SurreyPersonScraper(CanadianScraper):
     def scrape(self):
@@ -15,7 +14,7 @@ class SurreyPersonScraper(CanadianScraper):
         seat_number = 1
         for member in members:
 
-            role,name = member.xpath('.//a[@class="teaser__link"]/h4')[0].text_content().split(" ",1)
+            role, name = member.xpath('.//a[@class="teaser__link"]/h4')[0].text_content().split(" ", 1)
             district = "Surrey (seat {})".format(seat_number)
             seat_number += 1
             photo_url = member.xpath(".//figure//img/@src")[0]
@@ -36,11 +35,11 @@ class SurreyPersonScraper(CanadianScraper):
             yield p
 
         page = self.lxmlize(MAYOR_PAGE)
-        role,name = page.xpath('//h1/span')[0].text_content().split(" ",1)
+        role, name = page.xpath("//h1/span")[0].text_content().split(" ", 1)
         ext_infos = self.scrape_extended_info(MAYOR_PAGE)
         photo_url = page.xpath('//div[@class="page-header__hero js-cover-image"]/img/@src')[0]
-        
-        p = Person(primary_org="legislature", name=name, district = "Surrey", role=role)
+
+        p = Person(primary_org="legislature", name=name, district="Surrey", role=role)
         p.add_source(MAYOR_PAGE)
         p.image = photo_url
 
