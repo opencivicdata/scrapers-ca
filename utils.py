@@ -514,7 +514,7 @@ class CanadianJurisdiction(Jurisdiction):
     """
     Which division types to skip when creating posts.
     """
-    exclude_types = ["fed"]
+    exclude_types = []
     """
     Whether to skip divisions whose `validFrom` dates are null.
     """
@@ -560,7 +560,9 @@ class CanadianJurisdiction(Jurisdiction):
             yield post
 
         children = [
-            child for child in parent.children() if child._type != "place" and child._type not in self.exclude_types
+            child
+            for child in parent.children()
+            if child._type not in ("fed", "place") and child._type not in self.exclude_types
         ]
 
         for child in children:
