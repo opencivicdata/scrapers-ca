@@ -36,8 +36,20 @@ class Canada(CanadianJurisdiction):
         lower = Organization("House of Commons", classification="lower", parent_id=parliament)
 
         for division in Division.get(self.division_id).children("ed"):
-            if division.attrs.get("validFrom") and division.attrs["validFrom"] <= datetime.now().strftime("%Y-%m-%d"):
+            valid_from = division.attrs.get("validFrom")
+            if valid_from and valid_from <= datetime.now().strftime("%Y-%m-%d") and valid_from < "2024-04-23":
                 lower.add_post(role="MP", label=division.name, division_id=division.id)
+
+        # for ocd_type in ("province", "territory"):
+        #     for province_or_territory in Division.get(self.division_id).children(ocd_type):
+        #         for division in province_or_territory.children("fed"):
+        #             valid_from = division.attrs.get("validFrom")
+        #             valid_through = child.attrs.get("validThrough")
+        #             if valid_from and valid_from > datetime.now().strftime("%Y-%m-%d"):
+        #                 continue
+        #             if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
+        #                 continue
+        #             lower.add_post(role="MP", label=division.name, division_id=division.id)
 
         yield upper
         yield lower
