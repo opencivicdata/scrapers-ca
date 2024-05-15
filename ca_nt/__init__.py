@@ -1,10 +1,9 @@
-# encoding=utf-8
 from utils import CanadianJurisdiction
 
 
-class Northwest(CanadianJurisdiction):
+class NorthwestTerritories(CanadianJurisdiction):
     classification = "legislature"
     division_id = "ocd-division/country:ca/territory:nt"
     division_name = "Northwest Territories"
-    name = "Northwest Territories Legislative Assembly"
+    name = "Legislative Assembly of Northwest Territories"
     url = "https://www.ntassembly.ca/"
