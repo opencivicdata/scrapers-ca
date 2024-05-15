@@ -1,3 +1,4 @@
+import html
 import re
 
 from utils import CUSTOM_USER_AGENT
@@ -10,6 +11,12 @@ MAYOR_PAGE = "http://www.cbrm.ns.ca/mayor"
 
 class CapeBretonPersonScraper(CanadianScraper):
     def scrape(self):
+        def decode_email(script):
+            raw_address = re.findall(r"(?<=addy).*?;\s*addy", script)
+            local_part = html.unescape(raw_address[0]).split("= ", 1)[1].split(";", 1)[0]
+            email = re.sub(r"['\s+]", "", local_part) + "cbrm.ns.ca"
+            return email
+
         page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 
         councillors = page.xpath("//table/tbody/tr")[1:]
@@ -26,18 +33,20 @@ class CapeBretonPersonScraper(CanadianScraper):
                 contact_nodes = councillor.xpath(".//td[4]/p/text()")
 
             phone = contact_nodes[0].split(":")[1]
+            email_script = councillor.xpath(".//script")[0].text_content()
+            email = decode_email(email_script)
 
             # one number had a U+00A0 in it for some reason
             phone = phone.replace("(", "").replace(")", "-").replace(" ", "").replace("\N{NO-BREAK SPACE}", "")
             if "or" in phone:  # phone and cell
                 phone = phone.split("or")[0]
 
-            # email protected by js
             clean_name = name.replace("“", '"').replace("”", '"')
             p = Person(primary_org="legislature", name=clean_name, district=district, role="Councillor")
             p.add_source(COUNCIL_PAGE)
             p.add_contact("address", address, "legislature")
             p.add_contact("voice", phone, "legislature")
+            p.add_contact("email", email)
 
             if "F" in contact_nodes[1]:
                 fax = contact_nodes[1].split(":")[1].replace("(", "").replace(")", "-").replace(" ", "")
