@@ -514,7 +514,7 @@ class CanadianJurisdiction(Jurisdiction):
     """
     Which division types to skip when creating posts.
     """
-    exclude_types = []
+    exclude_types = ["fed"]
     """
     Whether to skip divisions whose `validFrom` dates are null.
     """
@@ -571,12 +571,12 @@ class CanadianJurisdiction(Jurisdiction):
             if self.skip_null_valid_from and not valid_from:
                 continue
 
-            # Skip divisions that became invalid in the past.
-            if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
-                continue
-
             # Skip divisions that become valid in the future, or that don't match the election date.
             if valid_from and valid_from > datetime.now().strftime("%Y-%m-%d") and valid_from != self.valid_from:
+                continue
+
+            # Skip divisions that became invalid in the past.
+            if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
                 continue
 
             if self.use_type_id:
