@@ -8,14 +8,18 @@ class FrederictonPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[contains(@class, "view view-councillor view-id-councillor view-display-id-block_1 js-view-dom-id-60ab7690fd8036f968c4406929bf5bec3a3f03554afaf4ff046cb5487dadf8da contextual-region")]//div[contains(@class, "views-row")]')
+        councillors = page.xpath(
+            '//div[contains(@class, "field field--name-field-content-rows field--type-entity-reference-revisions field--label-hidden content-rows field__items")]//div[contains(@class, "views-row")]'
+        )
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            name = councillor.xpath('.//h3/a')[0].text_content()
-            text = councillor.xpath('.//div[@class="views-field views-field-field-councillor-title"]/div')[0].text_content()
+            name = councillor.xpath(".//h3/a")[0].text_content()
+            text = councillor.xpath('.//div[@class="views-field views-field-field-councillor-title"]/div')[
+                0
+            ].text_content()
             ward_start = text.find("Ward")
-            if ward_start+1:
-                district = text[ward_start:ward_start+7].strip()
+            if ward_start + 1:
+                district = text[ward_start : ward_start + 7].strip()
                 role = "Councillor"
             else:
                 district = "Fredericton"
