@@ -10,8 +10,6 @@ COUNCIL_PAGE = "http://winnipeg.ca/council/"
 
 class WinnipegPersonScraper(CanadianScraper):
     def scrape(self):
-        # https://winnipeg.ca/council/wards/includes/wards.js
-        # var COUNCIL_API = 'https://data.winnipeg.ca/resource/r4tk-7dip.json';
         api_url = "https://data.winnipeg.ca/resource/r4tk-7dip.json"
         data = json.loads(requests.get(api_url).content)
 
@@ -22,18 +20,18 @@ class WinnipegPersonScraper(CanadianScraper):
                 continue
             name = item["person"]
             role = item["position_english"]
-            district = item["name_english"].replace(" - ","—")
+            district = item["name_english"].replace(" - ", "—")
             if "phone" in item:
                 phone = item["phone"]
             fax = item["fax"]
-            
-            p = Person(primary_org="legislature",name=name, role=role, district=district)
 
-            p.add_contact("voice",phone,"legislature")
-            p.add_contact("fax",fax,"legislature")
+            p = Person(primary_org="legislature", name=name, role=role, district=district)
+
+            p.add_contact("voice", phone, "legislature")
+            p.add_contact("fax", fax, "legislature")
             p.add_source(api_url)
             p.add_source(COUNCIL_PAGE)
             for councillor in councillors:
-                if name == councillor.xpath('.//a[@class="full-card-link"]')[0].text_content(): # matching names
-                    p.image = councillor.xpath('.//img/@src')[0]
+                if name == councillor.xpath('.//a[@class="full-card-link"]')[0].text_content():  # matching names
+                    p.image = councillor.xpath(".//img/@src")[0]
             yield p
