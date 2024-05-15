@@ -30,6 +30,10 @@ class NorthwestPersonScraper(CanadianScraper):
                     pass
 
                 contact = page.xpath('//*[contains(@class, "paragraph--type--office")]')[0]
+                if len(contact.xpath('./div[contains(@class, "office-address-wrapper")]')) == 0:
+                   address_section = page.xpath('//*[contains(@class, "paragraph--type--office")]')[1]
+                else:
+                   address_section = contact
 
                 def handle_address(contact, address_type):
                     address_lines = []
@@ -55,6 +59,8 @@ class NorthwestPersonScraper(CanadianScraper):
                 def handle_phone(lines, phone_type):
                     first_phone_added = False
                     for line in lines:
+                        if "Assistant" in line.strip():
+                            return
                         if "867" in line.strip():
                             number = line.strip().replace("(867) ", "").replace("867-", "")
                             if first_phone_added:
@@ -65,7 +71,7 @@ class NorthwestPersonScraper(CanadianScraper):
                             first_phone_added = True
 
                 contact_lines = contact.xpath(".//text()")
-                handle_address(contact, "legislature")
+                handle_address(address_section, "legislature")
                 handle_phone(contact_lines, "legislature")
 
                 email_elements = page.xpath(
