@@ -4,7 +4,7 @@ from utils import CanadianScraper
 COUNCIL_PAGE = "https://www.ntlegislativeassembly.ca/members/members-legislative-assembly/members"
 
 
-class NorthwestPersonScraper(CanadianScraper):
+class NorthwestTerritoriesPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
