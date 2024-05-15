@@ -14,7 +14,7 @@ class BellevillePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(MAYOR_PAGE)
 
-        node = page.xpath('//tbody/tr')[0]
+        node = page.xpath("//tbody/tr")[0]
         name = node.xpath("./td")[0].text_content()
         phone = node.xpath("./td")[2].text_content()
         email = self.get_email(node)
@@ -39,7 +39,7 @@ class BellevillePersonScraper(CanadianScraper):
                 district = "{} (seat {})".format(ward_name, self.seat_numbers[ward_name])
                 role = "Councillor"
 
-                name = councillor.xpath('./following-sibling::p')[0].text_content()
+                name = councillor.xpath("./following-sibling::p")[0].text_content()
                 phone = councillor.xpath("./following-sibling::p/text()")[2].split(":")[1]
                 email = councillor.xpath("./following-sibling::p/a//text()")[0]
                 image = councillor.xpath("./img/@src")[0]
@@ -51,5 +51,5 @@ class BellevillePersonScraper(CanadianScraper):
                 p.image = image
 
                 yield p
-                if self.seat_numbers[ward_name] >= 6: # Assigning councillors to correct Ward
+                if self.seat_numbers[ward_name] >= 6:  # Assigning councillors to correct Ward
                     break
