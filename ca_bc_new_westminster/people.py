@@ -12,6 +12,7 @@ class NewWestminsterPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         seat_number = 1
         councillors = page.xpath('//div[@id="main-bottom"]//li')
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.xpath(".//a[@name]")[0].text_content()
             district = "New Westminster (seat {})".format(seat_number)

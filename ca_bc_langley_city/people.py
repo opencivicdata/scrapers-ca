@@ -18,11 +18,11 @@ class LangleyPersonScraper(CanadianScraper):
         for url in councillors:
             district = "Langley (seat {})".format(councillor_seat_number)
             councillor_seat_number += 1
-            yield self.scrape_councillor(url, district)
+            yield self.scrape_person(url, district)
 
         yield self.scrape_mayor(mayor)
 
-    def scrape_councillor(self, url, district):
+    def scrape_person(self, url, district):
         infos_page = self.lxmlize(url)
         infos = infos_page.xpath('//div[@class="item-page"]')[0]
 
