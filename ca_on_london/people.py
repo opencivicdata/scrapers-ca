@@ -3,5 +3,6 @@ from utils import CSVScraper
 
 class LondonPersonScraper(CSVScraper):
     # "Elected officials' contact information"
-    # https://www.london.ca/city-hall/open-data/Pages/Open-Data-Data-Catalogue.aspx
-    csv_url = "http://apps.london.ca/OpenData/CSV/Council.csv"
+    # https://opendata.london.ca/datasets/6345aeda8fa74917a2500e66a3bb432e/about
+    csv_url = "https://opendata.arcgis.com/datasets/6345aeda8fa74917a2500e66a3bb432e_0.csv"
+    encoding = "utf8-sig"
