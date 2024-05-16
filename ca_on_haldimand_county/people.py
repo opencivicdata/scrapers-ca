@@ -1,54 +1,32 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.haldimandcounty.on.ca/OurCounty.aspx?id=338"
+COUNCIL_PAGE = "https://www.haldimandcounty.ca/council-information/council-members/"
 
 
 class HaldimandCountyPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//a/parent::p')
+        councillors = page.xpath('//a[@class="lsvr_person-list-widget__item-title-link"]/@href')
         assert len(councillors), "No councillors found"
-        for councillor in councillors:
-            if not councillor.text_content().strip():
-                continue
-            if "Mayor" in councillor.text_content():
-                name = councillor.text_content().replace("Mayor ", "")
+        for url in councillors:
+            page = self.lxmlize(url)
+            name = page.xpath("//h1")[0].text_content()
+            if "Mayor" in page.xpath('//p[@class="main__subtitle"]')[0].text_content():
                 district = "Haldimand County"
                 role = "Mayor"
             else:
-                district, name = councillor.text_content().split(" - ")
-                name = name.replace("Councillor", "").strip()
-                district = district.strip()
-                role = "Councillor"
-
-            url = councillor.xpath(".//a")[0].attrib["href"]
-            page = self.lxmlize(url)
+                role, district = page.xpath('//p[@class="main__subtitle"]')[0].text_content().split(" - ")
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 
-            p.image = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ContentBlock1"]//tr[1]/td//img/@src')[0]
-
-            info = page.xpath('//a[contains(@href, "mailto:")]/parent::*/text()')
-            for (
-                i,
-                field,
-            ) in enumerate(info):
-                if re.match(r"[0-9]+ [A-Z]", field):
-                    address = field + ", " + info[i + 1] + ", " + info[i + 2]
-                    p.add_contact("address", address, "legislature")
-                if re.findall(r"[0-9]{3} [0-9]{3} [0-9]{4}", field):
-                    if "Fax" in field:
-                        num = field.replace("Fax: ", "").strip().replace(" ", "-")
-                        p.add_contact("fax", num, "legislature")
-                    else:
-                        num = field.replace("Telephone: ", "").strip().replace(" ", "-")
-                        p.add_contact("voice", num, "legislature")
+            p.image = page.xpath('//p[@class="post__thumbnail"]/noscript//@src')[0]
             email = self.get_email(page)
+            phone = self.get_phone(page)
             p.add_contact("email", email)
+            p.add_contact("voice", phone, "legislature")
+
             yield p
