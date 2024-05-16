@@ -35,6 +35,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         members = members.replace('"', r"\"")  # escape double quotes
         members = members.replace("'", '"')  # replace single quotes
         members = re.sub("(name|district|party|phone|email):", r'"\1":', members)  # quote attributes
+        assert len(members), "No members found"
         for member in json.loads(members):
             if not member["name"].strip():
                 print("Skipping blank member: {}".format(member))

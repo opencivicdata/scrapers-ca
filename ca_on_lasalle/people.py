@@ -13,6 +13,7 @@ class LaSallePersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//table[@id="Table1table"]//td/p')
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             if not councillor.text_content().strip():
                 continue

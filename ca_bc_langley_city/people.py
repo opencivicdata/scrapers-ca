@@ -15,6 +15,7 @@ class LangleyPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Councillor")]/@href')
         mayor = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Mayor")]/@href')[0]
 
+        assert len(councillors), "No councillors found"
         for url in councillors:
             district = "Langley (seat {})".format(councillor_seat_number)
             councillor_seat_number += 1

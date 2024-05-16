@@ -33,9 +33,7 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         for ward in wards:
             area = ward.text_content().split("–", 1)[1].strip()
             councillors = ward.xpath("./following-sibling::table[1]/tbody/tr/td/h3")
-
             assert len(councillors), "No councillors found for {}".format(area)
-
             for councillor in councillors:
                 name = councillor.text_content()
 

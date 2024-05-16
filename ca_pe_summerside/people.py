@@ -16,6 +16,7 @@ class SummersidePersonScraper(CanadianScraper):
         yield self.scrape_mayor()
 
         councillors = page.xpath('//div[@class="articlebody-inside"]//p[contains(text(),"-")]')
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             url = councillor.xpath(".//a")[0].attrib["href"].replace("../", "")
             page = self.lxmlize(url, "iso-8859-1")

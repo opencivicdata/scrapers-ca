@@ -11,6 +11,7 @@ class KawarthaLakesPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//p[@class="WSIndent"]/a')
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             district = re.findall(r"(Ward [0-9]{1,2})", councillor.text_content())
             if district:
