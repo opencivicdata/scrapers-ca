@@ -17,6 +17,7 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
             # One of the councillors is the Reeve.
             if division_number == 5:
                 role = "Reeve"
+            # One of the councillors is the Deputy Reeve
             elif division_number == 7:
                 role = "Deputy Reeve"
             else:
