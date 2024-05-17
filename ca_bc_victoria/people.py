@@ -2,7 +2,6 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.victoria.ca/city-government/mayor-council/members-council"
-MAYOR_PAGE = "https://www.victoria.ca/city-government/mayor-council/mayor-marianne-alto"  # will probably break if the mayor changes
 
 
 class VictoriaPersonScraper(CanadianScraper):
@@ -33,7 +32,10 @@ class VictoriaPersonScraper(CanadianScraper):
 
             yield p
 
-        page = self.lxmlize(MAYOR_PAGE)
+        mayor_url = page.xpath(
+            '//ul[@class="menu menu--level-0"]//a[contains(., "Mayor") and not(contains(., "Council"))]/@href'
+        )[0]
+        page = self.lxmlize(mayor_url)
         role, name = page.xpath("//h1/span")[0].text_content().split(" ", 1)
         photo = councillor.xpath('//div[@class="field__item"]/img/@src')[0]
         email = self.get_email(page)
@@ -42,6 +44,6 @@ class VictoriaPersonScraper(CanadianScraper):
         p.image = photo
         p.add_contact("email", email)
         p.add_contact("voice", phone, "legislature")
-        p.add_source(MAYOR_PAGE)
+        p.add_source(mayor_url)
 
         yield p
