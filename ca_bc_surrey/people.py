@@ -2,7 +2,6 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.surrey.ca/city-government/mayor-council/city-councillors"
-MAYOR_PAGE = "https://www.surrey.ca/city-government/mayor-council/mayor-brenda-locke"
 
 
 class SurreyPersonScraper(CanadianScraper):
@@ -34,13 +33,15 @@ class SurreyPersonScraper(CanadianScraper):
                     p.add_contact("voice", phone, "legislature")
             yield p
 
-        page = self.lxmlize(MAYOR_PAGE)
+        mayor_url = page.xpath('//nav[@id="content-nav"]//a[contains(., "Mayor")]/@href')[0]
+
+        page = self.lxmlize(mayor_url)
         role, name = page.xpath("//h1/span")[0].text_content().split(" ", 1)
-        ext_infos = self.scrape_extended_info(MAYOR_PAGE)
+        ext_infos = self.scrape_extended_info(mayor_url)
         photo_url = page.xpath('//div[@class="page-header__hero js-cover-image"]/img/@src')[0]
 
         p = Person(primary_org="legislature", name=name, district="Surrey", role=role)
-        p.add_source(MAYOR_PAGE)
+        p.add_source(mayor_url)
         p.image = photo_url
 
         if ext_infos:  # member pages might return errors
