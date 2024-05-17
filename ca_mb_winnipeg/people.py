@@ -10,11 +10,14 @@ COUNCIL_PAGE = "http://winnipeg.ca/council/"
 
 class WinnipegPersonScraper(CanadianScraper):
     def scrape(self):
+        # from https://data.winnipeg.ca/Council-Services/Council-Data/r4tk-7dip/about_data
         api_url = "https://data.winnipeg.ca/resource/r4tk-7dip.json"
         data = json.loads(requests.get(api_url).content)
 
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//div[@class="card link h-100"]')
+        assert len(councillors), "No councillors found"
+
         for item in data:
             if not item["current_council"]:
                 continue
