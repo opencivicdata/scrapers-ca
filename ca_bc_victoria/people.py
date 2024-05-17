@@ -12,7 +12,7 @@ class VictoriaPersonScraper(CanadianScraper):
         councillors = page.xpath(
             '//article[@class="node node--type-councillor node--view-mode-list-item list-item flex fd-r fd-c-mq-m g-32"]'
         )
-
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             role, name = councillor.xpath(".//h3/a/span")[0].text_content().split(" ", 1)
             photo = councillor.xpath(".//img/@src")[0]
