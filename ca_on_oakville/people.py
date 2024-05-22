@@ -11,7 +11,7 @@ class OakvillePersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@class="card h-100"]')
-        assert len(councillors), "No Councillors found"
+        assert len(councillors), "No councillors found"
 
         for councillor in councillors:
             district_role = councillor.xpath(".//div[@class='user-function']/text()")[0]

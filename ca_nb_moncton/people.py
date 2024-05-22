@@ -14,7 +14,7 @@ class MonctonPersonScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(int)
         data = json.loads(requests.get(API_URL).content)["features"]
-        assert len(data), "No Councillors found"
+        assert len(data), "No councillors found"
 
         for item in data:
             councillor = item["properties"]

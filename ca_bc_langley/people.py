@@ -10,6 +10,7 @@ class LangleyPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         seat_number = 1
         councillors = page.xpath('//a[contains(@target,"_self")]/@href')
+        assert len(councillors), "No councillors found"
         for url in councillors:
             page = self.lxmlize(url)
             name = page.xpath("//h1")[0].text_content().strip()
