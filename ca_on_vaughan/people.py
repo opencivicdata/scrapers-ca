@@ -1,9 +1,7 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.vaughan.ca/council/Pages/default.aspx"
+COUNCIL_PAGE = "https://www.vaughan.ca/council"
 
 
 class VaughanPersonScraper(CanadianScraper):
@@ -12,56 +10,56 @@ class VaughanPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@class="ms-rteTable-0"]//a[./img]')
+        councillors = page.xpath('//table[@class="city-table-responsive"]//a[contains(./@href, "council")]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            url = councillor.attrib["href"]
+            url = councillor.xpath("./@href")[0]
             page = self.lxmlize(url)
-
-            title = page.xpath('//div[@class="PL_Title"]')[0].text_content()
-            if "Councillor" in title:
-                district, name = re.split(r"Councillor", title)
-                role = "Councillor"
-                if "Regional" in district:
-                    role = "Regional Councillor"
-                    district = "Vaughan (seat {})".format(regional_councillor_seat_number)
-                    regional_councillor_seat_number += 1
+            title = page.xpath("//h1/span")[0].text_content()
+            if "-" in title:
+                district, name = title.split("-")
             else:
-                name = re.search(r"Mayor ([^,]+)", page.xpath('//meta[@name="keywords"]/@content')[0]).group(1)
-                district = "Vaughan"
+                district, name = title.split("Councillor")
+            if "Regional" in district:
+                role = "Regional Councillor"
+                district = "Vaughan (seat {})".format(regional_councillor_seat_number)
+                regional_councillor_seat_number += 1
+            elif "Ward" in district:
+                role = "Councillor"
+                district = district.strip()
+            else:
                 role = "Mayor"
+                district = "Vaughan"
             name = name.strip()
 
-            contact_details_url = None
-            if role == "Mayor":
-                contact_details_url = page.xpath('//a[contains(@href,"/Contact-the-Mayor")]/@href')[0]
-                detail = self.lxmlize(contact_details_url)
-                contact_info = detail.xpath(
-                    '//div[@id="ctl00_PlaceHolderMain_RichHtmlField1__ControlWrapper_RichHtmlField"]'
-                )[0]
-            else:
-                contact_node = page.xpath('//div[contains(@id, "WebPartWPQ")][contains(., "Phone")]')
-                if contact_node:
-                    contact_info = contact_node[0]
-                else:
-                    contact_info = page.xpath('//div[@id="WebPartWPQ3"]')[0]
-
-            phone = re.findall(r"[0-9]{3}-[0-9]{3}-[0-9]{4} ext\. [0-9]{4}", contact_info.text_content())[0].replace(
-                "ext. ", "x"
+            email_node = page.xpath('//div[@class="field-container label-display--inline field-name--field_email"]')
+            phone_node = page.xpath(
+                '//div[@class="field-container label-display--inline field-name--field_phone_number"]'
             )
-            fax = re.findall(r"[0-9]{3}-[0-9]{3}-[0-9]{4}", contact_info.text_content())[1]
-            email = self.get_email(contact_info)
+            fax_node = page.xpath('//div[@class="field-container label-display--inline field-name--field_fax_number"]')
 
             p = Person(primary_org="legislature", name=name, district=district.strip(), role=role)
             p.add_source(COUNCIL_PAGE)
-            if contact_details_url:
-                p.add_source(contact_details_url)
             p.add_source(url)
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("fax", fax, "legislature")
-            p.add_contact("email", email)
 
-            image = page.xpath('//img[contains(@alt, "Councillor")]/@src')
+            if role == "Mayor":
+                contact_info = page.xpath('//p[contains(.,"Tel:")]/text()')
+                phone = contact_info[0].split(": ")[1]
+                fax = contact_info[1].split(": ")[1]
+                email = contact_info[2].replace("\u200b", "")
+                p.add_contact("email", email)
+                p.add_contact("voice", phone, "legislature")
+                p.add_contact("fax", fax, "legislature")
+
+            if phone_node:
+                self.get_phone(phone_node[0]).replace("=", "")
+                p.add_contact("voice", phone, "legislature")
+            if fax_node:
+                p.add_contact("fax", self.get_phone(fax_node[0]), "legislature")
+            if email_node:
+                p.add_contact("email", self.get_email(email_node[0]))
+
+            image = councillor.xpath("./ancestor::td//@src")
             if image:
                 p.image = image[0]
 
