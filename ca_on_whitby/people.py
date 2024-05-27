@@ -1,7 +1,7 @@
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.whitby.ca/en/townhall/meetyourcouncil.asp?_mid_=11883"
+COUNCIL_PAGE = "https://www.whitby.ca/en/town-hall/mayor-and-council.aspx"
 
 
 class WhitbyPersonScraper(CanadianScraper):
@@ -9,31 +9,31 @@ class WhitbyPersonScraper(CanadianScraper):
         regional_councillor_seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//a[@title="Mayor and Council::Meet Your Council"]/following-sibling::ul//@href')
+        councillors = page.xpath('//table[@class="icrtAccordion"]//tr[contains(./td/@data-name, "accParent")]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            node = self.lxmlize(councillor).xpath('//div[@id="printArea"]')[0]
-            name = node.xpath(".//h1/text()")[0]
+            name = councillor.xpath("./td")[0].text_content().strip().replace("\xa0", " ")
+            node = councillor.xpath("./following-sibling::tr/td")[0]
 
             if "Mayor" in name:
                 role = "Mayor"
                 district = "Whitby"
                 name = name.replace("Mayor ", "")
             else:
-                role = node.xpath(".//h2/text()")[0]
-                if "Regional Councillor" in role:
+                name, role = name.split(", ")
+                if role == "Regional Councillor":
                     district = "Whitby (seat {})".format(regional_councillor_seat_number)
                     regional_councillor_seat_number += 1
                 else:
-                    role, district = role.split(", ")
-                    district = district.split(" (")[0]
+                    district = role.split(" – ")[1]
+                    district = " ".join(district.split(" ")[:2])
+                    role = "Councillor"
 
             image = node.xpath(".//img/@src")[0]
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_contact("voice", self.get_phone(node), "legislature")
-            p.add_contact("email", self.get_email(node))
             p.image = image
 
             yield p
