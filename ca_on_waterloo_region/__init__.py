@@ -15,15 +15,6 @@ class Waterloo(CanadianJurisdiction):
 
         organization.add_post(role="Chair", label=self.division_name, division_id=self.division_id)
         organization.add_post(
-            role="Regional Councillor", label="Cambridge", division_id="ocd-division/country:ca/csd:3530010"
-        )
-        organization.add_post(
-            role="Regional Councillor", label="Kitchener", division_id="ocd-division/country:ca/csd:3530013"
-        )
-        organization.add_post(
-            role="Regional Councillor", label="Waterloo", division_id="ocd-division/country:ca/csd:3530016"
-        )
-        organization.add_post(
             role="Regional Councillor", label="North Dumfries", division_id="ocd-division/country:ca/csd:3530004"
         )
         organization.add_post(
@@ -35,19 +26,19 @@ class Waterloo(CanadianJurisdiction):
         organization.add_post(
             role="Regional Councillor", label="Woolwich", division_id="ocd-division/country:ca/csd:3530035"
         )
-        for seat_number in range(1, 3):
+        for seat_number in range(1, 4):
             organization.add_post(
                 role="Regional Councillor",
                 label="Cambridge (seat {})".format(seat_number),
                 division_id="ocd-division/country:ca/csd:3530010",
             )
-        for seat_number in range(1, 5):
+        for seat_number in range(1, 6):
             organization.add_post(
                 role="Regional Councillor",
                 label="Kitchener (seat {})".format(seat_number),
                 division_id="ocd-division/country:ca/csd:3530013",
             )
-        for seat_number in range(1, 3):
+        for seat_number in range(1, 4):
             organization.add_post(
                 role="Regional Councillor",
                 label="Waterloo (seat {})".format(seat_number),
