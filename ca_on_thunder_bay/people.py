@@ -1,7 +1,9 @@
+import requests
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.thunderbay.ca/en/city-hall/mayor-and-council.aspx"
+COUNCIL_PAGE = "https://www.thunderbay.ca/en/city-hall/mayor-and-council-profiles.aspx"
 
 
 class ThunderBayPersonScraper(CanadianScraper):
@@ -9,43 +11,38 @@ class ThunderBayPersonScraper(CanadianScraper):
         seat_number = 1
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@class="icrtAccordion"]//tr[position() mod 2=0]/td')
+        councillors = page.xpath("//p[@class='Center']/a[@href]")
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            paras = councillor.xpath("./p")
-            email = next(para for para in paras if "Email" in para.text_content())
-            paras = paras[: paras.index(email)]
+            url = councillor.xpath("./@href")[0]
+            councillor_page = self.lxmlize(url)
+            info = councillor_page.xpath("//div[@class='iCreateDynaToken']")[1]
+            role = info.xpath("./h2")[0].text_content()
+            name = info.xpath("./h3")[0].text_content()
 
-            role, name = paras[1].text_content().split(" ", 1)
-            district = paras[2].text_content()
-            start = 2
+            email = self.get_email(info)
+            phone = self.get_phone(info)
+            photo = councillor_page.xpath("//div[@class='lb-imageBoxLinkImage']//img/@src")[0]
+
+            district = councillor_page.xpath("//span[@class='imageBoxSpan']|//div[@class='lb-imageBoxLinkTitle']/h2")[
+                0
+            ].text_content()
             if "At Large" in district:
                 role = "Councillor at Large"
                 district = "Thunder Bay (seat {})".format(seat_number)
                 seat_number += 1
-            elif "Ward" in district:
-                district = district.replace("Ward", "").strip()
-            else:
+            elif "Mayor" in district:
                 district = "Thunder Bay"
-                start = 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-
-            p.image = paras[0].xpath(".//@src")[0]
-
-            address_parts = []
-            for para in paras[start:-1]:
-                content = para.text_content().replace("(1st)", "")
-                if ":" in content:
-                    type, value = content.split(":")
-                    if "Fax" in type:
-                        p.add_contact("fax", value, "legislature")
-                    else:
-                        p.add_contact("voice", value, type)
-                else:
-                    address_parts.append(content)
-
-            p.add_contact("address", "\n".join(address_parts), "constituency")
+            p.add_source(url)
+            p.add_contact("email", email)
+            p.add_contact("voice", phone, "legislature")
+            p.image = photo
 
             yield p
+
+    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None, xml=False):
+        requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"  # site uses a weak DH key
+        return super().lxmlize(url, encoding, user_agent, cookies, xml)
