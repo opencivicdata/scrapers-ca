@@ -53,10 +53,14 @@ class Huron(CanadianJurisdiction):
         }
         for division_name, division in divisions.items():
             division_id = "ocd-division/country:ca/csd:{}".format(division["type_id"])
-            organization.add_post(role="Mayor", label=division_name, division_id=division_id)
-            for seat_number in range(1, division["stop"]):
-                organization.add_post(
-                    role="Councillor", label="{} (seat {})".format(division_name, seat_number), division_id=division_id
-                )
+            if division["stop"] > 1:
+                for seat_number in range(1, division["stop"] + 1):
+                    organization.add_post(
+                        role="Councillor",
+                        label="{} (seat {})".format(division_name, seat_number),
+                        division_id=division_id,
+                    )
+            else:
+                organization.add_post(role="Councillor", label=division_name, division_id=division_id)
 
         yield organization
