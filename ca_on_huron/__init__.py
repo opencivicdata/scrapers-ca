@@ -15,45 +15,45 @@ class Huron(CanadianJurisdiction):
 
         divisions = {
             "Ashfield-Colborne-Wawanosh": {
-                "stop": 2,
+                "count": 2,
                 "type_id": "3540063",
             },
             "Bluewater": {
-                "stop": 2,
+                "count": 2,
                 "type_id": "3540010",
             },
             "Central Huron": {
-                "stop": 2,
+                "count": 2,
                 "type_id": "3540025",
             },
             "Goderich": {
-                "stop": 2,
+                "count": 2,
                 "type_id": "3540028",
             },
             "Howick": {
-                "stop": 1,
+                "count": 1,
                 "type_id": "3540046",
             },
             "Huron East": {
-                "stop": 2,
+                "count": 2,
                 "type_id": "3540040",
             },
             "Morris-Turnberry": {
-                "stop": 1,
+                "count": 1,
                 "type_id": "3540050",
             },
             "North Huron": {
-                "stop": 1,
+                "count": 1,
                 "type_id": "3540055",
             },
             "South Huron": {
-                "stop": 2,
+                "count": 2,
                 "type_id": "3540005",
             },
         }
         for division_name, division in divisions.items():
             division_id = "ocd-division/country:ca/csd:{}".format(division["type_id"])
-            for seat_number in range(1, division["stop"] + 1):
+            for seat_number in range(1, division["count"] + 1):
                 organization.add_post(
                     role="Councillor",
                     label="{} (seat {})".format(division_name, seat_number),
