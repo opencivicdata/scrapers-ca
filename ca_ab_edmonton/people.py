@@ -1,8 +1,10 @@
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.edmonton.ca/city_government/city_organization/city-councillors.aspx"
-MAYOR_PAGE = "https://www.edmonton.ca/city_government/city_organization/the-mayor.aspx"
+COUNCIL_PAGE = "https://www.edmonton.ca/city_government/city_organization/city-councillors"
+MAYOR_PAGE = "https://www.edmonton.ca/city_government/city_organization/the-mayor"
 
 
 class EdmontonPersonScraper(CanadianScraper):
@@ -10,17 +12,22 @@ class EdmontonPersonScraper(CanadianScraper):
         yield self.scrape_mayor()
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[contains(@class, "documentexcerpt-module__item")]')
+        councillors = page.xpath('.//div[contains(@class, "feature-box__title")]')
         assert len(councillors), "No councillors found"
         for cell in councillors:
-            name = cell[1].text
-            if name == "Vacant":
+            name = cell.xpath("./a")[0].text_content()
+            if "Vacant" in name:
                 continue
 
-            page_url = cell[0].attrib["href"]
+            page_url = cell.xpath("./a/@href")[0]
             page = self.lxmlize(page_url)
-            district_name = page.xpath('//h1[contains(@class, "page-title")]')[0].text_content()
+            district_name = page.xpath(
+                '//h1[contains(@class, "page-title")]|//h1[contains(@class, "page-title page-title--black-content-page")]'
+            )[0].text_content()
             district, name = district_name.split(" - ", 1)
+            district = district.replace("Ward ", "")
+            if " " in district and re.search("[^A-Za-z ]", district):
+                district = district.split()[0]
 
             p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
             p.add_source(COUNCIL_PAGE)
