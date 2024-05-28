@@ -17,22 +17,26 @@ class Peel(CanadianJurisdiction):
         organization.add_post(role="Mayor", label="Caledon", division_id="ocd-division/country:ca/csd:3521024")
         organization.add_post(role="Mayor", label="Brampton", division_id="ocd-division/country:ca/csd:3521010")
         organization.add_post(role="Mayor", label="Mississauga", division_id="ocd-division/country:ca/csd:3521005")
-        for ward_number in range(1, 6):
+        for ward_number in range(1, 7):
             organization.add_post(
                 role="Councillor",
-                label="Caledon Ward {}".format(ward_number),
+                label="Caledon Ward {} (seat 1)".format(ward_number),
                 division_id="ocd-division/country:ca/csd:3521024/ward:{}".format(ward_number),
             )
+        stop = 3
         for ward_number in range(1, 11):
-            organization.add_post(
-                role="Councillor",
-                label="Brampton Ward {}".format(ward_number),
-                division_id="ocd-division/country:ca/csd:3521010/ward:{}".format(ward_number),
-            )
+            if ward_number == 7:
+                stop = 2
+            for seat_number in range(1, stop):
+                organization.add_post(
+                    role="Councillor",
+                    label="Brampton Ward {} (seat {})".format(ward_number, seat_number),
+                    division_id="ocd-division/country:ca/csd:3521010/ward:{}".format(ward_number),
+                )
         for ward_number in range(1, 12):
             organization.add_post(
                 role="Councillor",
-                label="Mississauga Ward {}".format(ward_number),
+                label="Mississauga Ward {} (seat 1)".format(ward_number),
                 division_id="ocd-division/country:ca/csd:3521005/ward:{}".format(ward_number),
             )
 
