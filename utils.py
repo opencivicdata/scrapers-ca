@@ -280,6 +280,10 @@ class CSVScraper(CanadianScraper):
     """
     district_name_format_string = None
     """
+    A dictionary of district names to boundary URLs. Rarely used.
+    """
+    district_name_to_boundary_url = {}
+    """
     A dictionary of column names to alternate column names. Rarely used.
     """
     fallbacks = {}
@@ -470,6 +474,9 @@ class CSVScraper(CanadianScraper):
                     p._related[0].extras["boundary_url"] = "/boundaries/census-subdivisions/{}/".format(
                         row["district id"]
                     )
+
+            if row.get("district name") in self.district_name_to_boundary_url:
+                p._related[0].extras["boundary_url"] = self.district_name_to_boundary_url[row["district name"]]
 
             if row.get("gender"):
                 p.gender = row["gender"]
