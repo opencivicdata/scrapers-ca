@@ -343,7 +343,7 @@ class CSVScraper(CanadianScraper):
         empty = ("", "Vacant")
         if not any(row.values()):
             return False
-        if "first name" in row and "last name" in row:
+        if "first name" in row and "last name" in row and ("name" not in row or row["name"] in empty):
             return row["last name"] not in empty and row["first name"] not in empty
         return row["name"] not in empty
 
