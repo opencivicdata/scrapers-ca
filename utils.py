@@ -461,7 +461,11 @@ class CSVScraper(CanadianScraper):
             )
             p.add_source(self.csv_url)
 
-            if not row.get("district name") and row.get("district id"):  # ca_on_toronto_candidates
+            # ca_on_toronto_candidates:
+            #   District name,District ID,…
+            #   Toronto Centre,,…
+            #   ,3520005,…
+            if not row.get("district name") and row.get("district id"):
                 if len(row["district id"]) == 7:
                     p._related[0].extras["boundary_url"] = "/boundaries/census-subdivisions/{}/".format(
                         row["district id"]
