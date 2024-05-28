@@ -23,11 +23,8 @@ class Peel(CanadianJurisdiction):
                 label="Caledon Ward {} (seat 1)".format(ward_number),
                 division_id="ocd-division/country:ca/csd:3521024/ward:{}".format(ward_number),
             )
-        stop = 3
         for ward_number in range(1, 11):
-            if ward_number == 7:
-                stop = 2
-            for seat_number in range(1, stop):
+            for seat_number in range(1, 3 if ward_number <= 6 else 2):
                 organization.add_post(
                     role="Councillor",
                     label="Brampton Ward {} (seat {})".format(ward_number, seat_number),
