@@ -1,32 +1,43 @@
+import json
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.oshawa.ca/city-hall/city-council-members.asp"
+COUNCIL_PAGE = "https://www.oshawa.ca/en/city-hall/council-members.aspx"
 
 
 class OshawaPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath("//table//td[*]")
+        councillors = page.xpath("//div[@class='fbg-row lb-callToAction cm-datacontainer']")
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            district, role, name = councillor.xpath("./p[1]/text()")
-            role = role.strip()
-
-            if district == "City of Oshawa":
+            info = councillor.xpath(".//div[@class='lb-callToAction_header']")[0].text_content()
+            if "Mayor" in info:
+                role = "Mayor"
                 district = "Oshawa"
+                name = info.replace("Mayor ", "")
+            else:
+                district, role_name = re.split(r"(?<=\d)\s", info, 1)
+                if "Regional" in role_name:
+                    role = "Regional Councillor"
+                else:
+                    role = "Councillor"
+                name = re.split(r"Councillor\s", role_name, 1)[1]
 
-            if role == "City Councillor":
-                role = "Councillor"
-            elif role == "Regional & City Councillor":
-                role = "Regional Councillor"
-
-            photo_url = councillor.xpath("./p/img/@src")[0]
-            phone = self.get_phone(councillor.xpath('./p[contains(.//text(), "Phone")]')[0], area_codes=[905])
+            photo_url = councillor.xpath(".//img/@src")[0]
+            phone = self.get_phone(councillor)
+            links = councillor.xpath(".//a/@href")
+            data = json.loads(councillor.xpath("./@data-cm-itemdata")[0])
+            email = data["items"][0]["linkUrl"].replace("mailto:", "")
 
             p = Person(primary_org="legislature", name=name, district=district, role=role, image=photo_url)
             p.add_source(COUNCIL_PAGE)
             p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", self.get_email(councillor))
+            p.add_contact("email", email)
+            for link in links:
+                if "mail" not in link:
+                    p.add_link(link)
             yield p

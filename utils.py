@@ -560,26 +560,34 @@ class CanadianJurisdiction(Jurisdiction):
             yield post
 
         children = [
-            child for child in parent.children() if child._type != "place" and child._type not in self.exclude_types
+            child
+            for child in parent.children()
+            if child._type not in ("fed", "place") and child._type not in self.exclude_types
         ]
 
         for child in children:
-            if (
-                not self.skip_null_valid_from
-                and not child.attrs.get("validFrom")
-                or child.attrs.get("validFrom")
-                and (
-                    child.attrs["validFrom"] <= datetime.now().strftime("%Y-%m-%d")
-                    or child.attrs["validFrom"] == self.valid_from
-                )
-            ):
-                if self.use_type_id:
-                    label = child.id.rsplit("/", 1)[1].capitalize().replace(":", " ")
-                else:
-                    label = child.name
-                # Yield posts to allow ca_on_toronto to make changes.
-                post = Post(role=member_role, label=label, division_id=child.id, organization_id=organization._id)
-                yield post
+            valid_from = child.attrs.get("validFrom")
+            valid_through = child.attrs.get("validThrough")
+
+            # Skip divisions whose `validFrom` dates are null.
+            if self.skip_null_valid_from and not valid_from:
+                continue
+
+            # Skip divisions that become valid in the future, or that don't match the election date.
+            if valid_from and valid_from > datetime.now().strftime("%Y-%m-%d") and valid_from != self.valid_from:
+                continue
+
+            # Skip divisions that became invalid in the past.
+            if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
+                continue
+
+            if self.use_type_id:
+                label = child.id.rsplit("/", 1)[1].capitalize().replace(":", " ")
+            else:
+                label = child.name
+            # Yield posts to allow ca_on_toronto to make changes.
+            post = Post(role=member_role, label=label, division_id=child.id, organization_id=organization._id)
+            yield post
 
         if not children and parent.attrs["posts_count"]:
             for i in range(1, int(parent.attrs["posts_count"])):  # exclude Mayor

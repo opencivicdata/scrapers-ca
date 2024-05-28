@@ -11,6 +11,7 @@ class WoolwichPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="printArea"]//strong')
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             info = councillor.xpath("./parent::p/text()")
             if not info:

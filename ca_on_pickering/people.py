@@ -3,7 +3,7 @@ import re
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.pickering.ca/en/cityhall/citycouncil.asp"
+COUNCIL_PAGE = "https://www.pickering.ca/en/city-hall/citycouncil.aspx"
 
 
 class PickeringPersonScraper(CanadianScraper):
@@ -13,21 +13,17 @@ class PickeringPersonScraper(CanadianScraper):
         mayor_contacts = page.xpath("//table[1]//tr/td[1]/text()")
         council_contacts = page.xpath("//table[1]//tr/td[2]/text()")
 
-        councillors = page.xpath('//table[@id="Table3table"]//img/ancestor::td')
+        councillors = page.xpath('//div[@class="lmColumn ui-sortable fbg-col-xs-12 fbg-col-sm-4 column"]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.xpath(".//strong//text()")[0]
 
             if "Councillor" in name:
                 name = name.replace("Councillor", "").strip()
-                role_ward = councillor.xpath("./text()")[0]
-                if not role_ward.strip():
-                    role_ward = councillor.xpath(".//p/text()")[0]
-                role_ward = role_ward.split(" ")
-                role = re.sub(r"\ACity ", "", " ".join(role_ward[:2]))
-                ward = " ".join(role_ward[2:])
+                role_ward = councillor.xpath(".//text()")[1]
+                role, ward = re.split(r"\s(?=Ward)", role_ward, 1)
             else:
-                name = councillor.xpath(".//strong/text()")[1]
+                name = name.replace("Mayor", "")
                 role = "Mayor"
                 ward = "Pickering"
 

@@ -1,12 +1,40 @@
-from utils import CSVScraper
+import re
+
+from utils import CanadianPerson as Person
+from utils import CanadianScraper
+
+COUNCIL_PAGE = "https://www.newwestcity.ca/city_hall/mayor_and_council/councillors.php"
+MAYOR_PAGE = "https://www.newwestcity.ca/city_hall/mayor_and_council/mayor.php"
 
 
-class NewWestminsterPersonScraper(CSVScraper):
-    # http://opendata.newwestcity.ca/datasets/councillor-contact-information
-    csv_url = "http://opendata.newwestcity.ca/downloads/councillor-contact-information/councillor_contacts.csv"
-    many_posts_per_area = True
-    corrections = {
-        "last name": {
-            "Cot\x82": "Cote",
-        },
-    }
+class NewWestminsterPersonScraper(CanadianScraper):
+    def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE)
+        seat_number = 1
+        councillors = page.xpath('//div[@id="main-bottom"]//li')
+        assert len(councillors), "No councillors found"
+        for councillor in councillors:
+            name = councillor.xpath(".//a[@name]")[0].text_content()
+            district = "New Westminster (seat {})".format(seat_number)
+            seat_number += 1
+            p = Person(primary_org="legislature", name=name, role="Councillor", district=district)
+            photo = councillor.xpath("//img/@src")[0]
+            email_parts = re.sub(r"[\"\[\]]", "", councillor.xpath('//div[@class="text"]//a/@data-ob')[0])
+            email = "@".join(email_parts.split(",")[:2])
+            phone = self.get_phone(councillor)
+            p.add_contact("email", email)
+            p.add_contact("voice", phone, "legislature")
+            p.add_source(COUNCIL_PAGE)
+            p.image = photo
+            yield p
+        page = self.lxmlize(MAYOR_PAGE)
+        name = page.xpath('//p[@class="page_description"]/strong')[0].text_content()
+        email_parts = re.sub(r"[\"\[\]]", "", page.xpath("//a/@data-ob")[0])
+        email = "@".join(email_parts.split(",")[:2])
+        phone = self.get_phone(page)
+
+        p = Person(primary_org="legislature", name=name, role="Mayor", district="New Westminster")
+        p.add_source(MAYOR_PAGE)
+        p.add_contact("email", email)
+        p.add_contact("voice", phone, "legislature")
+        yield p

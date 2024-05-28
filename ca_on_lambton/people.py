@@ -1,9 +1,7 @@
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = (
-    "http://www.lambtononline.ca/home/government/accessingcountycouncil/countycouncillors/Pages/default.aspx"
-)
+COUNCIL_PAGE = "https://www.lambtononline.ca/en/county-government/councillors.aspx"
 
 
 class LambtonPersonScraper(CanadianScraper):
@@ -11,28 +9,28 @@ class LambtonPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[@id="content"]//table//tr[position() mod 2 = 1]')
+        councillors = page.xpath('//tbody//td[@data-name="accParent"]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            text = councillor.xpath(".//strong/text()")[0]
+            text = councillor.xpath(".//h3/text()")[0]
             if "Deputy Warden" in text:
                 role = "Deputy Warden"
-                name = text.replace("Deputy Warden", "")
+                name = text.replace("Deputy Warden ", "")
                 district = "Lambton"
             elif "Warden" in text:
                 role = "Warden"
-                name = text.replace("Warden", "")
+                name = text.replace("Warden ", "")
                 district = "Lambton"
             else:
                 role = "Councillor"
-                name = text
+                name = text.replace("Councillor ", "")
                 district = "Lambton (seat {})".format(councillor_seat_number)
                 councillor_seat_number += 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
-            p.image = councillor.xpath(".//img/@src")[0]
-            p.add_contact("email", self.get_email(councillor))
+            p.image = councillor.xpath("../following-sibling::tr//img/@src")[0]
+            p.add_contact("voice", self.get_phone(councillor.xpath("../following-sibling::tr")[0]), "legislature")
 
             yield p

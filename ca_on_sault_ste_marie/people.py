@@ -37,6 +37,7 @@ class SaultSteMariePersonScraper(CanadianScraper):
         yield p
 
         # alternate between a row represneting a ward name and councilors
+        assert len(council_data), "No councillors found"
         for ward_row, data_row in zip(*[iter(council_data)] * 2):
             district = ward_row.xpath('.//text()[contains(., "Ward")]')[0]
             district_num = district_name_using_number(district)

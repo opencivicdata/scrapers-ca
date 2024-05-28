@@ -10,7 +10,9 @@ class ClaringtonPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        for person_header_elem in page.xpath("//h2"):
+        councillors = page.xpath("//h2")
+        assert len(councillors), "No councillors found"
+        for person_header_elem in councillors:
             role, name_post = person_header_elem.text.split(" - ")
             try:
                 name, caps_post = re.match(r"(.+) \((.+)\)", name_post).groups()

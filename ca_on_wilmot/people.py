@@ -11,6 +11,7 @@ class WilmotPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//table[@id="Main Content"]//td[@colspan="3"]//td/p/b')
+        assert len(councillors), "No councillors found"
         for councillor in councillors:
             district, name = councillor.xpath("./text()")[0].split(":")
             if "Mayor" in district:

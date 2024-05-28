@@ -14,13 +14,8 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
         organization = Organization(self.name, classification=self.classification)
 
         for division_number in range(1, 10):
-            # One of the councillors is the Reeve.
-            if division_number == 3:
-                role = "Reeve"
-            else:
-                role = "Councillor"
             organization.add_post(
-                role=role,
+                role="Councillor",
                 label="Division {}".format(division_number),
                 division_id="{}/division:{}".format(self.division_id, division_number),
             )
