@@ -1,55 +1,65 @@
+import re
+
+import requests
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.caledon.ca/en/townhall/council.asp"
+COUNCIL_PAGE = "https://www.caledon.ca/en/government/mayor-and-council.aspx"
 
 
 class CaledonPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        node = page.xpath('//td[@rowspan="2"]')[0]
-        name = node.xpath(".//h3/strong/text()")[0]
-        image = node.xpath(".//@src")[0]
-        voice = self.get_phone(node)
-        url = node.xpath('.//a[contains(., "Visit")]/@href')[0]
-
-        p = Person(primary_org="legislature", name=name, district="Caledon", role="Mayor")
-        p.add_source(COUNCIL_PAGE)
-        p.add_source(url)
-
-        p.add_contact("voice", voice, "legislature")
-        p.add_contact("email", self.get_email(self.lxmlize(url)))
-        p.image = image
-
-        yield p
-
-        councillors = page.xpath('//div[@id="printAreaContent"]//table[2]//td')
-        councillors = councillors[:12] + councillors[16:]
+        councillors = page.xpath('//div[@class="fbg-row lb-imageBox cm-datacontainer"]')
         assert len(councillors), "No councillors found"
-        for i in range(len(councillors) // 3):
-            i = i // 4 * 12 + i % 4
-            district, role = councillors[i].xpath(".//h3/text()")
-            name = councillors[i + 8].xpath(".//strong/text()")[0]
-            voice = self.get_phone(councillors[i + 8])
-            url = councillors[i + 8].xpath('.//a[contains(., "Visit")]/@href')[0]
+        for councillor in councillors:
+            try:
+                district, role_name = re.split(r"(?<=\d)\s(?!.*\d)", councillor.xpath(".//a/div")[0].text_content())
+                if "Regional" in role_name:
+                    role = "Regional Councillor"
+                    name = role_name.replace("Regional Councillor ", "")
+                else:
+                    role = "Councillor"
+                    name = role_name.replace("Councillor ", "")
+            except ValueError:  # Mayor
+                name = councillor.xpath(".//a/div")[0].text_content().replace("Mayor ", "")
+                district = "Caledon"
+                role = "Mayor"
 
-            if "photo to come" in councillors[i + 4].text_content():
-                image = None
-            else:
-                image = councillors[i + 4].xpath(".//@src")[0]
+            url = councillor.xpath(".//@href")[0]
+            page = self.lxmlize(url)
+
+            # phone numbers populated by JS request
+            contact_num = page.xpath('//div[@class="contactBody"]/div/@id')[0].replace("contactEntry_", "")
+            contact_data = requests.get(
+                "https://www.caledon.ca//Modules/Contact/services/GetContactHTML.ashx?isMobile=false&param={}&lang=en".format(
+                    contact_num
+                )
+            ).text
+            voice = re.findall(r"(?<=tel://)\d+(?=\">)", contact_data)
+
+            image = councillor.xpath(".//@src")[0]
 
             district = district.replace("\xa0", " ")
-            if " and " in district:
-                district = district.replace("Ward ", "Wards ")
+            if "&" in district:  # Councillor for multiple wards
+                wards = re.findall(r"\d", district)
+                for ward_num in wards:
+                    p = Person(primary_org="legislature", name=name, district="Ward {}".format(ward_num), role=role)
+                    if voice:
+                        p.add_contact("voice", voice[0], "legislature")
+                    p.image = image
+                    p.add_source(COUNCIL_PAGE)
+                    p.add_source(url)
 
-            p = Person(primary_org="legislature", name=name, district=district, role=role)
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(url)
-
-            p.add_contact("voice", voice, "legislature")
-            p.add_contact("email", self.get_email(self.lxmlize(url)))
-            if image:
+                    yield p
+            else:
+                p = Person(primary_org="legislature", name=name, district=district, role=role)
+                p.add_source(COUNCIL_PAGE)
+                p.add_source(url)
+                if voice:
+                    p.add_contact("voice", voice[0], "legislature")
                 p.image = image
 
-            yield p
+                yield p
