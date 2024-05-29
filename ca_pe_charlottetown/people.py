@@ -8,9 +8,18 @@ COUNCIL_PAGE = "https://www.charlottetown.ca/mayor___council/city_council/meet_m
 
 class CharlottetownPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        def decode_email(e):
+            de = ""
+            k = int(e[:2], 16)
 
-        nodes = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ctl14_divContent"]/*')
+            for i in range(2, len(e) - 1, 2):
+                de += chr(int(e[i : i + 2], 16) ^ k)
+
+            return de
+
+        page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
+
+        nodes = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ctl13_divContent"]/*')
         groups = [[]]
         for node in nodes:
             if node.tag == "hr":
@@ -24,7 +33,7 @@ class CharlottetownPersonScraper(CanadianScraper):
             text = para.xpath(".//strong[1]/text()")[0]
             if "Deputy Mayor" in text:
                 role = "Councillor"
-                match = re.search(r"Deputy Mayor (.+) - Councillor (Ward \d+)", text)
+                match = re.search(r"Deputy Mayor (.+) - (Ward \d+)", text)
                 district = match.group(2)
             elif "Mayor" in text:
                 role = "Mayor"
@@ -36,15 +45,21 @@ class CharlottetownPersonScraper(CanadianScraper):
                 district = match.group(2)
 
             image = para.xpath(".//@src")[0]
-            name = match.group(1)
+            name = match.group(1).split("(")[0]
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
             p.image = image
-            email = self.get_email(para, error=False)
-            if email:
-                p.add_contact("email", email)
+
+            for node in group:
+                email_node = node.xpath("//a[span/@data-cfemail]")
+                if email_node:
+                    email = email_node[0].xpath("./@href")[0].split("#")[1]
+                    break
+
+            decoded_email = decode_email(email).split("?")[0]
+            p.add_contact("email", decoded_email)
 
             for text in para.xpath('.//strong[contains(., "Phone")]/following-sibling::text()'):
                 if re.search(r"\d", text):
