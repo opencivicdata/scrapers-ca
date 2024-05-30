@@ -12,7 +12,7 @@ class LevisPersonScraper(CanadianScraper):
         councillors = page.xpath('//div[@class="drawers"]//div[@class="dropdown"]')
         assert len(councillors), "No councillors found"
         for person in councillors:
-            position, name = person.xpath("./h2/text()")[0].replace("–", "-").split(" - ")
+            position, name = person.xpath("./h3/text()")[0].replace("–", "-").split(" - ")
             if "," in position:
                 role, district = position.title().split(", ")[0].split(" ", 1)
             else:
