@@ -30,7 +30,8 @@ class KirklandPersonScraper(CanadianScraper):
                 .replace(".", ",")  # correcting a typo
                 .replace(",-#-", " x")
             )
-            email = self.get_email(councillor)
+            encrypted_email = councillor.xpath('.//@href[contains(., "email")]')[0].split("#")[1]
+            email = decode_email(encrypted_email)
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
