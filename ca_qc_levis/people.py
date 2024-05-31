@@ -45,14 +45,15 @@ class LevisPersonScraper(CanadianScraper):
             p.add_source(COUNCIL_PAGE)
 
             if name in presidents:
-                person = Person(primary_org="legislature", name=name, district=presidents[name], role=role)
-                person.add_source(COUNCIL_PAGE)
-                person.image = photo_url
-                person.add_source(ARRONDISSEMENTS_PAGE)
-                person.add_contact("email", email)
-                person._related[0].extras["boundary_url"] = f"/levis-boroughs/{slugify(presidents[name])}/"
-
                 p.add_source(ARRONDISSEMENTS_PAGE)  # making sure the sources match for both memberships
+
+                person = Person(primary_org="legislature", name=name, district=presidents[name], role="Président")
+                person.add_source(COUNCIL_PAGE)
+                person.add_source(ARRONDISSEMENTS_PAGE)
+
+                person.image = photo_url
+                person.add_contact("email", email)
+                person._related[0].extras["boundary_url"] = f"/boundaries/levis-boroughs/{slugify(presidents[name])}/"
 
                 yield person
 
