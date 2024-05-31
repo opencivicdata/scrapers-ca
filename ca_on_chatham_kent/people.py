@@ -50,28 +50,6 @@ class ChathamKentPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        # getting 1 councillor with incomplete information
-        if seat_numbers["Ward 3"] < 2:
-            councillor_url = page.xpath(
-                '//a[contains(@href, "Councillors-by-Ward.aspx")]/following-sibling::ul[1]/li/a/@href'
-            )[-1]
-            councillor_page = self.lxmlize(councillor_url)
-
-            name = councillor_page.xpath("//h1")[0].text_content()
-            ward = "Ward 3"
-            seat_numbers[ward] += 1
-            district = "{} (seat {})".format(ward, seat_numbers[ward])
-
-            p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
-            p.add_source(councillor_url)
-            address = councillor_page.xpath("//hr/following-sibling::*")[1].text_content()
-            p.add_contact("address", address, "legislature")
-            email = self.get_email(councillor_page)
-            p.add_contact("email", email)
-            phone = self.get_phone(councillor_page)
-            p.add_contact("voice", phone, "legislature")
-            yield p
-
         mayor_url = page.xpath('//@href[contains(., "Mayor-")]')[0]
         page = self.lxmlize(mayor_url)
         contact_page = self.lxmlize(MAYOR_CONTACT_PAGE)
