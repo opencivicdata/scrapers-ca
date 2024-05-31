@@ -1,4 +1,3 @@
-# coding: utf-8
 import hashlib
 
 from utils import CanadianPerson as Person

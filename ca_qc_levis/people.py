@@ -1,4 +1,3 @@
-# coding: utf-8
 from django.template.defaultfilters import slugify
 
 from utils import CanadianPerson as Person

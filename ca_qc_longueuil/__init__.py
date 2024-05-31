@@ -1,4 +1,3 @@
-# coding: utf-8
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 

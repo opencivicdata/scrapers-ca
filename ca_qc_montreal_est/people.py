@@ -1,4 +1,3 @@
-# coding: utf-8
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
