@@ -1,4 +1,6 @@
 # coding: utf-8
+from django.template.defaultfilters import slugify
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -48,6 +50,7 @@ class LevisPersonScraper(CanadianScraper):
                 person.image = photo_url
                 person.add_source(ARRONDISSEMENTS_PAGE)
                 person.add_contact("email", email)
+                person._related[0].extras["boundary_url"] = f"/levis-boroughs/{slugify(presidents[name])}/"
 
                 p.add_source(ARRONDISSEMENTS_PAGE)  # making sure the sources match for both memberships
 

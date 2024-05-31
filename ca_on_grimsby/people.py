@@ -12,7 +12,7 @@ class GrimsbyPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         wards = page.xpath("//div[@id='printAreaContent']//tbody/tr[td/h4]")
-        assert len(wards), "No Wards found"
+        assert len(wards), "No wards found"
 
         for ward in wards:
             area = ward.xpath(".//h4")[0].text_content()
