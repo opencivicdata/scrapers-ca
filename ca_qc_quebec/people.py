@@ -25,18 +25,35 @@ class QuebecPersonScraper(CanadianScraper):
                     role = "Maire"
                 else:
                     district = councillor.xpath('./p[@itemprop="jobTitle"]/a/text()')[0]
-                    district = re.search(r"\ADistrict (?:de(?: la)?|du|des) ([\w —–-]+)", district, flags=re.U).group(
-                        1
+                    district = (
+                        re.search(r"\ADistrict (?:de(?: la)?|du|des) ([\w —–-]+)", district, flags=re.U)
+                        .group(1)
+                        .strip()
                     )
                     role = "Conseiller"
 
-                if district == "Saules":
+                if district == "Saules–Les Méandres":
                     district = "Les Saules"
+                elif district == "Neufch\u00e2tel\u2013Lebourgneuf":
+                    district = "Neufchâtel-Lebourgneuf"
+                elif district == "Loretteville\u2013Les Ch\u00e2tels":
+                    district = "Loretteville-Les Ch\u00e2tels"
                 else:
                     district = re.sub(r"–", "—", district)  # n-dash, m-dash
 
-                p = Person(primary_org="legislature", name=name, district=district, role=role)
-                p.add_source(COUNCIL_PAGE)
-                p.image = councillor.xpath("./figure//@src")[0]
-                p.add_contact("voice", self.get_phone(councillor, area_codes=[418]), "legislature")
-                yield p
+                districts = [district]
+
+                borough = None
+                borough_strings = councillor.xpath('.//p[@itemprop = "affiliation"]/text()')
+                for string in borough_strings:
+                    borough = re.findall(r"Présidente? de l’arrondissement (.*)$", string)
+                    if borough:
+                        borough = borough[0].replace("des", "Les").replace("de ", "")
+                        districts.append(borough)
+
+                for district in districts:
+                    p = Person(primary_org="legislature", name=name, district=district, role=role)
+                    p.add_source(COUNCIL_PAGE)
+                    p.image = councillor.xpath("./figure//@src")[0]
+                    p.add_contact("voice", self.get_phone(councillor, area_codes=[418]), "legislature")
+                    yield p
