@@ -10,25 +10,24 @@ MAYOR_CONTACT_URL = "http://www.halifax.ca/mayor/contact.php"
 
 class HalifaxPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[@id = "block-districtdistrictindex"]/ul/li')[1:]
+        page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
+        councillors = page.xpath('//div[@id = "block-districtdistrictindex"]//ul/li')[1:]
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             photo_div = councillor.xpath("./a/div[1]")[0]
             info_div = councillor.xpath("./a/div[2]")[0]
             district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()")))
-            # FIXME: we special-case one malformed district name. If you're editing this file,
-            # try removing these lines
-            if district.startswith("District 16 "):
-                district = district[len("District 16 ") :]
+            # District name different than in database
+            if "Westphal" in district:
+                district = "Cole Harbour—Westphal"
 
             name = info_div.xpath("./strong/p/text()")[0].replace("Councillor ", "").replace("Deputy Mayor ", "")
 
             if name != "To be determined":
                 photo = photo_div.xpath(".//img/@src")[0]
                 url = councillor.xpath("./a/@href")[0]
-                councillor_page = self.lxmlize(url)
+                councillor_page = self.lxmlize(url, user_agent="Mozilla/5.0")
 
                 contact_node = councillor_page.xpath('//div[@id = "block-districtdistrictprofile"]')[0]
                 phone = self.get_phone(contact_node, area_codes=[902])
@@ -42,7 +41,7 @@ class HalifaxPersonScraper(CanadianScraper):
                 p.image = photo
                 yield p
 
-        mayor_page = self.lxmlize(MAYOR_PAGE, "iso-8859-1")
+        mayor_page = self.lxmlize(MAYOR_PAGE, "iso-8859-1", user_agent="Mozilla/5.0")
         name = " ".join(mayor_page.xpath("//h1/text()")).replace("Mayor", "").strip()
         contact_div = mayor_page.xpath('//aside[contains(@class, "layout-sidebar-second")]/section/div[1]')[0]
         phone = self.get_phone(contact_div.xpath("./p[2]")[0])
