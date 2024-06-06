@@ -1,44 +1,66 @@
+import json
+
+import lxml.html
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper, clean_french_prepositions
 
-COUNCIL_PAGE = "http://www.ville.sherbrooke.qc.ca/mairie-et-vie-democratique/conseil-municipal/elus-municipaux/"
+COUNCIL_PAGE = "https://www.sherbrooke.ca/fr/vie-municipale/elues-et-elus-municipaux"
 
 
 class SherbrookePersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        districts = []
 
-        councillors = page.xpath('//div[@id="c2087"]//a')
+        # The whole site is rendered with Javascript, but has part of the html documents in the scripts
+        def get_content(url):
+            page = self.lxmlize(url)
+            script = page.xpath(".//script[not(@type)]")[0].text_content()
+            data = script.split(" = ", 1)[1]
+            data = json.loads(data)
+            content = data["value"]["selected"]["content"]["fr"]
+            page = lxml.html.fromstring(content)
+            return page
+
+        page = get_content(COUNCIL_PAGE)
+        councillors = page.xpath("//a[.//h3]")
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            name = councillor.text_content()
-            url = councillor.attrib["href"]
-            page = self.lxmlize(url)
+            name = councillor.xpath(".//h3")[0].text_content()
+            role = councillor.xpath('.//div[@class="poste"]')[0].text_content()
 
-            if "Maire" in page.xpath("//h2/text()")[0]:
-                district = "Sherbrooke"
+            if "Maire" in role:
                 role = "Maire"
+                district = "Sherbrooke"
             else:
-                district = page.xpath('//div[@class="csc-default"]//a[contains(@href, "fileadmin")]/text()')[0]
-                district = clean_french_prepositions(district).replace("district", "").strip()
                 role = "Conseiller"
+                district = councillor.xpath('.//div[@class="district"]')[0].text_content()
+                district = clean_french_prepositions(district).replace("District", "").strip()
 
             if district == "Lennoxville":
                 district = "Arrondissement 3"
+            elif district == "Lac-Magog":
+                district = "Lac Magog"
+            districts.append(district)
+            url = "https://www.sherbrooke.ca" + councillor.xpath("./@href")[0]
+            page = get_content(url)
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
-            p.image = page.xpath('//div[@class="csc-textpic-image csc-textpic-last"]//img/@src')[0]
-            parts = page.xpath('//li[contains(text(), "phone")]/text()')[0].split(":")
-            note = parts[0]
-            phone = parts[1]
-            p.add_contact(note, phone, note)
-            email = self.get_email(page)
+            image = councillor.xpath(".//@src")[0]
+            if "https://" not in image:
+                image = "https://contenu.maruche.ca" + image
+            p.image = image
+            phone = self.get_phone(page, error=False)
+            email = self.get_email(page, error=False)
             if email:
                 p.add_contact("email", email)
+            if phone:
+                p.add_contact("voice", phone, "legislature")
             if district == "Brompton":
                 p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/brompton/"
             elif district == "Lennoxville":
                 p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/lennoxville/"
             yield p
+            print(districts)
