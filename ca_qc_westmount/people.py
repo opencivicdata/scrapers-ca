@@ -21,11 +21,14 @@ class WestmountPersonScraper(CanadianScraper):
                 role = "Conseiller"
                 district = councillor.xpath(".//li//text()")[0]
 
+            email = self.get_email(councillor, error=False)
+
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
             p.image = councillor.xpath(".//@src")[0]
             p.add_contact("voice", self.get_phone(councillor), "legislature")
-            p.add_contact("email", self.get_email(councillor))
+            if email:
+                p.add_contact("email", email)
 
             yield p
