@@ -1,11 +1,10 @@
-import re
 from urllib.parse import urljoin
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.regina.ca/city-government/city-council"
-MAYOR_CONTACT_URL = "https://www.regina.ca/city-government/city-council/mayors-office"
+MAYOR_CONTACT_URL = "https://www.regina.ca/city-government/city-council/mayors-office/contact-mayor/"
 
 
 class ReginaPersonScraper(CanadianScraper):
@@ -26,7 +25,6 @@ class ReginaPersonScraper(CanadianScraper):
 
     def councillor_data(self, url, name, ward):
         page = self.lxmlize(url)
-        # sadly, email is a form on a separate page
         photo_url_rel = page.xpath('//div[@class="councillor__image"]//img/@src')[0]
         photo_url = urljoin(url, photo_url_rel)
 
@@ -34,12 +32,8 @@ class ReginaPersonScraper(CanadianScraper):
         m.add_source(COUNCIL_PAGE)
         m.add_source(url)
 
-        # Scrape and add phone.
-        phone_path = page.xpath('//div[@class="councillor__contact"]//ul/li/a/@href[contains(., "306")]')[0]
-        phone_string = phone_path.rsplit("/", 1)[-1]
-        phone = re.sub("[^0-9]", "", phone_string)
-        if phone:
-            m.add_contact("voice", phone, "legislature")
+        m.add_contact("voice", self.get_phone(page), "legislature")
+        m.add_contact("email", self.get_email(page))
 
         m.image = photo_url
         yield m
@@ -57,11 +51,8 @@ class ReginaPersonScraper(CanadianScraper):
         m.add_source(url)
         m.image = photo_url
 
-        # Scrape and add phone.
-        phone_path = page.xpath('//div[@class="councillor__contact"]//ul/li/a/@href[contains(., "306")]')[0]
-        phone_string = phone_path.rsplit("/", 1)[-1]
-        phone = re.sub("[^0-9]", "", phone_string)
-        if phone:
-            m.add_contact("voice", phone, "legislature")
+        page = self.lxmlize(MAYOR_CONTACT_URL)
+        m.add_contact("voice", self.get_phone(page), "legislature")
+        m.add_contact("email", self.get_email(page))
 
         return m
