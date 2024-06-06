@@ -124,6 +124,9 @@ class CanadianScraper(Scraper):
         # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
         for match in node.xpath('{}//a[contains(@href, "mailto:")]'.format(expression)):
             matches.append(unquote(match.attrib["href"]))
+        # some emails are obfuscated by cloudflare
+        for match in node.xpath('{}//@href[contains(., "cdn-cgi/l/email-protection")]'.format(expression)):
+            matches.append(self._cloudflare_decode(match))
         # If the node has no sub-tags.
         if not matches:
             for match in node.xpath('{}//text()[contains(., "@")]'.format(expression)):
@@ -137,6 +140,17 @@ class CanadianScraper(Scraper):
                 raise Exception("No email pattern in {}".format(matches))
         elif error:
             raise Exception("No email node in {}".format(etree.tostring(node)))
+
+    # Helper function for self,get_email
+    def _cloudflare_decode(self, link):
+        hex_email = link.split("#", 1)[1]
+        decoded_email = ""
+        key = int(hex_email[:2], 16)
+
+        for i in range(2, len(hex_email) - 1, 2):
+            decoded_email += chr(int(hex_email[i : i + 2], 16) ^ key)
+
+        return decoded_email
 
     def get_phone(self, node, *, area_codes=[], error=True):
         """
