@@ -21,13 +21,14 @@ class SaintJeromePersonScraper(CanadianScraper):
                 role = "Conseiller"
 
             image = councillor.xpath('.//div[@class="portrait_single"]/img/@data-lazy-src')[0]
-            contact = councillor.xpath('.//div[contains(@class,"phone")]/text()')[0]
+            phone = self.get_phone(councillor, error=False)
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.image = image
 
-            p.add_contact("voice", contact, "legislature")
+            if phone:
+                p.add_contact("voice", phone, "legislature")
             p.add_contact("email", self.get_email(councillor))
 
             yield p
