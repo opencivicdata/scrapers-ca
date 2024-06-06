@@ -8,15 +8,6 @@ COUNCIL_PAGE = "https://www.charlottetown.ca/mayor___council/city_council/meet_m
 
 class CharlottetownPersonScraper(CanadianScraper):
     def scrape(self):
-        def decode_email(e):
-            de = ""
-            k = int(e[:2], 16)
-
-            for i in range(2, len(e) - 1, 2):
-                de += chr(int(e[i : i + 2], 16) ^ k)
-
-            return de
-
         page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
 
         nodes = page.xpath('//div[@id="ctl00_ContentPlaceHolder1_ctl13_divContent"]/*')
@@ -52,14 +43,8 @@ class CharlottetownPersonScraper(CanadianScraper):
 
             p.image = image
 
-            for node in group:
-                email_node = node.xpath("//a[span/@data-cfemail]")
-                if email_node:
-                    email = email_node[0].xpath("./@href")[0].split("#")[1]
-                    break
-
-            decoded_email = decode_email(email).split("?")[0]
-            p.add_contact("email", decoded_email)
+            email = self.get_email(para)
+            p.add_contact("email", email)
 
             for text in para.xpath('.//strong[contains(., "Phone")]/following-sibling::text()'):
                 if re.search(r"\d", text):
