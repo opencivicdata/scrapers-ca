@@ -1,6 +1,7 @@
 import json
 
 import lxml.html
+from django.template.defaultfilters import slugify
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper, clean_french_prepositions
@@ -34,21 +35,23 @@ class SherbrookePersonScraper(CanadianScraper):
                 role = "Maire"
                 district = "Sherbrooke"
             else:
+                role = "Conseiller"
                 district = councillor.xpath('.//div[@class="district"]')[0].text_content()
                 district = clean_french_prepositions(district).replace("District", "").strip()
-                if "président" in role:
-                    borough = councillor.xpath('.//div[@class="bloc_bas"]/p')[0].text_content()
-                    borough = clean_french_prepositions(borough).replace("Arrondissement", "").strip()
+                if district == "Lac-Magog":
+                    district = "Lac Magog"
 
-                    if borough == "Brompton-Rock Forest-Saint-\u00c9lie-Deauville":
-                        borough = "Brompton–Rock Forest–Saint-Élie–Deauville"  # N-dashes
-                    if borough != district:  # Lennoxville
-                        districts.append(borough)
-                role = "Conseiller"
-
-            if district == "Lac-Magog":
-                district = "Lac Magog"
             districts.append(district)
+
+            if "président" in role:
+                borough = councillor.xpath('.//div[@class="bloc_bas"]/p')[0].text_content()
+                borough = clean_french_prepositions(borough).replace("Arrondissement", "").strip()
+
+                if borough == "Brompton-Rock Forest-Saint-\u00c9lie-Deauville":
+                    borough = "Brompton–Rock Forest–Saint-Élie–Deauville"  # N-dashes
+                if borough != district:  # Lennoxville
+                    districts.append(borough)
+
             url = "https://www.sherbrooke.ca" + councillor.xpath("./@href")[0]
             page = get_content(url)
 
@@ -58,7 +61,7 @@ class SherbrookePersonScraper(CanadianScraper):
             if "https://" not in image:
                 image = "https://contenu.maruche.ca" + image
 
-            for district in districts:
+            for i, district in enumerate(districts):
                 p = Person(primary_org="legislature", name=name, district=district, role=role)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
@@ -68,4 +71,6 @@ class SherbrookePersonScraper(CanadianScraper):
                     p.add_contact("email", email)
                 if phone:
                     p.add_contact("voice", phone, "legislature")
+                if i:
+                    p._related[0].extras["boundary_url"] = f"/boundaries/sherbrooke-boroughs/{slugify(district)}/"
                 yield p
