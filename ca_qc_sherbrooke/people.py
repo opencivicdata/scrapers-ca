@@ -37,6 +37,7 @@ class SherbrookePersonScraper(CanadianScraper):
                 district = councillor.xpath('.//div[@class="district"]')[0].text_content()
                 district = clean_french_prepositions(district).replace("District", "").strip()
 
+            # The shapefile in represent-canada-data is missing the Lennoxville district.
             if district == "Lennoxville":
                 district = "Arrondissement 3"
             elif district == "Lac-Magog":
