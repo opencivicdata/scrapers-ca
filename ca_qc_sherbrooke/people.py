@@ -63,4 +63,3 @@ class SherbrookePersonScraper(CanadianScraper):
             elif district == "Lennoxville":
                 p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/lennoxville/"
             yield p
-            print(districts)
