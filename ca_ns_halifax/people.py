@@ -4,14 +4,12 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.halifax.ca/city-hall/districts-councillors"
-MAYOR_PAGE = "https://www.halifax.ca/city-hall/mayor-mike-savage"
-MAYOR_CONTACT_URL = "http://www.halifax.ca/mayor/contact.php"
 
 
 class HalifaxPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
-        councillors = page.xpath('//div[@id = "block-districtdistrictindex"]//ul/li')[1:]
+        councillors = page.xpath('//div[@id = "block-districtdistrictindex"]//ul/li')
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
@@ -24,31 +22,25 @@ class HalifaxPersonScraper(CanadianScraper):
 
             name = info_div.xpath("./strong/p/text()")[0].replace("Councillor ", "").replace("Deputy Mayor ", "")
 
+            if "Mayor" in name:
+                role = "Mayor"
+                name = name.replace("Mayor ", "")
+                district = "Halifax"
+            else:
+                role = "Councillor"
+
             if name != "To be determined":
                 photo = photo_div.xpath(".//img/@src")[0]
                 url = councillor.xpath("./a/@href")[0]
                 councillor_page = self.lxmlize(url, user_agent="Mozilla/5.0")
 
-                contact_node = councillor_page.xpath('//div[@id = "block-districtdistrictprofile"]')[0]
-                phone = self.get_phone(contact_node, area_codes=[902])
-                email = self.get_email(contact_node)
+                phone = self.get_phone(councillor_page, area_codes=[902])
+                email = self.get_email(councillor_page)
 
-                p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
+                p = Person(primary_org="legislature", name=name, district=district, role=role)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
                 p.add_contact("voice", phone, "legislature")
                 p.add_contact("email", email)
                 p.image = photo
                 yield p
-
-        mayor_page = self.lxmlize(MAYOR_PAGE, "iso-8859-1", user_agent="Mozilla/5.0")
-        name = " ".join(mayor_page.xpath("//h1/text()")).replace("Mayor", "").strip()
-        contact_div = mayor_page.xpath('//aside[contains(@class, "layout-sidebar-second")]/section/div[1]')[0]
-        phone = self.get_phone(contact_div.xpath("./p[2]")[0])
-        email = self.get_email(contact_div.xpath("./p[2]")[0])
-
-        p = Person(primary_org="legislature", name=name, district="Halifax", role="Mayor")
-        p.add_source(MAYOR_PAGE)
-        p.add_contact("email", email)
-        p.add_contact("voice", phone, "legislature")
-        yield p
