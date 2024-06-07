@@ -37,7 +37,9 @@ class SherbrookePersonScraper(CanadianScraper):
                 district = councillor.xpath('.//div[@class="district"]')[0].text_content()
                 district = clean_french_prepositions(district).replace("District", "").strip()
 
-            if district == "Lac-Magog":
+            if district == "Lennoxville":
+                district = "Arrondissement 3"
+            elif district == "Lac-Magog":
                 district = "Lac Magog"
             districts.append(district)
             url = "https://www.sherbrooke.ca" + councillor.xpath("./@href")[0]
@@ -58,6 +60,6 @@ class SherbrookePersonScraper(CanadianScraper):
                 p.add_contact("voice", phone, "legislature")
             if district == "Brompton":
                 p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/brompton/"
-            elif district == "Lennoxville":
+            elif district == "Arrondissement 3":
                 p._related[0].extras["boundary_url"] = "/boundaries/sherbrooke-boroughs/lennoxville/"
             yield p

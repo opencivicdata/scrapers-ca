@@ -59,5 +59,5 @@ class QuebecPersonScraper(CanadianScraper):
                     p.image = councillor.xpath("./figure//@src")[0]
                     p.add_contact("voice", self.get_phone(councillor, area_codes=[418]), "legislature")
                     if borough:
-                        p._related[0].extras["boundary_url"] = f"/boundaries/quebec-boroughs/{slugify(borough)}"
+                        p._related[0].extras["boundary_url"] = f"/boundaries/quebec-boroughs/{slugify(borough)}/"
                     yield p

@@ -38,7 +38,7 @@ class SaguenayPersonScraper(CanadianScraper):
                 p.add_source(COUNCIL_PAGE)
                 p.add_contact("voice", self.get_phone(councillor), "legislature")
                 p.add_contact("email", self.get_email(councillor))
-                p._related[0].extras["boundary_url"] = f"/boundaries/saguenay-boroughs/{slugify(borough)}"
+                p._related[0].extras["boundary_url"] = f"/boundaries/saguenay-boroughs/{slugify(borough)}/"
                 yield p
 
             p = Person(primary_org="legislature", name=name, district=district, role="Conseiller")
