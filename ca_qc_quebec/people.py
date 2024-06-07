@@ -53,11 +53,11 @@ class QuebecPersonScraper(CanadianScraper):
                         borough = borough[0].replace("des", "Les").replace("de ", "")
                         districts.append(borough)
 
-                for district in districts:
+                for i, district in enumerate(districts):
                     p = Person(primary_org="legislature", name=name, district=district, role=role)
                     p.add_source(COUNCIL_PAGE)
                     p.image = councillor.xpath("./figure//@src")[0]
                     p.add_contact("voice", self.get_phone(councillor, area_codes=[418]), "legislature")
-                    if borough:
-                        p._related[0].extras["boundary_url"] = f"/boundaries/quebec-boroughs/{slugify(borough)}/"
+                    if i:
+                        p._related[0].extras["boundary_url"] = f"/boundaries/quebec-boroughs/{slugify(district)}/"
                     yield p
