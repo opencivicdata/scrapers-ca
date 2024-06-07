@@ -124,7 +124,7 @@ class CanadianScraper(Scraper):
         # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
         for match in node.xpath('{}//a[contains(@href, "mailto:")]'.format(expression)):
             matches.append(unquote(match.attrib["href"]))
-        # some emails are obfuscated by cloudflare
+        # Some emails are obfuscated by Cloudflare.
         for match in node.xpath('{}//@href[contains(., "cdn-cgi/l/email-protection")]'.format(expression)):
             matches.append(self._cloudflare_decode(match))
         # If the node has no sub-tags.
