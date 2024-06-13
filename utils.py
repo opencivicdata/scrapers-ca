@@ -248,8 +248,7 @@ class CanadianScraper(Scraper):
                 data.readline()
         if header:
             return csv.DictReader(data, delimiter=delimiter)
-        else:
-            return csv.reader(data, delimiter=delimiter)
+        return csv.reader(data, delimiter=delimiter)
 
 
 class CSVScraper(CanadianScraper):
@@ -266,6 +265,10 @@ class CSVScraper(CanadianScraper):
     If `csv_url` is a ZIP file, set the compressed file to read.
     """
     filename = None
+    """
+    If `csv_url` is an XLS, XLSX or ZIP file, but has no extension, set the extension (like '.xlsx').
+    """
+    extension = None
 
     # Table flags
     """
@@ -366,7 +369,10 @@ class CSVScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
-        extension = os.path.splitext(self.csv_url)[1]
+        if self.extension:
+            extension = self.extension
+        else:
+            extension = os.path.splitext(self.csv_url)[1]
         if extension in (".xls", ".xlsx"):
             data = StringIO()
             binary = BytesIO(self.get(self.csv_url).content)
