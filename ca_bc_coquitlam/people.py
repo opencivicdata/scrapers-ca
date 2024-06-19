@@ -18,7 +18,7 @@ class CoquitlamPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
-        councillors = page.xpath('//table[@id="cityDirectoryDepartmentDetails"]/tr')
+        councillors = page.xpath('//table[contains(@id, "cityDirectoryDepartmentDetails")]/tr')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = " ".join(
