@@ -1,3 +1,5 @@
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -17,9 +19,9 @@ class FrederictonPersonScraper(CanadianScraper):
             text = councillor.xpath('.//div[@class="views-field views-field-field-councillor-title"]/div')[
                 0
             ].text_content()
-            ward_start = text.find("Ward")
-            if ward_start + 1:
-                district = text[ward_start : ward_start + 7].strip()
+            ward = re.findall(r"Ward \d+", text)
+            if ward:
+                district = ward[0]
                 role = "Councillor"
             else:
                 district = "Fredericton"
