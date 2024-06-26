@@ -25,7 +25,6 @@ class SaultSteMariePersonScraper(CanadianScraper):
                 image = None  # No image on the Mayor's page at the moment
                 contact_node = page.xpath('//div[@id="mainContent_contactUs"]')[0]
                 phone_numbers = re.findall(r"\d{3}-\d{3}-\d{4}", contact_node.text_content())
-                breakpoint()
                 phone = phone_numbers[0]
                 fax = phone_numbers[1]
             else:
