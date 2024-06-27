@@ -12,11 +12,18 @@ class AlbertaCandidates(CanadianJurisdiction):
         {"name": "Alberta Liberal Party"},
         {"name": "Alberta New Democratic Party"},
         {"name": "Alberta Party"},
-        {"name": "Freedom Conservative"},
         {"name": "Green Party of Alberta"},
         {"name": "Alberta Independance Party"},
         {"name": "United Conservative Party"},
+        {"name": "Communist Party - Alberta"},
+        {"name": "Pro-Life Alberta Political Association"},
+        {"name": "Reform Party of Alberta"},
+        {"name": "Solidarity Movement of Alberta"},
+        {"name": "The Buffalo Party of Alberta"},
+        {"name": "Wildrose Independence Party of Alberta"},
+        {"name": "Wildrose Loyalty Coalition"},
+        {"name": "No Party Affiliation"},
     ]
     skip_null_valid_from = True
-    valid_from = "2019-05-31"
+    valid_from = "2023-01-05"
     member_role = "candidate"
