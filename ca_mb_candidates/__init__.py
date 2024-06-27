@@ -16,16 +16,18 @@ class ManitobaCandidates(CanadianJurisdiction):
         {"name": "Liberal"},
         {"name": "NDP"},
         {"name": "Progressive Conservative"},
+        {"name": "Keystone Party"},
+        {"name": "Communist Party"},
     ]
     skip_null_valid_from = True
-    valid_from = "2019-09-10"
+    valid_from = "2023-10-03"
     member_role = "candidate"
 
     def get_organizations(self):
         organization = Organization(self.name, classification=self.classification)
 
         for division in Division.get(self.division_id).children("ed"):
-            if division.attrs["validFrom"] == "2019-09-10":
+            if division.attrs["validFrom"] == "2023-10-03":
                 organization.add_post(role="candidate", label=division.name)
 
         yield organization
