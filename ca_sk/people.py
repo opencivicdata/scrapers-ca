@@ -19,7 +19,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
             district = member.xpath("./td")[2].text_content().strip()
             url = member.xpath("./td[1]/a/@href")[0]
             page = self.lxmlize(url)
-            party = page.xpath('//div[contains(@class, "mla-header")]')[0].text.split(' - ')[1].strip()
+            party = page.xpath('//div[contains(@class, "mla-header")]')[0].text.split(" - ")[1].strip()
 
             p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
             p.add_source(COUNCIL_PAGE)
@@ -32,7 +32,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
             def handle_address(lines, address_type):
                 address_lines = []
                 for line in lines:
-                    if re.match(r'(Room|Phone|Fax)\:', line):
+                    if re.match(r"(Room|Phone|Fax)\:", line):
                         break
                     address_lines.append(line)
                 if address_lines:
@@ -43,12 +43,12 @@ class SaskatchewanPersonScraper(CanadianScraper):
                     )
 
             def handle_phone(lines, phone_type):
-                matches = re.findall(r'Phone\:\s*(306-[\d\-]+)', '\n'.join(lines))
+                matches = re.findall(r"Phone\:\s*(306-[\d\-]+)", "\n".join(lines))
                 if len(matches) == 1:
                     p.add_contact("voice", matches[0], phone_type, area_code=306)
 
             for address in page.xpath('//div[@class="col-md-3"]'):
-                lines = address.xpath('./div//text()')
+                lines = address.xpath("./div//text()")
                 address_type = None
                 if lines[0] == "Legislative Building Address":
                     address_type = "legislature"
@@ -64,8 +64,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 p.add_contact("email", email)
 
             websites = re.findall(
-                r'Website:\s*(http\S+)',
-                ' '.join(page.xpath('//div[@class="col-md-4"]/div//text()'))
+                r"Website:\s*(http\S+)", " ".join(page.xpath('//div[@class="col-md-4"]/div//text()'))
             )
             if len(websites) == 1:
                 p.add_link(websites[0])
