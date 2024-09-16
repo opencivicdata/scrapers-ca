@@ -14,7 +14,7 @@ ignore = [
     "DTZ",
     "E501",
     "ERA001",  # commented-out code
-    "PLR2004",
+    "PLR2004",  # magic
     "PLW2901",
     "PTH",
     "RUF012",
@@ -22,7 +22,7 @@ ignore = [
     "S113",  # timeout
     "TRY003",  # errors
 
-    # Should be refactored:
+    # To fix:
     "BLE001",  # except Exception
     "S110",  # except pass
     "TRY002",  # raise Exception
