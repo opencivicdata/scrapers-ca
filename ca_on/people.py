@@ -58,7 +58,7 @@ class OntarioPersonScraper(CanadianScraper):
                     p.extras["constituency_email"] = emails.pop(0)
 
             for heading, note in headings.items():
-                office = node.xpath('//h3[contains(., "{}")]'.format(heading))
+                office = node.xpath(f'//h3[contains(., "{heading}")]')
                 if office:
                     try:
                         office_info = office[0].xpath(

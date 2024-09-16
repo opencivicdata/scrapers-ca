@@ -21,7 +21,7 @@ class WoolwichPersonScraper(CanadianScraper):
                 district = "Woolwich"
             else:
                 seat_numbers[area] += 1
-                district = area.group(0) + " (seat {})".format(seat_numbers[area])
+                district = area.group(0) + f" (seat {seat_numbers[area]})"
             if "(" in name:
                 name = name.split(" (")[0]
             info = councillor.xpath("./ancestor::tr[1]/following-sibling::tr")[0].text_content()

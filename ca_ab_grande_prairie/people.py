@@ -14,7 +14,7 @@ class GrandePrairiePersonScraper(CanadianScraper):
         for councillor in councillors:
             role, name = councillor.xpath(".//h3")[0].text_content().split(" ", 1)
             if role == "Councillor":
-                district = "Grande Prairie (seat {})".format(seat_number)
+                district = f"Grande Prairie (seat {seat_number})"
                 seat_number += 1
             else:
                 district = " Grande Prairie"

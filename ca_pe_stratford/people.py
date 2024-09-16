@@ -26,7 +26,7 @@ class StratfordPersonScraper(CanadianScraper):
                 role = "Councillor"
                 area = re.findall(r"(?<=Ward \d,).*", councillor.text_content())[0].strip()
                 seat_numbers[area] += 1
-                district = "{} (seat {})".format(area, seat_numbers[area])
+                district = f"{area} (seat {seat_numbers[area]})"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

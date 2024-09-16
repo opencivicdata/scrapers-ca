@@ -24,7 +24,7 @@ class LethbridgePersonScraper(CanadianScraper):
         p = Person(
             primary_org="legislature",
             name=name,
-            district="Lethbridge (seat {})".format(seat_number + 1),
+            district=f"Lethbridge (seat {seat_number + 1})",
             role="Councillor",
         )
 

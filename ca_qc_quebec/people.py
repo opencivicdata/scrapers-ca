@@ -28,7 +28,7 @@ class QuebecPersonScraper(CanadianScraper):
                 else:
                     district = councillor.xpath('./p[@itemprop="jobTitle"]/a/text()')[0]
                     district = (
-                        re.search(r"\ADistrict (?:de(?: la)?|du|des) ([\w —–-]+)", district, flags=re.U)
+                        re.search(r"\ADistrict (?:de(?: la)?|du|des) ([\w —–-]+)", district, flags=re.UNICODE)
                         .group(1)
                         .strip()
                     )

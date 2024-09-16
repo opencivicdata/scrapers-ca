@@ -24,7 +24,7 @@ class MonctonPersonScraper(CanadianScraper):
             role = councillor["Primary_role"]
             if role != "Mayor":
                 seat_numbers[ward] += 1
-                district = ward + " (seat {})".format(seat_numbers[ward])
+                district = ward + f" (seat {seat_numbers[ward]})"
             else:
                 district = ward
             name = councillor["Name"]

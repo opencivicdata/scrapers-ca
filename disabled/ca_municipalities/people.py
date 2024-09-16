@@ -61,7 +61,7 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     if self.many_posts_per_area and role not in self.unique_roles:
                         seat_numbers[role][district] += 1
-                        district = "{} (seat {})".format(district, seat_numbers[role][district])
+                        district = f"{district} (seat {seat_numbers[role][district]})"
 
                     p = Person(
                         primary_org=organization_classification,

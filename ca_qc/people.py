@@ -236,12 +236,12 @@ class QuebecPersonScraper(CanadianScraper):
                 p.add_link(twitter)
 
             for heading, note in headings.items():
-                office = contact_page.xpath('//h3[contains(., "{}")]/parent::div'.format(heading))
+                office = contact_page.xpath(f'//h3[contains(., "{heading}")]/parent::div')
 
                 try:
                     phone = self.get_phone(office[0])
                     office_info = contact_page.xpath(
-                        '//h3[contains(., "{}")]/parent::div/address[1]/span/text()'.format(heading)
+                        f'//h3[contains(., "{heading}")]/parent::div/address[1]/span/text()'
                     )
                     office_items = [item for item in office_info if item.strip()]
                     office_items = list(map(str.strip, office_items))

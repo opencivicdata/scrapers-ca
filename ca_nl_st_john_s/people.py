@@ -25,7 +25,7 @@ class StJohnsPersonScraper(CanadianScraper):
                 district = "St. John's"
                 if role != "Mayor" and role != "Deputy Mayor":
                     role = "Councillor at Large"
-                    district = "St. John's (seat {})".format(councillor_seat_number)
+                    district = f"St. John's (seat {councillor_seat_number})"
                     councillor_seat_number += 1
 
             email = self.get_email(page)

@@ -31,7 +31,7 @@ class SaultSteMariePersonScraper(CanadianScraper):
                 role = "Councillor"
                 area, name = title.split(" Councillor ")
                 seat_numbers[area] += 1
-                district = "{} (seat {})".format(area, seat_numbers[area])
+                district = f"{area} (seat {seat_numbers[area]})"
                 image = page.xpath(".//h3/img/@src")[0]
                 contact_node = page.xpath('//div[@id="mainContent_left"]')[0]
                 phone = self.get_phone(contact_node)

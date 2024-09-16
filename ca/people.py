@@ -119,7 +119,7 @@ class CanadaPersonScraper(CanadianScraper):
             ):
                 note = "constituency"
                 if i:
-                    note += " ({})".format(i + 1)
+                    note += f" ({i + 1})"
 
                 address = constituency_office_el.xpath("./p[1]")[0]
                 address = address.text_content().strip().splitlines()

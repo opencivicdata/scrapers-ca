@@ -133,7 +133,7 @@ person_schema["properties"]["name"]["pattern"] = re.compile(
     r"\A"
     r"(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|Hon|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)"
     r"(?:" + name_fragment + r"(?:'|-| - | )"
-    r")+" + name_fragment + r"\Z"  # noqa: W504
+    r")+" + name_fragment + r"\Z"
 )
 person_schema["properties"]["gender"]["enum"] = ["male", "female", ""]
 # @note https://github.com/opennorth/represent-canada-images checks whether an

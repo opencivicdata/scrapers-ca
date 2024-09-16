@@ -15,7 +15,7 @@ class LangleyPersonScraper(CanadianScraper):
             page = self.lxmlize(url)
             name = page.xpath("//h1")[0].text_content().strip()
 
-            district = "Langley (seat {})".format(seat_number)
+            district = f"Langley (seat {seat_number})"
             seat_number += 1
             email = self.get_email(page)
             phone = self.get_phone(page)

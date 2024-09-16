@@ -20,7 +20,7 @@ class TroisRivieresPersonScraper(CanadianScraper):
             email = self.get_email(self.lxmlize(url))
 
             name, district = [x.strip() for x in member.xpath(".//figcaption//text()")]
-            district = re.sub(r"\A(?:de|des|du) ", lambda match: match.group(0).lower(), district, flags=re.I)
+            district = re.sub(r"\A(?:de|des|du) ", lambda match: match.group(0).lower(), district, flags=re.IGNORECASE)
             role = "Conseiller"
 
             if "Maire" in district:

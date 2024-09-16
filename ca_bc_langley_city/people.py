@@ -22,7 +22,7 @@ class LangleyPersonScraper(CanadianScraper):
                 phone_div = councillor.xpath('..//p[contains(., "Phone:")]')[0]
                 phone = self.get_phone(phone_div)
             else:
-                district = "Langley (seat {})".format(councillor_seat_number)
+                district = f"Langley (seat {councillor_seat_number})"
                 phone = (
                     "604 514 2800"  # According to their site, all councillors can be contacted at this phone number
                 )

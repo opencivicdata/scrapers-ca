@@ -18,8 +18,8 @@ class StCatharines(CanadianJurisdiction):
             for seat_number in range(1, 3):
                 organization.add_post(
                     role="Councillor",
-                    label="{} (seat {})".format(ward_name, seat_number),
-                    division_id="{}/ward:{}".format(self.division_id, clean_type_id(ward_name)),
+                    label=f"{ward_name} (seat {seat_number})",
+                    division_id=f"{self.division_id}/ward:{clean_type_id(ward_name)}",
                 )
 
         yield organization

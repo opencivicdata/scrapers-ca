@@ -54,7 +54,7 @@ class CapeBretonPersonScraper(CanadianScraper):
             councillor_url = councillor.xpath(".//a/@href")[0]
             p.add_source(councillor_url)
             page = self.lxmlize(councillor_url, user_agent=CUSTOM_USER_AGENT)
-            image = page.xpath('//img[contains(@title, "{0}")]/@src'.format(name))
+            image = page.xpath(f'//img[contains(@title, "{name}")]/@src')
             if image:
                 p.image = image[0]
             yield p

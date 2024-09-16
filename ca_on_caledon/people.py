@@ -34,9 +34,7 @@ class CaledonPersonScraper(CanadianScraper):
             # phone numbers populated by JS request
             contact_num = page.xpath('//div[@class="contactBody"]/div/@id')[0].replace("contactEntry_", "")
             contact_data = requests.get(
-                "https://www.caledon.ca//Modules/Contact/services/GetContactHTML.ashx?isMobile=false&param={}&lang=en".format(
-                    contact_num
-                )
+                f"https://www.caledon.ca//Modules/Contact/services/GetContactHTML.ashx?isMobile=false&param={contact_num}&lang=en"
             ).text
             voice = re.findall(r"(?<=tel://)\d+(?=\">)", contact_data)
 
@@ -46,7 +44,7 @@ class CaledonPersonScraper(CanadianScraper):
             if "&" in district:  # Councillor for multiple wards
                 wards = re.findall(r"\d", district)
                 for ward_num in wards:
-                    p = Person(primary_org="legislature", name=name, district="Ward {}".format(ward_num), role=role)
+                    p = Person(primary_org="legislature", name=name, district=f"Ward {ward_num}", role=role)
                     if voice:
                         p.add_contact("voice", voice[0], "legislature")
                     p.image = image

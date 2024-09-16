@@ -34,10 +34,10 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         assert len(members), "No members found"
         for member in json.loads(members):
             if not member["name"].strip():
-                print("Skipping blank member: {}".format(member))
+                print(f"Skipping blank member: {member}")
                 continue
             if member["name"] == "<em>Vacant</em>":
-                print("Skipping vacant 'member': {}".format(member))
+                print(f"Skipping vacant 'member': {member}")
                 continue
             name = " ".join(reversed(member["name"].split(","))).strip()
             district = (

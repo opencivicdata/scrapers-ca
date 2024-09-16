@@ -19,7 +19,7 @@ class LaSallePersonScraper(CanadianScraper):
             if "Mayor" in role:
                 district = "LaSalle"
             else:
-                district = "LaSalle (seat {})".format(councillor_seat_number)
+                district = f"LaSalle (seat {councillor_seat_number})"
             image = councillor.xpath(".//img/@src")[0]
             voice = re.search(r"\d{3}-\d{3}-\d{4} ext. \d+", councillor.text_content())
             cell = re.search(r"\d{3}-\d{3}-\d{4}(?! ext)", councillor.text_content())

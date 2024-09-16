@@ -29,7 +29,7 @@ class ThunderBayPersonScraper(CanadianScraper):
             ].text_content()
             if "At Large" in district:
                 role = "Councillor at Large"
-                district = "Thunder Bay (seat {})".format(seat_number)
+                district = f"Thunder Bay (seat {seat_number})"
                 seat_number += 1
             elif "Mayor" in district:
                 district = "Thunder Bay"

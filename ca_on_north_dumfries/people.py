@@ -26,7 +26,7 @@ class NorthDumfriesPersonScraper(CanadianScraper):
             if role == "Mayor":
                 district = "North Dumfries"
             else:
-                district = "Ward {}".format(word_to_number[match.group(1)])
+                district = f"Ward {word_to_number[match.group(1)]}"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

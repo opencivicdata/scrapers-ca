@@ -30,7 +30,7 @@ class ChathamKentPersonScraper(CanadianScraper):
             ward, name = re.split(r"(?<=\d)\s", title)
             name.replace("Councillor ", "")
             seat_numbers[ward] += 1
-            district = "{} (seat {})".format(ward, seat_numbers[ward])
+            district = f"{ward} (seat {seat_numbers[ward]})"
 
             url = councillor.xpath("./@ows_URL")[0].split(",")[0]
             page = self.lxmlize(url, user_agent="Mozilla/5.0")

@@ -13,7 +13,7 @@ class SurreyPersonScraper(CanadianScraper):
         seat_number = 1
         for member in members:
             role, name = member.xpath('.//a[@class="teaser__link"]/h4')[0].text_content().split(" ", 1)
-            district = "Surrey (seat {})".format(seat_number)
+            district = f"Surrey (seat {seat_number})"
             seat_number += 1
             photo_url = member.xpath(".//figure//img/@src")[0]
 
