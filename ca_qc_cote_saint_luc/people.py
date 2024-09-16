@@ -1,6 +1,5 @@
-from utils import CUSTOM_USER_AGENT
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://cotesaintluc.org/fr/affaires-municipales/membres-du-conseil/"
 

@@ -7,7 +7,6 @@ COUNCIL_PAGE = "https://www.coquitlam.ca/Directory.aspx?DID=54"
 
 
 class CoquitlamPersonScraper(CanadianScraper):
-
     def scrape(self):
         def build_email(script):
             w = re.findall(r'w = "(.*?)"', script)[0]

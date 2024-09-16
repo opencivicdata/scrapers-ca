@@ -27,9 +27,9 @@ _contact_details["items"]["properties"]["value"]["conditionalPattern"] = [
     (r"\A1 \d{3} \d{3}-\d{4}(?: x\d+)?\Z", lambda x: x["type"] in ("text", "voice", "fax", "cell", "video", "pager")),
 ]
 # Validate the format of contact_details[].note.
-_contact_details["items"]["properties"]["note"][
-    "pattern"
-] = r"\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z"
+_contact_details["items"]["properties"]["note"]["pattern"] = (
+    r"\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z"
+)
 # contact_details[] must not include unexpected properties.
 _contact_details["items"]["additionalProperties"] = False
 

@@ -12,7 +12,6 @@ class SurreyPersonScraper(CanadianScraper):
         assert len(members), "No members found"
         seat_number = 1
         for member in members:
-
             role, name = member.xpath('.//a[@class="teaser__link"]/h4')[0].text_content().split(" ", 1)
             district = "Surrey (seat {})".format(seat_number)
             seat_number += 1

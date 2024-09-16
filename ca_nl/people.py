@@ -1,9 +1,8 @@
 import json
 import re
 
-from utils import CUSTOM_USER_AGENT
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.assembly.nl.ca/js/members-index.js"
 
@@ -26,9 +25,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         page = self.get(COUNCIL_PAGE)
         members = re.search(
             r"members = (\[(.+)\]);", page.content.decode().replace("<em>[Member-elect]</em>", ""), re.DOTALL
-        ).groups()[
-            0
-        ]  # extract javascript array
+        ).groups()[0]  # extract javascript array
         members = re.sub("<!--.+?-->", "", members)  # remove comments
         members = re.sub("<a.+?>", "", members).replace("</a>", "")  # tags
         members = members.replace('"', r"\"")  # escape double quotes
@@ -60,7 +57,8 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
             )
             if member.get("email"):
                 p.add_contact(
-                    "email", member["email"].replace("@gov.nl.ca@gov.nl.ca", "@gov.nl.ca")  # seriously guys?!
+                    "email",
+                    member["email"].replace("@gov.nl.ca@gov.nl.ca", "@gov.nl.ca"),  # seriously guys?!
                 )
 
             p.add_source(COUNCIL_PAGE)

@@ -256,6 +256,7 @@ class CSVScraper(CanadianScraper):
     """
     Set the CSV file's delimiter.
     """
+
     delimiter = ","
     """
     Set the CSV file's encoding, like 'windows-1252' ('utf-8' by default).

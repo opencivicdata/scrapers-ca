@@ -1,9 +1,8 @@
 import html
 import re
 
-from utils import CUSTOM_USER_AGENT
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "http://www.cbrm.ns.ca/mayor-council-2.html"
 MAYOR_PAGE = "http://www.cbrm.ns.ca/mayor"
