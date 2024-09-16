@@ -19,7 +19,7 @@ class OakvillePersonScraper(CanadianScraper):
                 district = "Oakville"
                 role = district_role
             else:
-                district, role = re.split(r"(?<=\d)\s+", district_role, 1)
+                district, role = re.split(r"(?<=\d)\s+", district_role, maxsplit=1)
                 role = "Regional Councillor" if "Regional" in role else "Councillor"
 
             name = councillor.xpath(".//div[@class='user-name']/text()")[0]

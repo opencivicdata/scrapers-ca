@@ -12,25 +12,25 @@ COUNCIL_PAGE = "https://www.brossard.ca/elus-municipaux"
 
 class BrossardPersonScraper(CanadianScraper):
     def scrape(self):
-        def indexById(elementList):
+        def index_by_id(element_list):
             result = {}
-            for element in elementList:
+            for element in element_list:
                 id = element["id"]
                 result[id] = element
             return result
 
         # Gets the ids of all children elements recursively
-        def getChildren(parentId, elementDict):
-            returnList = []
-            element = elementDict[parentId]
+        def get_children(parent_id, element_dict):
+            return_list = []
+            element = element_dict[parent_id]
             if element.get("children"):
                 for child in element.get("children"):
                     if not re.search(r"^\d+$", child):
                         continue
-                    returnList.append(child)
-                    if getChildren(child, elementDict):
-                        returnList.extend(getChildren(child, elementDict))
-            return returnList
+                    return_list.append(child)
+                    if get_children(child, element_dict):
+                        return_list.extend(get_children(child, element_dict))
+            return return_list
 
         # The whole page is rendered in javascript and stored as a massive json object
         page = requests.get(DATA_PAGE)
@@ -39,20 +39,20 @@ class BrossardPersonScraper(CanadianScraper):
         for container in containers:
             if container.get("contentType") != "CMSPage":
                 continue
-            elements = indexById(container["properties"]["content"]["data"])
+            elements = index_by_id(container["properties"]["content"]["data"])
 
-        councillors = []
-        for element in elements.values():
-            if isinstance(element.get("children"), dict) and re.search(
-                r"DISTRICT \d+\s+[-|]\sSecteur", element.get("children").get("fr")
-            ):
-                councillors.append(element)
+        councillors = [
+            element
+            for element in elements.values()
+            if isinstance(element.get("children"), dict)
+            and re.search(r"DISTRICT \d+\s+[-|]\sSecteur", element.get("children").get("fr"))
+        ]
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             district = re.search(r"DISTRICT (\d+)", councillor["children"]["fr"]).group(0).title()
             parent_id = councillor["parent"]
-            children = getChildren(parent_id, elements)
+            children = get_children(parent_id, elements)
             phone = None
             for id in children:
                 child = elements[id]
@@ -86,7 +86,7 @@ class BrossardPersonScraper(CanadianScraper):
             ):
                 mayor = element
         parent_id = mayor["parent"]
-        children = getChildren(parent_id, elements)
+        children = get_children(parent_id, elements)
         phone = None
         for id in children:
             child = elements[id]

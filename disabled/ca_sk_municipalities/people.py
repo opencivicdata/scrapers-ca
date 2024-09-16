@@ -1,8 +1,9 @@
 import os
 import re
 import subprocess
-from urllib.request import urlopen
+import tempfile
 
+import requests
 from pupa.scrape import Organization
 
 from utils import CanadianPerson as Person
@@ -14,14 +15,13 @@ COUNCIL_PAGE = "http://www.municipal.gov.sk.ca/Programs-Services/Municipal-Direc
 
 class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
     def scrape(self):
-        response = urlopen(COUNCIL_PAGE).read()
-        pdf = open("/tmp/sk.pdf", "w")
-        pdf.write(response)
-        pdf.close()
+        response = requests.get(COUNCIL_PAGE).read()
+        with tempfile.NamedTemporaryFile(delete_on_close=False) as pdf:
+            pdf.write(response)
 
-        data = subprocess.check_output(["pdftotext", "-layout", "/tmp/sk.pdf", "-"])
+        data = subprocess.check_output(["pdftotext", "-layout", pdf.name, "-"])  # noqa: S603,S607
 
-        data = data.splitlines(True)
+        data = data.splitlines(keepends=True)
         pages = []
         page = []
         for line in data:
@@ -96,4 +96,5 @@ class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
                 for key, value in contacts.items():
                     membership.add_contact_detail(key, value, "" if key == "email" else "legislature")
                 yield p
-        os.system("rm /tmp/sk.pdf")
+
+        os.unlink(pdf.name)

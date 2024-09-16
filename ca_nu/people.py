@@ -32,7 +32,7 @@ class NunavutPersonScraper(CanadianScraper):
             if website:
                 p.add_link(website[0].text_content())
 
-            def handle_address(lines, address_type):
+            def handle_address(p, lines, address_type):
                 address_lines = []
                 for line in lines:
                     if ":" in line.strip():  # Room:, Phone:, Fax:
@@ -45,15 +45,15 @@ class NunavutPersonScraper(CanadianScraper):
                         address_type,
                     )
 
-            def handle_phone(lines, phone_type):
+            def handle_phone(p, lines, phone_type):
                 for line in lines:
                     if "Phone:" in line:
                         number = line.replace("Phone: (867) ", "")
                         p.add_contact("voice", number, phone_type, area_code=867)
 
             address_lines = contact.xpath("./text()")
-            handle_address(address_lines, "legislature")
-            handle_phone(address_lines, "legislature")
+            handle_address(p, address_lines, "legislature")
+            handle_phone(p, address_lines, "legislature")
 
             email = self.get_email(contact, error=False)
             if email:

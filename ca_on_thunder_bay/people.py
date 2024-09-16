@@ -1,7 +1,7 @@
 import requests
 
+from utils import DEFAULT_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.thunderbay.ca/en/city-hall/mayor-and-council-profiles.aspx"
 
@@ -43,6 +43,6 @@ class ThunderBayPersonScraper(CanadianScraper):
 
             yield p
 
-    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None, xml=False):
+    def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False):
         requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"  # site uses a weak DH key
         return super().lxmlize(url, encoding, user_agent, cookies, xml)

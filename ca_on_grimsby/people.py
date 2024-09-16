@@ -22,7 +22,7 @@ class GrimsbyPersonScraper(CanadianScraper):
                 name_node = councillors_node.xpath(
                     './/h5[contains(./strong, "Councillor")]|.//h5[contains(., "Councillor")]'
                 )[i]
-                name = re.split(r"\s", name_node.text_content(), 1)[1]
+                name = re.split(r"\s", name_node.text_content(), maxsplit=1)[1]
                 district = f"{area} (seat {i + 1})"
                 phone = self.get_phone(name_node.xpath('./following-sibling::*[contains(., "Phone")]')[0])
                 email = self.get_email(name_node.xpath("./following-sibling::p[contains(., 'Email')]")[0])

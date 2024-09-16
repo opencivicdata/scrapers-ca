@@ -35,7 +35,7 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
                 else:
                     address_section = contact
 
-                def handle_address(contact, address_type):
+                def handle_address(p, contact, address_type):
                     address_lines = []
                     po_box_line = (
                         "PO Box "
@@ -56,7 +56,7 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
                             address_type,
                         )
 
-                def handle_phone(lines, phone_type):
+                def handle_phone(p, lines, phone_type):
                     first_phone_added = False
                     for line in lines:
                         if "Assistant" in line.strip():
@@ -71,8 +71,8 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
                             first_phone_added = True
 
                 contact_lines = contact.xpath(".//text()")
-                handle_address(address_section, "legislature")
-                handle_phone(contact_lines, "legislature")
+                handle_address(p, address_section, "legislature")
+                handle_phone(p, contact_lines, "legislature")
 
                 email_elements = page.xpath(
                     '//*[contains(@class, "field--paragraph--field-email")]/div[@class="field__item"]'

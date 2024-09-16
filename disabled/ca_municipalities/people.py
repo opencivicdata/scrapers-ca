@@ -112,4 +112,4 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
 
                     yield p
             except Exception:
-                continue
+                pass

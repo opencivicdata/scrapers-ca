@@ -28,7 +28,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
             with contextlib.suppress(IndexError):
                 p.image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
 
-            def handle_address(lines, address_type):
+            def handle_address(p, lines, address_type):
                 address_lines = []
                 for line in lines:
                     if re.match(r"(Room|Phone|Fax)\:", line):
@@ -41,7 +41,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
                         address_type,
                     )
 
-            def handle_phone(lines, phone_type):
+            def handle_phone(p, lines, phone_type):
                 matches = re.findall(r"Phone\:\s*(306-[\d\-]+)", "\n".join(lines))
                 if len(matches) == 1:
                     p.add_contact("voice", matches[0], phone_type, area_code=306)
@@ -55,8 +55,8 @@ class SaskatchewanPersonScraper(CanadianScraper):
                     address_type = "constituency"
                 else:
                     raise AssertionError(f"Unexpected address type: {lines[0]}")
-                handle_address(lines[1:], address_type)
-                handle_phone(lines[1:], address_type)
+                handle_address(p, lines[1:], address_type)
+                handle_phone(p, lines[1:], address_type)
 
             email = self.get_email(page.xpath('//div[@id="content"]')[0], error=False)
             if email:

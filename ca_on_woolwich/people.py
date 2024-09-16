@@ -15,7 +15,7 @@ class WoolwichPersonScraper(CanadianScraper):
         councillors = page.xpath('//td[@data-name="accParent"]/h2')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            role, name = re.split(r"\s", councillor.text_content(), 1)
+            role, name = re.split(r"\s", councillor.text_content(), maxsplit=1)
             area = re.search(r"Ward \d", name)
             if not area:
                 district = "Woolwich"

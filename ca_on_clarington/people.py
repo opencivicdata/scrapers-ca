@@ -15,7 +15,7 @@ class ClaringtonPersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name, role_district = councillor.text_content().split(" - ")
-            role, district = re.split(r"(?<=Councillor) ", role_district, 1)
+            role, district = re.split(r"(?<=Councillor) ", role_district, maxsplit=1)
             content_node = councillor.xpath("../following-sibling::tr")[0]
             email = self.get_email(content_node)
             photo_url = content_node.xpath(".//img/@src")[0]

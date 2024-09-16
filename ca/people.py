@@ -59,7 +59,7 @@ class CanadaPersonScraper(CanadianScraper):
                 photo_response = self.get(photo)
                 if (
                     photo_response.status_code == 200
-                    and hashlib.sha1(photo_response.content).hexdigest() not in IMAGE_PLACEHOLDER_SHA1
+                    and hashlib.sha1(photo_response.content).hexdigest() not in IMAGE_PLACEHOLDER_SHA1  # noqa: S324 # non-cryptographic
                 ):
                     m.image = photo
 

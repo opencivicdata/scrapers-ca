@@ -1,8 +1,9 @@
 import os
 import re
 import subprocess
-from urllib.request import urlopen
+import tempfile
 
+import requests
 from pupa.scrape import Organization
 
 from utils import CanadianPerson as Person
@@ -16,15 +17,14 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]
 
-        response = urlopen(url).read()
-        pdf = open("/tmp/nl.pdf", "w")
-        pdf.write(response)
-        pdf.close()
+        response = requests.get(url).content
+        with tempfile.NamedTemporaryFile(delete_on_close=False) as pdf:
+            pdf.write(response)
 
-        data = subprocess.check_output(["pdftotext", "-layout", "/tmp/nl.pdf", "-"])
+        data = subprocess.check_output(["pdftotext", "-layout", pdf.name, "-"])  # noqa: S603,S607
         pages = data.split("Municipal Directory")[1:]
         for page in pages:
-            page = page.splitlines(True)
+            page = page.splitlines(keepends=True)
             column_index = {}
             for line in page:
                 if "Official Name" in line:
@@ -81,4 +81,5 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
                 if address:
                     membership.add_contact_detail("address", address, "legislature")
                 yield p
-        os.system("rm /tmp/nl.pdf")
+
+        os.unlink(pdf.name)
