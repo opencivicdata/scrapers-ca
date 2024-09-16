@@ -83,7 +83,7 @@ CONTACT_DETAIL_NOTE_MAP = {
     "Voice Mail": "legislature",
     "Work": "legislature",
 }
-SSL_VERIFY = "/usr/lib/ssl/certs/ca-certificates.crt" if os.getenv("SSL_VERIFY", "") else False
+SSL_VERIFY = "/usr/lib/ssl/certs/ca-certificates.crt" if os.getenv("SSL_VERIFY", "") else True
 
 email_re = re.compile(r"([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})")
 
