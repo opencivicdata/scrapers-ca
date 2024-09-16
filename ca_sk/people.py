@@ -1,3 +1,4 @@
+import contextlib
 import re
 
 from utils import CanadianPerson as Person
@@ -24,10 +25,8 @@ class SaskatchewanPersonScraper(CanadianScraper):
             p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
-            try:
+            with contextlib.suppress(IndexError):
                 p.image = page.xpath('//div[contains(@class, "mla-image-cell")]/img/@src')[0]
-            except IndexError:
-                pass
 
             def handle_address(lines, address_type):
                 address_lines = []

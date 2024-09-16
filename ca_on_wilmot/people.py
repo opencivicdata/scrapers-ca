@@ -22,7 +22,6 @@ class WilmotPersonScraper(CanadianScraper):
 
             phone = self.get_phone(councillor).replace("/", "")
             p.add_contact("voice", phone, "legislature")
-            print(name + ";", role + ";", district)
             yield p
 
 

@@ -24,7 +24,7 @@ PARTIES = {
 
 
 def get_party(abbr):
-    """Return full party name from abbreviation"""
+    """Return full party name from abbreviation."""
     return PARTIES[abbr]
 
 

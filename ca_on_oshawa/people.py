@@ -21,10 +21,7 @@ class OshawaPersonScraper(CanadianScraper):
                 name = info.replace("Mayor ", "")
             else:
                 district, role_name = re.split(r"(?<=\d)\s", info, 1)
-                if "Regional" in role_name:
-                    role = "Regional Councillor"
-                else:
-                    role = "Councillor"
+                role = "Regional Councillor" if "Regional" in role_name else "Councillor"
                 name = re.split(r"Councillor\s", role_name, 1)[1]
 
             photo_url = councillor.xpath(".//img/@src")[0]

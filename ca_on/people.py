@@ -42,7 +42,7 @@ class OntarioPersonScraper(CanadianScraper):
                 '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
             )
 
-            party = [item for item in party if item.strip()][0]
+            party = next(item for item in party if item.strip())
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)

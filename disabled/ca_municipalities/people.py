@@ -111,6 +111,5 @@ class CanadaMunicipalitiesPersonScraper(CSVScraper):
                     p.validate()
 
                     yield p
-            except Exception as e:
-                print(repr(e))
+            except Exception:
                 continue

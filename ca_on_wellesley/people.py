@@ -27,10 +27,7 @@ class WellesleyPersonScraper(CanadianScraper):
             district = srch.group(2).strip()
             phone = self.get_phone(member)
             email = self.get_email(member, error=False)
-            if position == "Mayor":
-                district = "Wellesley"
-            else:
-                district = post_number(district)
+            district = "Wellesley" if position == "Mayor" else post_number(district)
 
             p = Person(primary_org="legislature", name=name, district=district, role=position)
             p.add_contact("voice", phone, "legislature")

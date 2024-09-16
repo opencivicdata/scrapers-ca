@@ -135,8 +135,10 @@ class CanadianScraper(Scraper):
                     return match.group(1)
             if error:
                 raise Exception(f"No email pattern in {matches}")
-        elif error:
+            return None
+        if error:
             raise Exception(f"No email node in {etree.tostring(node)}")
+        return None
 
     # Helper function for self,get_email
     def _cloudflare_decode(self, link):
@@ -149,11 +151,13 @@ class CanadianScraper(Scraper):
 
         return decoded_email
 
-    def get_phone(self, node, *, area_codes=[], error=True):
+    def get_phone(self, node, *, area_codes=None, error=True):
         """
         Don't use if multiple telephone numbers are present, e.g. voice and fax.
         If writing a new scraper, check that extensions are captured.
         """
+        if area_codes is None:
+            area_codes = []
         if isinstance(node, etree._ElementUnicodeResult):
             match = re.search(
                 r"(?:\A|\D)(\(?\d{3}\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)", node
@@ -180,6 +184,7 @@ class CanadianScraper(Scraper):
                 return match.group(1)
         if error:
             raise Exception(f"No phone pattern in {node.text_content()}")
+        return None
 
     def get_link(self, node, substring, *, error=True):
         match = node.xpath(f'.//a[contains(@href,"{substring}")]/@href')
@@ -187,6 +192,7 @@ class CanadianScraper(Scraper):
             return match[0]
         if error:
             raise Exception(f"No link matching {substring}")
+        return None
 
     def get(self, *args, **kwargs):
         return super().get(*args, verify=SSL_VERIFY, **kwargs)
@@ -248,9 +254,7 @@ class CanadianScraper(Scraper):
 
 class CSVScraper(CanadianScraper):
     # File flags
-    """
-    Set the CSV file's delimiter.
-    """
+    """Set the CSV file's delimiter."""
 
     delimiter = ","
     """
@@ -362,10 +366,7 @@ class CSVScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
-        if self.extension:
-            extension = self.extension
-        else:
-            extension = os.path.splitext(self.csv_url)[1]
+        extension = self.extension if self.extension else os.path.splitext(self.csv_url)[1]
         if extension in (".xls", ".xlsx"):
             data = StringIO()
             binary = BytesIO(self.get(self.csv_url).content)
@@ -480,11 +481,8 @@ class CSVScraper(CanadianScraper):
             #   District name,District ID,…
             #   Toronto Centre,,…
             #   ,3520005,…
-            if not row.get("district name") and row.get("district id"):
-                if len(row["district id"]) == 7:
-                    p._related[0].extras["boundary_url"] = "/boundaries/census-subdivisions/{}/".format(
-                        row["district id"]
-                    )
+            if not row.get("district name") and row.get("district id") and len(row["district id"]) == 7:
+                p._related[0].extras["boundary_url"] = "/boundaries/census-subdivisions/{}/".format(row["district id"])
 
             if row.get("district name") in self.district_name_to_boundary_url:
                 p._related[0].extras["boundary_url"] = self.district_name_to_boundary_url[row["district name"]]
@@ -528,9 +526,7 @@ class CSVScraper(CanadianScraper):
 
 
 class CanadianJurisdiction(Jurisdiction):
-    """
-    Whether to create posts whose labels match division names or type IDs.
-    """
+    """Whether to create posts whose labels match division names or type IDs."""
 
     use_type_id = False
     """
@@ -603,10 +599,7 @@ class CanadianJurisdiction(Jurisdiction):
             if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
                 continue
 
-            if self.use_type_id:
-                label = child.id.rsplit("/", 1)[1].capitalize().replace(":", " ")
-            else:
-                label = child.name
+            label = child.id.rsplit("/", 1)[1].capitalize().replace(":", " ") if self.use_type_id else child.name
             # Yield posts to allow ca_on_toronto to make changes.
             post = Post(role=member_role, label=label, division_id=child.id, organization_id=organization._id)
             yield post
@@ -620,9 +613,7 @@ class CanadianJurisdiction(Jurisdiction):
 
 class CanadianPerson(Person):
     def __init__(self, *, name, district, role, **kwargs):
-        """
-        Cleans a person's name, district, role and any other attributes.
-        """
+        """Cleans a person's name, district, role and any other attributes."""
         name = clean_name(name)
         district = clean_string(district).replace("&", "and")
         role = clean_string(role)
@@ -636,9 +627,7 @@ class CanadianPerson(Person):
         super().__init__(name=name, district=district, role=role, **kwargs)
 
     def __setattr__(self, name, value):
-        """
-        Corrects gender values.
-        """
+        """Corrects gender values."""
         if name == "gender":
             value = value.lower()
             if value == "m":
@@ -648,9 +637,7 @@ class CanadianPerson(Person):
         super().__setattr__(name, value)
 
     def add_link(self, url, *, note=""):
-        """
-        Corrects links without schemes or domains.
-        """
+        """Corrects links without schemes or domains."""
         url = url.strip()
         if url.startswith("www."):
             url = f"http://{url}"
@@ -659,9 +646,7 @@ class CanadianPerson(Person):
         self.links.append({"note": note, "url": url})
 
     def add_contact(self, type, value, note="", area_code=None):
-        """
-        Cleans and adds a contact detail to the person's membership.
-        """
+        """Cleans and adds a contact detail to the person's membership."""
         if type:
             type = clean_string(type)
         if note:
@@ -684,9 +669,7 @@ class CanadianPerson(Person):
         self._related[0].add_contact_detail(type=type, value=value, note=note)
 
     def clean_telephone_number(self, s, area_code=None):
-        """
-        @see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html
-        """
+        """@see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html."""
         splits = re.split(r"(?:\b \(|/|x|ext[.:]?|p\.|poste)[\s-]?(?=\b|\d)", s, flags=re.IGNORECASE)
         digits = re.sub(r"\D", "", splits[0])
 
@@ -768,8 +751,7 @@ def clean_type_id(type_id):
     # "Spaces should be converted to underscores."
     type_id = re.sub(r" ", "_", type_id)
     # "All invalid characters should be converted to tilde (~)."
-    type_id = re.sub(r"[^\w.~-]", "~", type_id, re.UNICODE)
-    return type_id
+    return re.sub(r"[^\w.~-]", "~", type_id, re.UNICODE)
 
 
 def clean_french_prepositions(s):

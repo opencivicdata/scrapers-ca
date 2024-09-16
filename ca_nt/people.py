@@ -1,3 +1,5 @@
+import contextlib
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -24,10 +26,8 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA")
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                try:
+                with contextlib.suppress(IndexError):
                     p.image = page.xpath('//div[contains(@class, "field--name-field-media-image")]/img/@src')[0]
-                except IndexError:
-                    pass
 
                 contact = page.xpath('//*[contains(@class, "paragraph--type--office")]')[0]
                 if len(contact.xpath('./div[contains(@class, "office-address-wrapper")]')) == 0:

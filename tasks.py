@@ -22,37 +22,29 @@ ocd_division_csv = os.path.join(os.path.abspath(os.path.dirname(__file__)), "cou
 
 
 def module_names():
-    """
-    Returns all module names.
-    """
+    """Returns all module names."""
     for module_name in os.listdir("."):
         if os.path.isfile(os.path.join(module_name, "__init__.py")):
             yield module_name
 
 
 def modules_and_module_names_and_classes():
-    """
-    Returns modules, module names, and person scraper classes.
-    """
+    """Returns modules, module names, and person scraper classes."""
     for module_name in module_names():
         module = importlib.import_module(f"{module_name}.people")
-        class_name = next(key for key in module.__dict__.keys() if "PersonScraper" in key)
+        class_name = next(key for key in module.__dict__ if "PersonScraper" in key)
         yield (module, module_name, module.__dict__[class_name])
 
 
 def csv_dict_reader(url, encoding="utf-8"):
-    """
-    Reads a remote CSV file.
-    """
+    """Reads a remote CSV file."""
     response = requests.get(url)
     response.encoding = encoding
     return csv.DictReader(StringIO(response.text))
 
 
 def slug(name):
-    """
-    Slugifies a division name.
-    """
+    """Slugifies a division name."""
     return unidecode(
         str(name)
         .lower()
@@ -78,16 +70,12 @@ def province_or_territory_abbreviation(code):
 
 
 def type_id(id):
-    """
-    Returns an OCD identifier's type ID.
-    """
+    """Returns an OCD identifier's type ID."""
     return id.rsplit(":", 1)[1]
 
 
 def get_definition(division_id, aggregation=False):
-    """
-    Returns the expected configuration for a given division.
-    """
+    """Returns the expected configuration for a given division."""
     if not ocdid_to_type_name_map:
         # Map census division type codes to names.
         census_division_type_names = {}
@@ -194,9 +182,7 @@ def get_definition(division_id, aggregation=False):
 
 @task
 def council_pages():
-    """
-    Prints scrapers' council page, or warns if it is missing or unneeded.
-    """
+    """Prints scrapers' council page, or warns if it is missing or unneeded."""
     for module, module_name, klass in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == "CSVScraper":
             if hasattr(module, "COUNCIL_PAGE"):
@@ -209,30 +195,24 @@ def council_pages():
 
 @task
 def csv_list():
-    """
-    Lists scrapers with CSV data.
-    """
-    for module, module_name, klass in modules_and_module_names_and_classes():
+    """Lists scrapers with CSV data."""
+    for _module, module_name, klass in modules_and_module_names_and_classes():
         if hasattr(klass, "csv_url"):
             print(f"{module_name}: {klass.csv_url}")
 
 
 @task
 def csv_stale():
-    """
-    Lists scrapers with stale manual CSV data.
-    """
-    for module, module_name, klass in modules_and_module_names_and_classes():
+    """Lists scrapers with stale manual CSV data."""
+    for _module, module_name, klass in modules_and_module_names_and_classes():
         if hasattr(klass, "updated_at") and klass.updated_at < date.today() - timedelta(days=365):
             print(f"{module_name}: Created on {klass.updated_at} by {klass.contact_person}")
 
 
 @task
 def csv_error():
-    """
-    Notes corrections that CSV publishers should make.
-    """
-    for module, module_name, klass in modules_and_module_names_and_classes():
+    """Notes corrections that CSV publishers should make."""
+    for _module, module_name, klass in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == "CSVScraper":
             if "_candidates" in module_name and hasattr(klass, "updated_at"):
                 continue
@@ -279,9 +259,7 @@ def csv_error():
 
 @task
 def tidy():
-    """
-    Checks that modules are configured correctly.
-    """
+    """Checks that modules are configured correctly."""
     # Map OCD identifiers to styles of address.
     leader_styles = {}
     member_styles = {}
@@ -297,7 +275,7 @@ def tidy():
     division_ids = set()
     jurisdiction_ids = set()
     for module_name in module_names():
-        if module_name.endswith("_candidates") or module_name.endswith("_municipalities"):
+        if module_name.endswith(("_candidates", "_municipalities")):
             continue
 
         metadata = module_name_to_metadata(module_name)
@@ -368,9 +346,7 @@ def tidy():
 
 @task
 def sources_and_assertions():
-    """
-    Checks that sources are attributed and assertions are made.
-    """
+    """Checks that sources are attributed and assertions are made."""
     for module_name in module_names():
         path = os.path.join(module_name, "people.py")
         with codecs.open(path, "r", "utf-8") as f:
@@ -387,9 +363,7 @@ def sources_and_assertions():
 
 @task
 def validate_spreadsheet(url, identifier_header, geographic_name_header):
-    """
-    Validates the identifiers, geographic names and geographic types in a spreadsheet.
-    """
+    """Validates the identifiers, geographic names and geographic types in a spreadsheet."""
     sgc_to_id = {}
 
     for division in Division.all("ca", from_csv=ocd_division_csv):
@@ -412,9 +386,7 @@ def validate_spreadsheet(url, identifier_header, geographic_name_header):
 
 
 def module_name_to_metadata(module_name):
-    """
-    Copied from `reports.utils`.
-    """
+    """Copied from `reports.utils`."""
     module = importlib.import_module(module_name)
     for obj in module.__dict__.values():
         division_id = getattr(obj, "division_id", None)
@@ -431,3 +403,4 @@ def module_name_to_metadata(module_name):
                     getattr(obj, "classification", "legislature"),
                 ),
             }
+    return None

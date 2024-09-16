@@ -13,8 +13,7 @@ class CapeBretonPersonScraper(CanadianScraper):
         def decode_email(script):
             raw_address = re.findall(r"(?<=addy).*?;\s*addy", script)
             local_part = html.unescape(raw_address[0]).split("= ", 1)[1].split(";", 1)[0]
-            email = re.sub(r"['\s+]", "", local_part) + "cbrm.ns.ca"
-            return email
+            return re.sub(r"['\s+]", "", local_part) + "cbrm.ns.ca"
 
         page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 

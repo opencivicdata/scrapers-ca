@@ -49,6 +49,5 @@ class SummersidePersonScraper(CanadianScraper):
             p.image = photo
             p.add_contact("voice", phone, "legislature")
             p.add_contact("email", email)
-            print(email)
 
             yield p

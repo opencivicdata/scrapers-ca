@@ -34,10 +34,7 @@ class SaskatchewanMunicipalitiesPersonScraper(CanadianScraper):
         districts = []
         for page in pages:
             index = re.search(r"(\s{6,})", page[0])
-            if index:
-                index = index.end() - 1
-            else:
-                index = -1
+            index = index.end() - 1 if index else -1
             dist1 = []
             dist2 = []
             for line in page:

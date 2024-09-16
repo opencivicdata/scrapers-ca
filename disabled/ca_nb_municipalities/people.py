@@ -112,10 +112,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                         if "vacant" in name.lower():
                             continue
 
-                        if role in unique_roles:
-                            district = division_name
-                        else:
-                            district = f"{division_name} (seat {seat_number})"
+                        district = division_name if role in unique_roles else f"{division_name} (seat {seat_number})"
 
                         organization.add_post(role=role, label=district, division_id=division_id)
 

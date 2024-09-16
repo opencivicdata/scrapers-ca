@@ -16,10 +16,7 @@ class LaSallePersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             role, name = re.split(r"(?<=Mayor)|(?<=Councillor)", councillor.xpath(".//a/div")[0].text_content(), 1)
-            if "Mayor" in role:
-                district = "LaSalle"
-            else:
-                district = f"LaSalle (seat {councillor_seat_number})"
+            district = "LaSalle" if "Mayor" in role else f"LaSalle (seat {councillor_seat_number})"
             image = councillor.xpath(".//img/@src")[0]
             voice = re.search(r"\d{3}-\d{3}-\d{4} ext. \d+", councillor.text_content())
             cell = re.search(r"\d{3}-\d{3}-\d{4}(?! ext)", councillor.text_content())

@@ -20,8 +20,7 @@ class SherbrookePersonScraper(CanadianScraper):
             data = script.split(" = ", 1)[1]
             data = json.loads(data)
             content = data["value"]["selected"]["content"]["fr"]
-            page = lxml.html.fromstring(content)
-            return page
+            return lxml.html.fromstring(content)
 
         page = get_content(COUNCIL_PAGE)
         councillors = page.xpath("//a[.//h3]")

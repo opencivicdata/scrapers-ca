@@ -15,10 +15,7 @@ class ManitobaMunicipalitiesPersonScraper(CanadianScraper):
         districts = page.xpath('//div[@id="ctl00_PublicContent_divSearchContent"]//tr')[5::3]
         for district in districts:
             title = district.xpath(".//td//text()")
-            if len(title[0]) > 1:
-                title = title[0]
-            else:
-                title = "".join(title[:2])
+            title = title[0] if len(title[0]) > 1 else "".join(title[:2])
 
             # @todo Need to distinguish between, e.g., R.M. and Town
             title = title.title()

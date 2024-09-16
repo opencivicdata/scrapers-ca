@@ -11,8 +11,7 @@ class CoquitlamPersonScraper(CanadianScraper):
         def build_email(script):
             w = re.findall(r'w = "(.*?)"', script)[0]
             x = re.findall(r'x = "(.*?)"', script)[0]
-            email = w + "@" + x
-            return email
+            return w + "@" + x
 
         councillor_seat_number = 1
 

@@ -49,10 +49,7 @@ class CharlottetownPersonScraper(CanadianScraper):
             for text in para.xpath('.//strong[contains(., "Phone")]/following-sibling::text()'):
                 if re.search(r"\d", text):
                     match = re.search(r"(.+) \((.+)\)", text)
-                    if match.group(2) == "Fax":
-                        contact_type = "fax"
-                    else:
-                        contact_type = "voice"
+                    contact_type = "fax" if match.group(2) == "Fax" else "voice"
                     p.add_contact(contact_type, match.group(1), match.group(2))
 
             yield p
