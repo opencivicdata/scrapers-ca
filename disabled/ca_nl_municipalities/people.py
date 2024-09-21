@@ -3,7 +3,6 @@ import re
 import subprocess
 import tempfile
 
-import requests
 from pupa.scrape import Organization
 
 from utils import CanadianPerson as Person
@@ -17,7 +16,7 @@ class NewfoundlandAndLabradorMunicipalitiesPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         url = page.xpath('//a[contains(text(),"Municipal Directory")]/@href')[0]
 
-        response = requests.get(url).content
+        response = self.get(url).content
         with tempfile.NamedTemporaryFile(delete_on_close=False) as pdf:
             pdf.write(response)
 

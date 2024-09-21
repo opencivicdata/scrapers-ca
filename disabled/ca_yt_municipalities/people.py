@@ -3,7 +3,6 @@ import re
 import subprocess
 import tempfile
 
-import requests
 from pupa.scrape import Organization
 
 from utils import CanadianPerson as Person
@@ -14,7 +13,7 @@ COUNCIL_PAGE = "http://www.community.gov.yk.ca/pdf/loc_govdir.pdf"
 
 class YukonMunicipalitiesPersonScraper(CanadianScraper):
     def scrape(self):
-        response = requests.get(COUNCIL_PAGE).content
+        response = self.get(COUNCIL_PAGE).content
         with tempfile.NamedTemporaryFile(delete_on_close=False) as pdf:
             pdf.write(response)
 

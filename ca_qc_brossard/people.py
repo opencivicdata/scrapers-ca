@@ -1,8 +1,6 @@
 import json
 import re
 
-import requests
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -33,7 +31,7 @@ class BrossardPersonScraper(CanadianScraper):
             return return_list
 
         # The whole page is rendered in javascript and stored as a massive json object
-        page = requests.get(DATA_PAGE)
+        page = self.get(DATA_PAGE)
         page = json.loads(page.content)
         containers = page["content"].values()
         for container in containers:

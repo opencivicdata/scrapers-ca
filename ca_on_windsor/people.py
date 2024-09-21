@@ -1,7 +1,5 @@
 import json
 
-import requests
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -12,7 +10,7 @@ class WindsorPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
         data_url = page.xpath('//comment()[contains(., "SITE JS")]/following-sibling::script/@src')[0]
-        data = json.loads(requests.get(data_url).text.split(" = ")[1])
+        data = json.loads(self.get(data_url).text.split(" = ")[1])
         nav_items = []
         for item in data:
             if item["RollupType"] == "SidebarNavigation":

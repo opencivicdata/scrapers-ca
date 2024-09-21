@@ -1,7 +1,5 @@
 import re
 
-import requests
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -33,7 +31,7 @@ class CaledonPersonScraper(CanadianScraper):
 
             # phone numbers populated by JS request
             contact_num = page.xpath('//div[@class="contactBody"]/div/@id')[0].replace("contactEntry_", "")
-            contact_data = requests.get(
+            contact_data = self.get(
                 f"https://www.caledon.ca//Modules/Contact/services/GetContactHTML.ashx?isMobile=false&param={contact_num}&lang=en"
             ).text
             voice = re.findall(r"(?<=tel://)\d+(?=\">)", contact_data)
