@@ -16,18 +16,22 @@ class MississaugaPersonScraper(CanadianScraper):
             if "vacant" not in councillor_url.xpath(".//div//div[1]/text()")[0].lower():
                 yield self.councillor_data(councillor_url.attrib["href"])
 
-        mayor_page = self.lxmlize(MAYOR_PAGE)
-        mayor_name = mayor_page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        if "vacant" not in mayor_name.lower():
-            yield self.mayor_data(MAYOR_PAGE)
+        mayor_url = page.xpath('//li/a[contains(@href, "mayor")]')[0]
+        if "vacant" not in mayor_url.xpath(".//div//div[1]/text()")[0].lower():
+            yield self.mayor_data(mayor_url.attrib["href"])
 
     def councillor_data(self, url):
         page = self.lxmlize(url)
 
         name_district = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
         hyphen = name_district.find("Councillor")
+        if hyphen == -1:
+            hyphen = 9
         district = name_district[: hyphen - 3]
         name = name_district[hyphen:]
+        mayor = name.find("Deputy")
+        if mayor != -1:
+            name = name[27:]
         bracket = name.find("(")
         if bracket != -1:
             name = name[:bracket]
@@ -47,9 +51,9 @@ class MississaugaPersonScraper(CanadianScraper):
     def mayor_data(self, url):
         page = self.lxmlize(url)
 
-        name_text = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        name = name_text.split(",")[0]
-        photo = page.xpath('//img[contains(@src, "mayor")]/@src')[0]
+        name = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
+        name = name[8:]
+        photo = page.xpath('//*[@id="65a01af8598b7"]/p[1]/img/@src')[0]
 
         p = Person(primary_org="legislature", name=name, district="Mississauga", role="Mayor")
         p.add_source(url)
