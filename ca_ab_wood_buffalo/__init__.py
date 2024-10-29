@@ -17,16 +17,16 @@ class WoodBuffalo(CanadianJurisdiction):
         for seat_number in range(1, 7):
             organization.add_post(
                 role="Councillor",
-                label="Ward 1 (seat {})".format(seat_number),
-                division_id="{}/ward:1".format(self.division_id),
+                label=f"Ward 1 (seat {seat_number})",
+                division_id=f"{self.division_id}/ward:1",
             )
         for seat_number in range(1, 3):
             organization.add_post(
                 role="Councillor",
-                label="Ward 2 (seat {})".format(seat_number),
-                division_id="{}/ward:2".format(self.division_id),
+                label=f"Ward 2 (seat {seat_number})",
+                division_id=f"{self.division_id}/ward:2",
             )
-        organization.add_post(role="Councillor", label="Ward 3", division_id="{}/ward:3".format(self.division_id))
-        organization.add_post(role="Councillor", label="Ward 4", division_id="{}/ward:4".format(self.division_id))
+        organization.add_post(role="Councillor", label="Ward 3", division_id=f"{self.division_id}/ward:3")
+        organization.add_post(role="Councillor", label="Ward 4", division_id=f"{self.division_id}/ward:4")
 
         yield organization

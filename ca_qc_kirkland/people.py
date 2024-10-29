@@ -8,15 +8,6 @@ COUNCIL_PAGE = "http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-munic
 
 class KirklandPersonScraper(CanadianScraper):
     def scrape(self):
-        def decode_email(e):
-            de = ""
-            k = int(e[:2], 16)
-
-            for i in range(2, len(e) - 1, 2):
-                de += chr(int(e[i : i + 2], 16) ^ k)
-
-            return de
-
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@class="container_content"]//tbody/tr')
@@ -39,8 +30,7 @@ class KirklandPersonScraper(CanadianScraper):
                 .replace(".", ",")  # correcting a typo
                 .replace(",-#-", " x")
             )
-            encrypted_email = councillor.xpath('.//@href[contains(., "email")]')[0].split("#")[1]
-            email = decode_email(encrypted_email)
+            email = self.get_email(councillor)
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)

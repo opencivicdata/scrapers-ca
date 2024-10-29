@@ -1,9 +1,8 @@
 import html
 import re
 
-from utils import CUSTOM_USER_AGENT
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "http://www.cbrm.ns.ca/mayor-council-2.html"
 MAYOR_PAGE = "http://www.cbrm.ns.ca/mayor"
@@ -14,8 +13,7 @@ class CapeBretonPersonScraper(CanadianScraper):
         def decode_email(script):
             raw_address = re.findall(r"(?<=addy).*?;\s*addy", script)
             local_part = html.unescape(raw_address[0]).split("= ", 1)[1].split(";", 1)[0]
-            email = re.sub(r"['\s+]", "", local_part) + "cbrm.ns.ca"
-            return email
+            return re.sub(r"['\s+]", "", local_part) + "cbrm.ns.ca"
 
         page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 
@@ -55,7 +53,7 @@ class CapeBretonPersonScraper(CanadianScraper):
             councillor_url = councillor.xpath(".//a/@href")[0]
             p.add_source(councillor_url)
             page = self.lxmlize(councillor_url, user_agent=CUSTOM_USER_AGENT)
-            image = page.xpath('//img[contains(@title, "{0}")]/@src'.format(name))
+            image = page.xpath(f'//img[contains(@title, "{name}")]/@src')
             if image:
                 p.image = image[0]
             yield p

@@ -26,7 +26,7 @@ class SaanichPersonScraper(CanadianScraper):
                 district = "Saanich"
             else:
                 role = "Councillor"
-                district = "Saanich (seat {})".format(councillor_seat_number)
+                district = f"Saanich (seat {councillor_seat_number})"
                 councillor_seat_number += 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)

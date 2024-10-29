@@ -19,7 +19,7 @@ class WhitchurchStouffville(CanadianJurisdiction):
             # organization.add_post(role='Councillor', label='Ward {}'.format(ward_number), division_id=self.division_id)
             organization.add_post(
                 role="Councillor",
-                label="{} (seat {})".format(self.division_name, ward_number),
+                label=f"{self.division_name} (seat {ward_number})",
                 division_id=self.division_id,
             )
 

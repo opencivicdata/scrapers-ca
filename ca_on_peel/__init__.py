@@ -20,21 +20,21 @@ class Peel(CanadianJurisdiction):
         for ward_number in range(1, 7):
             organization.add_post(
                 role="Councillor",
-                label="Caledon Ward {} (seat 1)".format(ward_number),
-                division_id="ocd-division/country:ca/csd:3521024/ward:{}".format(ward_number),
+                label=f"Caledon Ward {ward_number} (seat 1)",
+                division_id=f"ocd-division/country:ca/csd:3521024/ward:{ward_number}",
             )
         for ward_number in range(1, 11):
             for seat_number in range(1, 3 if ward_number <= 6 else 2):
                 organization.add_post(
                     role="Councillor",
-                    label="Brampton Ward {} (seat {})".format(ward_number, seat_number),
-                    division_id="ocd-division/country:ca/csd:3521010/ward:{}".format(ward_number),
+                    label=f"Brampton Ward {ward_number} (seat {seat_number})",
+                    division_id=f"ocd-division/country:ca/csd:3521010/ward:{ward_number}",
                 )
         for ward_number in range(1, 12):
             organization.add_post(
                 role="Councillor",
-                label="Mississauga Ward {} (seat 1)".format(ward_number),
-                division_id="ocd-division/country:ca/csd:3521005/ward:{}".format(ward_number),
+                label=f"Mississauga Ward {ward_number} (seat 1)",
+                division_id=f"ocd-division/country:ca/csd:3521005/ward:{ward_number}",
             )
 
         yield organization

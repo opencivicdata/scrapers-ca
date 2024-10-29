@@ -23,10 +23,10 @@ class PointeClairePersonScraper(CanadianScraper):
             elif district:
                 district = district[0].text_content().split(" – ")[0].strip()
             else:
-                assert False, "error parsing district"
+                raise AssertionError("error parsing district")
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
-            p.image = councillor.xpath(".//@src")[0]
+            p.image = councillor.xpath(".//@data-src")[0]
             p.add_contact("email", self.get_email(councillor))
             p.add_contact("voice", self.get_phone(councillor, area_codes=[514]), "legislature")
             p.add_source(COUNCIL_PAGE)

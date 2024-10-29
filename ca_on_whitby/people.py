@@ -22,7 +22,7 @@ class WhitbyPersonScraper(CanadianScraper):
             else:
                 name, role = name.split(", ")
                 if role == "Regional Councillor":
-                    district = "Whitby (seat {})".format(regional_councillor_seat_number)
+                    district = f"Whitby (seat {regional_councillor_seat_number})"
                     regional_councillor_seat_number += 1
                 else:
                     district = role.split(" – ")[1]

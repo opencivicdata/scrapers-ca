@@ -24,7 +24,7 @@ PARTIES = {
 
 
 def get_party(abbr):
-    """Return full party name from abbreviation"""
+    """Return full party name from abbreviation."""
     return PARTIES[abbr]
 
 
@@ -59,8 +59,8 @@ class AlbertaPersonScraper(CanadianScraper):
         field_names = next(reader)
         for name in OFFICE_FIELDS:
             assert field_names.count(name) == 2
-            field_names[field_names.index(name)] = "{} 1".format(name)
-            field_names[field_names.index(name)] = "{} 2".format(name)
+            field_names[field_names.index(name)] = f"{name} 1"
+            field_names[field_names.index(name)] = f"{name} 2"
         rows = [dict(zip_longest(field_names, row)) for row in reader]
         assert len(rows), "No members found"
         for mla in rows:
@@ -76,8 +76,8 @@ class AlbertaPersonScraper(CanadianScraper):
             row_xpath = '//td[normalize-space()="{}"]/..'.format(
                 mla["Constituency Name"],
             )
-            (detail_url,) = index.xpath("{}//a/@href".format(row_xpath))
-            (photo_url,) = index.xpath("{}//img/@src".format(row_xpath))
+            (detail_url,) = index.xpath(f"{row_xpath}//a/@href")
+            (photo_url,) = index.xpath(f"{row_xpath}//img/@src")
             district = mla["Constituency Name"]
             if district == "Calgary-Bhullar-McCall":
                 district = "Calgary-McCall"
@@ -108,10 +108,10 @@ class AlbertaPersonScraper(CanadianScraper):
 
             for suffix, note in addresses:
                 for key, contact_type in (("Phone", "voice"), ("Fax", "fax")):
-                    value = mla["{} Number {}".format(key, suffix)]
+                    value = mla[f"{key} Number {suffix}"]
                     if value and value != "Pending":
                         p.add_contact(contact_type, value, note)
-                address = ", ".join(filter(bool, [mla["{} {}".format(field, suffix)] for field in ADDRESS_FIELDS]))
+                address = ", ".join(filter(bool, [mla[f"{field} {suffix}"] for field in ADDRESS_FIELDS]))
                 if address:
                     p.add_contact("address", address, note)
 

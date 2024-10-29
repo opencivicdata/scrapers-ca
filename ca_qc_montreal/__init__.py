@@ -17,7 +17,7 @@ class Montreal(CanadianJurisdiction):
         {"name": "Projet Montréal - Équipe Valérie Plante"},
         {"name": "Vrai changement pour Montréal"},
         {"name": "Équipe Anjou"},
-        {"name": "Équipe Barbe Team"},
+        {"name": "Équipe LaSalle Team"},
         {"name": "Équipe Dauphin Lachine"},
         {"name": "Équipe Denis Coderre pour Montréal"},
     ]

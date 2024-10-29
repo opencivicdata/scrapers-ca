@@ -1,7 +1,6 @@
 import re
 from collections import defaultdict
 
-import requests
 from lxml import etree
 
 from utils import CanadianPerson as Person
@@ -19,8 +18,8 @@ class ChathamKentPersonScraper(CanadianScraper):
         headers = {"content-type": "text/xml"}
         body = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/"><listName>councillorsByWard</listName><viewName></viewName><query><Query><OrderBy Override="TRUE"><FieldRef Ascending="True" Name="Title" /></OrderBy></Query></query><viewFields><ViewFields Properties="True" /></viewFields><rowLimit>50</rowLimit><queryOptions><QueryOptions></QueryOptions></queryOptions></GetListItems></soap:Body></soap:Envelope>'
 
-        response = requests.post(url=COUNCIL_DATA_URL, data=body, headers=headers)
-        page = etree.fromstring(response.content)
+        response = self.post(url=COUNCIL_DATA_URL, data=body, headers=headers)
+        page = etree.fromstring(response.content)  # noqa: S320
         namespace = {"z": "#RowsetSchema", "rs": "urn:schemas-microsoft-com:rowset"}
 
         councillors = page.findall(".//z:row", namespace)
@@ -30,7 +29,7 @@ class ChathamKentPersonScraper(CanadianScraper):
             ward, name = re.split(r"(?<=\d)\s", title)
             name.replace("Councillor ", "")
             seat_numbers[ward] += 1
-            district = "{} (seat {})".format(ward, seat_numbers[ward])
+            district = f"{ward} (seat {seat_numbers[ward]})"
 
             url = councillor.xpath("./@ows_URL")[0].split(",")[0]
             page = self.lxmlize(url, user_agent="Mozilla/5.0")

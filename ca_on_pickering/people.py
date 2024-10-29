@@ -21,7 +21,7 @@ class PickeringPersonScraper(CanadianScraper):
             if "Councillor" in name:
                 name = name.replace("Councillor", "").strip()
                 role_ward = councillor.xpath(".//text()")[1]
-                role, ward = re.split(r"\s(?=Ward)", role_ward, 1)
+                role, ward = re.split(r"\s(?=Ward)", role_ward, maxsplit=1)
             else:
                 name = name.replace("Mayor", "")
                 role = "Mayor"

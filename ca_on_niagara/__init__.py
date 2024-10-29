@@ -70,7 +70,7 @@ class Niagara(CanadianJurisdiction):
             organization.add_post(role="Mayor", label=division_name, division_id=division_id)
             for seat_number in range(1, division["count"] + 1):
                 organization.add_post(
-                    role="Councillor", label="{} (seat {})".format(division_name, seat_number), division_id=division_id
+                    role="Councillor", label=f"{division_name} (seat {seat_number})", division_id=division_id
                 )
 
         yield organization

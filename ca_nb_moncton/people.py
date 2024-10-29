@@ -1,8 +1,6 @@
 import json
 from collections import defaultdict
 
-import requests
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -13,7 +11,7 @@ API_URL = "https://services1.arcgis.com/E26PuSoie2Y7bbyI/arcgis/rest/services/El
 class MonctonPersonScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(int)
-        data = json.loads(requests.get(API_URL).content)["features"]
+        data = json.loads(self.get(API_URL).content)["features"]
         assert len(data), "No councillors found"
 
         for item in data:
@@ -24,7 +22,7 @@ class MonctonPersonScraper(CanadianScraper):
             role = councillor["Primary_role"]
             if role != "Mayor":
                 seat_numbers[ward] += 1
-                district = ward + " (seat {})".format(seat_numbers[ward])
+                district = ward + f" (seat {seat_numbers[ward]})"
             else:
                 district = ward
             name = councillor["Name"]

@@ -20,7 +20,7 @@ class LongueuilPersonScraper(CanadianScraper):
 
             district = tr.xpath('.//p[contains(./strong, "District")]/a/text()')[0]
             if "Greenfield Park" in district:
-                district = "Greenfield Park (siège {})".format(seat_number)
+                district = f"Greenfield Park (siège {seat_number})"
                 seat_number += 1
 
             district = {
@@ -46,7 +46,7 @@ class LongueuilPersonScraper(CanadianScraper):
     def scrape_mayor(self):
         page = self.lxmlize(MAYOR_PAGE)
         name = page.xpath("//h1[not(@class)]/text()")[0]
-        img = page.xpath('//img[contains(./@alt, "{}")]/@src'.format(name))[0]
+        img = page.xpath(f'//img[contains(./@alt, "{name}")]/@src')[0]
         p = Person(primary_org="legislature", name=name, district="Longueuil", role="Maire")
         p.add_source(COUNCIL_PAGE)
         p.add_source(MAYOR_PAGE)

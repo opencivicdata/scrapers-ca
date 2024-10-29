@@ -27,9 +27,9 @@ _contact_details["items"]["properties"]["value"]["conditionalPattern"] = [
     (r"\A1 \d{3} \d{3}-\d{4}(?: x\d+)?\Z", lambda x: x["type"] in ("text", "voice", "fax", "cell", "video", "pager")),
 ]
 # Validate the format of contact_details[].note.
-_contact_details["items"]["properties"]["note"][
-    "pattern"
-] = r"\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z"
+_contact_details["items"]["properties"]["note"]["pattern"] = (
+    r"\A(?:constituency|legislature|office|residence|)(?: \(\d\))?\Z"
+)
 # contact_details[] must not include unexpected properties.
 _contact_details["items"]["additionalProperties"] = False
 
@@ -57,7 +57,7 @@ person_links = deepcopy(_links)
 
 social_re = re.compile(
     r"(?:facebook|fb|instagram|linkedin|twitter|youtube)\.com|conservative\.ca"
-)  # XXX ca_candidates
+)  # special case: ca_candidates
 facebook_re = re.compile(r"facebook\.com")
 instagram_re = re.compile(r"instagram\.com")
 linkedin_re = re.compile(r"linkedin\.com")
@@ -70,15 +70,15 @@ matchers = [
     (1, lambda x: x["type"] == "email", "Membership has many emails"),
 ]
 
-for type in ("address", "cell", "fax", "voice"):
-    for note in ("constituency", "legislature", "office", "residence"):
-        matchers.append(
-            (
-                1,
-                lambda x, type=type, note=note: x["type"] == type and x["note"] == note,
-                "Membership has contact_details with same type and note",
-            )
-        )
+matchers.extend(
+    (
+        1,
+        lambda x, type=type, note=note: x["type"] == type and x["note"] == note,
+        "Membership has contact_details with same type and note",
+    )
+    for type in ("address", "cell", "fax", "voice")
+    for note in ("constituency", "legislature", "office", "residence")
+)
 
 # A membership should not have notes on emails, should have notes on non-emails,
 # should have at most one email, and should, in most cases, have at most one of
@@ -133,7 +133,7 @@ person_schema["properties"]["name"]["pattern"] = re.compile(
     r"\A"
     r"(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|Hon|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)"
     r"(?:" + name_fragment + r"(?:'|-| - | )"
-    r")+" + name_fragment + r"\Z"  # noqa: W504
+    r")+" + name_fragment + r"\Z"
 )
 person_schema["properties"]["gender"]["enum"] = ["male", "female", ""]
 # @note https://github.com/opennorth/represent-canada-images checks whether an
@@ -147,7 +147,7 @@ person_schema["properties"]["district"] = {"type": "string", "blank": False}
 organization_schema["properties"]["classification"]["enum"] += ["government"]
 
 
-def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):
+def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None):  # noqa: N802
     value = x.get(fieldname)
     if isinstance(value, str):
         for pattern, method in arguments:
@@ -158,7 +158,7 @@ def validate_conditionalPattern(self, x, fieldname, schema, path, arguments=None
 DatetimeValidator.validate_conditionalPattern = validate_conditionalPattern
 
 
-def validate_maxMatchingItems(self, x, fieldname, schema, path, arguments=None):
+def validate_maxMatchingItems(self, x, fieldname, schema, path, arguments=None):  # noqa: N802
     value = x.get(fieldname)
     if isinstance(value, list):
         for length, method, message in arguments:

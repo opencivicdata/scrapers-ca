@@ -16,7 +16,7 @@ class MontrealEstPersonScraper(CanadianScraper):
                 district = "Montréal-Est"
                 role = "Maire"
             else:
-                district = "District {}".format(role_district[-1])
+                district = f"District {role_district[-1]}"
                 role = "Conseiller"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)

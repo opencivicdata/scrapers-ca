@@ -17,13 +17,13 @@ class Vancouver(CanadianJurisdiction):
         for seat_number in range(1, 11):
             organization.add_post(
                 role="Councillor",
-                label="{} (seat {})".format(self.division_name, seat_number),
+                label=f"{self.division_name} (seat {seat_number})",
                 division_id=self.division_id,
             )
         for seat_number in range(1, 8):
             organization.add_post(
                 role="Commissioner",
-                label="{} (seat {})".format(self.division_name, seat_number),
+                label=f"{self.division_name} (seat {seat_number})",
                 division_id=self.division_id,
             )
 

@@ -17,14 +17,14 @@ class ThunderBay(CanadianJurisdiction):
         for seat_number in range(1, 6):
             organization.add_post(
                 role="Councillor at Large",
-                label="{} (seat {})".format(self.division_name, seat_number),
+                label=f"{self.division_name} (seat {seat_number})",
                 division_id=self.division_id,
             )
         for ward_number, ward_name in enumerate(
             ("Current River", "Red River", "McKellar", "McIntyre", "Northwood", "Westfort", "Neebing"), 1
         ):
             organization.add_post(
-                role="Councillor", label=ward_name, division_id="{}/ward:{}".format(self.division_id, ward_number)
+                role="Councillor", label=ward_name, division_id=f"{self.division_id}/ward:{ward_number}"
             )
 
         yield organization

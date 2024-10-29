@@ -1,7 +1,7 @@
 import os
 import re
 import subprocess
-from urllib.request import urlopen
+import tempfile
 
 from pupa.scrape import Organization
 
@@ -13,12 +13,11 @@ COUNCIL_PAGE = "http://www.community.gov.yk.ca/pdf/loc_govdir.pdf"
 
 class YukonMunicipalitiesPersonScraper(CanadianScraper):
     def scrape(self):
-        response = urlopen(COUNCIL_PAGE).read()
-        pdf = open("/tmp/yt.pdf", "w")
-        pdf.write(response)
-        pdf.close()
+        response = self.get(COUNCIL_PAGE).content
+        with tempfile.NamedTemporaryFile(delete_on_close=False) as pdf:
+            pdf.write(response)
 
-        data = subprocess.check_output(["pdftotext", "-layout", "/tmp/yt.pdf", "-"])
+        data = subprocess.check_output(["pdftotext", "-layout", pdf.name, "-"])  # noqa: S603,S607
         data = re.split(r"\n\s*\n", data)
         for municipality in data:
             if "Councillors" not in municipality:
@@ -81,4 +80,4 @@ class YukonMunicipalitiesPersonScraper(CanadianScraper):
                         p.add_link(website)
                     yield p
 
-        os.system("rm /tmp/yt.pdf")
+        os.unlink(pdf.name)

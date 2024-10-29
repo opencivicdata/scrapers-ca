@@ -59,7 +59,7 @@ class CanadaPersonScraper(CanadianScraper):
                 photo_response = self.get(photo)
                 if (
                     photo_response.status_code == 200
-                    and hashlib.sha1(photo_response.content).hexdigest() not in IMAGE_PLACEHOLDER_SHA1
+                    and hashlib.sha1(photo_response.content).hexdigest() not in IMAGE_PLACEHOLDER_SHA1  # noqa: S324 # non-cryptographic
                 ):
                     m.image = photo
 
@@ -119,7 +119,7 @@ class CanadaPersonScraper(CanadianScraper):
             ):
                 note = "constituency"
                 if i:
-                    note += " ({})".format(i + 1)
+                    note += f" ({i + 1})"
 
                 address = constituency_office_el.xpath("./p[1]")[0]
                 address = address.text_content().strip().splitlines()

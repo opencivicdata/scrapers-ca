@@ -14,7 +14,7 @@ class RichmondHillPersonScraper(CanadianScraper):
         urls = page.xpath('//h3[contains(text(), "Regional and Local Councillors")]/following-sibling::p[1]//@href')
         assert len(urls), "No regional councillors found"
         for index, url in enumerate(urls, 1):
-            yield self.process(url, "Richmond Hill (seat {})".format(index), "Regional Councillor")
+            yield self.process(url, f"Richmond Hill (seat {index})", "Regional Councillor")
 
         councillors = page.xpath('//h3[text()="Local Councillors"]/following-sibling::p')
         assert len(councillors), "No councillors found"

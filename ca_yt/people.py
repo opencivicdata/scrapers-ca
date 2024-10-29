@@ -1,3 +1,5 @@
+import contextlib
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -25,17 +27,15 @@ class YukonPersonScraper(CanadianScraper):
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                try:
+                with contextlib.suppress(IndexError):
                     p.image = page.xpath('//article[contains(@class, "member")]/p/img/@src')[0]
-                except IndexError:
-                    pass
 
                 contact = page.xpath('//article[contains(@class, "members-sidebar")]')[0]
                 website = contact.xpath("./div[3]/div[3]/div[2]/a")
                 if website:
                     p.add_link(website[0].text_content())
 
-                def handle_address(lines, address_type):
+                def handle_address(p, lines, address_type):
                     address_lines = []
                     for line in lines:
                         if line.endswith(":"):  # Room:, Phone:, Fax:
@@ -48,7 +48,7 @@ class YukonPersonScraper(CanadianScraper):
                             address_type,
                         )
 
-                def handle_phone(lines, phone_type):
+                def handle_phone(p, lines, phone_type):
                     if "Phone:" in lines:
                         next_line = lines[lines.index("Phone:") + 1]
                         if next_line.endswith(":"):
@@ -66,8 +66,8 @@ class YukonPersonScraper(CanadianScraper):
                 address_lines = contact.xpath("//address//text()")
                 contact_lines = contact.xpath("//p[2]//text()")
                 assert address_lines[0].strip() == "Yukon Legislative Assembly"
-                handle_address(address_lines[1:], "legislature")
-                handle_phone(contact_lines[1:], "legislature")
+                handle_address(p, address_lines[1:], "legislature")
+                handle_phone(p, contact_lines[1:], "legislature")
 
                 email = self.get_email(contact, error=False)
                 if email:
