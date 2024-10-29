@@ -10,7 +10,8 @@ class KirklandPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@class="container_content"]//tbody/tr')
+        # councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
+        councillors = page.xpath('//table/tbody[not(@id)]/tr/td[@valign="top"]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             if councillor == councillors[0]:
