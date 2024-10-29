@@ -92,7 +92,7 @@ class BritishColumbiaMunicipalitiesPersonScraper(CanadianScraper):
                 if division_id in exclude_divisions:
                     continue
                 if division_id in processed_ids:
-                    raise Exception("unhandled collision: {}".format(division_id))
+                    raise Exception(f"unhandled collision: {division_id}")
                 division = Division.get(division_id)
                 processed_divisions.add(division_name)
 

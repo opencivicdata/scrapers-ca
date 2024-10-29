@@ -1,57 +1,49 @@
-from urllib.parse import urljoin
+import re
+from collections import defaultdict
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.city.sault-ste-marie.on.ca/Open_Page.aspx?ID=174&deptid=1"
-
-
-def word_to_number(word):
-    words = ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
-    return words.index(word.lower()) + 1
-
-
-def district_name_using_number(name):
-    district_split = name.split()
-    return " ".join([district_split[0], str(word_to_number(district_split[1]))])
+COUNCIL_PAGE = "https://saultstemarie.ca/Government/City-Council.aspx"
 
 
 class SaultSteMariePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        table_data = page.xpath('//div[@id="litcontentDiv"]//tr')
-        council_data = table_data[2:-1]
+        seat_numbers = defaultdict(int)
 
-        mayor_row = table_data[0]
+        councillors = page.xpath('//div[@class="mb-2"]//@href')
+        assert len(councillors), "No councillors found"
 
-        photo_url_rel = mayor_row.xpath("string(.//img/@src)")  # can be empty
-        photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
-        contact_node = mayor_row.xpath("./td")[1]
-        name = contact_node.xpath(".//font[1]/text()")[0]
-        email = self.get_email(contact_node)
+        for link in councillors:
+            page = self.lxmlize(link)
+            title = page.xpath("//h1")[0].text_content()
+            if "Mayor" in title:
+                role = "Mayor"
+                name = title.replace("Mayor ", "")
+                district = "Sault Ste. Marie"
+                image = None  # No image on the Mayor's page at the moment
+                contact_node = page.xpath('//div[@id="mainContent_contactUs"]')[0]
+                phone_numbers = re.findall(r"\d{3}-\d{3}-\d{4}", contact_node.text_content())
+                phone = phone_numbers[0]
+                fax = phone_numbers[1]
+            else:
+                role = "Councillor"
+                area, name = title.split(" Councillor ")
+                seat_numbers[area] += 1
+                district = f"{area} (seat {seat_numbers[area]})"
+                image = page.xpath(".//h3/img/@src")[0]
+                contact_node = page.xpath('//div[@id="mainContent_left"]')[0]
+                phone = self.get_phone(contact_node)
+            email = self.get_email(contact_node)
 
-        p = Person(primary_org="legislature", name=name, district="Sault Ste. Marie", role="Mayor")
-        p.add_source(COUNCIL_PAGE)
-        p.add_contact("email", email)
-        p.image = photo_url
-        yield p
-
-        # alternate between a row represneting a ward name and councilors
-        assert len(council_data), "No councillors found"
-        for ward_row, data_row in zip(*[iter(council_data)] * 2):
-            district = ward_row.xpath('.//text()[contains(., "Ward")]')[0]
-            district_num = district_name_using_number(district)
-            for councillor_node in data_row.xpath("./td"):
-                name = councillor_node.xpath(".//strong/text()|.//font[1]/text()")[0]
-                email = self.get_email(councillor_node)
-                photo_url_rel = councillor_node.xpath("string(.//img/@src)")  # can be empty
-                photo_url = urljoin(COUNCIL_PAGE, photo_url_rel)
-                # address and phone are brittle, inconsistent
-
-                p = Person(primary_org="legislature", name=name, district=district_num, role="Councillor")
-                p.add_source(COUNCIL_PAGE)
-                if email:
-                    p.add_contact("email", email)
-                p.image = photo_url
-
-                yield p
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
+            if image:
+                p.image = image
+            if fax:
+                p.add_contact("fax", fax, "legislature")
+            p.add_contact("email", email)
+            p.add_contact("voice", phone, "legislature")
+            p.add_source(COUNCIL_PAGE)
+            p.add_source(link)
+            yield p

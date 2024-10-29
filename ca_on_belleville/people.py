@@ -36,7 +36,7 @@ class BellevillePersonScraper(CanadianScraper):
             councillors = ward.xpath("./following-sibling::*[img]")
             for councillor in councillors:
                 self.seat_numbers[ward_name] += 1
-                district = "{} (seat {})".format(ward_name, self.seat_numbers[ward_name])
+                district = f"{ward_name} (seat {self.seat_numbers[ward_name]})"
                 role = "Councillor"
 
                 name = councillor.xpath("./following-sibling::p")[0].text_content()

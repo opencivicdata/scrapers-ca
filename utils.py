@@ -9,7 +9,7 @@ from urllib.parse import unquote, urlparse
 from zipfile import ZipFile
 
 import agate
-import agateexcel  # noqa
+import agateexcel  # noqa: F401
 import lxml.html
 import requests
 from lxml import etree
@@ -17,11 +17,12 @@ from opencivicdata.divisions import Division
 from pupa.scrape import Jurisdiction, Organization, Person, Post, Scraper
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-import patch  # patch patches validictory # noqa
+import patch  # patch patches validictory # noqa: F401
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 CUSTOM_USER_AGENT = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)"
+DEFAULT_USER_AGENT = requests.utils.default_user_agent()
 
 CONTACT_DETAIL_TYPE_MAP = {
     "Address": "address",
@@ -82,10 +83,7 @@ CONTACT_DETAIL_NOTE_MAP = {
     "Voice Mail": "legislature",
     "Work": "legislature",
 }
-if os.getenv("SSL_VERIFY", False):
-    SSL_VERIFY = "/usr/lib/ssl/certs/ca-certificates.crt"
-else:
-    SSL_VERIFY = bool(os.getenv("SSL_VERIFY", False))
+SSL_VERIFY = "/usr/lib/ssl/certs/ca-certificates.crt" if os.getenv("SSL_VERIFY", "") else True
 
 email_re = re.compile(r"([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})")
 
@@ -93,9 +91,7 @@ email_re = re.compile(r"([A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})")
 styles_of_address = {}
 for gid in range(3):
     response = requests.get(
-        "https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv".format(
-            gid
-        ),
+        f"https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={gid}&output=csv",
         verify=SSL_VERIFY,
     )
     if response.status_code == 200:
@@ -115,35 +111,51 @@ class CanadianScraper(Scraper):
         Make sure that the node/expression is narrow enough to not capture a
         generic email address in the footer of the page, for example.
         """
-
-        matches = []
         # If the text would be split across multiple sub-tags.
-        for match in node.xpath('{}//*[contains(text(), "@")]'.format(expression)):
-            matches.append(match.text_content())
+        matches = [match.text_content() for match in node.xpath(f'{expression}//*[contains(text(), "@")]')]
         # The text version is more likely to be correct, as it is more visible,
         # e.g. ca_bc has one `href` of `mailto:first.last.mla@leg.bc.ca`.
-        for match in node.xpath('{}//a[contains(@href, "mailto:")]'.format(expression)):
-            matches.append(unquote(match.attrib["href"]))
+        matches.extend(
+            unquote(match.attrib["href"]) for match in node.xpath(f'{expression}//a[contains(@href, "mailto:")]')
+        )
+        # Some emails are obfuscated by Cloudflare.
+        matches.extend(
+            self._cloudflare_decode(match)
+            for match in node.xpath(f'{expression}//@href[contains(., "cdn-cgi/l/email-protection")]')
+        )
         # If the node has no sub-tags.
         if not matches:
-            for match in node.xpath('{}//text()[contains(., "@")]'.format(expression)):
-                matches.append(match)
+            matches = list(node.xpath(f'{expression}//text()[contains(., "@")]'))
         if matches:
             for match in matches:
                 match = email_re.search(match)
                 if match:
                     return match.group(1)
             if error:
-                raise Exception("No email pattern in {}".format(matches))
-        elif error:
-            raise Exception("No email node in {}".format(etree.tostring(node)))
+                raise Exception(f"No email pattern in {matches}")
+            return None
+        if error:
+            raise Exception(f"No email node in {etree.tostring(node)}")
+        return None
 
-    def get_phone(self, node, *, area_codes=[], error=True):
+    # Helper function for self,get_email
+    def _cloudflare_decode(self, link):
+        hex_email = link.split("#", 1)[1]
+        decoded_email = ""
+        key = int(hex_email[:2], 16)
+
+        for i in range(2, len(hex_email) - 1, 2):
+            decoded_email += chr(int(hex_email[i : i + 2], 16) ^ key)
+
+        return decoded_email
+
+    def get_phone(self, node, *, area_codes=None, error=True):
         """
         Don't use if multiple telephone numbers are present, e.g. voice and fax.
         If writing a new scraper, check that extensions are captured.
         """
-
+        if area_codes is None:
+            area_codes = []
         if isinstance(node, etree._ElementUnicodeResult):
             match = re.search(
                 r"(?:\A|\D)(\(?\d{3}\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)", node
@@ -169,14 +181,16 @@ class CanadianScraper(Scraper):
             if match:
                 return match.group(1)
         if error:
-            raise Exception("No phone pattern in {}".format(node.text_content()))
+            raise Exception(f"No phone pattern in {node.text_content()}")
+        return None
 
     def get_link(self, node, substring, *, error=True):
-        match = node.xpath('.//a[contains(@href,"{}")]/@href'.format(substring))
+        match = node.xpath(f'.//a[contains(@href,"{substring}")]/@href')
         if match:
             return match[0]
         if error:
-            raise Exception("No link matching {}".format(substring))
+            raise Exception(f"No link matching {substring}")
+        return None
 
     def get(self, *args, **kwargs):
         return super().get(*args, verify=SSL_VERIFY, **kwargs)
@@ -184,7 +198,7 @@ class CanadianScraper(Scraper):
     def post(self, *args, **kwargs):
         return super().post(*args, verify=SSL_VERIFY, **kwargs)
 
-    def lxmlize(self, url, encoding=None, user_agent=requests.utils.default_user_agent(), cookies=None, xml=False):
+    def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False):
         self.user_agent = user_agent
 
         response = self.get(url, cookies=cookies)
@@ -194,31 +208,30 @@ class CanadianScraper(Scraper):
         try:
             text = response.text
             if xml:
-                text = text.replace('<?xml version="1.0" encoding="utf-8"?>', "")  # XXX ca_bc
-                page = etree.fromstring(text)
+                text = text.replace('<?xml version="1.0" encoding="utf-8"?>', "")  # special case: ca_bc
+                page = etree.fromstring(text)  # noqa: S320
             else:
                 page = lxml.html.fromstring(text)
-        except etree.ParserError:
-            raise etree.ParserError("Document is empty {}".format(url))
+        except etree.ParserError as e:
+            raise etree.ParserError(f"Document is empty {url}") from e
 
         meta = page.xpath('//meta[@http-equiv="refresh"]')
         if meta:
             _, url = meta[0].attrib["content"].split("=", 1)
             return self.lxmlize(url, encoding)
-        elif xml:
+        if xml:
             return page
-        else:
-            page.make_links_absolute(url)
-            return page
+        page.make_links_absolute(url)
+        return page
 
-    def csv_reader(self, url, delimiter=",", header=False, encoding=None, skip_rows=0, data=None, **kwargs):
+    def csv_reader(self, url, *, delimiter=",", header=False, encoding=None, skip_rows=0, data=None, **kwargs):
         if not data:
             result = urlparse(url)
             if result.scheme == "ftp":
                 data = StringIO()
-                ftp = FTP(result.hostname)
+                ftp = FTP(result.hostname)  # noqa: S321
                 ftp.login(result.username, result.password)
-                ftp.retrbinary("RETR {}".format(result.path), lambda block: data.write(block.decode("utf-8")))
+                ftp.retrbinary(f"RETR {result.path}", lambda block: data.write(block.decode("utf-8")))
                 ftp.quit()
                 data.seek(0)
             else:
@@ -234,15 +247,13 @@ class CanadianScraper(Scraper):
                 data.readline()
         if header:
             return csv.DictReader(data, delimiter=delimiter)
-        else:
-            return csv.reader(data, delimiter=delimiter)
+        return csv.reader(data, delimiter=delimiter)
 
 
 class CSVScraper(CanadianScraper):
     # File flags
-    """
-    Set the CSV file's delimiter.
-    """
+    """Set the CSV file's delimiter."""
+
     delimiter = ","
     """
     Set the CSV file's encoding, like 'windows-1252' ('utf-8' by default).
@@ -252,6 +263,10 @@ class CSVScraper(CanadianScraper):
     If `csv_url` is a ZIP file, set the compressed file to read.
     """
     filename = None
+    """
+    If `csv_url` is an XLS, XLSX or ZIP file, but has no extension, set the extension (like '.xlsx').
+    """
+    extension = None
 
     # Table flags
     """
@@ -326,22 +341,21 @@ class CSVScraper(CanadianScraper):
 
     def header_converter(self, s):
         """
-        Normalizes a column header name. By default, lowercases it and replaces
-        underscores with spaces (e.g. because Esri fields can't contain spaces).
-        """
+        Normalize a column header name.
 
+        By default, lowercase it and replace underscores with spaces (e.g. because Esri fields can't contain spaces).
+        """
         header = clean_string(s.lower().replace("_", " "))
         if hasattr(self, "locale"):
             return self.column_headers[self.locale].get(header, header)
-        else:
-            return header
+        return header
 
     def is_valid_row(self, row):
         """
-        Returns whether the row should be imported. By default, skips empty rows
-        and rows in which a name component is "Vacant".
-        """
+        Return whether the row should be imported.
 
+        By default, skip empty rows and rows in which a name component is "Vacant".
+        """
         empty = ("", "Vacant")
         if not any(row.values()):
             return False
@@ -352,7 +366,7 @@ class CSVScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
-        extension = os.path.splitext(self.csv_url)[1]
+        extension = self.extension if self.extension else os.path.splitext(self.csv_url)[1]
         if extension in (".xls", ".xlsx"):
             data = StringIO()
             binary = BytesIO(self.get(self.csv_url).content)
@@ -391,7 +405,7 @@ class CSVScraper(CanadianScraper):
             # ca_qc_laval: "maire et president du comite executif", "conseiller et membre du comite executif"
             # ca_qc_montreal: "Conseiller de la ville; Membre…", "Maire d'arrondissement\nMembre…"
             if row.get("primary role"):
-                row["primary role"] = re.split(r"(?: (?:et)\b|[;\n])", row["primary role"], 1)[0].strip()
+                row["primary role"] = re.split(r"(?: (?:et)\b|[;\n])", row["primary role"], maxsplit=1)[0].strip()
 
             if not self.is_valid_row(row):
                 continue
@@ -438,7 +452,7 @@ class CSVScraper(CanadianScraper):
 
             if self.many_posts_per_area and role not in self.unique_roles:
                 seat_numbers[role][district] += 1
-                district = "{} (seat {})".format(district, seat_numbers[role][district])
+                district = f"{district} (seat {seat_numbers[role][district]})"
 
             lines = []
             if row.get("address line 1"):
@@ -467,11 +481,8 @@ class CSVScraper(CanadianScraper):
             #   District name,District ID,…
             #   Toronto Centre,,…
             #   ,3520005,…
-            if not row.get("district name") and row.get("district id"):
-                if len(row["district id"]) == 7:
-                    p._related[0].extras["boundary_url"] = "/boundaries/census-subdivisions/{}/".format(
-                        row["district id"]
-                    )
+            if not row.get("district name") and row.get("district id") and len(row["district id"]) == 7:
+                p._related[0].extras["boundary_url"] = "/boundaries/census-subdivisions/{}/".format(row["district id"])
 
             if row.get("district name") in self.district_name_to_boundary_url:
                 p._related[0].extras["boundary_url"] = self.district_name_to_boundary_url[row["district name"]]
@@ -515,9 +526,7 @@ class CSVScraper(CanadianScraper):
 
 
 class CanadianJurisdiction(Jurisdiction):
-    """
-    Whether to create posts whose labels match division names or type IDs.
-    """
+    """Whether to create posts whose labels match division names or type IDs."""
 
     use_type_id = False
     """
@@ -590,28 +599,21 @@ class CanadianJurisdiction(Jurisdiction):
             if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
                 continue
 
-            if self.use_type_id:
-                label = child.id.rsplit("/", 1)[1].capitalize().replace(":", " ")
-            else:
-                label = child.name
+            label = child.id.rsplit("/", 1)[1].capitalize().replace(":", " ") if self.use_type_id else child.name
             # Yield posts to allow ca_on_toronto to make changes.
             post = Post(role=member_role, label=label, division_id=child.id, organization_id=organization._id)
             yield post
 
         if not children and parent.attrs["posts_count"]:
             for i in range(1, int(parent.attrs["posts_count"])):  # exclude Mayor
-                organization.add_post(
-                    role=member_role, label="{} (seat {})".format(parent.name, i), division_id=parent.id
-                )
+                organization.add_post(role=member_role, label=f"{parent.name} (seat {i})", division_id=parent.id)
 
         yield organization
 
 
 class CanadianPerson(Person):
     def __init__(self, *, name, district, role, **kwargs):
-        """
-        Cleans a person's name, district, role and any other attributes.
-        """
+        """Clean a person's name, district, role and any other attributes."""
         name = clean_name(name)
         district = clean_string(district).replace("&", "and")
         role = clean_string(role)
@@ -625,9 +627,7 @@ class CanadianPerson(Person):
         super().__init__(name=name, district=district, role=role, **kwargs)
 
     def __setattr__(self, name, value):
-        """
-        Corrects gender values.
-        """
+        """Correct gender values."""
         if name == "gender":
             value = value.lower()
             if value == "m":
@@ -637,20 +637,16 @@ class CanadianPerson(Person):
         super().__setattr__(name, value)
 
     def add_link(self, url, *, note=""):
-        """
-        Corrects links without schemes or domains.
-        """
+        """Correct links without schemes or domains."""
         url = url.strip()
         if url.startswith("www."):
-            url = "http://{}".format(url)
+            url = f"http://{url}"
         if re.match(r"\A@[A-Za-z]+\Z", url):
-            url = "https://twitter.com/{}".format(url[1:])
+            url = f"https://twitter.com/{url[1:]}"
         self.links.append({"note": note, "url": url})
 
     def add_contact(self, type, value, note="", area_code=None):
-        """
-        Cleans and adds a contact detail to the person's membership.
-        """
+        """Clean and add a contact detail to the person's membership."""
         if type:
             type = clean_string(type)
         if note:
@@ -673,9 +669,7 @@ class CanadianPerson(Person):
         self._related[0].add_contact_detail(type=type, value=value, note=note)
 
     def clean_telephone_number(self, s, area_code=None):
-        """
-        @see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html
-        """
+        """@see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html."""
         splits = re.split(r"(?:\b \(|/|x|ext[.:]?|p\.|poste)[\s-]?(?=\b|\d)", s, flags=re.IGNORECASE)
         digits = re.sub(r"\D", "", splits[0])
 
@@ -688,16 +682,11 @@ class CanadianPerson(Person):
             digits = re.sub(r"\A(\d)(\d{3})(\d{3})(\d{4})\Z", r"\1 \2 \3-\4", digits)
             if len(splits) == 2:
                 return "{} x{}".format(digits, splits[1].rstrip(")"))
-            else:
-                return digits
-        else:
-            return s
+            return digits
+        return s
 
     def clean_address(self, s):
-        """
-        Corrects the postal code, abbreviates the province or territory name, and
-        formats the last line of the address.
-        """
+        """Correct the postal code, abbreviate the province or territory name, and format the last line of the address."""
         # The letter "O" instead of the numeral "0" is a common mistake.
         s = re.sub(
             r"\b[A-Z][O0-9][A-Z]\s?[O0-9][A-Z][O0-9]\b", lambda x: x.group(0).replace("O", "0"), clean_string(s)
@@ -719,16 +708,16 @@ class CanadianPerson(Person):
         )
 
 
-whitespace_re = re.compile(r"\s+", flags=re.U)
-whitespace_and_newline_re = re.compile(r"[^\S\n]+", flags=re.U)
+whitespace_re = re.compile(r"\s+", flags=re.UNICODE)
+whitespace_and_newline_re = re.compile(r"[^\S\n]+", flags=re.UNICODE)
 honorific_prefix_re = re.compile(r"\A(?:Councillor|Dr|Hon|M|Mayor|Mme|Mr|Mrs|Ms|Miss)\.? ")
 honorific_suffix_re = re.compile(r", (?:Ph\.D, Q\.C\.)\Z")
 province_or_territory_abbreviation_memo = {}
 
 table = {
-    ord("​"): " ",  # zero-width space
+    ord("\u200b"): " ",  # zero-width space
     ord("’"): "'",
-    ord("\xc2"): " ",  # non-breaking space if mixing ISO-8869-1 into UTF-8
+    ord("\xc2"): "\xa0",  # non-breaking space if mixing ISO-8869-1 into UTF-8
 }
 
 
@@ -759,9 +748,8 @@ def clean_type_id(type_id):
     # "Spaces should be converted to underscores."
     type_id = re.sub(r" ", "_", type_id)
     # "All invalid characters should be converted to tilde (~)."
-    type_id = re.sub(r"[^\w.~-]", "~", type_id, re.UNICODE)
-    return type_id
+    return re.sub(r"[^\w.~-]", "~", type_id, flags=re.UNICODE)
 
 
 def clean_french_prepositions(s):
-    return re.sub(r"\b(?:d'|de (?:l'|la )?|du |des |l')", "", clean_string(s), flags=re.I)
+    return re.sub(r"\b(?:d'|de (?:l'|la )?|du |des |l')", "", clean_string(s), flags=re.IGNORECASE)

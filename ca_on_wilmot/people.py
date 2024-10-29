@@ -1,51 +1,27 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.wilmot.ca/current-council.php"
+COUNCIL_PAGE = "https://www.wilmot.ca/Modules/contact/search.aspx?s=EFHOVXSi8AOIMKMStZMNvAeQuAleQuAl"
 
 
 class WilmotPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@id="Main Content"]//td[@colspan="3"]//td/p/b')
+        councillors = page.xpath('//table[@class="contactList"]//tr')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            district, name = councillor.xpath("./text()")[0].split(":")
-            if "Mayor" in district:
+            name, role_district = councillor.xpath(".//button/text()")[0].split(" - ", 1)
+            if "Mayor" in role_district:
                 yield scrape_mayor(councillor, name)
                 continue
+            role, district = role_district.split(" - ")
 
-            p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
 
-            base_info = councillor.xpath("./parent::p/text()")
-            for info in councillor.xpath("./parent::p/following-sibling::p"):
-                if info.xpath(".//b"):
-                    break
-                base_info = base_info + info.xpath("./text()")
-
-            address = ""
-            complete = False
-            while not complete:
-                address = address + " " + base_info.pop(0)
-                if re.search(r"[A-Z][0-9A-Z][A-Z] \d[A-Z]\d", address):
-                    complete = True
-            p.add_contact("address", address, "legislature")
-
-            base_info.pop(-1)
-            base_info = " ".join(base_info).split()
-            for i, contact in enumerate(base_info):
-                if re.match(r"[0-9]", contact):
-                    continue
-                if "fax" in contact:
-                    p.add_contact("fax", base_info[i + 1], "legislature")
-                else:
-                    p.add_contact(contact, base_info[i + 1], contact)
-            email = self.get_email(councillor, "./parent::p/following-sibling::p")
-            p.add_contact("email", email)
+            phone = self.get_phone(councillor).replace("/", "")
+            p.add_contact("voice", phone, "legislature")
             yield p
 
 
@@ -53,14 +29,11 @@ def scrape_mayor(div, name):
     p = Person(primary_org="legislature", name=name, district="Wilmot", role="Mayor")
     p.add_source(COUNCIL_PAGE)
 
-    info = div.xpath("./parent::p//text()")
-    info.pop(0)
-    address = " ".join(info[:3])
-    phone = info[3].split()[1]
-    fax = info[4].split()[1]
-    email = info[-1]
+    address = div.xpath('.//div[@class="contactListAddress"]')[0].text_content()
+    phone = div.xpath('.//div[@class="contactListMainNumber"]/a/text()')[0]
+    other_phone = div.xpath('.//div[@class="contactListPhNumber"]/a/text()')[0]
     p.add_contact("address", address, "legislature")
     p.add_contact("voice", phone, "legislature")
-    p.add_contact("fax", fax, "legislature")
-    p.add_contact("email", email)
+    p.add_contact("voice", other_phone, "office")
+
     return p

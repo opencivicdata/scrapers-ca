@@ -15,7 +15,7 @@ class NewWestminsterPersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.xpath(".//a[@name]")[0].text_content()
-            district = "New Westminster (seat {})".format(seat_number)
+            district = f"New Westminster (seat {seat_number})"
             seat_number += 1
             p = Person(primary_org="legislature", name=name, role="Councillor", district=district)
             photo = councillor.xpath("//img/@src")[0]

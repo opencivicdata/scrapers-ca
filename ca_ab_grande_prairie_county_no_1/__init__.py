@@ -16,8 +16,8 @@ class GrandePrairieCountyNo1(CanadianJurisdiction):
         for division_number in range(1, 10):
             organization.add_post(
                 role="Councillor",
-                label="Division {}".format(division_number),
-                division_id="{}/division:{}".format(self.division_id, division_number),
+                label=f"Division {division_number}",
+                division_id=f"{self.division_id}/division:{division_number}",
             )
 
         yield organization

@@ -29,19 +29,19 @@ class Waterloo(CanadianJurisdiction):
         for seat_number in range(1, 4):
             organization.add_post(
                 role="Regional Councillor",
-                label="Cambridge (seat {})".format(seat_number),
+                label=f"Cambridge (seat {seat_number})",
                 division_id="ocd-division/country:ca/csd:3530010",
             )
         for seat_number in range(1, 6):
             organization.add_post(
                 role="Regional Councillor",
-                label="Kitchener (seat {})".format(seat_number),
+                label=f"Kitchener (seat {seat_number})",
                 division_id="ocd-division/country:ca/csd:3530013",
             )
         for seat_number in range(1, 4):
             organization.add_post(
                 role="Regional Councillor",
-                label="Waterloo (seat {})".format(seat_number),
+                label=f"Waterloo (seat {seat_number})",
                 division_id="ocd-division/country:ca/csd:3530016",
             )
 

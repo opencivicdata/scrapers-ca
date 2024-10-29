@@ -22,37 +22,29 @@ ocd_division_csv = os.path.join(os.path.abspath(os.path.dirname(__file__)), "cou
 
 
 def module_names():
-    """
-    Returns all module names.
-    """
+    """Return all module names."""
     for module_name in os.listdir("."):
         if os.path.isfile(os.path.join(module_name, "__init__.py")):
             yield module_name
 
 
 def modules_and_module_names_and_classes():
-    """
-    Returns modules, module names, and person scraper classes.
-    """
+    """Return modules, module names, and person scraper classes."""
     for module_name in module_names():
-        module = importlib.import_module("{}.people".format(module_name))
-        class_name = next(key for key in module.__dict__.keys() if "PersonScraper" in key)
+        module = importlib.import_module(f"{module_name}.people")
+        class_name = next(key for key in module.__dict__ if "PersonScraper" in key)
         yield (module, module_name, module.__dict__[class_name])
 
 
 def csv_dict_reader(url, encoding="utf-8"):
-    """
-    Reads a remote CSV file.
-    """
+    """Read a remote CSV file."""
     response = requests.get(url)
     response.encoding = encoding
     return csv.DictReader(StringIO(response.text))
 
 
 def slug(name):
-    """
-    Slugifies a division name.
-    """
+    """Slugify a division name."""
     return unidecode(
         str(name)
         .lower()
@@ -78,16 +70,12 @@ def province_or_territory_abbreviation(code):
 
 
 def type_id(id):
-    """
-    Returns an OCD identifier's type ID.
-    """
+    """Return an OCD identifier's type ID."""
     return id.rsplit(":", 1)[1]
 
 
-def get_definition(division_id, aggregation=False):
-    """
-    Returns the expected configuration for a given division.
-    """
+def get_definition(division_id, *, aggregation=False):
+    """Return the expected configuration for a given division."""
     if not ocdid_to_type_name_map:
         # Map census division type codes to names.
         census_division_type_names = {}
@@ -104,7 +92,7 @@ def get_definition(division_id, aggregation=False):
             requests.get("https://www12.statcan.gc.ca/census-recensement/2016/ref/dict/tab/t1_5-eng.cfm").content
         )
         for text in document.xpath("//table//th[@headers]/text()"):
-            code, name = text.split(" – ", 1)  # non-breaking space
+            code, name = text.split("\xa0– ", 1)
             census_subdivision_type_names[code] = name.split(" / ", 1)[0]
 
         # Map OCD identifiers to census types.
@@ -129,32 +117,28 @@ def get_definition(division_id, aggregation=False):
         pattern = "ca_{}_municipalities" if aggregation else "ca_{}"
         expected["module_name"] = pattern.format(ocd_type_id)
         if aggregation:
-            expected["name"] = "{} Municipalities".format(division.name)
+            expected["name"] = f"{division.name} Municipalities"
         elif ocd_type_id in ("nl", "ns"):
-            expected["name"] = "{} House of Assembly".format(division.name)
+            expected["name"] = f"{division.name} House of Assembly"
         elif ocd_type_id == "qc":
             expected["name"] = "Assemblée nationale du Québec"
         else:
-            expected["name"] = "Legislative Assembly of {}".format(division.name)
+            expected["name"] = f"Legislative Assembly of {division.name}"
 
     elif division._type == "cd":
-        expected["module_name"] = "ca_{}_{}".format(
-            province_or_territory_abbreviation(division.id), slug(division.name)
-        )
+        expected["module_name"] = f"ca_{province_or_territory_abbreviation(division.id)}_{slug(division.name)}"
         name_infix = ocdid_to_type_name_map[division.id]
         if name_infix == "Regional municipality":
             name_infix = "Regional"
-        expected["name"] = "{} {} Council".format(division.name, name_infix)
+        expected["name"] = f"{division.name} {name_infix} Council"
 
     elif division._type == "csd":
-        expected["module_name"] = "ca_{}_{}".format(
-            province_or_territory_abbreviation(division.id), slug(division.name)
-        )
+        expected["module_name"] = f"ca_{province_or_territory_abbreviation(division.id)}_{slug(division.name)}"
         if ocd_type_id[:2] == "24":
             if division.name[0] in vowels:
-                expected["name"] = "Conseil municipal d'{}".format(division.name)
+                expected["name"] = f"Conseil municipal d'{division.name}"
             else:
-                expected["name"] = "Conseil municipal de {}".format(division.name)
+                expected["name"] = f"Conseil municipal de {division.name}"
         else:
             name_infix = ocdid_to_type_name_map[division.id]
             if name_infix in ("Municipality", "Specialized municipality"):
@@ -163,21 +147,21 @@ def get_definition(division_id, aggregation=False):
                 name_infix = "District"
             elif name_infix == "Regional municipality":
                 name_infix = "Regional"
-            expected["name"] = "{} {} Council".format(division.name, name_infix)
+            expected["name"] = f"{division.name} {name_infix} Council"
 
     elif division._type == "arrondissement":
-        expected["module_name"] = "ca_{}_{}_{}".format(
-            province_or_territory_abbreviation(division.parent.id), slug(division.parent.name), slug(division.name)
+        expected["module_name"] = (
+            f"ca_{province_or_territory_abbreviation(division.parent.id)}_{slug(division.parent.name)}_{slug(division.name)}"
         )
         if division.name[0] in vowels:
-            expected["name"] = "Conseil d'arrondissement d'{}".format(division.name)
+            expected["name"] = f"Conseil d'arrondissement d'{division.name}"
         elif division.name[:3] == "Le ":
-            expected["name"] = "Conseil d'arrondissement du {}".format(division.name[3:])
+            expected["name"] = f"Conseil d'arrondissement du {division.name[3:]}"
         else:
-            expected["name"] = "Conseil d'arrondissement de {}".format(division.name)
+            expected["name"] = f"Conseil d'arrondissement de {division.name}"
 
     else:
-        raise Exception("{}: Unrecognized OCD type {}".format(division.id, division._type))
+        raise Exception(f"{division.id}: Unrecognized OCD type {division._type}")
 
     # Determine the class name.
     class_name_parts = re.split("[ -]", re.sub("[—–]", "-", re.sub("['.]", "", division.name)))
@@ -198,46 +182,37 @@ def get_definition(division_id, aggregation=False):
 
 @task
 def council_pages():
-    """
-    Prints scrapers' council page, or warns if it is missing or unneeded.
-    """
+    """Print scrapers' council page, or warns if it is missing or unneeded."""
     for module, module_name, klass in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == "CSVScraper":
             if hasattr(module, "COUNCIL_PAGE"):
-                print("{:<60} Delete COUNCIL_PAGE".format(module_name))
+                print(f"{module_name:<60} Delete COUNCIL_PAGE")
+        elif hasattr(module, "COUNCIL_PAGE"):
+            print(f"{module_name:<60} {module.COUNCIL_PAGE}")
         else:
-            if hasattr(module, "COUNCIL_PAGE"):
-                print("{:<60} {}".format(module_name, module.COUNCIL_PAGE))
-            else:
-                print("{:<60} Missing COUNCIL_PAGE".format(module_name))
+            print(f"{module_name:<60} Missing COUNCIL_PAGE")
 
 
 @task
 def csv_list():
-    """
-    Lists scrapers with CSV data.
-    """
-    for module, module_name, klass in modules_and_module_names_and_classes():
+    """List scrapers with CSV data."""
+    for _module, module_name, klass in modules_and_module_names_and_classes():
         if hasattr(klass, "csv_url"):
-            print("{}: {}".format(module_name, klass.csv_url))
+            print(f"{module_name}: {klass.csv_url}")
 
 
 @task
 def csv_stale():
-    """
-    Lists scrapers with stale manual CSV data.
-    """
-    for module, module_name, klass in modules_and_module_names_and_classes():
+    """List scrapers with stale manual CSV data."""
+    for _module, module_name, klass in modules_and_module_names_and_classes():
         if hasattr(klass, "updated_at") and klass.updated_at < date.today() - timedelta(days=365):
-            print("{}: Created on {} by {}".format(module_name, klass.updated_at, klass.contact_person))
+            print(f"{module_name}: Created on {klass.updated_at} by {klass.contact_person}")
 
 
 @task
 def csv_error():
-    """
-    Notes corrections that CSV publishers should make.
-    """
-    for module, module_name, klass in modules_and_module_names_and_classes():
+    """Note corrections that CSV publishers should make."""
+    for _module, module_name, klass in modules_and_module_names_and_classes():
         if klass.__bases__[0].__name__ == "CSVScraper":
             if "_candidates" in module_name and hasattr(klass, "updated_at"):
                 continue
@@ -263,23 +238,19 @@ def csv_error():
                 keys -= {"encoding"}
 
             if keys:
-                print("\n{}\n{}".format(module_name, klass.csv_url))
+                print(f"\n{module_name}\n{klass.csv_url}")
 
                 extra_keys = keys - {"corrections", "encoding", "header_converter"}
                 if extra_keys:
                     print("- Manually check the configuration of: {}".format(", ".join(extra_keys)))
 
                 if "encoding" in keys:
-                    print(
-                        "- The CSV file should be encoded as 'utf-8' or 'windows-1252', not '{}'".format(
-                            klass.encoding
-                        )
-                    )
+                    print(f"- The CSV file should be encoded as 'utf-8' or 'windows-1252', not '{klass.encoding}'")
 
                 if "corrections" in keys:
                     for key, values in klass.corrections.items():
                         for actual, expected in values.items():
-                            print("- Change '{}' to '{}' in {}".format(actual, expected, key))
+                            print(f"- Change '{actual}' to '{expected}' in {key}")
 
                 if "header_converter" in keys:
                     print("- Correct column headers according to:")
@@ -288,17 +259,13 @@ def csv_error():
 
 @task
 def tidy():
-    """
-    Checks that modules are configured correctly.
-    """
+    """Check that modules are configured correctly."""
     # Map OCD identifiers to styles of address.
     leader_styles = {}
     member_styles = {}
     for gid in range(3):
         reader = csv_dict_reader(
-            "https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={}&output=csv".format(
-                gid
-            )
+            f"https://docs.google.com/spreadsheets/d/11qUKd5bHeG5KIzXYERtVgs3hKcd9yuZlt-tCTLBFRpI/pub?single=true&gid={gid}&output=csv"
         )
         for row in reader:
             key = row["Identifier"]
@@ -308,7 +275,7 @@ def tidy():
     division_ids = set()
     jurisdiction_ids = set()
     for module_name in module_names():
-        if module_name.endswith("_candidates") or module_name.endswith("_municipalities"):
+        if module_name.endswith(("_candidates", "_municipalities")):
             continue
 
         metadata = module_name_to_metadata(module_name)
@@ -316,29 +283,29 @@ def tidy():
         # Ensure division_id is unique.
         division_id = metadata["division_id"]
         if division_id in division_ids:
-            print("{:<60} Duplicate division_id {}".format(module_name, division_id))
+            print(f"{module_name:<60} Duplicate division_id {division_id}")
         else:
             division_ids.add(division_id)
 
         # Ensure jurisdiction_id is unique.
         jurisdiction_id = metadata["jurisdiction_id"]
         if jurisdiction_id in jurisdiction_ids:
-            print("{:<60} Duplicate jurisdiction_id {}".format(module_name, jurisdiction_id))
+            print(f"{module_name:<60} Duplicate jurisdiction_id {jurisdiction_id}")
         else:
             jurisdiction_ids.add(jurisdiction_id)
 
-        expected = get_definition(division_id, bool(module_name.endswith("_municipalities")))
+        expected = get_definition(division_id, aggregation=bool(module_name.endswith("_municipalities")))
 
         # Ensure presence of url and styles of address.
         if division_id not in member_styles:
-            print("{:<60} Missing member style of address: {}".format(module_name, division_id))
+            print(f"{module_name:<60} Missing member style of address: {division_id}")
         if division_id not in leader_styles:
-            print("{:<60} Missing leader style of address: {}".format(module_name, division_id))
+            print(f"{module_name:<60} Missing leader style of address: {division_id}")
         url = metadata["url"]
         if url and not expected["url"]:
             parsed = urlsplit(url)
             if parsed.scheme not in ("http", "https") or parsed.path or parsed.query or parsed.fragment:
-                print("{:<60} Check: {}".format(module_name, url))
+                print(f"{module_name:<60} Check: {url}")
 
         # Warn if the name or classification may be incorrect.
         name = metadata["name"]
@@ -346,7 +313,7 @@ def tidy():
             print("{:<60} Expected {}".format(name, expected["name"]))
         classification = metadata["classification"]
         if classification != "legislature":
-            print("{:<60} Expected legislature".format(classification))
+            print(f"{classification:<60} Expected legislature")
 
         # Name the classes correctly.
         class_name = metadata["class_name"]
@@ -379,9 +346,7 @@ def tidy():
 
 @task
 def sources_and_assertions():
-    """
-    Checks that sources are attributed and assertions are made.
-    """
+    """Check that sources are attributed and assertions are made."""
     for module_name in module_names():
         path = os.path.join(module_name, "people.py")
         with codecs.open(path, "r", "utf-8") as f:
@@ -390,17 +355,15 @@ def sources_and_assertions():
             source_count = content.count("add_source")
             request_count = content.count("lxmlize") + content.count("self.get(") + content.count("requests.get")
             if source_count < request_count:
-                print("Expected {} sources after {} requests {}".format(source_count, request_count, path))
+                print(f"Expected {source_count} sources after {request_count} requests {path}")
 
             if "CSVScraper" not in content and "assert len(" not in content:
-                print("Expected an assertion like: assert len(councillors), 'No councillors found' {}".format(path))
+                print(f"Expected an assertion like: assert len(councillors), 'No councillors found' {path}")
 
 
 @task
 def validate_spreadsheet(url, identifier_header, geographic_name_header):
-    """
-    Validates the identifiers, geographic names and geographic types in a spreadsheet.
-    """
+    """Validate the identifiers, geographic names and geographic types in a spreadsheet."""
     sgc_to_id = {}
 
     for division in Division.all("ca", from_csv=ocd_division_csv):
@@ -413,19 +376,17 @@ def validate_spreadsheet(url, identifier_header, geographic_name_header):
         if len(identifier) == 2:
             identifier = sgc_to_id[identifier]
         elif len(identifier) == 4:
-            identifier = "ocd-division/country:ca/cd:{}".format(identifier)
+            identifier = f"ocd-division/country:ca/cd:{identifier}"
         elif len(identifier) == 7:
-            identifier = "ocd-division/country:ca/csd:{}".format(identifier)
+            identifier = f"ocd-division/country:ca/csd:{identifier}"
 
         division = Division.get(identifier)
         if row[geographic_name_header] != division.name:
-            print("{}: name: {} not {}".format(identifier, division.name, row[geographic_name_header]))
+            print(f"{identifier}: name: {division.name} not {row[geographic_name_header]}")
 
 
 def module_name_to_metadata(module_name):
-    """
-    Copied from `reports.utils`.
-    """
+    # Copied from reports.utils
     module = importlib.import_module(module_name)
     for obj in module.__dict__.values():
         division_id = getattr(obj, "division_id", None)
@@ -442,3 +403,4 @@ def module_name_to_metadata(module_name):
                     getattr(obj, "classification", "legislature"),
                 ),
             }
+    return None

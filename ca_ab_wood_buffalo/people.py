@@ -33,13 +33,13 @@ class WoodBuffaloPersonScraper(CanadianScraper):
         for ward in wards:
             area = ward.text_content().split("–", 1)[1].strip()
             councillors = ward.xpath("./following-sibling::table[1]/tbody/tr/td/h3")
-            assert len(councillors), "No councillors found for {}".format(area)
+            assert len(councillors), f"No councillors found for {area}"
             for councillor in councillors:
                 name = councillor.text_content()
 
                 if area in ("Ward 1", "Ward 2"):
                     seat_numbers[area] += 1
-                    district = "{} (seat {})".format(area, seat_numbers[area])
+                    district = f"{area} (seat {seat_numbers[area]})"
                 else:
                     district = area
 

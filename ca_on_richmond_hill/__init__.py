@@ -17,14 +17,14 @@ class RichmondHill(CanadianJurisdiction):
         for seat_number in range(1, 3):
             organization.add_post(
                 role="Regional Councillor",
-                label="{} (seat {})".format(self.division_name, seat_number),
+                label=f"{self.division_name} (seat {seat_number})",
                 division_id=self.division_id,
             )
         for ward_number in range(1, 7):
             organization.add_post(
                 role="Councillor",
-                label="Ward {}".format(ward_number),
-                division_id="{}/ward:{}".format(self.division_id, ward_number),
+                label=f"Ward {ward_number}",
+                division_id=f"{self.division_id}/ward:{ward_number}",
             )
 
         yield organization

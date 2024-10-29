@@ -15,10 +15,10 @@ class WellesleyPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         members = [
             el
-            for el in page.xpath('//div[@id="printAreaContent"]//td')
+            for el in page.xpath('//div//td[@data-name="accChild"]')
             if el.text_content().strip().lower().split()[0] in ["mayor", "councillor"]
-        ][1:]
-        assert len(members) == 5
+        ]
+        assert len(members), "No councillors found"
 
         for member in members:
             position = member.text_content().split()[0]
@@ -26,12 +26,12 @@ class WellesleyPersonScraper(CanadianScraper):
             name = srch.group(1).strip()
             district = srch.group(2).strip()
             phone = self.get_phone(member)
-            if position == "Mayor":
-                district = "Wellesley"
-            else:
-                district = post_number(district)
+            email = self.get_email(member, error=False)
+            district = "Wellesley" if position == "Mayor" else post_number(district)
 
             p = Person(primary_org="legislature", name=name, district=district, role=position)
             p.add_contact("voice", phone, "legislature")
+            if email:
+                p.add_contact("email", email)
             p.add_source(COUNCIL_PAGE)
             yield p

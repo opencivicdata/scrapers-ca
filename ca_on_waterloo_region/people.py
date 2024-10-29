@@ -20,7 +20,7 @@ class WaterlooPersonScraper(CanadianScraper):
             area = re.sub(r"(?:City|Region|Township) of ", "", area)
 
             councillors = municipality.xpath("./following-sibling::tr[1]//a[not(@target)]")
-            assert len(councillors), "No councillors found for {}".format(area)
+            assert len(councillors), f"No councillors found for {area}"
 
             for councillor in councillors:
                 name = councillor.text_content()
@@ -29,7 +29,7 @@ class WaterlooPersonScraper(CanadianScraper):
 
                 if re.search("Waterloo|Cambridge|Kitchener", area):
                     seat_numbers[area] += 1
-                    district = "{} (seat {})".format(area, seat_numbers[area])
+                    district = f"{area} (seat {seat_numbers[area]})"
                 else:
                     district = area
                 if "Regional Council" in area:

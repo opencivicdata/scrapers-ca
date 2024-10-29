@@ -8,7 +8,7 @@ MAYOR_PAGE = "https://www.lethbridge.ca/council-administration-governance/mayor-
 class LethbridgePersonScraper(CanadianScraper):
     def scrape_mayor(self):
         page = self.lxmlize(MAYOR_PAGE)
-        paragraph = page.xpath("//p[1]")[0].text_content().split()
+        paragraph = page.xpath("//h4[contains(., 'Mayor')]/following-sibling::p")[0].text_content().split()
         name = " ".join([paragraph[0], paragraph[1]])
 
         p = Person(primary_org="legislature", name=name, district="Lethbridge", role="Mayor")
@@ -24,7 +24,7 @@ class LethbridgePersonScraper(CanadianScraper):
         p = Person(
             primary_org="legislature",
             name=name,
-            district="Lethbridge (seat {})".format(seat_number + 1),
+            district=f"Lethbridge (seat {seat_number + 1})",
             role="Councillor",
         )
 

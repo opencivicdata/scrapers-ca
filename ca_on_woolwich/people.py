@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
@@ -8,29 +9,32 @@ COUNCIL_PAGE = "http://www.woolwich.ca/en/council/council.asp"
 
 class WoolwichPersonScraper(CanadianScraper):
     def scrape(self):
+        seat_numbers = defaultdict(int)
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="printArea"]//strong')
+        councillors = page.xpath('//td[@data-name="accParent"]/h2')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            info = councillor.xpath("./parent::p/text()")
-            if not info:
-                info = councillor.xpath("./parent::div/text()")
-            info = [x for x in info if x.strip()]
-            district = re.sub(r"(?<=Ward \d).+", "", info.pop(0))
-            if "Mayor" in district:
+            role, name = re.split(r"\s", councillor.text_content(), maxsplit=1)
+            area = re.search(r"Ward \d", name)
+            if not area:
                 district = "Woolwich"
-                role = "Mayor"
             else:
-                district = district.replace("Councillor", "").strip()
-                role = "Councillor"
+                seat_numbers[area] += 1
+                district = area.group(0) + f" (seat {seat_numbers[area]})"
+            if "(" in name:
+                name = name.split(" (")[0]
+            info = councillor.xpath("./ancestor::tr[1]/following-sibling::tr")[0].text_content()
+            office = re.search(r"(?<=Office: )\d{3}-\d{3}-\d{4}", info).group(0)
+            voice = (
+                re.search(r"(?<=Toll Free: )(1-)?\d{3}-\d{3}-\d{4}( extension \d{4})?", info)
+                .group(0)
+                .replace("extension", "x")
+            )
 
-            p = Person(primary_org="legislature", name=councillor.text_content(), district=district, role=role)
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.image = councillor.xpath("./img/@src")[0]
+            p.add_contact("voice", office, "office")
+            p.add_contact("voice", voice, "legislature")
 
-            for contact in info:
-                note, num = contact.split(":")
-                num = num.strip().replace("(", "").replace(") ", "-").replace("extension ", "x")
-                p.add_contact(note, num, note)
             yield p
