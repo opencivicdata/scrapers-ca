@@ -1,14 +1,16 @@
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.wilmot.ca/Modules/contact/search.aspx?s=EFHOVXSi8AOIMKMStZMNvAeQuAleQuAl"
+COUNCIL_PAGE = "https://www.wilmot.ca/en/township-office/council.aspx"
 
 
 class WilmotPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@class="contactList"]//tr')
+        # councillors = page.xpath('//div[@id="StandardOneColumnTK1_lm1723651463356"]')
+        councillors = page.xpath('//div[contains(@class, "icrtAccordion")]')
+        print("councillors", councillors)
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name, role_district = councillor.xpath(".//button/text()")[0].split(" - ", 1)
