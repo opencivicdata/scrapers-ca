@@ -1,4 +1,3 @@
-# coding: utf-8
 import re
 
 from utils import CanadianPerson as Person
@@ -12,17 +11,16 @@ COUNCIL_PAGE = (
 class TroisRivieresPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        members = page.xpath('//div[@class="photos_conseillers"]//figure')
+        members = page.xpath('//div[contains(@class, "photos_conseillers")]//figure')
         assert len(members), "No councillors found"
 
         for member in members:
             photo_url = member.xpath(".//a//img/@src")[0]
             url = member.xpath(".//figcaption//a/@href")[0]
-            email = self.lxmlize(url).xpath('//div[@class="content-page"]//a[starts-with(@href, "mailto:")]/@href')[0]
+            email = self.get_email(self.lxmlize(url))
 
-            email = re.sub("^mailto:", "", email)
             name, district = [x.strip() for x in member.xpath(".//figcaption//text()")]
-            district = re.sub(r"\A(?:de|des|du) ", lambda match: match.group(0).lower(), district, flags=re.I)
+            district = re.sub(r"\A(?:de|des|du) ", lambda match: match.group(0).lower(), district, flags=re.IGNORECASE)
             role = "Conseiller"
 
             if "Maire" in district:

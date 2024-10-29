@@ -1,4 +1,3 @@
-# coding: utf-8
 from pupa.scrape import Organization
 
 from utils import CanadianPerson as Person

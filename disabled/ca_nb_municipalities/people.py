@@ -52,7 +52,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 if division.attrs["classification"] == "P":
                     continue
                 if division.name in names_to_ids:
-                    raise Exception("unhandled collision: {}".format(division.name))
+                    raise Exception(f"unhandled collision: {division.name}")
                 else:
                     names_to_ids[division.name] = division.id
 
@@ -79,11 +79,11 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 if division_id in exclude_divisions:
                     continue
                 if division_id in seen:
-                    raise Exception("unhandled collision: {}".format(division_id))
+                    raise Exception(f"unhandled collision: {division_id}")
 
                 seen.add(division_id)
                 division_name = Division.get(division_id).name
-                organization_name = "{} {} Council".format(division_name, classifications[list_link.text])
+                organization_name = f"{division_name} {classifications[list_link.text]} Council"
                 organization = Organization(name=organization_name, classification="government")
                 organization.add_source(detail_url)
 
@@ -104,7 +104,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                 for p in groups:
                     role = p.xpath("./b/text()")[0].rstrip("s")
                     if role not in expected_roles:
-                        raise Exception("unexpected role: {}".format(role))
+                        raise Exception(f"unexpected role: {role}")
 
                     councillors = p.xpath("./text()")
                     assert len(councillors), "No councillors found"
@@ -112,10 +112,7 @@ class NewBrunswickMunicipalitiesPersonScraper(CanadianScraper):
                         if "vacant" in name.lower():
                             continue
 
-                        if role in unique_roles:
-                            district = division_name
-                        else:
-                            district = "{} (seat {})".format(division_name, seat_number)
+                        district = division_name if role in unique_roles else f"{division_name} (seat {seat_number})"
 
                         organization.add_post(role=role, label=district, division_id=division_id)
 

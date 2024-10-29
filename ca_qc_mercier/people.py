@@ -1,31 +1,40 @@
-import re
-
-from utils import CUSTOM_USER_AGENT
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.ville.mercier.qc.ca/02_viedemocratique/default.asp"
+COUNCIL_PAGE = "https://www.ville.mercier.qc.ca/affaires-municipales/conseil-municipal/membres-du-conseil/"
 
 
 class MercierPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT, encoding="windows-1252")
+        page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@width="800"]/tr')
+        councillors = page.xpath('//div[@class="wp-block-team-member"]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            if councillor == councillors[0]:
-                name = councillor.xpath(".//strong/text()")[0].replace("Monsieur", "").replace("Madame", "").strip()
-                role = "Maire"
-                district = "Mercier"
-            else:
-                name = councillor.xpath(".//strong/text()")[0].replace("Monsieur", "").replace("Madame", "").strip()
-                role = "Conseiller"
-                district = "District {}".format(re.search(r"(\d)", councillor.xpath(".//text()")[3]).group(1))
+            name = councillor.xpath(".//h4/text()")[0]
+            district = councillor.xpath(".//h5/text()")[0].split(" – ")[1]
 
             email = self.get_email(councillor)
+            phone = self.get_phone(councillor)
+            image = councillor.xpath(".//img/@src")[0]
 
-            p = Person(primary_org="legislature", name=name, district=district, role=role)
+            p = Person(primary_org="legislature", name=name, district=district, role="Conseiller", image=image)
             p.add_source(COUNCIL_PAGE)
             p.add_contact("email", email)
+            p.add_contact("voice", phone, "legislature")
+
             yield p
+
+        mayor_node = page.xpath('//div[@class="wp-block-media-text alignwide is-stacked-on-mobile"]')[0]
+        name = mayor_node.xpath(".//h1")[0].text_content()
+
+        email = self.get_email(mayor_node)
+        phone = self.get_phone(mayor_node)
+        image = mayor_node.xpath(".//img/@src")[0]
+
+        p = Person(primary_org="legislature", name=name, district="Mercier", role="Maire", image=image)
+        p.add_source(COUNCIL_PAGE)
+        p.add_contact("email", email)
+        p.add_contact("voice", phone, "legislature")
+
+        yield p

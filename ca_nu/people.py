@@ -1,3 +1,5 @@
+import contextlib
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -22,17 +24,15 @@ class NunavutPersonScraper(CanadianScraper):
             p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
-            try:
+            with contextlib.suppress(IndexError):
                 p.image = page.xpath('//div[contains(@class, "field--name-field-member-photo")]/div[2]/img/@src')[0]
-            except IndexError:
-                pass
 
             contact = page.xpath('//div[contains(@class, "field--name-field-member-constituency")]/div[2]/div/p')[0]
             website = contact.xpath("./div[3]/div[3]/div[2]/a")
             if website:
                 p.add_link(website[0].text_content())
 
-            def handle_address(lines, address_type):
+            def handle_address(p, lines, address_type):
                 address_lines = []
                 for line in lines:
                     if ":" in line.strip():  # Room:, Phone:, Fax:
@@ -45,15 +45,15 @@ class NunavutPersonScraper(CanadianScraper):
                         address_type,
                     )
 
-            def handle_phone(lines, phone_type):
+            def handle_phone(p, lines, phone_type):
                 for line in lines:
                     if "Phone:" in line:
                         number = line.replace("Phone: (867) ", "")
                         p.add_contact("voice", number, phone_type, area_code=867)
 
             address_lines = contact.xpath("./text()")
-            handle_address(address_lines, "legislature")
-            handle_phone(address_lines, "legislature")
+            handle_address(p, address_lines, "legislature")
+            handle_phone(p, address_lines, "legislature")
 
             email = self.get_email(contact, error=False)
             if email:

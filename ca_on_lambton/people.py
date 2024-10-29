@@ -24,7 +24,7 @@ class LambtonPersonScraper(CanadianScraper):
             else:
                 role = "Councillor"
                 name = text.replace("Councillor ", "")
-                district = "Lambton (seat {})".format(councillor_seat_number)
+                district = f"Lambton (seat {councillor_seat_number})"
                 councillor_seat_number += 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)

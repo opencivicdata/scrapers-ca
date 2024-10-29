@@ -1,6 +1,40 @@
-[tool.black]
-line-length = 119
+[project]
+name = "scrapers_ca"
+version = "0.0.1"
 
-[tool.isort]
-profile = 'black'
-line_length = 119
+[tool.ruff]
+line-length = 119
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN", "C901", "COM812", "D203", "D212", "D415", "EM", "ISC001", "PERF203", "PLR091", "Q000",
+    "D1", "D205",
+    "DTZ",
+    "E501",
+    "ERA001",  # commented-out code
+    "PLR2004",  # magic
+    "PLW2901",
+    "PTH",
+    "RUF012",
+    "S101",  # assert
+    "S113",  # timeout
+    "TRY003",  # errors
+
+    # To fix:
+    "BLE001",  # except Exception
+    "S110",  # except pass
+    "TRY002",  # raise Exception
+]
+allowed-confusables = ["’", "–"]
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = ["id", "type"]
+
+[tool.ruff.lint.flake8-self]
+extend-ignore-names = ["_ElementUnicodeResult", "_id", "_related", "_type"]
+
+[tool.ruff.lint.per-file-ignores]
+"patch.py" = ["ARG001"]
+"tasks.py" = ["T201"]

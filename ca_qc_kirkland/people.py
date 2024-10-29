@@ -8,13 +8,11 @@ COUNCIL_PAGE = "http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-munic
 
 class KirklandPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, "iso-8859-1")
+        page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
+        councillors = page.xpath('//div[@class="container_content"]//tbody/tr')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            if not councillor.text_content().strip():
-                continue
             if councillor == councillors[0]:
                 district = "Kirkland"
                 role = "Maire"
@@ -29,6 +27,7 @@ class KirklandPersonScraper(CanadianScraper):
                 councillor.xpath('.//div[contains(text(), "#")]/text()')[0]
                 .replace("T ", "")
                 .replace(" ", "-")
+                .replace(".", ",")  # correcting a typo
                 .replace(",-#-", " x")
             )
             email = self.get_email(councillor)

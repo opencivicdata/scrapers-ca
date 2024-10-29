@@ -21,7 +21,7 @@ class RichmondPersonScraper(CanadianScraper):
             if role == "Mayor":
                 district = "Richmond"
             else:
-                district = "Richmond (seat {})".format(councillor_seat_number)
+                district = f"Richmond (seat {councillor_seat_number})"
                 councillor_seat_number += 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)

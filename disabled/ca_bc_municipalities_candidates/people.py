@@ -116,11 +116,8 @@ class BritishColumbiaMunicipalitiesCandidatesPersonScraper(CanadianScraper):
 
             role = row["primary role"]
             if role not in expected_roles:
-                raise Exception("unexpected role: {}".format(role))
-            if row["district id"]:
-                district = format(division_id)
-            else:
-                district = division_name
+                raise Exception(f"unexpected role: {role}")
+            district = format(division_id) if row["district id"] else division_name
 
             organization.add_post(role=role, label=district, division_id=division_id)
 

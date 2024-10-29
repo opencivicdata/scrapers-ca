@@ -19,12 +19,12 @@ class AbbotsfordPersonScraper(CanadianScraper):
         ]
 
         assert len(councillors), "No councillors found"
-        assert len(councillors) == len(contact_data), "Expected {}, got {}".format(len(councillors), len(contact_data))
+        assert len(councillors) == len(contact_data), f"Expected {len(councillors)}, got {len(contact_data)}"
         for councillor, contact in zip(councillors, contact_data):
             text = councillor.xpath(".//h3/a")[0].text_content()
             if text.startswith("Councill"):
                 role = "Councillor"
-                district = "Abbotsford (seat {})".format(councillor_seat_number)
+                district = f"Abbotsford (seat {councillor_seat_number})"
                 councillor_seat_number += 1
             else:
                 role = "Mayor"

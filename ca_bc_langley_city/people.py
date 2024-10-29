@@ -1,9 +1,7 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.city.langley.bc.ca/index.php/city-hall/city-council"
+COUNCIL_PAGE = "https://city.langley.bc.ca/cityhall/city-council/council-members"
 
 
 class LangleyPersonScraper(CanadianScraper):
@@ -12,60 +10,35 @@ class LangleyPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Councillor")]/@href')
-        mayor = page.xpath('//div[@class="menuitems"]/ul//li/a[contains(text(), "Mayor")]/@href')[0]
+        councillors = page.xpath(
+            '//div[@class="field field--name-field-ec-section-title field--type-string field--label-hidden field__item"]'
+        )[:-1]
 
         assert len(councillors), "No councillors found"
-        for url in councillors:
-            district = "Langley (seat {})".format(councillor_seat_number)
-            councillor_seat_number += 1
-            yield self.scrape_person(url, district)
+        for councillor in councillors:
+            role, name = councillor.text_content().split(" ", 1)
+            if role == "Mayor":
+                district = "Langley"
+                phone_div = councillor.xpath('..//p[contains(., "Phone:")]')[0]
+                phone = self.get_phone(phone_div)
+            else:
+                district = f"Langley (seat {councillor_seat_number})"
+                phone = (
+                    "604 514 2800"  # According to their site, all councillors can be contacted at this phone number
+                )
+                councillor_seat_number += 1
+            email = (
+                councillor.xpath('..//p[contains(., "Email:")]')[0]
+                .text_content()
+                .split("Email:", 1)[1]
+                .strip()
+                .replace("(at)", "@")
+            )
+            image = councillor.xpath("..//img/@src")[0]
 
-        yield self.scrape_mayor(mayor)
+            p = Person(primary_org="legislature", name=name, district=district, role=role, image=image)
+            p.add_contact("voice", phone, "legislature")
+            p.add_contact("email", email)
+            p.add_source(COUNCIL_PAGE)
 
-    def scrape_person(self, url, district):
-        infos_page = self.lxmlize(url)
-        infos = infos_page.xpath('//div[@class="item-page"]')[0]
-
-        name = " ".join(infos.xpath("p[2]/text()")[0].split(" ")[1:3])
-        lname = name.lower()
-        email = lname.split(" ")[0][0] + lname.split(" ")[1] + "@langleycity.ca"
-        photo_url = infos.xpath("p[1]/img/@src")[0]
-
-        p = Person(primary_org="legislature", name=name, district=district, role="Councillor", image=photo_url)
-        p.add_source(COUNCIL_PAGE)
-        p.add_source(url)
-        p.add_contact("email", email)
-
-        personal_infos = infos.xpath("p[last()]/text()")
-
-        if "Residence" in personal_infos[0]:
-            phone = re.findall(r"(Phone|Res)(:?) (.*)", "\n".join(personal_infos))[0][2]
-            address = re.findall(r"Address: (.*) (Phone|Res)", " ".join(personal_infos))[0][0]
-            p.add_contact("address", address, "residence")
-            p.add_contact("voice", phone, "residence")
-
-        return p
-
-    def scrape_mayor(self, url):
-        infos_page = self.lxmlize(url)
-        infos = infos_page.xpath('//div[@class="item-page"]')[0]
-
-        name = " ".join(infos.xpath("p[2]/text()")[0].split(" ")[2:4])
-        lname = name.lower()
-        email = lname.split(" ")[0][0] + lname.split(" ")[1] + "@langleycity.ca"
-        photo_url = infos.xpath("p[1]/img/@src")[0]
-
-        p = Person(primary_org="legislature", name=name, district="Langley", role="Mayor", image=photo_url)
-        p.add_source(COUNCIL_PAGE)
-        p.add_source(url)
-        p.add_contact("email", email)
-
-        personal_infos = infos.xpath("p[last()]/text()")
-
-        phone = re.findall(r"Phone(:?) (.*)", "\n".join(personal_infos))[0][1]
-        address = re.findall(r"Address: (.*) Phone", " ".join(personal_infos))[0]
-        p.add_contact("address", address, "office")
-        p.add_contact("voice", phone, "office")
-
-        return p
+            yield p

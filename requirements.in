@@ -1,0 +1,11 @@
+# 0.9.0 uses jsonschema instead of validictory, so we use a commit after 0.8.0 that adds Django 2.0 support.
+git+https://github.com/opencivicdata/pupa@f0791f7de07574039eff10d804e4683399a16ec5
+agate
+agate-excel
+django<5
+invoke
+lxml
+opencivicdata
+regex
+requests[security]
+unidecode

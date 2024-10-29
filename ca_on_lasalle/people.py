@@ -3,7 +3,7 @@ import re
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.town.lasalle.on.ca/en/town-hall/LaSalle-Council.asp"
+COUNCIL_PAGE = "https://www.lasalle.ca/en/town-hall/town-of-lasalle-council.aspx"
 
 
 class LaSallePersonScraper(CanadianScraper):
@@ -12,39 +12,22 @@ class LaSallePersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//table[@id="Table1table"]//td/p')
+        councillors = page.xpath('//div[@class="fbg-row lb-imageBox cm-datacontainer"]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            if not councillor.text_content().strip():
-                continue
-            name = councillor.xpath("./font/b/text()")
-            if not name:
-                name = councillor.xpath("./font/text()")
-            if "email" in name[0]:
-                name = councillor.xpath("./b/font/text()")
-            name = name[0]
-            role = "Councillor"
-            if "Mayor" in name:
-                name = name.replace("Mayor", "")
-                role = "Mayor"
-                district = "LaSalle"
-            else:
-                district = "LaSalle (seat {})".format(councillor_seat_number)
-                councillor_seat_number += 1
+            role, name = re.split(
+                r"(?<=Mayor)|(?<=Councillor)", councillor.xpath(".//a/div")[0].text_content(), maxsplit=1
+            )
+            district = "LaSalle" if "Mayor" in role else f"LaSalle (seat {councillor_seat_number})"
+            image = councillor.xpath(".//img/@src")[0]
+            voice = re.search(r"\d{3}-\d{3}-\d{4} ext. \d+", councillor.text_content())
+            cell = re.search(r"\d{3}-\d{3}-\d{4}(?! ext)", councillor.text_content())
 
-            p = Person(primary_org="legislature", name=name, district=district, role=role)
+            p = Person(primary_org="legislature", name=name, role=role, district=district, image=image)
             p.add_source(COUNCIL_PAGE)
+            if voice:
+                p.add_contact("voice", voice.group(0), "legislature")
+            if cell:
+                p.add_contact("cell", cell.group(0), "legislature")
 
-            photo_url = councillor.xpath("./parent::td//img/@src")[0]
-            p.image = photo_url
-
-            email = self.get_email(councillor)
-            p.add_contact("email", email)
-
-            phone = re.findall(r"(?<=phone:)(.*)(?=home)", councillor.text_content(), flags=re.DOTALL)
-            if phone:
-                p.add_contact("voice", phone[0].strip(), "legislature")
-
-            home_phone = re.findall(r"(?<=home phone:)(.*)", councillor.text_content(), flags=re.DOTALL)[0]
-            p.add_contact("voice", home_phone.strip(), "residence")
             yield p

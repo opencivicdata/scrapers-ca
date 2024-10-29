@@ -56,7 +56,7 @@ class Huron(CanadianJurisdiction):
             for seat_number in range(1, division["count"] + 1):
                 organization.add_post(
                     role="Councillor",
-                    label="{} (seat {})".format(division_name, seat_number),
+                    label=f"{division_name} (seat {seat_number})",
                     division_id=division_id,
                 )
 
