@@ -1,4 +1,3 @@
-# coding: utf-8
 from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
@@ -22,7 +21,7 @@ class Longueuil(CanadianJurisdiction):
                 for seat_number in range(1, 4):
                     organization.add_post(
                         role="Conseiller",
-                        label="{} (siège {})".format(division.name, seat_number),
+                        label=f"{division.name} (siège {seat_number})",
                         division_id=division.id,
                     )
             else:

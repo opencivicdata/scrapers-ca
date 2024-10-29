@@ -18,8 +18,8 @@ class Welland(CanadianJurisdiction):
             for seat_number in range(1, 3):
                 organization.add_post(
                     role="Councillor",
-                    label="Ward {} (seat {})".format(ward_number, seat_number),
-                    division_id="{}/ward:{}".format(self.division_id, ward_number),
+                    label=f"Ward {ward_number} (seat {seat_number})",
+                    division_id=f"{self.division_id}/ward:{ward_number}",
                 )
 
         yield organization

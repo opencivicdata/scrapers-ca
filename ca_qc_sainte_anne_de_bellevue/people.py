@@ -12,7 +12,7 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
 
         councillors = page.xpath('//div[@class="block text"]')
         assert len(councillors), "No councillors found"
-        for i, councillor in enumerate(councillors):
+        for councillor in councillors:
             name = councillor.xpath('.//div[@class="content-writable"]//strong/text()')[0]
             district = councillor.xpath(".//h2/text()")[0]
 

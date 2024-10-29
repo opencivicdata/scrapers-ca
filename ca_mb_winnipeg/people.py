@@ -1,7 +1,5 @@
 import json
 
-import requests
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -12,7 +10,7 @@ class WinnipegPersonScraper(CanadianScraper):
     def scrape(self):
         # from https://data.winnipeg.ca/Council-Services/Council-Data/r4tk-7dip/about_data
         api_url = "https://data.winnipeg.ca/resource/r4tk-7dip.json"
-        data = json.loads(requests.get(api_url).content)
+        data = json.loads(self.get(api_url).content)
         assert len(data), "No councillors found via API"
 
         page = self.lxmlize(COUNCIL_PAGE)

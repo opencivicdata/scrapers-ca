@@ -1,7 +1,7 @@
 import os
 import re
 import subprocess
-from urllib.request import urlopen
+import tempfile
 
 from pupa.scrape import Organization
 
@@ -13,16 +13,15 @@ COUNCIL_PAGE = "http://www.unsm.ca/doc_download/880-mayor-list-2013"
 
 class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
     def scrape(self):
-        response = urlopen(COUNCIL_PAGE).read()
-        pdf = open("/tmp/ns.pdf", "w")
-        pdf.write(response)
-        pdf.close()
+        response = self.get(COUNCIL_PAGE).content
+        with tempfile.NamedTemporaryFile(delete_on_close=False) as pdf:
+            pdf.write(response)
 
-        data = subprocess.check_output(["pdftotext", "/tmp/ns.pdf", "-"])
+        data = subprocess.check_output(["pdftotext", pdf.name, "-"])  # noqa: S603,S607
         emails = re.findall(r"(?<=E-mail: ).+", data)
         data = re.split(r"Mayor |Warden ", data)[1:]
         for i, mayor in enumerate(data):
-            lines = mayor.splitlines(True)
+            lines = mayor.splitlines(keepends=True)
             name = lines.pop(0).strip()
             if name == "Jim Smith":
                 continue
@@ -61,9 +60,9 @@ class NovaScotiaMunicipalitiesPersonScraper(CanadianScraper):
             for i, email in enumerate(emails):
                 regex = name.split()[-1].lower() + "|" + "|".join(district.split()[-2:]).replace("of", "").lower()
                 regex = regex.replace("||", "|")
-                matches = re.findall(r"{}".format(regex), email)
+                matches = re.findall(rf"{regex}", email)
                 if matches:
                     membership.add_contact_detail("email", emails.pop(i))
             yield p
 
-        os.system("rm /tmp/ns.pdf")
+        os.unlink(pdf.name)

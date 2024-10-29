@@ -7,18 +7,16 @@ COUNCIL_PAGE = "https://www.coquitlam.ca/Directory.aspx?DID=54"
 
 
 class CoquitlamPersonScraper(CanadianScraper):
-
     def scrape(self):
         def build_email(script):
             w = re.findall(r'w = "(.*?)"', script)[0]
             x = re.findall(r'x = "(.*?)"', script)[0]
-            email = w + "@" + x
-            return email
+            return w + "@" + x
 
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
-        councillors = page.xpath('//table[@id="cityDirectoryDepartmentDetails"]/tr')
+        councillors = page.xpath('//table[contains(@id, "cityDirectoryDepartmentDetails")]/tr')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = " ".join(
@@ -36,7 +34,7 @@ class CoquitlamPersonScraper(CanadianScraper):
             if role == "Mayor":
                 district = "Coquitlam"
             else:
-                district = "Coquitlam (seat {})".format(councillor_seat_number)
+                district = f"Coquitlam (seat {councillor_seat_number})"
                 councillor_seat_number += 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)

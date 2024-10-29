@@ -12,3 +12,6 @@ class TorontoPersonScraper(CSVScraper):
             "councillor_ mckelvie@toronto.ca": "councillor_mckelvie@toronto.ca",
         },
     }
+
+    def is_valid_row(self, row):
+        return row["first name"] != "None" and row["last name"] != "None"

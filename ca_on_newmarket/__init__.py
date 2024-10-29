@@ -18,8 +18,8 @@ class Newmarket(CanadianJurisdiction):
         for ward_number in range(1, 8):
             organization.add_post(
                 role="Councillor",
-                label="Ward {}".format(ward_number),
-                division_id="{}/ward:{}".format(self.division_id, ward_number),
+                label=f"Ward {ward_number}",
+                division_id=f"{self.division_id}/ward:{ward_number}",
             )
 
         yield organization

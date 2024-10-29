@@ -44,7 +44,7 @@ class PrinceEdwardIslandMunicipalitiesPersonScraper(CanadianScraper):
 
             councillors = page.xpath(
                 '//div[@style="WIDTH:750"]/dl/dt[contains(text(), "Elected Officials")]/parent::dl/dd/pre/text()'
-            )[0].splitlines(True)
+            )[0].splitlines(keepends=True)
             for councillor in councillors:
                 name = (
                     councillor.replace("(Mayor)", "")

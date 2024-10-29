@@ -1,4 +1,3 @@
-# coding: utf-8
 import re
 
 from utils import CanadianPerson as Person
@@ -43,7 +42,7 @@ class OntarioPersonScraper(CanadianScraper):
                 '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
             )
 
-            party = [item for item in party if item.strip()][0]
+            party = next(item for item in party if item.strip())
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
@@ -59,7 +58,7 @@ class OntarioPersonScraper(CanadianScraper):
                     p.extras["constituency_email"] = emails.pop(0)
 
             for heading, note in headings.items():
-                office = node.xpath('//h3[contains(., "{}")]'.format(heading))
+                office = node.xpath(f'//h3[contains(., "{heading}")]')
                 if office:
                     try:
                         office_info = office[0].xpath(

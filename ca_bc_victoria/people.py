@@ -20,7 +20,7 @@ class VictoriaPersonScraper(CanadianScraper):
             phone = self.get_phone(councillor)
             url = councillor.xpath(".//h3/a/@href")[0]
 
-            district = "Victoria (seat {})".format(seat_number)
+            district = f"Victoria (seat {seat_number})"
             seat_number += 1
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)

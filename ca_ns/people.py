@@ -18,7 +18,7 @@ class NovaScotiaPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         members = page.xpath(
             '//div[contains(@class, "view-display-id-page_mlas_current_tiles")]//div[contains(@class, "views-row-")]'
-        )  # noqa
+        )
         assert len(members), "No members found"
         for member in members:
             district = member.xpath('.//div[contains(@class, "views-field-field-constituency")]/div/text()')[0]
@@ -66,16 +66,14 @@ class NovaScotiaPersonScraper(CanadianScraper):
 
             if len(mailing_address) > 0:
                 address = mailing_address
-            else:
-                if len(civic_address) > 0 or len(civic_address_alt) > 0:
-                    if len(civic_address_alt) > 0:
-                        address = civic_address_alt
-                    else:
-                        address = civic_address
-                        address.remove(address[0])  # remove civic address
+            elif len(civic_address) > 0 or len(civic_address_alt) > 0:
+                if len(civic_address_alt) > 0:
+                    address = civic_address_alt
                 else:
-                    if len(business_address) > 0:
-                        address = business_address
+                    address = civic_address
+                    address.remove(address[0])  # remove civic address
+            elif len(business_address) > 0:
+                address = business_address
 
             address = list(map(str.strip, address))
             p.add_contact("address", "\n".join(address), "constituency")
