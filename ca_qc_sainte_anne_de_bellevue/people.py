@@ -5,7 +5,6 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.ville.sainte-anne-de-bellevue.qc.ca/fr/199/elus-municipaux"
 
-
 class SainteAnneDeBellevuePersonScraper(CanadianScraper):
     def scrape(self):
         def decode_email(e):
@@ -19,24 +18,48 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@class="block text"]')
+        councillors = page.xpath('//div[@class="col-md-12"]')[0]
         assert len(councillors), "No councillors found"
-        for councillor in councillors:
-            name = councillor.xpath('.//div[@class="content-writable"]//strong/text()')[0]
-            district = councillor.xpath(".//h2/text()")[0]
+        
+        roles_and_districts = councillors.xpath('.//h2/text()')
+        roles = []
+        districts = []
+        names = []
+        emails = []
 
-            if "Maire" in district:
-                district = "Sainte-Anne-de-Bellevue"
-                role = "Maire"
+        # Fill in roles and districts via h2 tags
+        for role in roles_and_districts:
+            role_and_district = role.split()
+
+            roles.append(role_and_district[0])
+    
+            if len(role_and_district) == 1:
+                districts.append("Sainte-Anne-de-Bellevue")
             else:
-                district = "District {}".format(re.search(r"\d+", district)[0])
-                role = "Conseiller"
+                districts.append("District " + role_and_district[2])
+    
+        # Fill in contact info via p tags.
+        contact_info = councillors.xpath('.//p[a[contains(@href, "@")]]')
+        for contact in contact_info:
+            contact = contact.text_content().split()
+            print(contact)
+            input()
+            name = " ".join(contact[:2])
+            names.append(name)
+    
+            email = contact[3]
+            email = email.replace("Président", "")
+            emails.append(email)
+        
+        print(roles)
+        print(districts)
+        print(names)
+        print(emails)
+        input()
 
-            encoded_email = councillor.xpath('.//@href[contains(., "email-protection")]')[0].split("#")[1]
-
-            p = Person(primary_org="legislature", name=name, district=district, role=role)
+        assert len(roles) == len(districts) == len(names) == len(emails), "Lists are not of equal length"
+        for i in range(len(roles)):
+            p = Person(primary_org="legislature", name=names[i], district=districts[i], role=roles[i])
             p.add_source(COUNCIL_PAGE)
-
-            p.image = councillor.xpath(".//@src")[0]
-            p.add_contact("email", decode_email(encoded_email))
+            p.add_contact("email", emails[i])
             yield p
