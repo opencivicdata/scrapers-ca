@@ -36,7 +36,10 @@ class VictoriaPersonScraper(CanadianScraper):
             '//ul[@class="menu menu--level-0"]//a[contains(., "Mayor") and not(contains(., "Council"))]/@href'
         )[0]
         page = self.lxmlize(mayor_url)
-        role, name = page.xpath("//h1/span")[0].text_content().split(" ", 1)
+        role = "Mayor"
+        role, name = page.xpath(
+            '//ul[@class="menu menu--level-0"]//a[contains(., "Mayor") and not(contains(., "Council"))]/text()'
+        )[0].split(" ", 1)
         photo = councillor.xpath('//div[@class="field__item"]/img/@src')[0]
         email = self.get_email(page)
         phone = self.get_phone(page)
