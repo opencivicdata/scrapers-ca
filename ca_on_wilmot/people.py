@@ -12,11 +12,11 @@ class WilmotPersonScraper(CanadianScraper):
         councillors = parse_counsillors(councillors)
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            roleAndName, contactInfo = councillor
-            try:
-                role, name = roleAndName.text_content().strip().split("—\xa0")
-            except:
-                role, name = roleAndName.text_content().strip().split("— ")
+            role_name, contact_info = councillor
+            if "—\xa0" in role_name.text_content().strip():
+                role, name = role_name.text_content().strip().split("—\xa0")
+            else:
+                role, name = role_name.text_content().strip().split("— ")
 
             if "Councillor" in role:
                 district = role.split(" Councillor")[0]
@@ -24,8 +24,8 @@ class WilmotPersonScraper(CanadianScraper):
             else:
                 district = "Wilmot"
 
-            phone = self.get_phone(contactInfo)
-            email = self.get_email(contactInfo)
+            phone = self.get_phone(contact_info)
+            email = self.get_email(contact_info)
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_contact("voice", phone, "legislature")
