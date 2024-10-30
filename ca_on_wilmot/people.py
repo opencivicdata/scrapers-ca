@@ -8,22 +8,28 @@ class WilmotPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        # councillors = page.xpath('//div[@id="StandardOneColumnTK1_lm1723651463356"]')
-        councillors = page.xpath('//div[contains(@class, "icrtAccordion")]')
-        print("councillors", councillors)
+        councillors = page.xpath('.//table[@class="icrtAccordion"]//tr')
+        councillors = parse_counsillors(councillors)
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            name, role_district = councillor.xpath(".//button/text()")[0].split(" - ", 1)
-            if "Mayor" in role_district:
-                yield scrape_mayor(councillor, name)
-                continue
-            role, district = role_district.split(" - ")
+            roleAndName, contactInfo = councillor
+            try:
+                role, name = roleAndName.text_content().strip().split("—\xa0")
+            except:
+                role, name = roleAndName.text_content().strip().split("— ")
 
+            if "Councillor" in role:
+                district = role.split(" Councillor")[0]
+                role = "Councillor"
+            else:
+                district = "Wilmot"
+
+            phone = self.get_phone(contactInfo)
+            email = self.get_email(contactInfo)
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-
-            phone = self.get_phone(councillor).replace("/", "")
             p.add_contact("voice", phone, "legislature")
+            p.add_contact("email", email)
             yield p
 
 
@@ -39,3 +45,6 @@ def scrape_mayor(div, name):
     p.add_contact("voice", other_phone, "office")
 
     return p
+
+def parse_counsillors(councillors):
+    return [councillors[i:i + 2] for i in range(0, len(councillors), 2)]
