@@ -67,7 +67,7 @@ class MarkhamPersonScraper(CanadianScraper):
                 p.add_link(link)
 
             yield p
-   
+
     def get_contact(self, url):
         page = self.lxmlize(url)
 
@@ -96,7 +96,7 @@ class MarkhamPersonScraper(CanadianScraper):
         contact_node = page.xpath('.//div[@class="dept-contact-info--block"]')[0]
         email = self.get_email(contact_node)
         phone = self.get_phone(contact_node)
-        
+
         p = Person(primary_org="legislature", name=name, district="Markham", role="Mayor")
         p.image = page.xpath('.//div[@class="align-right media--image"]/div/img/@src')[0]
         p.add_contact("email", email)
