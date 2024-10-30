@@ -29,9 +29,9 @@ class DollardDesOrmeauxPersonScraper(CanadianScraper):
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            img_path = councillor.xpath(".//@data-src")
-            if img_path:
-                p.image = img_path[0]
+            image = councillor.xpath(".//@data-src")
+            if image:
+                p.image = image[0]
             p.add_contact("email", email)
             p.add_contact("voice", general_phone, "legislature")
             p.add_contact("fax", general_fax, "legislature")
