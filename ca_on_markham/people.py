@@ -1,5 +1,3 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -19,7 +17,7 @@ class MarkhamPersonScraper(CanadianScraper):
         ward_councillors = page.xpath('//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]')[1]
         councillors = [regional_councillors, ward_councillors]
         assert len(councillors), "No councillors found"
-        for i, councillor in enumerate(regional_councillors):
+        for councillor in regional_councillors:
             name = councillor.xpath(".//h3/text()")[0].strip()
             district = councillor.xpath(".//p/text()")[0].strip()
             role = "Regional Councillor"
@@ -44,8 +42,8 @@ class MarkhamPersonScraper(CanadianScraper):
                 p.add_link(link)
 
             yield p
-        
-        for i, councillor in enumerate(ward_councillors):
+
+        for councillor in ward_councillors:
             name = councillor.xpath(".//h3/text()")[0].strip()
             district = councillor.xpath(".//p/text()")[0].strip()
             district = district.replace("Councillor", "").strip()
@@ -69,7 +67,7 @@ class MarkhamPersonScraper(CanadianScraper):
                 p.add_link(link)
 
             yield p
-    
+   
     def get_contact(self, url):
         page = self.lxmlize(url)
 
@@ -85,7 +83,7 @@ class MarkhamPersonScraper(CanadianScraper):
         else:
             contact_node = page.xpath('//div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]')[0]
             address = contact_node.xpath('.//p/text()')[0] + " " + contact_node.xpath('.//p/text()')[1]
-        
+
         links = get_links(contact_node)
         phone = self.get_phone(contact_node)
         email = self.get_email(contact_node)
