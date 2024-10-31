@@ -47,5 +47,6 @@ def scrape_mayor(div, name):
 
     return p
 
+
 def parse_counsillors(councillors):
-    return [councillors[i:i + 2] for i in range(0, len(councillors), 2)]
+    return [councillors[i : i + 2] for i in range(0, len(councillors), 2)]
