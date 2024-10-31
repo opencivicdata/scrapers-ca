@@ -13,8 +13,7 @@ class GuelphPersonScraper(CanadianScraper):
         assert len(councillor_nodes), "No councillors found"
 
         for councillor_node in councillor_nodes:
-            ward_district = councillor_node.xpath(".//h2/text()")[0].split(" Councillors")[0]
-            district = ward_district.split(" ")[-1]
+            district = councillor_node.xpath(".//h2/text()")[0].split("Councillors")[0].strip()
 
             councillors = councillor_node.xpath(".//div/div")
             for councillor in councillors:
