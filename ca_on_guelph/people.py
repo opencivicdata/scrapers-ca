@@ -23,14 +23,10 @@ class GuelphPersonScraper(CanadianScraper):
                     continue
 
                 role_and_name = councillor.xpath(".//h3/text()")[0]
-                name, role = role_and_name.split(" ", 1)
-                contact_info = councillor.xpath(".//p/text()")
-                phone = contact_info[1].strip()
+                role, name = role_and_name.split(" ", 1)
+                phone = councillor.xpath(".//p/text()")[1].strip()
                 email = self.get_email(councillor)
-                if councillor.xpath(".//p/img/@src"):
-                    image = councillor.xpath(".//p/img/@src")[0]
-                else:
-                    image = councillor.xpath(".//div/img/@src")[0]
+                image = councillor.xpath(".//img/@src")[0]
 
                 p = Person(primary_org="legislature", name=name, district=district, role=role, image=image)
                 p.add_contact("email", email)
