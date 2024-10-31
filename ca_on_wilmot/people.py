@@ -13,10 +13,11 @@ class WilmotPersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             role_name, contact_info = councillor
-            if "—\xa0" in role_name.text_content().strip():
-                role, name = role_name.text_content().strip().split("—\xa0")
+            role_name = role_name.text_content().strip()
+            if "—\xa0" in role_name:
+                role, name = role_name.split("—\xa0")
             else:
-                role, name = role_name.text_content().strip().split("— ")
+                role, name = role_name.split("— ")
 
             if "Councillor" in role:
                 district = role.split(" Councillor")[0]
