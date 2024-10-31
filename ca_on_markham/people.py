@@ -13,8 +13,12 @@ class MarkhamPersonScraper(CanadianScraper):
 
         yield self.scrape_mayor(MAYOR_PAGE)
 
-        regional_councillors = page.xpath('//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]')[0]
-        ward_councillors = page.xpath('//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]')[1]
+        regional_councillors = page.xpath(
+            '//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]'
+        )[0]
+        ward_councillors = page.xpath(
+            '//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]'
+        )[1]
         councillors = [regional_councillors, ward_councillors]
         assert len(councillors), "No councillors found"
         for councillor in regional_councillors:
@@ -71,18 +75,28 @@ class MarkhamPersonScraper(CanadianScraper):
     def get_contact(self, url):
         page = self.lxmlize(url)
 
-        contact_node = page.xpath('//div[@class="pd-x-16 pd-y-32 bg-white committee-right-info-section layout__region layout__region--second"]')[0]
+        contact_node = page.xpath(
+            '//div[@class="pd-x-16 pd-y-32 bg-white committee-right-info-section layout__region layout__region--second"]'
+        )[0]
         links = []
 
         if contact_node.xpath('.//span[@class="address-line1"]/text()'):
-            address = (contact_node.xpath('.//span[@class="address-line1"]/text()')[0]
-                + " " + contact_node.xpath('.//span[@class="locality"]/text()')[0]
-                + " " + contact_node.xpath('.//span[@class="administrative-area"]/text()')[0]
-                + " " + contact_node.xpath('.//span[@class="postal-code"]/text()')[0]
-                + " " + contact_node.xpath('.//span[@class="country"]/text()')[0])
+            address = (
+                contact_node.xpath('.//span[@class="address-line1"]/text()')[0]
+                + " "
+                + contact_node.xpath('.//span[@class="locality"]/text()')[0]
+                + " "
+                + contact_node.xpath('.//span[@class="administrative-area"]/text()')[0]
+                + " "
+                + contact_node.xpath('.//span[@class="postal-code"]/text()')[0]
+                + " "
+                + contact_node.xpath('.//span[@class="country"]/text()')[0]
+            )
         else:
-            contact_node = page.xpath('//div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]')[0]
-            address = contact_node.xpath('.//p/text()')[0] + " " + contact_node.xpath('.//p/text()')[1]
+            contact_node = page.xpath(
+                '//div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]'
+            )[0]
+            address = contact_node.xpath(".//p/text()")[0] + " " + contact_node.xpath(".//p/text()")[1]
 
         links = get_links(contact_node)
         phone = self.get_phone(contact_node)
@@ -92,7 +106,9 @@ class MarkhamPersonScraper(CanadianScraper):
 
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
-        name = page.xpath('.//div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]/h1/span/span/text()')[0]
+        name = page.xpath(
+            './/div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]/h1/span/span/text()'
+        )[0]
         contact_node = page.xpath('.//div[@class="dept-contact-info--block"]')[0]
         email = self.get_email(contact_node)
         phone = self.get_phone(contact_node)
