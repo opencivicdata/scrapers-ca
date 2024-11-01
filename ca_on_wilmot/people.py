@@ -9,15 +9,10 @@ class WilmotPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('.//table[@class="icrtAccordion"]//tr')
-        councillors = parse_counsillors(councillors)
         assert len(councillors), "No councillors found"
-        for councillor in councillors:
-            role_name, contact_info = councillor
-            role_name = role_name.text_content().strip()
-            if "—\xa0" in role_name:
-                role, name = role_name.split("—\xa0")
-            else:
-                role, name = role_name.split("— ")
+        for i in range(0, len(councillors), 2):
+            role_name, contact_info = councillors[i], councillors[i + 1]
+            role, name = role_name.text_content().strip().replace("\xa0", " ").split("— ")
 
             if "Councillor" in role:
                 district = role.split(" Councillor")[0]
@@ -46,7 +41,3 @@ def scrape_mayor(div, name):
     p.add_contact("voice", other_phone, "office")
 
     return p
-
-
-def parse_counsillors(councillors):
-    return [councillors[i : i + 2] for i in range(0, len(councillors), 2)]
