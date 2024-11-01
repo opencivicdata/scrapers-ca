@@ -7,70 +7,45 @@ MAYOR_PAGE = "https://www.markham.ca/about-city-markham/city-hall/mayors-office"
 
 class MarkhamPersonScraper(CanadianScraper):
     def scrape(self):
-        regional_councillor_seat_number = 1
-
-        page = self.lxmlize(COUNCIL_PAGE)
-
         yield self.scrape_mayor(MAYOR_PAGE)
 
-        regional_councillors = page.xpath(
+        groups = self.lxmlize(COUNCIL_PAGE).xpath(
             '//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]'
-        )[0]
-        ward_councillors = page.xpath(
-            '//div[@class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 scrollablec"]'
-        )[1]
-        councillors = [regional_councillors, ward_councillors]
-        assert len(councillors), "No councillors found"
-        for councillor in regional_councillors:
-            name = councillor.xpath(".//h3/text()")[0].strip()
-            district = councillor.xpath(".//p/text()")[0].strip()
-            role = "Regional Councillor"
-            district = f"Markham (seat {regional_councillor_seat_number})"
-            regional_councillor_seat_number += 1
+        )
+        assert len(groups) == 2, "No councillors found"
 
-            image = councillor.xpath(".//img/@src")[0]
-            url = councillor.xpath(".//a/@href")[0]
+        regional_councillor_seat_number = 1
+        for i, group in enumerate(groups):
+            for councillor in group:
+                name = councillor.xpath(".//h3/text()")[0].strip()
+                district = councillor.xpath(".//p/text()")[0].strip()
 
-            address, phone, email, links = self.get_contact(url)
+                if i == 0:
+                    role = "Regional Councillor"
+                    district = f"Markham (seat {regional_councillor_seat_number})"
+                    regional_councillor_seat_number += 1
+                else:
+                    role = "Councillor"
+                    district = district.replace("Councillor", "").strip()
 
-            p = Person(primary_org="legislature", name=name, district=district, role=role)
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(url)
+                image = councillor.xpath(".//img/@src")[0]
+                url = councillor.xpath(".//a/@href")[0]
 
-            p.image = image
-            p.add_contact("address", address, "legislature")
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", email)
+                address, phone, email, links = self.get_contact(url)
 
-            for link in links:
-                p.add_link(link)
+                p = Person(primary_org="legislature", name=name, district=district, role=role)
+                p.add_source(COUNCIL_PAGE)
+                p.add_source(url)
 
-            yield p
+                p.image = image
+                p.add_contact("address", address, "legislature")
+                p.add_contact("voice", phone, "legislature")
+                p.add_contact("email", email)
 
-        for councillor in ward_councillors:
-            name = councillor.xpath(".//h3/text()")[0].strip()
-            district = councillor.xpath(".//p/text()")[0].strip()
-            district = district.replace("Councillor", "").strip()
-            role = "Councillor"
+                for link in links:
+                    p.add_link(link)
 
-            image = councillor.xpath(".//img/@src")[0]
-            url = councillor.xpath(".//a/@href")[0]
-
-            address, phone, email, links = self.get_contact(url)
-
-            p = Person(primary_org="legislature", name=name, district=district, role=role)
-            p.add_source(COUNCIL_PAGE)
-            p.add_source(url)
-
-            p.image = image
-            p.add_contact("address", address, "legislature")
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", email)
-
-            for link in links:
-                p.add_link(link)
-
-            yield p
+                yield p
 
     def get_contact(self, url):
         page = self.lxmlize(url)
