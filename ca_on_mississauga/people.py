@@ -1,3 +1,5 @@
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -23,14 +25,7 @@ class MississaugaPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         name_district = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        name_district_parts = name_district.split()
-        district = f"{name_district_parts[0]} {name_district_parts[1]}"
-        # Remove the first 3 elements of the name_district_parts which should include the district + '-'
-        name_district_parts.pop(0)
-        name_district_parts.pop(0)
-        name_district_parts.pop(0)
-        name = " ".join(name_district_parts)
-        name = name.replace("Councillor and Deputy Mayor", "").strip()
+        district, name = re.split(r" – (?:Councillor (?:and Deputy Mayor )?)?", name_district)  # n-dash
         email = self.get_email(page, '//section[contains(@class, "module-content")]')
         photo = page.xpath(
             '//section[contains(@class, "module-content")]/p[1]/img/@src|//section[contains(@class, "module-content")]/p[1]/b/img/@src|//section[contains(@class, "module-content")]/p[1]/strong/img/@src'
@@ -48,7 +43,7 @@ class MississaugaPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         name = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        name = name.replace("Mayor – ", "").strip()
+        name = name.replace("Mayor – ", "")
         photo = page.xpath('//*[@id="65a01af8598b7"]/p[1]/img/@src')[0]
 
         p = Person(primary_org="legislature", name=name, district="Mississauga", role="Mayor")
