@@ -2,7 +2,6 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "http://www.mississauga.ca/portal/cityhall/mayorandcouncil"
-MAYOR_PAGE = "http://www.mississauga.ca/portal/cityhall/mayorsoffice"
 CONTACT_PAGE = "http://www.mississauga.ca/portal/helpfeedback/contactus"
 
 
@@ -24,17 +23,14 @@ class MississaugaPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         name_district = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        hyphen = name_district.find("Councillor")
-        if hyphen == -1:
-            hyphen = 9
-        district = name_district[: hyphen - 3]
-        name = name_district[hyphen:]
-        mayor = name.find("Deputy")
-        if mayor != -1:
-            name = name[27:]
-        bracket = name.find("(")
-        if bracket != -1:
-            name = name[:bracket]
+        name_district_parts = name_district.split()
+        district = f"{name_district_parts[0]} {name_district_parts[1]}"
+        # Remove the first 3 elements of the name_district_parts which should include the district + '-'
+        name_district_parts.pop(0)
+        name_district_parts.pop(0)
+        name_district_parts.pop(0)
+        name = " ".join(name_district_parts)
+        name = name.replace("Councillor and Deputy Mayor", "").strip()
         email = self.get_email(page, '//section[contains(@class, "module-content")]')
         photo = page.xpath(
             '//section[contains(@class, "module-content")]/p[1]/img/@src|//section[contains(@class, "module-content")]/p[1]/b/img/@src|//section[contains(@class, "module-content")]/p[1]/strong/img/@src'
@@ -52,7 +48,7 @@ class MississaugaPersonScraper(CanadianScraper):
         page = self.lxmlize(url)
 
         name = page.xpath('//*[@id="com-main"]/div/div/div/h1/text()')[0]
-        name = name[8:]
+        name = name.replace("Mayor – ", "").strip()
         photo = page.xpath('//*[@id="65a01af8598b7"]/p[1]/img/@src')[0]
 
         p = Person(primary_org="legislature", name=name, district="Mississauga", role="Mayor")
