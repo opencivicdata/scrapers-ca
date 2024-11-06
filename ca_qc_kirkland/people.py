@@ -16,6 +16,7 @@ class KirklandPersonScraper(CanadianScraper):
                 de += chr(int(e[i : i + 2], 16) ^ k)
 
             return de
+
         page = self.lxmlize(COUNCIL_PAGE, "iso-8859-1")
 
         councillors = page.xpath('//table/tbody[not(@id)]/tr/td[@valign="top"]')
@@ -43,7 +44,7 @@ class KirklandPersonScraper(CanadianScraper):
             email = decode_email(encrypted_email)
 
             # cloudflare encrypts the email data
-            email = councillor.xpath('.//div/*/*/@href | .//div/*/@href | .//@href')[0]
+            email = councillor.xpath(".//div/*/*/@href | .//div/*/@href | .//@href")[0]
             decoded_email = decode_email(email.split("#", 1)[1])
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
