@@ -45,4 +45,4 @@ class ThunderBayPersonScraper(CanadianScraper):
 
     def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False):
         requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"  # site uses a weak DH key
-        return super().lxmlize(url, encoding, user_agent, cookies, xml)
+        return super().lxmlize(url, encoding, user_agent=user_agent, cookies=cookies, xml=xml)
