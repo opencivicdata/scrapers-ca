@@ -2,10 +2,14 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "http://ville.montreal-est.qc.ca/vie-democratique/conseil-municipal/"
+
+
 class MontrealEstPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[contains (@class, "membreimg text-center membres-conseil")]//div//div[@class="col-lg-6"]')
+        councillors = page.xpath(
+            '//div[contains (@class, "membreimg text-center membres-conseil")]//div//div[@class="col-lg-6"]'
+        )
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.xpath('.//div[@class="bg-trans-gris"]/span/text()')[0]
