@@ -1,9 +1,8 @@
-import re
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.ville.sainte-anne-de-bellevue.qc.ca/fr/199/elus-municipaux"
+
 
 class SainteAnneDeBellevuePersonScraper(CanadianScraper):
     def scrape(self):
@@ -20,8 +19,8 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
 
         councillors = page.xpath('//div[@class="col-md-12"]')[0]
         assert len(councillors), "No councillors found"
-        
-        roles_and_districts = councillors.xpath('.//h2/text()')
+
+        roles_and_districts = councillors.xpath(".//h2/text()")
         roles = []
         districts = []
         names = []
@@ -32,30 +31,22 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
             role_and_district = role.split()
 
             roles.append(role_and_district[0])
-    
+
             if len(role_and_district) == 1:
                 districts.append("Sainte-Anne-de-Bellevue")
             else:
                 districts.append("District " + role_and_district[2])
-    
+
         # Fill in contact info via p tags.
         contact_info = councillors.xpath('.//p[a[contains(@href, "@")]]')
         for contact in contact_info:
             contact = contact.text_content().split()
-            print(contact)
-            input()
             name = " ".join(contact[:2])
             names.append(name)
-    
+
             email = contact[3]
             email = email.replace("Président", "")
             emails.append(email)
-        
-        print(roles)
-        print(districts)
-        print(names)
-        print(emails)
-        input()
 
         assert len(roles) == len(districts) == len(names) == len(emails), "Lists are not of equal length"
         for i in range(len(roles)):
