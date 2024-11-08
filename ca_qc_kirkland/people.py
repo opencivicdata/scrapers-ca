@@ -40,16 +40,15 @@ class KirklandPersonScraper(CanadianScraper):
                 .replace(".", ",")
                 .replace(",-#-", " x")
             )
-            encrypted_email = councillor.xpath('.//@href[contains(., "email")]')[0].split("#")[1]
-            email = decode_email(encrypted_email)
 
             # cloudflare encrypts the email data
-            email = councillor.xpath(".//div/*/*/@href | .//div/*/@href | .//@href")[0]
-            decoded_email = decode_email(email.split("#", 1)[1])
+            encrypted_email = councillor.xpath('.//@href[contains(., "email")]')[0]
+            email = self._cloudflare_decode(encrypted_email)
+
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
             p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", decoded_email)
+            p.add_contact("email", email)
             image = councillor.xpath(".//img/@src")
             if image:
                 p.image = image[0]
