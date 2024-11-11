@@ -14,6 +14,9 @@ class WilmotPersonScraper(CanadianScraper):
             role_name, contact_info = councillors[i], councillors[i + 1]
             role, name = role_name.text_content().strip().replace("\xa0", " ").split("— ")
 
+            if "Executive Officer to the Mayor and Council" in role:
+                continue
+
             # "Ward 1 Councillor"
             if "Councillor" in role:
                 district = role.split(" Councillor")[0]
