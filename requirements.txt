@@ -35,7 +35,7 @@ lxml==4.9.1
     # via -r requirements.in
 olefile==0.47
     # via agate-excel
-opencivicdata==3.3.1
+opencivicdata==3.4.0
     # via
     #   -r requirements.in
     #   pupa
