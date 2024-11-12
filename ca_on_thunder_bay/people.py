@@ -44,5 +44,11 @@ class ThunderBayPersonScraper(CanadianScraper):
             yield p
 
     def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False):
-        requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"  # site uses a weak DH key
+        # SSLError(SSLError(1, '[SSL: DH_KEY_TOO_SMALL] dh key too small (_ssl.c:1133)'))
+        # https://stackoverflow.com/a/41041028/244258
+        requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"
+        try:
+            requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+        except AttributeError:
+            pass
         return super().lxmlize(url, encoding, user_agent=user_agent, cookies=cookies, xml=xml)
