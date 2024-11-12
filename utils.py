@@ -193,17 +193,17 @@ class CanadianScraper(Scraper):
         return None
 
     def get(self, *args, **kwargs):
-        return super().get(*args, verify=SSL_VERIFY, **kwargs)
+        return super().get(*args, verify=kwargs.pop("verify", SSL_VERIFY), **kwargs)
 
     def post(self, *args, **kwargs):
-        return super().post(*args, verify=SSL_VERIFY, **kwargs)
+        return super().post(*args, verify=kwargs.pop("verify", SSL_VERIFY), **kwargs)
 
-    def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False):
+    def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False, verify=SSL_VERIFY):
         # Sets User-Agent header.
         # https://github.com/jamesturk/scrapelib/blob/5ce0916/scrapelib/__init__.py#L505
         self.user_agent = user_agent
 
-        response = self.get(url, cookies=cookies)
+        response = self.get(url, cookies=cookies, verify=verify)
         if encoding:
             response.encoding = encoding
 

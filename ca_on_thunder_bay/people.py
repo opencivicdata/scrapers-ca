@@ -9,13 +9,14 @@ COUNCIL_PAGE = "https://www.thunderbay.ca/en/city-hall/mayor-and-council-profile
 class ThunderBayPersonScraper(CanadianScraper):
     def scrape(self):
         seat_number = 1
-        page = self.lxmlize(COUNCIL_PAGE)
+        # SSLError(SSLError(1, '[SSL: DH_KEY_TOO_SMALL] dh key too small (_ssl.c:1133)'))
+        page = self.lxmlize(COUNCIL_PAGE, verify=False)
 
         councillors = page.xpath("//p[@class='Center']/a[@href]")
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             url = councillor.xpath("./@href")[0]
-            councillor_page = self.lxmlize(url)
+            councillor_page = self.lxmlize(url, verify=False)
             info = councillor_page.xpath("//div[@class='iCreateDynaToken']")[1]
             role = info.xpath("./h2")[0].text_content()
             name = info.xpath("./h3")[0].text_content()
@@ -42,13 +43,3 @@ class ThunderBayPersonScraper(CanadianScraper):
             p.image = photo
 
             yield p
-
-    def lxmlize(self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False):
-        # SSLError(SSLError(1, '[SSL: DH_KEY_TOO_SMALL] dh key too small (_ssl.c:1133)'))
-        # https://stackoverflow.com/a/41041028/244258
-        requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ":HIGH:!DH:!aNULL"
-        try:
-            requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-        except AttributeError:
-            pass
-        return super().lxmlize(url, encoding, user_agent=user_agent, cookies=cookies, xml=xml)
