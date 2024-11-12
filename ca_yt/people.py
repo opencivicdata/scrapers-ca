@@ -5,22 +5,20 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://yukonassembly.ca/mlas"
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0.1 Safari/605.1.15'
-COOKIES = {
-    '__cf_bm': 'F6Hu6MMBLKVvWHRnv4jMKjzC6rPO.eZiP7e2wFmDDuk-1731447448-1.0.1.1-rOXfHAF4pu2oOjWi79k_ktxvpxutL0x.BKYzcxgqooaC0mZe.oRHqJe_bLzTcFHixlhjd4luXPSxO9kv08_7vw'
-}
 
 
+# This website uses Cloudflare bot products (setting a __cf_bm cookie), which is hard to circumvent.
+# https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/
 class YukonPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, cookies=COOKIES, user_agent=USER_AGENT)
+        page = self.lxmlize(COUNCIL_PAGE)
 
         members = page.xpath('//*[@id="block-views-block-members-listing-block-1"]/div/div/div[2]/div')
         assert len(members), "No members found"
         for member in members:
             if "Vacant" not in member.xpath("./div/span")[0].text_content():
                 url = member.xpath("./div/span/a/@href")[0]
-                page = self.lxmlize(url, cookies=COOKIES, user_agent=USER_AGENT)
+                page = self.lxmlize(url)
                 name = page.xpath("//html/body/div[1]/div/div/section/div[2]/article/div/h1/span/span")[
                     0
                 ].text_content()
