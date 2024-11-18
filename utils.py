@@ -739,9 +739,10 @@ def clean_string(s):
 
 
 def clean_name(s):
-    return honorific_suffix_re.sub(
-        "", honorific_prefix_re.sub("", whitespace_re.sub(" ", str(s).translate(table)).strip())
-    )
+    name = honorific_suffix_re.sub("", whitespace_re.sub(" ", str(s).translate(table)).strip())
+    if name.count(" ") > 1:
+        return honorific_prefix_re.sub("", name)  # Avoid truncating names like "Hon Chan"
+    return name
 
 
 def clean_type_id(type_id):

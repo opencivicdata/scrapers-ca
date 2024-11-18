@@ -123,7 +123,7 @@ name_fragment = (
     r'[("](?:\p{Lu}+|\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*)[)"]|'
     r"(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|St\.|Van|Vander?|van|vanden)?\p{Lu}\p{Ll}+|"
     r"\p{Lu}\p{Ll}+Anne?|Marie\p{Lu}\p{Ll}+|"
-    r"Ch'ng|Prud'homme|"
+    r"A'aliya|Ch'ng|Prud'homme|"
     r"D!ONNE|IsaBelle|Ya'ara"
     r")"
 )
@@ -131,7 +131,7 @@ name_fragment = (
 # Name components can be joined by apostrophes, hyphens or spaces.
 person_schema["properties"]["name"]["pattern"] = re.compile(
     r"\A"
-    r"(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|Hon|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)"
+    r"(?!(?:Chair|Commissioner|Conseiller|Councillor|Deputy|Dr|M|Maire|Mayor|Miss|Mme|Mr|Mrs|Ms|Regional|Warden)\b)"
     r"(?:" + name_fragment + r"(?:'|-| - | )"
     r")+" + name_fragment + r"\Z"
 )
