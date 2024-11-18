@@ -16,6 +16,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
         response = requests.post(url="https://lims.leg.bc.ca/graphql", json={"query": query, "variables": variables})
         data = json.loads(response.content.decode("utf-8"))
         members = data["data"]["allMemberParliaments"]["nodes"]
+        assert len(members), "No members found"
         for member in members:
             image = "https://lims.leg.bc.ca/public" + member["image"]["path"]
             district = member["constituency"]["name"]
