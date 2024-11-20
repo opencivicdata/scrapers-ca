@@ -8,9 +8,7 @@ COUNCIL_PAGE = "http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-munic
 
 class KirklandPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-
-        # councillors = page.xpath('//div[@id="PageContent"]/table/tbody/tr/td')
+        page = self.lxmlize(COUNCIL_PAGE, "iso-8859-1")
         councillors = page.xpath('//table/tbody[not(@id)]/tr/td[@valign="top"]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
