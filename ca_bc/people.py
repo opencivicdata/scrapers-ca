@@ -9,8 +9,10 @@ COUNCIL_PAGE = "https://www.leg.bc.ca/members"
 
 class BritishColumbiaPersonScraper(CanadianScraper):
     def scrape(self):
-        response = self.post(url="https://lims.leg.bc.ca/graphql", json={
-            "query": dedent("""\
+        response = self.post(
+            url="https://lims.leg.bc.ca/graphql",
+            json={
+                "query": dedent("""\
                 query GetMLAsByConstituency($parliamentId: Int!) {
                   allMemberParliaments(condition: {parliamentId: $parliamentId, active: true}) {
                     nodes {
@@ -41,10 +43,10 @@ class BritishColumbiaPersonScraper(CanadianScraper):
                     }
                     __typename
                   }
-                }"""
-            ),
-            "variables": {"parliamentId": 43},
-        })
+                }"""),
+                "variables": {"parliamentId": 43},
+            },
+        )
         data = json.loads(response.content.decode("utf-8"))
         members = data["data"]["allMemberParliaments"]["nodes"]
 
