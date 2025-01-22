@@ -23,14 +23,18 @@ class KirklandPersonScraper(CanadianScraper):
 
             name = councillor.xpath(".//strong/text()")[0]
 
+            # Using self.get_phone does not include the extension #
             phone = (
                 councillor.xpath('.//div[contains(text(), "#")]/text()')[0]
                 .replace("T ", "")
                 .replace(" ", "-")
-                .replace(".", ",")  # correcting a typo
+                .replace(".", ",")
                 .replace(",-#-", " x")
             )
-            email = self.get_email(councillor)
+
+            # cloudflare encrypts the email data
+            encrypted_email = councillor.xpath('.//@href[contains(., "email")]')[0]
+            email = self._cloudflare_decode(encrypted_email)
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
