@@ -31,7 +31,7 @@ isodate==0.6.1
     # via agate
 leather==0.4.0
     # via agate
-lxml==4.9.1
+lxml==5.3.0
     # via -r requirements.in
 olefile==0.47
     # via agate-excel
@@ -43,7 +43,7 @@ openpyxl==3.1.5
     # via agate-excel
 parsedatetime==2.6
     # via agate
-psycopg2==2.9.9
+psycopg2==2.9.10
     # via pupa
 psycopg2-binary==2.9.9
     # via opencivicdata
