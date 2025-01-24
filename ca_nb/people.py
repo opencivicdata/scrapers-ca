@@ -9,24 +9,31 @@ class NewBrunswickPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
         members = page.xpath('//div[contains(@class, "member-card")]//a//@href')
         assert len(members), "No members found"
+
         for url in members:
             node = self.lxmlize(url, encoding="utf-8")
             phone = ""
             email = ""
-            address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')[0]
-            address = address.text_content().strip().splitlines()
-            address = list(map(str.strip, address))
+            address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')
+            if address:
+                address = address[0]
+                address = address.text_content().strip().splitlines()
+                address = list(map(str.strip, address))
+
             hrefs = node.xpath('//table[contains(@class, "properties-table")]//a//@href')
             for href in hrefs:
                 if href.startswith("mailto:"):
                     email = href.replace("mailto:", "")
                 if href.startswith("tel:"):
                     phone = href.replace("tel:", "")
+                if href.startswith("fax:"):
+                    fax = href.replace("fax:", "")
 
             party, riding = [
                 span.text_content().strip()
                 for span in node.xpath('//div[contains(@class, "member-details-meta")]//span')
             ]
+
             district = riding.replace("\x97", "-").replace(" - ", "-")
             if district == "Madawaska Les lacs-Edmundston":
                 district = "Madawaska Les Lacs-Edmundston"
