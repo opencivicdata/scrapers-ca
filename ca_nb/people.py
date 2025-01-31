@@ -3,7 +3,6 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.legnb.ca/en/members/current"  # update each election
 
-
 class NewBrunswickPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
@@ -34,8 +33,6 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 span.text_content().strip()
                 for span in node.xpath('//div[contains(@class, "member-details-meta")]//span')
             ]
-            print(party)
-            print(riding)
             
             district = riding.replace("\x97", "-").replace(" - ", "-")
             if district == "Madawaska Les lacs-Edmundston":
