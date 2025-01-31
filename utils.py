@@ -168,7 +168,7 @@ class CanadianScraper(Scraper):
         if area_codes:
             for area_code in area_codes:
                 match = re.search(
-                    r"(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)" % area_code,
+                    r"(?:\A|\D)(\(?%d\)?\D?\d{3}\D?\d{4}(?:\s*(?:/|x|ext[.:]?|poste)[\s-]?\d+)?)(?:\D|\Z)" % area_code,  # noqa: UP031
                     node.text_content(),
                 )
                 if match:
@@ -242,10 +242,7 @@ class CanadianScraper(Scraper):
                 response = self.get(url, **kwargs)
                 if encoding:
                     response.encoding = encoding
-                text = response.text.strip()
-                if text.startswith("\ufeff"):  # BOM
-                    text = text[1:]
-                data = StringIO(text)
+                data = StringIO(response.text.strip().removeprefix("\ufeff"))  # BOM
         if skip_rows:
             for _ in range(skip_rows):
                 data.readline()
