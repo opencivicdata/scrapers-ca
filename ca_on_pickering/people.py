@@ -10,17 +10,41 @@ class PickeringPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        mayor_contacts = page.xpath("//table[1]//tr/td[1]/text()")
-        council_contacts = page.xpath("//table[1]//tr/td[2]/text()")
+        mayor_contacts = []
+        council_contacts = []
 
-        councillors = page.xpath('//div[@class="lmColumn ui-sortable fbg-col-xs-12 fbg-col-sm-4 column"]')
+        mayor_phone = page.xpath("//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'T.')][1]")[0]
+        mayor_phone = page.xpath("//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'T.')][1]")[0]
+        mayor_phone = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", mayor_phone)[0]
+        mayor_phone = mayor_phone.replace(".", "-")
+        
+        mayor_fax = page.xpath("//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'F.')][1]")[0]
+        mayor_fax = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", mayor_fax)[0]
+        mayor_fax = mayor_fax.replace(".", "-")
+        
+        mayor_contacts.append(mayor_phone)
+        mayor_contacts.append(mayor_fax)
+
+        council_phone = page.xpath("//strong[contains(text(), 'Council Office')]/following-sibling::text()[contains(., 'T.')][1]")[0]
+        council_phone = page.xpath("//strong[contains(text(), 'Council Office')]/following-sibling::text()[contains(., 'T.')][1]")[0]
+        council_phone = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", council_phone)[0]
+        council_phone = council_phone.replace(".", "-")
+        
+        council_fax = page.xpath("//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'F.')][1]")[0]
+        council_fax = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", council_fax)[0]
+        council_fax = council_fax.replace(".", "-")
+        
+        council_contacts.append(council_phone)
+        council_contacts.append(council_fax)
+        
+        councillors = page.xpath('//div[@class="inner  "]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.xpath(".//strong//text()")[0]
 
             if "Councillor" in name:
                 name = name.replace("Councillor", "").strip()
-                role_ward = councillor.xpath(".//text()")[1]
+                role_ward = councillor.xpath(".//text()")[10]
                 role, ward = re.split(r"\s(?=Ward)", role_ward, maxsplit=1)
             else:
                 name = name.replace("Mayor", "")
@@ -50,7 +74,8 @@ class PickeringPersonScraper(CanadianScraper):
 
 
 def add_contacts(p, contacts):
-    phone = re.findall(r"[0-9]{3}\.[0-9]{3}\.[0-9]{4}", contacts[0])[0]
-    fax = re.findall(r"[0-9]{3}\.[0-9]{3}\.[0-9]{4}", contacts[1])[0]
+    phone = re.findall(r"[0-9]{3}\-[0-9]{3}\-[0-9]{4}", contacts[0])[0]
+    fax = re.findall(r"[0-9]{3}\-[0-9]{3}\-[0-9]{4}", contacts[1])[0]
     p.add_contact("voice", phone, "legislature")
     p.add_contact("fax", fax, "legislature")
+
