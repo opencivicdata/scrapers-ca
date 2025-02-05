@@ -11,7 +11,6 @@ class LethbridgePersonScraper(CanadianScraper):
 
         paragraph = page.xpath("//h4[contains(., 'Mayor')]/following-sibling::p")[1].text_content().split()
         name = " ".join([paragraph[0], paragraph[1]])
-        print(name)
 
         p = Person(primary_org="legislature", name=name, district="Lethbridge", role="Mayor")
         p.image = page.xpath("//img/@src")[0]
