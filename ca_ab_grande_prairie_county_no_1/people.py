@@ -9,8 +9,7 @@ class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//div[contains(@class, "fbg-row lmRow ui-sortable")]')
 
-        # the first two matching containers have no councillor
-        councillors = councillors[3:]
+        councillors = councillors[4:]
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
