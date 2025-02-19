@@ -21,6 +21,9 @@ class SaskatchewanPersonScraper(CanadianScraper):
             url = member.xpath("./td[1]/a/@href")[0]
             page = self.lxmlize(url)
             party = page.xpath('//div[contains(@class, "mla-header")]')[0].text.split(" - ")[1].strip()
+            if(name == 'April ChiefCalf'):
+                name = 'April Chiefcalf'
+            print(name)
 
             p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
             p.add_source(COUNCIL_PAGE)
