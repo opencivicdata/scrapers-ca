@@ -52,11 +52,14 @@ class BritishColumbiaPersonScraper(CanadianScraper):
         members = data["data"]["allMemberParliaments"]["nodes"]
 
         assert len(members), "No members found"
+        print(len(members))
         for member in members:
             image = "https://lims.leg.bc.ca/public" + member["image"]["path"]
             district = member["constituency"]["name"]
             name = member["member"]["firstName"] + " " + member["member"]["lastName"]
             party = member["party"]["name"]
+
+            name = name.replace(":", "").replace("'","")
 
             p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party, image=image)
             p.add_source(COUNCIL_PAGE)
