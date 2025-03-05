@@ -103,13 +103,18 @@ class CanadaPersonScraper(CanadianScraper):
             if phone_el:
                 phone = phone_el[0].text_content().strip().splitlines()
                 phone = phone[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
-                if phone:
-                    m.add_contact("voice", phone, "legislature")
+
+                if phone != '--':
+                    phone = phone.replace("-", " ", 1)
+                    phone = "1 " + phone
+                    m.add_contact("voice", phone, "legislature") 
 
             if fax_el:
                 fax = fax_el[0].text_content().strip().splitlines()
                 fax = fax[0].replace("Fax:", "").replace("Télécopieur :", "").strip()
-                if fax:
+                fax = fax.replace("Telephone:", "").strip()
+                
+                if fax != '--':
                     m.add_contact("fax", fax, "legislature")
 
             # Constituency Office contacts

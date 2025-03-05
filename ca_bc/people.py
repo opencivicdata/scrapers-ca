@@ -47,6 +47,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
                 "variables": {"parliamentId": 43},
             },
         )
+        print("status code: " + str(response.status_code))
         data = json.loads(response.content.decode("utf-8"))
         members = data["data"]["allMemberParliaments"]["nodes"]
 
