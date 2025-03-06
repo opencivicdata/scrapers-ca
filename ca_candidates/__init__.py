@@ -7,6 +7,3 @@ class CanadaCandidates(CanadianJurisdiction):
     name = "Parliament of Canada"
     url = "http://www.parl.gc.ca"
     parties = [{"name": "Liberal Party"}, {"name": "Conservative Party"}, {"name": "Bloc Québécois"}, {"name": "New Democratic Party"}, {"name": "Green Party"}, {"name": "Independent"}]
-
-
-    # do i need a get_organization function ??
