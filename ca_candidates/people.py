@@ -13,9 +13,17 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             'ndp',
             'green',
         )
+        seen = set()
+
         for party in parties:
             party_method = getattr(self, f'scrape_{party}')
-            yield from party_method()
+            for p in party_method():
+                key = (p.name, p.district, p.role)
+                if key in seen:
+                    self.warning(f"Skipping duplicate candidate: {p.name})")
+                    continue
+                seen.add(key)
+                yield p
 
     def scrape_ndp(self):
         page = self.lxmlize(NDP_PAGE)
@@ -40,7 +48,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p.add_source(url)
 
             # candidate's personal page does not load
-            if(name == "Dharmasena Yakandawela"):
+            if(name == "Dharmasena Yakandawela" or name == "Sandra Sousa"):
                 continue
             
             candidatepage = self.lxmlize(url)
