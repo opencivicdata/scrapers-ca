@@ -30,10 +30,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             p = Person(primary_org="lower", name=name, district=district, role="candidate", party="New Democratic Party", image=image)
 
-            nameclean = name.replace(" ", "").replace("-", "").replace(".", "").replace("é", "e").replace("ô", "o").lower()
+            nameclean = name.replace(" ", "").replace("-", "").replace(".", "").replace("é", "e").replace("ô", "o").replace("ü", "u").lower()
             url = "https://" + nameclean + ".ndp.ca"
-            if name == "Nimâ Machouf":
-                url = "https://bio.site/nimamachouf"
             if name == 'Julie Girard-Lemay' or name == 'Tommy Bureau': # these two candidates have npd instead of ndp in url
                 url = "https://" + nameclean + ".npd.ca"
 
@@ -47,49 +45,82 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             
             candidatepage = self.lxmlize(url)
             info = candidatepage.xpath('//div[@class="footer-column-container"]')
-            if(len(info) < 2 or name == 'Hugues Boily-Maltais'): # candidate does not have contact info, doesn't exist but appears when scraping?
+            if(len(info) == 1 or name == 'Hugues Boily-Maltais'): # candidate does not have contact info, doesn't exist but appears when scraping
                 continue
             elif(len(info) < 2): # candidate page formatted differently, extract contact info differently
                 if name == 'Daria Juüdi-Hope':
-                    continue
+                    email = candidatepage.xpath('//li[@class="elementor-icon-list-item"]/span/text()')[2]
+                    socials = candidatepage.xpath('//div[@class="elementor-social-icons-wrapper elementor-grid"]/span/a/@href')
+                    p.add_contact("email", email)
+                    for social in socials:
+                        if social != 'https://dariajuudihope.ndp.ca':
+                            p.add_link(social)
                 elif name == 'Nimâ Machouf':
-                    continue
+                    socials = candidatepage.xpath('//section[@class="BioSite-components-BodySections-Socials-Socials__socials--vRiFp"]/div/a/@href')
+                    for social in socials:
+                        p.add_link(social)
                 elif name == 'Tammy Bentz':
-                    continue
+                    candidatecontact = self.lxmlize(url + "/contact/")
+                    email = candidatecontact.xpath('//a[contains(@href, "mailto:")]/@href')[0].replace("mailto:", "")
+                    phone = candidatecontact.xpath("//li[contains(text(), 'Call')]/text()")[0].replace("Call ", "")
+                    p.add_contact("email", email)
+                    p.add_contact("voice", phone, "office")
+                    socials = candidatecontact.xpath('//li[contains(@class, "wp-social-link")]/a/@href')
+                    for social in socials:
+                        p.add_link(social)
                 elif name == 'Bhutila Karpoche':
-                    continue
-                elif name == 'Samantha Green':
-                    continue
+                    contact = candidatepage.xpath('//address[@class="contact-block-items flex flex-justify-center"]/div')
+                    phone = contact[1].xpath('./a/@href')[0].replace("tel:", "")
+                    address = contact[2].xpath('./div/text()')[1].strip()
 
-            info = info[1]
-            
-            # getting email, phone number, social media links
-            contacts = info.xpath('./ul/li/a/@href')
-            # check if contacts is empty, if so it probably means they also have a phone number so query separately
-            if len(contacts) == 0:
-                phone_and_address = info.xpath('./div')[0]
-                phone = phone_and_address.xpath('./a/@href')[0].replace("tel:", "")
-                p.add_contact("voice", phone, "office")
-                ptags = phone_and_address.xpath('./p')
-                if len(ptags) > 1: # indicates that there is also an address present
-                    address = ptags[1].text_content()
+                    p.add_contact("voice", phone, "office")
                     p.add_contact("address", address, "office")
 
-                other = info.xpath('./div')[1]
-                other = other.xpath('./ul/li/a/@href')
-                for contact in other:
-                    if "mailto:" in contact:
-                        email = contact.replace("mailto:", "")
-                        p.add_contact("email", email)
-                    else:
-                        p.add_link(contact)
-            else: 
-                for contact in contacts:
-                    if "mailto:" in contact:
-                        email = contact.replace("mailto:", "")
-                        p.add_contact("email", email)
-                    else:
-                        p.add_link(contact)
+                    links = candidatepage.xpath('//ul[@class="connect-items list-unstyled engage-block-connect-items engage-block-item-content content-font-size"]')[0]
+                    socials = links.xpath('./li/a/@href')
+                    for social in socials:
+                        if "facebook.com" in social or "youtube.com" in social or "instagram.com" in social or "x.com" in social:
+                            p.add_link(social)
+                elif name == 'Samantha Green':
+                    contact = candidatepage.xpath('//address[@class="contact-block-items flex flex-justify-center"]/div')
+                    phone = contact[1].xpath('./a/@href')[0].replace("tel:", "")
+                    address = contact[2].xpath('./div/text()')[1].strip()
+                  
+                    p.add_contact("voice", phone, "office")
+                    p.add_contact("address", address, "office")
+
+                    socials = candidatepage.xpath('//li[@class="connect-item icons-block-item connect-block-item"]/a/@href')
+                    for social in socials:
+                        p.add_link(social)    
+            else:
+                info = info[1]
+                # getting email, phone number, social media links
+                contacts = info.xpath('./ul/li/a/@href')
+                # check if contacts is empty, if so it probably means they also have a phone number so query separately
+                if len(contacts) == 0:
+                    phone_and_address = info.xpath('./div')[0]
+                    phone = phone_and_address.xpath('./a/@href')[0].replace("tel:", "")
+                    p.add_contact("voice", phone, "office")
+                    ptags = phone_and_address.xpath('./p')
+                    if len(ptags) > 1: # indicates that there is also an address present
+                        address = ptags[1].text_content()
+                        p.add_contact("address", address, "office")
+
+                    other = info.xpath('./div')[1]
+                    other = other.xpath('./ul/li/a/@href')
+                    for contact in other:
+                        if "mailto:" in contact:
+                            email = contact.replace("mailto:", "")
+                            p.add_contact("email", email)
+                        else:
+                            p.add_link(contact)
+                else: 
+                    for contact in contacts:
+                        if "mailto:" in contact:
+                            email = contact.replace("mailto:", "")
+                            p.add_contact("email", email)
+                        else:
+                            p.add_link(contact)
 
             yield p
 
@@ -116,7 +147,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             for contact in contacts:
                 if "facebook.com" in contact or "twitter.com" in contact or "instagram.com" in contact or "x.com" in contact:
                     p.add_link(contact)
-                else: # candidate may have individual page with more information 
+                else: # candidate may have individual page with more information --> TO BE DONE
+                    candidatepage = self.lxmlize(contact)
+                    info = candidatepage.xpath('//section[@class="sidebar2-section"]/div/a/@href')
+                    email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
+                    if not email == []:
+                        email = email[0].replace("mailto:", "").replace("+", "")
+                        if not email == 'info@johngoheenliberal.ca?subject=I%20want%20to%20volunteer':
+                            p.add_contact("email", email)
                     p.add_source(contact)
                     
             yield p
@@ -153,6 +191,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
             if(len(email) > 0): # some candidates do not have email
                 email = email[0].replace("mailto:", "")
+                p.add_contact("email", email)
 
             yield p
 
