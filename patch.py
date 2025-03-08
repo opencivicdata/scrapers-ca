@@ -123,8 +123,10 @@ name_fragment = (
     r'[("](?:\p{Lu}+|\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*)[)"]|'
     r"(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|St\.|Van|Vander?|van|vanden)?\p{Lu}\p{Ll}+|"
     r"\p{Lu}\p{Ll}+Anne?|Marie\p{Lu}\p{Ll}+|"
-    r"Á'a:líya|A'aliya|Ch'ng|Prud'homme|Qwulti'stunaat|"
-    r"D!ONNE|IsaBelle|Ya'ara"
+    # Apostrophes
+    r"Á'a:líya|A'aliya|Ch'ng|Prud'homme|Qwulti'stunaat|Ya'ara|"
+    # Miscellaneous
+    r"D!ONNE|ChiefCalf|IsaBelle"
     r")"
 )
 
