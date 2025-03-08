@@ -14,6 +14,8 @@ certifi==2024.8.30
     # via requests
 charset-normalizer==3.3.2
     # via requests
+cloudscraper==1.2.71
+    # via -r requirements.in
 dj-database-url==0.3.0
     # via pupa
 django==4.2.18
@@ -49,6 +51,8 @@ psycopg2-binary==2.9.9
     # via opencivicdata
 pupa @ git+https://github.com/opencivicdata/pupa@f0791f7de07574039eff10d804e4683399a16ec5
     # via -r requirements.in
+pyparsing==3.2.1
+    # via cloudscraper
 python-slugify==8.0.4
     # via agate
 pytimeparse==1.1.8
@@ -60,7 +64,11 @@ regex==2014.4.10
 requests==2.32.3
     # via
     #   -r requirements.in
+    #   cloudscraper
+    #   requests-toolbelt
     #   scrapelib
+requests-toolbelt==1.0.0
+    # via cloudscraper
 scrapelib==2.3.0
     # via pupa
 six==1.16.0

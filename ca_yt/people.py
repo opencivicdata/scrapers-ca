@@ -10,14 +10,15 @@ COUNCIL_PAGE = "https://yukonassembly.ca/mlas"
 # https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/
 class YukonPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.cloudscrape(COUNCIL_PAGE)
 
         members = page.xpath('//*[@id="block-views-block-members-listing-block-1"]/div/div/div[2]/div')
         assert len(members), "No members found"
         for member in members:
             if "Vacant" not in member.xpath("./div/span")[0].text_content():
                 url = member.xpath("./div/span/a/@href")[0]
-                page = self.lxmlize(url)
+                page = self.cloudscrape(url)
+
                 name = page.xpath("//html/body/div[1]/div/div/section/div[2]/article/div/h1/span/span")[
                     0
                 ].text_content()

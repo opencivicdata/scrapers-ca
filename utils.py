@@ -10,6 +10,7 @@ from zipfile import ZipFile
 
 import agate
 import agateexcel  # noqa: F401
+import cloudscraper
 import lxml.html
 import requests
 from lxml import etree
@@ -23,6 +24,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 CUSTOM_USER_AGENT = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)"
 DEFAULT_USER_AGENT = requests.utils.default_user_agent()
+SCRAPER = cloudscraper.create_scraper()
 
 CONTACT_DETAIL_TYPE_MAP = {
     "Address": "address",
@@ -197,6 +199,13 @@ class CanadianScraper(Scraper):
 
     def post(self, *args, **kwargs):
         return super().post(*args, verify=kwargs.pop("verify", SSL_VERIFY), **kwargs)
+
+    def cloudscrape(self, url, verify=SSL_VERIFY):
+        response = SCRAPER.get(url, verify=verify)
+        response.raise_for_status()
+        page = lxml.html.fromstring(response.content)
+        page.make_links_absolute(url)
+        return page
 
     def lxmlize(
         self, url, encoding=None, *, user_agent=DEFAULT_USER_AGENT, cookies=None, xml=False, verify=SSL_VERIFY

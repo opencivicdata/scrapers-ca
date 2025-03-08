@@ -2,6 +2,7 @@
 git+https://github.com/opencivicdata/pupa@f0791f7de07574039eff10d804e4683399a16ec5
 agate
 agate-excel
+cloudscraper
 django<5
 invoke
 lxml
