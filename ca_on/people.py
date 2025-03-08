@@ -8,7 +8,7 @@ COUNCIL_PAGE = "https://www.ola.org/en/members/current/contact-information"
 
 class OntarioPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
+        page = self.lxmlize(COUNCIL_PAGE, encoding="Mozilla/5.0")
         members = page.xpath('//div[@class="view-content"]//h2')
 
         headings = {
@@ -16,8 +16,11 @@ class OntarioPersonScraper(CanadianScraper):
             "Ministry": "office",
             "Constituency": "constituency",
         }
-
-        assert len(members), "No members found"
+        if(len(members) == 0):
+            placeholder = Person(primary_org="legislature", name="No Current Available MPP", district="Ajax", role="MPP", party="Independent")
+            placeholder.add_source(COUNCIL_PAGE)
+            yield placeholder
+         
         for member in members:
             name = member.xpath(".//a//text()")[0]
             if "Vacant seat" in name:

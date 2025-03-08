@@ -9,24 +9,34 @@ class NewBrunswickPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
         members = page.xpath('//div[contains(@class, "member-card")]//a//@href')
         assert len(members), "No members found"
+
         for url in members:
             node = self.lxmlize(url, encoding="utf-8")
             phone = ""
             email = ""
-            address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')[0]
-            address = address.text_content().strip().splitlines()
-            address = list(map(str.strip, address))
+            if len(node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')) > 0:
+                address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')[0]
+                address = address.text_content().strip().splitlines()
+                address = list(map(str.strip, address))
+            else:
+                address = list("No address") 
+            
             hrefs = node.xpath('//table[contains(@class, "properties-table")]//a//@href')
             for href in hrefs:
                 if href.startswith("mailto:"):
                     email = href.replace("mailto:", "")
                 if href.startswith("tel:"):
                     phone = href.replace("tel:", "")
+                if href.startswith("fax:"):
+                    fax = href.replace("fax:", "")
 
             party, riding = [
                 span.text_content().strip()
                 for span in node.xpath('//div[contains(@class, "member-details-meta")]//span')
             ]
+            print(party)
+            print(riding)
+            
             district = riding.replace("\x97", "-").replace(" - ", "-")
             if district == "Madawaska Les lacs-Edmundston":
                 district = "Madawaska Les Lacs-Edmundston"
@@ -44,8 +54,10 @@ class NewBrunswickPersonScraper(CanadianScraper):
             roles = node.xpath('//ul[@class="member-details-positions"]/li/text()')
 
             p = Person(
-                primary_org="legislature", name=name, district=district, role="MLA", party=party, image=photo_url
+                primary_org="legislature", name=name, district=district, role="MLA"
+                # , party=party, image=photo_url
             )
+            # def __init__(self, *, name, district, role, **kwargs):
             if phone:
                 p.add_contact("voice", phone, "constituency")
             if email:
