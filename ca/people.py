@@ -139,13 +139,11 @@ class CanadaPersonScraper(CanadianScraper):
                     voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
                     if len(phone_and_fax) > 1:
                         fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
-                    print(name)
+                    
                     if voice:
-                        print(voice)
                         m.add_contact("voice", voice, note)
 
                     if fax:
-                        print(fax)
                         m.add_contact("fax", fax, note)
 
             yield m
