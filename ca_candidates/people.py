@@ -10,19 +10,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         # parties being scraped
         parties = (
             'liberal',
-            'ndp',
-            'green',
+            # 'ndp',
+            # 'green',
         )
         seen = set()
 
         for party in parties:
             party_method = getattr(self, f'scrape_{party}')
             for p in party_method():
-                key = (p.name, p.district, p.role)
-                if key in seen:
-                    self.warning(f"Skipping duplicate candidate: {p.name})")
-                    continue
-                seen.add(key)
                 yield p
 
     def scrape_ndp(self):
@@ -43,17 +38,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if name == 'Julie Girard-Lemay' or name == 'Tommy Bureau': # these two candidates have npd instead of ndp in url
                 url = "https://" + nameclean + ".npd.ca"
 
-            
             p.add_source(NDP_PAGE)
             p.add_source(url)
 
-            # candidate's personal page does not load
-            if(name == "Dharmasena Yakandawela" or name == "Sandra Sousa"):
-                continue
-            
             candidatepage = self.lxmlize(url)
             info = candidatepage.xpath('//div[@class="footer-column-container"]')
-            if(len(info) == 1 or name == 'Hugues Boily-Maltais'): # candidate does not have contact info, doesn't exist but appears when scraping
+            if(len(info) == 1): # candidate does not have contact info, doesn't exist but appears when scraping
                 continue
             elif(len(info) < 2): # candidate page formatted differently, extract contact info differently
                 if name == 'Daria Juüdi-Hope':
@@ -153,16 +143,21 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             row = candidate.xpath('./div/div')[1]
             contacts = row.xpath('./div/a/@href')
             for contact in contacts:
-                if "facebook.com" in contact or "twitter.com" in contact or "instagram.com" in contact or "x.com" in contact:
+                if "facebook.com" in contact or "twitter.com" in contact or "instagram.com" in contact or "x.com" in contact or "linkedin.com" in contact or "youtube.com" in contact:
                     p.add_link(contact)
                 else: # candidate may have individual page with more information --> TO BE DONE
                     candidatepage = self.lxmlize(contact)
                     info = candidatepage.xpath('//section[@class="sidebar2-section"]/div/a/@href')
                     email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
+                    # email = candidatepage.xpath('//a[contains(@href, "mailto:")]//text()')
                     if not email == []:
-                        email = email[0].replace("mailto:", "").replace("+", "")
-                        if not email == 'info@johngoheenliberal.ca?subject=I%20want%20to%20volunteer':
-                            p.add_contact("email", email)
+                        email = email[0].replace("mailto:", "")
+                        if email == 'info@johngoheenliberal.ca?subject=I%20want%20to%20volunteer': # change logic here
+                            email = 'info@johngoheenliberal.ca'
+                        elif email == 'connect@wadechang.ca?subject=Hi%20Wade%2C%20this%20is%20...':
+                            email = 'connect@wadechang.ca'
+                        email = email.replace("Canada￼", "")
+                        p.add_contact("email", email)
                     p.add_source(contact)
                     
             yield p
@@ -172,11 +167,15 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         page2 = self.lxmlize(GREEN_PARTY_PAGE + "page/2")
         page3 = self.lxmlize(GREEN_PARTY_PAGE + "page/3")
         page4 = self.lxmlize(GREEN_PARTY_PAGE + "page/4")
+        page5 = self.lxmlize(GREEN_PARTY_PAGE + "page/5")
+        page6 = self.lxmlize(GREEN_PARTY_PAGE + "page/6")
         candidates = []
         candidates = candidates + page1.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
         candidates = candidates + page2.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
         candidates = candidates + page3.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
         candidates = candidates + page4.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
+        candidates = candidates + page5.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
+        candidates = candidates + page6.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
         
         for candidate in candidates:
             name = candidate.xpath('./div/h2/a/text()')
@@ -194,7 +193,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             links = candidatepage.xpath('//ul[@class="wp-block-social-links gpc-candidate-socials is-layout-flex wp-block-social-links-is-layout-flex"]/li/a/@href')
 
             for link in links:
-                p.add_link(link)
+                if "facebook.com" in link or "twitter.com" in link or "instagram.com" in link or "x.com" in link or "linkedin.com" in link or "youtube.com" in link:
+                    p.add_link(link)
             
             email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
             if(len(email) > 0): # some candidates do not have email
