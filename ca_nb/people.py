@@ -59,6 +59,8 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 p.add_contact("voice", phone, "constituency")
             if email:
                 p.add_contact("email", email)
+            if fax:
+                p.add_contact("fax", fax, "legislature")
             if address:
                 p.add_contact("address", "\n".join(address), "constituency")
 
