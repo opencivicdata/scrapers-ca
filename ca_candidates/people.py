@@ -10,8 +10,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         # parties being scraped
         parties = (
             'liberal',
-            # 'ndp',
-            # 'green',
+            'ndp',
+            'green',
         )
         seen = set()
 
