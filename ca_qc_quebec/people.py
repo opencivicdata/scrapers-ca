@@ -37,9 +37,9 @@ class QuebecPersonScraper(CanadianScraper):
                 if district == "Saules–Les Méandres":
                     district = "Les Saules"
                 elif district == "Neufch\u00e2tel\u2013Lebourgneuf":
-                    district = "Neufchâtel-Lebourgneuf"
+                    district = "Neufchâtel-Lebourgneuf"  # hyphen
                 elif district == "Loretteville\u2013Les Ch\u00e2tels":
-                    district = "Loretteville-Les Ch\u00e2tels"
+                    district = "Loretteville-Les Ch\u00e2tels"  # hyphen
                 else:
                     district = re.sub(r"–", "—", district)  # n-dash, m-dash
 
@@ -50,7 +50,7 @@ class QuebecPersonScraper(CanadianScraper):
                 for string in borough_strings:
                     borough = re.findall(r"Présidente? de l’arrondissement (.*)$", string)
                     if borough:
-                        borough = borough[0].replace("des", "Les").replace("de ", "")
+                        borough = borough[0].replace("des", "Les").replace("de ", "").replace("–", "—")  # n/m-dash
                         districts.append(borough)
 
                 for i, district in enumerate(districts):
