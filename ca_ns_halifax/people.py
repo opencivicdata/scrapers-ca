@@ -28,6 +28,8 @@ class HalifaxPersonScraper(CanadianScraper):
                 district = "Halifax"
             else:
                 role = "Councillor"
+                if district == "Halifax West Armdale":
+                    district = "Halifax West—Armdale"  # m-dash
 
             if name != "To be determined":
                 photo = photo_div.xpath(".//img/@src")[0]
