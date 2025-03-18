@@ -16,3 +16,4 @@ class BritishColumbia(CanadianJurisdiction):
         {"name": "Independent"},
     ]
     skip_null_valid_from = True
+    valid_from = "2024-10-19"
