@@ -15,7 +15,9 @@ class HalifaxPersonScraper(CanadianScraper):
         for councillor in councillors:
             photo_div = councillor.xpath("./a/div[1]")[0]
             info_div = councillor.xpath("./a/div[2]")[0]
-            district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()"))).replace(" and ", " & ")
+            district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()")))
+            if district == "Halifax West Armdale":
+                district = "Halifax West—Armdale"  # m-dash
 
             name = info_div.xpath("./strong/p/text()")[0].replace("Councillor ", "").replace("Deputy Mayor ", "")
 
@@ -25,8 +27,6 @@ class HalifaxPersonScraper(CanadianScraper):
                 district = "Halifax"
             else:
                 role = "Councillor"
-                if district == "Halifax West Armdale":
-                    district = "Halifax West—Armdale"  # m-dash
 
             if name != "To be determined":
                 photo = photo_div.xpath(".//img/@src")[0]
