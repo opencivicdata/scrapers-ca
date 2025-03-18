@@ -21,6 +21,9 @@ class SennevillePersonScraper(CanadianScraper):
             email = self.get_email(councillor)
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.image = councillor.xpath(".//img/@src")[0]
+
+            image = councillor.xpath(".//img/@src")[0]
+            if not image.startswith("data:"):
+                p.image = image
             p.add_contact("email", email)
             yield p
