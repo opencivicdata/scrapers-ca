@@ -16,9 +16,6 @@ class HalifaxPersonScraper(CanadianScraper):
             photo_div = councillor.xpath("./a/div[1]")[0]
             info_div = councillor.xpath("./a/div[2]")[0]
             district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()")))
-            # District name different than in database
-            if "Westphal" in district:
-                district = "Cole Harbour—Westphal"
 
             name = info_div.xpath("./strong/p/text()")[0].replace("Councillor ", "").replace("Deputy Mayor ", "")
 
