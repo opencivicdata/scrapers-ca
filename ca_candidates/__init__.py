@@ -1,6 +1,8 @@
-from utils import CanadianJurisdiction
-from pupa.scrape import Organization
 from opencivicdata.divisions import Division
+
+from pupa.scrape import Organization
+from utils import CanadianJurisdiction
+
 
 class CanadaCandidates(CanadianJurisdiction):
     classification = "executive"
@@ -8,7 +10,14 @@ class CanadaCandidates(CanadianJurisdiction):
     division_name = "Canada"
     name = "Parliament of Canada"
     url = "http://www.parl.gc.ca"
-    parties = [{"name": "Liberal Party"}, {"name": "Conservative Party"}, {"name": "Bloc Québécois"}, {"name": "New Democratic Party"}, {"name": "Green Party"}, {"name": "Independent"}]
+    parties = [
+        {"name": "Liberal Party"},
+        {"name": "Conservative Party"},
+        {"name": "Bloc Québécois"},
+        {"name": "New Democratic Party"},
+        {"name": "Green Party"},
+        {"name": "Independent"},
+    ]
 
     def get_organizations(self):
         parliament = Organization(self.name, classification=self.classification)
@@ -19,8 +28,7 @@ class CanadaCandidates(CanadianJurisdiction):
 
         for division in Division.get(self.division_id).children("ed"):
             if "2023" in division.id:
-                lower.add_post(role="MP", label=division.name, division_id=division.id)
+                lower.add_post(role="candidate", label=division.name, division_id=division.id)
 
         yield upper
         yield lower
-

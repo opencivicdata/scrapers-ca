@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 import regex as re
+
 from pupa.scrape.schemas.common import contact_details as _contact_details
 from pupa.scrape.schemas.common import links as _links
 from pupa.scrape.schemas.common import sources as _sources
@@ -23,7 +24,10 @@ _contact_details["items"]["properties"]["type"]["enum"] = [
 _contact_details["items"]["properties"]["value"]["blank"] = False
 # Validate the format of contact_details[].value if contact_details[].type is an email address or telephone number.
 _contact_details["items"]["properties"]["value"]["conditionalPattern"] = [
-    (r"\A([A-Za-z0-9._\'+-]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z", lambda x: x["type"] == "email"), # accounts for + in email addresses
+    (
+        r"\A([A-Za-z0-9._\'+-]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\Z",
+        lambda x: x["type"] == "email",
+    ),  # accounts for + in email addresses
     (r"\A1 \d{3} \d{3}-\d{4}(?: x\d+)?\Z", lambda x: x["type"] in ("text", "voice", "fax", "cell", "video", "pager")),
 ]
 # Validate the format of contact_details[].note.
