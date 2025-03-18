@@ -23,7 +23,7 @@ class KawarthaLakesPersonScraper(CanadianScraper):
                 name = councillor.text_content().replace("Mayor", "").strip()
                 role = "Mayor"
 
-            if "RESIGNED" in name:
+            if "RESIGNED" in name or "Vacant" in name:
                 continue
 
             info_node = councillor.xpath("./following-sibling::*")[0]
