@@ -15,7 +15,7 @@ class HalifaxPersonScraper(CanadianScraper):
         for councillor in councillors:
             photo_div = councillor.xpath("./a/div[1]")[0]
             info_div = councillor.xpath("./a/div[2]")[0]
-            district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()")))
+            district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()"))).replace(" and ", " & ")
 
             name = info_div.xpath("./strong/p/text()")[0].replace("Councillor ", "").replace("Deputy Mayor ", "")
 
