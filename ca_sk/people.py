@@ -18,6 +18,8 @@ class SaskatchewanPersonScraper(CanadianScraper):
                 continue
             name = member.xpath("./td")[0].text_content().split(". ", 1)[1].strip()
             district = member.xpath("./td")[2].text_content().strip()
+            if district == "White City-Qu'Appelle":
+                district = "White City-Qu'appelle"
             url = member.xpath("./td[1]/a/@href")[0]
             page = self.lxmlize(url)
             party = page.xpath('//div[contains(@class, "mla-header")]')[0].text.split(" - ")[1].strip()
