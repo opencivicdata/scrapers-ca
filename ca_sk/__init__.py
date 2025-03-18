@@ -11,3 +11,4 @@ class Saskatchewan(CanadianJurisdiction):
         {"name": "Opposition Caucus"},
         {"name": "Government Caucus"},
     ]
+    skip_null_valid_from = True
