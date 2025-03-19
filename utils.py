@@ -595,7 +595,7 @@ class CanadianJurisdiction(Jurisdiction):
 
         for child in children:
             valid_from = child.attrs.get("validFrom")
-            valid_through = child.attrs.get("validThrough")
+            valid_through = getattr(child, "valid_through", None)
 
             # Skip divisions whose `validFrom` dates are null.
             if self.skip_null_valid_from and not valid_from:

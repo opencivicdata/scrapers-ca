@@ -43,7 +43,7 @@ class Canada(CanadianJurisdiction):
         #     for province_or_territory in Division.get(self.division_id).children(ocd_type):
         #         for division in province_or_territory.children("fed"):
         #             valid_from = division.attrs.get("validFrom")
-        #             valid_through = child.attrs.get("validThrough")
+        #             valid_through = getattr(child, "valid_through", None)
         #             if valid_from and valid_from > datetime.now().strftime("%Y-%m-%d"):
         #                 continue
         #             if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
