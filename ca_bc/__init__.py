@@ -11,7 +11,7 @@ class BritishColumbia(CanadianJurisdiction):
         {"name": "Conservative Party of British Columbia"},
         {"name": "British Columbia New Democratic Party"},
         {"name": "British Columbia Liberal Party"},
-        {"name": "BC Green Party"},
+        {"name": "British Columbia Green Party"},
         {"name": "BC United"},
         {"name": "Independent"},
     ]
