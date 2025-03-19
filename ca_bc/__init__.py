@@ -9,7 +9,7 @@ class BritishColumbia(CanadianJurisdiction):
     url = "http://www.leg.bc.ca"
     parties = [
         {"name": "Conservative Party of British Columbia"},
-        {"name": "New Democratic Party of British Columbia"},
+        {"name": "British Columbia New Democratic Party"},
         {"name": "British Columbia Liberal Party"},
         {"name": "BC Green Party"},
         {"name": "BC United"},
