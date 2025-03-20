@@ -1,3 +1,5 @@
+import re
+
 from opencivicdata.divisions import Division
 
 from pupa.scrape import Organization
@@ -29,6 +31,9 @@ class CanadaCandidates(CanadianJurisdiction):
         for division in Division.get(self.division_id).children("ed"):
             if "2023" in division.id:
                 lower.add_post(role="candidate", label=division.name, division_id=division.id)
+                lower.add_post(
+                    role="candidate", label=re.search(r"(\d+)-2023\Z", division.id).group(1), division_id=division.id
+                )
 
         yield upper
         yield lower

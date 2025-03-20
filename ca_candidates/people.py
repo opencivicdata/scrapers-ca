@@ -107,9 +107,40 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         for candidate in candidates:
             name = candidate.xpath("./div/header/h2/text()")[0]
-            district = candidate.xpath("./div/header/h3/text()")[0]
+            district = (
+                candidate.xpath("./div/header/h3/text()")[0]
+                .replace("- ", "—")
+                .replace(" – ", "—")
+                .replace("–", "—")
+                .replace("\u200f", "")
+                .replace("\u2013", "-")
+                .replace("\u2014", "-")
+                .replace("o", "o")
+                .strip()
+            )
+            if district == "Surrey\u2014Newton":
+                district = "Surrey Newton"
+            elif district == "Mont-Saint-Bruno\u2014L'Acadie":
+                district = "Mont-Saint-Bruno-L'Acadie"
+            elif district == "Ville-Marie\u2014Le Sud-Ouest\u2014\u00cele-des-Soeurs":
+                district = "Ville-Marie—Le Sud-Ouest—Île-des-Sœurs"
+            elif district == "Burnaby North-Seymour":
+                district = "Burnaby North—Seymour"
+            elif district == "Ottawa West-Nepean":
+                district = "Ottawa West—Nepean"
+            elif district == "Ville-Marie-Le Sud-Ouest-\u00cele-des-Soeurs":
+                district = "Ville-Marie—Le Sud-Ouest—Île-des-Sœurs"
+            elif district == "Saanich-Gulf Islands":
+                district = "Saanich—Gulf Islands"
+            elif district == "Mississauga-Malton":
+                district = "Mississauga—Malton"
+            elif district == "Scarborough-Guildwood-Rouge Park":
+                district = "Scarborough—Guildwood—Rouge Park"
+            # elif district == "Toronto-Danforth":
+            #   district = "Toronto—Danforth"
+            # elif district == "Scarborough-Woburn":
+            #   district = "Scarborough—Woburn"
             # image = candidate.xpath("./div/div")[0]
-
             p = Person(primary_org="lower", name=name, district=district, role="candidate", party="Liberal Party")
             # , image=image)
             # image is still a div element -> extract url
@@ -162,9 +193,21 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         for candidate in candidates:
             name = candidate.xpath("./div/h2/a/text()")
             name = "".join(name)
-            district = candidate.xpath("./div/p/text()")[0]
+            district = (
+                candidate.xpath("./div/p/text()")[0]
+                .replace("- ", "—")
+                .replace(" – ", "—")
+                .replace("–", "—")
+                .replace("\u200f", "")
+                .replace("\u2013", "-")
+                .strip()
+            )
             if district == "Quebec-Centre":
                 district = "Québec Centre"
+            if district == "Courtenay-Alberni":
+                district = "Courtenay—Alberni"
+            if district == "Kelowna\u2014Lake Country":
+                district = "Kelowna"
             image = candidate.xpath("./a/img/@src")[0]
 
             p = Person(
