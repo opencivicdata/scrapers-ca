@@ -7,7 +7,9 @@
 ### Folder Structure
 
 **ca** - Federal level scraper
+
 **ca_<abbreviated province name>** - Provincial scraper. Ex. 'ca_ab'
+
 **ca_<abbreviated province name>_<municiplaity>** - Municipal scraper. Ex. 'ca_ab_calgary'
 
 ## Usage
