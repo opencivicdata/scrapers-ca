@@ -1,4 +1,14 @@
-# Canadian Legislative Scrapers [![Build Status](https://travis-ci.com/opencivicdata/scrapers-ca.png?branch=master)](https://travis-ci.com/opencivicdata/scrapers-ca)
+# Canadian Legislative Scrapers 
+
+## Overview
+[Pupa](https://github.com/opencivicdata/pupa) scrapers to collect Canadian legislative data at all three levels of government.
+
+
+### Folder Structure
+
+**ca** - Federal level scraper
+**ca_<abbreviated province name>** - Provincial scraper. Ex. 'ca_ab'
+**ca_<abbreviated province name>_<municiplaity>** - Municipal scraper. Ex. 'ca_ab_calgary'
 
 ## Usage
 
@@ -43,7 +53,7 @@ See the first few steps of [this wiki page](https://github.com/opennorth/represe
 
 ## Develop a scraper
 
-Read the [Pupa documentation](http://docs.opencivicdata.org/en/latest/scrape/basics.html) or an existing scraper's code.
+Read the [Open Civic documentation](https://open-civic-data-docs.readthedocs.io/en/latest/scrape/index.html) or an existing scraper's code.
 
 Avoid using the XPath `string()` function unless the expression is known to not have matches on some pages. Otherwise, scrapers may continue to run without error despite failing to find a match. A comment like `# can be empty` or `# allow string()` should accompany the use of `string()`.
 
