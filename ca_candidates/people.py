@@ -1,5 +1,6 @@
 import re
 
+import scrapelib
 from opencivicdata.divisions import Division
 from unidecode import unidecode
 
@@ -183,19 +184,19 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             yield p
 
     def scrape_green(self):
-        page1 = self.lxmlize(GREEN_PARTY_PAGE + "page/1")
-        page2 = self.lxmlize(GREEN_PARTY_PAGE + "page/2")
-        page3 = self.lxmlize(GREEN_PARTY_PAGE + "page/3")
-        page4 = self.lxmlize(GREEN_PARTY_PAGE + "page/4")
-        page5 = self.lxmlize(GREEN_PARTY_PAGE + "page/5")
-        page6 = self.lxmlize(GREEN_PARTY_PAGE + "page/6")
         candidates = []
-        candidates = candidates + page1.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
-        candidates = candidates + page2.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
-        candidates = candidates + page3.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
-        candidates = candidates + page4.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
-        candidates = candidates + page5.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
-        candidates = candidates + page6.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
+        pattern = GREEN_PARTY_PAGE + "page/{}"
+        for page_number in range(1, 17):
+            try:
+                page = self.lxmlize(pattern.format(page_number))
+                page_candidates = page.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
+            except scrapelib.HTTPError:
+                page_candidates = []
+            if len(page_candidates):
+                candidates = candidates + page_candidates
+
+        if not len(candidates):
+            raise Exception("Green party returns no candidates")
 
         for candidate in candidates:
             name = candidate.xpath("./div/h2/a/text()")
