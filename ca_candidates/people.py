@@ -7,9 +7,15 @@ from unidecode import unidecode
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
+import csv 
+import json
+from six import StringIO
+import requests
+
 NDP_PAGE = "https://www.ndp.ca/candidates"
 LIBERAL_PAGE = "https://liberal.ca/your-liberal-candidates/"
 GREEN_PARTY_PAGE = "https://www.greenparty.ca/en/candidates/"
+CONSERVATIVE_PAGE = "https://www.conservative.ca/candidates/"
 
 
 class CanadaCandidatesPersonScraper(CanadianScraper):
@@ -33,6 +39,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             "liberal",
             "ndp",
             "green",
+            "conservative",
         )
 
         for party in parties:
@@ -246,3 +253,66 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 p.add_contact("email", email)
 
             yield p
+
+    def scrape_conservative(self):
+        page = self.lxmlize(CONSERVATIVE_PAGE)
+
+        candidates = page.xpath('//div[@class="candidate-grid"]/div')
+        assert len(candidates)
+        
+        for candidate in candidates:
+            name_el = candidate.xpath('./div/div/h3/text()')
+            name = ""
+            for el in name_el:
+                el = el.strip()
+                name = name + el + " "
+            name = name.strip()
+            district = candidate.xpath('./div/div/p/text()')[0]
+            image = candidate.xpath('./div/div/img/@src')
+
+            p = Person(primary_org="lower", name=name, district=district, role="candidate", party="Conservative Party")
+
+            url = candidate.xpath('./div/a/@href')
+            if url:
+                url = url[0]
+                p.add_source(url)
+                
+                try:
+                    candidatepage = self.lxmlize(url)
+                    contact_link = candidatepage.xpath('//a[contains(text(), "Contact")]/@href')
+                    if contact_link:
+                        # Navigate to the "Contact" page if found
+                        contact_url = contact_link[0]
+                        contact_page = self.lxmlize(contact_url)
+            
+                        # Search for text containing "Email" on the contact page
+                        email = contact_page.xpath('//*[contains(@href, "mailto:")]/@href')
+                        if email:
+                            email = email[0].strip().replace("mailto:", "")
+                            p.add_contact("email", email)
+                        else:
+                            email = contact_page.xpath('//*[contains(/text(), "@")]/text()')
+                            if email:
+                                email = email[0].strip()
+                                p.add_contact("email", email)
+                    
+
+                except Exception as e:
+                    continue
+
+            p.add_source(CONSERVATIVE_PAGE)
+
+            socials = candidate.xpath('./div/ul/li/a/@href')
+            for social in socials:
+                if (
+                    "facebook.com" in social
+                    or "twitter.com" in social
+                    or "instagram.com" in social
+                    or "x.com" in social
+                    or "linkedin.com" in social
+                    or "youtube.com" in social
+                ):
+                    p.add_link(social)
+
+        yield p
+        
