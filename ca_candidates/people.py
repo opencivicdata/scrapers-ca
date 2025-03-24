@@ -11,6 +11,8 @@ import csv
 import json
 from six import StringIO
 import requests
+import re
+from six.moves.urllib.parse import parse_qs, quote_plus, urlparse, urlsplit
 
 NDP_PAGE = "https://www.ndp.ca/candidates"
 LIBERAL_PAGE = "https://liberal.ca/your-liberal-candidates/"
@@ -34,11 +36,70 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if "2023" in division.id:
                 self.normalized_names[self.normalize_district(division.name).replace("--", "-")] = division.name
 
+        representatives = json.loads(self.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').text)['objects']
+        self.incumbents = [representative['name'] for representative in representatives]
+
+
+        boundaries = json.loads(self.get('http://represent.opennorth.ca/boundaries/federal-electoral-districts/?limit=0').text)['objects']
+        boundary_name_to_boundary_id = {boundary['name'].lower(): boundary['external_id'] for boundary in boundaries}
+
+        crowdsourcing = {}
+        url = 'https://docs.google.com/spreadsheets/d/1g0yaE3dr8N7pF2K9TSp2VApJHmHDyGMqH6-Ba5SQLts/export?format=csv&id=1g0yaE3dr8N7pF2K9TSp2VApJHmHDyGMqH6-Ba5SQLts'
+
+        response = requests.get(url)
+        response.encoding = 'utf-8'
+
+        key = ''
+
+        for row in csv.DictReader(StringIO(response.text)):
+            if "District Number" in row:
+                boundary_id = row['District Number']
+                if not re.search(r'\A\d{5}\Z', boundary_id):
+                    boundary_id = boundary_name_to_boundary_id[boundary_id.lower()]
+                key = '{}/{}/{}'.format(row['Party name'], boundary_id, row['Name'])
+
+
+                if crowdsourcing.get(key):
+                    self.warning('{} already exists'.format(key))
+                else:
+                    if row['Gender'] == 'M':
+                        gender = 'male'
+                    elif row['Gender'] == 'F':
+                        gender = 'female'
+                    else:
+                        gender = None
+
+                    crowdsourcing[key] = {
+                        'gender': gender,
+                        'email': row['Email'],
+                        'image': row['Photo URL'],
+                        'facebook': row['Facebook'],
+                        'instagram': row['Instagram'],
+                        'twitter': row['Twitter'],
+                        'linkedin': row['LinkedIn'],
+                        'youtube': row['YouTube']
+                    }
+
+            steps = {
+                'gender': (
+                    lambda p: p.gender,
+                    lambda p, value: setattr(p, 'gender', value),
+                ),
+                'email': (
+                    lambda p: next((contact_detail['value'] for contact_detail in p._related[0].contact_details if contact_detail['type'] == 'email'), None),
+                    lambda p, value: p.add_contact('email', value),
+                ),
+                'image': (
+                    lambda p: p.image,
+                    lambda p, value: setattr(p, 'image', value),
+                ),
+            }
+
         # parties being scraped
         parties = (
-            "liberal",
-            "ndp",
-            "green",
+            # "liberal",
+            # "ndp",
+            # "green",
             "conservative",
         )
 
@@ -46,6 +107,44 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             party_method = getattr(self, f"scrape_{party}")
             for method in party_method():
                 p = method
+                if crowdsourcing.get(key):
+                    o = crowdsourcing[key]
+
+                    links = {}
+                    for link in p.links:
+                        domain = '.'.join(urlsplit(link['url']).netloc.split('.')[-2:])
+                        if domain in ('facebook.com', 'fb.com'):
+                            links['facebook'] = link['url']
+                        elif domain == 'instagram.com':
+                            links['instagram'] = link['url']
+                        elif domain == 'linkedin.com':
+                            links['linkedin'] = link['url']
+                        elif domain == 'twitter.com':
+                            links['twitter'] = link['url']
+                        elif domain == 'youtube.com':
+                            links['youtube'] = link['url']
+
+                    for prop, (getter, setter) in steps.items():
+                        if o[prop]:
+                            if prop == 'email' and '.gc.ca' in o[prop]:
+                                self.info('{}: skipping email = {}'.format(key, o[prop]))
+                            else:
+                                scraped = getter(p)
+                                if not scraped:
+                                    setter(p, o[prop])
+                                    self.debug('{}: adding {} = {}'.format(key, prop, o[prop]))
+                                elif scraped.lower() != o[prop].lower() and prop != 'image':
+                                    self.warning('{}: expected {} to be {}, not {}'.format(key, prop, scraped, o[prop]))
+
+                    for prop in ['facebook', 'instagram', 'linkedin', 'twitter', 'youtube']:
+                        if o[prop]:
+                            scraped = links.get(prop)
+                            entered = re.sub(r'/timeline/\Z|\?(f?ref|lang|notif_t)=.+|\?_rdr\Z', '', o[prop].replace('@', '').replace('http://twitter.com/', 'https://twitter.com/'))  # Facebook, Twitter
+                            if not scraped:
+                                p.add_link(entered)
+                                self.debug('{}: adding {} = {}'.format(key, prop, entered))
+                            elif scraped.lower() != entered.lower():
+                                self.warning('{}: expected {} to be {}, not {}'.format(key, prop, scraped, entered))
                 yield p
 
     def scrape_ndp(self):
@@ -277,28 +376,28 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 url = url[0]
                 p.add_source(url)
                 
-                try:
-                    candidatepage = self.lxmlize(url)
-                    contact_link = candidatepage.xpath('//a[contains(text(), "Contact")]/@href')
-                    if contact_link:
-                        # Navigate to the "Contact" page if found
-                        contact_url = contact_link[0]
-                        contact_page = self.lxmlize(contact_url)
+                # try:
+                #     candidatepage = self.lxmlize(url)
+                #     contact_link = candidatepage.xpath('//a[contains(text(), "Contact")]/@href')
+                #     if contact_link:
+                #         # Navigate to the "Contact" page if found
+                #         contact_url = contact_link[0]
+                #         contact_page = self.lxmlize(contact_url)
             
-                        # Search for text containing "Email" on the contact page
-                        email = contact_page.xpath('//*[contains(@href, "mailto:")]/@href')
-                        if email:
-                            email = email[0].strip().replace("mailto:", "")
-                            p.add_contact("email", email)
-                        else:
-                            email = contact_page.xpath('//*[contains(/text(), "@")]/text()')
-                            if email:
-                                email = email[0].strip()
-                                p.add_contact("email", email)
+                #         # Search for text containing "Email" on the contact page
+                #         email = contact_page.xpath('//*[contains(@href, "mailto:")]/@href')
+                #         if email:
+                #             email = email[0].strip().replace("mailto:", "")
+                #             p.add_contact("email", email)
+                #         else:
+                #             email = contact_page.xpath('//*[contains(/text(), "@")]/text()')
+                #             if email:
+                #                 email = email[0].strip()
+                #                 p.add_contact("email", email)
                     
 
-                except Exception as e:
-                    continue
+                # except Exception as e:
+                #     continue
 
             p.add_source(CONSERVATIVE_PAGE)
 
