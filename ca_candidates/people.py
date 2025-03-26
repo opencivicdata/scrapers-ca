@@ -390,7 +390,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 d = "24049"
             if district == "Megantic-L'Erable-Lotbiniere":
                 d = "24046"
-            # image = candidate.xpath('./div/div/img/@src')
 
             p = Person(primary_org="lower", name=name, district=d, role="candidate", party="Conservative Party")
             url = candidate.xpath("./div/a/@href")
@@ -398,27 +397,17 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 url = url[0]
                 p.add_source(url)
 
-                # try:
-                #     candidatepage = self.lxmlize(url)
-                #     contact_link = candidatepage.xpath('//a[contains(text(), "Contact")]/@href')
-                #     if contact_link:
-                #         # Navigate to the "Contact" page if found
-                #         contact_url = contact_link[0]
-                #         contact_page = self.lxmlize(contact_url)
+                try:
+                    candidatepage = self.lxmlize(url)
+                    email = self.get_email(candidatepage)
+                    if email:
+                        p.add_contact("email", email)
+                    phone = self.get_phone(candidatepage).replace("https://", "")
+                    if phone:
+                        p.add_contact("voice", phone, "office")
 
-                #         # Search for text containing "Email" on the contact page
-                #         email = contact_page.xpath('//*[contains(@href, "mailto:")]/@href')
-                #         if email:
-                #             email = email[0].strip().replace("mailto:", "")
-                #             p.add_contact("email", email)
-                #         else:
-                #             email = contact_page.xpath('//*[contains(/text(), "@")]/text()')
-                #             if email:
-                #                 email = email[0].strip()
-                #                 p.add_contact("email", email)
-
-                # except Exception as e:
-                #     continue
+                except Exception as e:
+                    continue
 
             p.add_source(CONSERVATIVE_PAGE)
 
