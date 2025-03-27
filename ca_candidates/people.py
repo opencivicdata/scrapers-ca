@@ -70,6 +70,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             district = self.normalized_names[
                 self.normalize_district(candidate.xpath("./div/div/div")[1].text_content())
             ]
+
             p = Person(
                 primary_org="lower",
                 name=name,
@@ -79,24 +80,25 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 image=image,
             )
 
-            nameclean = delete_regex.sub("", unidecode(name)).lower()
-            url = f"https://{nameclean}.ndp.ca"
-            if name in {
-                "Julie Girard-Lemay",
-                "Tommy Bureau",
-                "Lise  Garon",
-                "Hugues Boily-Maltais",
-            }:  # these candidates have npd instead of ndp in url
-                url = f"https://{nameclean}.npd.ca"
-            if name == "Arlington Antonio Santiago":
-                url = "https://arlingtonsantiago.ndp.ca"
-            if name == "Tammy Bentz":
-                url += "/contact"
+            subdomain = delete_regex.sub("", unidecode(name).lower())
+            if subdomain == "arlingtonantoniosantiago":
+                subdomain = "arlingtonsantiago"
+
+            if subdomain == "tammybentz":
+                url = f"https://{subdomain}.ndp.ca/contact"
+            elif subdomain in {
+                "huguesboilymaltais",
+                "juliegirardlemay",
+                "lisegaron",
+                "tommybureau",
+            }:
+                url = f"https://{subdomain}.npd.ca"
+            else:
+                url = f"https://{subdomain}.ndp.ca"
 
             p.add_source(start_url)
             p.add_source(url)
 
-            # e.g. "requests.exceptions.SSLError: HTTPSConnectionPool(host='nimamachouf.org', port=443)"
             try:
                 candidatepage = self.lxmlize(url)
 
@@ -104,10 +106,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]))
 
                 for xpath in (
-                    "//a[contains(@href, 'facebook') or contains(@href, 'fb')]/@href",  # Facebook
-                    "//a[contains(@href, 'instagram')]/@href",  # Instagram
-                    "//a[contains(@href, 'twitter')]/@href",  # Twitter
-                    "//a[contains(@href, 'youtube')]/@href",  # Youtube
+                    "//a[contains(@href, 'facebook') or contains(@href, 'fb')]/@href",
+                    "//a[contains(@href, 'instagram')]/@href",
+                    "//a[contains(@href, 'twitter')]/@href",
+                    "//a[contains(@href, 'youtube')]/@href",
                 ):
                     if element := candidatepage.xpath(xpath):
                         p.add_link(element[0])
@@ -115,7 +117,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if phone := candidatepage.xpath('//a[contains(@href, "tel:")]/@href'):
                     p.add_contact("voice", phone[0].replace("tel:", ""), "office")
             except requests.RequestException:
-                logger.exception()
+                # e.g. "requests.exceptions.SSLError: HTTPSConnectionPool(host='nimamachouf.org', port=443)"
+                logger.exception("")
 
             yield p
 
