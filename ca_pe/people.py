@@ -17,8 +17,8 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
                 continue
 
             title = member.xpath('.//span[contains(@class, "member-title")]//a[1]')[0]
-            district = member.xpath(".//div[contains(@class, " '"views-field-field-member-constituency")]//text()')[0]
-            party = member.xpath(".//div[contains(@class, " '"views-field-field-member-pol-affiliation")]//text()')[0]
+            district = member.xpath('.//div[contains(@class, "views-field-field-member-constituency")]//text()')[0]
+            party = member.xpath('.//div[contains(@class, "views-field-field-member-pol-affiliation")]//text()')[0]
             url = title.attrib["href"]
             p = Person(
                 primary_org="legislature",
@@ -26,7 +26,7 @@ class PrinceEdwardIslandPersonScraper(CanadianScraper):
                 district=district,
                 party={
                     "Green": "Green Party of Prince Edward Island",
-                    "PC": ("Progressive Conservative Party " "of Prince Edward Island"),
+                    "PC": "Progressive Conservative Party of Prince Edward Island",
                     "Liberal": "Liberal Party of Prince Edward Island",
                 }.get(party, party),
                 role="MLA",

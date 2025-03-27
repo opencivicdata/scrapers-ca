@@ -74,7 +74,7 @@ class MarkhamPersonScraper(CanadianScraper):
             contact_node = page.xpath(
                 '//div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]'
             )[0]
-            address = f'{contact_node.xpath(".//p/text()")[0]} {contact_node.xpath(".//p/text()")[1]}'
+            address = f"{contact_node.xpath('.//p/text()')[0]} {contact_node.xpath('.//p/text()')[1]}"
 
         links = get_links(contact_node)
         phone = self.get_phone(contact_node)

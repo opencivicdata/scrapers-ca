@@ -33,7 +33,7 @@ class OntarioPersonScraper(CanadianScraper):
 
             district = "".join(
                 node.xpath(
-                    '//div[@block="block-views-block-member-member-riding-block"]' '//p[@class="riding"]//a//text()'
+                    '//div[@block="block-views-block-member-member-riding-block"]//p[@class="riding"]//a//text()'
                 )
             ).strip()
             nodes = node.xpath('//div[@id="main-content"]//a')

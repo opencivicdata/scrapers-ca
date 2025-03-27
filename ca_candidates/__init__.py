@@ -1,8 +1,8 @@
 import re
 
 from opencivicdata.divisions import Division
-
 from pupa.scrape import Organization
+
 from utils import CanadianJurisdiction
 
 

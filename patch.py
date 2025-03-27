@@ -1,7 +1,6 @@
 from copy import deepcopy
 
 import regex as re
-
 from pupa.scrape.schemas.common import contact_details as _contact_details
 from pupa.scrape.schemas.common import links as _links
 from pupa.scrape.schemas.common import sources as _sources
