@@ -1,3 +1,4 @@
+# https://github.com/opencivicdata/scrapers-ca/blob/b19f84783efe046fac96426ebe6e1d7c8dcf1fcd/ca_candidates/__init__.py
 import re
 
 from opencivicdata.divisions import Division
@@ -31,7 +32,7 @@ class CanadaCandidates(CanadianJurisdiction):
         for division in Division.get(self.division_id).children("ed"):
             if "2023" in division.id:
                 lower.add_post(role="candidate", label=division.name, division_id=division.id)
-                lower.add_post(
+                lower.add_post(  # parties can't spell
                     role="candidate", label=re.search(r"(\d+)-2023\Z", division.id).group(1), division_id=division.id
                 )
 
