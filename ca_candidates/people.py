@@ -1,3 +1,4 @@
+import logging
 import re
 
 import scrapelib
@@ -10,6 +11,8 @@ from utils import CanadianScraper
 NDP_PAGE = "https://www.ndp.ca/candidates"
 LIBERAL_PAGE = "https://liberal.ca/your-liberal-candidates/"
 GREEN_PARTY_PAGE = "https://www.greenparty.ca/en/candidates/"
+
+logger = logging.getLogger(__name__)
 
 
 class CanadaCandidatesPersonScraper(CanadianScraper):
@@ -56,7 +59,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = "Hochelaga-Rosemont-Est"
             if district == "Northwest Territores":
                 district = "Northwest Territories"
-            d = self.normalized_names[district]
+            d = self.normalized_names.get(district)
+            if d is None:
+                logger.warning("KeyError: %r", district)
+                continue
             p = Person(
                 primary_org="lower",
                 name=name,
