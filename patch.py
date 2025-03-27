@@ -126,6 +126,9 @@ name_fragment = (
     r'[("](?:\p{Lu}+|\p{Lu}\p{Ll}*(?:-\p{Lu}\p{Ll}*)*)[)"]|'
     r"(?:D'|d'|De|de|Des|Di|Du|L'|La|Le|Mac|Mc|O'|San|St\.|Van|Vander?|van|vanden)?\p{Lu}\p{Ll}+|"
     r"\p{Lu}\p{Ll}+Anne?|Marie\p{Lu}\p{Ll}+|"
+    # Inuktitut syllabics
+    r"[ᐁᐃᐄᐅᐆᐊᐋᐯᐱᐲᐳᐴᐸᐹᑉᑊᑌᑎᑏᑐᑑᑕᑖᑦᑫᑭᑮᑯᑰᑲᑳᒃᒉᒋᒌᒍᒎᒐᒑᒡᒣᒥᒦᒧᒨᒪᒫᒻᓀᓂᓃᓄᓅᓇᓈᓐᓓᓕᓖᓗᓘᓚᓛᓪᓭᓯᓰᓱᓲᓴᓵᔅᔦᔨᔩᔪᔫᔭᔮᔾᕂᕆᕇᕈᕉ"
+    r"ᕋᕌᕐᕓᕕᕖᕗᕘᕙᕚᕝᕴᕵᕶᕷᕸᕹᕺᕻᕼᕿᖀᖁᖂᖃᖄᖅᖏᖐᖑᖒᖓᖔᖕᖖᖠᖡᖢᖣᖤᖥᖦᖨᖩᖪᖫᖬᖭᖮᖯᙯᙰᙱᙲᙳᙴᙵᙶ𑪰𑪱𑪲𑪳𑪴𑪵𑪶𑪷𑪸𑪹𑪺𑪻]+|"
     # Apostrophes
     r"Á'a:líya|A'aliya|Ch'ng|Prud'homme|Qwulti'stunaat|Ya'ara|"
     # Miscellaneous
