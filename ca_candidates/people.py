@@ -104,9 +104,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         # parties being scraped
         parties = (
-            # "liberal",
-            # "ndp",
-            # "green",
+            "liberal",
+            "ndp",
+            "green",
             "conservative",
         )
 
@@ -393,7 +393,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             p = Person(primary_org="lower", name=name, district=d, role="candidate", party="Conservative Party")
             url = candidate.xpath("./div/a/@href")
-            if url:
+            if url and url[0] != CONSERVATIVE_PAGE:
                 url = url[0]
                 p.add_source(url)
 
@@ -406,8 +406,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     if phone:
                         p.add_contact("voice", phone, "office")
 
-                except Exception as e:
-                    continue
+                except Exception:
+                    self.warning(f"Cannot access {url}")
 
             p.add_source(CONSERVATIVE_PAGE)
 
