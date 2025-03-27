@@ -100,8 +100,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             try:
                 candidatepage = self.lxmlize(url)
 
-                email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
-                if email:
+                if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
                     p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]))
 
                 for xpath in (
@@ -110,12 +109,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     "//a[contains(@href, 'twitter')]/@href",  # Twitter
                     "//a[contains(@href, 'youtube')]/@href",  # Youtube
                 ):
-                    element = candidatepage.xpath(xpath)
-                    if element:
+                    if element := candidatepage.xpath(xpath):
                         p.add_link(element[0])
 
-                phone = candidatepage.xpath('//a[contains(@href, "tel:")]/@href')
-                if phone:
+                if phone := candidatepage.xpath('//a[contains(@href, "tel:")]/@href'):
                     p.add_contact("voice", phone[0].replace("tel:", ""), "office")
             except requests.RequestException:
                 logger.exception()
@@ -143,8 +140,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     p.add_link(contact)
                 else:
                     candidatepage = self.lxmlize(contact)
-                    email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
-                    if email:
+                    if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
                         p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]).replace("Canada￼", ""))
 
                     p.add_source(contact)
@@ -188,8 +184,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
 
-            email = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
-            if email:
+            if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
                 p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]))
 
             yield p
