@@ -27,6 +27,7 @@ DELETE_REGEX = re.compile(r"[\u200f]")
 CORRECTIONS = {
     # Different names.
     "Kelowna Lake Country": "Kelowna",
+    "Nonafot Nunavut": "Nunavut",
     # Typographic errors.
     "Northwest Territores": "Northwest Territories",
 }
@@ -42,6 +43,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         district = unidecode(district.translate(TRANSLATION_TABLE)).title().strip()
         district = DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district))
         return CORRECTIONS.get(district, district)
+
+    def get_district(self, district):
+        try:
+            return self.normalized_names[self.normalize_district(district)]
+        except KeyError:
+            logger.exception("")
 
     def scrape(self):
         # Create list mapping names to IDs.
@@ -67,11 +74,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         assert len(candidates), "No NDP candidates found"
 
         for candidate in candidates:
+            district = self.get_district(candidate.xpath("./div/div/div")[1].text_content())
+            if district is None:
+                continue
+
             name = candidate.xpath("./div/div/div")[0].text_content()
             image = f'https://www.ndp.ca{candidate.xpath("./div/img")[0].get("data-img-src")}'
-            district = self.normalized_names[
-                self.normalize_district(candidate.xpath("./div/div/div")[1].text_content())
-            ]
 
             p = Person(
                 primary_org="lower",
@@ -133,8 +141,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         assert len(candidates), "No Liberal candidates found"
 
         for candidate in candidates:
+            district = self.get_district(candidate.xpath("./div/header/h3/text()")[0])
+            if district is None:
+                continue
+
             name = candidate.xpath("./div/header/h2/text()")[0]
-            district = self.normalized_names[self.normalize_district(candidate.xpath("./div/header/h3/text()")[0])]
 
             p = Person(primary_org="lower", name=name, district=district, role="candidate", party="Liberal Party")
             # image is still a div element -> extract url
@@ -168,8 +179,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         assert len(candidates), "No Green candidates found"
 
         for candidate in candidates:
+            district = self.get_district(candidate.xpath("./div/p/text()")[0])
+            if district is None:
+                continue
+
             name = "".join(candidate.xpath("./div/h2/a/text()"))
-            district = self.normalized_names[self.normalize_district(candidate.xpath("./div/p/text()")[0])]
             image = candidate.xpath("./a/img/@src")[0]
 
             p = Person(
