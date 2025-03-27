@@ -4,11 +4,11 @@
 
 ## Directory layout
 
-- **ca** - Federal module
-- **ca_candidates** - Federal elections module
-- **ca_{province abbreviation}** - Provincial module, like `ca_ab`
-- **ca_{province abbreviation}** - Provincial elections module
-- **ca_{province abbreviation}_{municipality}>** - Municipal module, like `ca_ab_calgary`
+- `ca` Federal module
+- `ca_candidates`: Federal elections module
+- `ca_{province abbreviation}`: Provincial module, like `ca_ab`
+- `ca_{province abbreviation}`: Provincial elections module
+- `ca_{province abbreviation}_{municipality}`: Municipal module, like `ca_ab_calgary`
 
 ## Usage
 
