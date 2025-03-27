@@ -47,6 +47,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         for division in Division.get("ocd-division/country:ca").children("ed"):
             if "2023" in division.id:
                 self.normalized_names[self.normalize_district(division.name)] = division.name
+                self.normalized_names[self.normalize_district(division.attrs["name_fr"])] = division.name
 
         for party in (
             "liberal",
