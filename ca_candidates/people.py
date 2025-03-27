@@ -2,6 +2,7 @@
 import logging
 import re
 
+import lxml.etree
 import requests
 import scrapelib
 from opencivicdata.divisions import Division
@@ -117,8 +118,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 if phone := candidatepage.xpath('//a[contains(@href, "tel:")]/@href'):
                     p.add_contact("voice", phone[0].replace("tel:", ""), "office")
-            except requests.RequestException:
-                # e.g. "requests.exceptions.SSLError: HTTPSConnectionPool(host='nimamachouf.org', port=443)"
+            except (lxml.etree.ParserError, requests.RequestException):
+                # requests.exceptions.SSLError: HTTPSConnectionPool(host='nimamachouf.org', port=443)
+                # lxml.etree.ParserError: Document is empty https://avilewis.ndp.ca
                 logger.exception("")
 
             yield p
@@ -139,15 +141,15 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             p.add_source(start_url)
 
-            for contact in candidate.xpath("./div/div")[1].xpath("./div/a/@href"):
-                if any(domain in contact for domain in SOCIAL_MEDIA_DOMAINS):
-                    p.add_link(contact)
+            for link in candidate.xpath("./div/div")[1].xpath("./div/a/@href"):
+                if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
+                    p.add_link(link)
                 else:
-                    candidatepage = self.lxmlize(contact)
+                    candidatepage = self.lxmlize(link)
                     if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
                         p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]).replace("Canada￼", ""))
 
-                    p.add_source(contact)
+                    p.add_source(link)
 
             yield p
 
@@ -155,15 +157,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         start_url = "https://www.greenparty.ca/en/candidates/"
 
         candidates = []
-        pattern = start_url + "page/{}"
-        for page_number in range(1, 18):
+        for page_number in range(1, 343 // 20 + 1):  # 343 divisions, 20 candidates per page
             try:
-                page = self.lxmlize(pattern.format(page_number))
-                page_candidates = page.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
+                page = self.lxmlize(f"{start_url}/page/{page_number}")
             except scrapelib.HTTPError:
-                page_candidates = []
-            if len(page_candidates):
-                candidates += page_candidates
+                pass
+            else:
+                candidates += page.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
 
         assert len(candidates), "No Green candidates found"
 
@@ -182,13 +182,13 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
             candidatepage = self.lxmlize(url)
 
+            if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
+                p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]))
+
             for link in candidatepage.xpath(
                 '//ul[@class="wp-block-social-links gpc-candidate-socials is-layout-flex wp-block-social-links-is-layout-flex"]/li/a/@href'
             ):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
-
-            if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
-                p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]))
 
             yield p
