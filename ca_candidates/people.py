@@ -165,6 +165,8 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         for candidate in candidates:
             name = candidate.xpath("./div/div/div")[0].text_content()
+            if name == "ᓘᕆ ᐃᓪᓚᐅᖅ Lori Idlout":
+                name = "Lori Idlout"
             image = candidate.xpath("./div/img")[0].get("data-img-src")
             image = "https://www.ndp.ca" + image
             district = candidate.xpath("./div/div/div")[1].text_content()
@@ -173,6 +175,16 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = "Hochelaga-Rosemont-Est"
             if district == "Northwest Territores":
                 district = "Northwest Territories"
+            if district == "Churchill-Keewatinook-Aski":
+                district = "Churchill-Keewatinook Aski"
+            if district == "Cote-Du-Sud-Riviere-Du-Loup-Kataskomiq-Temiscouata":
+                district = "Cote-Du-Sud-Riviere-Du-Loup- Kataskomiq-Temiscouata"
+            if district == "Rosemont-La-Petite-Patrie":
+                district = "Rosemont-La Petite-Patrie"
+            if district == "Sudbury Est-Manitoulin-Nickel Belt":
+                district = "Sudbury East-Manitoulin-Nickel Belt"
+            if district == "Nonafot Nunavut":
+                district = "Nunavut"
             d = self.normalized_names[district]
             p = Person(
                 primary_org="lower",
@@ -208,37 +220,41 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             p.add_source(NDP_PAGE)
             p.add_source(url)
 
-            candidatepage = self.lxmlize(url)
+            try:
+                candidatepage = self.lxmlize(url)
 
-            email_el = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
-            if email_el:
-                email = email_el[0].replace("mailto:", "")
-                p.add_contact("email", email)
+                email_el = candidatepage.xpath('//a[contains(@href, "mailto:")]/@href')
+                if email_el:
+                    email = email_el[0].replace("mailto:", "")
+                    p.add_contact("email", email)
 
-            facebook_el = candidatepage.xpath('//a[contains(@href, "facebook") or contains(@href, "fb")]/@href')
-            if facebook_el:
-                facebook = facebook_el[0]
-                p.add_link(facebook)
+                facebook_el = candidatepage.xpath('//a[contains(@href, "facebook") or contains(@href, "fb")]/@href')
+                if facebook_el:
+                    facebook = facebook_el[0]
+                    p.add_link(facebook)
 
-            instagram_el = candidatepage.xpath('//a[contains(@href, "instagram")]/@href')
-            if instagram_el:
-                instagram = instagram_el[0]
-                p.add_link(instagram)
+                instagram_el = candidatepage.xpath('//a[contains(@href, "instagram")]/@href')
+                if instagram_el:
+                    instagram = instagram_el[0]
+                    p.add_link(instagram)
 
-            twitter_el = candidatepage.xpath('//a[contains(@href, "twitter")]/@href')
-            if twitter_el:
-                twitter = twitter_el[0]
-                p.add_link(twitter)
+                twitter_el = candidatepage.xpath('//a[contains(@href, "twitter")]/@href')
+                if twitter_el:
+                    twitter = twitter_el[0]
+                    p.add_link(twitter)
 
-            youtube_el = candidatepage.xpath('//a[contains(@href, "youtube")]/@href')
-            if youtube_el:
-                youtube = youtube_el[0]
-                p.add_link(youtube)
+                youtube_el = candidatepage.xpath('//a[contains(@href, "youtube")]/@href')
+                if youtube_el:
+                    youtube = youtube_el[0]
+                    p.add_link(youtube)
 
-            phone_el = candidatepage.xpath('//a[contains(@href, "tel:")]/@href')
-            if phone_el:
-                phone = phone_el[0].replace("tel:", "")
-                p.add_contact("voice", phone, "office")
+                phone_el = candidatepage.xpath('//a[contains(@href, "tel:")]/@href')
+                if phone_el:
+                    phone = phone_el[0].replace("tel:", "")
+                    p.add_contact("voice", phone, "office")
+
+            except Exception:
+                self.warning(f"Cannot access {url}")
 
             yield p
 
@@ -332,6 +348,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 district = "Quebec Centre"
             elif district == "Kelowna-Lake Country":
                 district = "Kelowna"
+            if district == "Regina Qu'Appelle":
+                district = "Regina-Qu'Appelle"
+            if district == "Regina Wascana":
+                district = "Regina-Wascana"
             d = self.normalized_names[district]
             image = candidate.xpath("./a/img/@src")[0]
 
