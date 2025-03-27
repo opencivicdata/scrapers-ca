@@ -169,10 +169,11 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
         candidates = []
         for page_number in range(1, 343 // 20 + 1):  # 343 divisions, 20 candidates per page
+            url = f"{start_url}/page/{page_number}"
             try:
-                page = self.lxmlize(f"{start_url}/page/{page_number}")
-            except scrapelib.HTTPError:
-                pass
+                page = self.lxmlize(url)
+            except scrapelib.HTTPError as e:
+                logger.warning("%s (%s)", e, url)
             else:
                 candidates += page.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
 
