@@ -61,6 +61,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             "liberal",
             "ndp",
             "green",
+            "conservative",
         ):
             yield from getattr(self, f"scrape_{party}")()
 
@@ -206,4 +207,54 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
 
+            yield p
+
+    def scrape_conservative(self):
+        start_url = "https://www.conservative.ca/candidates"
+        page = self.lxmlize(start_url)
+
+        candidates = page.xpath('//div[@class="candidate-grid"]/div')
+        assert len(candidates)
+
+        for candidate in candidates:
+            name = " ".join(candidate.xpath("./div/div/h3/text()"))
+            name = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", name)
+            district = self.get_district(candidate.xpath("./div/div/p")[0].text_content())
+            if district is None:
+                continue
+
+            p = Person(primary_org="lower", name=name, district=district, role="candidate", party="Conservative Party")
+            url = candidate.xpath("./div/a/@href")
+            if url and url[0] != start_url:
+                url = url[0]
+                p.add_source(url)
+
+                try:
+                    candidatepage = self.lxmlize(url)
+                    try:
+                        email = self.get_email(candidatepage)
+                    except Exception:
+                        email = ""
+                    if email:
+                        p.add_contact("email", email)
+                    try:
+                        phone = self.get_phone(candidatepage).replace("https://", "")
+                    except Exception:
+                        phone = ""
+                    if phone:
+                        p.add_contact("voice", phone, "office")
+
+                except (
+                    lxml.etree.ParserError,
+                    requests.RequestException,
+                    requests.exceptions.ConnectionError,
+                    scrapelib.HTTPError,
+                ):
+                    logger.exception("")
+
+            p.add_source(start_url)
+
+            for link in candidate.xpath("./div/ul/li/a/@href"):
+                if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
+                    p.add_link(link)
             yield p
