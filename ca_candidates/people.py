@@ -63,7 +63,10 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             "green",
             "conservative",
         ):
-            yield from getattr(self, f"scrape_{party}")()
+            try:
+                yield from getattr(self, f"scrape_{party}")()
+            except IndexError:
+                logger.exception("")
 
     def scrape_ndp(self):
         delete_regex = re.compile("[ '.-]")
@@ -142,18 +145,23 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         assert len(candidates), "No Liberal candidates found"
 
         for candidate in candidates:
-            district = self.get_district(candidate.xpath("./div/header/h3/text()")[0])
+            district = self.get_district(candidate.xpath(".//h3[contains(@class, 'person__riding-name')]/text()")[0])
             if district is None:
                 continue
 
-            name = candidate.xpath("./div/header/h2/text()")[0]
+            name = candidate.xpath(".//h2[contains(@class, 'person__name')]/text()")[0]
+            # Liberal party has got the wrong name here as of 27.3.25
+            if name == "Ron Thiering" and district == "Edmonton Strathcona":
+                continue
 
             p = Person(primary_org="lower", name=name, district=district, role="candidate", party="Liberal Party")
             # image is still a div element -> extract url
 
             p.add_source(start_url)
 
-            for link in candidate.xpath("./div/div")[1].xpath("./div/a/@href"):
+            for link in candidate.xpath(".//div[contains(@class, 'person__link-row-container')]")[0].xpath(
+                "./div/a/@href"
+            ):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
                 else:
@@ -238,7 +246,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     if email:
                         p.add_contact("email", email)
                     try:
-                        phone = self.get_phone(candidatepage).replace("https://", "")
+                        phone = self.get_phone(candidatepage).replace("https://", "").replace("%20", " ")
                     except Exception:
                         phone = ""
                     if phone:
