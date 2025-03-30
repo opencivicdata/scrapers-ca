@@ -165,11 +165,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
                 else:
-                    candidatepage = self.lxmlize(link)
-                    if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
-                        p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]).replace("Canada￼", ""))
+                    try:
+                        candidatepage = self.lxmlize(link)
+                        if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
+                            p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]).replace("Canada￼", ""))
 
-                    p.add_source(link)
+                        p.add_source(link)
+                    except scrapelib.HTTPError as e:
+                        logger.warning("%s (%s)", e, link)
 
             yield p
 
