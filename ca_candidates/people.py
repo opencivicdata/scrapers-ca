@@ -171,7 +171,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                             p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]).replace("Canada￼", ""))
 
                         p.add_source(link)
-                    except scrapelib.HTTPError as e:
+                    except (
+                        lxml.etree.ParserError,
+                        requests.RequestException,
+                        requests.exceptions.ConnectionError,
+                        scrapelib.HTTPError,
+                    ) as e:
                         logger.warning("%s (%s)", e, link)
 
             yield p
