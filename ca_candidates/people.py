@@ -1,6 +1,10 @@
 # https://github.com/opencivicdata/scrapers-ca/blob/b19f84783efe046fac96426ebe6e1d7c8dcf1fcd/ca_candidates/people.py
+import csv
+import json
 import logging
 import re
+from io import StringIO
+from urllib.parse import urlsplit
 
 import lxml.etree
 import requests
@@ -8,6 +12,7 @@ import scrapelib
 from opencivicdata.divisions import Division
 from unidecode import unidecode
 
+from pupa.utils import get_pseudo_id
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -37,6 +42,7 @@ logger = logging.getLogger(__name__)
 
 class CanadaCandidatesPersonScraper(CanadianScraper):
     normalized_names = {}
+    boundary_ids = {}
 
     def normalize_district(self, district):
         # Ignore accents, hyphens, lettercase, and leading, trailing and consecutive whitespace.
@@ -56,6 +62,84 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             if "2023" in division.id:
                 self.normalized_names[self.normalize_district(division.name)] = division.name
                 self.normalized_names[self.normalize_district(division.attrs["name_fr"])] = division.name
+                self.boundary_ids[division.name] = re.search(r"(\d+)-2023\Z", division.id).group(1)
+
+        representatives = json.loads(
+            self.get("http://represent.opennorth.ca/representatives/house-of-commons/?limit=0").text
+        )["objects"]
+        self.incumbents = [representative["name"] for representative in representatives]
+
+        crowdsourcing = {}
+        url = "https://docs.google.com/spreadsheets/d/1g0yaE3dr8N7pF2K9TSp2VApJHmHDyGMqH6-Ba5SQLts/export?format=csv&id=1g0yaE3dr8N7pF2K9TSp2VApJHmHDyGMqH6-Ba5SQLts"
+
+        response = requests.get(url)
+        response.encoding = "utf-8"
+
+        key = ""
+        seen = {}
+        scraped_parties = (
+            "Bloc Québécois",
+            "Christian Heritage",
+            "Communist",
+            "Conservative",
+            "Forces et Démocratie",
+            "Green Party",
+            "Independent",
+            "Liberal",
+            "Libertarian",
+            "Marxist–Leninist",
+            "NDP",
+        )
+
+        for row in csv.DictReader(StringIO(response.text)):
+            if "District Number" in row:
+                boundary_id = row["District Number"]
+                if not re.search(r"\A\d{5}\Z", boundary_id):
+                    boundary_id = self.boundary_ids[boundary_id]
+                key = "{}/{}/{}".format(row["Party name"], boundary_id, row["Name"])
+
+                if crowdsourcing.get(key):
+                    self.warning(f"{key} already exists")
+                else:
+                    if row["Gender"] == "M":
+                        gender = "male"
+                    elif row["Gender"] == "F":
+                        gender = "female"
+                    else:
+                        gender = None
+
+                    crowdsourcing[key] = {
+                        "gender": gender,
+                        "email": row["Email"],
+                        "image": row["Photo URL"],
+                        "facebook": row["Facebook"],
+                        "instagram": row["Instagram"],
+                        "twitter": row["Twitter"],
+                        "linkedin": row["LinkedIn"],
+                        "youtube": row["YouTube"],
+                    }
+
+            steps = {
+                "gender": (
+                    lambda p: p.gender,
+                    lambda p, value: setattr(p, "gender", value),
+                ),
+                "email": (
+                    lambda p: next(
+                        (
+                            contact_detail["value"]
+                            for contact_detail in p._related[0].contact_details
+                            if contact_detail["type"] == "email"
+                        ),
+                        None,
+                    ),
+                    lambda p, value: p.add_contact("email", value),
+                ),
+                "image": (
+                    lambda p: p.image,
+                    lambda p, value: setattr(p, "image", value),
+                ),
+            }
 
         for party in (
             "liberal",
@@ -64,7 +148,86 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             "conservative",
         ):
             try:
-                yield from getattr(self, f"scrape_{party}")()
+                for p in getattr(self, f"scrape_{party}")():
+                    if not p._related[0].post_id:
+                        raise Exception(f"No post_id for {p.name} of {p._related[1].organization_id}")
+
+                    # Uniquely identify the candidate.
+                    boundary_id = get_pseudo_id(p._related[0].post_id)["label"]
+                    partyname = get_pseudo_id(p._related[1].organization_id)["name"]
+                    if not re.search(r"\A\d{5}\Z", boundary_id):
+                        try:
+                            boundary_id = self.boundary_ids[boundary_id]
+                        except KeyError:
+                            raise Exception(f"KeyError: '{boundary_id.lower()}' on {party}") from None
+                    key = f"{partyname}/{boundary_id}/{p.name}"
+
+                    # Names from Elections Canada may differ, but there may also be
+                    # multiple independents per district.
+                    seen_key = key if partyname == "Independent" else f"{partyname}/{boundary_id}"
+                    if seen.get(seen_key):
+                        # We got the candidate from a scraper.
+                        if party == "elections_canada":
+                            continue
+                        # We got the same candidate from different scrapers.
+                        else:
+                            raise Exception(f"{seen_key} seen in {seen[seen_key]} during {party}")
+                    elif party == "elections_canada":
+                        # We should have gotten the candidate from a scraper.
+                        if partyname in scraped_parties:
+                            if partyname == "Independent":
+                                self.error(f"{seen_key} not seen")
+                            else:
+                                self.warning(f"{seen_key} not seen")
+                        # We are getting the candidate from a scraper.
+                        else:
+                            seen[seen_key] = party
+
+                    # Merge the crowdsourced data.
+                    if crowdsourcing.get(key):
+                        o = crowdsourcing[key]
+
+                        links = {}
+                        for link in p.links:
+                            domain = ".".join(urlsplit(link["url"]).netloc.split(".")[-2:])
+                            if domain in ("facebook.com", "fb.com"):
+                                links["facebook"] = link["url"]
+                            elif domain == "instagram.com":
+                                links["instagram"] = link["url"]
+                            elif domain == "linkedin.com":
+                                links["linkedin"] = link["url"]
+                            elif domain == "twitter.com":
+                                links["twitter"] = link["url"]
+                            elif domain == "youtube.com":
+                                links["youtube"] = link["url"]
+
+                        for prop, (getter, setter) in steps.items():
+                            if o[prop]:
+                                if prop == "email" and ".gc.ca" in o[prop]:
+                                    self.info(f"{key}: skipping email = {o[prop]}")
+                                else:
+                                    scraped = getter(p)
+                                    if not scraped:
+                                        setter(p, o[prop])
+                                        self.debug(f"{key}: adding {prop} = {o[prop]}")
+                                    elif scraped.lower() != o[prop].lower() and prop != "image":
+                                        self.warning(f"{key}: expected {prop} to be {scraped}, not {o[prop]}")
+
+                        for prop in ["facebook", "instagram", "linkedin", "twitter", "youtube"]:
+                            if o[prop]:
+                                scraped = links.get(prop)
+                                entered = re.sub(
+                                    r"/timeline/\Z|\?(f?ref|lang|notif_t)=.+|\?_rdr\Z",
+                                    "",
+                                    o[prop].replace("@", "").replace("http://twitter.com/", "https://twitter.com/"),
+                                )  # Facebook, Twitter
+                                if not scraped:
+                                    p.add_link(entered)
+                                    self.debug(f"{key}: adding {prop} = {entered}")
+                                elif scraped.lower() != entered.lower():
+                                    self.warning(f"{key}: expected {prop} to be {scraped}, not {entered}")
+                    yield p
+
             except IndexError:
                 logger.exception("")
 
