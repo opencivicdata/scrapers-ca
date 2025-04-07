@@ -47,7 +47,7 @@ parsedatetime==2.6
     # via agate
 psycopg2==2.9.10
     # via pupa
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.10
     # via opencivicdata
 pupa @ git+https://github.com/opencivicdata/pupa@f0791f7de07574039eff10d804e4683399a16ec5
     # via -r requirements.in
@@ -59,7 +59,7 @@ pytimeparse==1.1.8
     # via agate
 pytz==2024.2
     # via pupa
-regex==2014.4.10
+regex==2024.11.6
     # via -r requirements.in
 requests==2.32.3
     # via
