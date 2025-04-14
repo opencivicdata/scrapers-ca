@@ -9,24 +9,31 @@ class NewBrunswickPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE, encoding="utf-8")
         members = page.xpath('//div[contains(@class, "member-card")]//a//@href')
         assert len(members), "No members found"
+
         for url in members:
             node = self.lxmlize(url, encoding="utf-8")
             phone = ""
             email = ""
-            address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')[0]
-            address = address.text_content().strip().splitlines()
-            address = list(map(str.strip, address))
+            address = node.xpath('//td[contains(text(),"Address")]/parent::tr//td[2]')
+            if address:
+                address = address[0]
+                address = address.text_content().strip().splitlines()
+                address = list(map(str.strip, address))
+
             hrefs = node.xpath('//table[contains(@class, "properties-table")]//a//@href')
             for href in hrefs:
                 if href.startswith("mailto:"):
                     email = href.replace("mailto:", "")
                 if href.startswith("tel:"):
                     phone = href.replace("tel:", "")
+                if href.startswith("fax:"):
+                    fax = href.replace("fax:", "")
 
             party, riding = [
                 span.text_content().strip()
                 for span in node.xpath('//div[contains(@class, "member-details-meta")]//span')
             ]
+
             district = riding.replace("\x97", "-").replace(" - ", "-")
             if district == "Madawaska Les lacs-Edmundston":
                 district = "Madawaska Les Lacs-Edmundston"
@@ -38,6 +45,8 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 district = "Shippagan-Lamèque-Miscou"
             if district == "Saint John-East":
                 district = "Saint John East"
+            if district == "Shippagan-les-\u00celes":
+                district = "Shippagan-Les-Îles"
             name = node.xpath("//h1")[0].text_content()
             name = name.replace(", Q.C.", "").replace(", K.C.", "")
             photo_url = node.xpath('//div[contains(@class, "member-details-portrait")]//img//@src')[0]
@@ -50,6 +59,8 @@ class NewBrunswickPersonScraper(CanadianScraper):
                 p.add_contact("voice", phone, "constituency")
             if email:
                 p.add_contact("email", email)
+            if fax:
+                p.add_contact("fax", fax, "legislature")
             if address:
                 p.add_contact("address", "\n".join(address), "constituency")
 
