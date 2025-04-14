@@ -146,6 +146,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             "ndp",
             "green",
             "conservative",
+            "elections_canada"
         ):
             try:
                 for p in getattr(self, f"scrape_{party}")():
@@ -437,3 +438,35 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
             yield p
+
+    def scrape_elections_canada(self):
+        name = ""
+        district = ""
+        party = ""
+
+        url_ec = "https://docs.google.com/spreadsheets/d/1vcG7xsvUMtxrYmaswGY4MMbVf_lwJp3yoCOe7U75cQ0/export?format=csv&id=1vcG7xsvUMtxrYmaswGY4MMbVf_lwJp3yoCOe7U75cQ0"
+        response_ec = requests.get(url_ec)
+        response_ec = response_ec.content.decode('utf-8', errors='replace').replace('\x00', '')
+
+        for row in csv.DictReader(StringIO(response_ec)):
+            name = row["Candidate's First Name / PrÈnom du candidat"] + " " + row["Candidate's Family Name / Nom de famille du candidat"]
+            district = row["Electoral District Number / No de circonscription"]
+            party = row["Political Affiliation"]
+            if "Liberal Party of Canada" in party:
+                party = "Liberal Party"
+            elif "Conservative Party of Canada" in party:
+                party = "Conservative Party"
+            elif "Green Party of Canada" in party:
+                party = "Green Party"
+        
+        p = Person(primary_org="lower", name=name, district=district, role="candidate", party=party)
+        p.add_source(url_ec)
+
+        phone = row[" Candidate's Campaign Office Telephone Number / NumÈro de tÈlÈphone du bureau de campagne du candidat"]
+        if phone:
+            p.add_contact("voice", phone, "office")
+
+        yield p
+
+
+
