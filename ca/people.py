@@ -93,23 +93,26 @@ class CanadaPersonScraper(CanadianScraper):
             #   Telephone: xxx-xxx-xxxx<br/>
             #   Fax: xxx-xxx-xxx
             # </p>
-            phone_el = mp_page.xpath(
-                './/h4[contains(., "Hill Office")]/../p[contains(., "Telephone")]|.//h4[contains(., "Hill Office")]/../p[contains(., "Téléphone :")]'
-            )
-            fax_el = mp_page.xpath(
-                './/h4[contains(., "Hill Office")]/../p[contains(., "Fax")]|.//h4[contains(., "Hill Office")]/../p[contains(., "Télécopieur :")]'
-            )
 
-            if phone_el:
-                phone = phone_el[0].text_content().strip().splitlines()
-                phone = phone[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
-                if phone:
+            phone_and_fax = mp_page.xpath('.//h4[contains(., "Hill Office")]/../p')[1].xpath("./text()")
+
+            for contact in phone_and_fax:
+                contact = contact.strip()
+                if "Telephone" in contact or "Téléphone" in contact:
+                    phone = contact
+                elif "Fax" in contact or "Télécopieur" in contact:
+                    fax = contact
+
+            if phone:
+                phone = phone.replace("Telephone:", "").replace("Téléphone :", "").strip()
+
+                if phone != "--":
                     m.add_contact("voice", phone, "legislature")
 
-            if fax_el:
-                fax = fax_el[0].text_content().strip().splitlines()
-                fax = fax[0].replace("Fax:", "").replace("Télécopieur :", "").strip()
-                if fax:
+            if fax:
+                fax = fax.replace("Fax:", "").replace("Télécopieur :", "").strip()
+
+                if fax != "--":
                     m.add_contact("fax", fax, "legislature")
 
             # Constituency Office contacts
@@ -136,7 +139,7 @@ class CanadaPersonScraper(CanadianScraper):
                     voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
                     if len(phone_and_fax) > 1:
                         fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
-
+                    
                     if voice:
                         m.add_contact("voice", voice, note)
 
