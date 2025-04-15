@@ -2,8 +2,8 @@
 import re
 
 from opencivicdata.divisions import Division
-from pupa.scrape import Organization
 
+from pupa.scrape import Organization
 from utils import CanadianJurisdiction
 
 
@@ -20,6 +20,17 @@ class CanadaCandidates(CanadianJurisdiction):
         {"name": "New Democratic Party"},
         {"name": "Green Party"},
         {"name": "Independent"},
+        {"name": "People's Party of Canada"},
+        {"name": "Marxist-Leninist Party of Canada"},
+        {"name": "Animal Protection Party of Canada"},
+        {"name": "Centrist Party of Canada"},
+        {"name": "Christian Heritage Party of Canada"},
+        {"name": "United Party of Canada (UP)"},
+        {"name": "Marijuana Party"},
+        {"name": "Parti Rhinocéros Party"},
+        {"name": "Libertarian Party of Canada"},
+        {"name": "Communist Party of Canada"},
+        {"name": "Canadian Future Party"},
     ]
 
     def get_organizations(self):
