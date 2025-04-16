@@ -13,8 +13,8 @@ from opencivicdata.divisions import Division
 from unidecode import unidecode
 
 from pupa.utils import get_pseudo_id
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 SOCIAL_MEDIA_DOMAINS = (
     "facebook.com",
@@ -43,12 +43,18 @@ logger = logging.getLogger(__name__)
 class CanadaCandidatesPersonScraper(CanadianScraper):
     normalized_names = {}
     boundary_ids = {}
+    elections_canada_candidates = {}
+    division_map = {}
 
     def normalize_district(self, district):
         # Ignore accents, hyphens, lettercase, and leading, trailing and consecutive whitespace.
         district = unidecode(district.translate(TRANSLATION_TABLE)).title().strip()
         district = DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district))
         return CORRECTIONS.get(district, district)
+
+    def normalized_candidate_names(self, candidate_name):
+        candidate_name = unidecode(candidate_name.translate(TRANSLATION_TABLE)).title().strip()
+        return DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", candidate_name))
 
     def get_district(self, district):
         try:
@@ -63,6 +69,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 self.normalized_names[self.normalize_district(division.name)] = division.name
                 self.normalized_names[self.normalize_district(division.attrs["name_fr"])] = division.name
                 self.boundary_ids[division.name] = re.search(r"(\d+)-2023\Z", division.id).group(1)
+                self.division_map[re.search(r"(\d+)-2023\Z", division.id).group(1)] = self.normalize_district(
+                    division.name
+                )
 
         representatives = json.loads(
             self.get("http://represent.opennorth.ca/representatives/house-of-commons/?limit=0").text
@@ -141,11 +150,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 ),
             }
 
+        self.scrape_elections_canada()
+
         for party in (
             "liberal",
             "ndp",
             "green",
             "conservative",
+            "missing_elections_canada",
         ):
             try:
                 for p in getattr(self, f"scrape_{party}")():
@@ -160,7 +172,27 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                             boundary_id = self.boundary_ids[boundary_id]
                         except KeyError:
                             raise Exception(f"KeyError: '{boundary_id.lower()}' on {party}") from None
-                    key = f"{partyname}/{boundary_id}/{p.name}"
+
+                    key = f"{partyname}/{boundary_id}"
+                    try:
+                        elections_canada_candidate = self.elections_canada_candidates[key]
+                        phone_to_be_added = True
+                        if elections_canada_candidate["phone"] == "":
+                            phone_to_be_added = False
+                        for contact_detail in p._related[0].contact_details:
+                            if (
+                                phone_to_be_added
+                                and contact_detail["type"] == "voice"
+                                and contact_detail["value"]
+                                == p.clean_telephone_number(elections_canada_candidate["phone"])
+                            ):
+                                phone_to_be_added = False
+                        if phone_to_be_added:
+                            p.add_contact("voice", elections_canada_candidate["phone"], "Work")
+                        self.elections_canada_candidates[key]["processed"] = True
+                    except KeyError:
+                        self.warning(f"Candidate not present in elections canada scrpe {key}")
+                        continue
 
                     # Names from Elections Canada may differ, but there may also be
                     # multiple independents per district.
@@ -246,7 +278,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 continue
 
             name = candidate.xpath("./div/div/div")[0].text_content()
-            image = f'https://www.ndp.ca{candidate.xpath("./div/img")[0].get("data-img-src")}'
+            image = f"https://www.ndp.ca{candidate.xpath('./div/img')[0].get('data-img-src')}"
 
             p = Person(
                 primary_org="lower",
@@ -302,7 +334,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
     def scrape_liberal(self):
         start_url = "https://liberal.ca/your-liberal-candidates/"
-        page = self.lxmlize(start_url)
+        page = self.lxmlize(start_url, user_agent=CUSTOM_USER_AGENT)
 
         candidates = page.xpath('//div[@class="person-listing-container"]/article')
         assert len(candidates), "No Liberal candidates found"
@@ -329,7 +361,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     p.add_link(link)
                 else:
                     try:
-                        candidatepage = self.lxmlize(link)
+                        candidatepage = self.lxmlize(link, user_agent=CUSTOM_USER_AGENT)
                         if email := candidatepage.xpath('//a[contains(@href, "mailto:")]/@href'):
                             p.add_contact("email", CLEAN_EMAIL_REGEX.sub("", email[0]).replace("Canada￼", ""))
 
@@ -365,6 +397,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 continue
 
             name = "".join(candidate.xpath("./div/h2/a/text()"))
+            name = self.normalized_candidate_names(name)
             image = candidate.xpath("./a/img/@src")[0]
 
             p = Person(
@@ -437,3 +470,55 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
                     p.add_link(link)
             yield p
+
+    def scrape_elections_canada(self):
+        name = ""
+        party = ""
+
+        url_ec = "https://docs.google.com/spreadsheets/d/1vcG7xsvUMtxrYmaswGY4MMbVf_lwJp3yoCOe7U75cQ0/export?format=csv&id=1vcG7xsvUMtxrYmaswGY4MMbVf_lwJp3yoCOe7U75cQ0"
+        response_ec = requests.get(url_ec)
+        response_ec = response_ec.content.decode("utf-8", errors="replace").replace("\x00", "")
+
+        for row in csv.DictReader(StringIO(response_ec)):
+            name = (
+                row["Candidate's First Name / Prénom du candidat"]
+                + " "
+                + row["Candidate's Family Name / Nom de famille du candidat"]
+            )
+            party = row["Political Affiliation"]
+            if "Liberal Party of Canada" in party:
+                party = "Liberal Party"
+            elif "Conservative Party of Canada" in party:
+                party = "Conservative Party"
+            elif "Green Party of Canada" in party:
+                party = "Green Party"
+            elif "No Affiliation" in party:
+                party = "Independent"
+            boundary_id = row["Electoral District Number / No de circonscription"]
+
+            phone = row[
+                "Candidate's Campaign Office Telephone Number / Numéro de téléphone du bureau de campagne du candidat"
+            ]
+            if not phone:
+                phone = ""
+            self.elections_canada_candidates[f"{party}/{boundary_id}"] = {
+                "phone": phone,
+                "processed": False,
+                "name": name,
+                "district": self.division_map[boundary_id],
+                "party": party,
+            }
+
+    def scrape_missing_elections_canada(self):
+        for key in self.elections_canada_candidates:
+            candidate = self.elections_canada_candidates[key]
+            if not candidate["processed"]:
+                p = Person(
+                    primary_org="lower",
+                    name=self.normalized_candidate_names(candidate["name"]),
+                    district=self.get_district(candidate["district"]),
+                    role="candidate",
+                    party=candidate["party"],
+                )
+                p.add_source("https://www.elections.ca/content2.aspx?section=can&dir=cand/lst&document=index&lang=e")
+                yield p
