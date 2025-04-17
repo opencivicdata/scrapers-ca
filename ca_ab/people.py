@@ -62,7 +62,7 @@ class AlbertaPersonScraper(CanadianScraper):
             field_names[field_names.index(name)] = f"{name} 1"
             field_names[field_names.index(name)] = f"{name} 2"
         rows = [dict(zip_longest(field_names, row)) for row in reader]
-        assert len(rows), "No members found"
+        assert rows, "No members found"
         for mla in rows:
             name = "{} {} {}".format(
                 mla["MLA First Name"],

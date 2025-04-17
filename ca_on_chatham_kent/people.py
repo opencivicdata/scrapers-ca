@@ -19,7 +19,7 @@ class ChathamKentPersonScraper(CanadianScraper):
         body = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/"><listName>councillorsByWard</listName><viewName></viewName><query><Query><OrderBy Override="TRUE"><FieldRef Ascending="True" Name="Title" /></OrderBy></Query></query><viewFields><ViewFields Properties="True" /></viewFields><rowLimit>50</rowLimit><queryOptions><QueryOptions></QueryOptions></queryOptions></GetListItems></soap:Body></soap:Envelope>'
 
         response = self.post(url=COUNCIL_DATA_URL, data=body, headers=headers)
-        page = etree.fromstring(response.content)  # noqa: S320
+        page = etree.fromstring(response.content)
         namespace = {"z": "#RowsetSchema", "rs": "urn:schemas-microsoft-com:rowset"}
 
         councillors = page.findall(".//z:row", namespace)

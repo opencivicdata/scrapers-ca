@@ -222,7 +222,7 @@ class CanadianScraper(Scraper):
             text = response.text
             if xml:
                 text = text.replace('<?xml version="1.0" encoding="utf-8"?>', "")  # special case: ca_bc
-                page = etree.fromstring(text)  # noqa: S320
+                page = etree.fromstring(text)
             else:
                 page = lxml.html.fromstring(text)
         except etree.ParserError as e:

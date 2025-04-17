@@ -18,7 +18,7 @@ class GatineauPersonScraper(CanadianScraper):
         urls = re.findall(r'arrayMembres\[.+"(.*?)",', js)
 
         councillors = list(zip(roles, districts, names, urls))
-        assert len(councillors), "No councillors found"
+        assert councillors, "No councillors found"
         for role, raw_district, name, url in councillors:
             if name == "Vacant" or "(de " in role:
                 continue

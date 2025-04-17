@@ -18,7 +18,7 @@ class CharlottetownPersonScraper(CanadianScraper):
             else:
                 groups[-1].append(node)
 
-        assert len(groups), "No councillors found"
+        assert groups, "No councillors found"
         for group in groups:
             para = group[0]
             text = para.xpath(".//strong[1]/text()")[0]

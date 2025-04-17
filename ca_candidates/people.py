@@ -10,9 +10,9 @@ import lxml.etree
 import requests
 import scrapelib
 from opencivicdata.divisions import Division
+from pupa.utils import get_pseudo_id
 from unidecode import unidecode
 
-from pupa.utils import get_pseudo_id
 from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
 

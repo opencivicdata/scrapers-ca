@@ -18,7 +18,7 @@ class WellesleyPersonScraper(CanadianScraper):
             for el in page.xpath('//div//td[@data-name="accChild"]')
             if el.text_content().strip().lower().split()[0] in ["mayor", "councillor"]
         ]
-        assert len(members), "No councillors found"
+        assert members, "No councillors found"
 
         for member in members:
             position = member.text_content().split()[0]
