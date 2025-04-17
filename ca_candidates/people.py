@@ -429,13 +429,15 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
         assert len(candidates)
 
         for candidate in candidates:
-            name = " ".join(candidate.xpath("./div/div/h3/text()"))
-            name = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", name)
+            name = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", " ".join(candidate.xpath("./div/div/h3/text()")))
             district = self.get_district(candidate.xpath("./div/div/p")[0].text_content())
             if district is None:
                 continue
 
             p = Person(primary_org="lower", name=name, district=district, role="candidate", party="Conservative Party")
+
+            p.add_source(start_url)
+
             url = candidate.xpath("./div/a/@href")
             if url and url[0] != start_url:
                 url = url[0]
@@ -443,16 +445,14 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
 
                 try:
                     candidatepage = self.lxmlize(url)
-                    try:
-                        email = self.get_email(candidatepage)
-                    except Exception:
-                        email = ""
+
+                    email = self.get_email(candidatepage, error=False)
                     if email:
                         p.add_contact("email", email)
-                    try:
-                        phone = self.get_phone(candidatepage).replace("https://", "").replace("%20", " ")
-                    except Exception:
-                        phone = ""
+
+                    phone = self.get_phone(candidatepage, error=False)
+                    if phone is not None:
+                        phone = phone.replace("https://", "").replace("%20", " ")
                     if phone:
                         p.add_contact("voice", phone, "office")
 
@@ -463,8 +463,6 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                     scrapelib.HTTPError,
                 ):
                     logger.exception("")
-
-            p.add_source(start_url)
 
             for link in candidate.xpath("./div/ul/li/a/@href"):
                 if any(domain in link for domain in SOCIAL_MEDIA_DOMAINS):
