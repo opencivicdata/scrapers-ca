@@ -18,7 +18,7 @@ cloudscraper==1.2.71
     # via -r requirements.in
 dj-database-url==0.3.0
     # via pupa
-django==4.2.20
+django==4.2.21
     # via
     #   -r requirements.in
     #   opencivicdata
