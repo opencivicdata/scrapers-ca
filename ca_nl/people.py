@@ -35,7 +35,7 @@ class NewfoundlandAndLabradorPersonScraper(CanadianScraper):
         for member in json.loads(members):
             if not member["name"].strip():
                 continue
-            if member["name"] == "<em>Vacant</em>":
+            if member["name"] in ("Vacant", "<em>Vacant</em>"):
                 continue
             name = " ".join(reversed(member["name"].split(","))).strip()
             district = (
