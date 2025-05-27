@@ -31,6 +31,8 @@ class CanadaPersonScraper(CanadianScraper):
             constituency = constituency.replace("–", "—")  # n-dash, m-dash
             if constituency == "Mont-Royal":
                 constituency = "Mount Royal"
+            if constituency == "C\u00f4te-du-Sud-Rivi\u00e8re-du-Loup-Kataskomiq-T\u00e9miscouata":
+                constituency = "Côte-du-Sud—Rivière-du-Loup— Kataskomiq—Témiscouata"
 
             province = row.xpath('.//div[@class="ce-mip-mp-province"][1]')[0].text_content()
 
@@ -136,6 +138,8 @@ class CanadaPersonScraper(CanadianScraper):
                     voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
                     if len(phone_and_fax) > 1:
                         fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
+                    else: 
+                        fax = False;
 
                     if voice:
                         m.add_contact("voice", voice, note)
