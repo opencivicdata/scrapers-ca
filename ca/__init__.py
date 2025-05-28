@@ -37,7 +37,7 @@ class Canada(CanadianJurisdiction):
         for division in Division.get(self.division_id).children("ed"):
             valid_from = division.attrs.get("validFrom")
             valid_through = getattr(division, "valid_through", None)
-            if (not valid_from):
+            if not valid_from:
                 continue
             if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
                 continue
