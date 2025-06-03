@@ -1,4 +1,8 @@
 import hashlib
+import re
+
+from opencivicdata.divisions import Division
+from unidecode import unidecode
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
@@ -8,8 +12,20 @@ COUNCIL_PAGE_MALE = "https://www.ourcommons.ca/Members/en/search?caucusId=all&pr
 COUNCIL_PAGE_FEMALE = "https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=F"
 IMAGE_PLACEHOLDER_SHA1 = ["e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d"]
 
+TRANSLATION_TABLE = str.maketrans("\u2013\u2014-", "   ")
+CONSECUTIVE_WHITESPACE_REGEX = re.compile(r"\s+")
+DELETE_REGEX = re.compile(r"[\u200f]")
+CORRECTIONS = {
+    # Different names.
+    "Kelowna Lake Country": "Kelowna",
+    "Nonafot Nunavut": "Nunavut",
+    # Typographic errors.
+    "Northwest Territores": "Northwest Territories",
+}
+
 
 class CanadaPersonScraper(CanadianScraper):
+    normalized_names = {}
     """
     The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
     accessible from http://www.parl.gc.ca/Parliamentarians/en/members has no
@@ -17,20 +33,28 @@ class CanadaPersonScraper(CanadianScraper):
     """
 
     def scrape(self):
+        # Create list mapping names to IDs.
+        for division in Division.get("ocd-division/country:ca").children("ed"):
+            if "2023" in division.id:
+                self.normalized_names[self.normalize_district(division.name)] = division.name
         genders = {"male": COUNCIL_PAGE_MALE, "female": COUNCIL_PAGE_FEMALE}
         for gender, url in genders.items():
             page = self.lxmlize(url)
             rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
             yield from self.scrape_people(rows, gender)
 
+    def normalize_district(self, district):
+        # Ignore accents, hyphens, lettercase, and leading, trailing and consecutive whitespace.
+        district = unidecode(district.translate(TRANSLATION_TABLE)).title().strip()
+        district = DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district))
+        return CORRECTIONS.get(district, district)
+
     def scrape_people(self, rows, gender):
         assert len(rows), "No members found"
         for row in rows:
             name = row.xpath('.//div[@class="ce-mip-mp-name"][1]')[0].text_content()
             constituency = row.xpath('.//div[@class="ce-mip-mp-constituency"][1]')[0].text_content()
-            constituency = constituency.replace("–", "—")  # n-dash, m-dash
-            if constituency == "Mont-Royal":
-                constituency = "Mount Royal"
+            constituency = self.normalized_names[self.normalize_district(constituency)]
 
             province = row.xpath('.//div[@class="ce-mip-mp-province"][1]')[0].text_content()
 
@@ -136,6 +160,8 @@ class CanadaPersonScraper(CanadianScraper):
                     voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
                     if len(phone_and_fax) > 1:
                         fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
+                    else:
+                        fax = False
 
                     if voice:
                         m.add_contact("voice", voice, note)
