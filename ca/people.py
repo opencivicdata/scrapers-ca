@@ -24,29 +24,31 @@ CORRECTIONS = {
 
 
 class CanadaPersonScraper(CanadianScraper):
-    normalized_names = {}
     """
     The CSV at http://www.parl.gc.ca/Parliamentarians/en/members/export?output=CSV
     accessible from http://www.parl.gc.ca/Parliamentarians/en/members has no
     contact information or photo URLs.
     """
 
-    def scrape(self):
-        # Create list mapping names to IDs.
-        for division in Division.get("ocd-division/country:ca").children("ed"):
-            if "2023" in division.id:
-                self.normalized_names[self.normalize_district(division.name)] = division.name
-        genders = {"male": COUNCIL_PAGE_MALE, "female": COUNCIL_PAGE_FEMALE}
-        for gender, url in genders.items():
-            page = self.lxmlize(url)
-            rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
-            yield from self.scrape_people(rows, gender)
+    normalized_names = {}
 
     def normalize_district(self, district):
         # Ignore accents, hyphens, lettercase, and leading, trailing and consecutive whitespace.
         district = unidecode(district.translate(TRANSLATION_TABLE)).title().strip()
         district = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district)
         return CORRECTIONS.get(district, district)
+
+    def scrape(self):
+        # Create list mapping names to IDs.
+        for division in Division.get("ocd-division/country:ca").children("ed"):
+            if "2023" in division.id:
+                self.normalized_names[self.normalize_district(division.name)] = division.name
+
+        genders = {"male": COUNCIL_PAGE_MALE, "female": COUNCIL_PAGE_FEMALE}
+        for gender, url in genders.items():
+            page = self.lxmlize(url)
+            rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
+            yield from self.scrape_people(rows, gender)
 
     def scrape_people(self, rows, gender):
         assert len(rows), "No members found"
@@ -156,16 +158,14 @@ class CanadaPersonScraper(CanadianScraper):
                     phone_and_fax = phone_and_fax_el[0].text_content().strip().splitlines()
                     # Note that https://www.ourcommons.ca/Members/en/michael-barrett(102275)#contact
                     # has a empty value - "Telephone:". So the search / replace cannot include space.
-                    voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
-                    if len(phone_and_fax) > 1:
-                        fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
-                    else:
-                        fax = False
 
+                    voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
                     if voice:
                         m.add_contact("voice", voice, note)
 
-                    if fax:
-                        m.add_contact("fax", fax, note)
+                    if len(phone_and_fax) > 1:
+                        fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
+                        if fax:
+                            m.add_contact("fax", fax, note)
 
             yield m
