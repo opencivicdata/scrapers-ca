@@ -36,25 +36,10 @@ class Canada(CanadianJurisdiction):
 
         for division in Division.get(self.division_id).children("ed"):
             valid_from = division.attrs.get("validFrom")
-            valid_through = getattr(division, "valid_through", None)
-            if not valid_from:
-                continue
-            if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
-                continue
-            if valid_from > datetime.now().strftime("%Y-%m-%d"):
-                continue
-            lower.add_post(role="MP", label=division.name, division_id=division.id)
-
-        # for ocd_type in ("province", "territory"):
-        #     for province_or_territory in Division.get(self.division_id).children(ocd_type):
-        #         for division in province_or_territory.children("fed"):
-        #             valid_from = division.attrs.get("validFrom")
-        #             valid_through = getattr(child, "valid_through", None)
-        #             if valid_from and valid_from > datetime.now().strftime("%Y-%m-%d"):
-        #                 continue
-        #             if valid_through and valid_through < datetime.now().strftime("%Y-%m-%d"):
-        #                 continue
-        #             lower.add_post(role="MP", label=division.name, division_id=division.id)
+            valid_through = getattr(division, "valid_through", "9999-99-99")
+            now = datetime.now().strftime("%Y-%m-%d")
+            if valid_from and valid_from <= now and valid_through >= now:
+                lower.add_post(role="MP", label=division.name, division_id=division.id)
 
         yield upper
         yield lower
