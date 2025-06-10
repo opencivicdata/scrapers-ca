@@ -12,9 +12,8 @@ COUNCIL_PAGE_MALE = "https://www.ourcommons.ca/Members/en/search?caucusId=all&pr
 COUNCIL_PAGE_FEMALE = "https://www.ourcommons.ca/Members/en/search?caucusId=all&province=all&gender=F"
 IMAGE_PLACEHOLDER_SHA1 = ["e4060a9eeaf3b4f54e6c16f5fb8bf2c26962e15d"]
 
-TRANSLATION_TABLE = str.maketrans("\u2013\u2014-", "   ")
+TRANSLATION_TABLE = str.maketrans("\u2013\u2014-", "   ", "\u200f")  # n-dash, m-dash, right-to-left mark
 CONSECUTIVE_WHITESPACE_REGEX = re.compile(r"\s+")
-DELETE_REGEX = re.compile(r"[\u200f]")
 CORRECTIONS = {
     # Different names.
     "Kelowna Lake Country": "Kelowna",
@@ -46,7 +45,7 @@ class CanadaPersonScraper(CanadianScraper):
     def normalize_district(self, district):
         # Ignore accents, hyphens, lettercase, and leading, trailing and consecutive whitespace.
         district = unidecode(district.translate(TRANSLATION_TABLE)).title().strip()
-        district = DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district))
+        district = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district)
         return CORRECTIONS.get(district, district)
 
     def scrape_people(self, rows, gender):

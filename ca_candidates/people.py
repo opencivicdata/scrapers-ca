@@ -26,9 +26,8 @@ SOCIAL_MEDIA_DOMAINS = (
 )
 CLEAN_EMAIL_REGEX = re.compile(r"mailto:|\?subject=.+")
 
-TRANSLATION_TABLE = str.maketrans("\u2013\u2014-", "   ")
+TRANSLATION_TABLE = str.maketrans("\u2013\u2014-", "   ", r"\u200f")  # n-dash, m-dash, right-to-left mark
 CONSECUTIVE_WHITESPACE_REGEX = re.compile(r"\s+")
-DELETE_REGEX = re.compile(r"[\u200f]")
 CORRECTIONS = {
     # Different names.
     "Kelowna Lake Country": "Kelowna",
@@ -49,12 +48,12 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
     def normalize_district(self, district):
         # Ignore accents, hyphens, lettercase, and leading, trailing and consecutive whitespace.
         district = unidecode(district.translate(TRANSLATION_TABLE)).title().strip()
-        district = DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district))
+        district = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district)
         return CORRECTIONS.get(district, district)
 
     def normalized_candidate_names(self, candidate_name):
         candidate_name = unidecode(candidate_name.translate(TRANSLATION_TABLE)).title().strip()
-        return DELETE_REGEX.sub("", CONSECUTIVE_WHITESPACE_REGEX.sub(" ", candidate_name))
+        return CONSECUTIVE_WHITESPACE_REGEX.sub(" ", candidate_name)
 
     def get_district(self, district):
         try:
