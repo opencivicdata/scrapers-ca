@@ -7,58 +7,13 @@ COUNCIL_PAGE = "https://www.pickering.ca/en/city-hall/citycouncil.aspx"
 
 
 class PickeringPersonScraper(CanadianScraper):
-    def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
-
-        mayor_contacts = []
-        council_contacts = []
-
-        mayor_phone = page.xpath(
-            "//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'T.')][1]"
-        )[0]
-        mayor_phone = page.xpath(
-            "//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'T.')][1]"
-        )[0]
-        mayor_phone = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", mayor_phone)[0]
-        mayor_phone = mayor_phone.replace(".", "-")
-
-        mayor_fax = page.xpath(
-            "//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'F.')][1]"
-        )[0]
-        mayor_fax = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", mayor_fax)[0]
-        mayor_fax = mayor_fax.replace(".", "-")
-
-        mayor_contacts.append(mayor_phone)
-        mayor_contacts.append(mayor_fax)
-
-        council_phone = page.xpath(
-            "//strong[contains(text(), 'Council Office')]/following-sibling::text()[contains(., 'T.')][1]"
-        )[0]
-        council_phone = page.xpath(
-            "//strong[contains(text(), 'Council Office')]/following-sibling::text()[contains(., 'T.')][1]"
-        )[0]
-        council_phone = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", council_phone)[0]
-        council_phone = council_phone.replace(".", "-")
-
-        council_fax = page.xpath(
-            "//strong[contains(text(), 'Office of the Mayor')]/following-sibling::text()[contains(., 'F.')][1]"
-        )[0]
-        council_fax = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", council_fax)[0]
-        council_fax = council_fax.replace(".", "-")
-
-        council_contacts.append(council_phone)
-        council_contacts.append(council_fax)
-
-        mayor = page.xpath('//div[contains(@class, "component-outro")]')[0]
-        name = mayor.xpath(".//strong/text()")[0]
-        email = self.get_email(mayor)
-
-        p = Person(primary_org="legislature", name=name, district="Pickering", role="Mayor")
+    def _create_person(self, *, element, name, district, role, phone_text, fax_text):
+        p = Person(primary_org="legislature", name=name, district=district, role=role)
         p.add_source(COUNCIL_PAGE)
-        p.add_contact("email", email)
-        p.image = mayor.xpath(".//img/@src")[0]
+        p.add_contact("email", self.get_email(element))
+        p.image = element.xpath(".//img/@src")[0]
 
-        links = mayor.xpath(".//a")
+        links = element.xpath(".//a")
         for link in links:
             if "@" in link.text_content():
                 continue
@@ -67,39 +22,40 @@ class PickeringPersonScraper(CanadianScraper):
             else:
                 p.add_link(link.attrib["href"])
 
-        add_contacts(p, mayor_contacts)
+        for contact_type, letter, contact_text in (("voice", "T", phone_text), ("fax", "F", fax_text)):
+            text = element.xpath(
+                f"//strong[contains(text(), '{contact_text}')]/following-sibling::text()[contains(., '{letter}.')][1]"
+            )[0]
+            number = re.findall(r"\b\d{3}\.\d{3}\.\d{4}\b", text)[0].replace(".", "-")
+            p.add_contact(contact_type, number, "legislature")
+
+        return p
+
+    def scrape(self):
+        page = self.lxmlize(COUNCIL_PAGE)
+
+        mayor = page.xpath('//div[contains(@class, "component-outro")]')[0]
+        p = self._create_person(
+            element=mayor,
+            name=mayor.xpath(".//strong/text()")[0],
+            district="Pickering",
+            role="Mayor",
+            phone_text="Office of the Mayor",
+            fax_text="Office of the Mayor",
+        )
         yield p
 
         councillors = page.xpath('//div[@class="inner  "]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            name = councillor.xpath(".//strong//text()")[0]
+            role, ward = re.split(r"\s(?=Ward)", councillor.xpath(".//text()")[10], maxsplit=1)
 
-            name = name.replace("Councillor", "").strip()
-            role_ward = councillor.xpath(".//text()")[10]
-            role, ward = re.split(r"\s(?=Ward)", role_ward, maxsplit=1)
-
-            email = self.get_email(councillor)
-            p = Person(primary_org="legislature", name=name, district=ward, role=role)
-            p.add_source(COUNCIL_PAGE)
-            p.add_contact("email", email)
-            p.image = councillor.xpath(".//img/@src")[0]
-
-            links = councillor.xpath(".//a")
-            for link in links:
-                if "@" in link.text_content():
-                    continue
-                if "Profile" in link.text_content():
-                    p.add_source(link.attrib["href"])
-                else:
-                    p.add_link(link.attrib["href"])
-
-            add_contacts(p, council_contacts)
+            p = self._create_person(
+                element=councillor,
+                name=councillor.xpath(".//strong//text()")[0].replace("Councillor", "").strip(),
+                district=ward,
+                role=role,
+                phone_text="Council Office",
+                fax_text="Office of the Mayor",
+            )
             yield p
-
-
-def add_contacts(p, contacts):
-    phone = re.findall(r"[0-9]{3}\-[0-9]{3}\-[0-9]{4}", contacts[0])[0]
-    fax = re.findall(r"[0-9]{3}\-[0-9]{3}\-[0-9]{4}", contacts[1])[0]
-    p.add_contact("voice", phone, "legislature")
-    p.add_contact("fax", fax, "legislature")
