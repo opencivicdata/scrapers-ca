@@ -7,10 +7,10 @@ COUNCIL_PAGE = "https://www.countygp.ab.ca/en/county-government/council.aspx"
 class GrandePrairieCountyNo1PersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[contains(@class, "fbg-row lmRow ui-sortable")]')
+        councillors = page.xpath('//div[@id="printAreaContent"]/div[contains(@class, "fbg-row lmRow ui-sortable")]')
 
         # the first two matching containers have no councillor
-        councillors = councillors[3:]
+        councillors = councillors[2:]
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
