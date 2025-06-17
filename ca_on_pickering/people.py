@@ -35,7 +35,7 @@ class PickeringPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         mayor = page.xpath('//div[contains(@class, "component-outro")]')[0]
-        p = self._create_person(
+        yield self._create_person(
             element=mayor,
             name=mayor.xpath(".//strong/text()")[0],
             district="Pickering",
@@ -43,19 +43,17 @@ class PickeringPersonScraper(CanadianScraper):
             phone_text="Office of the Mayor",
             fax_text="Office of the Mayor",
         )
-        yield p
 
         councillors = page.xpath('//div[@class="inner  "]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             role, ward = re.split(r"\s(?=Ward)", councillor.xpath(".//text()")[10], maxsplit=1)
 
-            p = self._create_person(
+            yield self._create_person(
                 element=councillor,
                 name=councillor.xpath(".//strong//text()")[0].replace("Councillor", "").strip(),
                 district=ward,
                 role=role,
                 phone_text="Council Office",
-                fax_text="Office of the Mayor",
+                fax_text="Office of the Mayor",  # same as mayor
             )
-            yield p
