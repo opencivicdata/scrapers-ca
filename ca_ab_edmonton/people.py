@@ -5,9 +5,27 @@ from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.edmonton.ca/city_government/city_organization/city-councillors"
 MAYOR_PAGE = "https://www.edmonton.ca/city_government/city_organization/the-mayor"
+MAYOR_CONTACT_PAGE = "https://www.edmonton.ca/city_government/city_organization/mayor/contact-the-mayor"
 
 
 class EdmontonPersonScraper(CanadianScraper):
+    def get_contact_info(self, page, p: Person):
+        contacts = page.xpath('//table[@summary="Contact information"]//tr')
+        for contact in contacts:
+            contact_type = contact.xpath("./th/text()")[0]
+            value = contact.xpath("./td")[0].text_content().strip()
+            if "Title" in contact_type:
+                continue
+            if "Website" in contact_type or "Facebook" in contact_type or "Twitter" in contact_type:
+                value = contact.xpath("./td/a/text()")[0]
+                p.add_link(value)
+            elif "Telephone" in contact_type or "Phone" in contact_type:
+                p.add_contact("voice", value, "legislature")
+            elif "Fax" in contact_type:
+                p.add_contact("fax", value, "legislature")
+            elif "Email" in contact_type:
+                p.add_contact("email", value)
+
     def scrape(self):
         yield self.scrape_mayor()
         page = self.lxmlize(COUNCIL_PAGE)
@@ -41,22 +59,7 @@ class EdmontonPersonScraper(CanadianScraper):
             if address:
                 address = address[0].text_content()
                 p.add_contact("address", address, "legislature")
-
-            contacts = page.xpath('//table[@summary="Contact information"]//tr')
-            for contact in contacts:
-                contact_type = contact.xpath("./th/text()")[0]
-                value = contact.xpath("./td//text()")[0]
-                if "Title" in contact_type:
-                    continue
-                elif "Website" in contact_type or "Facebook" in contact_type or "Twitter" in contact_type:
-                    value = contact.xpath("./td/a/text()")[0]
-                    p.add_link(value)
-                elif "Telephone" in contact_type:
-                    p.add_contact("voice", value, "legislature")
-                elif "Fax" in contact_type:
-                    p.add_contact("fax", value, "legislature")
-                elif "Email" in contact_type:
-                    p.add_contact("email", value)
+            self.get_contact_info(page, p)
             yield p
 
     def scrape_mayor(self):
@@ -66,7 +69,11 @@ class EdmontonPersonScraper(CanadianScraper):
         p = Person(primary_org="legislature", name=name, district="Edmonton", role="Mayor")
         p.add_source(MAYOR_PAGE)
 
-        address = " ".join(page.xpath("//address/p/text()"))
+        contact_page = self.lxmlize(MAYOR_CONTACT_PAGE)
+
+        address = " ".join(contact_page.xpath("//address/p/text()"))
         p.add_contact("address", address, "legislature")
+
+        self.get_contact_info(contact_page, p)
 
         return p
