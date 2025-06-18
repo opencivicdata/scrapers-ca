@@ -38,6 +38,9 @@ class CanadaPersonScraper(CanadianScraper):
         district = CONSECUTIVE_WHITESPACE_REGEX.sub(" ", district)
         return CORRECTIONS.get(district, district)
 
+    def is_valid_telephone_number(self, string):
+        return len(re.sub(r"\D", "", string)) in {7, 10, 11}
+
     def scrape(self):
         # Create list mapping names to IDs.
         for division in Division.get("ocd-division/country:ca").children("ed"):
@@ -128,13 +131,13 @@ class CanadaPersonScraper(CanadianScraper):
             if phone_el:
                 phone = phone_el[0].text_content().strip().splitlines()
                 phone = phone[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
-                if phone:
+                if phone and self.is_valid_telephone_number(phone):
                     m.add_contact("voice", phone, "legislature")
 
             if fax_el:
                 fax = fax_el[0].text_content().strip().splitlines()
                 fax = fax[0].replace("Fax:", "").replace("Télécopieur :", "").strip()
-                if fax:
+                if fax and self.is_valid_telephone_number(fax):
                     m.add_contact("fax", fax, "legislature")
 
             # Constituency Office contacts
@@ -160,12 +163,12 @@ class CanadaPersonScraper(CanadianScraper):
                     # has a empty value - "Telephone:". So the search / replace cannot include space.
 
                     voice = phone_and_fax[0].replace("Telephone:", "").replace("Téléphone :", "").strip()
-                    if voice:
+                    if voice and self.is_valid_telephone_number(voice):
                         m.add_contact("voice", voice, note)
 
                     if len(phone_and_fax) > 1:
                         fax = phone_and_fax[1].replace("Fax:", "").replace("Télécopieur :", "").strip()
-                        if fax:
+                        if fax and self.is_valid_telephone_number(fax):
                             m.add_contact("fax", fax, note)
 
             yield m
