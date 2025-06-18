@@ -10,7 +10,7 @@ class LangleyPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@class="views-row"]')[1:]
+        councillors = page.xpath('//div[contains(./@class, "view-councillors")]//div[@class="views-row"]')
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
