@@ -11,8 +11,9 @@ class LambtonPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
         councillors = page.xpath('//tbody//td[@data-name="accParent"]')
         assert len(councillors), "No councillors found"
+
         for councillor in councillors:
-            text = councillor.xpath(".//h3/text()")[0]
+            text = councillor.text_content()
             if "Deputy Warden" in text:
                 role = "Deputy Warden"
                 name = text.replace("Deputy Warden ", "")
