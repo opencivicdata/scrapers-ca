@@ -61,10 +61,10 @@ class CapeBretonPersonScraper(CanadianScraper):
 
         mayorpage = self.lxmlize(MAYOR_PAGE, user_agent=CUSTOM_USER_AGENT)
 
-        info = mayorpage.xpath("//div[@class='item-page']/p/text()")[1]
-        name = " ".join(info.split()[:2])
+        info = mayorpage.xpath("//div[@class='item-page']/p/text()")[0]
+        name = " ".join(info.split()[1:]).title()
 
-        photo_url = mayorpage.xpath("//span/img/@src")[0]
+        photo_url = mayorpage.xpath('//div[@id="main-area"]//img/@src')[0]
         contact_nodes = mayorpage.xpath('//aside//h3[contains(text(), "Contact")]/following-sibling::div[1]')[0]
         address = contact_nodes.xpath(".//p[1]/text()")[0]
         phone = contact_nodes.xpath(".//p[2]/text()")[0].split(": ")[1]
