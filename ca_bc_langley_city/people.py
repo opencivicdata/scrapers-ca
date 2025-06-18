@@ -1,7 +1,8 @@
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://city.langley.bc.ca/cityhall/city-council/council-members"
+COUNCIL_PAGE = "https://www.langleycity.ca/city-hall/city-council"
+MAYOR_PAGE = "https://www.langleycity.ca/city-hall/city-council/mayor-nathan-pachal"
 
 
 class LangleyPersonScraper(CanadianScraper):
@@ -10,16 +11,16 @@ class LangleyPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath(
-            '//div[@class="field field--name-field-ec-section-title field--type-string field--label-hidden field__item"]'
-        )[:-1]
+        councillors = page.xpath('//div[@class="views-row"]')[1:]
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            role, name = councillor.text_content().split(" ", 1)
+            role, name = councillor.xpath(".//h3")[0].text_content().split(" ", 1)
             if role == "Mayor":
                 district = "Langley"
-                phone_div = councillor.xpath('..//p[contains(., "Phone:")]')[0]
+                url = councillor.xpath(".//h3/a/@href")[0]
+                mayor_page = self.lxmlize(url)
+                phone_div = mayor_page.xpath('//p[contains(., "Phone:")]')[0]
                 phone = self.get_phone(phone_div)
             else:
                 district = f"Langley (seat {councillor_seat_number})"
@@ -27,14 +28,8 @@ class LangleyPersonScraper(CanadianScraper):
                     "604 514 2800"  # According to their site, all councillors can be contacted at this phone number
                 )
                 councillor_seat_number += 1
-            email = (
-                councillor.xpath('..//p[contains(., "Email:")]')[0]
-                .text_content()
-                .split("Email:", 1)[1]
-                .strip()
-                .replace("(at)", "@")
-            )
-            image = councillor.xpath("..//img/@src")[0]
+            email = self.get_email(councillor)
+            image = councillor.xpath(".//img/@src")[0]
 
             p = Person(primary_org="legislature", name=name, district=district, role=role, image=image)
             p.add_contact("voice", phone, "legislature")
