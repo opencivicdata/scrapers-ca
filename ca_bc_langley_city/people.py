@@ -2,7 +2,6 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.langleycity.ca/city-hall/city-council"
-MAYOR_PAGE = "https://www.langleycity.ca/city-hall/city-council/mayor-nathan-pachal"
 
 
 class LangleyPersonScraper(CanadianScraper):
