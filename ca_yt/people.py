@@ -1,10 +1,8 @@
-import contextlib
+import cloudscraper
+from lxml import html
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
-
-import cloudscraper
-from lxml import html
 
 COUNCIL_PAGE = "https://yukonassembly.ca/mlas"
 
@@ -38,8 +36,9 @@ class YukonPersonScraper(CanadianScraper):
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                with contextlib.suppress(IndexError):
-                    p.image = page.xpath('//article[contains(@class, "member")]/p/img/@src')[0]
+                image_node = page.xpath('//article[contains(@class, "member")]/p/img/@src')
+                if image_node is not None:
+                    p.image = "https://yukonassmebly.c" + image_node[0]
 
                 contact = page.xpath('//article[contains(@class, "members-sidebar")]')[0]
                 website = contact.xpath("./div[3]/div[3]/div[2]/a")
