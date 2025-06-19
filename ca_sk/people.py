@@ -16,7 +16,7 @@ class SaskatchewanPersonScraper(CanadianScraper):
         for member in members:
             if "Vacant" in member.xpath("./td")[1].text_content():
                 continue
-            name = member.xpath("./td")[0].text_content().split(". ", 1)[1].strip()
+            name = member.xpath("./td")[0].text_content().strip()
             district = member.xpath("./td")[2].text_content().strip()
             if district == "White City-Qu'Appelle":
                 district = "White City-Qu'appelle"
