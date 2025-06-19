@@ -13,8 +13,7 @@ class HalifaxPersonScraper(CanadianScraper):
 
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            photo_div = councillor.xpath("./a/div[1]")[0]
-            info_div = councillor.xpath("./a/div[2]")[0]
+            info_div = councillor.xpath('.//div[contains(./@class, "c-district-index-tiles__content")]')[0]
             district = re.sub(r"\s*[–—-]\s*", "—", "—".join(info_div.xpath("./p/text()")))
             if district == "Halifax West Armdale":
                 district = "Halifax West—Armdale"  # m-dash
@@ -29,8 +28,8 @@ class HalifaxPersonScraper(CanadianScraper):
                 role = "Councillor"
 
             if name != "To be determined":
-                photo = photo_div.xpath(".//img/@src")[0]
-                url = councillor.xpath("./a/@href")[0]
+                photo = councillor.xpath(".//img/@src")[0]
+                url = councillor.xpath(".//a/@href")[0]
                 councillor_page = self.lxmlize(url, user_agent="Mozilla/5.0")
 
                 phone = self.get_phone(councillor_page, area_codes=[902])
