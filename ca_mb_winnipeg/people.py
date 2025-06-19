@@ -21,6 +21,8 @@ class WinnipegPersonScraper(CanadianScraper):
             if not item["current_council"]:
                 continue
             name = item["person"]
+            if name == "Vacant":
+                continue
             role = item["position_english"]
             district = item["name_english"].replace(" - ", "—")
             if "phone" in item:
