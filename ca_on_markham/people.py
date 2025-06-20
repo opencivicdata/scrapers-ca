@@ -20,6 +20,8 @@ class MarkhamPersonScraper(CanadianScraper):
 
         for councillor in councillors:
             name = councillor.xpath(".//h3/text()")[0].strip()
+            if "Vacant" in name:
+                continue
             district = councillor.xpath(".//p/text()")[0].strip()
 
             if "Ward" in district:
@@ -85,7 +87,7 @@ class MarkhamPersonScraper(CanadianScraper):
     def scrape_mayor(self, url):
         page = self.lxmlize(url)
         name = page.xpath(
-            './/div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]/h1/span/span/text()'
+            './/div[@class="formatted-text field-content field-content--label--body field-content--entity-type--block-content field-content--name--body"]/h2/text()'
         )[0]
         contact_node = page.xpath('.//div[@class="dept-contact-info--block"]')[0]
         email = self.get_email(contact_node)
