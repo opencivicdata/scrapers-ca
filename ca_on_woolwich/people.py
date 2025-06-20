@@ -13,7 +13,6 @@ class WoolwichPersonScraper(CanadianScraper):
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@class="repeatable accordion tab-basic "]//p[@class="tab "]')
-        # councillors = page.xpath('//td[@data-name="accParent"]/h2')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             role, name = re.split(r"\s", councillor.text_content().strip(), maxsplit=1)
