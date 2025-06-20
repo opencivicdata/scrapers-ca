@@ -4,7 +4,7 @@ from collections import defaultdict
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.woolwich.ca/en/council/council.asp"
+COUNCIL_PAGE = "https://www.woolwich.ca/learn-about/council/"
 
 
 class WoolwichPersonScraper(CanadianScraper):
@@ -12,10 +12,11 @@ class WoolwichPersonScraper(CanadianScraper):
         seat_numbers = defaultdict(int)
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//td[@data-name="accParent"]/h2')
+        councillors = page.xpath('//div[@class="repeatable accordion tab-basic "]//p[@class="tab "]')
+        # councillors = page.xpath('//td[@data-name="accParent"]/h2')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            role, name = re.split(r"\s", councillor.text_content(), maxsplit=1)
+            role, name = re.split(r"\s", councillor.text_content().strip(), maxsplit=1)
             area = re.search(r"Ward \d", name)
             if not area:
                 district = "Woolwich"
@@ -24,7 +25,7 @@ class WoolwichPersonScraper(CanadianScraper):
                 district = area.group(0) + f" (seat {seat_numbers[area]})"
             if "(" in name:
                 name = name.split(" (")[0]
-            info = councillor.xpath("./ancestor::tr[1]/following-sibling::tr")[0].text_content()
+            info = councillor.xpath("./following-sibling::div")[0].text_content()
             office = re.search(r"(?<=Office: )\d{3}-\d{3}-\d{4}", info).group(0)
             voice = (
                 re.search(r"(?<=Toll Free: )(1-)?\d{3}-\d{3}-\d{4}( extension \d{4})?", info)
