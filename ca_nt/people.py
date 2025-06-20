@@ -13,10 +13,10 @@ class NorthwestTerritoriesPersonScraper(CanadianScraper):
         members = page.xpath('//div[contains(@class, "view-id-member")]/div/div[contains(@class, "views-row")]')
         assert len(members), "No members found"
         for member in members:
-            if "Vacant" not in member.xpath('//span[contains(@class, "field--name-title")]')[0].text_content():
+            if "Vacant" not in member.xpath('.//span[contains(@class, "field--name-title")]')[0].text_content():
+                name = member.xpath('.//span[contains(@class, "field--name-title")]')[0].text_content().strip()
                 url = member.xpath("./article/a/@href")[0]
                 page = self.lxmlize(url)
-                name = page.xpath('//*[contains(@class, "page-title")]')[0].text_content().strip()
                 district = (
                     page.xpath('//*[contains(@class, "field--name-field-constituency")]')[0]
                     .text_content()
