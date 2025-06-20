@@ -9,7 +9,7 @@ class MiltonPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        wards = page.xpath('//div[@class="fbg-col-xs-12 fbg-col-sm-4 column lmColumn ui-sortable"]//a')[1:]
+        wards = page.xpath('//div[@class="fbg-col-xs-12 fbg-col-sm-4 column lmColumn ui-sortable"]//a')[1:5]
         assert len(wards), "No wards found"
         for ward in wards:
             district = ward.text_content()
@@ -18,7 +18,9 @@ class MiltonPersonScraper(CanadianScraper):
             councillors = page.xpath('//div[@class="fbg-col-xs-12"]')[1:]
             assert len(councillors), "No councillors found"
             for councillor in councillors:
-                yield self.scrape_person(councillor, district, url)
+                p = self.scrape_person(councillor, district, url)
+                if p is not None:
+                    yield p
 
         page = self.lxmlize(MAYOR_PAGE)
         info = page.xpath('//div[@class="fbg-col-xs-12"]')[0]
@@ -26,6 +28,8 @@ class MiltonPersonScraper(CanadianScraper):
 
     def scrape_person(self, node, district, source):
         role, name = node.xpath(".//h2/text()")[:2]
+        if "Vacant" in name:
+            return None
         role = role.strip()
         if role == "Town Councillor":
             role = "Councillor"
