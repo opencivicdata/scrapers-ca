@@ -3,7 +3,7 @@ import re
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.lasalle.ca/en/town-hall/town-of-lasalle-council.aspx"
+COUNCIL_PAGE = "https://www.lasalle.ca/town-hall/mayor-and-council/"
 
 
 class LaSallePersonScraper(CanadianScraper):
@@ -12,11 +12,13 @@ class LaSallePersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@class="fbg-row lb-imageBox cm-datacontainer"]')
+        councillors = page.xpath('//div[contains(@class, "component-main")]//div[contains(@class, "item")]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             role, name = re.split(
-                r"(?<=Mayor)|(?<=Councillor)", councillor.xpath(".//a/div")[0].text_content(), maxsplit=1
+                r"(?<=Mayor)|(?<=Councillor)",
+                councillor.xpath('.//p[contains(@class, "heading")]')[0].text_content(),
+                maxsplit=1,
             )
             district = "LaSalle" if "Mayor" in role else f"LaSalle (seat {councillor_seat_number})"
             image = councillor.xpath(".//img/@src")[0]
