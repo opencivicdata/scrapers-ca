@@ -303,6 +303,10 @@ class CSVScraper(CanadianScraper):
     """
     district_name_format_string = None
     """
+    A callable that formats the district name. If district_name_format_string is also specified it takes precendence. Rarely used.
+    """
+    district_name_format_callback = None
+    """
     A dictionary of district names to boundary URLs. Rarely used.
     """
     district_name_to_boundary_url = {}
@@ -447,6 +451,11 @@ class CSVScraper(CanadianScraper):
                     district = self.district_name_format_string.format(**row)
                 else:
                     district = self.jurisdiction.division_name
+            elif self.district_name_format_callback:
+                if row.get("district name"):
+                    district = self.district_name_format_callback(row["district name"])
+                else:
+                    district = self.district_name_format_callback(self.jurisdiction.division_name)
             elif row.get("district name"):
                 district = row["district name"]
             elif self.fallbacks.get("district name"):
