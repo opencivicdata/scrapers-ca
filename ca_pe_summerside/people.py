@@ -3,7 +3,7 @@ import re
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://summerside.hosted.civiclive.com/mayor_and_council"
+COUNCIL_PAGE = "https://www.summerside.ca/city_governance/senior_leadership_mayor_council"
 
 
 def decode_email(hex_email):
@@ -20,30 +20,32 @@ class SummersidePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, user_agent="Mozilla/5.0")
 
-        councillors = page.xpath('//ul[@class="sidenav"]//a[contains(., "Mayor") or contains(., "Councillor")]/@href')
+        councillors = page.xpath('//div[@class="subpageContent"]//div[@class="ptl_portlet_vertical"]')
         assert len(councillors), "No councillors found"
-        for url in councillors:
-            page = self.lxmlize(url, user_agent="Mozilla/5.0")
-
-            role, name = page.xpath('//div[@id="pagetitle"]')[0].text_content().split(" /")[0].split(" ", 1)
+        for councillor in councillors:
+            role_name = councillor.xpath('.//div[@class="LName"]')[0].text_content()
+            if "/" in role_name:
+                role, name = role_name.split(" / ")[1].split(" ", 1)
+            else:
+                role, name = role_name.split(" ", 1)
 
             if role == "Mayor":
                 district = "Summerside"
             else:
                 district = re.search(
-                    r"(?<=Ward\s\d:\s).*(?=\n|\s$|)",
-                    page.xpath('//div[contains(@id, "ContentPlaceHolder")]//img/parent::*')[0].text_content(),
+                    r"(?<=Ward\s\d:\s).*",
+                    councillor.xpath('.//div[@class="LContact"]/ul/li')[0].text_content(),
                 ).group(0)
                 district = (
                     district.replace(" -", "-").replace("- ", "-").replace("-", "—").replace("Councillor", "").strip()
                 )
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.add_source(url)
 
-            photo = page.xpath('//div[contains(@id, "ContentPlaceHolder")]//img/@src')[0]
+            photo = councillor.xpath(".//img/@src")[0]
             phone = self.get_phone(page)
-            hex_email = page.xpath('//div[contains(@id, "ContentPlaceHolder")]//@data-cfemail')[0]
+
+            hex_email = councillor.xpath(".//@data-cfemail")[0]
             email = decode_email(hex_email)
 
             p.image = photo
