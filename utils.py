@@ -689,7 +689,7 @@ class CanadianPerson(Person):
 
     def clean_telephone_number(self, s, area_code=None):
         """@see http://www.btb.termiumplus.gc.ca/tpv2guides/guides/favart/index-eng.html?lang=eng&lettr=indx_titls&page=9N6fM9QmOwCE.html."""
-        splits = re.split(r"(?:\b \(|/|x|ext[.:]?|p\.|poste)[\s-]?(?=\b|\d)", s, flags=re.IGNORECASE)
+        splits = re.split(r"(?:\b \(|/|x|ext[.:]?|p\.?|poste)[\s-]?(?=\b|\d)", s, flags=re.IGNORECASE)
         digits = re.sub(r"\D", "", splits[0])
 
         if len(digits) == 7 and area_code:
