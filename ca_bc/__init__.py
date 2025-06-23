@@ -14,6 +14,7 @@ class BritishColumbia(CanadianJurisdiction):
         {"name": "British Columbia Green Party"},
         {"name": "BC United"},
         {"name": "Independent"},
+        {"name": "One BC"},
     ]
     skip_null_valid_from = True
     valid_from = "2024-10-19"
