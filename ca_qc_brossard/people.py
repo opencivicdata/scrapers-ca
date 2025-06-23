@@ -6,6 +6,18 @@ COUNCIL_PAGE = "https://www.brossard.ca/elus-municipaux"
 
 class BrossardPersonScraper(CanadianScraper):
     def scrape(self):
+        secteurs_to_districts = {
+            "Secteurs C-E-B": "District 1",
+            "Secteur B": "District 2",
+            "Secteur A": "District 3",
+            "Secteurs P-V": "District 4",
+            "Secteurs T-S-P": "District 5",
+            "Secteur S": "District 6",
+            "Secteur R": "District 7",
+            "Secteurs O-N-I": "District 8",
+            "Secteurs L-N-J-X-Y": "District 9",
+            "Secteurs L-M-N": "District 1",
+        }
         page = self.lxmlize(COUNCIL_PAGE)
 
         councillors = page.xpath('//div[@id="ListPosts"]//div[@class="members-post-item"]')
@@ -17,7 +29,8 @@ class BrossardPersonScraper(CanadianScraper):
             if name == "Poste vacant":
                 continue
 
-            district = info_div.xpath(".//p")[0].text_content()
+            secteur = info_div.xpath(".//p")[0].text_content()
+            district = secteurs_to_districts[secteur]
             role = "Conseiller"
 
             # district = 'Brossard'
