@@ -39,7 +39,7 @@ class BellevillePersonScraper(CanadianScraper):
                 district = f"{ward_name} (seat {self.seat_numbers[ward_name]})"
                 role = "Councillor"
 
-                name = councillor.xpath("./following-sibling::p")[0].text_content()
+                name = re.sub(r" \([^)]+\)", "", councillor.xpath("./following-sibling::p")[0].text_content())
                 phone = councillor.xpath("./following-sibling::p/text()")[2].split(":")[1]
                 email = councillor.xpath("./following-sibling::p/a//text()")[0]
                 image = councillor.xpath("./img/@src")[0]
