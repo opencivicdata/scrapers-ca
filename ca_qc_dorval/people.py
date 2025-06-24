@@ -1,36 +1,29 @@
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.ville.dorval.qc.ca/en/the-city/page/council-members"
+COUNCIL_PAGE = "https://www.ville.dorval.qc.ca/en/the-city/democratic-life/municipal-council"
 
 
 class DorvalPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//div[@id="large_content"]//td/p[2]')
+        councillors = page.xpath('//div[@class="c-rubric-card || js-accordion"]')[:-3]
         assert len(councillors), "No councillors found"
         for councillor in councillors:
-            info = councillor.xpath("./strong/text()")
-
-            # In case the name spans on 2 lines
-            if len(info) > 2 and "Councillor" not in info[1]:
-                role, district = info[2].split("-")
-                info = [info[0] + info[1], role, district]
-
-            name = info[0]
-
+            name = councillor.xpath('.//h2[@class="c-rubric-card__title"]')[0].text_content()
+            info = councillor.xpath('.//span[@class="c-rubric-card__surtitle"]')[0].text_content()
             if "Vacant" not in info:
-                if len(info) < 3:
+                if "Mayor" in info:
                     district = "Dorval"
                     role = "Maire"
                 else:
-                    district = info[2]
+                    district = info.split(" – ")[1]
                     role = "Conseiller"
                 p = Person(primary_org="legislature", name=name, district=district, role=role)
                 p.add_source(COUNCIL_PAGE)
 
-                p.image = councillor.xpath("./preceding-sibling::p/img/@src")[0]
+                p.image = councillor.xpath('.//img[contains(@class, "c-rubric-card__img")]/@src')[0]
 
                 email = self.get_email(councillor)
                 p.add_contact("email", email)
