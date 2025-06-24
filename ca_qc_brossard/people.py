@@ -20,23 +20,26 @@ class BrossardPersonScraper(CanadianScraper):
         }
         page = self.lxmlize(COUNCIL_PAGE)
 
+        yield self.scrape_mayor(page)
+
         councillors = page.xpath('//div[@id="ListPosts"]//div[@class="members-post-item"]')
 
         assert len(councillors), "No councillors found"
+
+        # There is a duplicate of one of the councillors
+        names = set()
         for councillor in councillors:
             info_div = councillor.xpath('.//div[@class="members-post-item-content"]')[0]
             name = info_div.xpath(".//a")[0].text_content()
-            if name == "Poste vacant":
+            if name == "Poste vacant" or name in names:
                 continue
+            names.add(name)
 
             secteur = info_div.xpath(".//p")[0].text_content()
             district = secteurs_to_districts[secteur]
             role = "Conseiller"
 
-            # district = 'Brossard'
-            # role = 'Maire'
-
-            photo = councillor.xpath(".//img/@data-breeze")[0]
+            photo = councillor.xpath(".//img/@src")[0]
 
             p = Person(primary_org="legislature", name=name, district=district, role=role, image=photo)
             p.add_source(COUNCIL_PAGE)
@@ -50,3 +53,20 @@ class BrossardPersonScraper(CanadianScraper):
             p.add_contact("voice", phone, "legislature")
 
             yield p
+
+    def scrape_mayor(self, page):
+        mayor_div = page.xpath('//div[@class="members-cards"]/div[@class="row"]')[0]
+        name = mayor_div.xpath(".//h1")[0].text_content()
+        role = "Maire"
+        district = "Brossard"
+        image = mayor_div.xpath(".//img/@src")[0]
+
+        p = Person(primary_org="legislature", name=name, district=district, role=role, image=image)
+        email = self.get_email(mayor_div)
+        p.add_contact("email", email)
+
+        phone = self.get_phone(mayor_div)
+        p.add_contact("voice", phone, "legislature")
+        p.add_source(COUNCIL_PAGE)
+
+        return p
