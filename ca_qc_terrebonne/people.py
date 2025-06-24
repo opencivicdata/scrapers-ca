@@ -1,12 +1,12 @@
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://terrebonne.ca/membres-du-conseil-municipal/"
 
 
 class TerrebonnePersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE, "utf-8")
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
         councillors = page.xpath('//div[contains(@class, "member-card jsBlockLink")]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
@@ -22,7 +22,7 @@ class TerrebonnePersonScraper(CanadianScraper):
             photo_url = councillor.xpath(".//noscript/img/@src")[0]
             url = councillor.xpath(".//@href")[0]
 
-            page = self.lxmlize(url)
+            page = self.lxmlize(url, user_agent=CUSTOM_USER_AGENT)
             email = self.get_email(page)
             phone = self.get_phone(page)
 
