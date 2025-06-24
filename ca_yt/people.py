@@ -27,9 +27,14 @@ class YukonPersonScraper(CanadianScraper):
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                image_node = page.xpath('//article[contains(@class, "member")]/p/img/@src')
-                if image_node is not None:
-                    p.image = "https://yukonassmebly.c" + image_node[0]
+
+                image_from_src = page.xpath('//article[contains(@class, "member")]/p/img/@src')
+                image_from_cf = page.xpath('//article[contains(@class, "member")]/p/img/@data-cfsrc')
+
+                if image_from_src:
+                    p.image = "https://yukonassmebly.ca" + image_from_src[0]
+                if image_from_cf:
+                    p.image = "https://yukonassmebly.ca" + image_from_cf[0]
 
                 contact = page.xpath('//article[contains(@class, "members-sidebar")]')[0]
                 website = contact.xpath("./div[3]/div[3]/div[2]/a")
