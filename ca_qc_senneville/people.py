@@ -12,6 +12,8 @@ class SennevillePersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             role_and_district, name = councillor.xpath(".//h2")[0].text_content().split(" – ")
+            if "Vacant" in name:
+                continue
             if "Maire" in role_and_district:
                 role = "Maire"
                 district = "Senneville"
