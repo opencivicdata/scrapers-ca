@@ -1,12 +1,12 @@
+from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
-from utils import CanadianScraper
 
 COUNCIL_PAGE = "https://www.ville.mercier.qc.ca/affaires-municipales/conseil-municipal/membres-du-conseil/"
 
 
 class MercierPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 
         councillors = page.xpath('//div[@class="wp-block-team-member"]')
         assert len(councillors), "No councillors found"
