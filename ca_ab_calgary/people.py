@@ -12,6 +12,8 @@ class CalgaryPersonScraper(CanadianScraper):
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             name = councillor.xpath(".//h3")[0].text_content()
+            if "Information site" in name:
+                continue
             district = councillor.xpath(".//p")[0].text_content()
 
             role = "Councillor"
