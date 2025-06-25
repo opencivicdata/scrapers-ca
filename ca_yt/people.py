@@ -1,5 +1,3 @@
-import contextlib
-
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -16,9 +14,8 @@ class YukonPersonScraper(CanadianScraper):
         assert len(members), "No members found"
         for member in members:
             if "Vacant" not in member.xpath("./div/span")[0].text_content():
-                url = member.xpath("./div/span/a/@href")[0]
+                url = member.xpath("./div/span/a/@href")[0].strip()
                 page = self.cloudscrape(url)
-
                 name = page.xpath("//html/body/div[1]/div/div/section/div[2]/article/div/h1/span/span")[
                     0
                 ].text_content()
@@ -30,8 +27,14 @@ class YukonPersonScraper(CanadianScraper):
                 p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party)
                 p.add_source(COUNCIL_PAGE)
                 p.add_source(url)
-                with contextlib.suppress(IndexError):
-                    p.image = page.xpath('//article[contains(@class, "member")]/p/img/@src')[0]
+
+                image_from_src = page.xpath('//article[contains(@class, "member")]/p/img/@src')
+                image_from_cf = page.xpath('//article[contains(@class, "member")]/p/img/@data-cfsrc')
+
+                if image_from_src:
+                    p.image = "https://yukonassmebly.ca" + image_from_src[0]
+                if image_from_cf:
+                    p.image = "https://yukonassmebly.ca" + image_from_cf[0]
 
                 contact = page.xpath('//article[contains(@class, "members-sidebar")]')[0]
                 website = contact.xpath("./div[3]/div[3]/div[2]/a")
