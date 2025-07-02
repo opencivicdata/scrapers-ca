@@ -69,7 +69,7 @@ requests==2.32.4
     #   scrapelib
 requests-toolbelt==1.0.0
     # via cloudscraper
-scrapelib==2.3.0
+scrapelib==2.4.1
     # via pupa
 six==1.16.0
     # via isodate
@@ -79,7 +79,7 @@ text-unidecode==1.3
     # via python-slugify
 unidecode==0.4.14
     # via -r requirements.in
-urllib3==1.26.20
+urllib3==2.5.0
     # via
     #   requests
     #   scrapelib
