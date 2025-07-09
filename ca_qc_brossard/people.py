@@ -1,3 +1,5 @@
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
@@ -7,16 +9,16 @@ COUNCIL_PAGE = "https://www.brossard.ca/elus-municipaux"
 class BrossardPersonScraper(CanadianScraper):
     def scrape(self):
         secteurs_to_districts = {
-            "Secteurs C-E-B": "District 1",
-            "Secteur B": "District 2",
-            "Secteur A": "District 3",
-            "Secteurs P-V": "District 4",
-            "Secteurs T-S-P": "District 5",
-            "Secteur S": "District 6",
-            "Secteur R": "District 7",
-            "Secteurs O-N-I": "District 8",
-            "Secteurs L-N-J-X-Y": "District 9",
-            "Secteurs L-M-N": "District 1",
+            "secteurs c-e-b": "District 1",
+            "secteur b": "District 2",
+            "secteur a": "District 3",
+            "secteurs p-v": "District 4",
+            "secteurs t-s-p": "District 5",
+            "secteur s": "District 6",
+            "secteur r": "District 7",
+            "secteurs o-n-i": "District 8",
+            "secteurs l-n-j-x-y": "District 9",
+            "secteurs l-m-n": "District 1",
         }
         page = self.lxmlize(COUNCIL_PAGE)
 
@@ -36,6 +38,8 @@ class BrossardPersonScraper(CanadianScraper):
             names.add(name)
 
             secteur = info_div.xpath(".//p")[0].text_content()
+            # Do some initial cleaning for more robust matching
+            secteur = re.sub(r"[–—]", "-", secteur.casefold().replace("sector", "secteur"))
             district = secteurs_to_districts[secteur]
             role = "Conseiller"
 
