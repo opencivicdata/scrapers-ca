@@ -397,8 +397,7 @@ class CSVScraper(CanadianScraper):
             try:
                 response = requests.get(self.csv_url, stream=True)
                 with open(basename, "wb") as f:
-                    for chunk in response.iter_content():
-                        f.write(chunk)
+                    f.writelines(response.iter_content())
                 with ZipFile(basename).open(self.filename, "r") as fp:
                     data = StringIO(fp.read().decode(self.encoding))
             finally:
