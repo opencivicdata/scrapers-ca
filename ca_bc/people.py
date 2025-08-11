@@ -29,6 +29,7 @@ class BritishColumbiaPersonScraper(CanadianScraper):
                         firstName
                         lastName
                         __typename
+                        legislativeEmail
                       }
                       isCounsel
                       isDoctor
@@ -56,8 +57,11 @@ class BritishColumbiaPersonScraper(CanadianScraper):
             district = member["constituency"]["name"]
             name = member["member"]["firstName"] + " " + member["member"]["lastName"]
             party = member["party"]["name"]
+            if party == "OneBC":
+                party = "One BC"
 
             p = Person(primary_org="legislature", name=name, district=district, role="MLA", party=party, image=image)
             p.add_source(COUNCIL_PAGE)
+            p.add_contact("email", member["member"]["legislativeEmail"])
 
             yield p
