@@ -73,7 +73,7 @@ scrapelib==2.4.1
     # via pupa
 six==1.16.0
     # via isodate
-sqlparse==0.5.1
+sqlparse==0.5.4
     # via django
 text-unidecode==1.3
     # via python-slugify
