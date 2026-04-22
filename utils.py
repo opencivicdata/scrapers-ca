@@ -380,7 +380,7 @@ class CSVScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(lambda: defaultdict(int))
 
-        extension = self.extension if self.extension else os.path.splitext(self.csv_url)[1]
+        extension = self.extension or os.path.splitext(self.csv_url)[1]
         if extension in (".xls", ".xlsx"):
             data = StringIO()
             binary = BytesIO(self.get(self.csv_url).content)
