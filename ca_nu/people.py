@@ -13,7 +13,7 @@ class NunavutPersonScraper(CanadianScraper):
         members = page.xpath('//*[@id="content"]/section/div/div[3]/div/div[2]/div')
         assert len(members), "No members found"
         for member in members:
-            if "Vacant" in member.xpath("./span[2]")[0].text_content():
+            if member.xpath("./span[2]")[0].text_content().strip().lower() == "vacant":
                 continue
             url = member.xpath("./span[1]/span/a/@href")[0]
             page = self.lxmlize(url)

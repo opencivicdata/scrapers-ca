@@ -1,0 +1,24 @@
+from pupa.scrape import Organization
+
+from utils import CanadianJurisdiction
+
+
+class Barrie(CanadianJurisdiction):
+    classification = "legislature"
+    division_id = "ocd-division/country:ca/csd:3543042"
+    division_name = "Barrie"
+    name = "Barrie City Council"
+    url = "https://www.barrie.ca"
+
+    def get_organizations(self):
+        organization = Organization(self.name, classification=self.classification)
+
+        organization.add_post(role="Mayor", label=self.division_name, division_id=self.division_id)
+        for ward_number in range(1, 11):
+            organization.add_post(
+                role="Councillor",
+                label=f"Ward {ward_number}",
+                division_id=f"{self.division_id}/ward:{ward_number}",
+            )
+
+        yield organization

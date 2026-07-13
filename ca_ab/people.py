@@ -17,6 +17,7 @@ PARTIES = {
     "ND": "Alberta New Democratic Party",
     "NDP": "Alberta New Democratic Party",
     "PC": "Progressive Conservative Association of Alberta",
+    "PTP": "Progressive Tory Party",
     "UC": "United Conservative Party",
     "UCP": "United Conservative Party",
     "W": "Wildrose Alliance Party",
@@ -91,20 +92,17 @@ class AlbertaPersonScraper(CanadianScraper):
             )
             p.add_source(COUNCIL_PAGE)
             p.add_source(detail_url)
-            if mla["Email"]:
-                p.add_contact("email", mla["Email"])
-            elif mla.get("MLA Email"):
+            email = mla.get("Email", "")
+            if email and "@" in email:
+                p.add_contact("email", email)
+            elif mla.get("MLA Email") and "@" in mla["MLA Email"]:
                 p.add_contact("email", mla["MLA Email"])
 
-            addresses = [(1, "legislature"), (2, "constituency")]
-            if not mla["Address Type 1"].strip():
-                addresses.pop(0)
-            else:
-                assert mla["Address Type 1"] == "Legislature Office"
-            if not mla["Address Type 2"]:
-                addresses.pop()
-            else:
-                assert mla["Address Type 2"] == "Constituency Office"
+            addresses = []
+            if mla["Address Type 1"].strip() == "Legislature Office":
+                addresses.append((1, "legislature"))
+            if mla.get("Address Type 2", "").strip() == "Constituency Office":
+                addresses.append((2, "constituency"))
 
             for suffix, note in addresses:
                 for key, contact_type in (("Phone", "voice"), ("Fax", "fax")):

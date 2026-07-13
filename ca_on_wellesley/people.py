@@ -3,7 +3,7 @@ import re
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.wellesley.ca/council/councillors/?q=council/councillors"
+COUNCIL_PAGE = "https://www.wellesley.ca/council-and-administration/council/"
 
 
 def post_number(name):
@@ -13,21 +13,26 @@ def post_number(name):
 class WellesleyPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        members = [
-            el
-            for el in page.xpath('//div//td[@data-name="accChild"]')
-            if el.text_content().strip().lower().split()[0] in ["mayor", "councillor"]
-        ]
+
+        # Each member's info is in a paragraph with text like:
+        # "Mayor Joe Nowak is serving his third term as Mayor for the Township of Wellesley."
+        # "Councillor Shelley Wagner is serving her fifth term as Councillor for Ward One."
+        members = page.xpath(
+            '//div[contains(@id, "collapse_")]//p[contains(., " is ") and (contains(., "Mayor") or contains(., "Councillor"))]'
+        )
         assert members, "No councillors found"
 
         for member in members:
-            position = member.text_content().split()[0]
-            srch = re.search(r"\w+(.+?) is.*? for (.+?)\.", member.text_content().strip())
-            name = srch.group(1).strip()
-            district = srch.group(2).strip()
-            phone = self.get_phone(member)
-            email = self.get_email(member, error=False)
-            district = "Wellesley" if position == "Mayor" else post_number(district)
+            text = member.text_content().strip()
+            srch = re.search(r"(Mayor|Councillor)\s+(.+?)\s+is\s+.+?\s+for\s+(.+?)\.", text)
+            if not srch:
+                continue
+            position = srch.group(1)
+            name = srch.group(2).strip()
+            district_raw = srch.group(3).strip()
+            phone = self.get_phone(member.getparent())
+            email = self.get_email(member.getparent(), error=False)
+            district = "Wellesley" if position == "Mayor" else post_number(district_raw)
 
             p = Person(primary_org="legislature", name=name, district=district, role=position)
             p.add_contact("voice", phone, "legislature")

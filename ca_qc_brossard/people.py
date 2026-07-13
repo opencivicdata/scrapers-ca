@@ -9,16 +9,18 @@ COUNCIL_PAGE = "https://www.brossard.ca/elus-municipaux"
 class BrossardPersonScraper(CanadianScraper):
     def scrape(self):
         secteurs_to_districts = {
-            "secteurs c-e-b": "District 1",
-            "secteur b": "District 2",
-            "secteur a": "District 3",
-            "secteurs p-v": "District 4",
-            "secteurs t-s-p": "District 5",
-            "secteur s": "District 6",
-            "secteur r": "District 7",
-            "secteurs o-n-i": "District 8",
-            "secteurs l-n-j-x-y": "District 9",
-            "secteurs l-m-n": "District 1",
+            "c, e, l": "District 1",
+            "c, b": "District 2",
+            "b": "District 3",
+            "a": "District 4",
+            "p, v": "District 5",
+            "t, p": "District 6",
+            "r, s": "District 7",
+            "r": "District 8",
+            "o, n, i": "District 9",
+            "l, j, x, y": "District 10",
+            "m, n": "District 11",
+            "secteur saint-laurent": "District 12",
         }
         page = self.lxmlize(COUNCIL_PAGE)
 
@@ -43,7 +45,8 @@ class BrossardPersonScraper(CanadianScraper):
             district = secteurs_to_districts[secteur]
             role = "Conseiller"
 
-            photo = councillor.xpath(".//img/@src")[0]
+            photo = councillor.xpath('.//img[not(starts-with(@src, "data:"))]/@src')
+            photo = photo[0] if photo else None
 
             p = Person(primary_org="legislature", name=name, district=district, role=role, image=photo)
             p.add_source(COUNCIL_PAGE)
@@ -53,8 +56,9 @@ class BrossardPersonScraper(CanadianScraper):
                 email = self.get_email(councillor)
                 p.add_contact("email", email)
 
-            phone = self.get_phone(councillor)
-            p.add_contact("voice", phone, "legislature")
+            phone = self.get_phone(councillor, error=False)
+            if phone:
+                p.add_contact("voice", phone, "legislature")
 
             yield p
 
@@ -63,14 +67,17 @@ class BrossardPersonScraper(CanadianScraper):
         name = mayor_div.xpath(".//h1")[0].text_content()
         role = "Maire"
         district = "Brossard"
-        image = mayor_div.xpath(".//img/@src")[0]
+        image = mayor_div.xpath('.//img[not(starts-with(@src, "data:"))]/@src')
+        image = image[0] if image else None
 
         p = Person(primary_org="legislature", name=name, district=district, role=role, image=image)
-        email = self.get_email(mayor_div)
-        p.add_contact("email", email)
+        email = self.get_email(mayor_div, error=False)
+        if email:
+            p.add_contact("email", email)
 
-        phone = self.get_phone(mayor_div)
-        p.add_contact("voice", phone, "legislature")
+        phone = self.get_phone(mayor_div, error=False)
+        if phone:
+            p.add_contact("voice", phone, "legislature")
         p.add_source(COUNCIL_PAGE)
 
         return p

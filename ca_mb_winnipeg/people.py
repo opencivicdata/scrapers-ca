@@ -3,7 +3,7 @@ import json
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://winnipeg.ca/council/"
+COUNCIL_PAGE = "https://winnipeg.ca/council/"
 
 
 class WinnipegPersonScraper(CanadianScraper):
@@ -13,10 +13,6 @@ class WinnipegPersonScraper(CanadianScraper):
         data = json.loads(self.get(api_url).content)
         assert len(data), "No councillors found via API"
 
-        page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[@class="card link h-100"]')
-        assert len(councillors), "No councillors found on website"
-
         for item in data:
             if not item["current_council"]:
                 continue
@@ -25,17 +21,16 @@ class WinnipegPersonScraper(CanadianScraper):
                 continue
             role = item["position_english"]
             district = item["name_english"].replace(" - ", "—")
-            if "phone" in item:
-                phone = item["phone"]
-            fax = item["fax"]
+            phone = item.get("phone", "")
+            fax = item.get("fax", "")
 
             p = Person(primary_org="legislature", name=name, role=role, district=district)
 
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("fax", fax, "legislature")
+            if phone:
+                p.add_contact("voice", phone, "legislature")
+            if fax:
+                p.add_contact("fax", fax, "legislature")
             p.add_source(api_url)
-            p.add_source(COUNCIL_PAGE)
-            for councillor in councillors:
-                if name == councillor.xpath('.//a[@class="full-card-link"]')[0].text_content():  # matching names
-                    p.image = councillor.xpath(".//img/@src")[0]
+            if "portrait" in item:
+                p.image = item["portrait"]
             yield p

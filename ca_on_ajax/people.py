@@ -1,41 +1,54 @@
+import re
+
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.ajax.ca/en/inside-townhall/council-members.aspx"
+COUNCIL_PAGE = "https://ajax.ca/town-hall/leadership-council/mayor-council/meet-your-mayor-council"
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
+)
 
 
 class AjaxPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=BROWSER_USER_AGENT)
 
-        councillors = page.xpath('//table[@class="councilTable"]')
-        assert len(councillors), "No councillors found"
-        for councillor in councillors:
-            image = councillor.xpath(".//@src")[0]
-            alt = councillor.xpath(".//tr/td[1]/p[1]/img/@alt")[0]
-
-            if "Mayor" in alt:
-                name = alt
-                district = "Ajax"
-                role = "Mayor"
+        # One accordion per member, titled either "Mayor Shaun Collier" or
+        # "Marilyn Crawford - Regional Councillor Ward 1".
+        accordions = page.xpath('//div[contains(@class, "accordion")][.//h3]')
+        count = 0
+        seen = set()
+        for accordion in accordions:
+            title = re.sub(r"\s+", " ", accordion.xpath(".//h3")[0].text_content()).strip()
+            # Accordion divs can be nested; process each member once.
+            if title in seen:
+                continue
+            seen.add(title)
+            mayor_match = re.match(r"^Mayor\s+(.+)$", title)
+            councillor_match = re.match(r"^(.+?)\s*[-–]\s*(Regional Councillor|Councillor)\s+(Ward \d+)$", title)
+            if mayor_match:
+                name, role, district = mayor_match.group(1), "Mayor", "Ajax"
+            elif councillor_match:
+                name, role, district = councillor_match.groups()
             else:
-                name, rest = alt.split(" - ", 1)
-                district = rest.split("Councillor ", 1)[-1].strip()
-                role = rest.split("Ward ", 1)[0].strip()
-
-            cell = councillor.xpath('.//p[contains(.,"Cel")]/text()')[0].replace("Cell: ", "")
-            if councillor.xpath('.//p[contains(.,"Tel")]/text()'):
-                voice = councillor.xpath('.//p[contains(.,"Tel")]/text()')[1].replace(" Tel: ", "")
-            email = self.get_email(councillor)
+                continue
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.image = image
 
-            if cell:
-                p.add_contact("cell", cell, "legislature")
-            if voice:
-                p.add_contact("voice", voice, "legislature")
+            email = self.get_email(accordion, error=False)
             if email:
                 p.add_contact("email", email)
+            phone = self.get_phone(accordion, area_codes=[905, 289, 365], error=False)
+            if phone:
+                p.add_contact("voice", phone, "legislature")
+            image = [
+                src for src in accordion.xpath(".//img/@src") if not re.search(r"logo|icon|ytimg", src, re.IGNORECASE)
+            ]
+            if image:
+                p.image = image[0]
+
+            count += 1
             yield p
+
+        assert count, "No councillors found"

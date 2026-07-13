@@ -19,7 +19,7 @@ class TerrebonnePersonScraper(CanadianScraper):
                 role = "Conseiller"
                 district = district.split(" - ")[0]
 
-            photo_url = councillor.xpath(".//noscript/img/@src")[0]
+            photo_url = councillor.xpath('.//div[@class="image-wrapper"]/img/@src')[0]
             url = councillor.xpath(".//@href")[0]
 
             page = self.lxmlize(url, user_agent=CUSTOM_USER_AGENT)

@@ -3,7 +3,10 @@ import re
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "http://www.assnat.qc.ca/fr/deputes/index.html"
+COUNCIL_PAGE = "https://www.assnat.qc.ca/fr/deputes/index.html"
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
+)
 
 # Waiting for access to https://docs.google.com/spreadsheets/d/1ZV099FpBe1V9hLJNthw5bYyu6LjpC7fcjZUqEVJKhis/edit#gid=1522630662
 SOCIAL_MEDIA_DATA = {
@@ -186,10 +189,15 @@ SOCIAL_MEDIA_DATA = {
     "maccarone-jennifer-17911": ("https://www.facebook.com/jennifer.maccarone1", "https://twitter.com/jmaccarone"),
 }
 
+BIRTH_DATES = {
+    "girard-eric-17929": "1966-10-09",  # Eric Girard, Groulx
+    "girard-eric-17957": "1970-01-01",  # Eric Girard, Lac-Saint-Jean (year only known)
+}
+
 
 class QuebecPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=BROWSER_USER_AGENT, verify=False)
         members = page.xpath('//*[@id="ListeDeputes"]/tbody/tr')
         headings = {
             "Circonscription": "constituency",
@@ -212,10 +220,10 @@ class QuebecPersonScraper(CanadianScraper):
             email = self.get_email(row[3], error=False)
 
             detail_url = row[0][0].attrib["href"]
-            detail_page = self.lxmlize(detail_url)
+            detail_page = self.lxmlize(detail_url, user_agent=BROWSER_USER_AGENT, verify=False)
 
             contact_url = detail_url.replace("index.html", "coordonnees.html")
-            contact_page = self.lxmlize(contact_url)
+            contact_page = self.lxmlize(contact_url, user_agent=BROWSER_USER_AGENT, verify=False)
 
             photo_url = detail_page.xpath('//img[@class="photoDepute"]/@src')
 
@@ -229,6 +237,8 @@ class QuebecPersonScraper(CanadianScraper):
                 p.add_contact("email", email)
 
             identifier = re.search(r"/([^/]+)/index.html", detail_url).group(1)
+            if identifier in BIRTH_DATES:
+                p.birth_date = BIRTH_DATES[identifier]
             facebook, twitter = SOCIAL_MEDIA_DATA.get(identifier, ("", ""))
             if facebook:
                 p.add_link(facebook)
@@ -255,7 +265,9 @@ class QuebecPersonScraper(CanadianScraper):
                     if address:
                         p.add_contact("address", "\n".join(address), note)
 
-            en_detail_page = self.lxmlize(detail_url.replace("/fr/", "/en/"))
+            en_detail_page = self.lxmlize(
+                detail_url.replace("/fr/", "/en/"), user_agent=BROWSER_USER_AGENT, verify=False
+            )
             # roles = detail_page.xpath(
             #     '//ul/h4[contains(.,"Fonctions actuelles")]/following-sibling::li[preceding-sibling::h4[contains(.,"Fonctions actuelles")] and following-sibling::h4[contains(.,"Fonctions précédentes") or contains(.,"")]]/text()'
             # )

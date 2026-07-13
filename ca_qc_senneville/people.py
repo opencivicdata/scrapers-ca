@@ -19,6 +19,8 @@ class SennevillePersonScraper(CanadianScraper):
                 district = "Senneville"
             else:
                 role, district = role_and_district.split(" ", 1)
+                if role == "Conseillère":
+                    role = "Conseiller"
 
             email = self.get_email(councillor)
             p = Person(primary_org="legislature", name=name, district=district, role=role)

@@ -1,4 +1,3 @@
-from opencivicdata.divisions import Division
 from pupa.scrape import Organization
 
 from utils import CanadianJurisdiction
@@ -16,10 +15,18 @@ class Levis(CanadianJurisdiction):
 
         organization.add_post(role="Maire", label=self.division_name, division_id=self.division_id)
 
-        for division in Division.get(self.division_id).children("borough"):
-            organization.add_post(role="Président", label=division.name, division_id=division.id)
+        for borough in (
+            "Desjardins",
+            "Les Chutes-de-la-Chaudière-Est",
+            "Les Chutes-de-la-Chaudière-Ouest",
+        ):
+            organization.add_post(role="Président", label=borough, division_id=self.division_id)
 
-        for division in Division.get(self.division_id).children("district"):
-            organization.add_post(role="Conseiller", label=division.name, division_id=division.id)
+        for district_number in range(1, 16):
+            organization.add_post(
+                role="Conseiller",
+                label=f"District {district_number}",
+                division_id=self.division_id,
+            )
 
         yield organization

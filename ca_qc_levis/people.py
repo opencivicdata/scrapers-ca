@@ -1,3 +1,5 @@
+import re
+
 from django.template.defaultfilters import slugify
 
 from utils import CanadianPerson as Person
@@ -9,8 +11,8 @@ ARRONDISSEMENTS_PAGE = "https://www.ville.levis.qc.ca/la-ville/arrondissements/c
 
 class LevisPersonScraper(CanadianScraper):
     def scrape(self):
-        council_page = self.lxmlize(COUNCIL_PAGE)
-        arrondissements_page = self.lxmlize(ARRONDISSEMENTS_PAGE)
+        council_page = self.cloudscrape(COUNCIL_PAGE)
+        arrondissements_page = self.cloudscrape(ARRONDISSEMENTS_PAGE)
 
         presidents = {}
         for president in arrondissements_page.xpath('//p[contains(./b, "Président")]'):
@@ -30,11 +32,14 @@ class LevisPersonScraper(CanadianScraper):
             position, name = person.xpath("./h3/text()")[0].replace("–", "-").split(" - ")
             if "," in position:
                 role, district = position.title().split(", ")[0].split(" ", 1)
+                district_number = re.search(r"\b(\d+)\b", district)
+                if district_number:
+                    district = f"District {district_number.group(1)}"
             else:
                 role = "Maire"
                 district = "Lévis"
 
-            if role == "Conseillère":
+            if role.startswith("Conseiller") or role.startswith("Conseillère"):
                 role = "Conseiller"
 
             photo_url = person.xpath(".//img/@src")[0]

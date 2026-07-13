@@ -1,40 +1,50 @@
-import json
 import re
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.oshawa.ca/en/city-hall/council-members.aspx"
+COUNCIL_PAGE = "https://www.oshawa.ca/city-hall/city-council/council-members/"
 
 
 class OshawaPersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath("//div[@class='fbg-row lb-callToAction cm-datacontainer']")
+        # One card per member: div.inner with a p.heading (name), a role
+        # paragraph like "Ward 1 Regional & City Councillor", and contacts.
+        cards = [
+            card
+            for card in page.xpath(
+                '//div[contains(@class, "inner")][.//p[contains(@class, "heading")]][.//a[contains(@href, "mailto:")]]'
+            )
+            # Containers nest; a member card holds exactly one heading.
+            if len(card.xpath('.//p[contains(@class, "heading")]')) == 1
+        ]
+        assert cards, "No council member headings found"
 
-        assert len(councillors), "No councillors found"
-        for councillor in councillors:
-            info = councillor.xpath(".//div[@class='lb-callToAction_header']")[0].text_content()
-            if "Mayor" in info:
-                role = "Mayor"
-                district = "Oshawa"
-                name = info.replace("Mayor ", "")
+        for card in cards:
+            name = card.xpath('.//p[contains(@class, "heading")]')[0].text_content().strip()
+            text = re.sub(r"\s+", " ", card.text_content())
+
+            if re.search(r"\bMayor\b", text) and "Ward" not in text:
+                role, district = "Mayor", "Oshawa"
             else:
-                district, role_name = re.split(r"(?<=\d)\s", info, maxsplit=1)
-                role = "Regional Councillor" if "Regional" in role_name else "Councillor"
-                name = re.split(r"Councillor\s", role_name, maxsplit=1)[1]
+                ward_match = re.search(r"(Ward \d+) (Regional & City Councillor|City Councillor)", text)
+                if not ward_match:
+                    continue
+                district = ward_match.group(1)
+                role = "Regional Councillor" if "Regional" in ward_match.group(2) else "Councillor"
 
-            photo_url = councillor.xpath(".//img/@src")[0]
-            phone = self.get_phone(councillor)
-            links = councillor.xpath(".//a/@href")
-            data = json.loads(councillor.xpath("./@data-cm-itemdata")[0])
-            email = data["items"][0]["linkUrl"].replace("mailto:", "")
-
-            p = Person(primary_org="legislature", name=name, district=district, role=role, image=photo_url)
+            p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", email)
-            for link in links:
-                if "mail" not in link:
-                    p.add_link(link)
+
+            email = self.get_email(card, error=False)
+            if email:
+                p.add_contact("email", email)
+            phone = self.get_phone(card, error=False)
+            if phone:
+                p.add_contact("voice", phone, "legislature")
+            image = card.xpath(".//img/@src")
+            if image:
+                p.image = image[0]
+
             yield p

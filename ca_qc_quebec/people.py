@@ -26,7 +26,7 @@ class QuebecPersonScraper(CanadianScraper):
                     district = "Québec"
                     role = "Maire"
                 else:
-                    district = councillor.xpath('./p[@itemprop="jobTitle"]/a/text()')[0]
+                    district = councillor.xpath('.//a[contains(@href, "carte-district")]/text()')[0]
                     district = (
                         re.search(r"\ADistrict (?:de(?: la)?|du|des) ([\w —–-]+)", district, flags=re.UNICODE)
                         .group(1)
@@ -34,14 +34,18 @@ class QuebecPersonScraper(CanadianScraper):
                     )
                     role = "Conseiller"
 
-                if district == "Saules–Les Méandres":
+                if district == "Saules\u2013Les Méandres":
                     district = "Les Saules"
+                elif district == "Maizerets\u2013Lairet":
+                    district = "Maizerets-Lairet"
+                elif district == "Vanier\u2013Duberger":
+                    district = "Vanier-Duberger"
                 elif district == "Neufch\u00e2tel\u2013Lebourgneuf":
                     district = "Neufchâtel-Lebourgneuf"  # hyphen
                 elif district == "Loretteville\u2013Les Ch\u00e2tels":
                     district = "Loretteville-Les Ch\u00e2tels"  # hyphen
                 else:
-                    district = re.sub(r"–", "—", district)  # n-dash, m-dash
+                    district = re.sub(r"[\u2010\u2011\u2012\u2013\u2014\u2015]", "—", district)  # n-dash, m-dash
 
                 districts = [district]
 

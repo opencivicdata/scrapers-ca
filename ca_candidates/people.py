@@ -259,7 +259,9 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
                                     self.warning(f"{key}: expected {prop} to be {scraped}, not {entered}")
                     yield p
 
-            except IndexError:
+            except (IndexError, requests.RequestException, scrapelib.HTTPError):
+                # One party's site being down or unreachable (e.g. a connect
+                # timeout) should not abort the other parties' scrapes.
                 logger.exception("")
 
     def scrape_ndp(self):
@@ -383,7 +385,7 @@ class CanadaCandidatesPersonScraper(CanadianScraper):
             url = f"{start_url}page/{page_number}"
             try:
                 page = self.lxmlize(url)
-            except scrapelib.HTTPError as e:
+            except (requests.RequestException, scrapelib.HTTPError) as e:
                 logger.warning("%s (%s)", e, url)
             else:
                 candidates += page.xpath('.//div[@class="grid-4 gpc-candidates-grid"]/article')
