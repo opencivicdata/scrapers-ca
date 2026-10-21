@@ -1,45 +1,68 @@
-import json
 from collections import defaultdict
 
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-# from https://open.moncton.ca/datasets/elected-officials/explore
-API_URL = "https://services1.arcgis.com/E26PuSoie2Y7bbyI/arcgis/rest/services/Elected_Officials/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"
+BASE_URL = "https://www.moncton.ca"
+MEMBERS_URL = f"{BASE_URL}/en/government/council/members"
 
 
 class MonctonPersonScraper(CanadianScraper):
     def scrape(self):
         seat_numbers = defaultdict(int)
-        data = json.loads(self.get(API_URL).content)["features"]
-        assert len(data), "No councillors found"
 
-        for item in data:
-            councillor = item["properties"]
-            ward = councillor["WardName"]
-            if ward != "Moncton":
-                ward = "Ward " + ward
-            role = councillor["Primary_role"]
-            if role != "Mayor":
-                seat_numbers[ward] += 1
-                district = ward + f" (seat {seat_numbers[ward]})"
+        listing = self.lxmlize(MEMBERS_URL)
+        cards = [
+            c
+            for c in listing.xpath(
+                '//div[contains(@class,"d-flex") and contains(@class,"position-relative") and .//h3]'
+                '[.//a[contains(@href,"/members/")]]'
+            )
+            if len(c.xpath(".//h3//span/text()")) == 1
+        ]
+        assert len(cards), "No councillor cards found"
+
+        for card in cards:
+            name = card.xpath(".//h3//span/text()")[0].strip()
+            link = card.xpath('.//a[contains(@href,"/members/")]/@href')[0]
+            img = card.xpath(".//img/@src")
+
+            profile = self.lxmlize(link if link.startswith("http") else BASE_URL + link)
+
+            role_el = profile.xpath('//h2[@class="h5 text-black-50 mb-0 me-3"]')
+            role_raw = role_el[0].text_content().strip() if role_el else "Councillor"
+            # "Deputy Mayor | Councillor" → "Councillor"; "Councillor-at-Large" → "Councillor at Large"
+            role = role_raw.split("|")[-1].strip().replace("-", " ")
+
+            ward_badge = profile.xpath(
+                '//div[contains(@class,"badge") and contains(@class,"rounded-pill") and contains(text(),"Ward")]'
+            )
+
+            if role == "Mayor":
+                district = "Moncton"
+            elif role == "Councillor at Large":
+                seat_numbers["at_large"] += 1
+                district = f"Moncton (seat {seat_numbers['at_large']})"
             else:
-                district = ward
-            name = councillor["Name"]
-            email = councillor["Email"]
-            phone = councillor["Phone"]
-            fax = councillor["Fax"]
+                ward = ward_badge[0].text_content().strip() if ward_badge else None
+                assert ward, f"No ward found for {name}"
+                seat_numbers[ward] += 1
+                district = f"{ward} (seat {seat_numbers[ward]})"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
+            p.add_source(MEMBERS_URL)
 
+            if img:
+                src = img[0]
+                p.image = src if src.startswith("http") else BASE_URL + src
+
+            user = profile.xpath('//span[@class="spamspan"]/span[@class="u"]/text()')
+            domain = profile.xpath('//span[@class="spamspan"]/span[@class="d"]/text()')
+            if user and domain:
+                p.add_contact("email", f"{user[0]}@{domain[0]}")
+
+            phone = profile.xpath('//a[starts-with(@href,"tel:")]/@href')
             if phone:
-                p.add_contact("voice", p.clean_telephone_number(phone), "legislature")
-            if fax:
-                p.add_contact("fax", p.clean_telephone_number(fax), "legislature")
-            if email:
-                p.add_contact("email", email)
-
-            p.image = councillor["Photo_URL"]
-            p.add_source(API_URL)
+                p.add_contact("voice", p.clean_telephone_number(phone[0].replace("tel:", "")), "legislature")
 
             yield p

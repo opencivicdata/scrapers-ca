@@ -13,18 +13,22 @@ class SaskatoonPersonScraper(CanadianScraper):
 
         page = self.lxmlize(COUNCIL_URL)
 
-        councillors = page.xpath('//h2[@class="landing-block-title"]/a/@href')
+        councillors = [
+            url for url in page.xpath('//h2[@class="landing-block-title"]/a/@href') if re.search(r"/ward-\d+$", url)
+        ]
 
         assert len(councillors), "No councillors found"
         for url in councillors:
             page = self.lxmlize(url)
             content = page.xpath('//div[@id="main-content"]')[0]
 
-            district = content.xpath(".//h1")[0].text_content()
+            district = content.xpath(".//h1")[0].text_content().strip()
             name = content.xpath(".//h2")[0].text_content().replace("Councillor:", "").strip()
-            image = content.xpath(".//img/@src")[0]
+            image = content.xpath(".//img/@src")
 
-            p = Person(primary_org="legislature", name=name, district=district, role="Councillor", image=image)
+            p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
+            if image:
+                p.image = image[0]
 
             contact_node = page.xpath('//aside[@class="page-sidebar"]')[0]
             phone = self.get_phone(contact_node)

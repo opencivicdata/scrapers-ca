@@ -24,33 +24,21 @@ class OntarioPersonScraper(CanadianScraper):
                 continue
             url = member.xpath(".//a//@href")[0]
             node = self.lxmlize(url, encoding="utf-8")
-            fax = node.xpath(
-                '//div[@class="field field--name-field-fax-number field--type-string field--label-inline"]//div[@class="field__item"]//text()'
-            )
-            image = node.xpath(
-                '//div[@class="views-element-container block block-views block-views-blockmember-member-headshot"]//img/@src'
-            )
+            image = node.xpath('//div[@id="block-views-block-member-member-headshot"]//img/@src')
 
-            district = "".join(
-                node.xpath(
-                    '//div[@block="block-views-block-member-member-riding-block"]//p[@class="riding"]//a//text()'
-                )
-            ).strip()
+            district = "".join(node.xpath('//p[@class="riding"]//text()')).strip()
             nodes = node.xpath('//div[@id="main-content"]//a')
             emails = list(filter(None, [self.get_email(node, error=False) for node in nodes]))
             party = node.xpath(
-                '//div[@block="block-views-block-member-current-party-block"]//div[@class="view-content"]//text()'
+                '//div[contains(@class, "view-display-id-current_party_block")]//div[@class="view-content"]//text()'
             )
 
-            party = next(item for item in party if item.strip())
+            party = next((item.strip() for item in party if item.strip()), "Independent")
             p = Person(primary_org="legislature", name=name, district=district, role="MPP", party=party)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
             if image:
                 p.image = image[0]
-
-            if fax:
-                p.add_contact("fax", fax[-1], "legislature")
 
             if emails:
                 p.add_contact("email", emails.pop(0))
@@ -70,6 +58,12 @@ class OntarioPersonScraper(CanadianScraper):
                         phone_index = office_items.index("Tel.:")
                         phone = office_items[phone_index + 1]
 
+                        fax = None
+                        if "Fax:" in office_items:
+                            fax_index = office_items.index("Fax:")
+                            if fax_index + 1 < len(office_items):
+                                fax = office_items[fax_index + 1]
+
                         regex = re.compile(
                             r"(\b[\w.-]+@+[\w.]+.+[\w.]\b)|(\d{3}[-\.\s]\d{3}[-\.\s]\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]\d{4}|\d{3}[-\.\s]\d{4})|(?:Tel.:)|(?:Fax:)|(?:Toll free:)"
                         )  # remove none address items
@@ -79,10 +73,15 @@ class OntarioPersonScraper(CanadianScraper):
                     else:
                         if phone:
                             p.add_contact("voice", phone, note)
+                        if fax:
+                            p.add_contact("fax", fax, note)
                         if address:
                             p.add_contact("address", "\n".join(address), note)
 
-            roles = node.xpath('//h3[contains(.,"Current roles")]/../following-sibling::div/div/ul/li/text()')
+            roles = node.xpath(
+                '//div[contains(@class, "view-display-id-member_current_role_block")]'
+                '//ul/li/span[@aria-hidden="true"]/text()'
+            )
 
             if roles:
                 roles = [role.strip() for role in roles if role.strip()]

@@ -1,7 +1,7 @@
 from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
-COUNCIL_PAGE = "https://www.stjohns.ca/en/city-hall/mayor-and-council.aspx"
+COUNCIL_PAGE = "https://www.stjohns.ca/your-government/mayor-and-council/"
 
 
 class StJohnsPersonScraper(CanadianScraper):
@@ -9,15 +9,30 @@ class StJohnsPersonScraper(CanadianScraper):
         councillor_seat_number = 1
 
         page = self.lxmlize(COUNCIL_PAGE)
-        councillors = page.xpath('//div[@class="iCreateDynaToken"]/ul//a/@href')
+        councillors = page.xpath('//a[contains(@href, "/your-government/mayor-and-council/") and .//img]/@href')
         assert len(councillors), "No councillors found"
         for url in councillors:
-            page = self.lxmlize(url)
-            role, name = page.xpath("//h1")[0].text_content().strip().split(" ", 1)
-            if role == "Deputy":
+            if not url.startswith("http"):
+                url = "https://www.stjohns.ca" + url
+            profile_page = self.lxmlize(url)
+            h1_elements = profile_page.xpath("//main//h1") or profile_page.xpath("//h1")
+            h1_text = h1_elements[0].text_content().strip()
+            # h1 is "Mayor Name", "Deputy Mayor Name", or "Councillor Name"
+            if h1_text.startswith("Deputy Mayor "):
                 role = "Deputy Mayor"
-                name = name.split(" ", 1)[1]
-            description = page.xpath('//div[@data-lm-tokenid="StandardOneColumnTK1"]/p')[0].text_content()
+                name = h1_text[len("Deputy Mayor ") :]
+            elif h1_text.startswith("Mayor "):
+                role = "Mayor"
+                name = h1_text[len("Mayor ") :]
+            elif h1_text.startswith("Councillor "):
+                role = "Councillor"
+                name = h1_text[len("Councillor ") :]
+            else:
+                continue
+
+            # Find district from first paragraph text
+            paragraphs = profile_page.xpath("//main//p")
+            description = paragraphs[0].text_content() if paragraphs else ""
             if "Ward" in description:
                 index = description.find("Ward")
                 district = description[index : index + 6]
@@ -28,14 +43,20 @@ class StJohnsPersonScraper(CanadianScraper):
                     district = f"St. John's (seat {councillor_seat_number})"
                     councillor_seat_number += 1
 
-            email = self.get_email(page)
-            phone = self.get_phone(page)
-            photo = page.xpath('//div[@class="fbg-row lb-imageBox cm-datacontainer"]//img/@src')[0]
+            email = self.get_email(profile_page, error=False)
+            phone = self.get_phone(profile_page, error=False)
+            photo_nodes = profile_page.xpath('//img[contains(@src, "/media/")]/@src')
+            photo = photo_nodes[0] if photo_nodes else None
+            if photo and not photo.startswith("http"):
+                photo = "https://www.stjohns.ca" + photo
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
-            p.image = photo
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", email)
+            if photo:
+                p.image = photo
+            if phone:
+                p.add_contact("voice", phone, "legislature")
+            if email:
+                p.add_contact("email", email)
             p.add_source(COUNCIL_PAGE)
             p.add_source(url)
 

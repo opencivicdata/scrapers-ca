@@ -4,11 +4,14 @@ from utils import CanadianPerson as Person
 from utils import CanadianScraper
 
 COUNCIL_PAGE = "http://www.ville.kirkland.qc.ca/portrait-municipal/conseil-municipal/elus-municipaux"
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
+)
 
 
 class KirklandPersonScraper(CanadianScraper):
     def scrape(self):
-        page = self.cloudscrape(COUNCIL_PAGE)
+        page = self.lxmlize(COUNCIL_PAGE, user_agent=BROWSER_USER_AGENT)
 
         councillors = page.xpath('//table/tbody[not(@id)]/tr/td[@valign="top"]')
         assert len(councillors), "No councillors found"

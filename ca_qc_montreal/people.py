@@ -1,9 +1,13 @@
 from utils import CSVScraper
 
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
+)
+
 
 class MontrealPersonScraper(CSVScraper):
     # http://donnees.ville.montreal.qc.ca/dataset/listes-des-elus-de-la-ville-de-montreal
-    csv_url = "https://donnees.montreal.ca/dataset/381d74ca-dadd-459f-95c9-db255b5f4480/resource/ce1315a3-50ee-48d0-a0f0-9bcc15f65643/download/liste_elus_montreal.csv"
+    csv_url = "https://donnees.montreal.ca/dataset/381d74ca-dadd-459f-95c9-db255b5f4480/resource/211f6903-1440-438a-9f6c-9718ecf2d3ee/download/liste_elus_montreal.csv"
     encoding = "utf-8"
     locale = "fr"
     corrections = {
@@ -57,6 +61,14 @@ class MontrealPersonScraper(CSVScraper):
     def header_converter(self, s):
         s = super().header_converter(s).strip()
         return {
+            # Current column names (2024+ CSV format)
+            "fonction élective": "primary role",
+            "appellation": "gender",
+            "district": "district name",
+            "parti": "party name",
+            "téléphone": "phone",
+            "courriel officiel": "email",
+            # Legacy column names (pre-2024)
             "rôles": "primary role",
             "adresse ligne 1 (arrondissement)": "address line 1",
             "adresse ligne 2 (arrondissement)": "address line 2",
@@ -72,3 +84,8 @@ class MontrealPersonScraper(CSVScraper):
             "Conseillère d'arrondissement",
             "Conseiller(\u00e8re) d'arrondissement",
         )
+
+    def scrape(self):
+        # donnees.montreal.ca intermittently rejects non-browser user agents.
+        self.user_agent = BROWSER_USER_AGENT
+        yield from super().scrape()

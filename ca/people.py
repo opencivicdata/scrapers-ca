@@ -48,13 +48,17 @@ class CanadaPersonScraper(CanadianScraper):
                 self.normalized_names[self.normalize_district(division.name)] = division.name
 
         genders = {"male": COUNCIL_PAGE_MALE, "female": COUNCIL_PAGE_FEMALE}
+        seen_urls = set()
         for gender, url in genders.items():
             page = self.lxmlize(url)
             rows = page.xpath('//div[contains(@class, "ce-mip-mp-tile-container")]')
-            yield from self.scrape_people(rows, gender)
+            yield from self.scrape_people(rows, gender, seen_urls)
 
-    def scrape_people(self, rows, gender):
+    def scrape_people(self, rows, gender, seen_urls=None):
         assert len(rows), "No members found"
+        if seen_urls is None:
+            seen_urls = set()
+
         for row in rows:
             name = row.xpath('.//div[@class="ce-mip-mp-name"][1]')[0].text_content()
             constituency = row.xpath('.//div[@class="ce-mip-mp-constituency"][1]')[0].text_content()
@@ -64,7 +68,15 @@ class CanadaPersonScraper(CanadianScraper):
 
             party = row.xpath('.//div[@class="ce-mip-mp-party"][1]')[0].text_content()
 
-            url = row.xpath('.//a[@class="ce-mip-mp-tile"]/@href')[0]
+            url_results = row.xpath('.//a[@class="ce-mip-mp-tile-link"]/@href')
+            if not url_results:
+                continue
+            href = url_results[0]
+            url = href if href.startswith("http") else "https://www.ourcommons.ca" + href
+
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
 
             if province == "Québec":
                 url = url.replace("/en/", "/fr/")

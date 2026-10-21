@@ -14,6 +14,7 @@ class Alberta(CanadianJurisdiction):
         {"name": "Freedom Conservative Party"},
         {"name": "Independent Conservative"},
         {"name": "Progressive Conservative Association of Alberta"},
+        {"name": "Progressive Tory Party"},
         {"name": "United Conservative Party"},
         {"name": "Wildrose Alliance Party"},
         {"name": "Independent"},

@@ -120,11 +120,14 @@ class CanadianScraper(Scraper):
         matches.extend(
             unquote(match.attrib["href"]) for match in node.xpath(f'{expression}//a[contains(@href, "mailto:")]')
         )
-        # Some emails are obfuscated by Cloudflare.
+        # Some emails are obfuscated by Cloudflare. (The href must contain a
+        # "#" fragment: plain links to /cdn-cgi/l/email-protection carry no
+        # encoded address.)
         matches.extend(
             self._cloudflare_decode(match)
-            for match in node.xpath(f'{expression}//@href[contains(., "cdn-cgi/l/email-protection")]')
+            for match in node.xpath(f'{expression}//@href[contains(., "cdn-cgi/l/email-protection#")]')
         )
+        matches.extend(self._cloudflare_decode(f"#{match}") for match in node.xpath(f"{expression}//@data-cfemail"))
         # If the node has no sub-tags.
         if not matches:
             matches = list(node.xpath(f'{expression}//text()[contains(., "@")]'))
@@ -166,7 +169,9 @@ class CanadianScraper(Scraper):
                 return match.group(1)
         match = node.xpath('.//a[contains(@href,"tel:")]')
         if match:
-            return match[0].attrib["href"].replace("tel:", "")
+            # Handle tel:5551234567, tel://5551234567 and RFC 3966 extensions
+            # like tel:5551234567;ext=123.
+            return match[0].attrib["href"].replace("tel:", "").lstrip("/").replace(";ext=", " x")
         if area_codes:
             for area_code in area_codes:
                 match = re.search(

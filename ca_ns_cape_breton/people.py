@@ -1,81 +1,70 @@
-import html
 import re
 
 from utils import CUSTOM_USER_AGENT, CanadianScraper
 from utils import CanadianPerson as Person
 
-COUNCIL_PAGE = "http://www.cbrm.ns.ca/mayor-council-2.html"
-MAYOR_PAGE = "http://www.cbrm.ns.ca/mayor"
+COUNCIL_PAGE = "https://cbrm.ns.ca/city-hall/councillors/"
+MAYOR_PAGE = "https://cbrm.ns.ca/city-hall/mayors-office/"
 
 
 class CapeBretonPersonScraper(CanadianScraper):
-    def scrape(self):
-        def decode_email(script):
-            raw_address = re.findall(r"(?<=addy).*?;\s*addy", script)
-            local_part = html.unescape(raw_address[0]).split("= ", 1)[1].split(";", 1)[0]
-            return re.sub(r"['\s+]", "", local_part) + "cbrm.ns.ca"
+    def get_cape_breton_phone(self, page):
+        phone = self.get_phone(page, area_codes=[902], error=False)
+        if phone and len(re.sub(r"\D", "", phone)) >= 10:
+            return phone
+        return None
 
+    def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE, user_agent=CUSTOM_USER_AGENT)
 
-        councillors = page.xpath("//table/tbody/tr")[1:]
-        assert len(councillors), "No councillors found"
-        for councillor in councillors:
-            name = " ".join(councillor.xpath("./td[2]//text()"))
-            if "District " in name:  # Vacant
-                continue
-            district = "District {}".format(councillor.xpath(".//strong")[0].text_content())
+        councillor_urls = list(
+            dict.fromkeys(page.xpath('//a[contains(@href, "/city-hall/councillors/district-")]/@href'))
+        )
+        assert len(councillor_urls), "No councillor URLs found"
 
-            address = councillor.xpath(".//td")[2].text_content().replace("\r\n", ", ")
-            contact_nodes = councillor.xpath(".//td[4]/text()")
-            if ":" not in contact_nodes[0]:
-                contact_nodes = councillor.xpath(".//td[4]/p/text()")
+        for url in councillor_urls:
+            cpage = self.lxmlize(url, user_agent=CUSTOM_USER_AGENT)
 
-            phone = contact_nodes[0].split(":")[1]
-            email_script = councillor.xpath(".//script")[0].text_content()
-            email = decode_email(email_script)
+            name = cpage.xpath("//h1/text()")[0].strip()
 
-            # one number had a U+00A0 in it for some reason
-            phone = phone.replace("(", "").replace(")", "-").replace(" ", "").replace("\N{NO-BREAK SPACE}", "")
-            if "or" in phone:  # phone and cell
-                phone = phone.split("or")[0]
+            district_match = re.search(r"/district-(\d+)/?$", url)
+            district = (
+                f"District {district_match.group(1)}"
+                if district_match
+                else cpage.xpath("//h2/text()")[0].strip().split("&")[0].strip()
+            )
 
-            clean_name = name.replace("“", '"').replace("”", '"')
-            p = Person(primary_org="legislature", name=clean_name, district=district, role="Councillor")
+            phone = self.get_cape_breton_phone(cpage)
+            email = self.get_email(cpage, error=False)
+            image = cpage.xpath("//img[contains(@alt, 'Councillor')]/@src")
+
+            p = Person(primary_org="legislature", name=name, district=district, role="Councillor")
             p.add_source(COUNCIL_PAGE)
-            p.add_contact("address", address, "legislature")
-            p.add_contact("voice", phone, "legislature")
-            p.add_contact("email", email)
-
-            if "F" in contact_nodes[1]:
-                fax = contact_nodes[1].split(":")[1].replace("(", "").replace(")", "-").replace(" ", "")
-                p.add_contact("fax", fax, "legislature")
-
-            councillor_url = councillor.xpath(".//a/@href")[0]
-            p.add_source(councillor_url)
-            page = self.lxmlize(councillor_url, user_agent=CUSTOM_USER_AGENT)
-            escaped_name = name.replace('"', "&quot;")
-            image = page.xpath(f'//img[contains(@title, "{escaped_name}")]/@src')
+            p.add_source(url)
+            if phone:
+                p.add_contact("voice", phone, "legislature")
+            if email:
+                p.add_contact("email", email)
             if image:
                 p.image = image[0]
+
             yield p
 
         mayorpage = self.lxmlize(MAYOR_PAGE, user_agent=CUSTOM_USER_AGENT)
 
-        info = mayorpage.xpath("//div[@class='item-page']/p/text()")[0]
-        name = " ".join(info.split()[1:]).title()
-
-        photo_url = mayorpage.xpath('//div[@id="main-area"]//img/@src')[0]
-        contact_nodes = mayorpage.xpath('//aside//h3[contains(text(), "Contact")]/following-sibling::div[1]')[0]
-        address = contact_nodes.xpath(".//p[1]/text()")[0]
-        phone = contact_nodes.xpath(".//p[2]/text()")[0].split(": ")[1]
-        fax = contact_nodes.xpath(".//p[2]/text()")[1].split(": ")[1]
-        email = self.get_email(contact_nodes.xpath(".//p[3]")[0])
+        # h1 is "Mayor's Office"; the mayor's name is in the first h2
+        name = mayorpage.xpath("//h2/text()")[0].strip()
+        phone = self.get_cape_breton_phone(mayorpage)
+        email = self.get_email(mayorpage, error=False)
+        image = mayorpage.xpath('//img[contains(@alt, "Mayor")]/@src')
 
         p = Person(primary_org="legislature", name=name, district="Cape Breton", role="Mayor")
         p.add_source(MAYOR_PAGE)
-        p.add_contact("address", address, "legislature")
-        p.add_contact("voice", phone, "legislature")
-        p.add_contact("email", email)
-        p.add_contact("fax", fax, "legislature")
-        p.image = photo_url
+        if phone:
+            p.add_contact("voice", phone, "legislature")
+        if email:
+            p.add_contact("email", email)
+        if image:
+            p.image = image[0]
+
         yield p

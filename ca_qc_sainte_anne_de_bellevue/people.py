@@ -10,22 +10,33 @@ class SainteAnneDeBellevuePersonScraper(CanadianScraper):
     def scrape(self):
         page = self.lxmlize(COUNCIL_PAGE)
 
-        councillors = page.xpath('//p[a[contains(@href, "@")]]')
-        assert len(councillors), "No councillors found"
+        # Councillors are in a table; each row has pairs of (photo td, info td)
+        # Info td contains: <h2>role</h2>, <p>name</p>, <p><a href="mailto:...">
+        info_tds = page.xpath('//table//td[h2[normalize-space(.)!=""]]')
+        assert len(info_tds), "No councillors found"
 
-        for councillor in councillors:
-            name = councillor.text_content().split(" |", 1)[0]
-            district = councillor.xpath("./preceding-sibling::h2[1]/text()")[0]
+        for td in info_tds:
+            role_text = " ".join(td.xpath(".//h2//text()")).strip()
+            if not role_text:
+                continue
 
-            if "Maire" in district:
+            name_nodes = td.xpath("./p[not(a)]/text()")
+            name = next((t.strip() for t in name_nodes if t.strip()), None)
+            if not name:
+                continue
+
+            email = self.get_email(td, error=False)
+
+            if "Maire" in role_text:
                 district = "Sainte-Anne-de-Bellevue"
                 role = "Maire"
             else:
-                district = "District {}".format(re.search(r"\d+", district)[0])
+                m = re.search(r"\d+", role_text)
+                district = "District {}".format(m[0]) if m else role_text
                 role = "Conseiller"
 
             p = Person(primary_org="legislature", name=name, district=district, role=role)
             p.add_source(COUNCIL_PAGE)
-
-            p.add_contact("email", self.get_email(councillor))
+            if email:
+                p.add_contact("email", email)
             yield p

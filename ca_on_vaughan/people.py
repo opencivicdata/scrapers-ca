@@ -8,13 +8,13 @@ class VaughanPersonScraper(CanadianScraper):
     def scrape(self):
         regional_councillor_seat_number = 1
 
-        page = self.lxmlize(COUNCIL_PAGE)
+        page = self.cloudscrape(COUNCIL_PAGE)
 
         councillors = page.xpath('//table[@class="city-table-responsive"]//a[@title][contains(./@href, "council")]')
         assert len(councillors), "No councillors found"
         for councillor in councillors:
             url = councillor.xpath("./@href")[0]
-            page = self.lxmlize(url)
+            page = self.cloudscrape(url)
             title = page.xpath("//h1/span")[0].text_content()
             if "-" in title:
                 district, name = title.split("-")
