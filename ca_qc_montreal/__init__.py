@@ -14,10 +14,11 @@ class Montreal(CanadianJurisdiction):
         {"name": "Coalition Montréal"},
         {"name": "Ensemble Montréal"},
         {"name": "Indépendant"},
-        {"name": "Projet Montréal - Équipe Valérie Plante"},
+        {"name": "Projet Montréal"},
         {"name": "Vrai changement pour Montréal"},
         {"name": "Équipe Anjou"},
-        {"name": "Équipe LaSalle Team"},
+        {"name": "Équipe LaSalle"},
+        {"name": "Équipe St-Léonard"},
         {"name": "Équipe Dauphin Lachine"},
         {"name": "Équipe Denis Coderre pour Montréal"},
     ]

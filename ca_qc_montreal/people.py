@@ -1,9 +1,19 @@
-from utils import CSVScraper
+import re
+
+from utils import CUSTOM_USER_AGENT, CSVScraper
+
+
+def phone(value):
+    # "Tél.  : 514-328-4000\nposte 5573\nCell. : 514-…\nFax  : 514-…"
+    match = re.search(r"^Tél\. *: *(\S.*)(?:\n(poste .+))?", value, flags=re.MULTILINE)
+    if not match:
+        return ""
+    return " ".join(group for group in match.groups() if group)
 
 
 class MontrealPersonScraper(CSVScraper):
     # http://donnees.ville.montreal.qc.ca/dataset/listes-des-elus-de-la-ville-de-montreal
-    csv_url = "https://donnees.montreal.ca/dataset/381d74ca-dadd-459f-95c9-db255b5f4480/resource/ce1315a3-50ee-48d0-a0f0-9bcc15f65643/download/liste_elus_montreal.csv"
+    csv_url = "https://donnees.montreal.ca/dataset/381d74ca-dadd-459f-95c9-db255b5f4480/resource/211f6903-1440-438a-9f6c-9718ecf2d3ee/download/liste_elus_montreal.csv"
     encoding = "utf-8"
     locale = "fr"
     corrections = {
@@ -21,6 +31,8 @@ class MontrealPersonScraper(CSVScraper):
         "arrondissement": {
             # Articles.
             "Ile-Bizard - Sainte-Genevi\u00e8ve": "L'Île-Bizard—Sainte-Geneviève",
+            "Le Plateau-Mont-Royal": "Plateau-Mont-Royal",
+            "Le Sud-Ouest": "Sud-Ouest",
             # Hyphens.
             "Côte-des-Neiges - Notre-Dame-de-Grâce": "Côte-des-Neiges—Notre-Dame-de-Grâce",
             "Mercier - Hochelaga-Maisonneuve": "Mercier—Hochelaga-Maisonneuve",
@@ -35,6 +47,7 @@ class MontrealPersonScraper(CSVScraper):
             "De Lorimier": "DeLorimier",
             "Saint-Henri-Est–Petite-\nBourgogne–Pointe-Saint-\nCharles–Griffintown": "Saint-Henri—Petite-Bourgogne—Pointe-Saint-Charles",
             "Saint-Paul–Émard– \nSaint-Henri-Ouest": "Saint-Paul—Émard",
+            "Saint-Paul–Émard–\nSaint-Henri-Ouest": "Saint-Paul—Émard",
             # Hyphens.
             "Maisonneuve-Longue-Pointe": "Maisonneuve—Longue-Pointe",
             "Norman McLaren": "Norman-McLaren",
@@ -49,6 +62,7 @@ class MontrealPersonScraper(CSVScraper):
             "Madame": "female",
             "Monsieur": "male",
         },
+        "phone": phone,
     }
     fallbacks = {
         "district name": "arrondissement",
@@ -57,18 +71,34 @@ class MontrealPersonScraper(CSVScraper):
     def header_converter(self, s):
         s = super().header_converter(s).strip()
         return {
-            "rôles": "primary role",
-            "adresse ligne 1 (arrondissement)": "address line 1",
-            "adresse ligne 2 (arrondissement)": "address line 2",
-            "localité (arrondissement)": "locality",
-            "province (arrondissement)": "province",
-            "code postal (arrondissement)": "postal code",
-            "téléphone (arrondissement)": "phone",
+            "appellation": "gender",
+            "fonction élective": "primary role",
+            "district": "district name",
+            "parti": "party name",
+            "bureau": "address line 1",
+            "courriel officiel": "email",
         }.get(s, s)
 
     def is_valid_row(self, row):
-        return row["primary role"] not in (
-            "Conseiller d'arrondissement",
-            "Conseillère d'arrondissement",
-            "Conseiller(\u00e8re) d'arrondissement",
+        # The CSV ends with a "Départs d'élus" section, listing elected officials who left office.
+        if row["gender"] == "Départs d'élus":
+            self.departures = True
+        # The CSV omits this councillor's last name.
+        if row["email"] == "maeva.vilain@montreal.ca" and not row["last name"]:
+            row["last name"] = "Vilain"
+        return (
+            not self.departures
+            and row["primary role"]  # blank rows
+            and row["primary role"]
+            not in (
+                "Conseiller d'arrondissement",
+                "Conseillère d'arrondissement",
+                "Conseiller(\u00e8re) d'arrondissement",
+            )
         )
+
+    def scrape(self):
+        # donnees.montreal.ca returns 403 to the default python-requests user agent.
+        self.user_agent = CUSTOM_USER_AGENT
+        self.departures = False
+        yield from super().scrape()
